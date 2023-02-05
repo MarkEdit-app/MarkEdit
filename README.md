@@ -1,0 +1,64 @@
+# MarkEdit
+
+MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
+
+<a href="https://apps.apple.com/app/id1669953820" target="_blank"><img alt="Download on the Mac App Store" src="https://user-images.githubusercontent.com/6745066/216816394-706b5104-42f3-4cc4-96c9-471a9356d1a8.svg"></a>
+
+> **Note** The source code will be released as soon as the application is released. Join [TestFlight](https://testflight.apple.com/join/Nv4YUeHT).
+
+## Screenshots
+
+![Screenshots 01](/Screenshots/01.png)
+
+![Screenshots 02](/Screenshots/02.png)
+
+![Screenshots 03](/Screenshots/03.png)
+
+## What make MarkEdit different
+
+- Privacy focused: doesn't collect any user data
+- Native: clean and intuitive, feels right at home on Mac
+- Fast: edits 10 MB files easily
+- Lightweight: installer size is about 3 MB
+
+To learn more, refer to [Philosophy](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy) and [Why MarkEdit](https://github.com/MarkEdit-app/MarkEdit/wiki/Why-MarkEdit).
+
+## Using MarkEdit
+
+Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki) for details.
+
+## Building MarkEdit
+
+### Building CoreEditor
+
+After checking out the project, go to the root folder of the repository and run:
+
+```
+cd CoreEditor
+yarn install
+yarn build
+```
+
+> To test the editor in a development environment, run `yarn dev` instead.
+
+### Building MarkEditMac
+
+After successfully building `CoreEditor`, open `MarkEdit.xcodeproj`, and build the `MarkEditMac` target.
+
+It's recommended to override build settings by adding a `Local.xcconfig` file under the root folder, including code signing identity, development team, etc.
+
+## Contributing to MarkEdit
+
+For bug reports, please [open an issue](https://github.com/MarkEdit-app/MarkEdit/issues/new).
+
+For code changes, bug fixes are generally welcomed, feel free to [open pull requests](https://github.com/MarkEdit-app/MarkEdit/compare). However, we hesitate to add new features ([why](https://github.com/MarkEdit-app/MarkEdit/wiki/Why-MarkEdit#feature-poor)), please fork the repository and make your own.
+
+For localization, please also open an issue as mentioned above first.
+
+Thanks in advance.
+
+## Acknowledgments
+
+MarkEdit is built on top of the awesome [CodeMirror 6](https://codemirror.net/) project.
+
+MarkEdit has built-in proofing support based on [Grammarly](https://grammarly.com/).
