@@ -4,8 +4,6 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 <a href="https://apps.apple.com/app/id1669953820" target="_blank"><img alt="Download on the Mac App Store" src="https://user-images.githubusercontent.com/6745066/216816394-706b5104-42f3-4cc4-96c9-471a9356d1a8.svg"></a>
 
-> **Note** The source code will be released as soon as the application is released. Join [TestFlight](https://testflight.apple.com/join/Nv4YUeHT).
-
 ## Screenshots
 
 ![Screenshots 01](/Screenshots/01.png)
@@ -46,6 +44,27 @@ yarn build
 After successfully building `CoreEditor`, open `MarkEdit.xcodeproj`, and build the `MarkEditMac` target.
 
 It's recommended to override build settings by adding a `Local.xcconfig` file under the root folder, including code signing identity, development team, etc.
+
+## Testing MarkEdit Locally
+
+Unit tests are run automatically by [GitHub actions](https://github.com/MarkEdit-app/MarkEdit/actions), you can also run them on your machine.
+
+### Testing CoreEditor
+
+Make sure dependencies are installed and run:
+
+```
+cd CoreEditor
+yarn test
+```
+
+### Testing MarkEditMac
+
+MarkEditMac consists of several targets, here's an example of testing `MarkEditCoreTests`:
+
+```
+xcodebuild test -project MarkEdit.xcodeproj -scheme MarkEditCoreTests -destination 'platform=macOS'
+```
 
 ## Contributing to MarkEdit
 

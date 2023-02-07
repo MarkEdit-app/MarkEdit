@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>katex</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+    * {
+      margin: 0px !important;
+    }
+    div {
+      padding: 8px !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="container" style="text-align: center;"></div>
+  <script type="module" type="text/javascript">
+    import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.mjs";
+    const container = document.querySelector("#container");
+    container.innerHTML = katex.renderToString("{{DATA}}".code, { throwOnError: false, displayMode: true });
+  </script>
+</body>
+</html>

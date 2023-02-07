@@ -1,0 +1,39 @@
+/* General */
+
+:root {
+  color-scheme: light dark;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* CodeMirror */
+
+.cm-editor {
+  height: 100vh;
+}
+
+.cm-gutters {
+  cursor: default;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+
+  /* To work around a Safari bug where :hover is not cleared when mouse is outside the window */
+  margin-top: 1px;
+  margin-left: 1px;
+}
+
+/* Markdown */
+
+.cm-md-link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.cm-md-header {
+  font-weight: bold;
+}

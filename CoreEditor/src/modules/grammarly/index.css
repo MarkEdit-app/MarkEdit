@@ -1,0 +1,5 @@
+grammarly-editor-plugin {
+  width: 100% !important;
+  --grammarly-button-position-top: 6px;
+  --grammarly-button-position-right: 6px;
+}

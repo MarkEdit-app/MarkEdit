@@ -1,0 +1,102 @@
+//
+//  {{moduleName}}.swift
+//
+//  Generated using https://github.com/microsoft/ts-gyb
+//
+//  Don't modify this file manually, it's auto generated.
+//
+//  To make changes, edit template files under /CoreEditor/src/@codegen
+
+import Foundation
+
+public protocol {{moduleName}}: NativeModule {
+  {{#methods}}
+  func {{methodName}}({{parametersDeclaration}}){{#returnType}} async -> {{returnType}}{{/returnType}}
+  {{/methods}}
+}
+
+public extension {{moduleName}} {
+  var bridge: NativeBridge { {{customTags.bridgeName}}(self) }
+}
+
+final class {{customTags.bridgeName}}: NativeBridge {
+  static let name = "{{customTags.invokePath}}"
+  lazy var methods: [String: NativeMethod] = [
+    {{#methods}}
+    "{{methodName}}": { [weak self] in
+      await self?.{{methodName}}(parameters: $0)
+    },
+    {{/methods}}
+  ]
+
+  private let module: {{moduleName}}
+  private lazy var decoder = JSONDecoder()
+
+  init(_ module: {{moduleName}}) {
+    self.module = module
+  }
+  {{#methods}}
+
+  @MainActor private func {{methodName}}(parameters: Data) async -> Result<Encodable?, Error>? {
+    {{#parameters.length}}
+    struct Message: Decodable {
+      {{#parameters}}
+      var {{name}}: {{type}}
+      {{/parameters}}
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    {{/parameters.length}}
+    {{#returnType}}let result = await {{/returnType}}module.{{methodName}}({{#parameters}}{{name}}: message.{{name}}{{^last}}, {{/last}}{{/parameters}})
+    return .success({{#returnType}}result{{/returnType}}{{^returnType}}nil{{/returnType}})
+  }
+  {{/methods}}
+}
+{{#associatedTypes}}
+
+{{#custom}}
+{{#documentationLines}}
+///{{{.}}}
+{{/documentationLines}}
+public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFromReturn}}{{^isFromReturn}}Decodable{{/isFromReturn}}{{/isFromParameter}}{{^isFromParameter}}{{#isFromReturn}}Encodable{{/isFromReturn}}{{/isFromParameter}}, Equatable {
+  {{#members}}
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  public var {{name}}: {{type}}
+  {{/members}}
+  {{#staticMembers}}
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  private var {{name}}: {{type}} = {{{value}}}
+  {{/staticMembers}}
+
+  public init({{#members}}{{name}}: {{type}}{{^last}}, {{/last}}{{/members}}) {
+    {{#members}}
+    self.{{name}} = {{name}}
+    {{/members}}
+  }
+}
+{{/custom}}
+{{#enum}}
+{{#documentationLines}}
+///{{{.}}}
+{{/documentationLines}}
+public enum {{typeName}}: {{valueType}}, Codable {
+  {{#members}}
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  case {{key}} = {{{value}}}
+  {{/members}}
+}
+{{/enum}}
+{{/associatedTypes}}

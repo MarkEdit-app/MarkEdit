@@ -1,0 +1,47 @@
+name: Build and test all targets
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: ['18.x']
+
+    defaults:
+      run:
+        working-directory: 'CoreEditor'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Build and test CoreEditor
+        run: |
+          yarn install
+          yarn build
+          yarn test
+
+      - name: Build MarkEditMac
+        run: |
+          xcodebuild build -project ../MarkEdit.xcodeproj -scheme MarkEditMac -destination 'platform=macOS'
+
+      - name: Test MarkEditCoreTests
+        run: |
+          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditCoreTests -destination 'platform=macOS'
+
+      - name: Test ModulesTests
+        run: |
+          xcodebuild test -project ../MarkEdit.xcodeproj -scheme ModulesTests -destination 'platform=macOS'

@@ -1,0 +1,32 @@
+import isMetaKey from './isMetaKey';
+
+import * as grammarly from '../../modules/grammarly';
+import * as selection from '../../modules/selection';
+import * as link from '../../styling/nodes/link';
+
+export function startObserving() {
+  document.addEventListener('click', event => {
+    grammarly.centerActiveDialog();
+    selection.selectWholeLineIfNeeded(event);
+  });
+
+  document.addEventListener('keydown', event => {
+    if (isMetaKey(event)) {
+      link.startClickable();
+    } else {
+      link.stopClickable();
+    }
+  });
+
+  document.addEventListener('keyup', () => {
+    link.stopClickable();
+  });
+
+  document.addEventListener('mousedown', event => {
+    link.handleMouseDown(event);
+  }, true);
+
+  document.addEventListener('mouseup', event => {
+    link.handleMouseUp(event);
+  }, true);
+}

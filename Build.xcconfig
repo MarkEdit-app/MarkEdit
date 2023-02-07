@@ -1,0 +1,16 @@
+//
+//  Build.xcconfig
+//  MarkEditMac
+//
+//  Created by cyan on 12/26/22.
+//
+//  https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+CODE_SIGN_IDENTITY = -
+DEVELOPMENT_TEAM =
+PRODUCT_BUNDLE_IDENTIFIER = app.cyan.markedit-dev
+
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 3
+
+#include? "Local.xcconfig"

@@ -1,0 +1,560 @@
+disabled_rules:
+
+  # Rationale: Arbitrary restriction
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#cyclomatic-complexity
+  - cyclomatic_complexity
+
+  # Rationale: There are cases where you may want to declare the string enum value explicitly
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-string-enum-value
+  - redundant_string_enum_value
+
+opt_in_rules:
+
+  # Rationale: When using map, we think of it being used to transform a current array into something else
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#array-init
+  - array_init
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#attributes
+  - attributes
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#block-based-kvo
+  - block_based_kvo
+
+  # Rationale: Prevents retain cycles
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#class-delegate-protocol
+  - class_delegate_protocol
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#closing-brace-spacing
+  - closing_brace
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#closure-parameter-position
+  - closure_parameter_position
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#closure-spacing
+  - closure_spacing
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#colon
+  - colon
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#comma-spacing
+  - comma
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#compiler-protocol-init
+  - compiler_protocol_init
+
+  # Rationale: A more clear and consise way to check if something exists
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#contains_over_filter_count
+  - contains_over_filter_count
+
+  # Rationale: A more clear and consise way to check if something exists
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#contains_over_filter_is_empty
+  - contains_over_filter_is_empty
+
+  # Rationale: A more clear and consise way to check if something exists
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#contains-over-first-not-nil
+  - contains_over_first_not_nil
+
+  # Rationale: A more clear and consise way to check if a range exists
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#contains_over_range_nil_comparison
+  - contains_over_range_nil_comparison
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#control-statement
+  - control_statement
+
+  # Rationale: Encourages proper memory practices
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#discarded-notification-center-observer
+  - discarded_notification_center_observer
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#discouraged-direct-initialization
+  - discouraged_direct_init
+
+  # Rationale: A nil bool is a tri-state variable which can be modeled more clearly
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#discouraged-optional-boolean
+  - discouraged_optional_boolean
+
+  # Rationale: Imports are not required more than once.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#duplicate-imports
+  - duplicate_imports
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#dynamic-inline
+  - dynamic_inline
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#empty_collection_literal
+  - empty_collection_literal
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#empty-count
+  - empty_count
+
+  # Rationale: Provides consistency in coding style and brevity.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#empty-enum-arguments
+  - empty_enum_arguments
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#empty-parameters
+  - empty_parameters
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#empty-parentheses-with-trailing-closure
+  - empty_parentheses_with_trailing_closure
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#empty-string
+  - empty_string
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#explicit-init
+  - explicit_init
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#fallthrough
+  - fallthrough
+
+  # Rationale: Encourages better documentation
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#fatal-error-message
+  - fatal_error_message
+
+  # Rationale: Encourages using the right API to solve a problem
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#first-where
+  - first_where
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#flatmap_over_map_reduce
+  - flatmap_over_map_reduce
+
+  # Rationale: Encourages using the right API to solve a problem
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#for-where
+  - for_where
+
+  # Rationale: Prevents coder error, doesn't crash, makes coder be explicit about their assumptions
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#force-cast
+  - force_cast
+
+  # Rationale: Prevents coder error, doesn't crash, makes coder be explicit about their assumptions
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#force-try
+  - force_try
+
+  # Rationale: Prevents coder error, doesn't crash, makes coder be explicit about their assumptions
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#force-unwrapping
+  - force_unwrapping
+
+  # Rationale: Provides consistency in coding style and brevity.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#implicit-getter
+  - implicit_getter
+
+  # Rationale: Prevents coder error, doesn't crash, makes coder be explicit about their assumptions
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#implicitly-unwrapped-optional
+  - implicitly_unwrapped_optional
+
+  # Rationale: Encourages using the right API to solve a problem
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#is-disjoint
+  - is_disjoint
+
+  # Rationale: Provides clarity and consistency by using the default parameter
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#joined-default-parameter
+  - joined_default_parameter
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#last-where
+  - last_where
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#leading-whitespace
+  - leading_whitespace
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-cggeometry-functions
+  - legacy_cggeometry_functions
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-constant
+  - legacy_constant
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-constructor
+  - legacy_constructor
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-hashing
+  - legacy_hashing
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-nsgeometry-functions
+  - legacy_nsgeometry_functions
+
+  # Rationale: Usage of proper access level
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#lower-acl-than-parent
+  - lower_acl_than_parent
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#mark
+  - mark
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#multiline-parameters
+  - multiline_parameters
+
+  # Rationale: Clarity of code
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#multiple-closures-with-trailing-closure
+  - multiple_closures_with_trailing_closure
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#no_space_in_method_call
+  - no_space_in_method_call
+
+  # Rationale: Encourages coder best practices though language feature likely makes this obsolete
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#multiple-closures-with-trailing-closure
+  - notification_center_detachment
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#opening-brace-spacing
+  - opening_brace
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#operator-usage-whitespace
+  - operator_usage_whitespace
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#operator-function-whitespace
+  - operator_whitespace
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#overridden-methods-call-super
+  - overridden_super_call
+
+  # Rationale: Prevents unpredictable behavior
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#override-in-extension
+  - override_in_extension
+
+  # Rationale: Promotes consistency and reduces duplication.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#pattern-matching-keywords
+  - pattern_matching_keywords
+
+  # Rationale: Keep internal details from being overexposed
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#private-over-fileprivate
+  - private_over_fileprivate
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#private-unit-test
+  - private_unit_test
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#prohibited-calls-to-super
+  - prohibited_super_call
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#protocol-property-accessors-order
+  - protocol_property_accessors_order
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-discardable-let
+  - redundant_discardable_let
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-nil-coalescing
+  - redundant_nil_coalescing
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-objc-attribute
+  - redundant_objc_attribute
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-optional-initialization
+  - redundant_optional_initialization
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-void-return
+  - redundant_void_return
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#required-enum-case
+  - required_enum_case
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#returning-whitespace
+  - return_arrow_whitespace
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#shorthand-operator
+  - shorthand_operator
+
+  # Rationale: There should be only XCTestCase per file
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#single-test-class
+  - single_test_class
+
+  # Rationale: Provides consistency and clarity in coding style and is less code
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#min-or-max-over-sorted-first-or-last
+  - sorted_first_last
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#statement-position
+  - statement_position
+
+  # Rationale: Provides cleaniness of code
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#superfluous-disable-command
+  - superfluous_disable_command
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#switch-and-case-statement-alignment
+  - switch_case_alignment
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#syntactic-sugar
+  - syntactic_sugar
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#trailing-newline
+  - trailing_newline
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#trailing-semicolon
+  - trailing_semicolon
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unneeded-break-in-switch
+  - unneeded_break_in_switch
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-control-flow-label
+  - unused_control_flow_label
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-closure-parameter
+  - unused_closure_parameter
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-enumerated
+  - unused_enumerated
+
+  # Rationale: Provides consistency in coding style and brevity
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-optional-binding
+  - unused_optional_binding
+
+  # Rationale: Avoids issues where the setter is not using the value passed in.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-setter-value
+  - unused_setter_value
+
+  # Rationale: Prevents coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#valid-ibinspectable
+  - valid_ibinspectable
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#vertical-parameter-alignment
+  - vertical_parameter_alignment
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#vertical-parameter-alignment-on-call
+  - vertical_parameter_alignment_on_call
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#vertical-whitespace
+  - vertical_whitespace
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#vertical-whitespace-before-closing-braces
+  - vertical_whitespace_closing_braces
+
+  # Rationale: Provides consistency in coding style and follows modern practices of the language
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#void-return
+  - void_return
+
+  # Rationale: Prevents retain cycles and coder error
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#weak-delegate
+  - weak_delegate
+
+  # Rationale: Encourages better documentation
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#xctfail-message
+  - xctfail_message
+
+  # Rationale: Provides consistency in coding style
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#yoda-condition-rule
+  - yoda_condition
+
+  # Rationale: Provides consistency in coding style.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#reduce-boolean
+  - reduce_boolean
+
+  # Rationale: == is not used for NSObject comparison, and could lead to confusion.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#nsobject-prefer-isequal
+  - nsobject_prefer_isequal
+
+  # Rationale: Provides consistency in coding style.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-capture-list
+  - unused_capture_list
+
+  # Rationale: Prevents issues with using unowned.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unowned-variable-capture
+  - unowned_variable_capture
+
+  # Rationale: Ensures all enums can be switched upon.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#duplicate-enum-cases
+  - duplicate_enum_cases
+
+  # Rationale: Provides consistency in coding style.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-multiple
+  - legacy_multiple
+
+  # Prefer using `AnyObject` over `class` for class-only protocols.
+  - anyobject_protocol
+
+  # Closure end should have the same indentation as the line that started it.
+  - closure_end_indentation
+
+  # All elements in a collection literal should be vertically aligned
+  - collection_alignment
+
+  # Prefer // comment over //comment
+  - comment_spacing
+
+  # Refer assertionFailure() over assert(false)
+  - discouraged_assert
+
+  # Discourage enum cases that interfere with Optional<T>.none and type checking.
+  - discouraged_none_name
+
+  # Encourages initializers over object literals
+  - discouraged_object_literal
+
+  # Empty XCTest methods should be avoided.
+  - empty_xctest_method
+
+  # Swift files must have our copyright header info.
+  - file_header
+
+  # Comparing two identical operands is likely a mistake.
+  - identical_operands
+
+  # Customized identifier name rules
+  - identifier_name
+
+  # Let and var should be separated from other statements by a blank line.
+  - let_var_whitespace
+
+  # Array and dictionary literal end should have the same indentation as the line that started it.
+  - literal_expression_end_indentation
+
+  # Modifier order should be consistent
+  - modifier_order
+
+  # Static strings should be used as a key/comment in NSLocalizedString in order for genstrings to work.
+  - nslocalizedstring_key
+
+  # Matching an enum case against an optional enum without '?' is supported on Swift 5.1 and above.
+  - optional_enum_case_matching
+
+  # Using Self to reference a Type when possible is more stable
+  - prefer_self_in_static_references
+
+  # Prefer `Self` over `type(of: self)` when accessing properties or calling methods.
+  - prefer_self_type_over_type_of_self
+
+  # Prefer `.zero` over explicit init with zero parameters (e.g., `CGPoint(x: 0, y: 0)`)
+  - prefer_zero_over_explicit_init
+
+  # Mutable reference can be faster than repeated copying
+  - reduce_into
+
+  # Catch uses of self inside an inline closure used for initializing a variable
+  - self_in_property_initialization
+
+  # Operators should be declared as static functions, not free functions.
+  - static_operator
+
+  # Test case API should be private for that test case
+  - test_case_accessibility
+
+  # Prefer `someBool.toggle()` over `someBool = !someBool`
+  - toggle_bool
+
+  # Parentheses are not needed when declaring closure arguments.
+  - unneeded_parentheses_in_closure_argument
+
+  # Test classes must implement balanced setUp and tearDown methods
+  - balanced_xctest_lifecycle
+
+  # Types used for hosting only static members should be implemeted as a caseless enum to avoid instantiation.
+  - convenience_type
+
+  # Number of associated values in an enum should be low
+  - enum_case_associated_values_count
+
+  # Arguments should be either on the same line, or one per line
+  - multiline_arguments
+
+  # Multiline arguments should have their surrounding brackets in a new line.
+  - multiline_arguments_brackets
+
+  # Chained function calls should be either on the same line, or one per line.
+  - multiline_function_chains
+
+  # Multiline literals should have their surrounding brackets in a new line.
+  - multiline_literal_brackets
+
+  # Multiline parameters should have their surrounding brackets in a new line.
+  - multiline_parameters_brackets
+
+  # Trailing closure syntax should be used whenever possible.
+  - trailing_closure
+
+  # Uncallable or unreachabable implimentations should be marked unavailable
+  - unavailable_function
+
+  # Catch statements should not declare error variables without type casting.
+  - untyped_error_in_catch
+
+  # Prefer specific XCTest matchers over `XCTAssertEqual` and `XCTAssertNotEqual`
+  - xct_specific_matcher
+
+attributes:
+  always_on_same_line: ["@IBAction", "@IBSegueAction", "@NSManaged", "@escaping", "@objc", "@frozen"]
+
+file_length:
+  warning: 1000
+  error: 2000
+
+function_body_length:
+  warning: 200
+  error: 300
+
+identifier_name:
+  min_length: 1
+  max_length:
+    warning: 60
+    error: 80
+  allowed_symbols: ["_"]
+  validates_start_with_lowercase: true
+
+inclusive_language:
+  override_allowed_terms: ["master", "blacklist", "whitelist"]
+
+large_tuple:
+  warning: 3
+  error: 3
+
+line_length:
+  warning: 400
+  error: 400
+
+nesting:
+  type_level: 2
+  function_level: 5
+
+trailing_comma:
+  mandatory_comma: true
+
+type_name:
+  max_length:
+    warning: 75
+    error: 75

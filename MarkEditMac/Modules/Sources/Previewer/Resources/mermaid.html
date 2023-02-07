@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mermaid</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+    * {
+      margin: 0px !important;
+    }
+    div {
+      padding: 8px !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="container" style="text-align: center;"></div>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.esm.min.mjs";
+
+    const isDarkMode = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = isDarkMode ? "dark" : "default";
+    mermaid.initialize({ theme, startOnLoad: false });
+
+    const container = document.querySelector("#container");
+    mermaid.render("graph", "{{DATA}}".code, html => container.innerHTML = html);
+  </script>
+</body>
+</html>

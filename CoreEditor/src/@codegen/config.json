@@ -1,0 +1,46 @@
+{
+  "parsing": {
+    "targets": {
+      "config": {
+        "source": ["../config.ts"]
+      },
+      "native": {
+        "source": ["../bridge/native/*.ts"]
+      },
+      "web": {
+        "source": ["../bridge/web/*.ts"]
+      }
+    },
+    "predefinedTypes": [
+      "CodeGen_Int"
+    ],
+    "defaultCustomTags": {},
+    "dropInterfaceIPrefix": true
+  },
+  "rendering": {
+    "swift": {
+      "renders": [
+        {
+          "target": "config",
+          "template": "swift-config.mustache",
+          "outputPath": "../../../MarkEditCore/Sources"
+        },
+        {
+          "target": "native",
+          "template": "swift-native-module.mustache",
+          "outputPath": "../../../MarkEditKit/Sources/Bridge/Native/Generated"
+        },
+        {
+          "target": "web",
+          "template": "swift-web-module.mustache",
+          "outputPath": "../../../MarkEditKit/Sources/Bridge/Web/Generated"
+        }
+      ],
+      "namedTypesTemplatePath": "swift-shared-types.mustache",
+      "namedTypesOutputPath": "../../../MarkEditKit/Sources/Generated/SharedTypes.swift",
+      "typeNameMap": {
+        "CodeGen_Int": "Int"
+      }
+    }
+  }
+}

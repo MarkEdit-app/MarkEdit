@@ -1,0 +1,38 @@
+{{#custom}}
+{{#documentationLines}}
+///{{{.}}}
+{{/documentationLines}}
+public struct {{typeName}}: Codable {
+  {{#members}}
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  public var {{name}}: {{type}}
+  {{/members}}
+  {{#staticMembers}}
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  private var {{name}}: {{type}} = {{{value}}}
+  {{/staticMembers}}
+
+  public init({{#members}}{{name}}: {{type}}{{^last}}, {{/last}}{{/members}}) {
+    {{#members}}
+    self.{{name}} = {{name}}
+    {{/members}}
+  }
+}
+{{/custom}}
+{{#enum}}
+{{#documentationLines}}
+///{{{.}}}
+{{/documentationLines}}
+public enum {{typeName}}: {{valueType}}, Codable {
+  {{#members}}
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  case {{key}} = {{{value}}}
+  {{/members}}
+}
+{{/enum}}

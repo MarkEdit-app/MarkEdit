@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>table</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont;
+      margin: 0px !important;
+    }
+
+    div {
+      padding: 8px !important;
+    }
+
+    table {
+      overflow: auto;
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    table th {
+      font-weight: 600;
+      background-color: #f6f8fa;
+    }
+
+    table th, table td {
+      padding: 6px 13px;
+      border: 1px solid #dfe2e5;
+    }
+
+    table tr {
+      background-color: #ffffff;
+      border-top: 1px solid #c6cbd1;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      table th {
+        background-color: #292929;
+      }
+
+      table th, table td {
+        border: 1px solid #404040;
+      }
+
+      table tr {
+        background-color: #212121;
+        border-top: 1px solid #c6cbd1;
+        color: #e3e3e3;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="container" style="text-align: center;"></div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    const container = document.querySelector("#container");
+    container.innerHTML = marked.parse("{{DATA}}".code);
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+//
+//  {{moduleName}}.swift
+//
+//  Generated using https://github.com/microsoft/ts-gyb
+//
+//  Don't modify this file manually, it's auto generated.
+//
+//  To make changes, edit template files under /CoreEditor/src/@codegen
+
+import WebKit
+
+public final class {{moduleName}} {
+  private weak var webView: WKWebView?
+
+  init(webView: WKWebView) {
+    self.webView = webView
+  }
+  {{#methods}}
+
+  {{#documentationLines}}
+  ///{{{.}}}
+  {{/documentationLines}}
+  {{#returnType}}@MainActor {{/returnType}}public func {{methodName}}({{parametersDeclaration}}{{#parametersDeclaration.length}}{{^returnType}}, {{/returnType}}{{/parametersDeclaration.length}}{{^returnType}}completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil{{/returnType}}) {{#returnType}}async throws -> {{returnType}} {{/returnType}}{
+    {{#parameters.length}}
+    struct Message: Encodable {
+      {{#parameters}}
+      let {{name}}: {{type}}
+      {{/parameters}}
+    }
+
+    {{/parameters.length}}
+    {{#parameters.length}}
+    let message = Message(
+      {{#parameters}}
+      {{name}}: {{name}}{{^last}},{{/last}}
+      {{/parameters}}
+    )
+
+    {{/parameters.length}}
+    {{#returnType}}
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}"{{#parameters.length}}, message: message{{/parameters.length}}) {
+        continuation.resume(with: $0)
+      }
+    }
+    {{/returnType}}
+    {{^returnType}}
+    webView?.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}", {{#parameters.length}}message: message, {{/parameters.length}}completion: completion)
+    {{/returnType}}
+  }
+  {{/methods}}
+}
+{{#associatedTypes}}
+
+{{> swift-named-type}}
+{{/associatedTypes}}

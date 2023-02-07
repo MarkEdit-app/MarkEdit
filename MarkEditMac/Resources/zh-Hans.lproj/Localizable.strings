@@ -1,0 +1,291 @@
+/* Use 1 tab as the indent unit */
+"1 tab" = "1 个制表符";
+
+/* Use 2 spaces as the indent unit */
+"2 spaces" = "2 个空格";
+
+/* Use 2 tabs as the indent unit */
+"2 tabs" = "2 个制表符";
+
+/* Use 4 spaces as the indent unit */
+"4 spaces" = "4 个空格";
+
+/* Option to show active line indicator */
+"Active line indicator" = "当前行指示器";
+
+/* Button title, perform actions to all items */
+"All" = "全部";
+
+/* Appearance for the app */
+"Appearance:" = "外观：";
+
+/* Automatic window tabbing mode */
+"Automatic" = "自动";
+
+/* Toolbar item to toggle bold */
+"Bold" = "粗体";
+
+/* Toggle case sensitive search */
+"Case Sensitive" = "大小写敏感";
+
+/* Line endings used on Classic Mac OS */
+"Classic Mac OS (CR)" = "Classic Mac OS (CR)";
+
+/* Menu item: clear recents */
+"Clear Recents" = "清除最近";
+
+/* Column name for table creation */
+"Column" = "列";
+
+/* Compact mode for window toolbar */
+"Compact" = "紧凑";
+
+/* Phrase used in CodeMirror to indicate control character */
+"Control Character" = "控制字符";
+
+/* Toolbar item to copy pandoc command */
+"Copy Pandoc Command" = "拷贝 Pandoc 指令";
+
+/* Always use dark mode for the app */
+"Dark" = "深色";
+
+/* Dark theme for the editor */
+"Dark Theme:" = "深色主题：";
+
+/* Line endings for creating new files */
+"Default Line Endings:" = "默认行尾格式：";
+
+/* Text encoding for opening and saving files */
+"Default Text Encoding:" = "默认文本编码：";
+
+/* Explanation for focus mode */
+"Dim inactive lines" = "淡化非当前行";
+
+/* Disallowed window tabbing mode */
+"Disallowed" = "禁用";
+
+/* Button title, confirm an action */
+"Done" = "完成";
+
+/* Editor behavior like focus mode and typewriter mode */
+"Edit Behavior:" = "编辑行为：";
+
+/* Window title for editor settings */
+"Editor" = "编辑器";
+
+/* Find mode in search menu */
+"Find" = "查找";
+
+/* Menu item: use selection to find */
+"Find Selection" = "查找选中内容";
+
+/* Phrase used in CodeMirror fold a line */
+"Fold Line" = "折叠行";
+
+/* Phrase used in CodeMirror to indicated folded code */
+"Folded Code" = "折叠的代码";
+
+/* Phrase used in CodeMirror to indicate folded lines */
+"Folded Lines" = "折叠的行";
+
+/* Label for font settings */
+"Font:" = "字体：";
+
+/* Window title for general settings */
+"General" = "通用";
+
+/* Placeholder text for goto line window */
+"Go to Line" = "跳转到行";
+
+/* Toolbar item to toggle heading levels */
+"Headers" = "标题";
+
+/* Hidden mode for window toolbar */
+"Hidden" = "隐藏";
+
+/* Toolbar item to insert horizontal rule */
+"Horizontal Rule" = "水平分割线";
+
+/* Toolbar item to insert code */
+"Insert Code" = "插入代码";
+
+/* Toolbar item to insert image */
+"Insert Image" = "插入图片";
+
+/* Toolbar item to insert link */
+"Insert Link" = "插入链接";
+
+/* Press tab key to insert 2 spaces */
+"Inserts 2 spaces" = "插入 2 个空格";
+
+/* Press tab key to insert 4 spaces */
+"Inserts 4 spaces" = "插入 4 个空格";
+
+/* Default tab key behavior */
+"Inserts tab character" = "插入制表符";
+
+/* Option to show invisible characters */
+"Invisible characters" = "不可见字符";
+
+/* Toolbar item to toggle italic */
+"Italic" = "斜体";
+
+/* Item name for table creation */
+"Item" = "项目";
+
+/* Explanation for typewriter mode */
+"Keep caret in the middle" = "保持光标居中";
+
+/* Always use light mode for the app */
+"Light" = "浅色";
+
+/* Light theme for the editor */
+"Light Theme:" = "浅色主题：";
+
+/* Label for line height option */
+"Line Height:" = "行高：";
+
+/* Option to show line numbers */
+"Line numbers" = "行号";
+
+/* Label for line wrapping option */
+"Line Wrapping:" = "自动折行：";
+
+/* Toggle literal search */
+"Literal Search" = "字面查找";
+
+/* Line endings used on macOS and Unix */
+"macOS / Unix (LF)" = "macOS / Unix (LF)";
+
+/* Menu item: create a new document */
+"New Document" = "新建文档";
+
+/* Behavior when creating new windows */
+"New Window Behavior:" = "新窗口行为：";
+
+/* Button title, move to the next item */
+"Next" = "下一个";
+
+/* Normal line spacing */
+"Normal" = "正常";
+
+/* Menu item: open an existing document */
+"Open Document" = "打开文档";
+
+/* Menu item for selecting custom fonts */
+"Open Font Panel..." = "打开字体面板…";
+
+/* Label for indent unit settings */
+"Prefer Indent Using:" = "缩进偏好：";
+
+/* Preferred window tabbing mode */
+"Preferred" = "首选";
+
+/* Button title for code preview */
+"preview" = "预览";
+
+/* Button title, move to the previous item */
+"Previous" = "上一个";
+
+/* Toolbar item to toggle blockquote */
+"Quote" = "引用";
+
+/* Menu item: recent searches */
+"Recent Searches" = "最近的搜索";
+
+/* Label for the option to reduce window transparency */
+"Reduce Transparency:" = "降低透明度：";
+
+/* Toggle regular expression for search */
+"Regular Expression" = "正则表达式";
+
+/* Relaxed line spacing */
+"Relaxed" = "宽松";
+
+/* Explanation for the option to reduce window transparency */
+"Remove the toolbar blur" = "移除工具栏模糊效果";
+
+/* Replace mode in search menu */
+"Replace" = "替换";
+
+/* Menu item: select all occurrences */
+"Select All Occurrences" = "选择所有相同项";
+
+/* Menu label for selecting fonts */
+"Select..." = "选择…";
+
+/* Option to show selection status */
+"Selection status" = "选择状态";
+
+/* Toolbar item to share the document */
+"Share this document" = "分享此文档";
+
+/* Label for display options */
+"Show:" = "显示：";
+
+/* Toolbar item to toggle strikethrough */
+"Strikethrough" = "删除线";
+
+/* Follow the system appearance */
+"System" = "系统";
+
+/* System default font name */
+"System Default" = "系统默认";
+
+/* System mono font name */
+"System Mono" = "系统等宽";
+
+/* System rounded font name */
+"System Rounded" = "系统圆润";
+
+/* System serif font name */
+"System Serif" = "系统衬线";
+
+/* Label for tab key behavior settings */
+"Tab Key:" = "制表键：";
+
+/* Label for window tabbing mode settings */
+"Tabbing Mode:" = "标签模式：";
+
+/* Toolbar item to insert table */
+"Table" = "表格";
+
+/* Toolbar item to show table of contents */
+"Table of Contents" = "内容目录";
+
+/* Toolbar item to use text format menu */
+"Text Format" = "文本格式";
+
+/* Tight line spacing */
+"Tight" = "紧凑";
+
+/* Default title used for link insertion */
+"title" = "标题";
+
+/* Toolbar item to toggle bullet list */
+"Toggle List" = "切换列表";
+
+/* Label for window toolbar mode */
+"Toolbar Mode:" = "工具栏模式：";
+
+/* Phrase used in CodeMirror to unfold a piece of text */
+"Unfold" = "展开";
+
+/* Phrase used in CodeMirror to unfold a line */
+"Unfold Line" = "展开行";
+
+/* Phrase used in CodeMirror to indicate unfolded lines */
+"Unfolded Lines" = "展开的行";
+
+/* Toggle whole word search */
+"Whole Word" = "整词查找";
+
+/* Window title for window settings */
+"Window" = "窗口";
+
+/* Line endings used on Windows */
+"Windows (CRLF)" = "Windows (CRLF)";
+
+/* Explanation for line wrapping option */
+"Wrap lines to editor width" = "按编辑器的宽度换行";
+
