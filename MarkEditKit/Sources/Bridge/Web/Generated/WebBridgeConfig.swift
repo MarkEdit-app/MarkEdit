@@ -177,4 +177,5 @@ public enum TabKeyBehavior: Int, Codable {
   case insertTab = 0
   case insertTwoSpaces = 1
   case insertFourSpaces = 2
+  case indentMore = 3
 }
