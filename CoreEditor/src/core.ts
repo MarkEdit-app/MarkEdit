@@ -27,6 +27,9 @@ export function resetEditor(doc: string) {
   editor.focus();
   window.editor = editor;
 
+  const scrollDOM = editor.scrollDOM;
+  fixWebKitWheelIssues(scrollDOM);
+
   // Recofigure, window.config might have changed
   styling.setUp(window.config);
 
@@ -64,4 +67,17 @@ export function getEditorText() {
 
 export function markEditorDirty(isDirty: boolean) {
   editedState.isDirty = isDirty;
+}
+
+function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
+  // Fix the vertical scrollbar initially visible for short documents
+  scrollDOM.style.overflow = 'hidden';
+  setTimeout(() => scrollDOM.style.overflow = 'auto', 50);
+
+  // Dirty fix to a WebKit bug,
+  // the vertical scrollbar won't be hidden after the element is scrolled horizontally.
+  //
+  // This fix doesn't make any sense, it cannot be explained,
+  // however, it just works™.
+  scrollDOM.addEventListener('wheel', () => { /* no-op */ });
 }
