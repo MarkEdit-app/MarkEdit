@@ -106,6 +106,9 @@
 /* Toolbar item to insert horizontal rule */
 "Horizontal Rule" = "水平分割线";
 
+/* Press tab key to indent more */
+"Indents more" = "增加缩进";
+
 /* Toolbar item to insert code */
 "Insert Code" = "插入代码";
 

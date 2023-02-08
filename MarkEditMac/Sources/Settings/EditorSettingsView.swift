@@ -130,6 +130,7 @@ struct EditorSettingsView: View {
             Text(Localized.Settings.insertsTab).tag(TabKeyBehavior.insertTab)
             Text(Localized.Settings.insertsTwoSpaces).tag(TabKeyBehavior.insertTwoSpaces)
             Text(Localized.Settings.insertsFourSpaces).tag(TabKeyBehavior.insertFourSpaces)
+            Text(Localized.Settings.indentsMore).tag(TabKeyBehavior.indentMore)
           }
           .onChange(of: tabKeyBehavior) {
             AppPreferences.Editor.tabKeyBehavior = $0

@@ -101,6 +101,7 @@ enum Localized {
     static let insertsTab = String(localized: "Inserts tab character", comment: "Default tab key behavior")
     static let insertsTwoSpaces = String(localized: "Inserts 2 spaces", comment: "Press tab key to insert 2 spaces")
     static let insertsFourSpaces = String(localized: "Inserts 4 spaces", comment: "Press tab key to insert 4 spaces")
+    static let indentsMore = String(localized: "Indents more", comment: "Press tab key to indent more")
     static let indentUnit = String(localized: "Prefer Indent Using:", comment: "Label for indent unit settings")
     static let twoSpaces = String(localized: "2 spaces", comment: "Use 2 spaces as the indent unit")
     static let fourSpaces = String(localized: "4 spaces", comment: "Use 4 spaces as the indent unit")
