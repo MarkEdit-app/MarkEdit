@@ -190,6 +190,9 @@
 /* Button title, move to the previous item */
 "Previous" = "上一个";
 
+/* Whether to keep windows when quit the app */
+"Quit always keeps windows" = "退出时总是保留窗口";
+
 /* Toolbar item to toggle blockquote */
 "Quote" = "引用";
 
@@ -285,6 +288,9 @@
 
 /* Window title for window settings */
 "Window" = "窗口";
+
+/* Label for window restoration options */
+"Window Restoration:" = "窗口恢复：";
 
 /* Line endings used on Windows */
 "Windows (CRLF)" = "Windows (CRLF)";
