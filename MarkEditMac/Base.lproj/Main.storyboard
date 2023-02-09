@@ -775,7 +775,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="EditorWindowController" id="jGA-0Y-lOj" userLabel="Editor Window Controller" customClass="EditorWindowController" customModule="MarkEdit" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Window" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="EditorWindow" animationBehavior="default" toolbarStyle="unified" id="Ckk-yw-fiv" customClass="EditorWindow" customModule="MarkEdit" customModuleProvider="target">
+                    <window key="window" title="Window" separatorStyle="line" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" toolbarStyle="unified" id="Ckk-yw-fiv" customClass="EditorWindow" customModule="MarkEdit" customModuleProvider="target">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <rect key="contentRect" x="89" y="664" width="720" height="480"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>

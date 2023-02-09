@@ -16,10 +16,17 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     super.windowDidLoad()
     window?.minSize = CGSize(width: 240, height: 0)
     window?.backgroundColor = .controlBackgroundColor
+
+    windowFrameAutosaveName = "Editor"
+    window?.setFrameUsingName(windowFrameAutosaveName)
   }
 
   func windowDidBecomeMain(_ notification: Notification) {
     NSApplication.shared.closeOpenPanels()
+  }
+
+  func windowDidResize(_ notification: Notification) {
+    window?.saveFrame(usingName: windowFrameAutosaveName)
   }
 
   func windowWillClose(_ notification: Notification) {
