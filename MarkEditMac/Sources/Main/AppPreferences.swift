@@ -30,6 +30,15 @@ enum AppPreferences {
         performUpdates { $0.setDefaultLineBreak(defaultLineEndings.characters) }
       }
     }
+
+    static var quitAlwaysKeepsWindows: Bool {
+      get {
+        UserDefaults.standard.bool(forKey: "NSQuitAlwaysKeepsWindows")
+      }
+      set {
+        UserDefaults.standard.set(newValue, forKey: "NSQuitAlwaysKeepsWindows")
+      }
+    }
   }
 
   enum Editor {

@@ -12,6 +12,7 @@ import MarkEditKit
 struct GeneralSettingsView: View {
   @State private var appearance = AppPreferences.General.appearance
   @State private var newWindowBehavior = AppPreferences.General.newWindowBehavior
+  @State private var quitAlwaysKeepsWindows = AppPreferences.General.quitAlwaysKeepsWindows
   @State private var defaultTextEncoding = AppPreferences.General.defaultTextEncoding
   @State private var defaultLineEndings = AppPreferences.General.defaultLineEndings
 
@@ -38,6 +39,12 @@ struct GeneralSettingsView: View {
           AppPreferences.General.newWindowBehavior = $0
         }
         .formMenuPicker()
+
+        Toggle(Localized.Settings.quitAlwaysKeepsWindows, isOn: $quitAlwaysKeepsWindows)
+          .onChange(of: quitAlwaysKeepsWindows) {
+            AppPreferences.General.quitAlwaysKeepsWindows = $0
+          }
+          .formLabel(Localized.Settings.windowRestoration)
       }
 
       Section {
