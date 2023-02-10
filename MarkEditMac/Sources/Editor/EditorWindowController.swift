@@ -24,7 +24,13 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
     // Editor view controllers are created without having a window (for pre-loading),
     // this is used for restoring the autosaved window frame.
-    autosavedFrame = window?.frame
+    //
+    // Unfortunately, we need to manually do the window cascading.
+    if let window, NSApp.windows.filter({ $0 is EditorWindow }).count > 1 {
+      autosavedFrame = window.cascadeRect(from: window.frame)
+    } else {
+      autosavedFrame = window?.frame
+    }
   }
 
   func windowDidBecomeMain(_ notification: Notification) {
