@@ -40,13 +40,18 @@ final class EditorDocument: NSDocument {
     let storyboard = NSStoryboard(name: NSStoryboard.Name("Main"), bundle: nil)
     let sceneIdentifier = NSStoryboard.SceneIdentifier("EditorWindowController")
 
-    guard let windowController = storyboard.instantiateController(withIdentifier: sceneIdentifier) as? NSWindowController else {
+    guard let windowController = storyboard.instantiateController(withIdentifier: sceneIdentifier) as? EditorWindowController else {
       return
     }
 
     // Note hostViewController is a weak reference, it must be strongly retained first
     let contentVC = EditorReusePool.shared.dequeueViewController()
     windowController.contentViewController = contentVC
+
+    // Restore the autosaved window frame, which relies on windowFrameAutosaveName
+    if let autosavedFrame = windowController.autosavedFrame {
+      windowController.window?.setFrame(autosavedFrame, display: false)
+    }
 
     hostViewController = contentVC
     hostViewController?.representedObject = self

@@ -7,6 +7,8 @@
 import AppKit
 
 final class EditorWindowController: NSWindowController, NSWindowDelegate {
+  var autosavedFrame: CGRect?
+
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     shouldCascadeWindows = true
@@ -19,6 +21,10 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
     windowFrameAutosaveName = "Editor"
     window?.setFrameUsingName(windowFrameAutosaveName)
+
+    // Editor view controllers are created without having a window (for pre-loading),
+    // this is used for restoring the autosaved window frame.
+    autosavedFrame = window?.frame
   }
 
   func windowDidBecomeMain(_ notification: Notification) {
