@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
+import { sleep } from '../src/@test/helpers';
 import * as editor from '../src/@test/editor';
 
 describe('Styling module', () => {
@@ -28,10 +29,3 @@ describe('Styling module', () => {
     expect(classNames.has('cm-lineNumbers')).toBeTruthy();
   });
 });
-
-function sleep(milliseconds: number) {
-  // eslint-disable-next-line compat/compat
-  return new Promise(resolve => {
-    setTimeout(resolve, milliseconds);
-  });
-}
