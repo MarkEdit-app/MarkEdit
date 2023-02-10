@@ -43,6 +43,16 @@ public extension NSWindow {
       y: (visibleSize.height - frame.size.height) * 0.5 + fullSize.height - visibleSize.height
     ))
   }
+
+  /// Get the cascade rect based on a rect
+  func cascadeRect(from rect: CGRect) -> CGRect {
+    let origin = cascadeTopLeft(from: CGPoint(
+      x: rect.origin.x,
+      y: rect.origin.y + rect.height
+    ))
+
+    return CGRect(origin: CGPoint(x: origin.x, y: origin.y - rect.height), size: rect.size)
+  }
 }
 
 // MARK: - Private
