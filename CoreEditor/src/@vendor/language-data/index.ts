@@ -311,7 +311,7 @@ export const languages = [
   LanguageDescription.of({
     name: "OCaml",
     alias: ["ocaml"],
-    extensions: ["ml"],
+    extensions: ["ml","mli","mll","mly"],
     load() {
       return import("@codemirror/legacy-modes/mode/mllike").then(m => legacy(m.oCaml))
     }
