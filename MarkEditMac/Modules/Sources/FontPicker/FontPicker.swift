@@ -27,13 +27,18 @@ public struct FontPicker: View {
 
   public var body: some View {
     HStack {
-      Text(configuration.localizedInfo(style: selectedFontStyle, size: selectedFontSize))
-        .font(Font(selectedFontStyle.fontWith(size: 12)))
-        .frame(width: 180, height: 19, alignment: .center)
-        .padding(.horizontal, 5)
-        .truncationMode(.middle)
-        .border(Color(.theme(light: .lightGray, dark: .darkGray)))
-        .background(Color(.theme(light: .controlBackgroundColor, dark: .windowBackgroundColor)))
+      ZStack {
+        // Just to steal the bezel UI from TextField
+        TextField(text: .constant("")) {}
+          .focusable(false)
+          .allowsHitTesting(false)
+
+        Text(configuration.localizedInfo(style: selectedFontStyle, size: selectedFontSize))
+          .font(Font(selectedFontStyle.fontWith(size: 12)))
+          .padding(.horizontal, 5)
+          .truncationMode(.middle)
+      }
+      .frame(width: 190, height: 19, alignment: .center)
 
       Stepper(
         value: $selectedFontSize,
