@@ -165,9 +165,8 @@ extension EditorViewController {
 
       Grammarly.shared.update(bridge: self.bridge.grammarly)
 
-      // Dirty trick, show the window later to wait CodeMirror finishes its initial layout,
-      // the line number height is not initially correct because of the window animation,
-      // we skip showing the window in makeWindowControllers and wait the final layout.
+      // Dirty trick, show the content later to wait CodeMirror finishes its initial layout,
+      // the line number height is not initially correct because of the window animation.
       DispatchQueue.afterDelay(seconds: 0.05) {
         self.webView.isHidden = false
       }
