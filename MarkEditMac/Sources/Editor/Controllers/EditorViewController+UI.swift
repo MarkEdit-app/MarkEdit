@@ -28,6 +28,11 @@ extension EditorViewController {
     }
   }
 
+  func setWindowHidden(_ isHidden: Bool) {
+    // There's also "setIsVisible" but it will also be called in AppKit internally
+    view.window?.alphaValue = isHidden ? 0 : 1
+  }
+
   func configureToolbar() {
     let toolbar = NSToolbar(identifier: "EditorToolbar")
     toolbar.displayMode = .iconOnly
