@@ -215,6 +215,14 @@ export const languages = [
     }
   }),
   LanguageDescription.of({
+    name: "F#",
+    alias: ["fsharp"],
+    extensions: ["fs", "fsx"],
+    load() {
+      return import("@codemirror/legacy-modes/mode/mllike").then(m => legacy(m.fSharp))
+    }
+  }),
+  LanguageDescription.of({
     name: "Go",
     extensions: ["go"],
     load() {
@@ -298,6 +306,14 @@ export const languages = [
     extensions: ["mm"],
     load() {
       return import("@codemirror/legacy-modes/mode/clike").then(m => legacy(m.objectiveCpp))
+    }
+  }),
+  LanguageDescription.of({
+    name: "OCaml",
+    alias: ["ocaml"],
+    extensions: ["ml"],
+    load() {
+      return import("@codemirror/legacy-modes/mode/mllike").then(m => legacy(m.oCaml))
     }
   }),
   LanguageDescription.of({
