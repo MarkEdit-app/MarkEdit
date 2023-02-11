@@ -38,7 +38,7 @@ public struct FontPicker: View {
           .padding(.horizontal, 5)
           .truncationMode(.middle)
       }
-      .frame(width: 180, height: 19, alignment: .center)
+      .frame(width: 190, height: 19, alignment: .center)
 
       Stepper(
         value: $selectedFontSize,
