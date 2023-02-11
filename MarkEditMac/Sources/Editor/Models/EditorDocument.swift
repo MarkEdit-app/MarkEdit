@@ -55,28 +55,7 @@ final class EditorDocument: NSDocument {
 
     hostViewController = contentVC
     hostViewController?.representedObject = self
-
-    let hasOpenPanels = NSApplication.shared.hasOpenPanels
-    NSApplication.shared.closeOpenPanels()
-
-    // Return early, window creation in version browsing mode cannot be asynchronous
-    guard !NSDocumentController.shared.documents.contains(where: { $0.isBrowsingVersions }) else {
-      return addWindowController(windowController)
-    }
-
-    // Return early, the line number glitch happens only when there're open panels
-    guard hasOpenPanels else {
-      return addWindowController(windowController)
-    }
-
-    // Dirty trick, show the window later to wait CodeMirror finishes its initial layout,
-    // the line number height is not initially correct because of the window animation,
-    // we skip showing the window in makeWindowControllers and wait the final layout.
-    DispatchQueue.afterDelay(seconds: 0.02) {
-      self.hostViewController?.view.needsLayout = true
-      self.addWindowController(windowController)
-      self.showWindows()
-    }
+    addWindowController(windowController)
   }
 }
 

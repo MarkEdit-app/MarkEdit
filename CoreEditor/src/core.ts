@@ -72,7 +72,7 @@ export function markEditorDirty(isDirty: boolean) {
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   // Fix the vertical scrollbar initially visible for short documents
   scrollDOM.style.overflow = 'hidden';
-  setTimeout(() => scrollDOM.style.overflow = 'auto', 150);
+  setTimeout(() => scrollDOM.style.overflow = 'auto', 300);
 
   // Dirty fix to a WebKit bug,
   // the vertical scrollbar won't be hidden after the element is scrolled horizontally.

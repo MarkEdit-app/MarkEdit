@@ -153,6 +153,7 @@ extension EditorViewController {
       return
     }
 
+    webView.isHidden = true
     bridge.core.resetEditor(text: text) { _ in
       self.setWindowHidden(false)
       self.bridge.textChecker.update(options: TextCheckerOptions(
@@ -161,7 +162,15 @@ extension EditorViewController {
         autocomplete: true,
         autocapitalize: false
       ))
+
       Grammarly.shared.update(bridge: self.bridge.grammarly)
+
+      // Dirty trick, show the window later to wait CodeMirror finishes its initial layout,
+      // the line number height is not initially correct because of the window animation,
+      // we skip showing the window in makeWindowControllers and wait the final layout.
+      DispatchQueue.afterDelay(seconds: 0.05) {
+        self.webView.isHidden = false
+      }
     }
   }
 
