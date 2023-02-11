@@ -15,10 +15,6 @@ public extension NSApplication {
     currentEvent?.modifierFlags.contains(.shift) == true
   }
 
-  var hasOpenPanels: Bool {
-    windows.contains { $0 is NSOpenPanel }
-  }
-
   func showOpenPanel() {
     if let openPanel = windows.first(where: { $0 is NSOpenPanel }) {
       openPanel.makeKeyAndOrderFront(self)
