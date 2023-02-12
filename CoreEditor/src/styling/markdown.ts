@@ -4,6 +4,7 @@ import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdo
 import { tags } from './builder';
 import { inlineCodeStyle, fencedCodeStyle, previewMermaid, previewMath } from './nodes/code';
 import { previewTable, tableStyle } from './nodes/table';
+import { frontMatterStyle } from './nodes/frontMatter';
 
 // https://github.com/lezer-parser/markdown/blob/main/src/markdown.ts
 export const markdownExtensions: MarkdownConfig[] = [
@@ -29,6 +30,7 @@ export const renderExtensions = [
   inlineCodeStyle,
   fencedCodeStyle,
   tableStyle,
+  frontMatterStyle,
 ];
 
 /**

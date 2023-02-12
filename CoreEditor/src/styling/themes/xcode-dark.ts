@@ -5,12 +5,14 @@ import { darkBase as base } from './colors';
 const colors = {
   accent: '#5dd8ff',
   text: '#ffffffd9',
+  comment: '#6c7986',
   brown: '#bf8555',
 };
 
 function theme() {
   return buildTheme({
     text: colors.text,
+    comment: colors.comment,
     background: '#1f1f24',
     caret: colors.text,
     selection: '#515b70',
@@ -33,7 +35,7 @@ function highlight() {
     { tag: [tags.deleted, tags.macroName], color: base.red },
     { tag: [tags.className, tags.definition(tags.propertyName), tags.definition(tags.typeName)], color: '#9ef1dd' },
     { tag: [tags.function(tags.variableName), tags.function(tags.propertyName)], color: '#a167e6' },
-    { tag: [tags.meta, tags.comment], color: '#6c7986' },
+    { tag: [tags.meta, tags.comment], color: colors.comment },
     { tag: [tags.link, tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#fc6a5d' },
     { tag: [tags.linkMark, tags.listMark], color: '#fd8f3f' },
     { tag: tags.url, color: '#41a1c0' },

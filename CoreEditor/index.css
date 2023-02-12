@@ -34,6 +34,6 @@ html, body {
   text-decoration: underline;
 }
 
-.cm-md-header {
+.cm-md-header:not(.cm-md-frontMatter *) {
   font-weight: bold;
 }

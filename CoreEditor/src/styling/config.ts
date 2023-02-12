@@ -69,10 +69,10 @@ export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
     const style = document.createElement('style');
     style.textContent = `
-      .cm-editor {}
-      .cm-md-heading1 {}
-      .cm-md-heading2 {}
-      .cm-md-heading3 {}
+      .cm-editor:not(.cm-md-frontMatter *) {}
+      .cm-md-heading1:not(.cm-md-frontMatter *) {}
+      .cm-md-heading2:not(.cm-md-frontMatter *) {}
+      .cm-md-heading3:not(.cm-md-frontMatter *) {}
     `;
 
     styleSheets.fontSize = style;
@@ -81,7 +81,8 @@ export function setFontSize(fontSize: number) {
 
   updateStyleSheet(styleSheets.fontSize, (style, rule) => {
     // E.g., .cm-md-heading1 -> 1, .cm-editor -> 0
-    const headingLevel = parseInt(rule.selectorText.slice(-1)) || 0;
+    const selector = rule.selectorText.split(':')[0];
+    const headingLevel = parseInt(selector.slice(-1)) || 0;
     style.fontSize = `${calculateFontSize(fontSize, headingLevel)}px`;
   });
 }

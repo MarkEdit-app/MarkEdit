@@ -5,6 +5,7 @@ import { lightBase as base } from './colors';
 const colors = {
   accent: '#0550ae',
   text: '#24292f',
+  comment: '#6e7781',
   activeLine: '#eaeef27f',
   searchMatch: '#fae17d7f',
   selectedMatch: '#bf8700',
@@ -16,6 +17,7 @@ const colors = {
 function theme() {
   return buildTheme({
     text: colors.text,
+    comment: colors.comment,
     background: '#ffffff',
     caret: '#0a69da',
     selection: '#add6ff',
@@ -39,7 +41,7 @@ function highlight() {
     { tag: [tags.deleted, tags.macroName], color: base.red },
     { tag: [tags.className, tags.definition(tags.propertyName), tags.definition(tags.typeName), tags.listMark], color: '#953800' },
     { tag: [tags.function(tags.variableName), tags.function(tags.propertyName)], color: '#8250df' },
-    { tag: [tags.meta, tags.comment], color: '#6e7781' },
+    { tag: [tags.meta, tags.comment], color: colors.comment },
     { tag: [tags.link, tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#0a3069' },
     { tag: [tags.url, tags.linkMark], color: colors.text },
     { tag: tags.propertyName, color: colors.text },

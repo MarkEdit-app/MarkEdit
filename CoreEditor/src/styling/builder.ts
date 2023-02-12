@@ -156,6 +156,9 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-md-inlineCode': {
       backgroundColor: colors.lighterBackground,
     },
+    '.cm-md-frontMatter *': {
+      color: colors.comment,
+    },
   };
 
   const combined = { ...sharedStyles };

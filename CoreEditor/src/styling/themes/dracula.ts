@@ -12,6 +12,7 @@ const colors = {
 function theme() {
   return buildTheme({
     text: colors.text,
+    comment: colors.gray,
     background: '#282a36',
     caret: '#aeafad',
     selection: '#44475a',
