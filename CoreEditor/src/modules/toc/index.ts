@@ -1,6 +1,7 @@
 import { EditorSelection } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { HeadingInfo } from './types';
+import { frontMatterRange } from '../frontMatter';
 import { scrollToSelection } from '../selection';
 import selectWithRanges from '../selection/selectWithRanges';
 
@@ -19,6 +20,14 @@ export function getTableOfContents() {
       const match = /^(?:ATX|Setext)Heading(\d)$/.exec(node.name);
       if (match === null) {
         return;
+      }
+
+      // If it's inside a front matter section, we will not treat it as a section header
+      if (node.name.startsWith('SetextHeading')) {
+        const range = frontMatterRange();
+        if (range !== undefined && node.from >= range.from && node.to <= range.to) {
+          return;
+        }
       }
 
       // ATXHeading can have up to 3 leading spaces and arbitrary number of spaces between # and visible characters,
