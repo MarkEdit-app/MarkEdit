@@ -59,7 +59,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   },
   // Extended
   '.cm-visibleTab': {
-    backgroundImage: 'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20"><path stroke="%23888" stroke-width="1" fill="none" d="M1 10H196L190 5M190 15L196 10M197 4L197 16"/></svg>\')',
+    backgroundImage: 'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20"><path stroke="%23888" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M190.5 5l6 5m-6 5l6-5M1 10h195"/></svg>\')',
     backgroundSize: 'auto 100%',
     backgroundPosition: 'right 90%',
     backgroundRepeat: 'no-repeat',
