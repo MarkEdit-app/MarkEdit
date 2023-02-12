@@ -9,6 +9,7 @@ export interface BaseColors {
 
 export interface EditorColors {
   text: string;
+  comment: string;
   background: string;
   caret: string;
   selection: string;

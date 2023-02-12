@@ -12,6 +12,7 @@ const colors = {
 function theme() {
   return buildTheme({
     text: colors.text,
+    comment: dark.gray1,
     background: colors.background,
     caret: colors.accent,
     lineNumber: light.gray1,

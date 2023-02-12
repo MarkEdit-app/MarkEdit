@@ -5,6 +5,7 @@ import { darkBase as base } from './colors';
 const colors = {
   accent: '#79c0ff',
   text: '#c9d1d9',
+  comment: '#8b949e',
   activeLine: '#6e76811a',
   searchMatch: '#f2cc607f',
   selectedMatch: '#9e6a03',
@@ -16,6 +17,7 @@ const colors = {
 function theme() {
   return buildTheme({
     text: colors.text,
+    comment: colors.comment,
     background: '#0d1116',
     caret: '#58a6ff',
     selection: '#264f78',
@@ -39,7 +41,7 @@ function highlight() {
     { tag: [tags.deleted, tags.macroName], color: base.red },
     { tag: [tags.className, tags.definition(tags.propertyName), tags.definition(tags.typeName), tags.listMark], color: '#ffa657' },
     { tag: [tags.function(tags.variableName), tags.function(tags.propertyName)], color: '#d2a8ff' },
-    { tag: [tags.meta, tags.comment], color: '#8b949e' },
+    { tag: [tags.meta, tags.comment], color: colors.comment },
     { tag: [tags.link, tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#a5d6ff' },
     { tag: [tags.url, tags.linkMark], color: colors.text },
     { tag: tags.propertyName, color: colors.text },

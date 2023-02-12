@@ -2,7 +2,7 @@ import { Decoration, DOMEventHandlers, EditorView, ViewPlugin } from '@codemirro
 import { RangeSet } from '@codemirror/state';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createDecoPlugin(builder: () => RangeSet<Decoration>,  eventHandlers?: DOMEventHandlers<any>) {
+export function createDecoPlugin(builder: () => RangeSet<Decoration>, eventHandlers?: DOMEventHandlers<any>) {
   return ViewPlugin.fromClass(class {}, {
     provide: () => EditorView.decorations.of(editor => {
       window.editor = editor;
