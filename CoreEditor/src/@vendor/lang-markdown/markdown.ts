@@ -30,6 +30,10 @@ function isHeading(type: NodeType) {
 
 // [MarkEdit] We prefer empty sections to be foldable (original: https://github.com/codemirror/lang-markdown/blob/main/src/markdown.ts#L31)
 function findSectionEnd(headerNode: SyntaxNode, level: number) {
+  // [MarkEdit] we also only fold ATXHeadings and leave Setext headings alone
+  const nodeType = headerNode.type.name
+  if (nodeType.startsWith('SetextHeading')) return headerNode.from
+
   let last = headerNode
   for (;;) {
     let next = last.nextSibling, heading
