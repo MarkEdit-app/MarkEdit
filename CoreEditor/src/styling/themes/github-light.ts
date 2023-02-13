@@ -43,8 +43,7 @@ function highlight() {
     { tag: [tags.function(tags.variableName), tags.function(tags.propertyName)], color: '#8250df' },
     { tag: [tags.meta, tags.comment], color: colors.comment },
     { tag: [tags.link, tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#0a3069' },
-    { tag: [tags.url, tags.linkMark], color: colors.text },
-    { tag: tags.propertyName, color: colors.text },
+    { tag: [tags.url, tags.linkMark, tags.propertyName], color: colors.text },
     { tag: [tags.quote, tags.quoteMark], color: base.green, fontStyle: 'italic' },
   ]);
 }
