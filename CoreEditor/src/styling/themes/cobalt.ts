@@ -38,12 +38,12 @@ function highlight() {
     { tag: [tags.link, tags.escape, tags.string, tags.inserted, tags.regexp, tags.listMark, tags.special(tags.string)], color: '#a5ff90' },
     { tag: [tags.url, tags.tagName, tags.codeInfo], color: colors.cyan },
     { tag: [tags.className, tags.attributeName, tags.definition(tags.typeName), tags.function(tags.variableName)], color: colors.accent },
-    { tag: tags.typeName, color: '#80ffbb' },
     { tag: [tags.meta, tags.comment], color: colors.comment, fontStyle: 'italic' },
-    { tag: tags.strong, color: colors.cyan, fontWeight: 'bold' },
     { tag: [tags.linkMark, tags.quoteMark], color: colors.text },
     { tag: [tags.contentSeparator, tags.definition(tags.variableName), tags.function(tags.propertyName)], color: colors.accent },
     { tag: [tags.atom, tags.bool, tags.number], color: '#ff628c' },
+    { tag: tags.typeName, color: '#80ffbb' },
+    { tag: tags.strong, color: colors.cyan, fontWeight: 'bold' },
     { tag: tags.self, color: '#fb94ff' },
   ], 'dark');
 }
