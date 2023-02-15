@@ -39,7 +39,7 @@ function highlight() {
     { tag: [tags.url, tags.tagName, tags.codeInfo], color: colors.cyan },
     { tag: [tags.className, tags.attributeName, tags.definition(tags.typeName), tags.function(tags.variableName)], color: colors.accent },
     { tag: tags.typeName, color: '#80ffbb' },
-    { tag: [tags.meta, tags.comment], color: colors.comment },
+    { tag: [tags.meta, tags.comment], color: colors.comment, fontStyle: 'italic' },
     { tag: tags.strong, color: colors.cyan, fontWeight: 'bold' },
     { tag: [tags.linkMark, tags.quoteMark], color: colors.text },
     { tag: [tags.contentSeparator, tags.definition(tags.variableName), tags.function(tags.propertyName)], color: colors.accent },
