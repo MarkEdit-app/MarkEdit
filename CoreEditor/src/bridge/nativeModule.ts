@@ -17,7 +17,7 @@ export interface NativeReply {
   error?: string;
 }
 
-const callbacks: Record<string, (reply: NativeReply) => void> = {};
+const callbacks = new Map<string, (reply: NativeReply) => void>();
 
 /**
  * Create a Proxy for redirecting messages to native by relying on messageHandlers.
@@ -27,7 +27,7 @@ const callbacks: Record<string, (reply: NativeReply) => void> = {};
  */
 export function createNativeModule<T extends NativeModule>(moduleName: string): T {
   return new Proxy({} as T, {
-    get(_target, p): ((args?: Record<string, unknown>) => Promise<unknown>) | undefined {
+    get(_target, p): ((args?: Map<string, unknown>) => Promise<unknown>) | undefined {
       if (typeof p !== 'string') {
         return undefined;
       }
@@ -37,13 +37,13 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
         // Context is saved to callbacks,
         // we will retrieve it in handleNativeReply later
         const id = UUID();
-        callbacks[id] = (reply: NativeReply) => {
+        callbacks.set(id, (reply: NativeReply) => {
           if (reply.error === undefined) {
             resolve(reply.result);
           } else {
             reject(new Error(reply.error));
           }
-        };
+        });
 
         const message = {
           id,
@@ -69,11 +69,11 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
  * Native invokes this to reply to a message sent by web.
  */
 export function handleNativeReply(reply: NativeReply) {
-  const callback = callbacks[reply.id] as ((reply: NativeReply) => void) | undefined;
+  const callback = callbacks.get(reply.id);
   if (callback == undefined) {
     return;
   }
 
   callback(reply);
-  delete callbacks[reply.id];
+  callbacks.delete(reply.id);
 }

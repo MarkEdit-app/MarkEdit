@@ -62,4 +62,4 @@ function headingLevel(type: NodeType) {
   return match ? +match[1] : 0;
 }
 
-const cachedDecos = new Map();
+const cachedDecos = new Map<string, Decoration>();
