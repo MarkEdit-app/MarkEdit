@@ -35,7 +35,7 @@ function highlight() {
     { tag: [tags.deleted, tags.macroName], color: base.red },
     { tag: [tags.className, tags.definition(tags.propertyName), tags.definition(tags.typeName)], color: '#9ef1dd' },
     { tag: [tags.function(tags.variableName), tags.function(tags.propertyName)], color: '#a167e6' },
-    { tag: [tags.meta, tags.comment], color: colors.comment },
+    { tag: [tags.meta, tags.comment], color: colors.comment, fontStyle: 'italic' },
     { tag: [tags.link, tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#fc6a5d' },
     { tag: [tags.linkMark, tags.listMark], color: '#fd8f3f' },
     { tag: tags.url, color: '#41a1c0' },
