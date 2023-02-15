@@ -10,6 +10,7 @@ import WinterIsComingLight from './winter-is-coming-light';
 import WinterIsComingDark from './winter-is-coming-dark';
 import MinimalLight from './minimal-light';
 import MinimalDark from './minimal-dark';
+import SynthWave84 from './synthwave84';
 
 const themes = {
   'github-light': GitHubLight,
@@ -22,6 +23,7 @@ const themes = {
   'winter-is-coming-dark': WinterIsComingDark,
   'minimal-light': MinimalLight,
   'minimal-dark': MinimalDark,
+  'synthwave84': SynthWave84,
 };
 
 export function loadTheme(name: string): EditorTheme {

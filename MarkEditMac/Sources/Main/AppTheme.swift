@@ -44,6 +44,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
       Cobalt,
       WinterIsComingLight, WinterIsComingDark,
       MinimalLight, MinimalDark,
+      SynthWave84,
     ]
   }
 
@@ -127,6 +128,14 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     )
   }
 
+  static var SynthWave84: Self {
+    Self(
+      isDark: true,
+      editorTheme: "synthwave84",
+      windowBackground: NSColor(hexCode: 0x252335)
+    )
+  }
+
   var description: String {
     switch self {
     case Self.GitHubLight:
@@ -149,6 +158,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
       return "Minimal (Light)"
     case Self.MinimalDark:
       return "Minimal (Dark)"
+    case Self.SynthWave84:
+      return "SynthWave '84"
     default:
       fatalError("Invalid theme was found")
     }

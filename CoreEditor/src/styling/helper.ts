@@ -25,18 +25,18 @@ export function updateStyleSheet(element: HTMLStyleElement | null, update: (styl
 }
 
 /**
- * Returns a css color in { key: value } format from a string like "color: foo; text-shadow: bar".
+ * Returns a css style in { 'color': foo, 'text-shadow': bar } format from a css string like "color: foo; text-shadow: bar".
  *
  * Note that, the input string must exactly follow the format, this is not an error-tolerant approach.
  */
-export function extractCssColor(input: string) {
+export function shadowableTextColor(input: string) {
   if (!input.includes('; ')) {
-    return { color: input };
+    return { 'color': input, 'text-shadow': 'none' };
   }
 
   return input.split('; ').reduce((acc, cur) => {
-    const pair = cur.split(': ');
-    acc[pair[0]] = pair[1];
+    const parts = cur.split(': ');
+    acc[parts[0]] = parts[1];
     return acc;
   }, {});
 }
