@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { EditorTheme, loadTheme } from './themes';
+import { EditorTheme } from './themes';
 import { Config } from '../config';
 import { styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
@@ -21,8 +21,8 @@ export default interface StyleSheets {
   lineHeight?: HTMLStyleElement;
 }
 
-export function setUp(config: Config) {
-  setAccentColor(loadTheme(config.theme).accentColor);
+export function setUp(config: Config, accentColor: string) {
+  setAccentColor(accentColor);
   setFontFamily(config.fontFamily);
   setFontSize(config.fontSize);
   setFocusMode(config.focusMode);

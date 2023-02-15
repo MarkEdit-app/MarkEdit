@@ -3,6 +3,7 @@ import { extensions } from './extensions';
 import { editedState } from './common/store';
 
 import * as styling from './styling/config';
+import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
 
 /**
@@ -31,7 +32,7 @@ export function resetEditor(doc: string) {
   fixWebKitWheelIssues(scrollDOM);
 
   // Recofigure, window.config might have changed
-  styling.setUp(window.config);
+  styling.setUp(window.config, themes.loadTheme(window.config.theme).accentColor);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifySelectionDidChange({
