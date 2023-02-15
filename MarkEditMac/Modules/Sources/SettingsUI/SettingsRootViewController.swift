@@ -31,6 +31,9 @@ public final class SettingsRootViewController: NSTabViewController {
     tabs?.forEach {
       addTabViewItem($0.tabViewItem)
     }
+
+    (NSCursor.arrow as NSCursorDeprecated).setOnMouseEntered(true)
+    view.addTrackingRect(view.bounds, owner: NSCursor.arrow, userData: nil, assumeInside: true)
   }
 
   override public func viewDidAppear() {
