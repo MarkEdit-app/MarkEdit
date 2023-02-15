@@ -1,4 +1,4 @@
-import { EditorView, highlightActiveLine } from '@codemirror/view';
+import { EditorView } from '@codemirror/view';
 import { EditorTheme, loadTheme } from './themes';
 import { Config } from '../config';
 import { styleSheets } from '../common/store';
@@ -17,6 +17,7 @@ export default interface StyleSheets {
   fontFamily?: HTMLStyleElement;
   fontSize?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
+  activeLineDisabler?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
 }
 
@@ -100,12 +101,16 @@ export function setShowLineNumbers(enabled: boolean) {
 }
 
 export function setShowActiveLineIndicator(enabled: boolean) {
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.activeLine?.reconfigure(enabled ? highlightActiveLine() : []),
-    });
+  if (styleSheets.activeLineDisabler === undefined) {
+    const style = document.createElement('style');
+    style.textContent = '.cm-activeLine { background-color: unset !important }';
+
+    style.disabled = true;
+    styleSheets.activeLineDisabler = style;
+    document.head.appendChild(style);
   }
+
+  styleSheets.activeLineDisabler.disabled = enabled;
 }
 
 export function setShowInvisibles(enabled: boolean) {
