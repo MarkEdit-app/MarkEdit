@@ -14,7 +14,7 @@ protocol NSCursorDeprecated: AnyObject {
   /**
    Apple says this method is "unused and should not be called", Apple lied.
 
-   This method does have effect and it fixes some weird cursor style issues.
+   This method does have effects and it fixes some weird cursor style issues.
    */
   func setOnMouseEntered(_ flag: Bool)
 }
