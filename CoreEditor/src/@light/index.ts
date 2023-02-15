@@ -5,7 +5,9 @@ import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
 import { Config } from '../config';
 import { markdownExtensions, renderExtensions } from '../styling/markdown';
 
-import { loadTheme } from '../styling/themes';
+import GitHubLight from '../styling/themes/github-light';
+import GitHubDark from '../styling/themes/github-dark';
+
 import * as styling from '../styling/config';
 
 // "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
@@ -38,7 +40,7 @@ const doc = config.text;
 const parent = document.querySelector('#editor') ?? document.body;
 
 window.editor = new EditorView({ doc, parent, extensions });
-styling.setUp(config);
+styling.setUp(config, loadTheme(config.theme).accentColor);
 
 // To keep the app size smaller, we don't have bridge here,
 // inject function to window directly.
@@ -46,3 +48,13 @@ styling.setUp(config);
 (window as any).setTheme = (name: string) => {
   styling.setTheme(loadTheme(name));
 };
+
+// There're only two themes in the preview extension,
+// use a simplified "loadTheme" to avoid bundling unused themes.
+function loadTheme(name: string) {
+  if (name === 'github-dark') {
+    return GitHubDark();
+  } else {
+    return GitHubLight();
+  }
+}

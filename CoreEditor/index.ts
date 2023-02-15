@@ -19,6 +19,7 @@ import { NativeModulePreview } from './src/bridge/native/preview';
 
 import * as core from './src/core';
 import * as styling from './src/styling/config';
+import * as themes from './src/styling/themes';
 import * as events from './src/dom/events';
 
 // "{{EDITOR_CONFIG}}" will be replaced with a JSON literal in production
@@ -69,5 +70,5 @@ window.onload = () => {
   }
 };
 
-styling.setUp(config);
+styling.setUp(config, themes.loadTheme(config.theme).accentColor);
 events.startObserving();
