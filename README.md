@@ -37,7 +37,7 @@ yarn install
 yarn build
 ```
 
-> To test the editor in a development environment, run `yarn dev` instead.
+> To test the editor in a dev environment, run `yarn dev` instead, web interfaces are exposed to `window.webModules`.
 
 ### Building MarkEditMac
 
