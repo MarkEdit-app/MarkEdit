@@ -3,6 +3,7 @@ import { HighlightStyle, TagStyle, syntaxHighlighting } from '@codemirror/langua
 import { Tag, tags as defaultTags } from '@lezer/highlight';
 import { StyleSpec } from 'style-mod';
 import { ColorScheme, BaseColors, EditorColors } from './types';
+import { extractCssColor } from './helper';
 
 // Extend tags by adding Markdown-specific ones
 const tags = {
@@ -112,7 +113,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     '.cm-activeLine': {
       backgroundColor: colors.activeLine,
-      boxShadow: innerBorder(3.0, colors.lineBorder),
+      boxShadow: innerBorder(2.5, colors.lineBorder),
     },
     // Brackets
     '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
@@ -186,14 +187,14 @@ function buildHighlight(colors: BaseColors, specs: readonly TagStyle[], scheme?:
           tags.atom, tags.bool, tags.number,
           tags.contentSeparator, tags.special(tags.variableName),
         ],
-        color: colors.accent,
+        ...extractCssColor(colors.accent),
       },
       {
         tag: [
           tags.name, tags.character, tags.labelName,
           tags.separator, tags.processingInstruction, tags.definition(tags.name),
         ],
-        color: colors.text,
+        ...extractCssColor(colors.text),
       },
       { tag: tags.invalid, color: '#ff0000' },
     ],

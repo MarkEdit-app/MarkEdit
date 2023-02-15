@@ -5,7 +5,7 @@ import { styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
 import { calculateFontSize } from './nodes/heading';
-import { updateStyleSheet } from './helper';
+import { extractCssColor, updateStyleSheet } from './helper';
 
 /**
  * Style sheets that can be changed dynamically.
@@ -50,7 +50,10 @@ export function setAccentColor(accentColor: string) {
     document.head.appendChild(style);
   }
 
-  updateStyleSheet(styleSheets.accentColor, style => style.color = accentColor);
+  updateStyleSheet(styleSheets.accentColor, style => {
+    const cssColor = extractCssColor(accentColor);
+    Object.keys(cssColor).forEach(key => style.setProperty(key, cssColor[key] as string));
+  });
 }
 
 export function setFontFamily(fontFamily: string) {
