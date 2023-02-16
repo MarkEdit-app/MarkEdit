@@ -1,6 +1,5 @@
 import { EditorView } from '@codemirror/view';
 import { editedState, selectionState } from '../../common/store';
-import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setShowActiveLineIndicator } from '../../styling/config';
 
@@ -52,17 +51,6 @@ export function observeChanges() {
       // it makes the selection easier to read.
       if (updateActiveLine) {
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
-      }
-
-      if (!hasSelection) {
-        // Make sure the main selection is always centered for typewriter mode
-        if (window.config.typewriterMode) {
-          scrollToSelection('center');
-        } else {
-          // We need this because we have different line height for headings,
-          // CodeMirror doesn't by default fix the offset issue.
-          scrollCaretToVisible();
-        }
       }
     }
   });
