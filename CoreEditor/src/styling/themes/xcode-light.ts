@@ -20,7 +20,6 @@ function theme() {
     matchingBracket: '#326d7440',
     lineNumber: '#a6a6a6',
     searchMatch: '#e4e4e4',
-    selectedMatch: '#fffa5c',
     selectionHighlight: '#e9eef9',
     visibleSpace: '#cccccc',
     lighterBackground: '#cccccc4c',

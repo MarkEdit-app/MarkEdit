@@ -139,8 +139,10 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-searchMatch': {
       backgroundColor: colors.searchMatch,
     },
-    '.cm-searchMatch.cm-searchMatch-selected': {
-      backgroundColor: colors.selectedMatch,
+    '.cm-searchMatch-selected, .cm-searchMatch-selected *': {
+      color: '#000000 !important',
+      backgroundColor: '#ffff00 !important',
+      boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.2)',
     },
     '.cm-selectionMatch': {
       backgroundColor: colors.selectionHighlight,
