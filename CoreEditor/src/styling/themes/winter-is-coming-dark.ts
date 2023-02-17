@@ -19,7 +19,6 @@ function theme() {
     matchingBracket: '#22567e',
     lineNumber: '#219fd5',
     searchMatch: '#103362',
-    selectedMatch: '#515c6a',
     selectionHighlight: '#1033627f',
     visibleSpace: '#3b3a32',
     lighterBackground: '#3b3a32ee',

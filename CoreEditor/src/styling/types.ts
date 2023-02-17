@@ -17,7 +17,6 @@ export interface EditorColors {
   matchingBracket: string;
   lineNumber: string;
   searchMatch: string;
-  selectedMatch: string;
   selectionHighlight: string;
   visibleSpace: string;
   lighterBackground: string;

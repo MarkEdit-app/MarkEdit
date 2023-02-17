@@ -20,7 +20,6 @@ function theme() {
     selection: dark.gray5,
     activeLine: fallback.activeLine,
     searchMatch: fallback.searchMatch,
-    selectedMatch: fallback.selectedMatch,
     selectionHighlight: fallback.selectionHighlight,
     visibleSpace: fallback.visibleSpace,
     lighterBackground: fallback.lighterBackground,
