@@ -42,7 +42,7 @@ function extractLink(target: EventTarget | null) {
 
   // It's OK to have a trailing period in a valid url,
   // but generally it's the end of a sentence and we want to remove the period.
-  if (link?.endsWith('.') === true) {
+  if (link?.endsWith('.') === true && link?.endsWith('..') !== true) {
     return link.slice(0, -1);
   }
 
