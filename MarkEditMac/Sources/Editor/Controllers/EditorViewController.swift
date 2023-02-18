@@ -158,9 +158,7 @@ extension EditorViewController {
       self.setWindowHidden(false)
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
-        autocorrect: true,
-        autocomplete: true,
-        autocapitalize: false
+        autocorrect: true
       ))
 
       Grammarly.shared.update(bridge: self.bridge.grammarly)

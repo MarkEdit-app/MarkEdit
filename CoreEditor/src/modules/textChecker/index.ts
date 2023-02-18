@@ -4,16 +4,14 @@ import TextCheckerOptions from './options';
  * Div level text checker settings.
  */
 export function update(options: TextCheckerOptions) {
-  const contentDiv = document.querySelector('.cm-content');
-  if (contentDiv === null) {
-    return;
-  }
+  const contentDOM = window.editor.contentDOM;
+  contentDOM.setAttribute('spellcheck', options.spellcheck ? 'true' : 'false');
+  contentDOM.setAttribute('autocorrect', options.autocorrect ? 'on' : 'off');
 
-  const toString = (value: boolean) => value ? 'true' : 'false';
-  contentDiv.setAttribute('spellcheck', toString(options.spellcheck));
-  contentDiv.setAttribute('autocorrect', toString(options.autocorrect));
-  contentDiv.setAttribute('autocomplete', toString(options.autocomplete));
-  contentDiv.setAttribute('autocapitalize', toString(options.autocapitalize));
+  // Remove attributes to respect system preferences,
+  // we don't use EditorView.contentAttributes because it doesn't support removing.
+  contentDOM.removeAttribute('autocomplete');
+  contentDOM.removeAttribute('autocapitalize');
 }
 
 export type { TextCheckerOptions };
