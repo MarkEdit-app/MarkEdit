@@ -127,4 +127,6 @@ public enum EditCommand: String, Codable {
   case moveLineDown = "moveLineDown"
   case copyLineUp = "copyLineUp"
   case copyLineDown = "copyLineDown"
+  case toggleLineComment = "toggleLineComment"
+  case toggleBlockComment = "toggleBlockComment"
 }

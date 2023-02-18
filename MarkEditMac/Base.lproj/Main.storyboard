@@ -360,6 +360,18 @@
                                                             <action selector="performEditCommand:" target="Ady-hI-5gd" id="zdx-Fd-od3"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="XoK-EC-SDK"/>
+                                                    <menuItem title="Toggle Line Comment" keyEquivalent="/" identifier="toggleLineComment" id="P57-5f-z5e">
+                                                        <connections>
+                                                            <action selector="performEditCommand:" target="Ady-hI-5gd" id="OtY-hU-ezP"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Toggle Block Comment" keyEquivalent="A" identifier="toggleBlockComment" id="OB4-Cz-Y5L">
+                                                        <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                                        <connections>
+                                                            <action selector="performEditCommand:" target="Ady-hI-5gd" id="W5e-Ip-4DK"/>
+                                                        </connections>
+                                                    </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>

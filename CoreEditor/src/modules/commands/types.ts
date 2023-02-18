@@ -6,4 +6,6 @@ export enum EditCommand {
   moveLineDown = 'moveLineDown',
   copyLineUp = 'copyLineUp',
   copyLineDown = 'copyLineDown',
+  toggleLineComment = 'toggleLineComment',
+  toggleBlockComment = 'toggleBlockComment',
 }
