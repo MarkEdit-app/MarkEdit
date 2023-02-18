@@ -38,5 +38,13 @@ export function handleMouseUp(event: MouseEvent) {
 function extractLink(target: EventTarget | null) {
   const selector = `.${className}`;
   const element = (target as HTMLElement).closest<HTMLElement>(selector);
-  return element?.innerText;
+  const link = element?.innerText;
+
+  // It's OK to have a trailing period in a valid url,
+  // but generally it's the end of a sentence and we want to remove the period.
+  if (link?.endsWith('.') === true) {
+    return link.slice(0, -1);
+  }
+
+  return link;
 }
