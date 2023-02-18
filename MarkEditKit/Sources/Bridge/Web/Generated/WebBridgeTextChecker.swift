@@ -32,13 +32,9 @@ public final class WebBridgeTextChecker {
 public struct TextCheckerOptions: Codable {
   public var spellcheck: Bool
   public var autocorrect: Bool
-  public var autocomplete: Bool
-  public var autocapitalize: Bool
 
-  public init(spellcheck: Bool, autocorrect: Bool, autocomplete: Bool, autocapitalize: Bool) {
+  public init(spellcheck: Bool, autocorrect: Bool) {
     self.spellcheck = spellcheck
     self.autocorrect = autocorrect
-    self.autocomplete = autocomplete
-    self.autocapitalize = autocapitalize
   }
 }
