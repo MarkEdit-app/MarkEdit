@@ -94,6 +94,8 @@ export function performEditCommand(command: EditCommand) {
     case EditCommand.moveLineDown: commands.moveLineDown(editor); break;
     case EditCommand.copyLineUp: commands.copyLineUp(editor); break;
     case EditCommand.copyLineDown: commands.copyLineDown(editor); break;
+    case EditCommand.toggleLineComment: commands.toggleComment(editor); break; // Don't call toggleLineComment here, it won't work
+    case EditCommand.toggleBlockComment: commands.toggleBlockComment(editor); break;
     default: break;
   }
 }

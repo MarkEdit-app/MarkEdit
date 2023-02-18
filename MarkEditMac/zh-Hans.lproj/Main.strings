@@ -244,6 +244,9 @@
 /* Class = "NSMenu"; title = "Open Recent"; ObjectID = "oas-Oc-fiZ"; */
 "oas-Oc-fiZ.title" = "打开最近使用";
 
+/* Class = "NSMenuItem"; title = "Toggle Block Comment"; ObjectID = "OB4-Cz-Y5L"; */
+"OB4-Cz-Y5L.title" = "切换块注释";
+
 /* Class = "NSMenuItem"; title = "Export to PDF"; ObjectID = "oc0-ce-Yrd"; */
 "oc0-ce-Yrd.title" = "导出到 PDF";
 
@@ -267,6 +270,9 @@
 
 /* Class = "NSMenuItem"; title = "Heading 4"; ObjectID = "P4a-Ym-fhL"; */
 "P4a-Ym-fhL.title" = "四级标题";
+
+/* Class = "NSMenuItem"; title = "Toggle Line Comment"; ObjectID = "P57-5f-z5e"; */
+"P57-5f-z5e.title" = "切换行注释";
 
 /* Class = "NSMenuItem"; title = "Delete"; ObjectID = "pa3-QI-u2k"; */
 "pa3-QI-u2k.title" = "删除";
