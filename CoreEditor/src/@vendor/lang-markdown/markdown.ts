@@ -3,7 +3,7 @@ import {Language, defineLanguageFacet, languageDataProp, foldNodeProp, indentNod
 import {parser as baseParser, MarkdownParser, GFM, Subscript, Superscript, Emoji} from "@lezer/markdown"
 import {SyntaxNode, NodeType, NodeProp} from "@lezer/common"
 
-const data = defineLanguageFacet({block: {open: "<!--", close: "-->"}})
+const data = defineLanguageFacet({commentTokens: {block: {open: "<!--", close: "-->"}}})
 
 const headingProp = new NodeProp<number>()
 
