@@ -27,6 +27,11 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-cursor': {
     borderLeftWidth: '2px',
   },
+  '.cm-lineWrapping': {
+    // Prefer pre-wrap over break-spaces because trailing whitespaces can lead to extra line breaks,
+    // it can be an issue for whitespace rendering, especially for "selection" mode.
+    whiteSpace: 'pre-wrap',
+  },
   '.cm-focused': {
     outline: 'none',
   },
