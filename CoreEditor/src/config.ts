@@ -58,6 +58,7 @@ export interface Dynamics {
   gutters?: Compartment;
   invisibles?: Compartment;
   activeLine?: Compartment;
+  selectedLines?: Compartment;
   lineWrapping?: Compartment;
   lineEndings?: Compartment;
   indentUnit?: Compartment;

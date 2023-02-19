@@ -4,6 +4,7 @@ import { Config, InvisiblesBehavior } from '../config';
 import { selectionState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
+import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
 
@@ -141,10 +142,17 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
 }
 
 export function setFocusMode(enabled: boolean) {
+  const editor = window.editor as EditorView | null;
+  if (typeof editor?.dispatch === 'function') {
+    editor.dispatch({
+      effects: window.dynamics.selectedLines?.reconfigure(enabled ? selectedLinesDecoration : []),
+    });
+  }
+
   if (styleSheets.focusMode === undefined) {
     const style = document.createElement('style');
     style.textContent = `
-      .cm-line:not(.cm-activeLine), .cm-gutterElement:not(.cm-activeLineGutter) {
+      .cm-line:not(.cm-selectedLineRange), .cm-gutterElement:not(.cm-activeLineGutter) {
         filter: grayscale(1);
         opacity: 0.3;
       }
