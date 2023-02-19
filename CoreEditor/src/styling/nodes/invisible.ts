@@ -24,15 +24,14 @@ export const invisiblesExtension = createDecoPlugin(() => {
  * Get or create a deco for given invisible character at a position.
  */
 function getOrCreateDeco(invisible: string, pos: number) {
-  const state = window.editor.state;
-  const node = syntaxTree(state).resolve(pos);
-
   const fontSize = (() => {
     const range = frontMatterRange();
     if (range !== undefined && pos >= range.from && pos <= range.to) {
       return window.config.fontSize;
     }
 
+    const state = window.editor.state;
+    const node = syntaxTree(state).resolve(pos);
     return calculateFontSize(window.config.fontSize, headingLevel(node.type));
   })();
 
