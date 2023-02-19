@@ -70,10 +70,14 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     backgroundPosition: 'right 90%',
     backgroundRepeat: 'no-repeat',
   },
+  '.cm-visibleSpace': {
+    display: 'flex',
+    alignItems: 'center',
+    pointerEvents: 'none',
+  },
   '.cm-visibleSpace:before': {
     content: 'attr(content)',
     position: 'absolute',
-    pointerEvents: 'none',
   },
   '.cm-md-monospace, .cm-md-fencedCode *, .cm-md-table *': {
     fontFamily: 'ui-monospace, monospace',

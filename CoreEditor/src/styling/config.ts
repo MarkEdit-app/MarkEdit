@@ -60,7 +60,7 @@ export function setAccentColor(accentColor: string) {
 export function setFontFamily(fontFamily: string) {
   if (styleSheets.fontFamily === undefined) {
     const style = document.createElement('style');
-    style.textContent = '.cm-content * {}';
+    style.textContent = '.cm-content, .cm-visibleSpaceLayer * {}';
 
     styleSheets.fontFamily = style;
     document.head.appendChild(style);
