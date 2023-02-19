@@ -55,7 +55,7 @@ export function getTableOfContents() {
 
 export function gotoHeader(headingInfo: HeadingInfo) {
   selectWithRanges([EditorSelection.cursor(headingInfo.from)]);
-  scrollToSelection('start');
+  scrollToSelection(window.config.typewriterMode ? 'center' : 'start');
 }
 
 export type { HeadingInfo };
