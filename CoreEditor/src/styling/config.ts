@@ -1,9 +1,10 @@
-import { EditorView } from '@codemirror/view';
+import { EditorView, highlightActiveLine } from '@codemirror/view';
 import { EditorTheme } from './themes';
 import { Config, InvisiblesBehavior } from '../config';
 import { selectionState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
+import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
 
@@ -18,7 +19,6 @@ export default interface StyleSheets {
   fontSize?: HTMLStyleElement;
   invisibles?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
-  activeLineDisabler?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
 }
 
@@ -103,16 +103,12 @@ export function setShowLineNumbers(enabled: boolean) {
 }
 
 export function setShowActiveLineIndicator(enabled: boolean) {
-  if (styleSheets.activeLineDisabler === undefined) {
-    const style = document.createElement('style');
-    style.textContent = '.cm-activeLine { background-color: unset !important }';
-
-    style.disabled = true;
-    styleSheets.activeLineDisabler = style;
-    document.head.appendChild(style);
+  const editor = window.editor as EditorView | null;
+  if (typeof editor?.dispatch === 'function') {
+    editor.dispatch({
+      effects: window.dynamics.activeLine?.reconfigure(enabled ? highlightActiveLine() : []),
+    });
   }
-
-  styleSheets.activeLineDisabler.disabled = enabled;
 }
 
 export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
@@ -146,10 +142,17 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
 }
 
 export function setFocusMode(enabled: boolean) {
+  const editor = window.editor as EditorView | null;
+  if (typeof editor?.dispatch === 'function') {
+    editor.dispatch({
+      effects: window.dynamics.selectedLines?.reconfigure(enabled ? selectedLinesDecoration : []),
+    });
+  }
+
   if (styleSheets.focusMode === undefined) {
     const style = document.createElement('style');
     style.textContent = `
-      .cm-line:not(.cm-activeLine), .cm-gutterElement:not(.cm-activeLineGutter) {
+      .cm-line:not(.cm-selectedLineRange), .cm-gutterElement:not(.cm-activeLineGutter) {
         filter: grayscale(1);
         opacity: 0.3;
       }

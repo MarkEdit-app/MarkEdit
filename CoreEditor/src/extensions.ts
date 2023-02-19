@@ -29,6 +29,8 @@ import { observeChanges, interceptInputs } from './modules/input';
 const theme = new Compartment;
 const gutters = new Compartment;
 const invisibles = new Compartment;
+const activeLine = new Compartment;
+const selectedLines = new Compartment;
 const lineWrapping = new Compartment;
 const lineEndings = new Compartment;
 const indentUnit = new Compartment;
@@ -37,6 +39,8 @@ window.dynamics = {
   theme,
   gutters,
   invisibles,
+  activeLine,
+  selectedLines,
   lineWrapping,
   lineEndings,
   indentUnit,
@@ -57,7 +61,7 @@ export function extensions(options: { lineBreak?: string }) {
     closeBrackets(),
     rectangularSelection(),
     crosshairCursor(),
-    highlightActiveLine(),
+    activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
     highlightActiveLineGutter(),
     highlightSelectionMatches(),
     localizePhrases(),
@@ -97,6 +101,7 @@ export function extensions(options: { lineBreak?: string }) {
     // Styling
     theme.of(loadTheme(window.config.theme)),
     invisibles.of([]),
+    selectedLines.of([]),
     renderExtensions,
     actionExtensions,
 
