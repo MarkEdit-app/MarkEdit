@@ -16,7 +16,7 @@ public struct EditorConfig: Encodable {
   let fontSize: Double
   let showLineNumbers: Bool
   let showActiveLineIndicator: Bool
-  let showInvisibles: Bool
+  let invisiblesBehavior: EditorInvisiblesBehavior
   let typewriterMode: Bool
   let focusMode: Bool
   let lineWrapping: Bool
@@ -33,7 +33,7 @@ public struct EditorConfig: Encodable {
     fontSize: Double,
     showLineNumbers: Bool,
     showActiveLineIndicator: Bool,
-    showInvisibles: Bool,
+    invisiblesBehavior: EditorInvisiblesBehavior,
     typewriterMode: Bool,
     focusMode: Bool,
     lineWrapping: Bool,
@@ -49,7 +49,7 @@ public struct EditorConfig: Encodable {
     self.fontSize = fontSize
     self.showLineNumbers = showLineNumbers
     self.showActiveLineIndicator = showActiveLineIndicator
-    self.showInvisibles = showInvisibles
+    self.invisiblesBehavior = invisiblesBehavior
     self.typewriterMode = typewriterMode
     self.focusMode = focusMode
     self.lineWrapping = lineWrapping

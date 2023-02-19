@@ -48,7 +48,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       fontSize: 12,
       showLineNumbers: false,
       showActiveLineIndicator: false,
-      showInvisibles: false,
+      invisiblesBehavior: .always,
       typewriterMode: false,
       focusMode: false,
       lineWrapping: true,

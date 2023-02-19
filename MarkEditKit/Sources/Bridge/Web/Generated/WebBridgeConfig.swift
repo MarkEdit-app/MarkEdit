@@ -77,16 +77,16 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setShowActiveLineIndicator", message: message, completion: completion)
   }
 
-  public func setShowInvisibles(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func setInvisiblesBehavior(behavior: EditorInvisiblesBehavior, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
-      let enabled: Bool
+      let behavior: EditorInvisiblesBehavior
     }
 
     let message = Message(
-      enabled: enabled
+      behavior: behavior
     )
 
-    webView?.invoke(path: "webModules.config.setShowInvisibles", message: message, completion: completion)
+    webView?.invoke(path: "webModules.config.setInvisiblesBehavior", message: message, completion: completion)
   }
 
   public func setTypewriterMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

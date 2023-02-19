@@ -84,17 +84,17 @@ enum AppPreferences {
       }
     }
 
-    @Storage(key: "editor.show-invisibles", defaultValue: true)
-    static var showInvisibles: Bool {
-      didSet {
-        performUpdates { $0.setShowInvisibles(enabled: showInvisibles) }
-      }
-    }
-
     @Storage(key: "editor.show-selection-status", defaultValue: true)
     static var showSelectionStatus: Bool {
       didSet {
         performUpdates { $0.setShowSelectionStatus(enabled: showSelectionStatus) }
+      }
+    }
+
+    @Storage(key: "editor.invisibles-behavior", defaultValue: .selection)
+    static var invisiblesBehavior: EditorInvisiblesBehavior {
+      didSet {
+        performUpdates { $0.setInvisiblesBehavior(behavior: invisiblesBehavior) }
       }
     }
 
@@ -188,7 +188,7 @@ extension AppPreferences {
       fontSize: Editor.fontSize,
       showLineNumbers: Editor.showLineNumbers,
       showActiveLineIndicator: Editor.showActiveLineIndicator,
-      showInvisibles: Editor.showInvisibles,
+      invisiblesBehavior: Editor.invisiblesBehavior,
       typewriterMode: Editor.typewriterMode,
       focusMode: Editor.focusMode,
       lineWrapping: Editor.lineWrapping,

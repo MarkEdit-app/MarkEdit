@@ -9,6 +9,7 @@ import AppKit
 import SwiftUI
 import FontPicker
 import SettingsUI
+import MarkEditCore
 import MarkEditKit
 
 struct EditorSettingsView: View {
@@ -16,8 +17,8 @@ struct EditorSettingsView: View {
   @State private var darkTheme = AppPreferences.Editor.darkTheme
   @State private var showLineNumbers = AppPreferences.Editor.showLineNumbers
   @State private var showActiveLineIndicator = AppPreferences.Editor.showActiveLineIndicator
-  @State private var showInvisibles = AppPreferences.Editor.showInvisibles
   @State private var showSelectionStatus = AppPreferences.Editor.showSelectionStatus
+  @State private var invisiblesBehavior = AppPreferences.Editor.invisiblesBehavior
   @State private var typewriterMode = AppPreferences.Editor.typewriterMode
   @State private var focusMode = AppPreferences.Editor.focusMode
   @State private var lineWrapping = AppPreferences.Editor.lineWrapping
@@ -71,13 +72,6 @@ struct EditorSettingsView: View {
               AppPreferences.Editor.showActiveLineIndicator = $0
             }
 
-            Toggle(isOn: $showInvisibles) {
-              Text(Localized.Settings.invisibleCharacters)
-            }
-            .onChange(of: showInvisibles) {
-              AppPreferences.Editor.showInvisibles = $0
-            }
-
             Toggle(isOn: $showSelectionStatus) {
               Text(Localized.Settings.selectionStatus)
             }
@@ -86,6 +80,17 @@ struct EditorSettingsView: View {
             }
           }
           .formLabel(alignment: .top, Localized.Settings.displayOptions)
+
+          Picker(Localized.Settings.renderInvisibles, selection: $invisiblesBehavior) {
+            Text(Localized.Settings.never).tag(EditorInvisiblesBehavior.never)
+            Text(Localized.Settings.selection).tag(EditorInvisiblesBehavior.selection)
+            Text(Localized.Settings.trailing).tag(EditorInvisiblesBehavior.trailing)
+            Text(Localized.Settings.always).tag(EditorInvisiblesBehavior.always)
+          }
+          .onChange(of: invisiblesBehavior) {
+            AppPreferences.Editor.invisiblesBehavior = $0
+          }
+          .formMenuPicker()
         }
 
         Section {

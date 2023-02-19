@@ -1,9 +1,11 @@
-import { Decoration } from '@codemirror/view';
+import { Decoration, highlightTrailingWhitespace } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { NodeType } from '@lezer/common';
+import { InvisiblesBehavior } from '../../config';
 import { calculateFontSize } from './heading';
 import { createMarkDeco } from '../matchers/regex';
 import { createDecoPlugin } from '../helper';
+import { selectedTextDecoration } from './selection';
 import { frontMatterRange } from '../../modules/frontMatter';
 
 // Originally learned from: https://github.com/ChromeDevTools/devtools-frontend/blob/main/front_end/ui/components/text_editor/config.ts
@@ -13,12 +15,28 @@ import { frontMatterRange } from '../../modules/frontMatter';
 //
 // In Markdown rendering, we have different font sizes for headers,
 // we need to figure out proper font size and set it to the pseudo class.
-export const invisiblesExtension = createDecoPlugin(() => {
+const renderInvisibles = createDecoPlugin(() => {
   return createMarkDeco(/\t| +/g, (match, pos) => {
     const invisible = match[0];
     return getOrCreateDeco(invisible, pos);
   });
 });
+
+export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: boolean) {
+  if (behavior === InvisiblesBehavior.always) {
+    return renderInvisibles;
+  }
+
+  if (behavior === InvisiblesBehavior.selection) {
+    return hasSelection ? [renderInvisibles, selectedTextDecoration] : selectedTextDecoration;
+  }
+
+  if (behavior === InvisiblesBehavior.trailing) {
+    return highlightTrailingWhitespace();
+  }
+
+  return [];
+}
 
 /**
  * Get or create a deco for given invisible character at a position.

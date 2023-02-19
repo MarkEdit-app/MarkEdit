@@ -1,6 +1,8 @@
 import { EditorView } from '@codemirror/view';
+import { InvisiblesBehavior } from '../../config';
 import { editedState, selectionState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
+import { setInvisiblesBehavior } from '../config';
 import { setShowActiveLineIndicator } from '../../styling/config';
 
 import selectedRange from '../selection/selectedRanges';
@@ -47,9 +49,15 @@ export function observeChanges() {
       const updateActiveLine = selectionState.hasSelection !== hasSelection;
       selectionState.hasSelection = hasSelection;
 
-      // Clear active line background when there's selection,
-      // it makes the selection easier to read.
       if (updateActiveLine) {
+        // Update invisible behavior as selection changed
+        const invisiblesBehavior = window.config.invisiblesBehavior;
+        if (invisiblesBehavior === InvisiblesBehavior.selection) {
+          setInvisiblesBehavior(invisiblesBehavior);
+        }
+
+        // Clear active line background when there's selection,
+        // it makes the selection easier to read.
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
       }
     }
