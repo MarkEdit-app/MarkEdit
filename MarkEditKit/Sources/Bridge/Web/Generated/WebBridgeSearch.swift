@@ -8,6 +8,7 @@
 //  To make changes, edit template files under /CoreEditor/src/@codegen
 
 import WebKit
+import MarkEditCore
 
 public final class WebBridgeSearch {
   private weak var webView: WKWebView?
