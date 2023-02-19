@@ -37,7 +37,7 @@
         }
       ],
       "namedTypesTemplatePath": "swift-shared-types.mustache",
-      "namedTypesOutputPath": "../../../MarkEditKit/Sources/Generated/SharedTypes.swift",
+      "namedTypesOutputPath": "../../../MarkEditCore/Sources/EditorSharedTypes.swift",
       "typeNameMap": {
         "CodeGen_Int": "Int"
       }
