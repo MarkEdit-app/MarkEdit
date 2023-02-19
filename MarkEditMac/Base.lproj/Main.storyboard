@@ -745,6 +745,12 @@
                                                 <action selector="showHelp:" target="Voe-Tx-rLC" id="ba9-aC-ghc"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Issue Tracker" id="uKp-pC-7O6">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openIssueTracker:" target="Voe-Tx-rLC" id="rd4-7Y-b3U"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

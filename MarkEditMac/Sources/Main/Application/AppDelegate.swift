@@ -76,4 +76,10 @@ private extension AppDelegate {
       NSWorkspace.shared.open(url)
     }
   }
+
+  @IBAction func openIssueTracker(_ sender: Any?) {
+    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/issues") {
+      NSWorkspace.shared.open(url)
+    }
+  }
 }
