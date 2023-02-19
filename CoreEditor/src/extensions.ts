@@ -21,7 +21,6 @@ import { languages } from './@vendor/language-data';
 import { loadTheme } from './styling/themes';
 import { markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { gutterExtensions } from './styling/nodes/gutter';
-import { invisiblesExtension } from './styling/nodes/invisible';
 
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
@@ -97,7 +96,7 @@ export function extensions(options: { lineBreak?: string }) {
 
     // Styling
     theme.of(loadTheme(window.config.theme)),
-    invisibles.of(window.config.showInvisibles ? invisiblesExtension : []),
+    invisibles.of([]),
     renderExtensions,
     actionExtensions,
 

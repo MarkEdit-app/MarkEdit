@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MarkEditCore
 import MarkEditKit
 
 extension EditorViewController {
@@ -34,8 +35,8 @@ extension EditorViewController {
     bridge.config.setShowActiveLineIndicator(enabled: enabled)
   }
 
-  func setShowInvisibles(enabled: Bool) {
-    bridge.config.setShowInvisibles(enabled: enabled)
+  func setInvisiblesBehavior(behavior: EditorInvisiblesBehavior) {
+    bridge.config.setInvisiblesBehavior(behavior: behavior)
   }
 
   func setShowSelectionStatus(enabled: Bool) {

@@ -1,4 +1,4 @@
-import { Config } from './src/config';
+import { Config, InvisiblesBehavior } from './src/config';
 import { isProd } from './src/common/utils';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
@@ -31,7 +31,7 @@ const config: Config = isProd ? ('{{EDITOR_CONFIG}}' as any) : {
   fontSize: 17,
   showLineNumbers: true,
   showActiveLineIndicator: true,
-  showInvisibles: true,
+  invisiblesBehavior: InvisiblesBehavior.always,
   typewriterMode: false,
   focusMode: false,
   lineWrapping: true,

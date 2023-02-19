@@ -19,6 +19,17 @@ export interface Localizable {
 
 /**
  * @shouldExport true
+ * @overrideModuleName EditorInvisiblesBehavior
+ */
+export enum InvisiblesBehavior {
+  never = 'never',
+  selection = 'selection',
+  trailing = 'trailing',
+  always = 'always',
+}
+
+/**
+ * @shouldExport true
  * @overrideModuleName EditorConfig
  */
 export interface Config {
@@ -28,7 +39,7 @@ export interface Config {
   fontSize: number;
   showLineNumbers: boolean;
   showActiveLineIndicator: boolean;
-  showInvisibles: boolean;
+  invisiblesBehavior: InvisiblesBehavior;
   typewriterMode: boolean;
   focusMode: boolean;
   lineWrapping: boolean;

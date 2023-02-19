@@ -16,6 +16,9 @@
 /* Button title, perform actions to all items */
 "All" = "全部";
 
+/* Always show invisibles */
+"Always" = "總是";
+
 /* Appearance for the app */
 "Appearance:" = "外觀：";
 
@@ -127,9 +130,6 @@
 /* Default tab key behavior */
 "Inserts tab character" = "插入制表符";
 
-/* Option to show invisible characters */
-"Invisible characters" = "不可見字元";
-
 /* Toolbar item to toggle italic */
 "Italic" = "斜體";
 
@@ -159,6 +159,9 @@
 
 /* Line endings used on macOS and Unix */
 "macOS / Unix (LF)" = "macOS / Unix (LF)";
+
+/* Never show invisibles */
+"Never" = "從不";
 
 /* Menu item: create a new document */
 "New Document" = "新增文件";
@@ -211,6 +214,9 @@
 /* Explanation for the option to reduce window transparency */
 "Remove the toolbar blur" = "移除工具列模糊效果";
 
+/* Label for invisibles behavior setting */
+"Render Invisibles:" = "渲染不可見字元：";
+
 /* Replace mode in search menu */
 "Replace" = "取代";
 
@@ -219,6 +225,9 @@
 
 /* Menu label for selecting fonts */
 "Select..." = "選擇…";
+
+/* Show invisibles for selected ranges */
+"Selection" = "選中區域";
 
 /* Option to show selection status */
 "Selection status" = "選擇狀態";
@@ -273,6 +282,9 @@
 
 /* Label for window toolbar mode */
 "Toolbar Mode:" = "工具列模式：";
+
+/* Show trailing invisibles */
+"Trailing" = "尾部空白";
 
 /* Phrase used in CodeMirror to unfold a piece of text */
 "Unfold" = "展開";

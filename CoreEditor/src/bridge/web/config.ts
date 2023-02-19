@@ -1,4 +1,5 @@
 import { WebModule } from '../webModule';
+import { InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../../modules/indentation';
 
 import {
@@ -7,7 +8,7 @@ import {
   setFontSize,
   setShowLineNumbers,
   setShowActiveLineIndicator,
-  setShowInvisibles,
+  setInvisiblesBehavior,
   setTypewriterMode,
   setFocusMode,
   setLineWrapping,
@@ -28,7 +29,7 @@ export interface WebModuleConfig extends WebModule {
   setFontSize({ fontSize }: { fontSize: number }): void;
   setShowLineNumbers({ enabled }: { enabled: boolean } ): void;
   setShowActiveLineIndicator({ enabled }: { enabled: boolean }): void;
-  setShowInvisibles({ enabled }: { enabled: boolean }): void;
+  setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void;
   setTypewriterMode({ enabled }: { enabled: boolean }): void;
   setFocusMode({ enabled }: { enabled: boolean }): void;
   setLineWrapping({ enabled }: { enabled: boolean }): void;
@@ -59,8 +60,8 @@ export class WebModuleConfigImpl implements WebModuleConfig {
     setShowActiveLineIndicator(enabled);
   }
 
-  setShowInvisibles({ enabled }: { enabled: boolean }): void {
-    setShowInvisibles(enabled);
+  setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void {
+    setInvisiblesBehavior(behavior);
   }
 
   setTypewriterMode({ enabled }: { enabled: boolean }): void {

@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { indentUnit } from '@codemirror/language';
+import { InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
 import { scrollToSelection } from '../selection';
 import { selectionState } from '../../common/store';
@@ -31,9 +32,9 @@ export function setShowActiveLineIndicator(enabled: boolean) {
   styling.setShowActiveLineIndicator(enabled && !selectionState.hasSelection);
 }
 
-export function setShowInvisibles(enabled: boolean) {
-  window.config.showInvisibles = enabled;
-  styling.setShowInvisibles(enabled);
+export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
+  window.config.invisiblesBehavior = behavior;
+  styling.setInvisiblesBehavior(behavior);
 }
 
 export function setTypewriterMode(enabled: boolean) {

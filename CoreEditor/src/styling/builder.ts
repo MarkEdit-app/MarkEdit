@@ -170,6 +170,12 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-visibleSpace:before': {
       color: colors.visibleSpace,
     },
+    '.cm-selectedTextRange .cm-visibleTab': {
+      backgroundColor: `${colors.text}99`,
+    },
+    '.cm-selectedTextRange .cm-visibleSpace::before': {
+      color: `${colors.text}99`,
+    },
     '.cm-md-inlineCode': {
       backgroundColor: colors.lighterBackground,
     },

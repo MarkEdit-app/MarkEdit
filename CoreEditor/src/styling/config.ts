@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorTheme } from './themes';
-import { Config } from '../config';
-import { styleSheets } from '../common/store';
+import { Config, InvisiblesBehavior } from '../config';
+import { selectionState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
 import { calculateFontSize } from './nodes/heading';
@@ -16,6 +16,7 @@ export default interface StyleSheets {
   accentColor?: HTMLStyleElement;
   fontFamily?: HTMLStyleElement;
   fontSize?: HTMLStyleElement;
+  invisibles?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
   activeLineDisabler?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
@@ -25,6 +26,7 @@ export function setUp(config: Config, accentColor: string) {
   setAccentColor(accentColor);
   setFontFamily(config.fontFamily);
   setFontSize(config.fontSize);
+  setInvisiblesBehavior(config.invisiblesBehavior);
   setFocusMode(config.focusMode);
   setLineHeight(config.lineHeight);
 }
@@ -113,13 +115,34 @@ export function setShowActiveLineIndicator(enabled: boolean) {
   styleSheets.activeLineDisabler.disabled = enabled;
 }
 
-export function setShowInvisibles(enabled: boolean) {
+export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
   const editor = window.editor as EditorView | null;
+  const hasSelection = selectionState.hasSelection;
+
   if (typeof editor?.dispatch === 'function') {
     editor.dispatch({
-      effects: window.dynamics.invisibles?.reconfigure(enabled ? invisiblesExtension : []),
+      effects: window.dynamics.invisibles?.reconfigure(invisiblesExtension(behavior, hasSelection)),
     });
   }
+
+  if (styleSheets.invisibles === undefined) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .cm-visibleTab:not(.cm-selectedTextRange *) {
+        background-color: #00000000;
+      }
+
+      .cm-visibleSpace:not(.cm-selectedTextRange *)::before {
+        color: #00000000;
+      }
+    `;
+
+    style.disabled = true;
+    styleSheets.invisibles = style;
+    document.head.appendChild(style);
+  }
+
+  styleSheets.invisibles.disabled = behavior !== InvisiblesBehavior.selection;
 }
 
 export function setFocusMode(enabled: boolean) {
