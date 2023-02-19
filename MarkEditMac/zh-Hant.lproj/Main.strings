@@ -355,6 +355,9 @@
 /* Class = "NSMenuItem"; title = "Export to Word Docx"; ObjectID = "Ukm-Sm-nrt"; */
 "Ukm-Sm-nrt.title" = "輸出為 Word Docx";
 
+/* Class = "NSMenuItem"; title = "Issue Tracker"; ObjectID = "uKp-pC-7O6"; */
+"uKp-pC-7O6.title" = "問題追蹤系統";
+
 /* Class = "NSMenu"; title = "MarkEdit"; ObjectID = "uQy-DD-JDr"; */
 "uQy-DD-JDr.title" = "MarkEdit";
 
