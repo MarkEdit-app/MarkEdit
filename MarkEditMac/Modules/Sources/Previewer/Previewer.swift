@@ -82,7 +82,7 @@ public final class Previewer: NSViewController {
     const observer = new ResizeObserver(entries => {
       requestAnimationFrame(() => {
         const height = entries[0].target.clientHeight;
-        window.webkit.messageHandlers.bridge.postMessage({ height });
+        window.webkit.messageHandlers.bridge.postMessage({ height: Math.min(height, 640) });
         if (height <= \(Constants.minimumHeight)) {
           const style = document.head.appendChild(document.createElement("style"));
           style.appendChild(document.createTextNode(`
