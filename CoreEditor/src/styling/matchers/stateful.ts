@@ -25,8 +25,7 @@ export function startEffect(compartment: Compartment, ranges: RangeSet<Decoratio
  */
 export function stopEffect(compartments: Compartment[]) {
   for (const compartment of compartments) {
-    const extension = StateField.define({ create() { /* no-op */ }, update() { /* no-op */ } });
-    const effects = compartment.reconfigure(extension);
+    const effects = compartment.reconfigure([]);
     window.editor.dispatch({ effects });
   }
 }
