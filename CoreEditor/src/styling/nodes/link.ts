@@ -4,7 +4,7 @@ import { createMarkDeco } from '../matchers/regex';
 import { startEffect, stopEffect } from '../matchers/stateful';
 
 // Fragile approach, but we only use it for link clicking, it should be fine
-const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
 const className = 'cm-md-link';
 
 export function startClickable() {
