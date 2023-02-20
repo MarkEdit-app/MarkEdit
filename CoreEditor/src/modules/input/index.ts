@@ -4,6 +4,7 @@ import { editedState, selectionState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
 import { setShowActiveLineIndicator } from '../../styling/config';
+import { renderWhitespaceBeforeCaret } from '../../styling/nodes/invisible';
 
 import selectedRange from '../selection/selectedRanges';
 import wrapBlock from './wrapBlock';
@@ -60,6 +61,9 @@ export function observeChanges() {
         // it makes the selection easier to read.
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
       }
+
+      // Render the special invisible before the main caret
+      renderWhitespaceBeforeCaret();
     }
   });
 }
