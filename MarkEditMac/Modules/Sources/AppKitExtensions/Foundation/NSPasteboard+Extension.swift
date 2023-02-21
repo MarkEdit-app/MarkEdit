@@ -17,7 +17,7 @@ public extension NSPasteboard {
 
   var url: String? {
     guard let string else {
-      return nil
+      return string(forType: .URL)
     }
 
     return NSDataDetector.extractURL(from: string)
