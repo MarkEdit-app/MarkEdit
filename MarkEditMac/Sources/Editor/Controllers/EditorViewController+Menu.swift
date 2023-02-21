@@ -34,6 +34,10 @@ extension EditorViewController: NSMenuItemValidation {
       return document?.fileURL != nil
     }
 
+    if menuItem.action == #selector(performPaste(_:)) {
+      return NSPasteboard.general.canPaste
+    }
+
     return true
   }
 }
@@ -221,6 +225,11 @@ private extension EditorViewController {
 
   @IBAction func redo(_ sender: Any?) {
     bridge.history.redo()
+  }
+
+  @IBAction func performPaste(_ sender: Any?) {
+    NSPasteboard.general.sanitize()
+    NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil)
   }
 
   @IBAction func gotoLine(_ sender: Any?) {
