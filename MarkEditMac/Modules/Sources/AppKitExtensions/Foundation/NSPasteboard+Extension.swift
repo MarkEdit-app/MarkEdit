@@ -7,6 +7,10 @@
 import AppKit
 
 public extension NSPasteboard {
+  var canPaste: Bool {
+    pasteboardItems?.isEmpty == false
+  }
+
   var string: String? {
     string(forType: .string)
   }
@@ -24,6 +28,14 @@ public extension NSPasteboard {
 
     if let string {
       setString(string, forType: .string)
+    }
+  }
+
+  func sanitize() {
+    // Handle the case where a link is only copied to "public.url",
+    // for example, copying the link generated for iCloud Collaborate.
+    if string?.isEmpty ?? true, let url = string(forType: .URL), !url.isEmpty {
+      overwrite(string: url)
     }
   }
 }
