@@ -65,7 +65,7 @@ export function renderWhitespaceBeforeCaret() {
       storage.lazyCompartment = new Compartment;
       startEffect(storage.lazyCompartment, Decoration.set(deco.range(from, to)));
     }
-  }, 50);
+  }, 5);
 }
 
 export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: boolean) {
