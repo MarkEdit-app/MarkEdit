@@ -50,15 +50,24 @@ export function getTableOfContents() {
         level: level as CodeGen_Int,
         from: node.from as CodeGen_Int,
         to: node.to as CodeGen_Int,
+        selected: false,
       });
     },
   });
 
-  // Indent each level with 2 spaces, the top level is not indented
   const baseLevel = results.reduce((acc, cur) => Math.min(acc, cur.level), 6);
-  results.forEach(item => {
+  const selection = state.selection.main.anchor;
+
+  for (let index = 0; index < results.length; ++index) {
+    const item = results[index];
+    const next = results[index + 1] as HeadingInfo | undefined;
+
+    // Indent each level with 2 spaces, the top level is not indented
     item.title = `${' '.repeat((item.level - baseLevel) * 2)}${item.title}`;
-  });
+
+    // Mark an item as selected if the main selection is between the current item and the next item
+    item.selected = selection >= item.from && selection < (next?.from ?? Number.MAX_SAFE_INTEGER);
+  }
 
   return results;
 }

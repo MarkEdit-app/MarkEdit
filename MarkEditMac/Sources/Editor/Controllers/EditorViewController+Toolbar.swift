@@ -206,11 +206,20 @@ private extension EditorViewController {
       tableOfContents?.forEach { info in
         let title = info.title.components(separatedBy: .newlines).first ?? info.title
         let item = menu.addItem(withTitle: title, action: #selector(self.gotoHeader(_:)))
-        item.attributedTitle = NSAttributedString(string: title, attributes: [
-          .font: NSFont.systemFont(ofSize: 15.0 - min(3, Double(info.level)), weight: .medium),
-        ])
-
         item.representedObject = info
+
+        let fontSize = 15.0 - min(3, Double(info.level))
+        let attributedTitle = NSMutableAttributedString()
+
+        attributedTitle.append(NSAttributedString(string: info.selected ? "‣" : " ", attributes: [
+          .font: NSFont.monospacedSystemFont(ofSize: fontSize, weight: .medium),
+        ]))
+
+        attributedTitle.append(NSAttributedString(string: " \(title)", attributes: [
+          .font: NSFont.systemFont(ofSize: fontSize, weight: .medium),
+        ]))
+
+        item.attributedTitle = attributedTitle
         menu.addItem(.separator())
       }
     }

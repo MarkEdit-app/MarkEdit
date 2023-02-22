@@ -3,4 +3,5 @@ export interface HeadingInfo {
   level: CodeGen_Int;
   from: CodeGen_Int;
   to: CodeGen_Int;
+  selected: boolean;
 }
