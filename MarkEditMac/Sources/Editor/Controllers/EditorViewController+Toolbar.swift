@@ -9,6 +9,10 @@ import AppKit
 import MarkEditKit
 
 extension EditorViewController {
+  var tableOfContentsMenuButton: NSPopUpButton? {
+    view.window?.popUpButton(with: Constants.tableOfContentsMenuIdentifier)
+  }
+
   private enum Constants {
     static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
     static let normalizedButtonSize: Double = 15 // "bold" icon looks bigger than expected, fix it
@@ -21,9 +25,7 @@ extension EditorViewController {
   }
 
   func showTableOfContentsMenu() {
-    let button = view.window?.popUpButton(with: Constants.tableOfContentsMenuIdentifier)
-    Logger.assert(button != nil, "Failed to find popUp button")
-    button?.performClick(nil)
+    tableOfContentsMenuButton?.performClick(nil)
   }
 }
 

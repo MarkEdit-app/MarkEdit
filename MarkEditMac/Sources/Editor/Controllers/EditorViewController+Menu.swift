@@ -38,6 +38,10 @@ extension EditorViewController: NSMenuItemValidation {
       return NSPasteboard.general.canPaste
     }
 
+    if menuItem.action == #selector(openTableOfContents(_:)) {
+      return tableOfContentsMenuButton != nil
+    }
+
     return true
   }
 }
