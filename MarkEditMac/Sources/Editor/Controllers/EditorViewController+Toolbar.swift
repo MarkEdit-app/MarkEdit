@@ -22,6 +22,7 @@ extension EditorViewController {
 
   func showTableOfContentsMenu() {
     let button = view.window?.popUpButton(with: Constants.tableOfContentsMenuIdentifier)
+    Logger.assert(button != nil, "Failed to find popUp button")
     button?.performClick(nil)
   }
 }

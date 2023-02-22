@@ -5,7 +5,6 @@
 //
 
 import AppKit
-import MarkEditKit
 
 public extension NSWindow {
   var toolbarContainerView: NSView? {
@@ -60,7 +59,6 @@ public extension NSWindow {
   /// There's no public API to programmatically show the menu assigned to an NSToolbarItem.
   func popUpButton(with menuIdentifier: NSUserInterfaceItemIdentifier) -> NSPopUpButton? {
     guard let view = contentView?.superview else {
-      Logger.log(.error, "Failed to obtain superview from contentView of: \(self)")
       return nil
     }
 
@@ -71,7 +69,6 @@ public extension NSWindow {
       }
     }
 
-    Logger.log(.error, "Failed to find popUp button of menu: \(menuIdentifier)")
     return result
   }
 }
