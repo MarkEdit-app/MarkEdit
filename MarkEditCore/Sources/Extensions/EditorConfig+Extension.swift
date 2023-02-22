@@ -13,7 +13,7 @@ public extension EditorConfig {
 }
 
 extension EditorConfig {
-  /// index.html built by CoreEditor
+  /// index.html built by CoreEditor.
   private var indexHtml: String? {
     guard let path = Bundle.main.url(forResource: "index", withExtension: "html") else {
       fatalError("Missing index.html to set up the editor")

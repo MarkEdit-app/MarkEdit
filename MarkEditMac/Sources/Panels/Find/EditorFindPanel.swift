@@ -9,11 +9,11 @@ import AppKit
 import AppKitControls
 
 @frozen enum EditorFindMode {
-  /// Find panel is not visible
+  /// Find panel is not visible.
   case hidden
-  /// Find panel is visible, shows only find
+  /// Find panel is visible, shows only find.
   case find
-  /// Find panel is visible, shows both find and replace
+  /// Find panel is visible, shows both find and replace.
   case replace
 }
 

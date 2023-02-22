@@ -7,12 +7,12 @@
 import Foundation
 
 public extension String {
-  /// Overload of the String.Encoding version
+  /// Overload of the String.Encoding version.
   init?(data: Data, encoding: CFStringEncodings) {
     self.init(data: data, encoding: String.Encoding(from: encoding))
   }
 
-  /// Overload of the String.Encoding version
+  /// Overload of the String.Encoding version.
   func data(using encoding: CFStringEncodings, allowLossyConversion: Bool = false) -> Data? {
     data(using: String.Encoding(from: encoding), allowLossyConversion: allowLossyConversion)
   }

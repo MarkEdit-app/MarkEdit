@@ -6,10 +6,10 @@
 
 import Foundation
 
-/// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/Articles/readingFiles.html#//apple_ref/doc/uid/TP40003459-SW4
+/// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/Articles/readingFiles.html#//apple_ref/doc/uid/TP40003459-SW4.
 ///
 /// We *can*, but don't want to, include all supported encodings, which makes the UI super complicated,
-/// Markdown prefers utf-8 as mentioned here: https://daringfireball.net/linked/2011/08/05/markdown-uti
+/// Markdown prefers utf-8 as mentioned here: https://daringfireball.net/linked/2011/08/05/markdown-uti.
 public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable {
   // Derived from String.Encoding
   case ascii
@@ -88,7 +88,7 @@ public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable {
 }
 
 public extension EditorTextEncoding {
-  /// In menus, grouping cases with a separator
+  /// In menus, grouping cases with a separator.
   static var groupingCases: Set<Self> {
     Set([.nonLossyASCII, .utf16LittleEndian, .windowsLatin1, .big5, .shiftJIS])
   }

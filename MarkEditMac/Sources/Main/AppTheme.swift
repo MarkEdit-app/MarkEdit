@@ -20,12 +20,12 @@ struct AppTheme {
     allCases.first { $0.editorTheme == name } ?? GitHubLight
   }
 
-  /// Get a "resolved" appearance name based on the current effective appearance
+  /// Get a "resolved" appearance name based on the current effective appearance.
   var resolvedAppearance: NSAppearance? {
     NSAppearance(named: NSApp.effectiveAppearance.resolvedName(isDarkMode: isDark))
   }
 
-  /// Trigger theme update for all editors
+  /// Trigger theme update for all editors.
   func updateAppearance() {
     EditorReusePool.shared.viewControllers().forEach {
       $0.setTheme(self)

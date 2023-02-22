@@ -57,12 +57,12 @@ public extension NSView {
     }
   }
 
-  /// Check if the view itself or its children is the first responder in a window
+  /// Check if the view itself or its children is the first responder in a window.
   func isFirstResponder(in window: NSWindow?) -> Bool {
     (window?.firstResponder as? NSView)?.belongs(to: self) ?? false
   }
 
-  /// Check if the view is a child of another view, or is another view
+  /// Check if the view is a child of another view, or is another view.
   func belongs(to view: NSView) -> Bool {
     var node: NSView? = self
     while node != nil {
@@ -79,7 +79,7 @@ public extension NSView {
     animated ? animator() : self
   }
 
-  /// Enumerate all children, recursively, self first
+  /// Enumerate all children, recursively, self first.
   func enumerateChildren<T: NSView>(where: ((T) -> Bool)? = nil, handler: (T) -> Void) {
     if let view = self as? T, `where`?(view) ?? true {
       handler(view)

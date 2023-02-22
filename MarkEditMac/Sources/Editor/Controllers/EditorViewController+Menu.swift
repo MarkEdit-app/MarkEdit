@@ -21,7 +21,7 @@ extension EditorViewController: NSMenuDelegate {
 // MARK: - NSMenuItemValidation
 
 extension EditorViewController: NSMenuItemValidation {
-  /// Actions that require the existence of a file
+  /// Actions that require the existence of a file.
   private static let fileActions = [
     #selector(copyFilePath(_:)),
     #selector(copyFolderPath(_:)),

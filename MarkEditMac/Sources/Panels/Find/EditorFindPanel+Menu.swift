@@ -8,7 +8,7 @@
 import AppKit
 
 extension EditorFindPanel {
-  /// Reset the search menu, generally after search mode changed
+  /// Reset the search menu, generally after search mode changed.
   func resetMenu() {
     let menu = NSMenu()
     menu.addItem(withTitle: Localized.Search.find, action: #selector(enableFindMode(_:))).setOn(mode != .replace)

@@ -33,7 +33,7 @@ final class EditorReusePool {
     return EditorViewController()
   }
 
-  /// All editors, whether with or without a visible window
+  /// All editors, whether with or without a visible window.
   func viewControllers() -> [EditorViewController] {
     controllerPool + {
       let windows = NSApplication.shared.windows.compactMap { $0 as? EditorWindow }

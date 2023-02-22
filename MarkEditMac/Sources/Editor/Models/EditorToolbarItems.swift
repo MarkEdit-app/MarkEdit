@@ -41,7 +41,7 @@ extension NSToolbarItem {
     return item
   }
 
-  /// Used in toolTip as a hint, values should match mainMenu
+  /// Used in toolTip as a hint, values should match mainMenu.
   var shortcutHint: String? {
     switch itemIdentifier {
     case .toggleBold: return "⌘ B"

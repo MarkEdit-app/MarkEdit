@@ -61,7 +61,7 @@ public final class EditorMessageHandler: NSObject, WKScriptMessageHandler {
 // MARK: - Private
 
 private extension EditorMessageHandler {
-  /// Reply to a message sent by JavaScript
+  /// Reply to a message sent by JavaScript.
   func reply(id: String, result: Result<Encodable?, Error>) {
     guard let webView = webViewProvider() else {
       Logger.log(.error, "Missing WebView to proceed")
@@ -96,9 +96,9 @@ private extension EditorMessageHandler {
   }
 }
 
-/// Encodable wrapper for generics
+/// Encodable wrapper for generics.
 ///
-/// https://www.dabby.dev/article/2019-04-25-any-encodable
+/// https://www.dabby.dev/article/2019-04-25-any-encodable.
 private struct AnyEncodable: Encodable {
   let value: Encodable
 

@@ -27,7 +27,7 @@ public extension NSMenu {
     return item
   }
 
-  /// Force an update, the .update() method doesn't work reliably
+  /// Force an update, the .update() method doesn't work reliably.
   func reloadItems() {
     let item = NSMenuItem.separator()
     addItem(item)
