@@ -100,6 +100,9 @@
 /* Class = "NSMenuItem"; title = "Save As…"; ObjectID = "Bw7-FT-i3A"; */
 "Bw7-FT-i3A.title" = "儲存為…";
 
+/* Class = "NSMenu"; title = "Table of Contents"; ObjectID = "BxI-nv-Xa5"; */
+"BxI-nv-Xa5.title" = "內容目錄";
+
 /* Class = "NSMenuItem"; title = "File Path"; ObjectID = "BxS-9Q-HQd"; */
 "BxS-9Q-HQd.title" = "檔案路徑";
 
@@ -157,6 +160,9 @@
 /* Class = "NSMenuItem"; title = "MarkEdit Help"; ObjectID = "FKE-Sm-Kum"; */
 "FKE-Sm-Kum.title" = "MarkEdit 輔助說明";
 
+/* Class = "NSMenuItem"; title = "Select Previous Section"; ObjectID = "Gbu-oy-t2b"; */
+"Gbu-oy-t2b.title" = "選擇上個章節";
+
 /* Class = "NSMenuItem"; title = "Open In..."; ObjectID = "GdB-IP-6C8"; */
 "GdB-IP-6C8.title" = "使用應用打開…";
 
@@ -204,6 +210,9 @@
 
 /* Class = "NSMenuItem"; title = "Select Line"; ObjectID = "InE-bU-3FX"; */
 "InE-bU-3FX.title" = "選擇整行";
+
+/* Class = "NSMenuItem"; title = "Open Menu"; ObjectID = "IPm-0a-pwK"; */
+"IPm-0a-pwK.title" = "打開選單";
 
 /* Class = "NSMenuItem"; title = "Copy Path"; ObjectID = "jv9-dC-jQp"; */
 "jv9-dC-jQp.title" = "拷貝路徑";
@@ -306,6 +315,9 @@
 
 /* Class = "NSMenuItem"; title = "Check Spelling While Typing"; ObjectID = "rbD-Rh-wIN"; */
 "rbD-Rh-wIN.title" = "在輸入時同步檢查拼字";
+
+/* Class = "NSMenuItem"; title = "Table of Contents"; ObjectID = "REb-f5-kpc"; */
+"REb-f5-kpc.title" = "內容目錄";
 
 /* Class = "NSMenuItem"; title = "Smart Dashes"; ObjectID = "rgM-f4-ycn"; */
 "rgM-f4-ycn.title" = "智慧型破折號";
@@ -432,6 +444,9 @@
 
 /* Class = "NSMenuItem"; title = "Strikethrough"; ObjectID = "z7z-Qk-jsC"; */
 "z7z-Qk-jsC.title" = "刪除線";
+
+/* Class = "NSMenuItem"; title = "Select Next Section"; ObjectID = "ZM6-yO-uqe"; */
+"ZM6-yO-uqe.title" = "選擇下個章節";
 
 /* Class = "NSMenuItem"; title = "Folder Path"; ObjectID = "zVr-EF-hMY"; */
 "zVr-EF-hMY.title" = "目錄路徑";

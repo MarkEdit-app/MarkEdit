@@ -293,6 +293,30 @@
                                                 <action selector="gotoLine:" target="Ady-hI-5gd" id="puP-5D-Fgc"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Table of Contents" id="REb-f5-kpc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Table of Contents" id="BxI-nv-Xa5">
+                                                <items>
+                                                    <menuItem title="Open Menu" keyEquivalent="O" id="IPm-0a-pwK">
+                                                        <connections>
+                                                            <action selector="openTableOfContents:" target="Ady-hI-5gd" id="GAy-8C-JmJ"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Select Previous Section" keyEquivalent="" id="Gbu-oy-t2b">
+                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                                        <connections>
+                                                            <action selector="selectPreviousSection:" target="Ady-hI-5gd" id="ItO-QD-K4H"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Select Next Section" keyEquivalent="" id="ZM6-yO-uqe">
+                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                                        <connections>
+                                                            <action selector="selectNextSection:" target="Ady-hI-5gd" id="dss-gg-NFs"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem title="Font" id="enN-sJ-W90">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Font" id="VwK-Nx-wgD">

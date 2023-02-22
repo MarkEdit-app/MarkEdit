@@ -5,6 +5,7 @@
 //
 
 import AppKit
+import MarkEditKit
 
 public extension NSWindow {
   var toolbarContainerView: NSView? {
@@ -52,6 +53,26 @@ public extension NSWindow {
     ))
 
     return CGRect(origin: CGPoint(x: origin.x, y: origin.y - rect.height), size: rect.size)
+  }
+
+  /// Get the popUp button associated with an NSMenu.
+  ///
+  /// There's no public API to programmatically show the menu assigned to an NSToolbarItem.
+  func popUpButton(with menuIdentifier: NSUserInterfaceItemIdentifier) -> NSPopUpButton? {
+    guard let view = contentView?.superview else {
+      Logger.log(.error, "Failed to obtain superview from contentView of: \(self)")
+      return nil
+    }
+
+    var result: NSPopUpButton?
+    view.enumerateChildren { (button: NSPopUpButton) in
+      if button.menu?.identifier == menuIdentifier {
+        result = button
+      }
+    }
+
+    Logger.log(.error, "Failed to find popUp button of menu: \(menuIdentifier)")
+    return result
   }
 }
 

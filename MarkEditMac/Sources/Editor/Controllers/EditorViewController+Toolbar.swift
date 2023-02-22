@@ -10,14 +10,19 @@ import MarkEditKit
 
 extension EditorViewController {
   private enum Constants {
-    static let tableOfContentsMenuIdentifier = "tableOfContentsMenu"
+    static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
     static let normalizedButtonSize: Double = 15 // "bold" icon looks bigger than expected, fix it
   }
 
   func updateToolbarItemMenus(_ menu: NSMenu) {
-    if menu.identifier?.rawValue == Constants.tableOfContentsMenuIdentifier {
+    if menu.identifier == Constants.tableOfContentsMenuIdentifier {
       updateTableOfContentsMenu(menu)
     }
+  }
+
+  func showTableOfContentsMenu() {
+    let button = view.window?.popUpButton(with: Constants.tableOfContentsMenuIdentifier)
+    button?.performClick(nil)
   }
 }
 
@@ -93,7 +98,7 @@ private extension EditorViewController {
   var tableOfContentsItem: NSToolbarItem {
     let menu = NSMenu()
     menu.delegate = self
-    menu.identifier = NSUserInterfaceItemIdentifier(Constants.tableOfContentsMenuIdentifier)
+    menu.identifier = Constants.tableOfContentsMenuIdentifier
 
     let label = NSMenuItem(title: Localized.Toolbar.tableOfContents, action: nil, keyEquivalent: "")
     label.isEnabled = false
