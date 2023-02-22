@@ -17,9 +17,9 @@ export function getTableOfContents() {
       return ensureSyntaxTree(state, length) ?? syntaxTree(state);
     }
 
-  // Note that, it's not going to iterate the entire tree (might not have been parsed).
-  //
-  // This is by design because of potential performance issues.
+    // Note that, it's not going to iterate the entire tree (might not have been parsed).
+    //
+    // This is by design because of potential performance issues.
     return syntaxTree(state);
   })();
 
