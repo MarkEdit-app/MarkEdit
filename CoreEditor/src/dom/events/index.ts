@@ -1,4 +1,3 @@
-import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import isMetaKey from './isMetaKey';
 
 import * as grammarly from '../../modules/grammarly';
@@ -16,15 +15,6 @@ export function startObserving() {
       link.startClickable();
     } else {
       link.stopClickable();
-    }
-
-    // Make sure the main selection is always centered for typewriter mode
-    if (window.config.typewriterMode) {
-      scrollToSelection('center');
-    } else {
-      // We need this because we have different line height for headings,
-      // CodeMirror doesn't by default fix the offset issue.
-      scrollCaretToVisible();
     }
   });
 
