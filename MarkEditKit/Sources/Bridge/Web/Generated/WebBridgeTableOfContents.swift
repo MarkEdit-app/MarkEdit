@@ -43,11 +43,13 @@ public struct HeadingInfo: Codable {
   public var level: Int
   public var from: Int
   public var to: Int
+  public var selected: Bool
 
-  public init(title: String, level: Int, from: Int, to: Int) {
+  public init(title: String, level: Int, from: Int, to: Int, selected: Bool) {
     self.title = title
     self.level = level
     self.from = from
     self.to = to
+    self.selected = selected
   }
 }
