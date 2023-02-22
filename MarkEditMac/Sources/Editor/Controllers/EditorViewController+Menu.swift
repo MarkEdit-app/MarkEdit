@@ -236,6 +236,18 @@ private extension EditorViewController {
     showGotoLineWindow(sender)
   }
 
+  @IBAction func openTableOfContents(_ sender: Any?) {
+    showTableOfContentsMenu()
+  }
+
+  @IBAction func selectPreviousSection(_ sender: Any?) {
+    bridge.toc.selectPreviousSection()
+  }
+
+  @IBAction func selectNextSection(_ sender: Any?) {
+    bridge.toc.selectNextSection()
+  }
+
   @IBAction func makeFontBigger(_ sender: Any?) {
     let fontSize = AppPreferences.Editor.fontSize
     if fontSize < FontPicker.maximumFontSize {

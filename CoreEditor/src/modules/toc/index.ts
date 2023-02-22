@@ -72,6 +72,18 @@ export function getTableOfContents() {
   return results;
 }
 
+export function selectPreviousSection() {
+  const toc = getTableOfContents();
+  const index = Math.max(0, toc.findIndex(info => info.selected) - 1);
+  gotoHeader(toc[index]);
+}
+
+export function selectNextSection() {
+  const toc = getTableOfContents();
+  const index = Math.min(toc.length - 1, toc.findIndex(info => info.selected) + 1);
+  gotoHeader(toc[index]);
+}
+
 export function gotoHeader(headingInfo: HeadingInfo) {
   selectWithRanges([EditorSelection.cursor(headingInfo.from)]);
   scrollToSelection(window.config.typewriterMode ? 'center' : 'start');
