@@ -7,9 +7,9 @@
 import Foundation
 
 public extension Data {
-  /// Handle text encoding in Cocoa apps: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/introStrings.html
+  /// Handle text encoding in Cocoa apps: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/introStrings.html.
   ///
-  /// Ideally, the encoding for Markdown should always be utf-8 as described in: https://daringfireball.net/linked/2011/08/05/markdown-uti
+  /// Ideally, the encoding for Markdown should always be utf-8 as described in: https://daringfireball.net/linked/2011/08/05/markdown-uti.
   func toString(encoding: String.Encoding = .utf8) -> String? {
     // Perfect, successfully decoded it with the preferred encoding
     if let decoded = String(data: self, encoding: encoding) {

@@ -25,14 +25,14 @@ public extension NSWindow {
     return result
   }
 
-  /// Change the frame size, treat the top-left corner as the anchor point
+  /// Change the frame size, treat the top-left corner as the anchor point.
   func setFrameSize(_ target: CGSize, display flag: Bool = false, animated: Bool = false) {
     let size = frameRect(forContentRect: CGRect(origin: .zero, size: target)).size
     let frame = CGRect(origin: frame.origin, size: size).offsetBy(dx: 0, dy: frame.height - size.height)
     setFrame(frame, display: flag, animate: animated)
   }
 
-  /// Move to the center of the screen, the built-in .center() method doesn't work reliably
+  /// Move to the center of the screen, the built-in .center() method doesn't work reliably.
   func moveToCenter() {
     guard let visibleSize = screen?.visibleFrame.size, let fullSize = screen?.frame.size else {
       return
@@ -44,7 +44,7 @@ public extension NSWindow {
     ))
   }
 
-  /// Get the cascade rect based on a rect
+  /// Get the cascade rect based on a rect.
   func cascadeRect(from rect: CGRect) -> CGRect {
     let origin = cascadeTopLeft(from: CGPoint(
       x: rect.origin.x,

@@ -76,7 +76,7 @@ public final class Previewer: NSViewController {
     return try? Data(contentsOf: path).toString()
   }
 
-  /// Observe body size change and update content size accordingly
+  /// Observe body size change and update content size accordingly.
   private var resizeObserver: WKUserScript {
     let source = """
     const observer = new ResizeObserver(entries => {
