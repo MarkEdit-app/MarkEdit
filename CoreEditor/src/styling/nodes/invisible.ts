@@ -57,10 +57,11 @@ export function renderWhitespaceBeforeCaret() {
 
     const to = editor.state.selection.main.anchor;
     const from = to - 1;
+    const caret = doc.sliceString(from, to);
     const spaces = doc.sliceString(from - 1, to + 1);
 
     // Example valid patterns: " (caret)", "x (caret)", "x (caret)y".
-    if (from >= 0 && (/^[^ ]? $/.test(spaces) || /^[^ ] [^ ]$/.test(spaces))) {
+    if (from >= 0 && caret === ' ' && (/^[^ ]? $/.test(spaces) || /^[^ ] [^ ]$/.test(spaces))) {
       const deco = getOrCreateDeco(' ', from);
       storage.lazyCompartment = new Compartment;
       startEffect(storage.lazyCompartment, Decoration.set(deco.range(from, to)));
