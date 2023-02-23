@@ -18,6 +18,7 @@ enum Localized {
     static let previous = String(localized: "Previous", comment: "Button title, move to the previous item")
     static let next = String(localized: "Next", comment: "Button title, move to the next item")
     static let all = String(localized: "All", comment: "Button title, perform actions to all items")
+    static let selected = String(localized: "Selected", comment: "General title that indicates something is selected")
   }
 
   enum Editor {

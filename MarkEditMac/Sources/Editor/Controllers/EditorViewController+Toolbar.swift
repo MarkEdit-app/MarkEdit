@@ -215,6 +215,12 @@ private extension EditorViewController {
         let title = info.title.components(separatedBy: .newlines).first ?? info.title
         let item = menu.addItem(withTitle: title, action: #selector(self.gotoHeader(_:)))
         item.representedObject = info
+        item.setAccessibilityLabel(title)
+        item.setAccessibilityValue(info.level)
+
+        if info.selected {
+          item.setAccessibilityHelp(Localized.General.selected)
+        }
 
         let fontSize = 15.0 - min(3, Double(info.level))
         let attributedTitle = NSMutableAttributedString()

@@ -74,4 +74,9 @@ extension EditorStatusView {
   override func accessibilityLabel() -> String? {
     button.labelView.stringValue
   }
+
+  override func accessibilityPerformPress() -> Bool {
+    button.performClick(nil)
+    return true
+  }
 }
