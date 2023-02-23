@@ -4,6 +4,7 @@ import { WebModule } from '../bridge/webModule';
 import { NativeReply } from '../bridge/nativeModule';
 import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModulePreview } from '../bridge/native/preview';
+import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
 
 declare global {
   type CodeGen_Int = number & { _brand: never };
@@ -28,6 +29,7 @@ declare global {
     nativeModules: {
       core: NativeModuleCore;
       preview: NativeModulePreview;
+      tokenizer: NativeModuleTokenizer;
     };
     handleNativeReply: (reply: NativeReply) => void;
   }

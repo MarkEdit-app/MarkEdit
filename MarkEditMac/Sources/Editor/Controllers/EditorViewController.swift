@@ -67,6 +67,7 @@ final class EditorViewController: NSViewController {
     let modules = NativeModules(modules: [
       EditorModuleCore(delegate: self),
       EditorModulePreview(delegate: self),
+      EditorModuleTokenizer(),
     ])
 
     let handler = EditorMessageHandler(modules: modules) { [weak self] in

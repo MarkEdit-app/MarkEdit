@@ -16,6 +16,7 @@ import { pseudoDocument } from './src/@test/mock';
 import { createNativeModule, handleNativeReply } from './src/bridge/nativeModule';
 import { NativeModuleCore } from './src/bridge/native/core';
 import { NativeModulePreview } from './src/bridge/native/preview';
+import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 
 import * as core from './src/core';
 import * as styling from './src/styling/config';
@@ -57,6 +58,7 @@ window.webModules = {
 window.nativeModules = {
   core: createNativeModule<NativeModuleCore>('core'),
   preview: createNativeModule<NativeModulePreview>('preview'),
+  tokenizer: createNativeModule<NativeModuleTokenizer>('tokenizer'),
 };
 
 window.onload = () => {

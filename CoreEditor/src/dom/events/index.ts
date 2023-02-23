@@ -2,12 +2,17 @@ import isMetaKey from './isMetaKey';
 
 import * as grammarly from '../../modules/grammarly';
 import * as selection from '../../modules/selection';
+import * as tokenizer from '../../modules/tokenizer';
 import * as link from '../../styling/nodes/link';
 
 export function startObserving() {
   document.addEventListener('click', event => {
     grammarly.centerActiveDialog();
     selection.selectWholeLineIfNeeded(event);
+  });
+
+  document.addEventListener('dblclick', event => {
+    tokenizer.handleDoubleClick(event);
   });
 
   document.addEventListener('keydown', event => {
