@@ -226,6 +226,9 @@
 /* Menu label for selecting fonts */
 "Select..." = "選擇…";
 
+/* General title that indicates something is selected */
+"Selected" = "已選擇";
+
 /* Show invisibles for selected ranges */
 "Selection" = "選中區域";
 
