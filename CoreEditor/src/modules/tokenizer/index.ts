@@ -29,7 +29,7 @@ export async function handleDoubleClick(event: MouseEvent) {
     //
     // Also, we need to filter out ranges that creates a selection with two carets.
     selection: EditorSelection.create([
-      ...editor.state.selection.ranges.filter(range => range.from < from || range.to > to),
+      ...editor.state.selection.ranges.filter(range => range.to < from || range.from > to),
       EditorSelection.range(from, to),
     ]),
   });
