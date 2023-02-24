@@ -15,6 +15,7 @@ extension EditorViewController {
       "pandoc",
       url.escapedFilePath,
       "-f gfm -t \(format)",
+      "--pdf-engine=context",
       "-s -o \(url.replacingPathExtension(format).escapedFilePath)",
       "&& open \(url.deletingLastPathComponent().escapedFilePath)",
     ].joined(separator: " ")
