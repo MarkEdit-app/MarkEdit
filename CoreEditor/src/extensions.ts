@@ -24,7 +24,7 @@ import { gutterExtensions } from './styling/nodes/gutter';
 
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
-import { observeChanges, interceptInputs } from './modules/input';
+import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 
 const theme = new Compartment;
 const gutters = new Compartment;
@@ -106,6 +106,7 @@ export function extensions(options: { lineBreak?: string }) {
     actionExtensions,
 
     // Input handling
+    wordTokenizer(),
     interceptInputs(),
     observeChanges(),
   ];

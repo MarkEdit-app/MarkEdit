@@ -3,12 +3,31 @@ import { InvisiblesBehavior } from '../../config';
 import { editedState, selectionState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
+import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
 import { renderWhitespaceBeforeCaret } from '../../styling/nodes/invisible';
 
 import selectedRange from '../selection/selectedRanges';
 import wrapBlock from './wrapBlock';
+
+/**
+ * Tokenize words at the click position, especially useful for CJK languages.
+ */
+export function wordTokenizer() {
+  return EditorView.mouseSelectionStyle.of((editor, event) => {
+    if (tokenizePosition(event) === null) {
+      return null;
+    }
+
+    // There isn't an async way to get selection in CodeMirror,
+    // we simply just leave the selection as is and handle the updates in a "dblclick" event handler.
+    return {
+      get(_event, _extend, _multiple) { return editor.state.selection; },
+      update(_update) { /* no-op */},
+    };
+  });
+}
 
 /**
  * Give us an opportunity to intercept user inputs.
