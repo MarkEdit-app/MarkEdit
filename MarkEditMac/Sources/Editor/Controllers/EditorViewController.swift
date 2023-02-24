@@ -85,9 +85,15 @@ final class EditorViewController: NSViewController {
     webView.uiDelegate = self
     webView.menuDelegate = self
 
+    let html = [
+      AppPreferences.editorConfig.toHtml,
+      EditorStyleSheet.shared.contents,
+    ].joined(separator: "\n\n")
+
     // Non-nil baseURL is required by web services like Grammarly
     let baseURL = URL(string: "http://localhost")
-    webView.loadHTMLString(AppPreferences.editorConfig.toHtml, baseURL: baseURL)
+    webView.loadHTMLString(html, baseURL: baseURL)
+
     return webView
   }()
 
