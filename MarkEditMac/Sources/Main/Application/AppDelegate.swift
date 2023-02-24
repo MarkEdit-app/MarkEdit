@@ -47,6 +47,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     UserDefaults.overwriteTextCheckerOnce()
     EditorReusePool.shared.warmUp()
+    EditorStyleSheet.shared.createFile()
 
     // Initialize this earlier instead of making it lazy,
     // the window size relies on the SwiftUI content view size, it takes time.
