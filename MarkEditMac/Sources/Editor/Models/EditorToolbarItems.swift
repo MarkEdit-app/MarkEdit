@@ -44,6 +44,7 @@ extension NSToolbarItem {
   /// Used in toolTip as a hint, values should match mainMenu.
   var shortcutHint: String? {
     switch itemIdentifier {
+    case .tableOfContents: return "⇧ ⌘ O"
     case .toggleBold: return "⌘ B"
     case .toggleItalic: return "⌘ I"
     case .toggleStrikethrough: return "⌃ ⌘ S"
