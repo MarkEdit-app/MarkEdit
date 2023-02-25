@@ -56,7 +56,7 @@ export function getTableOfContents() {
   });
 
   const baseLevel = results.reduce((acc, cur) => Math.min(acc, cur.level), 6);
-  const selection = state.selection.main.anchor;
+  const selection = state.selection.main.head;
 
   for (let index = 0; index < results.length; ++index) {
     const item = results[index];
