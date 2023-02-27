@@ -19,7 +19,7 @@ export const selectedTextDecoration = ViewPlugin.fromClass(class {
       return;
     }
 
-    const ranges = update.state.selection.ranges.filter(range => range.to !== range.from);
+    const ranges = update.state.selection.ranges.filter(range => !range.empty);
     const markDeco = Decoration.mark({ class: 'cm-selectedTextRange' });
     this.decorations = Decoration.set(ranges.map(range => {
       return markDeco.range(range.from, range.to);

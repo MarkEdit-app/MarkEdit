@@ -7,6 +7,11 @@ import { EditorView } from '@codemirror/view';
  * @param mark The mark, e.g., "*"
  */
 export default function wrapBlock(mark: string, editor: EditorView) {
+  // Fallback to the default behavior if all selections are empty
+  if (!editor.state.selection.ranges.some(range => !range.empty)) {
+    return false;
+  }
+
   const doc = editor.state.doc;
   editor.dispatch(editor.state.changeByRange(({ from, to }) => {
     const selection = doc.sliceString(from, to);
