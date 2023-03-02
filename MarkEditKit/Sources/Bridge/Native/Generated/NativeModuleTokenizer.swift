@@ -51,16 +51,6 @@ final class NativeBridgeTokenizer: NativeBridge {
   }
 }
 
-public struct TextTokenizeAnchor: Decodable, Equatable {
-  public var text: String
-  public var pos: Int
-
-  public init(text: String, pos: Int) {
-    self.text = text
-    self.pos = pos
-  }
-}
-
 public struct TextTokenizeResult: Encodable, Equatable {
   public var from: Int
   public var to: Int

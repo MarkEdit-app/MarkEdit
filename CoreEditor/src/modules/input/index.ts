@@ -3,6 +3,7 @@ import { InvisiblesBehavior } from '../../config';
 import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
+import { startCompletion } from '../completion';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
@@ -41,6 +42,11 @@ export function interceptInputs() {
     // E.g., wrap "selection" as "*selection*"
     if (marksToWrap.includes(insert)) {
       return wrapBlock(insert, editor);
+    }
+
+    // Typing suggestions for non-space insertions
+    if (window.config.suggestWhileTyping && insert.trim().length > 0) {
+      startCompletion();
     }
 
     // Fallback to default behavior

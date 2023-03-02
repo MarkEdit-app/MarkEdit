@@ -15,3 +15,15 @@ public enum EditorInvisiblesBehavior: String, Codable {
   case trailing = "trailing"
   case always = "always"
 }
+
+public struct TextTokenizeAnchor: Codable {
+  public var text: String
+  public var pos: Int
+  public var offset: Int
+
+  public init(text: String, pos: Int, offset: Int) {
+    self.text = text
+    self.pos = pos
+    self.offset = offset
+  }
+}

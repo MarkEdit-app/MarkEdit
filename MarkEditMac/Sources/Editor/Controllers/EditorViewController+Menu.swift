@@ -236,6 +236,10 @@ private extension EditorViewController {
     NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil)
   }
 
+  @IBAction func startCompletion(_ sender: Any?) {
+    bridge.completion.startCompletion()
+  }
+
   @IBAction func gotoLine(_ sender: Any?) {
     showGotoLineWindow(sender)
   }

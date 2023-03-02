@@ -66,6 +66,7 @@ final class EditorViewController: NSViewController {
   private(set) lazy var webView: WKWebView = {
     let modules = NativeModules(modules: [
       EditorModuleCore(delegate: self),
+      EditorModuleCompletion(delegate: self),
       EditorModulePreview(delegate: self),
       EditorModuleTokenizer(),
     ])

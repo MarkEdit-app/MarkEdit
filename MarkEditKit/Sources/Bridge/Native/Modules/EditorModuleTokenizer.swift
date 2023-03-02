@@ -6,6 +6,7 @@
 
 import Foundation
 import NaturalLanguage
+import MarkEditCore
 
 public final class EditorModuleTokenizer: NativeModuleTokenizer {
   public init() {}

@@ -1,5 +1,6 @@
 import isMetaKey from './isMetaKey';
 import { editingState } from '../../common/store';
+import { isPanelVisible } from '../../modules/completion';
 
 import * as grammarly from '../../modules/grammarly';
 import * as selection from '../../modules/selection';
@@ -43,4 +44,34 @@ export function startObserving() {
   document.addEventListener('compositionend', () => {
     editingState.compositionEnded = true;
   });
+
+  overrideNavigationKeysForCompletion();
+}
+
+function overrideNavigationKeysForCompletion() {
+  document.addEventListener('keydown', event => {
+    if (!isPanelVisible()) {
+      return;
+    }
+
+    const skipDefaultBehavior = () => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    if (event.key === 'ArrowUp') {
+      window.nativeModules.completion.selectPrevious();
+      return skipDefaultBehavior();
+    }
+
+    if (event.key === 'ArrowDown') {
+      window.nativeModules.completion.selectNext();
+      return skipDefaultBehavior();
+    }
+
+    if (event.key === 'Enter' || event.key === 'Tab') {
+      window.nativeModules.completion.commitCompletion();
+      return skipDefaultBehavior();
+    }
+  }, true);
 }
