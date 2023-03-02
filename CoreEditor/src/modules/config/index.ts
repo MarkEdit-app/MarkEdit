@@ -3,7 +3,7 @@ import { indentUnit } from '@codemirror/language';
 import { InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
 import { scrollToSelection } from '../selection';
-import { selectionState } from '../../common/store';
+import { editingState } from '../../common/store';
 import { loadTheme } from '../../styling/themes';
 import * as styling from '../../styling/config';
 
@@ -29,7 +29,7 @@ export function setShowLineNumbers(enabled: boolean) {
 
 export function setShowActiveLineIndicator(enabled: boolean) {
   window.config.showActiveLineIndicator = enabled;
-  styling.setShowActiveLineIndicator(enabled && !selectionState.hasSelection);
+  styling.setShowActiveLineIndicator(enabled && !editingState.hasSelection);
 }
 
 export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {

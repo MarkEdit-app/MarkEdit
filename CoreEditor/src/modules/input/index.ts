@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { InvisiblesBehavior } from '../../config';
-import { editedState, selectionState } from '../../common/store';
+import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
 import { tokenizePosition } from '../tokenizer';
@@ -54,12 +54,12 @@ export function interceptInputs() {
 export function observeChanges() {
   return EditorView.updateListener.of(update => {
     // We only notify changes when the editor is not dirty (all changes are saved)
-    if (update.docChanged && !editedState.isDirty) {
+    if (update.docChanged && !editingState.isDirty) {
       // It would be great if we could also provide the updated text here,
       // but it's time-consuming for large payload,
       // we want to be responsive for every key stroke.
       window.nativeModules.core.notifyTextDidChange();
-      editedState.isDirty = true;
+      editingState.isDirty = true;
     }
 
     if (update.selectionSet) {
@@ -67,8 +67,8 @@ export function observeChanges() {
       window.nativeModules.core.notifySelectionDidChange({ lineColumn });
 
       const hasSelection = selectedRange().some(range => !range.empty);
-      const updateActiveLine = selectionState.hasSelection !== hasSelection;
-      selectionState.hasSelection = hasSelection;
+      const updateActiveLine = editingState.hasSelection !== hasSelection;
+      editingState.hasSelection = hasSelection;
 
       if (updateActiveLine) {
         // Update invisible behavior as selection changed

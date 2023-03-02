@@ -1,4 +1,5 @@
 import isMetaKey from './isMetaKey';
+import { editingState } from '../../common/store';
 
 import * as grammarly from '../../modules/grammarly';
 import * as selection from '../../modules/selection';
@@ -34,4 +35,12 @@ export function startObserving() {
   document.addEventListener('mouseup', event => {
     link.handleMouseUp(event);
   }, true);
+
+  document.addEventListener('compositionstart', () => {
+    editingState.compositionEnded = false;
+  });
+
+  document.addEventListener('compositionend', () => {
+    editingState.compositionEnded = true;
+  });
 }

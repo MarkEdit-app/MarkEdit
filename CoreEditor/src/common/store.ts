@@ -1,8 +1,11 @@
 import { Compartment } from '@codemirror/state';
 import StyleSheets from '../styling/config';
 
-export const editedState = { isDirty: false };
-export const selectionState = { hasSelection: false };
+export const editingState = {
+  isDirty: false,
+  hasSelection: false,
+  compositionEnded: true,
+};
 
 export const styleSheets: StyleSheets = {};
 export const clickableLinks: Compartment[] = [];

@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { extensions } from './extensions';
-import { editedState } from './common/store';
+import { editingState } from './common/store';
 
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
@@ -67,7 +67,7 @@ export function getEditorText() {
 }
 
 export function markEditorDirty(isDirty: boolean) {
-  editedState.isDirty = isDirty;
+  editingState.isDirty = isDirty;
 }
 
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {

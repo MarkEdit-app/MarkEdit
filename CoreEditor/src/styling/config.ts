@@ -1,7 +1,7 @@
 import { EditorView, highlightActiveLine } from '@codemirror/view';
 import { EditorTheme } from './themes';
 import { Config, InvisiblesBehavior } from '../config';
-import { selectionState, styleSheets } from '../common/store';
+import { editingState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
 import { selectedLinesDecoration } from './nodes/selection';
@@ -113,7 +113,7 @@ export function setShowActiveLineIndicator(enabled: boolean) {
 
 export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
   const editor = window.editor as EditorView | null;
-  const hasSelection = selectionState.hasSelection;
+  const hasSelection = editingState.hasSelection;
 
   if (typeof editor?.dispatch === 'function') {
     editor.dispatch({
