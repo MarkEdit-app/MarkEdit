@@ -73,21 +73,18 @@ extension EditorViewController: EditorModuleCoreDelegate {
 // MARK: - EditorModuleCompletionDelegate
 
 extension EditorViewController: EditorModuleCompletionDelegate {
-  // swiftlint:disable:next function_parameter_count
   func editorCompletion(
     _ sender: EditorModuleCompletion,
     request prefix: String,
     anchor: TextTokenizeAnchor,
     partialRange: NSRange,
-    tokenizedWords: [String],
-    caretRect: CGRect
+    tokenizedWords: [String]
   ) {
     requestCompletions(
       prefix: prefix,
       anchor: anchor,
       partialRange: partialRange,
-      tokenizedWords: tokenizedWords,
-      caretRect: caretRect
+      tokenizedWords: tokenizedWords
     )
   }
 

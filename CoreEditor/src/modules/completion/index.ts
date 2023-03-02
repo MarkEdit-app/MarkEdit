@@ -1,5 +1,4 @@
 import { editingState } from '../../common/store';
-import { getJSRect } from '../../common/utils';
 import anchorAtPos from '../tokenizer/anchorAtPos';
 
 export function startCompletion() {
@@ -36,14 +35,8 @@ export function startCompletion() {
       }
     })();
 
-    // We're not showing completions when caret rect is invalid
-    const caretRect = editor.coordsAtPos(pos);
-    if (caretRect === null) {
-      return;
-    }
-
     const anchor = anchorAtPos(pos);
-    window.nativeModules.completion.requestCompletions({ anchor, fullText, caretRect: getJSRect(caretRect) });
+    window.nativeModules.completion.requestCompletions({ anchor, fullText });
   }, 300);
 }
 

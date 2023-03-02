@@ -1,5 +1,3 @@
-import { getJSRect } from '../../common/utils';
-
 export enum PreviewType {
   mermaid = 'mermaid',
   katex = 'katex',
@@ -32,7 +30,12 @@ export function showPreview(event: MouseEvent) {
 
   const type = target.getAttribute('data-type') as PreviewType;
   window.nativeModules.preview.show({
-    code, type, rect: getJSRect(rect),
+    code, type, rect: {
+      x: rect.left,
+      y: rect.top,
+      width: rect.right - rect.left,
+      height: rect.bottom - rect.top,
+    },
   });
 
   event.preventDefault();

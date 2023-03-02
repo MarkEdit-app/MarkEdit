@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import MarkEditCore
 
 public protocol EditorModulePreviewDelegate: AnyObject {
   func editorPreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect)

@@ -1,6 +1,5 @@
 import { NativeModule } from '../nativeModule';
 import { TextTokenizeAnchor } from '../../modules/tokenizer/types';
-import { JSRect } from '../../@types/JSRect';
 
 /**
  * @shouldExport true
@@ -8,7 +7,7 @@ import { JSRect } from '../../@types/JSRect';
  * @bridgeName NativeBridgeCompletion
  */
 export interface NativeModuleCompletion extends NativeModule {
-  requestCompletions({ anchor, fullText, caretRect }: { anchor: TextTokenizeAnchor; fullText?: string; caretRect: JSRect }): void;
+  requestCompletions({ anchor, fullText }: { anchor: TextTokenizeAnchor; fullText?: string }): void;
   commitCompletion(): void;
   selectPrevious(): void;
   selectNext(): void;
