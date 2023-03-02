@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line } from '@codemirror/state';
+import { getJSRect } from '../../common/utils';
 
 import selectedRanges from './selectedRanges';
 import selectWholeLineAt from './selectWholeLineAt';
@@ -70,6 +71,15 @@ export function scrollToSelection(strategy: 'nearest' | 'start' | 'end' | 'cente
   editor.dispatch({
     effects: EditorView.scrollIntoView(range, { y: strategy, yMargin: margin }),
   });
+}
+
+export function getRect(pos: number) {
+  const rect = window.editor.coordsAtPos(pos);
+  if (rect === null) {
+    return undefined;
+  }
+
+  return getJSRect(rect);
 }
 
 export function gotoLine(lineNumber: number) {

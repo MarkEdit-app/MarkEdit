@@ -34,6 +34,12 @@ extension EditorViewController {
     }()
 
     updateCompletionPanel(isVisible: isPanelVisible)
+
+    Task {
+      if let caretRect = try? await bridge.selection.getRect(pos: anchor.offset + partialRange.location) {
+        updateCompletionPanel(completions: completions, caretRect: caretRect.cgRect)
+      }
+    }
   }
 
   func commitCompletion() {
@@ -79,5 +85,21 @@ extension EditorViewController {
         bridge.textChecker.dismiss()
       }
     }
+  }
+}
+
+// MARK: - Private
+
+private extension EditorViewController {
+  func updateCompletionPanel(completions: [String], caretRect: CGRect) {
+    guard completionContext.isPanelVisible, let parentWindow = view.window else {
+      return
+    }
+
+    completionContext.updateCompletions(
+      completions,
+      parentWindow: parentWindow,
+      caretRect: caretRect
+    )
   }
 }

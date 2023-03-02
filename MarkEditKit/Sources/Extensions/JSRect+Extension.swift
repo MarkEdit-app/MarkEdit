@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MarkEditCore
 
 public extension JSRect {
   var cgRect: CGRect {
