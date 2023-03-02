@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { TextCheckerOptions, update } from '../../modules/textChecker';
+import { TextCheckerOptions, update, dismiss } from '../../modules/textChecker';
 
 /**
  * @shouldExport true
@@ -8,10 +8,15 @@ import { TextCheckerOptions, update } from '../../modules/textChecker';
  */
 export interface WebModuleTextChecker extends WebModule {
   update({ options }: { options: TextCheckerOptions }): void;
+  dismiss(): void;
 }
 
 export class WebModuleTextCheckerImpl implements WebModuleTextChecker {
   update({ options }: { options: TextCheckerOptions }): void {
     update(options);
+  }
+
+  dismiss(): void {
+    dismiss();
   }
 }
