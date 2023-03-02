@@ -45,12 +45,12 @@ extension EditorViewController: EditorWebViewMenuDelegate {
 // MARK: - EditorModuleCoreDelegate
 
 extension EditorViewController: EditorModuleCoreDelegate {
-  func editorModuleCoreWindowDidLoad(_ sender: EditorModuleCore) {
+  func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
   }
 
-  func editorModuleCoreTextDidChange(_ sender: EditorModuleCore) {
+  func editorCoreTextDidChange(_ sender: EditorModuleCore) {
     document?.updateChangeCount(.changeDone)
 
     if findPanel.mode != .hidden {
@@ -71,7 +71,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
 // MARK: - EditorModulePreviewDelegate
 
 extension EditorViewController: EditorModulePreviewDelegate {
-  func editorModulePreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect) {
+  func editorPreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect) {
     showPreview(code: code, type: type, rect: rect)
   }
 }
