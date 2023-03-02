@@ -7,6 +7,7 @@
 
 import AppKit
 import WebKit
+import MarkEditCore
 import MarkEditKit
 import Proofing
 
@@ -65,6 +66,38 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCore(_ sender: EditorModuleCore, selectionDidChange lineColumn: LineColumnInfo) {
     statusView.updateLineColumn(lineColumn)
     layoutStatusView()
+    updateCompletionPanel(isVisible: false)
+  }
+}
+
+// MARK: - EditorModuleCompletionDelegate
+
+extension EditorViewController: EditorModuleCompletionDelegate {
+  func editorCompletion(
+    _ sender: EditorModuleCompletion,
+    request prefix: String,
+    anchor: TextTokenizeAnchor,
+    partialRange: NSRange,
+    tokenizedWords: [String]
+  ) {
+    requestCompletions(
+      prefix: prefix,
+      anchor: anchor,
+      partialRange: partialRange,
+      tokenizedWords: tokenizedWords
+    )
+  }
+
+  func editorCompletionCommit(_ sender: EditorModuleCompletion) {
+    commitCompletion()
+  }
+
+  func editorCompletionSelectPrevious(_ sender: EditorModuleCompletion) {
+    selectPreviousCompletion()
+  }
+
+  func editorCompletionSelectNext(_ sender: EditorModuleCompletion) {
+    selectNextCompletion()
   }
 }
 

@@ -64,6 +64,9 @@
 		87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE0824294DF340004AD33A /* EditorFindButtons.swift */; };
 		87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */; };
 		87EB9901295755DA00A56B97 /* MarkEditCore in Frameworks */ = {isa = PBXBuildFile; productRef = 87EB9900295755DA00A56B97 /* MarkEditCore */; };
+		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
+		87F2B60929AEF3D70027103E /* EditorCompletionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B60829AEF3D70027103E /* EditorCompletionController.swift */; };
+		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +165,9 @@
 		87DE081A294DDA49004AD33A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		87DE0824294DF340004AD33A /* EditorFindButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindButtons.swift; sourceTree = "<group>"; };
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
+		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
+		87F2B60829AEF3D70027103E /* EditorCompletionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCompletionController.swift; sourceTree = "<group>"; };
+		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +280,7 @@
 				873D6403295FD2FF0095DEF7 /* Main */,
 				870A51C429470D830095C7EB /* Editor */,
 				870F1797298577A000003DA7 /* Panels */,
+				87F2B60629AEF3B00027103E /* Completion */,
 				8780AC0A29822C5500065EF4 /* Settings */,
 				87850C8429482A6A00D1A952 /* Extensions */,
 			);
@@ -345,6 +352,7 @@
 				8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */,
 				870F17672985285B00003DA7 /* EditorViewController+Config.swift */,
 				8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */,
+				87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */,
 				8729C5A5294B5E6B006F262B /* EditorViewController+Menu.swift */,
 				8725E0812977EF46006A4961 /* EditorViewController+Toolbar.swift */,
 				87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */,
@@ -385,6 +393,7 @@
 			isa = PBXGroup;
 			children = (
 				87850C8529482A8600D1A952 /* NSApplication+Extension.swift */,
+				87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -417,6 +426,14 @@
 				8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */,
 			);
 			path = Replace;
+			sourceTree = "<group>";
+		};
+		87F2B60629AEF3B00027103E /* Completion */ = {
+			isa = PBXGroup;
+			children = (
+				87F2B60829AEF3D70027103E /* EditorCompletionController.swift */,
+			);
+			path = Completion;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -577,6 +594,7 @@
 				8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */,
 				8767BBB5295AD62700BFACAE /* EditorReplaceButtons.swift in Sources */,
 				87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */,
+				87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */,
 				8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */,
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
@@ -605,6 +623,8 @@
 				87A73AB5294C4B48006A710E /* EditorFindPanel.swift in Sources */,
 				870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */,
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,
+				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
+				87F2B60929AEF3D70027103E /* EditorCompletionController.swift in Sources */,
 				87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */,
 				873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */,
 				87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */,

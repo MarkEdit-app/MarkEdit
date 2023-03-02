@@ -26,6 +26,15 @@ extension EditorViewController {
     safeAreaObservation = view.observe(\.safeAreaInsets) { view, _ in
       view.needsLayout = true
     }
+
+    // Observe window changes because we don't have better alternatives,
+    // this is used mainly for word completions.
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(windowDidUpdate(_:)),
+      name: NSWindow.didUpdateNotification,
+      object: nil
+    )
   }
 
   func setWindowHidden(_ isHidden: Bool) {
@@ -123,5 +132,15 @@ extension EditorViewController {
     )
 
     popover.show(relativeTo: rect, of: focusTrackingView, preferredEdge: .maxX)
+  }
+}
+
+// MARK: - Private
+
+private extension EditorViewController {
+  @objc func windowDidUpdate(_ notification: Notification) {
+    if EditorCompletionController.shared.isPanelVisible {
+      updateSpellCheckPanel(isVisible: false)
+    }
   }
 }

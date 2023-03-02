@@ -98,6 +98,10 @@ final class EditorViewController: NSViewController {
     return webView
   }()
 
+  private(set) lazy var spellChecker = {
+    NSSpellChecker()
+  }()
+
   init() {
     super.init(nibName: nil, bundle: nil)
     _ = self.webView // Pre-load
