@@ -33,6 +33,10 @@ let package = Package(
       name: "SettingsUI",
       targets: ["SettingsUI"]
     ),
+    .library(
+      name: "TextCompletion",
+      targets: ["TextCompletion"]
+    ),
   ],
   dependencies: [
     .package(path: "../MarkEditKit"),
@@ -85,6 +89,13 @@ let package = Package(
       name: "SettingsUI",
       dependencies: ["AppKitExtensions"],
       path: "Sources/SettingsUI",
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
+    .target(
+      name: "TextCompletion",
+      path: "Sources/TextCompletion",
       plugins: [
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
       ]

@@ -36,6 +36,7 @@
 		873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873ACD4629644E2F00431498 /* EditorViewController+Encoding.swift */; };
 		873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873D6401295FCC3E0095DEF7 /* AppResources.swift */; };
 		873D6438295FEF220095DEF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 873D643A295FEF220095DEF7 /* Localizable.strings */; };
+		874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */ = {isa = PBXBuildFile; productRef = 874823CD29B0BD980067EC49 /* TextCompletion */; };
 		874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874AAE2D2959F197000E0E84 /* EditorReplacePanel.swift */; };
 		8752CEB6295B2F8800BA9D5B /* EditorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8752CEB5295B2F8800BA9D5B /* EditorPanelView.swift */; };
 		876578FA2993853500A1388A /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 876578F92993853500A1388A /* index.html */; };
@@ -65,7 +66,6 @@
 		87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */; };
 		87EB9901295755DA00A56B97 /* MarkEditCore in Frameworks */ = {isa = PBXBuildFile; productRef = 87EB9900295755DA00A56B97 /* MarkEditCore */; };
 		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
-		87F2B60929AEF3D70027103E /* EditorCompletionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B60829AEF3D70027103E /* EditorCompletionController.swift */; };
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -166,7 +166,6 @@
 		87DE0824294DF340004AD33A /* EditorFindButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindButtons.swift; sourceTree = "<group>"; };
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
 		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
-		87F2B60829AEF3D70027103E /* EditorCompletionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCompletionController.swift; sourceTree = "<group>"; };
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -180,6 +179,7 @@
 				870F17942985775B00003DA7 /* Proofing in Frameworks */,
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
 				870F17922985775B00003DA7 /* Previewer in Frameworks */,
+				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
 				870F178E2985775B00003DA7 /* AppKitControls in Frameworks */,
 				870F17962985775B00003DA7 /* SettingsUI in Frameworks */,
 			);
@@ -214,6 +214,7 @@
 				872924042951525C007156B1 /* PreviewExtension */,
 				8743B26229593B2000F83DAE /* Build.xcconfig */,
 				870A51A3294700DE0095C7EB /* Products */,
+				874823CC29B0BD980067EC49 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -345,6 +346,13 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		874823CC29B0BD980067EC49 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8767BBAC295A893200BFACAE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -431,7 +439,6 @@
 		87F2B60629AEF3B00027103E /* Completion */ = {
 			isa = PBXGroup;
 			children = (
-				87F2B60829AEF3D70027103E /* EditorCompletionController.swift */,
 			);
 			path = Completion;
 			sourceTree = "<group>";
@@ -463,6 +470,7 @@
 				870F17932985775B00003DA7 /* Proofing */,
 				870F17952985775B00003DA7 /* SettingsUI */,
 				8775A77A29867012005867BF /* FontPicker */,
+				874823CD29B0BD980067EC49 /* TextCompletion */,
 			);
 			productName = MarkEdit;
 			productReference = 870A51A2294700DE0095C7EB /* MarkEdit.app */;
@@ -624,7 +632,6 @@
 				870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */,
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,
 				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
-				87F2B60929AEF3D70027103E /* EditorCompletionController.swift in Sources */,
 				87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */,
 				873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */,
 				87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */,
@@ -1058,6 +1065,10 @@
 		870F17952985775B00003DA7 /* SettingsUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SettingsUI;
+		};
+		874823CD29B0BD980067EC49 /* TextCompletion */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TextCompletion;
 		};
 		8775A77A29867012005867BF /* FontPicker */ = {
 			isa = XCSwiftPackageProductDependency;

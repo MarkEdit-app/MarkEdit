@@ -53,8 +53,8 @@ extension EditorViewController {
 
 extension EditorViewController {
   func updateCompletionPanel(isVisible: Bool) {
-    let changed = EditorCompletionController.shared.isPanelVisible != isVisible
-    EditorCompletionController.shared.isPanelVisible = isVisible
+    let changed = completionContext.isPanelVisible != isVisible
+    completionContext.isPanelVisible = isVisible
 
     // We prefer completion over correction,
     // as long as completion panel shows, we should hide the spellcheck panel.

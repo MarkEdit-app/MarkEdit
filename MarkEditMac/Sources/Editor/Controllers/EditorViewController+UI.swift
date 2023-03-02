@@ -139,7 +139,7 @@ extension EditorViewController {
 
 private extension EditorViewController {
   @objc func windowDidUpdate(_ notification: Notification) {
-    if EditorCompletionController.shared.isPanelVisible {
+    if completionContext.isPanelVisible {
       updateSpellCheckPanel(isVisible: false)
     }
   }

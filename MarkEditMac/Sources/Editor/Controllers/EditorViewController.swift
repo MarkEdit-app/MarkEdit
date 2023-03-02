@@ -10,6 +10,7 @@ import WebKit
 import MarkEditCore
 import MarkEditKit
 import Proofing
+import TextCompletion
 
 final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
@@ -100,6 +101,10 @@ final class EditorViewController: NSViewController {
 
   private(set) lazy var spellChecker = {
     NSSpellChecker()
+  }()
+
+  private(set) lazy var completionContext = {
+    TextCompletionContext()
   }()
 
   init() {
