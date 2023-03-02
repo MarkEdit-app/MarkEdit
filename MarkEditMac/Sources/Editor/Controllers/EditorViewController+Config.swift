@@ -51,6 +51,10 @@ extension EditorViewController {
     bridge.config.setFocusMode(enabled: enabled)
   }
 
+  func setSuggestWhileTyping(enabled: Bool) {
+    bridge.config.setSuggestWhileTyping(enabled: enabled)
+  }
+
   func setLineWrapping(enabled: Bool) {
     bridge.config.setLineWrapping(enabled: enabled)
   }

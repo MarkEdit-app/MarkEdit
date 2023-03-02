@@ -51,6 +51,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       invisiblesBehavior: .always,
       typewriterMode: false,
       focusMode: false,
+      suggestWhileTyping: false,
       lineWrapping: true,
       lineHeight: 1.4,
       defaultLineBreak: nil,

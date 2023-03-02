@@ -11,6 +11,7 @@ import {
   setInvisiblesBehavior,
   setTypewriterMode,
   setFocusMode,
+  setSuggestWhileTyping,
   setLineWrapping,
   setLineHeight,
   setDefaultLineBreak,
@@ -32,6 +33,7 @@ export interface WebModuleConfig extends WebModule {
   setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void;
   setTypewriterMode({ enabled }: { enabled: boolean }): void;
   setFocusMode({ enabled }: { enabled: boolean }): void;
+  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void;
   setLineWrapping({ enabled }: { enabled: boolean }): void;
   setLineHeight({ lineHeight }: { lineHeight: number }): void;
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void;
@@ -70,6 +72,10 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setFocusMode({ enabled }: { enabled: boolean }): void {
     setFocusMode(enabled);
+  }
+
+  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void {
+    setSuggestWhileTyping(enabled);
   }
 
   setLineWrapping({ enabled }: { enabled: boolean }): void {

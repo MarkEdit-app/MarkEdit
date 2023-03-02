@@ -19,6 +19,7 @@ public struct EditorConfig: Encodable {
   let invisiblesBehavior: EditorInvisiblesBehavior
   let typewriterMode: Bool
   let focusMode: Bool
+  let suggestWhileTyping: Bool
   let lineWrapping: Bool
   let lineHeight: Double
   let defaultLineBreak: String?
@@ -36,6 +37,7 @@ public struct EditorConfig: Encodable {
     invisiblesBehavior: EditorInvisiblesBehavior,
     typewriterMode: Bool,
     focusMode: Bool,
+    suggestWhileTyping: Bool,
     lineWrapping: Bool,
     lineHeight: Double,
     defaultLineBreak: String?,
@@ -52,6 +54,7 @@ public struct EditorConfig: Encodable {
     self.invisiblesBehavior = invisiblesBehavior
     self.typewriterMode = typewriterMode
     self.focusMode = focusMode
+    self.suggestWhileTyping = suggestWhileTyping
     self.lineWrapping = lineWrapping
     self.lineHeight = lineHeight
     self.defaultLineBreak = defaultLineBreak

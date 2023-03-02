@@ -42,6 +42,7 @@ export interface Config {
   invisiblesBehavior: InvisiblesBehavior;
   typewriterMode: boolean;
   focusMode: boolean;
+  suggestWhileTyping: boolean;
   lineWrapping: boolean;
   lineHeight: number;
   defaultLineBreak?: string;

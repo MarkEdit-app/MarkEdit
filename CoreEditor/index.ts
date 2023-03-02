@@ -35,6 +35,7 @@ const config: Config = isProd ? ('{{EDITOR_CONFIG}}' as any) : {
   invisiblesBehavior: InvisiblesBehavior.always,
   typewriterMode: false,
   focusMode: false,
+  suggestWhileTyping: false,
   lineWrapping: true,
   lineHeight: 1.5,
   localizable: {

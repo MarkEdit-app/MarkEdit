@@ -50,6 +50,10 @@ export function setFocusMode(enabled: boolean) {
   styling.setFocusMode(enabled);
 }
 
+export function setSuggestWhileTyping(enabled: boolean) {
+  window.config.suggestWhileTyping = enabled;
+}
+
 export function setLineWrapping(enabled: boolean) {
   window.config.lineWrapping = enabled;
   styling.setLineWrapping(enabled);

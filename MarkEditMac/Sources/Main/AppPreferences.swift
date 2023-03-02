@@ -141,6 +141,15 @@ enum AppPreferences {
     }
   }
 
+  enum Completion {
+    @Storage(key: "completion.suggest-while-typing", defaultValue: true)
+    static var suggestWhileTyping: Bool {
+      didSet {
+        performUpdates { $0.setSuggestWhileTyping(enabled: suggestWhileTyping) }
+      }
+    }
+  }
+
   enum Search {
     @Storage(key: "search.case-sensitive", defaultValue: false)
     static var caseSensitive: Bool
@@ -191,6 +200,7 @@ extension AppPreferences {
       invisiblesBehavior: Editor.invisiblesBehavior,
       typewriterMode: Editor.typewriterMode,
       focusMode: Editor.focusMode,
+      suggestWhileTyping: Completion.suggestWhileTyping,
       lineWrapping: Editor.lineWrapping,
       lineHeight: Editor.lineHeight.multiplier,
       defaultLineBreak: General.defaultLineEndings.characters,
