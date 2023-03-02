@@ -62,7 +62,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
-  func editorModuleCore(_ sender: EditorModuleCore, selectionDidChange lineColumn: LineColumnInfo) {
+  func editorCore(_ sender: EditorModuleCore, selectionDidChange lineColumn: LineColumnInfo) {
     statusView.updateLineColumn(lineColumn)
     layoutStatusView()
   }
