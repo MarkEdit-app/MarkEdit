@@ -8,6 +8,7 @@
 //  To make changes, edit template files under /CoreEditor/src/@codegen
 
 import Foundation
+import MarkEditCore
 
 public protocol NativeModulePreview: NativeModule {
   func show(code: String, type: PreviewType, rect: JSRect)
