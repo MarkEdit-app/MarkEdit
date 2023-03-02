@@ -9,12 +9,14 @@ import NaturalLanguage
 import MarkEditCore
 
 public protocol EditorModuleCompletionDelegate: AnyObject {
+  // swiftlint:disable:next function_parameter_count
   func editorCompletion(
     _ sender: EditorModuleCompletion,
     request prefix: String,
     anchor: TextTokenizeAnchor,
     partialRange: NSRange,
-    tokenizedWords: [String]
+    tokenizedWords: [String],
+    caretRect: CGRect
   )
 
   func editorCompletionCommit(_ sender: EditorModuleCompletion)
@@ -30,7 +32,7 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
     self.delegate = delegate
   }
 
-  public func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?) {
+  public func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?, caretRect: JSRect) {
     let tokenizer = NLTokenizer(unit: .word)
     tokenizer.string = anchor.text
 
@@ -54,7 +56,8 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
       partialRange: NSRange(location: from, length: to - from),
       tokenizedWords: (cachedTokens + tokens(in: anchor.text)).filter {
         $0.lowercased().hasPrefix(prefix)
-      }
+      },
+      caretRect: caretRect.cgRect
     )
   }
 

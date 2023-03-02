@@ -15,7 +15,8 @@ extension EditorViewController {
     prefix: String,
     anchor: TextTokenizeAnchor,
     partialRange: NSRange,
-    tokenizedWords: [String]
+    tokenizedWords: [String],
+    caretRect: CGRect
   ) {
     var completions = spellChecker.completions(
       forPartialWordRange: partialRange,
