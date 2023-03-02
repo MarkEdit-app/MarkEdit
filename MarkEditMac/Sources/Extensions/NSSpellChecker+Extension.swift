@@ -8,6 +8,10 @@
 import AppKit
 
 extension NSSpellChecker {
+  static func hasPanels() -> Bool {
+    !spellCheckPanels.isEmpty
+  }
+
   static func hidePanels() {
     spellCheckPanels.forEach { $0.alphaValue = 0 }
   }

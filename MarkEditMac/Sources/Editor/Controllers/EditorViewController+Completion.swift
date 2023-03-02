@@ -74,7 +74,11 @@ extension EditorViewController {
       NSSpellChecker.showPanels()
     } else {
       NSSpellChecker.hidePanels()
-      bridge.textChecker.dismiss()
+
+      // Close the panel, also abandon the correction
+      if NSSpellChecker.hasPanels() {
+        bridge.textChecker.dismiss()
+      }
     }
   }
 }
