@@ -41,6 +41,10 @@ extension EditorViewController {
     updateCompletionPanel(isVisible: false)
   }
 
+  func cancelCompletion() {
+    updateCompletionPanel(isVisible: false)
+  }
+
   func selectPreviousCompletion() {
     // tbd
   }

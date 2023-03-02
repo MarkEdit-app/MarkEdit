@@ -16,6 +16,10 @@ extension EditorViewController {
       return
     }
 
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    }
+
     let window = GotoLineWindow(
       relativeTo: parentRect,
       placeholder: Localized.Document.gotoLine,

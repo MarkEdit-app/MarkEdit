@@ -150,6 +150,12 @@ final class EditorViewController: NSViewController {
     handleMouseMoved(event)
   }
 
+  override func cancelOperation(_ sender: Any?) {
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    }
+  }
+
   override var representedObject: Any? {
     didSet {
       resetEditor()
