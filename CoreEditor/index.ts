@@ -1,5 +1,5 @@
 import { Config, InvisiblesBehavior } from './src/config';
-import { isProd } from './src/common/utils';
+import { isProd } from './src/common/env';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
 import { WebModuleCoreImpl } from './src/bridge/web/core';
