@@ -3,7 +3,7 @@ import { InvisiblesBehavior } from '../../config';
 import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
-import { startCompletion } from '../completion';
+import { startCompletion, isPanelVisible } from '../completion';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
@@ -44,9 +44,14 @@ export function interceptInputs() {
       return wrapBlock(insert, editor);
     }
 
-    // Typing suggestions for non-space insertions
-    if (window.config.suggestWhileTyping && insert.trim().length > 0) {
-      startCompletion();
+    if (window.config.suggestWhileTyping) {
+      if (insert.trim().length > 0) {
+        // Typing suggestions for non-space insertions
+        startCompletion();
+      } else if (isPanelVisible()) {
+        // Cancel the completion for whitespace insertions
+        window.nativeModules.completion.cancelCompletion();
+      }
     }
 
     // Fallback to default behavior
@@ -70,7 +75,7 @@ export function observeChanges() {
 
     if (update.selectionSet) {
       const lineColumn = selectedLineColumn();
-      window.nativeModules.core.notifySelectionDidChange({ lineColumn });
+      window.nativeModules.core.notifySelectionDidChange({ lineColumn, contentEdited: update.docChanged });
 
       const hasSelection = selectedRange().some(range => !range.empty);
       const updateActiveLine = editingState.hasSelection !== hasSelection;

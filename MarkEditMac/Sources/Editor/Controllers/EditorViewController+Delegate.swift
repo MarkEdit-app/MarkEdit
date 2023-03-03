@@ -63,10 +63,17 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
-  func editorCore(_ sender: EditorModuleCore, selectionDidChange lineColumn: LineColumnInfo) {
+  func editorCore(
+    _ sender: EditorModuleCore,
+    selectionDidChange lineColumn: LineColumnInfo,
+    contentEdited: Bool
+  ) {
     statusView.updateLineColumn(lineColumn)
     layoutStatusView()
-    updateCompletionPanel(isVisible: false)
+
+    if !contentEdited {
+      updateCompletionPanel(isVisible: false)
+    }
   }
 }
 
@@ -88,15 +95,19 @@ extension EditorViewController: EditorModuleCompletionDelegate {
     )
   }
 
-  func editorCompletionCommit(_ sender: EditorModuleCompletion) {
+  func editorCompletionDidCommit(_ sender: EditorModuleCompletion) {
     commitCompletion()
   }
 
-  func editorCompletionSelectPrevious(_ sender: EditorModuleCompletion) {
+  func editorCompletionDidCancel(_ sender: EditorModuleCompletion) {
+    cancelCompletion()
+  }
+
+  func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion) {
     selectPreviousCompletion()
   }
 
-  func editorCompletionSelectNext(_ sender: EditorModuleCompletion) {
+  func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion) {
     selectNextCompletion()
   }
 }

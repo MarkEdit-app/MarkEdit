@@ -13,7 +13,7 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyTextDidChange()
-  func notifySelectionDidChange(lineColumn: LineColumnInfo)
+  func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool)
 }
 
 public extension NativeModuleCore {
@@ -54,6 +54,7 @@ final class NativeBridgeCore: NativeBridge {
   @MainActor private func notifySelectionDidChange(parameters: Data) async -> Result<Encodable?, Error>? {
     struct Message: Decodable {
       var lineColumn: LineColumnInfo
+      var contentEdited: Bool
     }
 
     let message: Message
@@ -64,7 +65,7 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifySelectionDidChange(lineColumn: message.lineColumn)
+    module.notifySelectionDidChange(lineColumn: message.lineColumn, contentEdited: message.contentEdited)
     return .success(nil)
   }
 }

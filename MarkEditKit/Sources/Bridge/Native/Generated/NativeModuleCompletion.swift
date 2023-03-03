@@ -13,6 +13,7 @@ import MarkEditCore
 public protocol NativeModuleCompletion: NativeModule {
   func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?)
   func commitCompletion()
+  func cancelCompletion()
   func selectPrevious()
   func selectNext()
 }
@@ -29,6 +30,9 @@ final class NativeBridgeCompletion: NativeBridge {
     },
     "commitCompletion": { [weak self] in
       await self?.commitCompletion(parameters: $0)
+    },
+    "cancelCompletion": { [weak self] in
+      await self?.cancelCompletion(parameters: $0)
     },
     "selectPrevious": { [weak self] in
       await self?.selectPrevious(parameters: $0)
@@ -65,6 +69,11 @@ final class NativeBridgeCompletion: NativeBridge {
 
   @MainActor private func commitCompletion(parameters: Data) async -> Result<Encodable?, Error>? {
     module.commitCompletion()
+    return .success(nil)
+  }
+
+  @MainActor private func cancelCompletion(parameters: Data) async -> Result<Encodable?, Error>? {
+    module.cancelCompletion()
     return .success(nil)
   }
 

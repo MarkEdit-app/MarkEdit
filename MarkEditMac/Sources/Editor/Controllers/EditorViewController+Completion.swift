@@ -17,6 +17,10 @@ extension EditorViewController {
     partialRange: NSRange,
     tokenizedWords: [String]
   ) {
+    guard !prefix.isEmpty else {
+      return updateCompletionPanel(isVisible: false)
+    }
+
     var completions = spellChecker.completions(
       forPartialWordRange: partialRange,
       in: anchor.text,
@@ -28,18 +32,8 @@ extension EditorViewController {
     let isWord = completions.contains { $0.lowercased() == prefix }
     completions.append(contentsOf: tokenizedWords.filter { isWord || $0.lowercased() != prefix })
 
-    let isPanelVisible = !prefix.isEmpty && !{
-      // isMisspelled is the last thing here to leverage short-circuit evaluation
-      return !isWord && spellChecker.isMisspelled(word: prefix)
-    }()
-
-    updateCompletionPanel(isVisible: isPanelVisible)
-
-    Task {
-      if let caretRect = try? await bridge.selection.getRect(pos: anchor.offset + partialRange.location) {
-        updateCompletionPanel(completions: completions, caretRect: caretRect.cgRect)
-      }
-    }
+    updateCompletionPanel(isVisible: !completions.isEmpty)
+    updateCompletionPanel(completions: completions, position: anchor.offset + partialRange.location)
   }
 
   func commitCompletion() {
@@ -66,32 +60,24 @@ extension EditorViewController {
     let changed = completionContext.isPanelVisible != isVisible
     completionContext.isPanelVisible = isVisible
 
-    // We prefer completion over correction,
-    // as long as completion panel shows, we should hide the spellcheck panel.
     if changed {
       bridge.completion.setState(panelVisible: isVisible)
-      updateSpellCheckPanel(isVisible: !isVisible)
     }
   }
 
-  func updateSpellCheckPanel(isVisible: Bool) {
-    if isVisible {
-      NSSpellChecker.showPanels()
-    } else {
-      NSSpellChecker.hidePanels()
+  private func updateCompletionPanel(completions: [String], position: Int) {
+    guard completionContext.isPanelVisible else {
+      return
+    }
 
-      // Close the panel, also abandon the correction
-      if NSSpellChecker.hasPanels() {
-        bridge.textChecker.dismiss()
+    Task {
+      if let caretRect = try? await bridge.selection.getRect(pos: position) {
+        updateCompletionPanel(completions: completions, caretRect: caretRect.cgRect)
       }
     }
   }
-}
 
-// MARK: - Private
-
-private extension EditorViewController {
-  func updateCompletionPanel(completions: [String], caretRect: CGRect) {
+  private func updateCompletionPanel(completions: [String], caretRect: CGRect) {
     guard completionContext.isPanelVisible, let parentWindow = view.window else {
       return
     }

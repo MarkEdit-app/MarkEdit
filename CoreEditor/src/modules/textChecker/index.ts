@@ -14,13 +14,4 @@ export function update(options: TextCheckerOptions) {
   contentDOM.removeAttribute('autocapitalize');
 }
 
-/**
- * Dismiss the existing text checking indicator.
- */
-export function dismiss() {
-  // There's no official way to do that, this works magically
-  window.editor.contentDOM.blur();
-  window.editor.contentDOM.focus();
-}
-
 export type { TextCheckerOptions };

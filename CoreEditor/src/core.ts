@@ -37,6 +37,7 @@ export function resetEditor(doc: string) {
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifySelectionDidChange({
     lineColumn: { line: 1 as CodeGen_Int, column: 1 as CodeGen_Int, length: 0 as CodeGen_Int },
+    contentEdited: false,
   });
 }
 

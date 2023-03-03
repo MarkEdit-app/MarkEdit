@@ -28,10 +28,6 @@ public final class WebBridgeTextChecker {
 
     webView?.invoke(path: "webModules.textChecker.update", message: message, completion: completion)
   }
-
-  public func dismiss(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    webView?.invoke(path: "webModules.textChecker.dismiss", completion: completion)
-  }
 }
 
 public struct TextCheckerOptions: Codable {

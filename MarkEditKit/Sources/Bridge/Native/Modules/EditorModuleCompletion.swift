@@ -17,9 +17,10 @@ public protocol EditorModuleCompletionDelegate: AnyObject {
     tokenizedWords: [String]
   )
 
-  func editorCompletionCommit(_ sender: EditorModuleCompletion)
-  func editorCompletionSelectPrevious(_ sender: EditorModuleCompletion)
-  func editorCompletionSelectNext(_ sender: EditorModuleCompletion)
+  func editorCompletionDidCommit(_ sender: EditorModuleCompletion)
+  func editorCompletionDidCancel(_ sender: EditorModuleCompletion)
+  func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion)
+  func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion)
 }
 
 public final class EditorModuleCompletion: NativeModuleCompletion {
@@ -59,15 +60,19 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
   }
 
   public func commitCompletion() {
-    delegate?.editorCompletionCommit(self)
+    delegate?.editorCompletionDidCommit(self)
+  }
+
+  public func cancelCompletion() {
+    delegate?.editorCompletionDidCancel(self)
   }
 
   public func selectPrevious() {
-    delegate?.editorCompletionSelectPrevious(self)
+    delegate?.editorCompletionDidSelectPrevious(self)
   }
 
   public func selectNext() {
-    delegate?.editorCompletionSelectNext(self)
+    delegate?.editorCompletionDidSelectNext(self)
   }
 }
 
