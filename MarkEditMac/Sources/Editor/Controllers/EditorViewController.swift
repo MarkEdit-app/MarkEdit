@@ -150,6 +150,10 @@ final class EditorViewController: NSViewController {
     handleMouseMoved(event)
   }
 
+  override func complete(_ sender: Any?) {
+    bridge.completion.startCompletion()
+  }
+
   override func cancelOperation(_ sender: Any?) {
     if completionContext.isPanelVisible {
       cancelCompletion()

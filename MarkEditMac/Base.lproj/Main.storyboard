@@ -288,7 +288,7 @@ Gw
 </string>
                                             <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>
-                                                <action selector="startCompletion:" target="Ady-hI-5gd" id="S4o-Kb-uyV"/>
+                                                <action selector="complete:" target="Ady-hI-5gd" id="S4o-Kb-uyV"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
