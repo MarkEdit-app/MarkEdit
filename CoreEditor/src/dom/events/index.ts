@@ -75,8 +75,7 @@ function overrideNavigationKeysForCompletion() {
     }
 
     if (event.key === 'Backspace') {
-      window.nativeModules.completion.cancelCompletion();
-      return skipDefaultBehavior();
+      return window.nativeModules.completion.cancelCompletion();
     }
   }, true);
 }
