@@ -46,6 +46,10 @@ final class TextCompletionPanel: NSPanel {
     state.items = completions
   }
 
+  func selectedCompletion() -> String {
+    state.items[state.selectedIndex]
+  }
+
   func selectPrevious() {
     state.selectedIndex = max(0, state.selectedIndex - 1)
   }

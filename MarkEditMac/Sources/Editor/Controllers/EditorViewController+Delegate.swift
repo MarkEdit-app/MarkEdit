@@ -72,7 +72,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
     layoutStatusView()
 
     if !contentEdited {
-      updateCompletionPanel(isVisible: false)
+      cancelCompletion()
     }
   }
 }

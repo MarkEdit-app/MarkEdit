@@ -18,6 +18,10 @@ public final class TextCompletionContext {
     }
   }
 
+  public var fromIndex: Int = 0
+  public var toIndex: Int = 0
+  public var selectedText: String { panel.selectedCompletion() }
+
   public init(localize: TextCompletionLocalizable) {
     self.localizable = localize
   }

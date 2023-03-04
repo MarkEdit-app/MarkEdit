@@ -18,8 +18,11 @@ extension EditorViewController {
     tokenizedWords: [String]
   ) {
     guard !prefix.isEmpty else {
-      return updateCompletionPanel(isVisible: false)
+      return cancelCompletion()
     }
+
+    completionContext.fromIndex = anchor.offset + partialRange.location
+    completionContext.toIndex = completionContext.fromIndex + partialRange.length
 
     var completions = spellChecker.completions(
       forPartialWordRange: partialRange,
@@ -33,11 +36,17 @@ extension EditorViewController {
     completions.append(contentsOf: tokenizedWords.filter { isWord || $0.lowercased() != prefix })
 
     updateCompletionPanel(isVisible: !completions.isEmpty)
-    updateCompletionPanel(completions: completions, position: anchor.offset + partialRange.location)
+    updateCompletionPanel(completions: completions)
   }
 
   func commitCompletion() {
-    updateCompletionPanel(isVisible: false)
+    bridge.core.insertText(
+      text: completionContext.selectedText,
+      from: completionContext.fromIndex,
+      to: completionContext.toIndex
+    )
+
+    cancelCompletion()
   }
 
   func cancelCompletion() {
@@ -57,13 +66,13 @@ extension EditorViewController {
     }
   }
 
-  private func updateCompletionPanel(completions: [String], position: Int) {
+  private func updateCompletionPanel(completions: [String]) {
     guard completionContext.isPanelVisible else {
       return
     }
 
     Task {
-      if let caretRect = try? await bridge.selection.getRect(pos: position) {
+      if let caretRect = try? await bridge.selection.getRect(pos: completionContext.fromIndex) {
         updateCompletionPanel(completions: completions, caretRect: caretRect.cgRect)
       }
     }
