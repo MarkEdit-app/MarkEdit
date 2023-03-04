@@ -104,7 +104,9 @@ final class EditorViewController: NSViewController {
   }()
 
   private(set) lazy var completionContext = {
-    TextCompletionContext()
+    TextCompletionContext(localize: TextCompletionLocalizable(
+      selectedHint: Localized.General.selected
+    ))
   }()
 
   init() {
@@ -151,7 +153,11 @@ final class EditorViewController: NSViewController {
   }
 
   override func complete(_ sender: Any?) {
-    bridge.completion.startCompletion()
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    } else {
+      bridge.completion.startCompletion(afterDelay: 0)
+    }
   }
 
   override func cancelOperation(_ sender: Any?) {

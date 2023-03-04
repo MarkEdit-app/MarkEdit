@@ -21,6 +21,8 @@ public protocol EditorModuleCompletionDelegate: AnyObject {
   func editorCompletionDidCancel(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion)
+  func editorCompletionDidSelectTop(_ sender: EditorModuleCompletion)
+  func editorCompletionDidSelectBottom(_ sender: EditorModuleCompletion)
 }
 
 public final class EditorModuleCompletion: NativeModuleCompletion {
@@ -74,6 +76,14 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
   public func selectNext() {
     delegate?.editorCompletionDidSelectNext(self)
   }
+
+  public func selectTop() {
+    delegate?.editorCompletionDidSelectTop(self)
+  }
+
+  public func selectBottom() {
+    delegate?.editorCompletionDidSelectBottom(self)
+  }
 }
 
 // MARK: - Private
@@ -84,6 +94,6 @@ private extension EditorModuleCompletion {
     tokenizer.string = string
 
     let range = string.startIndex..<string.endIndex
-    return tokenizer.tokens(for: range).map { String(string[$0]) }
+    return tokenizer.tokens(for: range).map { String(string[$0]) }.deduplicated
   }
 }

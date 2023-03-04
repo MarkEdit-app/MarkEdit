@@ -1,7 +1,7 @@
 import { editingState } from '../../common/store';
 import anchorAtPos from '../tokenizer/anchorAtPos';
 
-export function startCompletion() {
+export function startCompletion({ afterDelay }: { afterDelay: number }) {
   if (storage.cancellable !== undefined) {
     clearTimeout(storage.cancellable);
   }
@@ -37,7 +37,7 @@ export function startCompletion() {
 
     const anchor = anchorAtPos(pos);
     window.nativeModules.completion.requestCompletions({ anchor, fullText });
-  }, 300);
+  }, afterDelay);
 }
 
 export function setPanelVisible(visible: boolean) {

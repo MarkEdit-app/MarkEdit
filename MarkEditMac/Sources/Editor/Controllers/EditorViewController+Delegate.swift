@@ -104,11 +104,19 @@ extension EditorViewController: EditorModuleCompletionDelegate {
   }
 
   func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion) {
-    selectPreviousCompletion()
+    completionContext.selectPrevious()
   }
 
   func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion) {
-    selectNextCompletion()
+    completionContext.selectNext()
+  }
+
+  func editorCompletionDidSelectTop(_ sender: EditorModuleCompletion) {
+    completionContext.selectTop()
+  }
+
+  func editorCompletionDidSelectBottom(_ sender: EditorModuleCompletion) {
+    completionContext.selectBottom()
   }
 }
 

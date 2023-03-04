@@ -7,13 +7,13 @@ import { startCompletion, setPanelVisible } from '../../modules/completion';
  * @overrideModuleName WebBridgeCompletion
  */
 export interface WebModuleCompletion extends WebModule {
-  startCompletion(): void;
+  startCompletion({ afterDelay }: { afterDelay: number }): void;
   setState({ panelVisible }: { panelVisible: boolean }): void;
 }
 
 export class WebModuleCompletionImpl implements WebModuleCompletion {
-  startCompletion(): void {
-    startCompletion();
+  startCompletion({ afterDelay }: { afterDelay: number }): void {
+    startCompletion({ afterDelay });
   }
 
   setState({ panelVisible }: { panelVisible: boolean }): void {

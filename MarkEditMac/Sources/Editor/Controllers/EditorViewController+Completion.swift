@@ -43,14 +43,6 @@ extension EditorViewController {
   func cancelCompletion() {
     updateCompletionPanel(isVisible: false)
   }
-
-  func selectPreviousCompletion() {
-    // tbd
-  }
-
-  func selectNextCompletion() {
-    // tbd
-  }
 }
 
 // MARK: - Panels
@@ -83,7 +75,7 @@ extension EditorViewController {
     }
 
     completionContext.updateCompletions(
-      completions,
+      completions.deduplicated,
       parentWindow: parentWindow,
       caretRect: caretRect
     )

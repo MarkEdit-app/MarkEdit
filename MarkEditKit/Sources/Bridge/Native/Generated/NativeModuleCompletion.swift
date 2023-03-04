@@ -16,6 +16,8 @@ public protocol NativeModuleCompletion: NativeModule {
   func cancelCompletion()
   func selectPrevious()
   func selectNext()
+  func selectTop()
+  func selectBottom()
 }
 
 public extension NativeModuleCompletion {
@@ -39,6 +41,12 @@ final class NativeBridgeCompletion: NativeBridge {
     },
     "selectNext": { [weak self] in
       await self?.selectNext(parameters: $0)
+    },
+    "selectTop": { [weak self] in
+      await self?.selectTop(parameters: $0)
+    },
+    "selectBottom": { [weak self] in
+      await self?.selectBottom(parameters: $0)
     },
   ]
 
@@ -84,6 +92,16 @@ final class NativeBridgeCompletion: NativeBridge {
 
   @MainActor private func selectNext(parameters: Data) async -> Result<Encodable?, Error>? {
     module.selectNext()
+    return .success(nil)
+  }
+
+  @MainActor private func selectTop(parameters: Data) async -> Result<Encodable?, Error>? {
+    module.selectTop()
+    return .success(nil)
+  }
+
+  @MainActor private func selectBottom(parameters: Data) async -> Result<Encodable?, Error>? {
+    module.selectBottom()
     return .success(nil)
   }
 }

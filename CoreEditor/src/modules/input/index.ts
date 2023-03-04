@@ -47,7 +47,7 @@ export function interceptInputs() {
     if (window.config.suggestWhileTyping) {
       if (insert.trim().length > 0) {
         // Typing suggestions for non-space insertions
-        startCompletion();
+        startCompletion({ afterDelay: 300 });
       } else if (isPanelVisible()) {
         // Cancel the completion for whitespace insertions
         window.nativeModules.completion.cancelCompletion();

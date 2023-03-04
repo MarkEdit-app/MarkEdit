@@ -12,4 +12,6 @@ export interface NativeModuleCompletion extends NativeModule {
   cancelCompletion(): void;
   selectPrevious(): void;
   selectNext(): void;
+  selectTop(): void;
+  selectBottom(): void;
 }

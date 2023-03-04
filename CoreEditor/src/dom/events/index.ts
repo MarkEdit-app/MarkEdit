@@ -45,10 +45,10 @@ export function startObserving() {
     editingState.compositionEnded = true;
   });
 
-  overrideNavigationKeysForCompletion();
+  overrideEventsForCompletion();
 }
 
-function overrideNavigationKeysForCompletion() {
+function overrideEventsForCompletion() {
   document.addEventListener('keydown', event => {
     if (!isPanelVisible()) {
       return;
@@ -60,12 +60,20 @@ function overrideNavigationKeysForCompletion() {
     };
 
     if (event.key === 'ArrowUp') {
-      window.nativeModules.completion.selectPrevious();
+      if (event.metaKey) {
+        window.nativeModules.completion.selectTop();
+      } else {
+        window.nativeModules.completion.selectPrevious();
+      }
       return skipDefaultBehavior();
     }
 
     if (event.key === 'ArrowDown') {
-      window.nativeModules.completion.selectNext();
+      if (event.metaKey) {
+        window.nativeModules.completion.selectBottom();
+      } else {
+        window.nativeModules.completion.selectNext();
+      }
       return skipDefaultBehavior();
     }
 
@@ -74,7 +82,7 @@ function overrideNavigationKeysForCompletion() {
       return skipDefaultBehavior();
     }
 
-    if (event.key === 'Backspace') {
+    if (event.key === 'Backspace' || (event.key === 'z' && event.metaKey)) {
       return window.nativeModules.completion.cancelCompletion();
     }
   }, true);
