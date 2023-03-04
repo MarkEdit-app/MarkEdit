@@ -75,6 +75,13 @@ export function getEditorText() {
   return lines.join(state.lineBreak);
 }
 
+export function insertText(text: string, from: number, to: number) {
+  const editor = window.editor;
+  editor.dispatch({
+    changes: { from, to, insert: text },
+  });
+}
+
 export function markEditorDirty(isDirty: boolean) {
   editingState.isDirty = isDirty;
 }
