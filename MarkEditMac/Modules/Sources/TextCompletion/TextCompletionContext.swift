@@ -32,6 +32,7 @@ public final class TextCompletionContext {
       parentWindow.addChildWindow(panel, ordered: .above)
     }
 
+    // Don't make the list absurdly wrong
     panel.updateCompletions(Array(completions.prefix(50)))
     panel.selectTop()
 
@@ -49,12 +50,12 @@ public final class TextCompletionContext {
       y: parentWindow.frame.height - caretRect.maxY - size.height - safeArea - caretPadding
     )
 
-    // Too right
+    // Too close to the right
     if origin.x + size.width + panelPadding > parentWindow.frame.size.width {
       origin.x = parentWindow.frame.size.width - panelPadding - size.width
     }
 
-    // Too bottom
+    // Too close to the bottom
     if origin.y - panelPadding < 0 {
       origin.y = parentWindow.frame.height - caretRect.minY - safeArea + caretPadding
     }

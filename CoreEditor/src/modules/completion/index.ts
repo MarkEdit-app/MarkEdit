@@ -1,6 +1,18 @@
 import { editingState } from '../../common/store';
 import anchorAtPos from '../tokenizer/anchorAtPos';
 
+/**
+ * The start of a multi-stage completion process:
+ *
+ *  1. This method is called automatically if "suggestWhileTyping" is enabled, or manually like pressing cmd-esc on macOS
+ *  2. This method calls client with an anchor for tokenization, and optionally the whole document
+ *  3. Client determines the "prefix" to complete, and its range
+ *  4. Client calls CoreEditor to request the rectangle and shows the panel
+ *  5. CoreEditor intercepts navigation keys and calls client to update the panel
+ *  6. Client calls CoreEditor to commit the selection
+ *
+ * Note that, "afterDelay" is used typically for "suggest while typing" scenario.
+ */
 export function startCompletion({ afterDelay }: { afterDelay: number }) {
   if (storage.cancellable !== undefined) {
     clearTimeout(storage.cancellable);

@@ -86,6 +86,9 @@ extension EditorViewController {
     }
 
     Task {
+      // Get the rectangle at the beginning of the word.
+      //
+      // For example, for "Hello", we are showing the panel at position relative to letter "H".
       if let caretRect = try? await bridge.selection.getRect(pos: completionContext.fromIndex) {
         updateCompletionPanel(completions: completions, caretRect: caretRect.cgRect)
       }
