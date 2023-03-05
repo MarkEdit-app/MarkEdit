@@ -27,7 +27,11 @@ public final class TextCompletionContext {
     self.commitCompletion = commitCompletion
   }
 
-  public func updateCompletions(_ completions: [String], parentWindow: NSWindow, caretRect: CGRect) {
+  public func updateCompletions(
+    _ completions: [String],
+    parentWindow: NSWindow,
+    caretRect: CGRect
+  ) {
     if panel.parent == nil {
       parentWindow.addChildWindow(panel, ordered: .above)
     }
@@ -36,23 +40,19 @@ public final class TextCompletionContext {
     panel.updateCompletions(Array(completions.prefix(50)))
     panel.selectTop()
 
-    let size = CGSize(
-      width: UIConstants.itemWidth + 2 * UIConstants.itemPadding,
-      height: Double(min(8, completions.count)) * UIConstants.itemHeight + 2 * UIConstants.itemPadding
-    )
-
+    let panelSize = TextCompletionView.panelSize(itemCount: completions.count)
     let safeArea = parentWindow.contentView?.safeAreaInsets.top ?? 0
     let caretPadding: Double = 5
     let panelPadding: Double = 10
 
     var origin = CGPoint(
       x: caretRect.origin.x - caretPadding,
-      y: parentWindow.frame.height - caretRect.maxY - size.height - safeArea - caretPadding
+      y: parentWindow.frame.height - caretRect.maxY - panelSize.height - safeArea - caretPadding
     )
 
     // Too close to the right
-    if origin.x + size.width + panelPadding > parentWindow.frame.size.width {
-      origin.x = parentWindow.frame.size.width - panelPadding - size.width
+    if origin.x + panelSize.width + panelPadding > parentWindow.frame.size.width {
+      origin.x = parentWindow.frame.size.width - panelPadding - panelSize.width
     }
 
     // Too close to the bottom
@@ -61,7 +61,7 @@ public final class TextCompletionContext {
     }
 
     let screenOrigin = parentWindow.convertPoint(toScreen: origin)
-    panel.setFrame(CGRect(origin: screenOrigin, size: size), display: false)
+    panel.setFrame(CGRect(origin: screenOrigin, size: panelSize), display: false)
     panel.orderFront(nil)
   }
 

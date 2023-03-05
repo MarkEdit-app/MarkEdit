@@ -71,15 +71,11 @@ final class TextCompletionPanel: NSPanel {
 // MARK: - Private
 
 private final class ContentView: NSView {
-  private enum Constants {
-    static let cornerRadius: Double = 5
-  }
-
   init() {
     super.init(frame: .zero)
     wantsLayer = true
     layer?.cornerCurve = .continuous
-    layer?.cornerRadius = Constants.cornerRadius
+    layer?.cornerRadius = 5
 
     let effectView = NSVisualEffectView()
     effectView.material = .popover
