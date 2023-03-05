@@ -44,14 +44,12 @@ export function interceptInputs() {
       return wrapBlock(insert, editor);
     }
 
-    if (window.config.suggestWhileTyping) {
-      if (insert.trim().length > 0) {
-        // Typing suggestions for non-space insertions
-        startCompletion({ afterDelay: 300 });
-      } else if (isPanelVisible()) {
-        // Cancel the completion for whitespace insertions
-        window.nativeModules.completion.cancelCompletion();
-      }
+    if (window.config.suggestWhileTyping && insert.trim().length > 0) {
+      // Typing suggestions for non-space insertions
+      startCompletion({ afterDelay: 300 });
+    } else if (isPanelVisible()) {
+      // Cancel the completion for whitespace insertions
+      window.nativeModules.completion.cancelCompletion();
     }
 
     // Fallback to default behavior
