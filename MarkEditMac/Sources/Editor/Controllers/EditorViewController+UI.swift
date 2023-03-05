@@ -26,6 +26,16 @@ extension EditorViewController {
     safeAreaObservation = view.observe(\.safeAreaInsets) { view, _ in
       view.needsLayout = true
     }
+
+    // Press option to cancel correction indicator,
+    // it ensures a smoother text completion experience.
+    NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { [weak self] event in
+      if event.keyCode == 58, let self {
+        NSSpellChecker.shared.declineCorrectionIndicator(for: self.webView)
+      }
+
+      return event
+    }
   }
 
   func setWindowHidden(_ isHidden: Bool) {
