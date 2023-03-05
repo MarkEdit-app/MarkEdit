@@ -42,9 +42,9 @@ export interface Config {
   invisiblesBehavior: InvisiblesBehavior;
   typewriterMode: boolean;
   focusMode: boolean;
-  suggestWhileTyping: boolean;
   lineWrapping: boolean;
   lineHeight: number;
+  suggestWhileTyping: boolean;
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;

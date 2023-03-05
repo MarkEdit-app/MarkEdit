@@ -11,12 +11,12 @@ import {
   setInvisiblesBehavior,
   setTypewriterMode,
   setFocusMode,
-  setSuggestWhileTyping,
   setLineWrapping,
   setLineHeight,
   setDefaultLineBreak,
   setTabKeyBehavior,
   setIndentUnit,
+  setSuggestWhileTyping,
 } from '../../modules/config';
 
 /**
@@ -33,12 +33,12 @@ export interface WebModuleConfig extends WebModule {
   setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void;
   setTypewriterMode({ enabled }: { enabled: boolean }): void;
   setFocusMode({ enabled }: { enabled: boolean }): void;
-  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void;
   setLineWrapping({ enabled }: { enabled: boolean }): void;
   setLineHeight({ lineHeight }: { lineHeight: number }): void;
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void;
   setTabKeyBehavior({ behavior }: { behavior: TabKeyBehavior }): void;
   setIndentUnit({ unit }: { unit: string }): void;
+  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void;
 }
 
 export class WebModuleConfigImpl implements WebModuleConfig {
@@ -74,10 +74,6 @@ export class WebModuleConfigImpl implements WebModuleConfig {
     setFocusMode(enabled);
   }
 
-  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void {
-    setSuggestWhileTyping(enabled);
-  }
-
   setLineWrapping({ enabled }: { enabled: boolean }): void {
     setLineWrapping(enabled);
   }
@@ -96,5 +92,9 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setIndentUnit({ unit }: { unit: string }): void {
     setIndentUnit(unit);
+  }
+
+  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void {
+    setSuggestWhileTyping(enabled);
   }
 }
