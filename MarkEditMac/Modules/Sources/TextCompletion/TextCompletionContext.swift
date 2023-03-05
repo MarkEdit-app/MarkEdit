@@ -22,8 +22,9 @@ public final class TextCompletionContext {
   public var toIndex: Int = 0
   public var selectedText: String { panel.selectedCompletion() }
 
-  public init(localize: TextCompletionLocalizable) {
+  public init(localize: TextCompletionLocalizable, commitCompletion: @escaping () -> Void) {
     self.localizable = localize
+    self.commitCompletion = commitCompletion
   }
 
   public func updateCompletions(_ completions: [String], parentWindow: NSWindow, caretRect: CGRect) {
@@ -35,7 +36,7 @@ public final class TextCompletionContext {
     panel.selectTop()
 
     let size = CGSize(
-      width: 120,
+      width: UIConstants.itemWidth + 2 * UIConstants.itemPadding,
       height: Double(min(8, completions.count)) * UIConstants.itemHeight + 2 * UIConstants.itemPadding
     )
 
@@ -82,5 +83,10 @@ public final class TextCompletionContext {
   // MARK: - Private
 
   private let localizable: TextCompletionLocalizable
-  private lazy var panel = TextCompletionPanel(localizable: localizable)
+  private let commitCompletion: () -> Void
+
+  private lazy var panel = TextCompletionPanel(
+    localizable: localizable,
+    commitCompletion: commitCompletion
+  )
 }

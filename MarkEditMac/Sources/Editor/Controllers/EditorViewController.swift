@@ -104,9 +104,11 @@ final class EditorViewController: NSViewController {
   }()
 
   private(set) lazy var completionContext = {
-    TextCompletionContext(localize: TextCompletionLocalizable(
-      selectedHint: Localized.General.selected
-    ))
+    TextCompletionContext(
+      localize: TextCompletionLocalizable(selectedHint: Localized.General.selected)
+    ) { [weak self] in
+      self?.commitCompletion()
+    }
   }()
 
   init() {

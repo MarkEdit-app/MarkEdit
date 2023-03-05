@@ -11,7 +11,7 @@ final class TextCompletionPanel: NSPanel {
   private var state = TextCompletionState()
   private var mainView: NSView?
 
-  init(localizable: TextCompletionLocalizable) {
+  init(localizable: TextCompletionLocalizable, commitCompletion: @escaping () -> Void) {
     super.init(
       contentRect: .zero,
       styleMask: .borderless,
@@ -20,8 +20,9 @@ final class TextCompletionPanel: NSPanel {
     )
 
     let mainView = NSHostingView(rootView: TextCompletionView(
+      state: state,
       localizable: localizable,
-      state: state
+      commitCompletion: commitCompletion
     ))
 
     let contentView = ContentView()

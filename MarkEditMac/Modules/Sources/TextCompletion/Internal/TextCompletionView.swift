@@ -8,8 +8,9 @@ import AppKit
 import SwiftUI
 
 struct TextCompletionView: View {
-  let localizable: TextCompletionLocalizable
   @ObservedObject var state: TextCompletionState
+  let localizable: TextCompletionLocalizable
+  let commitCompletion: () -> Void
 
   var body: some View {
     VStack {
@@ -34,6 +35,24 @@ struct TextCompletionView: View {
                 alignment: .leading
               )
               .accessibilityHint(index == state.selectedIndex ? localizable.selectedHint : "")
+              .contentShape(Rectangle())
+              .simultaneousGesture(
+                DragGesture(minimumDistance: 0).onChanged { _ in
+                  state.selectedIndex = index
+                }
+                .onEnded {
+                  let bounds = CGRect(
+                    x: 0,
+                    y: 0,
+                    width: UIConstants.itemWidth,
+                    height: UIConstants.itemHeight
+                  )
+
+                  if bounds.contains($0.location) {
+                    commitCompletion()
+                  }
+                }
+              )
             }
           }
         }
