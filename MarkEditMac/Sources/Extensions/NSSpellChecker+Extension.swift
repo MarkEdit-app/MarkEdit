@@ -29,7 +29,7 @@ private extension NSSpellChecker {
   ) {
     // We prefer completion over correction,
     // when suggestWhileTyping is enabled we don't show correction indicators.
-    guard !AppPreferences.Completion.suggestWhileTyping else {
+    guard !AppPreferences.Assistant.suggestWhileTyping else {
       return
     }
 

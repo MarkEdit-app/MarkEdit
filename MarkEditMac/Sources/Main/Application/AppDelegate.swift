@@ -55,6 +55,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // the window size relies on the SwiftUI content view size, it takes time.
     settingsWindowController = SettingsRootViewController.withTabs([
       .editor,
+      .assistant,
       .general,
       .window,
     ])

@@ -141,8 +141,17 @@ enum AppPreferences {
     }
   }
 
-  enum Completion {
-    @Storage(key: "completion.suggest-while-typing", defaultValue: true)
+  enum Assistant {
+    @Storage(key: "assistant.words-in-document", defaultValue: true)
+    static var wordsInDocument: Bool
+
+    @Storage(key: "assistant.standard-words", defaultValue: true)
+    static var standardWords: Bool
+
+    @Storage(key: "assistant.guessed-words", defaultValue: false)
+    static var guessedWords: Bool
+
+    @Storage(key: "assistant.suggest-while-typing", defaultValue: false)
     static var suggestWhileTyping: Bool {
       didSet {
         performUpdates { $0.setSuggestWhileTyping(enabled: suggestWhileTyping) }

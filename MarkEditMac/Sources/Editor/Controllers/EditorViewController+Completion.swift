@@ -23,17 +23,31 @@ extension EditorViewController {
 
     completionContext.fromIndex = anchor.offset + partialRange.location
     completionContext.toIndex = completionContext.fromIndex + partialRange.length
+    var completions = [String]()
 
-    var completions = spellChecker.completions(
-      forPartialWordRange: partialRange,
-      in: anchor.text,
-      language: nil,
-      inSpellDocumentWithTag: 0
-    ) ?? []
+    if AppPreferences.Assistant.wordsInDocument {
+      // Remove tokens if they "cannot be completed", usually means they are not a word
+      let isWord = completions.contains { $0.lowercased() == prefix }
+      completions.append(contentsOf: tokenizedWords.filter { isWord || $0.lowercased() != prefix })
+    }
 
-    // Remove tokens if they "cannot be completed", usually means they are not a word
-    let isWord = completions.contains { $0.lowercased() == prefix }
-    completions.append(contentsOf: tokenizedWords.filter { isWord || $0.lowercased() != prefix })
+    if AppPreferences.Assistant.standardWords {
+      completions.append(contentsOf: spellChecker.completions(
+        forPartialWordRange: partialRange,
+        in: anchor.text,
+        language: nil,
+        inSpellDocumentWithTag: 0
+      ) ?? [])
+    }
+
+    if AppPreferences.Assistant.guessedWords {
+      completions.append(contentsOf: spellChecker.guesses(
+        forWordRange: partialRange,
+        in: anchor.text,
+        language: nil,
+        inSpellDocumentWithTag: 0
+      ) ?? [])
+    }
 
     updateCompletionPanel(isVisible: !completions.isEmpty)
     updateCompletionPanel(completions: completions)

@@ -244,6 +244,9 @@
 /* Class = "NSMenuItem"; title = "Check Grammar With Spelling"; ObjectID = "mK6-2p-4JG"; */
 "mK6-2p-4JG.title" = "检查拼写和语法";
 
+/* Class = "NSMenuItem"; title = "Complete"; ObjectID = "My7-8t-jlU"; */
+"My7-8t-jlU.title" = "补全";
+
 /* Class = "NSMenuItem"; title = "Insert Image"; ObjectID = "N2l-0X-yEw"; */
 "N2l-0X-yEw.title" = "插入图片";
 

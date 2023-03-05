@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87067E2629755D5C0052E795 /* EditorStatusView.swift */; };
+		8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */; };
 		870A51AA294700E00095C7EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 870A51A9294700E00095C7EB /* Assets.xcassets */; };
 		870A51AD294700E00095C7EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 870A51AB294700E00095C7EB /* Main.storyboard */; };
 		870A51B9294702AF0095C7EB /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870A51B4294702AF0095C7EB /* EditorViewController.swift */; };
@@ -102,6 +103,7 @@
 
 /* Begin PBXFileReference section */
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
+		8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantSettingsView.swift; sourceTree = "<group>"; };
 		870A51A2294700DE0095C7EB /* MarkEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarkEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		870A51A9294700E00095C7EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		870A51AC294700E00095C7EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 			children = (
 				8780AC172982554800065EF4 /* SettingTabs.swift */,
 				8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */,
+				8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */,
 				8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */,
 				8780AC1F2982A2DD00065EF4 /* WindowSettingsView.swift */,
 			);
@@ -604,6 +607,7 @@
 				87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */,
 				87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */,
 				8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */,
+				8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */,
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
 				87AA1224296560AE00BE4719 /* EditorViewController+HyperLink.swift in Sources */,

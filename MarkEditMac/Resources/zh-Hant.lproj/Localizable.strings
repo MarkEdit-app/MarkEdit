@@ -22,6 +22,12 @@
 /* Appearance for the app */
 "Appearance:" = "外觀：";
 
+/* Window title for assistant settings */
+"Assistant" = "輔助";
+
+/* Label for autocomplete options */
+"Autocomplete:" = "自動補全：";
+
 /* Automatic window tabbing mode */
 "Automatic" = "自動";
 
@@ -42,6 +48,9 @@
 
 /* Compact mode for window toolbar */
 "Compact" = "緊湊";
+
+/* Label for text completion options */
+"Completion:" = "文字補全：";
 
 /* Phrase used in CodeMirror to indicate control character */
 "Control Character" = "控制字元";
@@ -99,6 +108,9 @@
 
 /* Placeholder text for goto line window */
 "Go to Line" = "跳轉到行";
+
+/* Option for guessed words suggestion */
+"Guessed words" = "猜測的單字";
 
 /* Toolbar item to toggle heading levels */
 "Headers" = "標題";
@@ -187,6 +199,9 @@
 /* Preferred window tabbing mode */
 "Preferred" = "首選";
 
+/* Hint for using text completion */
+"Press ⌘ ESC to show the panel." = "按下 ⌘ ESC 來顯示列表。";
+
 /* Button title for code preview */
 "preview" = "預覽";
 
@@ -241,8 +256,14 @@
 /* Label for display options */
 "Show:" = "顯示：";
 
+/* Option for standard words suggestion */
+"Standard words" = "標準單字";
+
 /* Toolbar item to toggle strikethrough */
 "Strikethrough" = "刪除線";
+
+/* Whether to suggest while typing */
+"Suggest while typing" = "鍵入時提供補全";
 
 /* Follow the system appearance */
 "System" = "系統";
@@ -309,6 +330,9 @@
 
 /* Line endings used on Windows */
 "Windows (CRLF)" = "Windows (CRLF)";
+
+/* Option for words in documents suggestion */
+"Words in document" = "文件中的單字";
 
 /* Explanation for line wrapping option */
 "Wrap lines to editor width" = "按編輯器的寬度換行";
