@@ -50,7 +50,7 @@ extension EditorViewController {
     }
 
     updateCompletionPanel(isVisible: !completions.isEmpty)
-    updateCompletionPanel(completions: completions)
+    updateCompletionPanel(completions: completions.deduplicated)
   }
 
   func commitCompletion() {
@@ -98,7 +98,7 @@ extension EditorViewController {
     }
 
     completionContext.updateCompletions(
-      completions.deduplicated,
+      completions,
       parentWindow: parentWindow,
       caretRect: caretRect
     )

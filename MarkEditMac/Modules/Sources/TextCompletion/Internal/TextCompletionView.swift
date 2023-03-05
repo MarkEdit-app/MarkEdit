@@ -28,7 +28,6 @@ struct TextCompletionView: View {
                   .foregroundColor(index == state.selectedIndex ? .white : .label)
                   .padding([.leading, .trailing], UIConstants.itemPadding)
               }
-              .id(index)
               .frame(
                 maxWidth: .infinity,
                 idealHeight: UIConstants.itemHeight,

@@ -43,7 +43,7 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
     // Figure out the partial word range with one tokenization pass
     let from = range.lowerBound.utf16Offset(in: anchor.text)
     let to = range.upperBound.utf16Offset(in: anchor.text)
-    let prefix = anchor.text[range].lowercased().trimmingCharacters(in: .whitespaces)
+    let prefix = anchor.text[range].trimmingCharacters(in: .whitespaces).lowercased()
 
     // Figure out all words in the document with more tokenization passes
     if let fullText {

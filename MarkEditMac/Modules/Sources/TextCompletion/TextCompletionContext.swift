@@ -82,11 +82,11 @@ public final class TextCompletionContext {
 
   // MARK: - Private
 
-  private let localizable: TextCompletionLocalizable
-  private let commitCompletion: () -> Void
-
   private lazy var panel = TextCompletionPanel(
     localizable: localizable,
     commitCompletion: commitCompletion
   )
+
+  private let localizable: TextCompletionLocalizable
+  private let commitCompletion: () -> Void
 }
