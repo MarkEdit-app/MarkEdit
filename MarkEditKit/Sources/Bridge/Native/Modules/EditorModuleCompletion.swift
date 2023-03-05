@@ -17,6 +17,7 @@ public protocol EditorModuleCompletionDelegate: AnyObject {
     tokenizedWords: [String]
   )
 
+  func editorCompletionTokenizeWholeDocument(_ sender: EditorModuleCompletion) -> Bool
   func editorCompletionDidCommit(_ sender: EditorModuleCompletion)
   func editorCompletionDidCancel(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion)
@@ -46,7 +47,7 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
     let prefix = anchor.text[range].trimmingCharacters(in: .whitespaces).lowercased()
 
     // Figure out all words in the document with more tokenization passes
-    if let fullText {
+    if let fullText, delegate?.editorCompletionTokenizeWholeDocument(self) == true {
       cachedTokens = tokens(in: fullText)
     }
 

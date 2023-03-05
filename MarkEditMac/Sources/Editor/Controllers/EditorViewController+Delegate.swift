@@ -95,6 +95,10 @@ extension EditorViewController: EditorModuleCompletionDelegate {
     )
   }
 
+  func editorCompletionTokenizeWholeDocument(_ sender: EditorModuleCompletion) -> Bool {
+    AppPreferences.Assistant.wordsInDocument
+  }
+
   func editorCompletionDidCommit(_ sender: EditorModuleCompletion) {
     commitCompletion()
   }

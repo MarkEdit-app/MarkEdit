@@ -5,7 +5,9 @@ import { TabKeyBehavior } from '../indentation';
 import { scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
 import { loadTheme } from '../../styling/themes';
+
 import * as styling from '../../styling/config';
+import * as completion from '../completion';
 
 export function setTheme(name: string) {
   window.config.theme = name;
@@ -81,4 +83,5 @@ export function setTabKeyBehavior(behavior: TabKeyBehavior) {
 
 export function setSuggestWhileTyping(enabled: boolean) {
   window.config.suggestWhileTyping = enabled;
+  completion.invalidateCache();
 }

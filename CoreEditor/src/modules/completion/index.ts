@@ -60,6 +60,10 @@ export function isPanelVisible() {
   return storage.panelVisible;
 }
 
+export function invalidateCache() {
+  storage.cachedPosition = -1;
+}
+
 const storage: {
   cancellable: ReturnType<typeof setTimeout> | undefined;
   cachedPosition: number;
