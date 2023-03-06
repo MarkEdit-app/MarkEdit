@@ -47,11 +47,16 @@ final class EditorWindow: NSWindow {
 
     // Slightly change the toolbar effect to match editor better
     if let view = toolbarEffectView {
-      view.isHidden = reduceTransparency == true
-      view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
-
       // Blend the color of contents behind the window
       view.blendingMode = .behindWindow
+      view.isHidden = reduceTransparency == true
+
+      // When self is the keyWindow, add a little transparency
+      if isKeyWindow {
+        view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
+      } else {
+        view.alphaValue = 1.0
+      }
     }
   }
 }
