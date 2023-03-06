@@ -44,7 +44,7 @@ export function interceptInputs() {
       return wrapBlock(insert, editor);
     }
 
-    if (window.config.suggestWhileTyping && insert.trim().length > 0) {
+    if ((window.config.suggestWhileTyping || isPanelVisible()) && insert.trim().length > 0) {
       // Typing suggestions for non-space insertions
       startCompletion({ afterDelay: 300 });
     } else if (isPanelVisible()) {
