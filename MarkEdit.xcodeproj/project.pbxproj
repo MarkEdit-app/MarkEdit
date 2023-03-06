@@ -283,7 +283,6 @@
 				873D6403295FD2FF0095DEF7 /* Main */,
 				870A51C429470D830095C7EB /* Editor */,
 				870F1797298577A000003DA7 /* Panels */,
-				87F2B60629AEF3B00027103E /* Completion */,
 				8780AC0A29822C5500065EF4 /* Settings */,
 				87850C8429482A6A00D1A952 /* Extensions */,
 			);
@@ -437,13 +436,6 @@
 				8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */,
 			);
 			path = Replace;
-			sourceTree = "<group>";
-		};
-		87F2B60629AEF3B00027103E /* Completion */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Completion;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
