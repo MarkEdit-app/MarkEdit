@@ -1,7 +1,7 @@
 import isMetaKey from './isMetaKey';
 import { editingState } from '../../common/store';
-import { isPanelVisible } from '../../modules/completion';
 
+import * as completion from '../../modules/completion';
 import * as grammarly from '../../modules/grammarly';
 import * as selection from '../../modules/selection';
 import * as tokenizer from '../../modules/tokenizer';
@@ -50,7 +50,7 @@ export function startObserving() {
 
 function overrideEventsForCompletion() {
   document.addEventListener('keydown', event => {
-    if (!isPanelVisible()) {
+    if (!completion.isPanelVisible()) {
       return;
     }
 
@@ -59,7 +59,7 @@ function overrideEventsForCompletion() {
       event.stopPropagation();
     };
 
-    if (event.key === 'ArrowUp') {
+    if (event.key === 'ArrowUp' || (event.key === 'p' && event.ctrlKey)) {
       if (event.metaKey) {
         window.nativeModules.completion.selectTop();
       } else {
@@ -68,7 +68,7 @@ function overrideEventsForCompletion() {
       return skipDefaultBehavior();
     }
 
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown' || (event.key === 'n' && event.ctrlKey)) {
       if (event.metaKey) {
         window.nativeModules.completion.selectBottom();
       } else {
@@ -82,6 +82,7 @@ function overrideEventsForCompletion() {
       return skipDefaultBehavior();
     }
 
+    // We don't need to call skipDefaultBehavior for this one
     if (event.key === 'Backspace' || (event.key === 'z' && event.metaKey)) {
       return window.nativeModules.completion.cancelCompletion();
     }
