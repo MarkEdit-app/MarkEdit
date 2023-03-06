@@ -8,7 +8,11 @@ import AppKit
 import SwiftUI
 
 extension Color {
+  static var accent: Self {
+    Color(nsColor: .controlAccentColor)
+  }
+
   static var label: Self {
-    Color(NSColor.labelColor)
+    Color(nsColor: .labelColor)
   }
 }
