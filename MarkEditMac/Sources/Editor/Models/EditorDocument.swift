@@ -66,12 +66,16 @@ extension EditorDocument {
     true
   }
 
+  override class func canConcurrentlyReadDocuments(ofType type: String) -> Bool {
+    true
+  }
+
   override func canAsynchronouslyWrite(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) -> Bool {
     true
   }
 
-  override class func canConcurrentlyReadDocuments(ofType type: String) -> Bool {
-    true
+  override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
+    "md"
   }
 
   // MARK: - Reading and Writing
