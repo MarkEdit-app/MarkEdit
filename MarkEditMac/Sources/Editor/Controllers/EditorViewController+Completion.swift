@@ -77,6 +77,10 @@ extension EditorViewController {
 
     if changed {
       bridge.completion.setState(panelVisible: isVisible)
+
+      if isVisible {
+        NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
+      }
     }
   }
 

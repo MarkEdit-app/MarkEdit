@@ -7,6 +7,11 @@
 import AppKit
 
 /**
+ Panel interface used to render text completions.
+ */
+public protocol TextCompletionPanelProtocol {}
+
+/**
  Manages the state of text completions.
  */
 public final class TextCompletionContext {

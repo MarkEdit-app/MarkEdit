@@ -7,6 +7,7 @@
 
 import AppKit
 import MarkEditKit
+import TextCompletion
 
 /**
  NSSpellChecker is pretty much a black box, this extension uses runtime skills to hack it around.
@@ -45,6 +46,11 @@ private extension NSSpellChecker {
     // We prefer completion over correction,
     // when suggestWhileTyping is enabled we don't show correction indicators.
     guard !AppPreferences.Assistant.suggestWhileTyping else {
+      return
+    }
+
+    // We also want to avoid the overlap of the two panels
+    guard !NSApp.windows.contains(where: { $0 is TextCompletionPanelProtocol }) else {
       return
     }
 

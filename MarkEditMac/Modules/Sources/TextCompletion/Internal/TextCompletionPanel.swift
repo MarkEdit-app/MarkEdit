@@ -7,7 +7,7 @@
 import AppKit
 import SwiftUI
 
-final class TextCompletionPanel: NSPanel {
+final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
   private var state = TextCompletionState()
   private var mainView: NSView?
 
