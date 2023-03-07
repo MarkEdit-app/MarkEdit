@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { resetEditor, clearEditor, getEditorText, markEditorDirty } from '../../core';
+import { resetEditor, clearEditor, getEditorText, insertText, markEditorDirty } from '../../core';
 
 /**
  * @shouldExport true
@@ -10,6 +10,7 @@ export interface WebModuleCore extends WebModule {
   resetEditor({ text }: { text: string }): void;
   clearEditor(): void;
   getEditorText(): string;
+  insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   markEditorDirty({ isDirty }: { isDirty: boolean }): void;
 }
 
@@ -24,6 +25,10 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   getEditorText(): string {
     return getEditorText();
+  }
+
+  insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void {
+    insertText(text, from, to);
   }
 
   markEditorDirty({ isDirty }: { isDirty: boolean }): void {

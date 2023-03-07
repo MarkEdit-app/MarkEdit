@@ -12,6 +12,7 @@ import WebKit
 public struct WebModuleBridge {
   public let config: WebBridgeConfig
   public let core: WebBridgeCore
+  public let completion: WebBridgeCompletion
   public let history: WebBridgeHistory
   public let lineEndings: WebBridgeLineEndings
   public let textChecker: WebBridgeTextChecker
@@ -24,6 +25,7 @@ public struct WebModuleBridge {
   public init(webView: WKWebView) {
     self.config = WebBridgeConfig(webView: webView)
     self.core = WebBridgeCore(webView: webView)
+    self.completion = WebBridgeCompletion(webView: webView)
     self.history = WebBridgeHistory(webView: webView)
     self.lineEndings = WebBridgeLineEndings(webView: webView)
     self.textChecker = WebBridgeTextChecker(webView: webView)

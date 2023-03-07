@@ -25,6 +25,22 @@ public final class WebBridgeSelection {
     }
   }
 
+  @MainActor public func getRect(pos: Int) async throws -> JSRect? {
+    struct Message: Encodable {
+      let pos: Int
+    }
+
+    let message = Message(
+      pos: pos
+    )
+
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.selection.getRect", message: message) {
+        continuation.resume(with: $0)
+      }
+    }
+  }
+
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.scrollToSelection", completion: completion)
   }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87067E2629755D5C0052E795 /* EditorStatusView.swift */; };
+		8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */; };
 		870A51AA294700E00095C7EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 870A51A9294700E00095C7EB /* Assets.xcassets */; };
 		870A51AD294700E00095C7EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 870A51AB294700E00095C7EB /* Main.storyboard */; };
 		870A51B9294702AF0095C7EB /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870A51B4294702AF0095C7EB /* EditorViewController.swift */; };
@@ -36,6 +37,7 @@
 		873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873ACD4629644E2F00431498 /* EditorViewController+Encoding.swift */; };
 		873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873D6401295FCC3E0095DEF7 /* AppResources.swift */; };
 		873D6438295FEF220095DEF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 873D643A295FEF220095DEF7 /* Localizable.strings */; };
+		874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */ = {isa = PBXBuildFile; productRef = 874823CD29B0BD980067EC49 /* TextCompletion */; };
 		874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874AAE2D2959F197000E0E84 /* EditorReplacePanel.swift */; };
 		8752CEB6295B2F8800BA9D5B /* EditorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8752CEB5295B2F8800BA9D5B /* EditorPanelView.swift */; };
 		876578FA2993853500A1388A /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 876578F92993853500A1388A /* index.html */; };
@@ -64,6 +66,8 @@
 		87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE0824294DF340004AD33A /* EditorFindButtons.swift */; };
 		87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */; };
 		87EB9901295755DA00A56B97 /* MarkEditCore in Frameworks */ = {isa = PBXBuildFile; productRef = 87EB9900295755DA00A56B97 /* MarkEditCore */; };
+		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
+		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +103,7 @@
 
 /* Begin PBXFileReference section */
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
+		8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantSettingsView.swift; sourceTree = "<group>"; };
 		870A51A2294700DE0095C7EB /* MarkEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarkEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		870A51A9294700E00095C7EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		870A51AC294700E00095C7EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -162,6 +167,8 @@
 		87DE081A294DDA49004AD33A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		87DE0824294DF340004AD33A /* EditorFindButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindButtons.swift; sourceTree = "<group>"; };
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
+		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
+		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +181,7 @@
 				870F17942985775B00003DA7 /* Proofing in Frameworks */,
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
 				870F17922985775B00003DA7 /* Previewer in Frameworks */,
+				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
 				870F178E2985775B00003DA7 /* AppKitControls in Frameworks */,
 				870F17962985775B00003DA7 /* SettingsUI in Frameworks */,
 			);
@@ -208,6 +216,7 @@
 				872924042951525C007156B1 /* PreviewExtension */,
 				8743B26229593B2000F83DAE /* Build.xcconfig */,
 				870A51A3294700DE0095C7EB /* Products */,
+				874823CC29B0BD980067EC49 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -338,6 +347,13 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		874823CC29B0BD980067EC49 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8767BBAC295A893200BFACAE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +361,7 @@
 				8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */,
 				870F17672985285B00003DA7 /* EditorViewController+Config.swift */,
 				8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */,
+				87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */,
 				8729C5A5294B5E6B006F262B /* EditorViewController+Menu.swift */,
 				8725E0812977EF46006A4961 /* EditorViewController+Toolbar.swift */,
 				87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */,
@@ -375,6 +392,7 @@
 			children = (
 				8780AC172982554800065EF4 /* SettingTabs.swift */,
 				8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */,
+				8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */,
 				8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */,
 				8780AC1F2982A2DD00065EF4 /* WindowSettingsView.swift */,
 			);
@@ -385,6 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				87850C8529482A8600D1A952 /* NSApplication+Extension.swift */,
+				87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -446,6 +465,7 @@
 				870F17932985775B00003DA7 /* Proofing */,
 				870F17952985775B00003DA7 /* SettingsUI */,
 				8775A77A29867012005867BF /* FontPicker */,
+				874823CD29B0BD980067EC49 /* TextCompletion */,
 			);
 			productName = MarkEdit;
 			productReference = 870A51A2294700DE0095C7EB /* MarkEdit.app */;
@@ -577,7 +597,9 @@
 				8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */,
 				8767BBB5295AD62700BFACAE /* EditorReplaceButtons.swift in Sources */,
 				87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */,
+				87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */,
 				8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */,
+				8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */,
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
 				87AA1224296560AE00BE4719 /* EditorViewController+HyperLink.swift in Sources */,
@@ -605,6 +627,7 @@
 				87A73AB5294C4B48006A710E /* EditorFindPanel.swift in Sources */,
 				870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */,
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,
+				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
 				87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */,
 				873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */,
 				87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */,
@@ -1038,6 +1061,10 @@
 		870F17952985775B00003DA7 /* SettingsUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SettingsUI;
+		};
+		874823CD29B0BD980067EC49 /* TextCompletion */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TextCompletion;
 		};
 		8775A77A29867012005867BF /* FontPicker */ = {
 			isa = XCSwiftPackageProductDependency;

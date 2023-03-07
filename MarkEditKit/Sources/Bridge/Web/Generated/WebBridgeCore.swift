@@ -41,6 +41,22 @@ public final class WebBridgeCore {
     }
   }
 
+  public func insertText(text: String, from: Int, to: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let text: String
+      let from: Int
+      let to: Int
+    }
+
+    let message = Message(
+      text: text,
+      from: from,
+      to: to
+    )
+
+    webView?.invoke(path: "webModules.core.insertText", message: message, completion: completion)
+  }
+
   public func markEditorDirty(isDirty: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let isDirty: Bool

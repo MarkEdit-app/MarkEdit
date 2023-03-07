@@ -16,6 +16,7 @@ import {
   setDefaultLineBreak,
   setTabKeyBehavior,
   setIndentUnit,
+  setSuggestWhileTyping,
 } from '../../modules/config';
 
 /**
@@ -37,6 +38,7 @@ export interface WebModuleConfig extends WebModule {
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void;
   setTabKeyBehavior({ behavior }: { behavior: TabKeyBehavior }): void;
   setIndentUnit({ unit }: { unit: string }): void;
+  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void;
 }
 
 export class WebModuleConfigImpl implements WebModuleConfig {
@@ -90,5 +92,9 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setIndentUnit({ unit }: { unit: string }): void {
     setIndentUnit(unit);
+  }
+
+  setSuggestWhileTyping({ enabled }: { enabled: boolean }): void {
+    setSuggestWhileTyping(enabled);
   }
 }

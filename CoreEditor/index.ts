@@ -1,8 +1,9 @@
 import { Config, InvisiblesBehavior } from './src/config';
-import { isProd } from './src/common/utils';
+import { isProd } from './src/common/env';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
 import { WebModuleCoreImpl } from './src/bridge/web/core';
+import { WebModuleCompletionImpl } from './src/bridge/web/completion';
 import { WebModuleHistoryImpl } from './src/bridge/web/history';
 import { WebModuleLineEndingsImpl } from './src/bridge/web/lineEndings';
 import { WebModuleTextCheckerImpl } from './src/bridge/web/textChecker';
@@ -15,6 +16,7 @@ import { WebModuleGrammarlyImpl } from './src/bridge/web/grammarly';
 import { pseudoDocument } from './src/@test/mock';
 import { createNativeModule, handleNativeReply } from './src/bridge/nativeModule';
 import { NativeModuleCore } from './src/bridge/native/core';
+import { NativeModuleCompletion } from './src/bridge/native/completion';
 import { NativeModulePreview } from './src/bridge/native/preview';
 import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 
@@ -37,6 +39,7 @@ const config: Config = isProd ? ('{{EDITOR_CONFIG}}' as any) : {
   focusMode: false,
   lineWrapping: true,
   lineHeight: 1.5,
+  suggestWhileTyping: false,
   localizable: {
     previewButtonTitle: 'preview',
   },
@@ -45,6 +48,7 @@ const config: Config = isProd ? ('{{EDITOR_CONFIG}}' as any) : {
 window.webModules = {
   config: new WebModuleConfigImpl(),
   core: new WebModuleCoreImpl(),
+  completion: new WebModuleCompletionImpl(),
   history: new WebModuleHistoryImpl(),
   lineEndings: new WebModuleLineEndingsImpl(),
   textChecker: new WebModuleTextCheckerImpl(),
@@ -57,6 +61,7 @@ window.webModules = {
 
 window.nativeModules = {
   core: createNativeModule<NativeModuleCore>('core'),
+  completion: createNativeModule<NativeModuleCompletion>('completion'),
   preview: createNativeModule<NativeModulePreview>('preview'),
   tokenizer: createNativeModule<NativeModuleTokenizer>('tokenizer'),
 };

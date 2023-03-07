@@ -1,10 +1,11 @@
 import { EditorView } from '@codemirror/view';
 import { extensions } from './extensions';
-import { editedState } from './common/store';
+import { editingState } from './common/store';
 
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
+import * as completion from './modules/completion';
 
 /**
  * Reset the editor to the initial state.
@@ -31,12 +32,20 @@ export function resetEditor(doc: string) {
   const scrollDOM = editor.scrollDOM;
   fixWebKitWheelIssues(scrollDOM);
 
+  // Dismiss the completion panel whenever the dom scrolls
+  scrollDOM.addEventListener('scroll', () => {
+    if (completion.isPanelVisible()) {
+      window.nativeModules.completion.cancelCompletion();
+    }
+  });
+
   // Recofigure, window.config might have changed
   styling.setUp(window.config, themes.loadTheme(window.config.theme).accentColor);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifySelectionDidChange({
     lineColumn: { line: 1 as CodeGen_Int, column: 1 as CodeGen_Int, length: 0 as CodeGen_Int },
+    contentEdited: false,
   });
 }
 
@@ -66,8 +75,15 @@ export function getEditorText() {
   return lines.join(state.lineBreak);
 }
 
+export function insertText(text: string, from: number, to: number) {
+  const editor = window.editor;
+  editor.dispatch({
+    changes: { from, to, insert: text },
+  });
+}
+
 export function markEditorDirty(isDirty: boolean) {
-  editedState.isDirty = isDirty;
+  editingState.isDirty = isDirty;
 }
 
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {

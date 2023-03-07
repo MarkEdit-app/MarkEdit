@@ -10,6 +10,7 @@ import WebKit
 import MarkEditCore
 import MarkEditKit
 import Proofing
+import TextCompletion
 
 final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
@@ -66,6 +67,7 @@ final class EditorViewController: NSViewController {
   private(set) lazy var webView: WKWebView = {
     let modules = NativeModules(modules: [
       EditorModuleCore(delegate: self),
+      EditorModuleCompletion(delegate: self),
       EditorModulePreview(delegate: self),
       EditorModuleTokenizer(),
     ])
@@ -95,6 +97,18 @@ final class EditorViewController: NSViewController {
     webView.loadHTMLString(html, baseURL: baseURL)
 
     return webView
+  }()
+
+  private(set) lazy var spellChecker = {
+    NSSpellChecker()
+  }()
+
+  private(set) lazy var completionContext = {
+    TextCompletionContext(
+      localize: TextCompletionLocalizable(selectedHint: Localized.General.selected)
+    ) { [weak self] in
+      self?.commitCompletion()
+    }
   }()
 
   init() {
@@ -138,6 +152,20 @@ final class EditorViewController: NSViewController {
   override func mouseMoved(with event: NSEvent) {
     super.mouseMoved(with: event)
     handleMouseMoved(event)
+  }
+
+  override func complete(_ sender: Any?) {
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    } else {
+      bridge.completion.startCompletion(afterDelay: 0)
+    }
+  }
+
+  override func cancelOperation(_ sender: Any?) {
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    }
   }
 
   override var representedObject: Any? {

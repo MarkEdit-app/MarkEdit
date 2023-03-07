@@ -44,6 +44,7 @@ export interface Config {
   focusMode: boolean;
   lineWrapping: boolean;
   lineHeight: number;
+  suggestWhileTyping: boolean;
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;

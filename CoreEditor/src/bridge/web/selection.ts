@@ -1,5 +1,6 @@
 import { WebModule } from '../webModule';
-import { selectedMainText, scrollToSelection, gotoLine } from '../../modules/selection';
+import { JSRect } from '../../@types/JSRect';
+import { selectedMainText, scrollToSelection, getRect, gotoLine } from '../../modules/selection';
 
 /**
  * @shouldExport true
@@ -8,6 +9,7 @@ import { selectedMainText, scrollToSelection, gotoLine } from '../../modules/sel
  */
 export interface WebModuleSelection extends WebModule {
   getText(): string;
+  getRect({ pos }: { pos: CodeGen_Int }): JSRect | undefined;
   scrollToSelection(): void;
   gotoLine({ lineNumber }: { lineNumber: CodeGen_Int }): void;
 }
@@ -15,6 +17,10 @@ export interface WebModuleSelection extends WebModule {
 export class WebModuleSelectionImpl implements WebModuleSelection {
   getText(): string {
     return selectedMainText();
+  }
+
+  getRect({ pos }: { pos: CodeGen_Int }): JSRect | undefined {
+    return getRect(pos);
   }
 
   scrollToSelection(): void {

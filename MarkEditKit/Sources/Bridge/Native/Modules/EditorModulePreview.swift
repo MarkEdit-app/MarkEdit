@@ -5,9 +5,10 @@
 //
 
 import Foundation
+import MarkEditCore
 
 public protocol EditorModulePreviewDelegate: AnyObject {
-  func editorModulePreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect)
+  func editorPreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect)
 }
 
 public final class EditorModulePreview: NativeModulePreview {
@@ -18,6 +19,6 @@ public final class EditorModulePreview: NativeModulePreview {
   }
 
   public func show(code: String, type: PreviewType, rect: JSRect) {
-    delegate?.editorModulePreview(self, show: code, type: type, rect: rect.cgRect)
+    delegate?.editorPreview(self, show: code, type: type, rect: rect.cgRect)
   }
 }

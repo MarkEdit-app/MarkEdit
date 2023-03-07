@@ -7,9 +7,13 @@
 import Foundation
 
 public protocol EditorModuleCoreDelegate: AnyObject {
-  func editorModuleCoreWindowDidLoad(_ sender: EditorModuleCore)
-  func editorModuleCoreTextDidChange(_ sender: EditorModuleCore)
-  func editorModuleCore(_ sender: EditorModuleCore, selectionDidChange lineColumn: LineColumnInfo)
+  func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
+  func editorCoreTextDidChange(_ sender: EditorModuleCore)
+  func editorCore(
+    _ sender: EditorModuleCore,
+    selectionDidChange lineColumn: LineColumnInfo,
+    contentEdited: Bool
+  )
 }
 
 public final class EditorModuleCore: NativeModuleCore {
@@ -20,14 +24,14 @@ public final class EditorModuleCore: NativeModuleCore {
   }
 
   public func notifyWindowDidLoad() {
-    delegate?.editorModuleCoreWindowDidLoad(self)
+    delegate?.editorCoreWindowDidLoad(self)
   }
 
   public func notifyTextDidChange() {
-    delegate?.editorModuleCoreTextDidChange(self)
+    delegate?.editorCoreTextDidChange(self)
   }
 
-  public func notifySelectionDidChange(lineColumn: LineColumnInfo) {
-    delegate?.editorModuleCore(self, selectionDidChange: lineColumn)
+  public func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool) {
+    delegate?.editorCore(self, selectionDidChange: lineColumn, contentEdited: contentEdited)
   }
 }

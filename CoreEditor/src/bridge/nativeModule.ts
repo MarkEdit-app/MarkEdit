@@ -1,5 +1,5 @@
 import { v4 as UUID } from 'uuid';
-import { isProd, isWebKit } from '../common/utils';
+import { isProd, isWebKit } from '../common/env';
 
 /**
  * Module used to send message to native.

@@ -70,4 +70,8 @@ extension EditorViewController {
   func setIndentUnit(_ unit: IndentUnit) {
     bridge.config.setIndentUnit(unit: unit.characters)
   }
+
+  func setSuggestWhileTyping(enabled: Bool) {
+    bridge.config.setSuggestWhileTyping(enabled: enabled)
+  }
 }

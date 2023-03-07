@@ -141,6 +141,24 @@ enum AppPreferences {
     }
   }
 
+  enum Assistant {
+    @Storage(key: "assistant.words-in-document", defaultValue: true)
+    static var wordsInDocument: Bool
+
+    @Storage(key: "assistant.standard-words", defaultValue: true)
+    static var standardWords: Bool
+
+    @Storage(key: "assistant.guessed-words", defaultValue: false)
+    static var guessedWords: Bool
+
+    @Storage(key: "assistant.suggest-while-typing", defaultValue: false)
+    static var suggestWhileTyping: Bool {
+      didSet {
+        performUpdates { $0.setSuggestWhileTyping(enabled: suggestWhileTyping) }
+      }
+    }
+  }
+
   enum Search {
     @Storage(key: "search.case-sensitive", defaultValue: false)
     static var caseSensitive: Bool
@@ -193,6 +211,7 @@ extension AppPreferences {
       focusMode: Editor.focusMode,
       lineWrapping: Editor.lineWrapping,
       lineHeight: Editor.lineHeight.multiplier,
+      suggestWhileTyping: Assistant.suggestWhileTyping,
       defaultLineBreak: General.defaultLineEndings.characters,
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,

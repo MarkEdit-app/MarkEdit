@@ -8,6 +8,7 @@
 //  To make changes, edit template files under /CoreEditor/src/@codegen
 
 import Foundation
+import MarkEditCore
 
 public protocol NativeModuleTokenizer: NativeModule {
   func tokenize(anchor: TextTokenizeAnchor) async -> TextTokenizeResult
@@ -47,16 +48,6 @@ final class NativeBridgeTokenizer: NativeBridge {
 
     let result = await module.tokenize(anchor: message.anchor)
     return .success(result)
-  }
-}
-
-public struct TextTokenizeAnchor: Decodable, Equatable {
-  public var text: String
-  public var pos: Int
-
-  public init(text: String, pos: Int) {
-    self.text = text
-    self.pos = pos
   }
 }
 

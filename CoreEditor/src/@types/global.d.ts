@@ -3,6 +3,7 @@ import { Config, Dynamics } from '../config';
 import { WebModule } from '../bridge/webModule';
 import { NativeReply } from '../bridge/nativeModule';
 import { NativeModuleCore } from '../bridge/native/core';
+import { NativeModuleCompletion } from '../bridge/native/completion';
 import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
 
@@ -28,6 +29,7 @@ declare global {
     webModules: Record<string, WebModule>;
     nativeModules: {
       core: NativeModuleCore;
+      completion: NativeModuleCompletion;
       preview: NativeModulePreview;
       tokenizer: NativeModuleTokenizer;
     };

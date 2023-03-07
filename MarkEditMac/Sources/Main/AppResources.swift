@@ -113,6 +113,16 @@ enum Localized {
     static let oneTab = String(localized: "1 tab", comment: "Use 1 tab as the indent unit")
     static let twoTabs = String(localized: "2 tabs", comment: "Use 2 tabs as the indent unit")
 
+    // Assistant
+    static let assistant = String(localized: "Assistant", comment: "Window title for assistant settings")
+    static let completion = String(localized: "Completion:", comment: "Label for text completion options")
+    static let wordsInDocument = String(localized: "Words in document", comment: "Option for words in documents suggestion")
+    static let standardWords = String(localized: "Standard words", comment: "Option for standard words suggestion")
+    static let guessedWords = String(localized: "Guessed words", comment: "Option for guessed words suggestion")
+    static let completionHint = String(localized: "Press ⌘ ESC to show the panel.", comment: "Hint for using text completion")
+    static let autocomplete = String(localized: "Autocomplete:", comment: "Label for autocomplete options")
+    static let suggestWhileTyping = String(localized: "Suggest while typing", comment: "Whether to suggest while typing")
+
     // General
     static let general = String(localized: "General", comment: "Window title for general settings")
     static let appearance = String(localized: "Appearance:", comment: "Appearance for the app")
@@ -168,6 +178,7 @@ enum Icons {
   static let terminal = "terminal"
   static let textQuote = "text.quote"
   static let textformat = "textformat"
+  static let wandAndStars = "wand.and.stars"
 }
 
 extension EditorLocalizable {

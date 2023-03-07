@@ -1,8 +1,9 @@
 import { EditorView } from '@codemirror/view';
 import { InvisiblesBehavior } from '../../config';
-import { editedState, selectionState } from '../../common/store';
+import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
+import { startCompletion, isPanelVisible } from '../completion';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
@@ -43,6 +44,14 @@ export function interceptInputs() {
       return wrapBlock(insert, editor);
     }
 
+    if ((window.config.suggestWhileTyping || isPanelVisible()) && insert.trim().length > 0) {
+      // Typing suggestions for non-space insertions
+      startCompletion({ afterDelay: 300 });
+    } else if (isPanelVisible()) {
+      // Cancel the completion for whitespace insertions
+      window.nativeModules.completion.cancelCompletion();
+    }
+
     // Fallback to default behavior
     return false;
   });
@@ -54,21 +63,21 @@ export function interceptInputs() {
 export function observeChanges() {
   return EditorView.updateListener.of(update => {
     // We only notify changes when the editor is not dirty (all changes are saved)
-    if (update.docChanged && !editedState.isDirty) {
+    if (update.docChanged && !editingState.isDirty) {
       // It would be great if we could also provide the updated text here,
       // but it's time-consuming for large payload,
       // we want to be responsive for every key stroke.
       window.nativeModules.core.notifyTextDidChange();
-      editedState.isDirty = true;
+      editingState.isDirty = true;
     }
 
     if (update.selectionSet) {
       const lineColumn = selectedLineColumn();
-      window.nativeModules.core.notifySelectionDidChange({ lineColumn });
+      window.nativeModules.core.notifySelectionDidChange({ lineColumn, contentEdited: update.docChanged });
 
       const hasSelection = selectedRange().some(range => !range.empty);
-      const updateActiveLine = selectionState.hasSelection !== hasSelection;
-      selectionState.hasSelection = hasSelection;
+      const updateActiveLine = editingState.hasSelection !== hasSelection;
+      editingState.hasSelection = hasSelection;
 
       if (updateActiveLine) {
         // Update invisible behavior as selection changed

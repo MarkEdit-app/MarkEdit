@@ -12,6 +12,10 @@ extension SettingsTabViewController {
     Self(EditorSettingsView(), title: Localized.Settings.editor, icon: Icons.characterCursorIbeam)
   }
 
+  static var assistant: Self {
+    Self(AssistantSettingsView(), title: Localized.Settings.assistant, icon: Icons.wandAndStars)
+  }
+
   static var general: Self {
     Self(GeneralSettingsView(), title: Localized.Settings.general, icon: Icons.gearshape)
   }

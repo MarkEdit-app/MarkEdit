@@ -7,6 +7,7 @@
 
 import AppKit
 import WebKit
+import MarkEditCore
 import MarkEditKit
 import Proofing
 
@@ -45,12 +46,12 @@ extension EditorViewController: EditorWebViewMenuDelegate {
 // MARK: - EditorModuleCoreDelegate
 
 extension EditorViewController: EditorModuleCoreDelegate {
-  func editorModuleCoreWindowDidLoad(_ sender: EditorModuleCore) {
+  func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
   }
 
-  func editorModuleCoreTextDidChange(_ sender: EditorModuleCore) {
+  func editorCoreTextDidChange(_ sender: EditorModuleCore) {
     document?.updateChangeCount(.changeDone)
 
     if findPanel.mode != .hidden {
@@ -62,16 +63,71 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
-  func editorModuleCore(_ sender: EditorModuleCore, selectionDidChange lineColumn: LineColumnInfo) {
+  func editorCore(
+    _ sender: EditorModuleCore,
+    selectionDidChange lineColumn: LineColumnInfo,
+    contentEdited: Bool
+  ) {
     statusView.updateLineColumn(lineColumn)
     layoutStatusView()
+
+    if !contentEdited {
+      cancelCompletion()
+    }
+  }
+}
+
+// MARK: - EditorModuleCompletionDelegate
+
+extension EditorViewController: EditorModuleCompletionDelegate {
+  func editorCompletion(
+    _ sender: EditorModuleCompletion,
+    request prefix: String,
+    anchor: TextTokenizeAnchor,
+    partialRange: NSRange,
+    tokenizedWords: [String]
+  ) {
+    requestCompletions(
+      prefix: prefix,
+      anchor: anchor,
+      partialRange: partialRange,
+      tokenizedWords: tokenizedWords
+    )
+  }
+
+  func editorCompletionTokenizeWholeDocument(_ sender: EditorModuleCompletion) -> Bool {
+    AppPreferences.Assistant.wordsInDocument
+  }
+
+  func editorCompletionDidCommit(_ sender: EditorModuleCompletion) {
+    commitCompletion()
+  }
+
+  func editorCompletionDidCancel(_ sender: EditorModuleCompletion) {
+    cancelCompletion()
+  }
+
+  func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion) {
+    completionContext.selectPrevious()
+  }
+
+  func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion) {
+    completionContext.selectNext()
+  }
+
+  func editorCompletionDidSelectTop(_ sender: EditorModuleCompletion) {
+    completionContext.selectTop()
+  }
+
+  func editorCompletionDidSelectBottom(_ sender: EditorModuleCompletion) {
+    completionContext.selectBottom()
   }
 }
 
 // MARK: - EditorModulePreviewDelegate
 
 extension EditorViewController: EditorModulePreviewDelegate {
-  func editorModulePreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect) {
+  func editorPreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect) {
     showPreview(code: code, type: type, rect: rect)
   }
 }
