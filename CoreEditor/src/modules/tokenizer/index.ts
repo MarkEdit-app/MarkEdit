@@ -1,4 +1,5 @@
 import { EditorSelection } from '@codemirror/state';
+import { TextTokenizeAnchor } from './types';
 import anchorAtPos from './anchorAtPos';
 
 /**
@@ -29,6 +30,42 @@ export async function handleDoubleClick(event: MouseEvent) {
       EditorSelection.range(from, to),
     ]),
   });
+}
+
+/**
+ * Handle option-arrow keys, leverage native methods to move by word.
+ */
+export async function handleKeyDown(event: KeyboardEvent) {
+  const editor = window.editor;
+  const state = editor.state;
+
+  // Tokenization based moving is more meaningful for single selection
+  if (!event.altKey || state.selection.ranges.length > 1) {
+    return;
+  }
+
+  const moveWord = async(moveFn: ({ anchor }: { anchor: TextTokenizeAnchor }) => Promise<CodeGen_Int>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const newPos = await moveFn({ anchor: anchorAtPos(pos) });
+    editor.dispatch({
+      selection: EditorSelection.cursor(newPos),
+    });
+  };
+
+  const pos = state.selection.main.head;
+  const line = state.doc.lineAt(pos);
+
+  // We don't leverage the tokenizer if it's at the start of a line
+  if (event.key === 'ArrowLeft' && line.from !== pos) {
+    return moveWord(window.nativeModules.tokenizer.moveWordBackward);
+  }
+
+  // We don't leverage the tokenizer if it's at the end of a line
+  if (event.key === 'ArrowRight' && line.to !== pos) {
+    return moveWord(window.nativeModules.tokenizer.moveWordForward);
+  }
 }
 
 /**
