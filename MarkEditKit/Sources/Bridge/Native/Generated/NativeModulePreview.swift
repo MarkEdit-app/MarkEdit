@@ -22,7 +22,7 @@ final class NativeBridgePreview: NativeBridge {
   static let name = "preview"
   lazy var methods: [String: NativeMethod] = [
     "show": { [weak self] in
-      await self?.show(parameters: $0)
+      self?.show(parameters: $0)
     },
   ]
 
@@ -33,7 +33,7 @@ final class NativeBridgePreview: NativeBridge {
     self.module = module
   }
 
-  @MainActor private func show(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func show(parameters: Data) -> Result<Encodable?, Error>? {
     struct Message: Decodable {
       var code: String
       var type: PreviewType

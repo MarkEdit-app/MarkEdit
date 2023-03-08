@@ -49,11 +49,11 @@ public final class EditorMessageHandler: NSObject, WKScriptMessageHandler {
       return
     }
 
-    Task {
-      Logger.log(.debug, "Invoke native: \(moduleName).\(methodName)")
-      if let result = await invokeNative(parameters) {
-        reply(id: messageID, result: result)
-      }
+    Logger.log(.debug, "Invoke native: \(moduleName).\(methodName)")
+    if let result = invokeNative(parameters) {
+      reply(id: messageID, result: result)
+    } else {
+      Logger.log(.error, "Missing result from native method: \(methodName)")
     }
   }
 }

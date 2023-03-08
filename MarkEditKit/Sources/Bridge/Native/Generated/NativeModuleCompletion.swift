@@ -28,25 +28,25 @@ final class NativeBridgeCompletion: NativeBridge {
   static let name = "completion"
   lazy var methods: [String: NativeMethod] = [
     "requestCompletions": { [weak self] in
-      await self?.requestCompletions(parameters: $0)
+      self?.requestCompletions(parameters: $0)
     },
     "commitCompletion": { [weak self] in
-      await self?.commitCompletion(parameters: $0)
+      self?.commitCompletion(parameters: $0)
     },
     "cancelCompletion": { [weak self] in
-      await self?.cancelCompletion(parameters: $0)
+      self?.cancelCompletion(parameters: $0)
     },
     "selectPrevious": { [weak self] in
-      await self?.selectPrevious(parameters: $0)
+      self?.selectPrevious(parameters: $0)
     },
     "selectNext": { [weak self] in
-      await self?.selectNext(parameters: $0)
+      self?.selectNext(parameters: $0)
     },
     "selectTop": { [weak self] in
-      await self?.selectTop(parameters: $0)
+      self?.selectTop(parameters: $0)
     },
     "selectBottom": { [weak self] in
-      await self?.selectBottom(parameters: $0)
+      self?.selectBottom(parameters: $0)
     },
   ]
 
@@ -57,7 +57,7 @@ final class NativeBridgeCompletion: NativeBridge {
     self.module = module
   }
 
-  @MainActor private func requestCompletions(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func requestCompletions(parameters: Data) -> Result<Encodable?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
       var fullText: String?
@@ -75,32 +75,32 @@ final class NativeBridgeCompletion: NativeBridge {
     return .success(nil)
   }
 
-  @MainActor private func commitCompletion(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func commitCompletion(parameters: Data) -> Result<Encodable?, Error>? {
     module.commitCompletion()
     return .success(nil)
   }
 
-  @MainActor private func cancelCompletion(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func cancelCompletion(parameters: Data) -> Result<Encodable?, Error>? {
     module.cancelCompletion()
     return .success(nil)
   }
 
-  @MainActor private func selectPrevious(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func selectPrevious(parameters: Data) -> Result<Encodable?, Error>? {
     module.selectPrevious()
     return .success(nil)
   }
 
-  @MainActor private func selectNext(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func selectNext(parameters: Data) -> Result<Encodable?, Error>? {
     module.selectNext()
     return .success(nil)
   }
 
-  @MainActor private func selectTop(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func selectTop(parameters: Data) -> Result<Encodable?, Error>? {
     module.selectTop()
     return .success(nil)
   }
 
-  @MainActor private func selectBottom(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func selectBottom(parameters: Data) -> Result<Encodable?, Error>? {
     module.selectBottom()
     return .success(nil)
   }

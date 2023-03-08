@@ -12,7 +12,7 @@ import MarkEditCore
 
 public protocol {{moduleName}}: NativeModule {
   {{#methods}}
-  func {{methodName}}({{parametersDeclaration}}){{#returnType}} async -> {{returnType}}{{/returnType}}
+  func {{methodName}}({{parametersDeclaration}}){{#returnType}} -> {{returnType}}{{/returnType}}
   {{/methods}}
 }
 
@@ -25,7 +25,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
   lazy var methods: [String: NativeMethod] = [
     {{#methods}}
     "{{methodName}}": { [weak self] in
-      await self?.{{methodName}}(parameters: $0)
+      self?.{{methodName}}(parameters: $0)
     },
     {{/methods}}
   ]
@@ -38,7 +38,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
   }
   {{#methods}}
 
-  @MainActor private func {{methodName}}(parameters: Data) async -> Result<Encodable?, Error>? {
+  private func {{methodName}}(parameters: Data) -> Result<Encodable?, Error>? {
     {{#parameters.length}}
     struct Message: Decodable {
       {{#parameters}}
@@ -55,7 +55,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
     }
 
     {{/parameters.length}}
-    {{#returnType}}let result = await {{/returnType}}module.{{methodName}}({{#parameters}}{{name}}: message.{{name}}{{^last}}, {{/last}}{{/parameters}})
+    {{#returnType}}let result = {{/returnType}}module.{{methodName}}({{#parameters}}{{name}}: message.{{name}}{{^last}}, {{/last}}{{/parameters}})
     return .success({{#returnType}}result{{/returnType}}{{^returnType}}nil{{/returnType}})
   }
   {{/methods}}

@@ -7,7 +7,7 @@
 import Foundation
 
 /// Native method that will be invoked by JavaScript.
-public typealias NativeMethod = (_ parameters: Data) async -> Result<Encodable?, Error>?
+public typealias NativeMethod = (_ parameters: Data) -> Result<Encodable?, Error>?
 
 public protocol NativeBridge: AnyObject {
   static var name: String { get }
