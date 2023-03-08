@@ -13,10 +13,6 @@ export function startObserving() {
     selection.selectWholeLineIfNeeded(event);
   });
 
-  document.addEventListener('dblclick', event => {
-    tokenizer.handleDoubleClick(event);
-  });
-
   document.addEventListener('keydown', event => {
     if (isMetaKey(event)) {
       link.startClickable();
@@ -45,10 +41,21 @@ export function startObserving() {
     editingState.compositionEnded = true;
   });
 
-  overrideEventsForCompletion();
+  observeEventsForTokenization();
+  observeEventsForCompletion();
 }
 
-function overrideEventsForCompletion() {
+function observeEventsForTokenization() {
+  document.addEventListener('dblclick', event => {
+    tokenizer.handleDoubleClick(event);
+  });
+
+  document.addEventListener('keydown', event => {
+    tokenizer.handleKeyDown(event);
+  }, true);
+}
+
+function observeEventsForCompletion() {
   document.addEventListener('keydown', event => {
     if (!completion.isPanelVisible()) {
       return;
