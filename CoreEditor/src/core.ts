@@ -26,6 +26,15 @@ export function resetEditor(doc: string) {
     }),
   });
 
+  // Dirty trick, the line number height is not initially correct because of window animations,
+  // this approach forces a layout pass.
+  if (window.config.showLineNumbers) {
+    editingState.isDirty = true;
+    setTimeout(() => editingState.isDirty = false, 50);
+    editor.dispatch({ changes: { from: 0, insert: '\u200b' } });
+    editor.dispatch({ changes: { from: 0, to: 1, insert: '' } });
+  }
+
   editor.focus();
   window.editor = editor;
 

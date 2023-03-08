@@ -128,14 +128,6 @@ final class EditorViewController: NSViewController {
   override func viewWillAppear() {
     super.viewWillAppear()
     configureToolbar()
-
-    // Hide the window to mitigate the WKWebView loading latency,
-    // reset it after finished rendering the text.
-    //
-    // It takes a bit longer to show the window but also makes the experience better.
-    if !hasFinishedLoading {
-      setWindowHidden(true)
-    }
   }
 
   override func viewDidLayout() {
@@ -188,21 +180,13 @@ extension EditorViewController {
       return
     }
 
-    webView.isHidden = true
     bridge.core.resetEditor(text: text) { _ in
-      self.setWindowHidden(false)
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
         autocorrect: true
       ))
 
       Grammarly.shared.update(bridge: self.bridge.grammarly)
-
-      // Dirty trick, show the content later to wait CodeMirror finishes its initial layout,
-      // the line number height is not initially correct because of the window animation.
-      DispatchQueue.afterDelay(seconds: 0.05) {
-        self.webView.isHidden = false
-      }
     }
   }
 
