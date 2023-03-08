@@ -55,6 +55,8 @@ final class EditorDocument: NSDocument {
 
     hostViewController = contentVC
     hostViewController?.representedObject = self
+
+    NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)
   }
 }
@@ -81,15 +83,17 @@ extension EditorDocument {
   // MARK: - Reading and Writing
 
   override func read(from data: Data, ofType typeName: String) throws {
-    let encoding = AppPreferences.General.defaultTextEncoding
-    let newValue = encoding.decode(data: data) ?? data.toString() ?? ""
-    guard stringValue != newValue else {
-      return
-    }
+    DispatchQueue.global(qos: .userInitiated).async {
+      let encoding = AppPreferences.General.defaultTextEncoding
+      let newValue = encoding.decode(data: data) ?? data.toString() ?? ""
+      guard self.stringValue != newValue else { return }
 
-    fileData = data
-    stringValue = newValue
-    hostViewController?.representedObject = self
+      DispatchQueue.main.async {
+        self.fileData = data
+        self.stringValue = newValue
+        self.hostViewController?.representedObject = self
+      }
+    }
   }
 
   // We don't have a sync way to get the text, override save and autosave to do an async approach.
