@@ -55,6 +55,8 @@ final class EditorDocument: NSDocument {
 
     hostViewController = contentVC
     hostViewController?.representedObject = self
+
+    NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)
   }
 }
