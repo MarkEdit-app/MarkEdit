@@ -7,12 +7,12 @@
 import AppKit
 
 /**
- Panel interface used to render text completions.
+ Panel interface used to render word completions.
  */
 public protocol TextCompletionPanelProtocol {}
 
 /**
- Manages the state of text completions.
+ Manages the state of word completions.
  */
 public final class TextCompletionContext {
   public var isPanelVisible = false {

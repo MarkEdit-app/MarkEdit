@@ -49,8 +49,8 @@
 /* Compact mode for window toolbar */
 "Compact" = "緊湊";
 
-/* Label for text completion options */
-"Completion:" = "文字補全：";
+/* Label for word completion options */
+"Completion:" = "單字補全：";
 
 /* Phrase used in CodeMirror to indicate control character */
 "Control Character" = "控制字元";
@@ -199,7 +199,7 @@
 /* Preferred window tabbing mode */
 "Preferred" = "首選";
 
-/* Hint for using text completion */
+/* Hint for using word completion */
 "Press ⌘ ESC to show the panel." = "按下 ⌘ ESC 來顯示列表。";
 
 /* Button title for code preview */

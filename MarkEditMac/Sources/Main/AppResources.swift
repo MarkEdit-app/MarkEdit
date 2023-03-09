@@ -115,11 +115,11 @@ enum Localized {
 
     // Assistant
     static let assistant = String(localized: "Assistant", comment: "Window title for assistant settings")
-    static let completion = String(localized: "Completion:", comment: "Label for text completion options")
+    static let completion = String(localized: "Completion:", comment: "Label for word completion options")
     static let wordsInDocument = String(localized: "Words in document", comment: "Option for words in documents suggestion")
     static let standardWords = String(localized: "Standard words", comment: "Option for standard words suggestion")
     static let guessedWords = String(localized: "Guessed words", comment: "Option for guessed words suggestion")
-    static let completionHint = String(localized: "Press ⌘ ESC to show the panel.", comment: "Hint for using text completion")
+    static let completionHint = String(localized: "Press ⌘ ESC to show the panel.", comment: "Hint for using word completion")
     static let autocomplete = String(localized: "Autocomplete:", comment: "Label for autocomplete options")
     static let suggestWhileTyping = String(localized: "Suggest while typing", comment: "Whether to suggest while typing")
 
