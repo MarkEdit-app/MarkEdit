@@ -4,6 +4,7 @@ import { editingState } from './common/store';
 
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
+import * as history from './modules/history';
 import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
 
@@ -33,6 +34,7 @@ export function resetEditor(doc: string) {
     setTimeout(() => editingState.isDirty = false, 50);
     editor.dispatch({ changes: { from: 0, insert: '\u200b' } });
     editor.dispatch({ changes: { from: 0, to: 1, insert: '' } });
+    history.clearHistory();
   }
 
   editor.focus();
