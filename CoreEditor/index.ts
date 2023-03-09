@@ -23,7 +23,7 @@ import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 import * as core from './src/core';
 import * as styling from './src/styling/config';
 import * as themes from './src/styling/themes';
-import * as events from './src/dom/events';
+import * as events from './src/events';
 
 // "{{EDITOR_CONFIG}}" will be replaced with a JSON literal in production
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

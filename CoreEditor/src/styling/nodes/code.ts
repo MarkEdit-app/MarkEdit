@@ -1,6 +1,6 @@
 import { createMarkDeco, createWidgetDeco } from '../matchers/lexer';
 import { createDecoPlugin } from '../helper';
-import { PreviewWidget } from '../../dom/views';
+import { PreviewWidget } from '../../views';
 import { PreviewType, showPreview } from '../../modules/preview';
 
 /**

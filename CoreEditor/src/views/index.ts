@@ -1,5 +1,5 @@
 import { WidgetView } from './types';
-import { PreviewType } from '../../modules/preview';
+import { PreviewType } from '../modules/preview';
 
 /**
  * Widget used to show a [preview] button after some contents, such as mermaid diagrams.

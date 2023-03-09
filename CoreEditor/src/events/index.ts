@@ -1,11 +1,11 @@
 import isMetaKey from './isMetaKey';
-import { editingState } from '../../common/store';
+import { editingState } from '../common/store';
 
-import * as completion from '../../modules/completion';
-import * as grammarly from '../../modules/grammarly';
-import * as selection from '../../modules/selection';
-import * as tokenizer from '../../modules/tokenizer';
-import * as link from '../../styling/nodes/link';
+import * as completion from '../modules/completion';
+import * as grammarly from '../modules/grammarly';
+import * as selection from '../modules/selection';
+import * as tokenizer from '../modules/tokenizer';
+import * as link from '../styling/nodes/link';
 
 export function startObserving() {
   document.addEventListener('click', event => {
