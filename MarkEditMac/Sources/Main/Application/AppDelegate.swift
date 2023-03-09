@@ -59,6 +59,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       .general,
       .window,
     ])
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(windowDidResignKey(_:)),
+      name: NSWindow.didResignKeyNotification,
+      object: nil
+    )
   }
 
   func application(_ application: NSApplication, open urls: [URL]) {
@@ -71,6 +78,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 // MARK: - Private
 
 private extension AppDelegate {
+  @objc private func windowDidResignKey(_ notification: Notification) {
+    // To reduce the glitches between switching windows,
+    // close openPanel once we don't have any key windows.
+    if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
+      NSApp.closeOpenPanels()
+    }
+  }
+
   @IBAction func showPreferences(_ sender: Any?) {
     settingsWindowController?.showWindow(self)
   }
