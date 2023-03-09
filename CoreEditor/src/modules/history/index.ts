@@ -1,5 +1,5 @@
 import { ChangeSet } from '@codemirror/state';
-import { historyField, undo as undoCommand, redo as redoCommand } from '@codemirror/commands';
+import { historyField, undo as undoCommand, redo as redoCommand, undoDepth, redoDepth } from '@codemirror/commands';
 
 // Weirdly, CodeMirror doesn't expose HistoryState as a public interface,
 // define it here and leverage tests to ensure its existence.
@@ -27,17 +27,20 @@ export function redo() {
 }
 
 export function canUndo() {
-  const editor = window.editor;
-  const history = editor.state.field(historyField) as HistoryState;
-  return filterHistory(history.done).length > 0;
+  return undoDepth(window.editor.state) > 0;
 }
 
 export function canRedo() {
-  const editor = window.editor;
-  const history = editor.state.field(historyField) as HistoryState;
-  return filterHistory(history.undone).length > 0;
+  return redoDepth(window.editor.state) > 0;
 }
 
-function filterHistory(events?: HistoryEvent[]) {
-  return events?.filter(event => event.changes !== undefined) ?? [];
+export function clearHistory() {
+  try {
+    const editor = window.editor;
+    const history = editor.state.field(historyField) as HistoryState;
+    history.done = [];
+    history.undone = [];
+  } catch (error) {
+    console.error(error);
+  }
 }
