@@ -10,7 +10,7 @@ import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
 
 export enum ReplaceGranularity {
-  fullDocument = 'fullDocument',
+  wholeDocument = 'wholeDocument',
   selection = 'selection',
 }
 
@@ -101,7 +101,7 @@ export function insertText(text: string, from: number, to: number) {
 
 export function replaceText(text: string, granularity: ReplaceGranularity) {
   switch (granularity) {
-    case ReplaceGranularity.fullDocument:
+    case ReplaceGranularity.wholeDocument:
       insertText(text, 0, window.editor.state.doc.length);
       break;
     case ReplaceGranularity.selection:

@@ -11,18 +11,18 @@ import MarkEditKit
 @available(macOS 13.0, *)
 struct UpdateFileContentIntent: AppIntent {
   enum Granularity: String, AppEnum {
-    case fullDocument
+    case wholeDocument
     case selection
 
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Granularity")
     static var caseDisplayRepresentations: [Granularity: DisplayRepresentation] = [
-      .fullDocument: "Full Document",
+      .wholeDocument: "Whole Document",
       .selection: "Selection",
     ]
 
     var replaceGranularity: ReplaceGranularity {
       switch self {
-      case .fullDocument: return .fullDocument
+      case .wholeDocument: return .wholeDocument
       case .selection: return .selection
       }
     }
@@ -40,7 +40,7 @@ struct UpdateFileContentIntent: AppIntent {
   @Parameter(title: "Content")
   var content: String
 
-  @Parameter(title: "Granularity", default: .fullDocument)
+  @Parameter(title: "Granularity", default: .wholeDocument)
   var granularity: Granularity
 
   @Parameter(title: "Save Changes")

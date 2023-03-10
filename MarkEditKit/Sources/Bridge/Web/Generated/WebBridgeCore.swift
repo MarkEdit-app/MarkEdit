@@ -85,6 +85,6 @@ public final class WebBridgeCore {
 }
 
 public enum ReplaceGranularity: String, Codable {
-  case fullDocument = "fullDocument"
+  case wholeDocument = "wholeDocument"
   case selection = "selection"
 }

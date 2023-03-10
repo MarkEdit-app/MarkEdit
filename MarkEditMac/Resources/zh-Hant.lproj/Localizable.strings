@@ -112,9 +112,6 @@
 /* Label for font settings */
 "Font:" = "字體：";
 
-/* No comment provided by engineer. */
-"Full Document" = "整個文件";
-
 /* Window title for general settings */
 "General" = "一般";
 
@@ -360,6 +357,9 @@
 
 /* No comment provided by engineer. */
 "Update file with ${content}" = "使用 ${content} 更新文件";
+
+/* No comment provided by engineer. */
+"Whole Document" = "整個文件";
 
 /* Toggle whole word search */
 "Whole Word" = "整詞尋找";
