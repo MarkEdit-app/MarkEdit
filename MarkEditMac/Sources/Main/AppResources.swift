@@ -8,10 +8,15 @@
 import Foundation
 import MarkEditCore
 
-// To make localization work, always use String(localized:comment:) directly and add to this file.
-//
-// Besides, we use xcloc files to do the translation work:
-// https://developer.apple.com/documentation/xcode/exporting-localizations
+/**
+ To make localization work, always use `String(localized:comment:)` directly and add to this file.
+
+ Besides, we use `xcloc` files to do the translation work:
+ https://developer.apple.com/documentation/xcode/exporting-localizations
+
+ The only exception to not using this file for localization is the app intents,
+ where we rely on `LocalizedStringResource` instead.
+ */
 enum Localized {
   enum General {
     static let done = String(localized: "Done", comment: "Button title, confirm an action")
