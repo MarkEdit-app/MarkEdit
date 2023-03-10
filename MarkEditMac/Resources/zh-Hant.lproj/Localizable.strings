@@ -200,7 +200,7 @@
 "Preferred" = "首選";
 
 /* Hint for using word completion */
-"Press ⌘ ESC to show the panel." = "按下 ⌘ ESC 來顯示列表。";
+"Press ⌥ ESC to show the panel." = "按下 ⌥ ESC 來顯示列表。";
 
 /* Button title for code preview */
 "preview" = "預覽";
