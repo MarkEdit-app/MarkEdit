@@ -12,17 +12,25 @@ public extension NSWindow {
   }
 
   var toolbarEffectView: NSVisualEffectView? {
-    var result: NSVisualEffectView?
-    rootView?.enumerateChildren { (view: NSVisualEffectView) in
-      // Blindly consider a full-width NSVisualEffectView the toolbar,
-      // a more accurate way would be relying on NSThemeFrame, which is private.
-      if abs(view.frame.width - frame.width) < .ulpOfOne {
-        result = view
-      }
+    guard let rootView else {
+      assertionFailure("Missing rootView from window to proceed")
+      return nil
     }
 
-    assert(result != nil, "Failed to find NSVisualEffectView in toolbar")
-    return result
+    var stack = [rootView]
+    while !stack.isEmpty {
+      let node = stack.removeLast()
+      if node is NSVisualEffectView && node.superview?.className.hasPrefix("NSTitlebar") == true {
+        // What we want is an NSVisualEffectView descendant of an NSTitlebarView
+        return node as? NSVisualEffectView
+      }
+
+      // Depth-first search
+      stack.append(contentsOf: node.subviews)
+    }
+
+    assertionFailure("Failed to find NSVisualEffectView in toolbar")
+    return nil
   }
 
   /// Change the frame size, treat the top-left corner as the anchor point.

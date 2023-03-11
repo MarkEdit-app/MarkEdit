@@ -47,17 +47,11 @@ final class EditorWindow: NSWindow {
 
     // Slightly change the toolbar effect to match editor better
     if let view = toolbarEffectView {
-      // Blend the color of contents behind the window
-      view.blendingMode = .behindWindow
+      view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
       view.isHidden = reduceTransparency == true
 
-      // When there's a dimmed view from save panel, always make it fully visible,
-      // otherwise, a layered background appears.
-      if NSApp.keyWindow is NSSavePanel {
-        view.alphaValue = 1.0
-      } else {
-        view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
-      }
+      // Blend the color of contents behind the window
+      view.blendingMode = .behindWindow
     }
   }
 }
