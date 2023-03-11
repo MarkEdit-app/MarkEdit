@@ -51,11 +51,12 @@ final class EditorWindow: NSWindow {
       view.blendingMode = .behindWindow
       view.isHidden = reduceTransparency == true
 
-      // When self is the keyWindow, add a little transparency
-      if isKeyWindow {
-        view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
-      } else {
+      // When there's a dimmed view from save panel, always make it fully visible,
+      // otherwise, a layered background appears.
+      if NSApp.keyWindow is NSSavePanel {
         view.alphaValue = 1.0
+      } else {
+        view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
       }
     }
   }
