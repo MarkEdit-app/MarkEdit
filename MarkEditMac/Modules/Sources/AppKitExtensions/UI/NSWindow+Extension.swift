@@ -12,25 +12,13 @@ public extension NSWindow {
   }
 
   var toolbarEffectView: NSVisualEffectView? {
-    guard let rootView else {
-      assertionFailure("Missing rootView from window to proceed")
-      return nil
+    let result = rootView?.firstDescendant { (effectView: NSVisualEffectView) in
+      // What we want is an NSVisualEffectView child of an NSTitlebarView
+      effectView.superview?.className.hasPrefix("NSTitlebar") == true
     }
 
-    var stack = [rootView]
-    while !stack.isEmpty {
-      let node = stack.removeLast()
-      if node is NSVisualEffectView && node.superview?.className.hasPrefix("NSTitlebar") == true {
-        // What we want is an NSVisualEffectView child of an NSTitlebarView
-        return node as? NSVisualEffectView
-      }
-
-      // Depth-first search
-      stack.append(contentsOf: node.subviews)
-    }
-
-    assertionFailure("Failed to find NSVisualEffectView in toolbar")
-    return nil
+    assert(result != nil, "Failed to find NSVisualEffectView in toolbar")
+    return result
   }
 
   /// Change the frame size, treat the top-left corner as the anchor point.
@@ -66,18 +54,9 @@ public extension NSWindow {
   ///
   /// There's no public API to programmatically show the menu assigned to an NSToolbarItem.
   func popUpButton(with menuIdentifier: NSUserInterfaceItemIdentifier) -> NSPopUpButton? {
-    guard let view = contentView?.superview else {
-      return nil
+    contentView?.superview?.firstDescendant { (button: NSPopUpButton) in
+      button.menu?.identifier == menuIdentifier
     }
-
-    var result: NSPopUpButton?
-    view.enumerateChildren { (button: NSPopUpButton) in
-      if button.menu?.identifier == menuIdentifier {
-        result = button
-      }
-    }
-
-    return result
   }
 }
 

@@ -14,7 +14,7 @@ public extension BackgroundTheming {
     layerBackgroundColor = color
     needsDisplay = true
 
-    enumerateChildren { (button: NonBezelButton) in
+    enumerateDescendants { (button: NonBezelButton) in
       button.layerBackgroundColor = color
       button.needsDisplay = true
     }

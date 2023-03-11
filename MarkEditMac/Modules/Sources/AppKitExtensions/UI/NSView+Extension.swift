@@ -57,7 +57,7 @@ public extension NSView {
     }
   }
 
-  /// Check if the view itself or its children is the first responder in a window.
+  /// Check if the view itself or one of its descendants is the first responder in a window.
   func isFirstResponder(in window: NSWindow?) -> Bool {
     (window?.firstResponder as? NSView)?.belongs(to: self) ?? false
   }
@@ -79,14 +79,30 @@ public extension NSView {
     animated ? animator() : self
   }
 
-  /// Enumerate all children, recursively, self first.
-  func enumerateChildren<T: NSView>(where: ((T) -> Bool)? = nil, handler: (T) -> Void) {
+  /// Enumerate all descendants, recursively, self first.
+  func enumerateDescendants<T: NSView>(where: ((T) -> Bool)? = nil, handler: (T) -> Void) {
     if let view = self as? T, `where`?(view) ?? true {
       handler(view)
     }
 
     subviews.forEach {
-      $0.enumerateChildren(where: `where`, handler: handler)
+      $0.enumerateDescendants(where: `where`, handler: handler)
     }
+  }
+
+  /// Returns the first descendant that matches a predicate, self is included.
+  func firstDescendant<T: NSView>(where: ((T) -> Bool)? = nil) -> T? {
+    var stack = [self]
+    while !stack.isEmpty {
+      let node = stack.removeLast()
+      if let view = node as? T, `where`?(view) ?? true {
+        return view
+      }
+
+      // Depth-first search
+      stack.append(contentsOf: node.subviews)
+    }
+
+    return nil
   }
 }
