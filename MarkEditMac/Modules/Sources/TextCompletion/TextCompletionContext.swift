@@ -24,6 +24,15 @@ public final class TextCompletionContext {
     }
   }
 
+  public var appearance: NSAppearance? {
+    get {
+      panel.appearance
+    }
+    set {
+      panel.appearance = newValue
+    }
+  }
+
   public var fromIndex: Int = 0
   public var toIndex: Int = 0
   public var selectedText: String { panel.selectedCompletion() }
