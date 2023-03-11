@@ -57,6 +57,20 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.insertText", message: message, completion: completion)
   }
 
+  public func replaceText(text: String, granularity: ReplaceGranularity, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let text: String
+      let granularity: ReplaceGranularity
+    }
+
+    let message = Message(
+      text: text,
+      granularity: granularity
+    )
+
+    webView?.invoke(path: "webModules.core.replaceText", message: message, completion: completion)
+  }
+
   public func markEditorDirty(isDirty: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let isDirty: Bool
@@ -68,4 +82,9 @@ public final class WebBridgeCore {
 
     webView?.invoke(path: "webModules.core.markEditorDirty", message: message, completion: completion)
   }
+}
+
+public enum ReplaceGranularity: String, Codable {
+  case wholeDocument = "wholeDocument"
+  case selection = "selection"
 }

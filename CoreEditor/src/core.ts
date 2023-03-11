@@ -1,12 +1,18 @@
 import { EditorView } from '@codemirror/view';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
+import replaceSelections from './modules/commands/replaceSelections';
 
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as history from './modules/history';
 import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
+
+export enum ReplaceGranularity {
+  wholeDocument = 'wholeDocument',
+  selection = 'selection',
+}
 
 /**
  * Reset the editor to the initial state.
@@ -91,6 +97,17 @@ export function insertText(text: string, from: number, to: number) {
   editor.dispatch({
     changes: { from, to, insert: text },
   });
+}
+
+export function replaceText(text: string, granularity: ReplaceGranularity) {
+  switch (granularity) {
+    case ReplaceGranularity.wholeDocument:
+      insertText(text, 0, window.editor.state.doc.length);
+      break;
+    case ReplaceGranularity.selection:
+      replaceSelections(text);
+      break;
+  }
 }
 
 export function markEditorDirty(isDirty: boolean) {

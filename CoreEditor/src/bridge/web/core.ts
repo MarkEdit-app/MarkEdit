@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { resetEditor, clearEditor, getEditorText, insertText, markEditorDirty } from '../../core';
+import { ReplaceGranularity, resetEditor, clearEditor, getEditorText, insertText, replaceText, markEditorDirty } from '../../core';
 
 /**
  * @shouldExport true
@@ -11,6 +11,7 @@ export interface WebModuleCore extends WebModule {
   clearEditor(): void;
   getEditorText(): string;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
+  replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
   markEditorDirty({ isDirty }: { isDirty: boolean }): void;
 }
 
@@ -29,6 +30,10 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void {
     insertText(text, from, to);
+  }
+
+  replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void {
+    replaceText(text, granularity);
   }
 
   markEditorDirty({ isDirty }: { isDirty: boolean }): void {

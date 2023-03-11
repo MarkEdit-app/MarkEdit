@@ -52,11 +52,20 @@
 /* Label for word completion options */
 "Completion:" = "单词补全：";
 
+/* No comment provided by engineer. */
+"Content" = "内容";
+
 /* Phrase used in CodeMirror to indicate control character */
 "Control Character" = "控制字符";
 
 /* Toolbar item to copy pandoc command */
 "Copy Pandoc Command" = "拷贝 Pandoc 指令";
+
+/* No comment provided by engineer. */
+"Create a new document, with an optional parameter to specify the initial content." = "新建一个文档，可通过一个可选参数来指定初始内容。";
+
+/* No comment provided by engineer. */
+"Create New Document" = "创建新文档";
 
 /* Always use dark mode for the app */
 "Dark" = "深色";
@@ -106,8 +115,17 @@
 /* Window title for general settings */
 "General" = "通用";
 
+/* No comment provided by engineer. */
+"Get File Content" = "获取文件内容";
+
+/* No comment provided by engineer. */
+"Get file content of the active document, throws an error if no editor is opened." = "获取当前活跃文档的内容，没有打开的编辑器时将抛出异常。";
+
 /* Placeholder text for goto line window */
 "Go to Line" = "跳转到行";
+
+/* No comment provided by engineer. */
+"Granularity" = "粒度";
 
 /* Option for guessed words suggestion */
 "Guessed words" = "猜测的单词";
@@ -123,6 +141,9 @@
 
 /* Press tab key to indent more */
 "Indents more" = "增加缩进";
+
+/* No comment provided by engineer. */
+"Initial Content" = "初始内容";
 
 /* Toolbar item to insert code */
 "Insert Code" = "插入代码";
@@ -172,11 +193,17 @@
 /* Line endings used on macOS and Unix */
 "macOS / Unix (LF)" = "macOS / Unix (LF)";
 
+/* No comment provided by engineer. */
+"Missing active document to proceed." = "没有活跃的文档来进行下一步。";
+
 /* Never show invisibles */
 "Never" = "从不";
 
 /* Menu item: create a new document */
 "New Document" = "新建文档";
+
+/* No comment provided by engineer. */
+"New Document with ${initialContent}" = "使用 ${initialContent} 新建文档";
 
 /* Behavior when creating new windows */
 "New Window Behavior:" = "新窗口行为：";
@@ -234,6 +261,9 @@
 
 /* Replace mode in search menu */
 "Replace" = "替换";
+
+/* No comment provided by engineer. */
+"Save Changes" = "保存改动";
 
 /* Menu item: select all occurrences */
 "Select All Occurrences" = "选择所有相同项";
@@ -318,6 +348,18 @@
 
 /* Phrase used in CodeMirror to indicate unfolded lines */
 "Unfolded Lines" = "展开的行";
+
+/* No comment provided by engineer. */
+"Update File Content" = "更新文件内容";
+
+/* No comment provided by engineer. */
+"Update file content of the active document, throws an error if no editor is opened." = "更新当前活跃文档的内容，没有打开的编辑器时将抛出异常。";
+
+/* No comment provided by engineer. */
+"Update file with ${content}" = "使用 ${content} 更新文件";
+
+/* No comment provided by engineer. */
+"Whole Document" = "整个文档";
 
 /* Toggle whole word search */
 "Whole Word" = "整词查找";
