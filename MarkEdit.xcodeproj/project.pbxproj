@@ -264,9 +264,9 @@
 			isa = PBXGroup;
 			children = (
 				870A51BE294702FD0095C7EB /* Info.plist */,
-				87F85D5729BC95AE00F3FD37 /* AppShortcuts.strings */,
 				870A51AE294700E00095C7EB /* Info.entitlements */,
 				870A51AB294700E00095C7EB /* Main.storyboard */,
+				87F85D5729BC95AE00F3FD37 /* AppShortcuts.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
