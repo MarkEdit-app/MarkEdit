@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitControls
 import MarkEditCore
 import MarkEditKit
 
@@ -16,7 +17,14 @@ extension EditorViewController {
 
     // It's possible to select a light theme for dark mode,
     // override the window appearance to keep consistent.
-    view.window?.appearance = theme.resolvedAppearance
+    let resolvedAppearance = theme.resolvedAppearance
+    view.window?.appearance = resolvedAppearance
+
+    // Also update windows that inherit appearance from the editor
+    completionContext.appearance = resolvedAppearance
+    NSApp.windows.compactMap { $0 as? GotoLineWindow }.forEach {
+      $0.appearance = resolvedAppearance
+    }
   }
 
   func setFontFamily(_ fontFamily: String) {
