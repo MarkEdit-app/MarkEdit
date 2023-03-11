@@ -206,7 +206,17 @@ extension AppPreferences {
       fontSize: Editor.fontSize,
       showLineNumbers: Editor.showLineNumbers,
       showActiveLineIndicator: Editor.showActiveLineIndicator,
-      invisiblesBehavior: Editor.invisiblesBehavior,
+      invisiblesBehavior: {
+      #if DEBUG
+        if ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] == "YES" {
+          return .always
+        } else {
+          return Editor.invisiblesBehavior
+        }
+      #else
+        return Editor.invisiblesBehavior
+      #endif
+      }(),
       typewriterMode: Editor.typewriterMode,
       focusMode: Editor.focusMode,
       lineWrapping: Editor.lineWrapping,

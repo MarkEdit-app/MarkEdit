@@ -21,16 +21,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
     windowFrameAutosaveName = "Editor"
     window?.setFrameUsingName(windowFrameAutosaveName)
-
-    // Editor view controllers are created without having a window (for pre-loading),
-    // this is used for restoring the autosaved window frame.
-    //
-    // Unfortunately, we need to manually do the window cascading.
-    if let window, NSApp.windows.filter({ $0 is EditorWindow }).count > 1 {
-      autosavedFrame = window.cascadeRect(from: window.frame)
-    } else {
-      autosavedFrame = window?.frame
-    }
+    saveWindowRect()
   }
 
   func windowDidBecomeMain(_ notification: Notification) {
@@ -43,5 +34,27 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
   func windowWillClose(_ notification: Notification) {
     (contentViewController as? EditorViewController)?.clearEditor()
+  }
+}
+
+// MARK: - Private
+
+private extension EditorWindowController {
+  func saveWindowRect() {
+  #if DEBUG
+    guard ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] != "YES" else {
+      return
+    }
+  #endif
+
+    // Editor view controllers are created without having a window (for pre-loading),
+    // this is used for restoring the autosaved window frame.
+    //
+    // Unfortunately, we need to manually do the window cascading.
+    if let window, NSApp.windows.filter({ $0 is EditorWindow }).count > 1 {
+      autosavedFrame = window.cascadeRect(from: window.frame)
+    } else {
+      autosavedFrame = window?.frame
+    }
   }
 }
