@@ -74,6 +74,7 @@
 		87EB9901295755DA00A56B97 /* MarkEditCore in Frameworks */ = {isa = PBXBuildFile; productRef = 87EB9900295755DA00A56B97 /* MarkEditCore */; };
 		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
+		87F85D5929BC95AE00F3FD37 /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87F85D5729BC95AE00F3FD37 /* AppShortcuts.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +182,8 @@
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
 		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
+		87F85D5829BC95AE00F3FD37 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppShortcuts.strings"; sourceTree = "<group>"; };
+		87F85D5B29BC962100F3FD37 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/AppShortcuts.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				870A51BE294702FD0095C7EB /* Info.plist */,
+				87F85D5729BC95AE00F3FD37 /* AppShortcuts.strings */,
 				870A51AE294700E00095C7EB /* Info.entitlements */,
 				870A51AB294700E00095C7EB /* Main.storyboard */,
 			);
@@ -602,6 +606,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				870A51C9294752530095C7EB /* index.html in Resources */,
+				87F85D5929BC95AE00F3FD37 /* AppShortcuts.strings in Resources */,
 				873D6438295FEF220095DEF7 /* Localizable.strings in Resources */,
 				870A51AA294700E00095C7EB /* Assets.xcassets in Resources */,
 				870A51AD294700E00095C7EB /* Main.storyboard in Resources */,
@@ -745,6 +750,15 @@
 				87231E79298E77D800251D09 /* zh-Hant */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		87F85D5729BC95AE00F3FD37 /* AppShortcuts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				87F85D5829BC95AE00F3FD37 /* zh-Hans */,
+				87F85D5B29BC962100F3FD37 /* zh-Hant */,
+			);
+			name = AppShortcuts.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

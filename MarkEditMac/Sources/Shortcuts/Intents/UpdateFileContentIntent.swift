@@ -62,6 +62,6 @@ struct UpdateFileContentIntent: AppIntent {
       }
     }
 
-    return .result(value: true)
+    return .result()
   }
 }
