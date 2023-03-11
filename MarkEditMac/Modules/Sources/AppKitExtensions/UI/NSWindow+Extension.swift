@@ -21,7 +21,7 @@ public extension NSWindow {
     while !stack.isEmpty {
       let node = stack.removeLast()
       if node is NSVisualEffectView && node.superview?.className.hasPrefix("NSTitlebar") == true {
-        // What we want is an NSVisualEffectView descendant of an NSTitlebarView
+        // What we want is an NSVisualEffectView child of an NSTitlebarView
         return node as? NSVisualEffectView
       }
 
