@@ -20,6 +20,14 @@ public extension String {
   func toData(encoding: String.Encoding = .utf8) -> Data? {
     data(using: encoding)
   }
+
+  func equalsIgnoreCase(_ another: String) -> Bool {
+    caseInsensitiveCompare(another) == .orderedSame
+  }
+
+  func hasPrefixIgnoreCase(_ prefix: String) -> Bool {
+    range(of: prefix, options: [.anchored, .caseInsensitive]) != nil
+  }
 }
 
 extension String.Encoding {

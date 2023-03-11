@@ -57,7 +57,7 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
       anchor: anchor,
       partialRange: NSRange(location: from, length: to - from),
       tokenizedWords: (cachedTokens + tokens(in: anchor.text)).filter {
-        $0.range(of: prefix, options: [.anchored, .caseInsensitive]) != nil
+        $0.hasPrefixIgnoreCase(prefix)
       }
     )
   }
