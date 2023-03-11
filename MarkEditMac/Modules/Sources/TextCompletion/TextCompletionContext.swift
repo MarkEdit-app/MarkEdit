@@ -15,21 +15,21 @@ public protocol TextCompletionPanelProtocol {}
  Manages the state of word completions.
  */
 public final class TextCompletionContext {
-  public var isPanelVisible = false {
-    didSet {
-      if !isPanelVisible {
-        panel.orderOut(nil)
-        wasFlipped = false
-      }
-    }
-  }
-
   public var appearance: NSAppearance? {
     get {
       panel.appearance
     }
     set {
       panel.appearance = newValue
+    }
+  }
+
+  public var isPanelVisible = false {
+    didSet {
+      if !isPanelVisible {
+        panel.orderOut(nil)
+        wasFlipped = false
+      }
     }
   }
 

@@ -85,6 +85,7 @@ private final class ContentView: NSView {
 
     let effectView = NSVisualEffectView()
     effectView.material = .popover
+    effectView.state = .active // Looks less dimmed in non-key windows
     effectView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(effectView)
 
