@@ -41,7 +41,7 @@ public final class TextCompletionContext {
       parentWindow.addChildWindow(panel, ordered: .above)
     }
 
-    // Don't make the list absurdly wrong
+    // Don't make the list absurdly long
     panel.updateCompletions(Array(completions.prefix(50)))
     panel.selectTop()
 
