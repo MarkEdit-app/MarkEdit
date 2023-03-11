@@ -79,6 +79,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 private extension AppDelegate {
   @objc private func windowDidResignKey(_ notification: Notification) {
+    // Cancel completion when an editor is no longer the key window
+    if let editor = (notification.object as? NSWindow)?.contentViewController as? EditorViewController {
+      editor.cancelCompletion()
+    }
+
     // To reduce the glitches between switching windows,
     // close openPanel once we don't have any key windows.
     if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {

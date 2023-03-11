@@ -35,6 +35,12 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
     self.backgroundColor = .clear
   }
 
+  override var canBecomeKey: Bool {
+    // We don't need the completion panel to be the key window,
+    // keyboard events are handled in the editor and redirected.
+    false
+  }
+
   override func layoutIfNeeded() {
     super.layoutIfNeeded()
 
