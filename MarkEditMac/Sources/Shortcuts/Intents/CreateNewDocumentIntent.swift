@@ -32,6 +32,6 @@ struct CreateNewDocumentIntent: AppIntent {
       }
     }
 
-    return .result(value: true)
+    return .result()
   }
 }

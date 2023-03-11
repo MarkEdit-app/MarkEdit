@@ -1,0 +1,9 @@
+/* No comment provided by engineer. */
+"Create New Document in ${applicationName}" = "在 ${applicationName} 中创建新文档";
+
+/* No comment provided by engineer. */
+"Get File Content in ${applicationName}" = "在 ${applicationName} 中获取文件内容";
+
+/* No comment provided by engineer. */
+"Update File Content in ${applicationName}" = "在 ${applicationName} 中更新文件内容";
+
