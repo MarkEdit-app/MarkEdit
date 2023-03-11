@@ -19,6 +19,7 @@ public final class TextCompletionContext {
     didSet {
       if !isPanelVisible {
         panel.orderOut(nil)
+        wasFlipped = false
       }
     }
   }
@@ -41,7 +42,7 @@ public final class TextCompletionContext {
       parentWindow.addChildWindow(panel, ordered: .above)
     }
 
-    // Don't make the list absurdly wrong
+    // Don't make the list absurdly long
     panel.updateCompletions(Array(completions.prefix(50)))
     panel.selectTop()
 
@@ -60,9 +61,10 @@ public final class TextCompletionContext {
       origin.x = parentWindow.frame.size.width - panelPadding - panelSize.width
     }
 
-    // Too close to the bottom
-    if origin.y - panelPadding < 0 {
+    // Too close to the bottom, or was already upside down during one typing session
+    if (origin.y - panelPadding < 0) || wasFlipped {
       origin.y = parentWindow.frame.height - caretRect.minY - safeArea + caretPadding
+      wasFlipped = true
     }
 
     let screenOrigin = parentWindow.convertPoint(toScreen: origin)
@@ -92,6 +94,11 @@ public final class TextCompletionContext {
     localizable: localizable,
     commitCompletion: commitCompletion
   )
+
+  // The flag to track whether the panel was flipped during a session,
+  // as the word gets longer, we will likely see fewer suggestions,
+  // we don't want the panel to suddenly flip in this case.
+  private var wasFlipped = false
 
   private let localizable: TextCompletionLocalizable
   private let commitCompletion: () -> Void

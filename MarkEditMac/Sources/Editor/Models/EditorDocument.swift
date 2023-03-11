@@ -104,6 +104,10 @@ extension EditorDocument {
       await saveAsynchronously {
         super.save(sender)
       }
+
+      if sender != nil {
+        hostViewController?.cancelCompletion()
+      }
     }
   }
 
