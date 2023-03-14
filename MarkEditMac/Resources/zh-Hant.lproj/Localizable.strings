@@ -94,6 +94,15 @@
 /* Window title for editor settings */
 "Editor" = "編輯器";
 
+/* No comment provided by engineer. */
+"Evaluate JavaScript" = "執行 JavaScript";
+
+/* No comment provided by engineer. */
+"Evaluate JavaScript and get the result on the active document, throws an error if no editor is opened." = "在當前活躍文件執行 JavaScript 並獲取結果，沒有開啟的編輯器時將丟擲異常。";
+
+/* No comment provided by engineer. */
+"Evaluate JavaScript with ${content}" = "使用 ${content} 執行 JavaScript";
+
 /* Find mode in search menu */
 "Find" = "尋找";
 

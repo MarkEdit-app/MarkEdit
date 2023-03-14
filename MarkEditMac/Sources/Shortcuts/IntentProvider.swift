@@ -14,6 +14,9 @@ struct IntentProvider: AppShortcutsProvider {
       AppShortcut(intent: CreateNewDocumentIntent(), phrases: [
         "Create New Document in \(.applicationName)",
       ]),
+      AppShortcut(intent: CreateNewDocumentIntent(), phrases: [
+        "Evaluate JavaScript in \(.applicationName)",
+      ]),
       AppShortcut(intent: GetFileContentIntent(), phrases: [
         "Get File Content in \(.applicationName)",
       ]),
