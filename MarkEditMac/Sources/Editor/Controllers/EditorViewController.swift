@@ -89,7 +89,8 @@ final class EditorViewController: NSViewController {
 
     let html = [
       AppPreferences.editorConfig.toHtml,
-      EditorStyleSheet.shared.contents,
+      EditorCustomization.style.contents,
+      EditorCustomization.script.contents,
     ].joined(separator: "\n\n")
 
     // Non-nil baseURL is required by web services like Grammarly
