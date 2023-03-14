@@ -20,15 +20,13 @@ struct CreateNewDocumentIntent: AppIntent {
   @Parameter(title: "Initial Content")
   var initialContent: String?
 
-  func perform() async throws -> some IntentResult {
-    await NSDocumentController.shared.newDocument(nil)
-    await NSApp.activate(ignoringOtherApps: true)
+  @MainActor func perform() async throws -> some IntentResult {
+    NSDocumentController.shared.newDocument(nil)
+    NSApp.activate(ignoringOtherApps: true)
 
     DispatchQueue.afterDelay(seconds: 0.2) {
-      Task { @MainActor in
-        if let initialContent {
-          activeController?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
-        }
+      if let initialContent {
+        activeController?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
       }
     }
 

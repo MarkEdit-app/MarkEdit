@@ -12,8 +12,8 @@ struct GetFileContentIntent: AppIntent {
   static var title: LocalizedStringResource = "Get File Content"
   static var description = IntentDescription("Get file content of the active document, throws an error if no editor is opened.")
 
-  func perform() async throws -> some ReturnsValue {
-    guard let fileURL = await activeController?.document?.fileURL else {
+  @MainActor func perform() async throws -> some ReturnsValue {
+    guard let fileURL = activeController?.document?.fileURL else {
       throw IntentError.missingDocument
     }
 
