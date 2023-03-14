@@ -46,19 +46,17 @@ struct UpdateFileContentIntent: AppIntent {
   @Parameter(title: "Save Changes")
   var saveChanges: Bool
 
-  func perform() async throws -> some IntentResult {
-    guard let activeController = await activeController else {
+  @MainActor func perform() async throws -> some IntentResult {
+    guard let activeController else {
       throw IntentError.missingDocument
     }
 
-    Task { @MainActor in
-      activeController.bridge.core.replaceText(
-        text: content,
-        granularity: granularity.replaceGranularity
-      ) { _ in
-        if saveChanges {
-          activeController.document?.save(nil)
-        }
+    activeController.bridge.core.replaceText(
+      text: content,
+      granularity: granularity.replaceGranularity
+    ) { _ in
+      if saveChanges {
+        activeController.document?.save(nil)
       }
     }
 
