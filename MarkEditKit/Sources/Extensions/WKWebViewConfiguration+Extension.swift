@@ -17,14 +17,12 @@ public extension WKWebViewConfiguration {
       Logger.assertFail("Failed to overwrite drawsBackground in WKWebViewConfiguration")
     }
 
-  #if DEBUG
     // https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/API/Cocoa/WKPreferences.mm
     if config.preferences.responds(to: sel_getUid("_developerExtrasEnabled")) {
       config.preferences.setValue(true, forKey: "developerExtrasEnabled")
     } else {
       Logger.assertFail("Failed to overwrite developerExtrasEnabled in WKPreferences")
     }
-  #endif
 
     return config
   }
