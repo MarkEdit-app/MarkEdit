@@ -15,7 +15,7 @@ struct EvaluateJavaScriptIntent: AppIntent {
     Summary("Evaluate JavaScript with \(\.$content)")
   }
 
-  @Parameter(title: "Content")
+  @Parameter(title: "Content", inputOptions: String.IntentInputOptions(capitalizationType: .none, multiline: true, autocorrect: false, smartQuotes: false, smartDashes: false))
   var content: String
 
   @MainActor func perform() async throws -> some IntentResult {
