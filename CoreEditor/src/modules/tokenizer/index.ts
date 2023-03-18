@@ -44,26 +44,29 @@ export async function handleKeyDown(event: KeyboardEvent) {
     return;
   }
 
+  const anchor = state.selection.main.anchor;
+  const head = state.selection.main.head;
+  const line = state.doc.lineAt(anchor);
+
   const moveWord = async(moveFn: ({ anchor }: { anchor: TextTokenizeAnchor }) => Promise<CodeGen_Int>) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const newPos = await moveFn({ anchor: anchorAtPos(pos) });
+    const newPos = await moveFn({ anchor: anchorAtPos(head) });
     editor.dispatch({
-      selection: EditorSelection.cursor(newPos),
+      // When shift key is held, extending the selection rather than moving the caret position
+      selection: event.shiftKey ? EditorSelection.range(anchor, newPos) : EditorSelection.cursor(newPos),
+      scrollIntoView: true,
     });
   };
 
-  const pos = state.selection.main.head;
-  const line = state.doc.lineAt(pos);
-
   // We don't leverage the tokenizer if it's at the start of a line
-  if (event.key === 'ArrowLeft' && line.from !== pos) {
+  if (event.key === 'ArrowLeft' && line.from !== anchor) {
     return moveWord(window.nativeModules.tokenizer.moveWordBackward);
   }
 
   // We don't leverage the tokenizer if it's at the end of a line
-  if (event.key === 'ArrowRight' && line.to !== pos) {
+  if (event.key === 'ArrowRight' && line.to !== head) {
     return moveWord(window.nativeModules.tokenizer.moveWordForward);
   }
 }
@@ -83,7 +86,7 @@ export function tokenizePosition(event: MouseEvent) {
     return null;
   }
 
-  // We don't caret about ascii characters, tokenization is more meaningful for CJK languages.
+  // We don't care about ascii characters, tokenization is more meaningful for CJK languages.
   const character = editor.state.doc.sliceString(pos, pos + 1);
   if (/[ -~]/.test(character)) {
     return null;
