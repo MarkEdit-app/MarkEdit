@@ -86,7 +86,7 @@ export function tokenizePosition(event: MouseEvent) {
     return null;
   }
 
-  // We don't caret about ascii characters, tokenization is more meaningful for CJK languages.
+  // We don't care about ascii characters, tokenization is more meaningful for CJK languages.
   const character = editor.state.doc.sliceString(pos, pos + 1);
   if (/[ -~]/.test(character)) {
     return null;
