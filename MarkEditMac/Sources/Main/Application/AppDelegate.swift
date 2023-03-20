@@ -87,8 +87,12 @@ private extension AppDelegate {
 
     // To reduce the glitches between switching windows,
     // close openPanel once we don't have any key windows.
-    if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
-      NSApp.closeOpenPanels()
+    //
+    // Delay because there's no keyWindow during window transitions.
+    DispatchQueue.afterDelay(seconds: 0.5) {
+      if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
+        NSApp.closeOpenPanels()
+      }
     }
   }
 
