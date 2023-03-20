@@ -13,7 +13,7 @@ import selectedRange from '../selection/selectedRanges';
 import wrapBlock from './wrapBlock';
 
 /**
- * Tokenize words at the click position, especially useful for CJK languages.
+ * Tokenize words at the click position, especially useful for languages like Chinese and Japanese.
  */
 export function wordTokenizer() {
   return EditorView.mouseSelectionStyle.of((editor, event) => {

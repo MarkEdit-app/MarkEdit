@@ -61,12 +61,12 @@ export async function handleKeyDown(event: KeyboardEvent) {
   };
 
   // We don't leverage the tokenizer if it's at the start of a line
-  if (event.key === 'ArrowLeft' && line.from !== anchor) {
+  if (event.key === 'ArrowLeft' && line.from !== anchor && !useBuiltIn(anchor - 1)) {
     return moveWord(window.nativeModules.tokenizer.moveWordBackward);
   }
 
   // We don't leverage the tokenizer if it's at the end of a line
-  if (event.key === 'ArrowRight' && line.to !== head) {
+  if (event.key === 'ArrowRight' && line.to !== head && !useBuiltIn(anchor)) {
     return moveWord(window.nativeModules.tokenizer.moveWordForward);
   }
 }
@@ -82,15 +82,18 @@ export function tokenizePosition(event: MouseEvent) {
 
   const editor = window.editor;
   const pos = editor.posAtCoords({ x: event.clientX, y: event.clientY });
-  if (pos === null) {
-    return null;
-  }
-
-  // We don't care about ascii characters, tokenization is more meaningful for CJK languages.
-  const character = editor.state.doc.sliceString(pos, pos + 1);
-  if (/[ -~]/.test(character)) {
+  if (pos === null || useBuiltIn(pos)) {
     return null;
   }
 
   return pos;
+}
+
+/**
+ * Determines whether to use the built-in tokenization behavior.
+ */
+function useBuiltIn(pos: number) {
+  // We don't care about ascii characters, tokenization is more meaningful for languages like Chinese and Japanese.
+  const character = window.editor.state.doc.sliceString(pos, pos + 1);
+  return /[ -~]/.test(character);
 }
