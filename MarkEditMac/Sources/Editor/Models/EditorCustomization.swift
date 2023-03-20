@@ -9,7 +9,7 @@ import Foundation
 import MarkEditKit
 
 /**
- Style sheet and script to change the appearance and behavior of the editor.
+ Style sheet, script and config file to change the appearance and behavior of the editor.
 
  Files are located at ~/Library/Containers/app.cyan.markedit/Data/Documents/
  */
@@ -17,24 +17,42 @@ final class EditorCustomization {
   enum FileType {
     case style
     case script
+    case pandoc
 
-    var tagName: String {
+    var tagName: String? {
       switch self {
       case .style: return "style"
       case .script: return "script"
+      case .pandoc: return nil
       }
     }
 
-    var pathExtension: String {
+    var fileName: String {
       switch self {
-      case .style: return "css"
-      case .script: return "js"
+      case .style: return "editor.css"
+      case .script: return "editor.js"
+      case .pandoc: return "pandoc.yaml"
       }
     }
   }
 
   static let style = EditorCustomization(fileType: .style)
   static let script = EditorCustomization(fileType: .script)
+  static let pandoc = EditorCustomization(fileType: .pandoc)
+
+  static func createFiles() {
+    style.createFile()
+    script.createFile()
+    pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
+  }
+
+  var fileURL: URL? {
+    FileManager.default.urls(
+      for: .documentDirectory,
+      in: .userDomainMask
+    )
+    .first?.appendingPathComponent(fileType.fileName)
+  }
 
   var contents: String {
     guard let fileURL else {
@@ -45,10 +63,22 @@ final class EditorCustomization {
       return ""
     }
 
-    return "<\(fileType.tagName)>\n\(contents)\n</\(fileType.tagName)>"
+    if let tagName = fileType.tagName {
+      return "<\(tagName)>\n\(contents)\n</\(tagName)>"
+    } else {
+      return contents
+    }
   }
 
-  func createFile() {
+  // MARK: - Private
+
+  private let fileType: FileType
+
+  private init(fileType: FileType) {
+    self.fileType = fileType
+  }
+
+  private func createFile(_ contents: String = "") {
     guard let fileURL else {
       return Logger.assertFail("Missing fileURL to proceed")
     }
@@ -57,22 +87,6 @@ final class EditorCustomization {
       return
     }
 
-    try? "".toData()?.write(to: fileURL)
-  }
-
-  // MARK: - Private
-
-  private let fileType: FileType
-
-  private var fileURL: URL? {
-    FileManager.default.urls(
-      for: .documentDirectory,
-      in: .userDomainMask
-    )
-    .first?.appendingPathComponent("editor.\(fileType.pathExtension)")
-  }
-
-  private init(fileType: FileType) {
-    self.fileType = fileType
+    try? contents.toData()?.write(to: fileURL)
   }
 }

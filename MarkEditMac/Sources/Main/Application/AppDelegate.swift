@@ -49,8 +49,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     NSSpellChecker.swizzleCorrectionIndicatorOnce
 
     EditorReusePool.shared.warmUp()
-    EditorCustomization.style.createFile()
-    EditorCustomization.script.createFile()
+    EditorCustomization.createFiles()
 
     // Initialize this earlier instead of making it lazy,
     // the window size relies on the SwiftUI content view size, it takes time.

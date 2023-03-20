@@ -14,9 +14,9 @@ extension EditorViewController {
     let command = [
       "pandoc",
       url.escapedFilePath,
-      "-f gfm -t \(format)",
-      "--pdf-engine=context",
-      "-s -o \(url.replacingPathExtension(format).escapedFilePath)",
+      "-t \(format)",
+      "-d \(EditorCustomization.pandoc.fileURL?.escapedFilePath ?? "")",
+      "-o \(url.replacingPathExtension(format).escapedFilePath)",
       "&& open \(url.deletingLastPathComponent().escapedFilePath)",
     ].joined(separator: " ")
 
