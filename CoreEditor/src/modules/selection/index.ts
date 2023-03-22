@@ -116,7 +116,7 @@ export function scrollSearchMatchToVisible() {
 export function scrollPositionToVisible(pos: number) {
   const editor = window.editor;
   const coords = editor.coordsAtPos(pos);
-  const margin = 40;
+  const margin = 45;
 
   if (coords === null) {
     return console.error('Error getting coords from pos');
