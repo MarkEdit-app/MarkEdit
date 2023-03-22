@@ -87,6 +87,10 @@ final class EditorViewController: NSViewController {
     webView.uiDelegate = self
     webView.menuDelegate = self
 
+    if #available(macOS 13.3, *) {
+      webView.isInspectable = true
+    }
+
     let html = [
       AppPreferences.editorConfig.toHtml,
       EditorCustomization.style.contents,

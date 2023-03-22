@@ -46,6 +46,8 @@ After successfully building `CoreEditor`, open `MarkEdit.xcodeproj`, and build t
 
 It's recommended to override build settings by adding a `Local.xcconfig` file under the root folder, including code signing identity, development team, etc.
 
+> Note that you should always use the latest version of Xcode.
+
 ## Testing MarkEdit Locally
 
 Unit tests are run automatically by [GitHub actions](https://github.com/MarkEdit-app/MarkEdit/actions), you can also run them on your machine.
