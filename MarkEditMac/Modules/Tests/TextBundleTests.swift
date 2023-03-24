@@ -7,8 +7,6 @@
 import TextBundle
 import XCTest
 
-// MARK: - Private
-
 final class TextBundleTests: XCTestCase {
   func testTextBundleParsing() {
     // swiftlint:disable:next force_unwrapping
