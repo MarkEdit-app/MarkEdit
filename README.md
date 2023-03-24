@@ -22,6 +22,12 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 To learn more, refer to [Philosophy](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy) and [Why MarkEdit](https://github.com/MarkEdit-app/MarkEdit/wiki/Why-MarkEdit).
 
+## Why is MarkEdit Free
+
+MarkEdit is completely free and open source, with no advertising or promotions for other services. We ship it because we love it, and we don't expect any revenue from it.
+
+Please consider starring this project and leaving a nice review on the [Mac App Store](https://markedit.app), your support is all we need.
+
 ## Using MarkEdit
 
 Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki) for details.
