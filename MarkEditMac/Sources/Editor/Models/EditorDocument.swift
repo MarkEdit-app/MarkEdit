@@ -81,9 +81,11 @@ extension EditorDocument {
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
     "md"
   }
+}
 
-  // MARK: - Reading and Writing
+// MARK: - Reading and Writing
 
+extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
     DispatchQueue.global(qos: .userInitiated).async {
       let encoding = AppPreferences.General.defaultTextEncoding
@@ -147,9 +149,11 @@ extension EditorDocument {
       }
     }
   }
+}
 
-  // MARK: - Text Bundle
+// MARK: - Text Bundle
 
+extension EditorDocument {
   override func read(from fileWrapper: FileWrapper, ofType typeName: String) throws {
     guard typeName.isTextBundle else {
       return try super.read(from: fileWrapper, ofType: typeName)
