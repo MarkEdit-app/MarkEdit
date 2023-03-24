@@ -43,7 +43,7 @@
 			<key>NSIsRelatedItemType</key>
 			<true/>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>CFBundleTypeExtensions</key>
