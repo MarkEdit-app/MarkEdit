@@ -21,6 +21,6 @@ final class TextBundleTests: XCTestCase {
     XCTAssertEqual(textBundle?.info.creatorIdentifier, "com.example.editor")
 
     let text = String(data: textBundle?.data ?? Data(), encoding: .utf8)
-    XCTAssert(text?.hasPrefix("# Textbundle Example") == true)
+    XCTAssertEqual(text?.hasPrefix("# Textbundle Example"), true)
   }
 }

@@ -14,7 +14,7 @@ import Foundation
   - info.json
   - text.markdown
 
- FileWrapper parsing is learned from: https://github.com/shinyfrog/TextBundle
+ FileWrapper parsing is learned from: https://github.com/shinyfrog/TextBundle.
  */
 public struct TextBundleWrapper {
   public let data: Data
