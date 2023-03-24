@@ -7,8 +7,8 @@ on:
     branches: ['main']
 
 jobs:
-  build:
-
+  build-and-test:
+    name: Build and test
     runs-on: macos-latest
 
     strategy:
