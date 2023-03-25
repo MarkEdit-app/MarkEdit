@@ -1,3 +1,4 @@
+import formatContent from './formatContent';
 import toggleBlockWithMarks from './toggleBlockWithMarks';
 import toggleLineLeadingMark from './toggleLineLeadingMark';
 import toggleListStyle from './toggleListStyle';
@@ -80,10 +81,6 @@ export function insertMathBlock() {
   insertBlockWithMarks('$$');
 }
 
-export function formatContent(insertFinalNewline: boolean, trimTrailingWhitespace: boolean) {
-  console.log(insertFinalNewline, trimTrailingWhitespace);
-}
-
 /**
  * Wrapper to a series of commands in CodeMirror,
  * we need this because we want to show them in the application.
@@ -104,4 +101,5 @@ export function performEditCommand(command: EditCommand) {
   }
 }
 
+export { formatContent };
 export type { EditCommand };
