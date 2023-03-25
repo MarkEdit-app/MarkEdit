@@ -14,6 +14,6 @@ extension FileWrapper {
   var textFileName: String {
     fileWrappers?.values.first {
       $0.filename?.lowercased().hasPrefix("text.") == true
-    }?.filename ?? "text.markdown"
+    }?.filename ?? FileNames.textFile
   }
 }

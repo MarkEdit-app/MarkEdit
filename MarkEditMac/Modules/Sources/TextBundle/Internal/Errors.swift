@@ -1,5 +1,5 @@
 //
-//  Error.swift
+//  Errors.swift
 //
 //  Created by cyan on 3/23/23.
 //

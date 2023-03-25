@@ -32,7 +32,7 @@ public struct TextBundleWrapper {
       throw TextBundleError.invalidBundle
     }
 
-    guard let infoFileWrapper = fileWrapper.fileWrappers?[Keys.infoFileName] else {
+    guard let infoFileWrapper = fileWrapper.fileWrappers?[FileNames.infoFile] else {
       throw TextBundleError.invalidBundle
     }
 
@@ -44,7 +44,7 @@ public struct TextBundleWrapper {
     info = try JSONDecoder().decode(TextBundleInfo.self, from: infoFileData)
 
     textFileName = fileWrapper.textFileName
-    assetsFileWrapper = fileWrapper.fileWrappers?[Keys.assetsFileName]
+    assetsFileWrapper = fileWrapper.fileWrappers?[FileNames.assetsFolder]
   }
 
   public func textFilePath(baseURL: URL) -> String? {
@@ -59,7 +59,7 @@ public struct TextBundleWrapper {
     jsonEncoder.outputFormatting = [.sortedKeys, .prettyPrinted]
 
     let infoFileData = try jsonEncoder.encode(info)
-    fileWrapper.addRegularFile(withContents: infoFileData, preferredFilename: Keys.infoFileName)
+    fileWrapper.addRegularFile(withContents: infoFileData, preferredFilename: FileNames.infoFile)
 
     if let assetsFileWrapper {
       fileWrapper.addFileWrapper(assetsFileWrapper)
