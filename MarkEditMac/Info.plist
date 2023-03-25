@@ -11,6 +11,8 @@
 			<false/>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -27,6 +29,30 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>net.daringfireball.markdown</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Text Bundle</string>
+			<key>LSTypeIsPackage</key>
+			<integer>1</integer>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
+			<key>NSIsRelatedItemType</key>
+			<true/>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>textbundle</string>
+			</array>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.textbundle.package</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
@@ -76,6 +102,8 @@
 			<string>Markdown</string>
 			<key>UTTypeIdentifier</key>
 			<string>net.daringfireball.markdown</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://daringfireball.net/projects/markdown/</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -86,6 +114,25 @@
 					<string>mkdn</string>
 					<string>mkd</string>
 					<string>mdwn</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Text Bundle</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.textbundle.package</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.textbundle.org</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>textbundle</string>
 				</array>
 			</dict>
 		</dict>
@@ -115,6 +162,27 @@
 					<string>mkdn</string>
 					<string>mkd</string>
 					<string>mdwn</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Text Bundle</string>
+			<key>UTTypeIcons</key>
+			<dict/>
+			<key>UTTypeIdentifier</key>
+			<string>org.textbundle.package</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.textbundle.org</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>textbundle</string>
 				</array>
 			</dict>
 		</dict>

@@ -6,14 +6,16 @@
 
 import AppKit
 import MarkEditKit
+import TextBundle
 
 /**
- Main document used to deal with markdown files.
+ Main document used to deal with markdown files and text bundles.
 
  https://developer.apple.com/documentation/appkit/nsdocument
  */
 final class EditorDocument: NSDocument {
   var fileData: Data?
+  var textBundle: TextBundleWrapper?
   var stringValue = ""
 
   var canUndo: Bool {
@@ -79,9 +81,11 @@ extension EditorDocument {
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
     "md"
   }
+}
 
-  // MARK: - Reading and Writing
+// MARK: - Reading and Writing
 
+extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
     DispatchQueue.global(qos: .userInitiated).async {
       let encoding = AppPreferences.General.defaultTextEncoding
@@ -133,13 +137,40 @@ extension EditorDocument {
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
     DispatchQueue.onMainThread {
       do {
-        if let modificationDate = try FileManager.default.attributesOfItem(atPath: fileURL.path)[.modificationDate] as? Date, modificationDate > (self.fileModificationDate ?? .distantPast) {
+        // For text bundles, use the text.markdown file inside it
+        let filePath = self.textBundle?.textFilePath(baseURL: fileURL) ?? fileURL.path
+        let modificationDate = try FileManager.default.attributesOfItem(atPath: filePath)[.modificationDate] as? Date
+
+        if let modificationDate, modificationDate > (self.fileModificationDate ?? .distantPast) {
+          self.fileModificationDate = modificationDate
           try self.revert(toContentsOf: fileURL, ofType: fileType)
         }
       } catch {
         Logger.log(.error, error.localizedDescription)
       }
     }
+  }
+}
+
+// MARK: - Text Bundle
+
+extension EditorDocument {
+  override func read(from fileWrapper: FileWrapper, ofType typeName: String) throws {
+    guard typeName.isTextBundle else {
+      return try super.read(from: fileWrapper, ofType: typeName)
+    }
+
+    textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
+    try read(from: textBundle?.data ?? Data(), ofType: typeName)
+  }
+
+  override func write(to url: URL, ofType typeName: String) throws {
+    guard typeName.isTextBundle else {
+      return try super.write(to: url, ofType: typeName)
+    }
+
+    let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
+    try fileWrapper?.write(to: url, originalContentsURL: nil)
   }
 }
 

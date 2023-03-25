@@ -34,6 +34,10 @@ let package = Package(
       targets: ["SettingsUI"]
     ),
     .library(
+      name: "TextBundle",
+      targets: ["TextBundle"]
+    ),
+    .library(
       name: "TextCompletion",
       targets: ["TextCompletion"]
     ),
@@ -94,6 +98,13 @@ let package = Package(
       ]
     ),
     .target(
+      name: "TextBundle",
+      path: "Sources/TextBundle",
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
+    .target(
       name: "TextCompletion",
       path: "Sources/TextCompletion",
       plugins: [
@@ -105,8 +116,12 @@ let package = Package(
       name: "ModulesTests",
       dependencies: [
         "AppKitExtensions",
+        "TextBundle",
       ],
       path: "Tests",
+      resources: [
+        .copy("Files/sample.textbundle"),
+      ],
       plugins: [
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
       ]
