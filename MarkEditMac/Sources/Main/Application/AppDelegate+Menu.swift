@@ -51,7 +51,8 @@ private extension AppDelegate {
   }
 
   func reconfigureMainWindowMenu(document: EditorDocument?) {
-    windowFloatingItem?.setOn(document?.isWindowFloating == true)
+    windowFloatingItem?.isEnabled = NSApp.keyWindow is EditorWindow
+    windowFloatingItem?.setOn(NSApp.keyWindow?.level == .floating)
   }
 
   func reconfigureOpenFileInMenu(document: EditorDocument?) {

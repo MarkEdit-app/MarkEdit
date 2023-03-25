@@ -42,6 +42,10 @@ extension EditorViewController: NSMenuItemValidation {
       return tableOfContentsMenuButton != nil
     }
 
+    if menuItem.action == #selector(toggleWindowFloating(_:)) {
+      return view.window?.isKeyWindow == true
+    }
+
     return true
   }
 }
