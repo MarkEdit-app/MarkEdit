@@ -1,5 +1,3 @@
-import { editingState } from '../../common/store';
-
 /**
  * Format the content, usually get called when saving files.
  *
@@ -23,10 +21,6 @@ export default function formatContent(insertFinalNewline: boolean, trimTrailingW
   }
 
   if (trimTrailingWhitespace) {
-    // Dirty trick to prevent the "Edited" state change
-    editingState.isDirty = true;
-    setTimeout(() => editingState.isDirty = false, 50);
-
     // We need to update reversely to avoid index shift
     for (let index = state.doc.lines; index >= 1; --index) {
       const line = state.doc.line(index);
