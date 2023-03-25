@@ -36,6 +36,10 @@ final class EditorDocument: NSDocument {
     }
   }
 
+  var isWindowFloating: Bool {
+    hostViewController?.view.window?.level == .floating
+  }
+
   private weak var hostViewController: EditorViewController?
 
   override func makeWindowControllers() {

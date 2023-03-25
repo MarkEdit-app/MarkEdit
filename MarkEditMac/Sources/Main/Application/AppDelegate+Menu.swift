@@ -18,6 +18,8 @@ extension AppDelegate: NSMenuDelegate {
       lineEndingsMenu?.superMenuItem?.isHidden = noDoc
     case mainEditMenu:
       reconfigureMainEditMenu(document: activeDocument)
+    case mainWindowMenu:
+      reconfigureMainWindowMenu(document: activeDocument)
     case openFileInMenu:
       reconfigureOpenFileInMenu(document: activeDocument)
     case reopenFileMenu:
@@ -35,6 +37,10 @@ extension AppDelegate: NSMenuDelegate {
 private extension AppDelegate {
   var activeDocument: EditorDocument? {
     (NSApp.mainWindow?.contentViewController as? EditorViewController)?.document
+  }
+
+  func reconfigureMainWindowMenu(document: EditorDocument?) {
+    windowFloatingItem?.setOn(document?.isWindowFloating == true)
   }
 
   func reconfigureOpenFileInMenu(document: EditorDocument?) {

@@ -297,6 +297,14 @@ private extension EditorViewController {
   }
 }
 
+// MARK: - Window
+
+private extension EditorViewController {
+  @IBAction func toggleWindowFloating(_ sender: Any?) {
+    view.window?.level = view.window?.level == .floating ? .normal : .floating
+  }
+}
+
 // MARK: - Private
 
 private extension EditorViewController {
