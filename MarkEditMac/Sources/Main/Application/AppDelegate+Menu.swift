@@ -39,6 +39,17 @@ private extension AppDelegate {
     (NSApp.mainWindow?.contentViewController as? EditorViewController)?.document
   }
 
+  func reconfigureMainEditMenu(document: EditorDocument?) {
+    Task { @MainActor in
+      guard let document else {
+        return
+      }
+
+      editUndoItem?.isEnabled = await document.canUndo
+      editRedoItem?.isEnabled = await document.canRedo
+    }
+  }
+
   func reconfigureMainWindowMenu(document: EditorDocument?) {
     windowFloatingItem?.setOn(document?.isWindowFloating == true)
   }
@@ -99,17 +110,6 @@ private extension AppDelegate {
       lineEndingsCRLFItem?.setOn(lineEndings == .crlf)
       lineEndingsCRItem?.setOn(lineEndings == .cr)
       lineEndingsMenu?.reloadItems()
-    }
-  }
-
-  func reconfigureMainEditMenu(document: EditorDocument?) {
-    Task { @MainActor in
-      guard let document else {
-        return
-      }
-
-      editUndoItem?.isEnabled = await document.canUndo
-      editRedoItem?.isEnabled = await document.canRedo
     }
   }
 }
