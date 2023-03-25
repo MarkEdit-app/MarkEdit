@@ -14,12 +14,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var mainFileMenu: NSMenu?
   @IBOutlet weak var mainEditMenu: NSMenu?
 
+  @IBOutlet weak var copyPandocCommandMenu: NSMenu?
   @IBOutlet weak var openFileInMenu: NSMenu?
   @IBOutlet weak var reopenFileMenu: NSMenu?
   @IBOutlet weak var lineEndingsMenu: NSMenu?
   @IBOutlet weak var textFormatMenu: NSMenu?
   @IBOutlet weak var formatHeadersMenu: NSMenu?
-  @IBOutlet weak var copyPandocCommandMenu: NSMenu?
+
+  @IBOutlet weak var lineEndingsLFItem: NSMenuItem?
+  @IBOutlet weak var lineEndingsCRLFItem: NSMenuItem?
+  @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
+
+  @IBOutlet weak var editUndoItem: NSMenuItem?
+  @IBOutlet weak var editRedoItem: NSMenuItem?
 
   @IBOutlet weak var formatBulletItem: NSMenuItem?
   @IBOutlet weak var formatNumberingItem: NSMenuItem?
@@ -28,13 +35,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var formatCodeBlockItem: NSMenuItem?
   @IBOutlet weak var formatMathItem: NSMenuItem?
   @IBOutlet weak var formatMathBlockItem: NSMenuItem?
-
-  @IBOutlet weak var lineEndingsLFItem: NSMenuItem?
-  @IBOutlet weak var lineEndingsCRLFItem: NSMenuItem?
-  @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
-
-  @IBOutlet weak var editUndoItem: NSMenuItem?
-  @IBOutlet weak var editRedoItem: NSMenuItem?
 
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
