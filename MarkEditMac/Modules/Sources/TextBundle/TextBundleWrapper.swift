@@ -40,6 +40,8 @@ public struct TextBundleWrapper {
       throw TextBundleError.invalidBundle
     }
 
+    // The example project by shinyfrog assumes all files are utf-8,
+    // but here we keep the raw data and leave editors to handle it.
     data = textFileData
     info = try JSONDecoder().decode(TextBundleInfo.self, from: infoFileData)
 
@@ -51,6 +53,10 @@ public struct TextBundleWrapper {
     baseURL.appendingPathComponent(textFileName).path
   }
 
+  /// Create a new FileWrapper with text file data.
+  ///
+  /// The example project by shinyfrog assumes all files are utf-8,
+  /// but here we use the data encoded by editors.
   public func fileWrapper(with textFileData: Data) throws -> FileWrapper {
     let fileWrapper = FileWrapper(directoryWithFileWrappers: [:])
     fileWrapper.addRegularFile(withContents: textFileData, preferredFilename: textFileName)
@@ -61,6 +67,7 @@ public struct TextBundleWrapper {
     let infoFileData = try jsonEncoder.encode(info)
     fileWrapper.addRegularFile(withContents: infoFileData, preferredFilename: FileNames.infoFile)
 
+    // For now, we don't care about assets, just add it back if we have
     if let assetsFileWrapper {
       fileWrapper.addFileWrapper(assetsFileWrapper)
     }
