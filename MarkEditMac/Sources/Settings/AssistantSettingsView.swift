@@ -9,6 +9,8 @@ import SwiftUI
 import SettingsUI
 
 struct AssistantSettingsView: View {
+  @State private var insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
+  @State private var trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
   @State private var wordsInDocument = AppPreferences.Assistant.wordsInDocument
   @State private var standardWords = AppPreferences.Assistant.standardWords
   @State private var guessedWords = AppPreferences.Assistant.guessedWords
@@ -16,6 +18,28 @@ struct AssistantSettingsView: View {
 
   var body: some View {
     SettingsForm {
+      Section {
+        VStack(alignment: .leading) {
+          Toggle(isOn: $insertFinalNewline) {
+            Text(Localized.Settings.insertFinalNewline)
+          }
+          .onChange(of: insertFinalNewline) {
+            AppPreferences.Assistant.insertFinalNewline = $0
+          }
+
+          Toggle(isOn: $trimTrailingWhitespace) {
+            Text(Localized.Settings.trimTrailingWhitespace)
+          }
+          .onChange(of: trimTrailingWhitespace) {
+            AppPreferences.Assistant.trimTrailingWhitespace = $0
+          }
+
+          Text(Localized.Settings.fileFormattingHint)
+            .formDescription()
+        }
+        .formLabel(alignment: .top, Localized.Settings.formatFiles)
+      }
+
       Section {
         VStack(alignment: .leading) {
           Toggle(isOn: $wordsInDocument) {
@@ -40,8 +64,7 @@ struct AssistantSettingsView: View {
           }
 
           Text(Localized.Settings.completionHint)
-            .font(.system(size: 12))
-            .foregroundStyle(.secondary)
+            .formDescription()
         }
         .formLabel(alignment: .top, Localized.Settings.completion)
       }

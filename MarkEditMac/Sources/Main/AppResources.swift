@@ -120,6 +120,10 @@ enum Localized {
 
     // Assistant
     static let assistant = String(localized: "Assistant", comment: "Window title for assistant settings")
+    static let formatFiles = String(localized: "Format Files:", comment: "Label for file formatting options")
+    static let insertFinalNewline = String(localized: "Insert final newline", comment: "Option for inserting newline at end of file")
+    static let trimTrailingWhitespace = String(localized: "Trim trailing whitespace", comment: "Option for trimming trailing whitespaces")
+    static let fileFormattingHint = String(localized: "Format when saving files.", comment: "Hint for format files on save")
     static let completion = String(localized: "Completion:", comment: "Label for word completion options")
     static let wordsInDocument = String(localized: "Words in document", comment: "Option for words in documents suggestion")
     static let standardWords = String(localized: "Standard words", comment: "Option for standard words suggestion")
