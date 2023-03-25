@@ -80,6 +80,10 @@ export function insertMathBlock() {
   insertBlockWithMarks('$$');
 }
 
+export function formatContent(insertFinalNewline: boolean, trimTrailingWhitespace: boolean) {
+  console.log(insertFinalNewline, trimTrailingWhitespace);
+}
+
 /**
  * Wrapper to a series of commands in CodeMirror,
  * we need this because we want to show them in the application.

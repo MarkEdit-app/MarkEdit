@@ -199,6 +199,21 @@ extension EditorDocument {
 
 private extension EditorDocument {
   func saveAsynchronously(saveAction: () -> Void) async {
+    let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
+    let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
+
+    // Format when saving files, only if at least one option is enabled
+    if insertFinalNewline || trimTrailingWhitespace {
+      await withCheckedContinuation { continuation in
+        hostViewController?.bridge.format.formatContent(
+          insertFinalNewline: insertFinalNewline,
+          trimTrailingWhitespace: trimTrailingWhitespace
+        ) { _ in
+          continuation.resume()
+        }
+      }
+    }
+
     guard let editorText = await hostViewController?.editorText else {
       return
     }
