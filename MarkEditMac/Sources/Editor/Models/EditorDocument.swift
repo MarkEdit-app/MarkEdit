@@ -137,6 +137,7 @@ extension EditorDocument {
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
     DispatchQueue.onMainThread {
       do {
+        // For text bundles, use the text.markdown file inside it
         let filePath = self.textBundle?.textFilePath(baseURL: fileURL) ?? fileURL.path
         let modificationDate = try FileManager.default.attributesOfItem(atPath: filePath)[.modificationDate] as? Date
 
