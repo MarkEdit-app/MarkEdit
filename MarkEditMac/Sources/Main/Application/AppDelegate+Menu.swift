@@ -18,6 +18,8 @@ extension AppDelegate: NSMenuDelegate {
       lineEndingsMenu?.superMenuItem?.isHidden = noDoc
     case mainEditMenu:
       reconfigureMainEditMenu(document: activeDocument)
+    case mainWindowMenu:
+      reconfigureMainWindowMenu(document: activeDocument)
     case openFileInMenu:
       reconfigureOpenFileInMenu(document: activeDocument)
     case reopenFileMenu:
@@ -35,6 +37,22 @@ extension AppDelegate: NSMenuDelegate {
 private extension AppDelegate {
   var activeDocument: EditorDocument? {
     (NSApp.mainWindow?.contentViewController as? EditorViewController)?.document
+  }
+
+  func reconfigureMainEditMenu(document: EditorDocument?) {
+    Task { @MainActor in
+      guard let document else {
+        return
+      }
+
+      editUndoItem?.isEnabled = await document.canUndo
+      editRedoItem?.isEnabled = await document.canRedo
+    }
+  }
+
+  func reconfigureMainWindowMenu(document: EditorDocument?) {
+    windowFloatingItem?.isEnabled = NSApp.keyWindow is EditorWindow
+    windowFloatingItem?.setOn(NSApp.keyWindow?.level == .floating)
   }
 
   func reconfigureOpenFileInMenu(document: EditorDocument?) {
@@ -93,17 +111,6 @@ private extension AppDelegate {
       lineEndingsCRLFItem?.setOn(lineEndings == .crlf)
       lineEndingsCRItem?.setOn(lineEndings == .cr)
       lineEndingsMenu?.reloadItems()
-    }
-  }
-
-  func reconfigureMainEditMenu(document: EditorDocument?) {
-    Task { @MainActor in
-      guard let document else {
-        return
-      }
-
-      editUndoItem?.isEnabled = await document.canUndo
-      editRedoItem?.isEnabled = await document.canRedo
     }
   }
 }

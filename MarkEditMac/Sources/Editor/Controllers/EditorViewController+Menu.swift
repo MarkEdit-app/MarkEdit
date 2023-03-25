@@ -42,6 +42,10 @@ extension EditorViewController: NSMenuItemValidation {
       return tableOfContentsMenuButton != nil
     }
 
+    if menuItem.action == #selector(toggleWindowFloating(_:)) {
+      return view.window?.isKeyWindow == true
+    }
+
     return true
   }
 }
@@ -294,6 +298,14 @@ private extension EditorViewController {
   @IBAction func toggleGrammarly(_ sender: Any?) {
     (sender as? NSMenuItem)?.toggle()
     Grammarly.shared.toggle(bridge: bridge.grammarly)
+  }
+}
+
+// MARK: - Window
+
+private extension EditorViewController {
+  @IBAction func toggleWindowFloating(_ sender: Any?) {
+    view.window?.level = view.window?.level == .floating ? .normal : .floating
   }
 }
 
