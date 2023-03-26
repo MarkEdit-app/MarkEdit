@@ -30,6 +30,10 @@ public extension View {
   func formHorizontalRadio() -> some View {
     pickerStyle(.radioGroup).horizontalRadioGroupLayout()
   }
+
+  func formDescription() -> some View {
+    font(.system(size: 12)).foregroundStyle(.secondary)
+  }
 }
 
 // MARK: - Private

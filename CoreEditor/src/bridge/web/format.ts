@@ -14,6 +14,7 @@ import {
   insertCodeBlock,
   insertMathBlock,
   insertHorizontalRule,
+  formatContent,
   performEditCommand,
 } from '../../modules/commands';
 
@@ -40,6 +41,7 @@ export interface WebModuleFormat extends WebModule {
   insertHorizontalRule(): void;
   insertHyperLink({ title, url, prefix }: { title: string; url: string; prefix?: string }): void;
   insertTable({ columnName, itemName }: { columnName: string; itemName: string }): void;
+  formatContent({ insertFinalNewline, trimTrailingWhitespace }: { insertFinalNewline: boolean; trimTrailingWhitespace: boolean }): void;
   performEditCommand({ command }: { command: EditCommand }): void;
 }
 
@@ -102,6 +104,10 @@ export class WebModuleFormatImpl implements WebModuleFormat {
 
   insertTable({ columnName, itemName }: { columnName: string; itemName: string }): void {
     insertTable(columnName, itemName);
+  }
+
+  formatContent({ insertFinalNewline, trimTrailingWhitespace }: { insertFinalNewline: boolean; trimTrailingWhitespace: boolean }): void {
+    formatContent(insertFinalNewline, trimTrailingWhitespace);
   }
 
   performEditCommand({ command }: { command: EditCommand }): void {

@@ -121,6 +121,12 @@
 /* Label for font settings */
 "Font:" = "字体：";
 
+/* Label for file formatting options */
+"Format Files:" = "格式化文件：";
+
+/* Hint for format files on save */
+"Format when saving files." = "保存时进行格式化。";
+
 /* Window title for general settings */
 "General" = "通用";
 
@@ -156,6 +162,9 @@
 
 /* Toolbar item to insert code */
 "Insert Code" = "插入代码";
+
+/* Option for inserting newline at end of file */
+"Insert final newline" = "插入最终换行";
 
 /* Toolbar item to insert image */
 "Insert Image" = "插入图片";
@@ -348,6 +357,9 @@
 
 /* Show trailing invisibles */
 "Trailing" = "尾部空白";
+
+/* Option for trimming trailing whitespaces */
+"Trim trailing whitespace" = "移除尾部空白";
 
 /* Phrase used in CodeMirror to unfold a piece of text */
 "Unfold" = "展开";

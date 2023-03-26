@@ -1,3 +1,4 @@
+import formatContent from './formatContent';
 import toggleBlockWithMarks from './toggleBlockWithMarks';
 import toggleLineLeadingMark from './toggleLineLeadingMark';
 import toggleListStyle from './toggleListStyle';
@@ -100,4 +101,5 @@ export function performEditCommand(command: EditCommand) {
   }
 }
 
+export { formatContent };
 export type { EditCommand };

@@ -142,6 +142,12 @@ enum AppPreferences {
   }
 
   enum Assistant {
+    @Storage(key: "assistant.insert-final-newline", defaultValue: false)
+    static var insertFinalNewline: Bool
+
+    @Storage(key: "assistant.trim-trailing-whitespace", defaultValue: false)
+    static var trimTrailingWhitespace: Bool
+
     @Storage(key: "assistant.words-in-document", defaultValue: true)
     static var wordsInDocument: Bool
 
