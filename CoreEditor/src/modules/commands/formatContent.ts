@@ -1,5 +1,5 @@
 /**
- * Format the content, usually get called when saving files.
+ * Format the content, usually gets called when saving files.
  *
  * @param insertFinalNewline Whether to insert newline at end of file
  * @param trimTrailingWhitespace Whether to remove trailing whitespaces
