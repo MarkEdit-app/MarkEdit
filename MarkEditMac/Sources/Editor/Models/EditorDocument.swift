@@ -172,6 +172,20 @@ extension EditorDocument {
     let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
     try fileWrapper?.write(to: url, originalContentsURL: nil)
   }
+
+  override func duplicate() throws -> NSDocument {
+    guard textBundle != nil, let fileURL else {
+      return try super.duplicate()
+    }
+
+    // We currently don't support creating text bundles,
+    // this will just duplicate the Markdown file inside it.
+    return try NSDocumentController.shared.duplicateDocument(
+      withContentsOf: fileURL,
+      copying: true,
+      displayName: fileURL.deletingPathExtension().lastPathComponent
+    )
+  }
 }
 
 // MARK: - Printing
