@@ -30,9 +30,8 @@ public final class Grammarly {
     }
   }
 
-  public func startOAuth(url: URL, bridge: WebBridgeGrammarly?) {
+  public func startOAuth(bridge: WebBridgeGrammarly?) {
     self.bridge = bridge
-    NSWorkspace.shared.open(url)
   }
 
   public func completeOAuth(url: URL) {

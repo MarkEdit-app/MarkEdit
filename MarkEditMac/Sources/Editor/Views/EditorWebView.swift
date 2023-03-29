@@ -21,6 +21,7 @@ protocol EditorWebViewMenuDelegate: AnyObject {
  Lightweight wrapper for WKWebView used in editors.
  */
 final class EditorWebView: WKWebView {
+  static let baseURL = "http://localhost/"
   weak var menuDelegate: EditorWebViewMenuDelegate?
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
