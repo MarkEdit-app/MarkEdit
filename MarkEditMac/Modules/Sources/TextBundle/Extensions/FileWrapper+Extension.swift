@@ -13,7 +13,9 @@ extension FileWrapper {
   /// but their app (and many other apps) uses `.markdown` as the path extension.
   var textFileName: String {
     fileWrappers?.values.first {
-      $0.filename?.lowercased().hasPrefix("text.") == true
+      // The spec says path extensions can be arbitrary, but let's ignore generated html
+      let filename = $0.filename?.lowercased()
+      return filename?.hasPrefix("text.") == true && filename != "text.html"
     }?.filename ?? FileNames.textFile
   }
 }

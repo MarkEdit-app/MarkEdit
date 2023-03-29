@@ -36,8 +36,12 @@ final class EditorDocument: NSDocument {
     }
   }
 
-  var folderURL: URL? {
-    textBundle != nil ? fileURL : fileURL?.deletingLastPathComponent()
+  var baseURL: URL? {
+    textBundle != nil ? fileURL : folderURL
+  }
+
+  var textFileURL: URL? {
+    fileURL?.appendingPathComponent(textBundle?.textFileName ?? "")
   }
 
   private weak var hostViewController: EditorViewController?

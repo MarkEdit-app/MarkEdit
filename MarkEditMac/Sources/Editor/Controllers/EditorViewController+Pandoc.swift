@@ -9,15 +9,23 @@ import AppKit
 import MarkEditKit
 
 extension EditorViewController {
-  func copyPandocCommand(url: URL, format: String) {
-    // https://pandoc.org/
+  /// https://pandoc.org/
+  func copyPandocCommand(document: EditorDocument, format: String) {
+    guard let inputURL = document.textFileURL else {
+      Logger.log(.error, "Failed to copy pandoc command")
+      return
+    }
+
+    let configPath = EditorCustomization.pandoc.fileURL?.escapedFilePath ?? ""
+    let outputPath = inputURL.replacingPathExtension(format).escapedFilePath
+
     let command = [
       "pandoc",
-      url.escapedFilePath,
+      inputURL.escapedFilePath,
       "-t \(format)",
-      "-d \(EditorCustomization.pandoc.fileURL?.escapedFilePath ?? "")",
-      "-o \(url.replacingPathExtension(format).escapedFilePath)",
-      "&& open \(url.deletingLastPathComponent().escapedFilePath)",
+      "-d \(configPath)",
+      "-o \(outputPath)",
+      "&& open -R \(outputPath)",
     ].joined(separator: " ")
 
     NSPasteboard.general.overwrite(string: command)
