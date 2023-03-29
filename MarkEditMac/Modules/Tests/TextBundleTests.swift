@@ -13,12 +13,7 @@ final class TextBundleTests: XCTestCase {
     let url = Bundle.module.url(forResource: "sample.textbundle", withExtension: nil)!
     let textBundle = try? TextBundleWrapper(fileWrapper: FileWrapper(url: url))
 
-    XCTAssertEqual(textBundle?.info.version, 2)
-    XCTAssertEqual(textBundle?.info.transient, true)
-    XCTAssertEqual(textBundle?.info.type, "net.daringfireball.markdown")
-    XCTAssertEqual(textBundle?.info.creatorIdentifier, "com.example.editor")
-
-    let text = String(data: textBundle?.data ?? Data(), encoding: .utf8)
-    XCTAssertEqual(text?.hasPrefix("# Textbundle Example"), true)
+    let textContent = String(data: textBundle?.data ?? Data(), encoding: .utf8)
+    XCTAssertEqual(textContent?.hasPrefix("# Textbundle Example"), true)
   }
 }

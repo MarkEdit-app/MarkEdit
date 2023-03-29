@@ -18,9 +18,9 @@ import Foundation
  */
 public struct TextBundleWrapper {
   public let data: Data
-  public let info: TextBundleInfo
+  public let textFileName: String
 
-  private let textFileName: String
+  private let infoFileWrapper: FileWrapper?
   private let assetsFileWrapper: FileWrapper?
 
   public init(fileWrapper: FileWrapper) throws {
@@ -32,20 +32,12 @@ public struct TextBundleWrapper {
       throw TextBundleError.invalidBundle
     }
 
-    guard let infoFileWrapper = fileWrapper.fileWrappers?[FileNames.infoFile] else {
-      throw TextBundleError.invalidBundle
-    }
-
-    guard let infoFileData = infoFileWrapper.regularFileContents else {
-      throw TextBundleError.invalidBundle
-    }
-
     // The example project by shinyfrog assumes all files are utf-8,
     // but here we keep the raw data and leave editors to handle it.
     data = textFileData
-    info = try JSONDecoder().decode(TextBundleInfo.self, from: infoFileData)
-
     textFileName = fileWrapper.textFileName
+
+    infoFileWrapper = fileWrapper.fileWrappers?[FileNames.infoFile]
     assetsFileWrapper = fileWrapper.fileWrappers?[FileNames.assetsFolder]
   }
 
@@ -61,11 +53,10 @@ public struct TextBundleWrapper {
     let fileWrapper = FileWrapper(directoryWithFileWrappers: [:])
     fileWrapper.addRegularFile(withContents: textFileData, preferredFilename: textFileName)
 
-    let jsonEncoder = JSONEncoder()
-    jsonEncoder.outputFormatting = [.sortedKeys, .prettyPrinted]
-
-    let infoFileData = try jsonEncoder.encode(info)
-    fileWrapper.addRegularFile(withContents: infoFileData, preferredFilename: FileNames.infoFile)
+    // For now, we don't change info.json, just add it back if we have
+    if let infoFileWrapper {
+      fileWrapper.addFileWrapper(infoFileWrapper)
+    }
 
     // For now, we don't care about assets, just add it back if we have
     if let assetsFileWrapper {
