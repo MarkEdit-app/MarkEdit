@@ -19,11 +19,16 @@ extension EditorViewController: WKUIDelegate {
       return nil
     }
 
-    // Instead of creating a new WebView, opening the link in the system default browser
-    if url.absoluteString.contains("grammarly") {
-      Grammarly.shared.startOAuth(url: url, bridge: bridge.grammarly)
-    } else {
-      NSWorkspace.shared.open(url)
+    // Capture the bridge for Grammarly OAuth requests
+    if url.absoluteString.contains("grammarly.com") {
+      Grammarly.shared.startOAuth(bridge: bridge.grammarly)
+    }
+
+    // Instead of creating a new WebView, opening the link using the system default behavior.
+    //
+    // It's a local file when it starts with baseURL, replace it with folder path.
+    if let url = URL(string: url.absoluteString.replacingOccurrences(of: EditorWebView.baseURL, with: document?.folderURL?.absoluteString ?? "")) {
+      NSWorkspace.shared.openOrReveal(url: url)
     }
 
     return nil

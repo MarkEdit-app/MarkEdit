@@ -36,6 +36,10 @@ final class EditorDocument: NSDocument {
     }
   }
 
+  var folderURL: URL? {
+    textBundle != nil ? fileURL : fileURL?.deletingLastPathComponent()
+  }
+
   private weak var hostViewController: EditorViewController?
 
   override func makeWindowControllers() {

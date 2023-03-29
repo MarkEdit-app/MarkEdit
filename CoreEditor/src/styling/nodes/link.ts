@@ -1,16 +1,31 @@
+import { Decoration, MatchDecorator } from '@codemirror/view';
 import { Compartment } from '@codemirror/state';
 import { clickableLinks as compartments } from '../../common/store';
-import { createMarkDeco } from '../matchers/regex';
 import { startEffect, stopEffect } from '../matchers/stateful';
 
 // Fragile approach, but we only use it for link clicking, it should be fine
-const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|(\[.*?\]\()(.+?)\)/g;
 const className = 'cm-md-link';
+
+const matcher = new MatchDecorator({
+  regexp,
+  boundary: /\S/,
+  decorate: (add, from, to, match) => {
+    const deco = Decoration.mark({ class: className });
+    if (match[3]) {
+      // Markdown links, only decorate the part inside parentheses
+      add(from + match[3].length, to - 1, deco);
+    } else {
+      // Normal links, decorate the full match
+      add(from, to, deco);
+    }
+  },
+});
 
 export function startClickable() {
   const compartment = new Compartment;
   compartments.push(compartment);
-  startEffect(compartment, createMarkDeco(pattern, className));
+  startEffect(compartment, matcher.createDeco(window.editor));
 }
 
 export function stopClickable() {

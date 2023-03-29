@@ -26,4 +26,19 @@ public extension NSWorkspace {
       openApplication(at: url, configuration: Self.OpenConfiguration())
     }
   }
+
+  /// Open the URL if we can, otherwise reveal it in Finder.
+  ///
+  /// The return value indicates whether it's successfully opened.
+  @discardableResult
+  func openOrReveal(url: URL) -> Bool {
+    // It's not a local file or we have read access, we just open it
+    guard url.scheme == "file" && !FileManager.default.isReadableFile(atPath: url.path) else {
+      return open(url)
+    }
+
+    // Otherwise, we can only reveal it in Finder
+    activateFileViewerSelecting([url])
+    return false
+  }
 }

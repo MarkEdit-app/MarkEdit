@@ -103,8 +103,8 @@ final class EditorViewController: NSViewController {
       EditorCustomization.script.contents,
     ].joined(separator: "\n\n")
 
-    // Non-nil baseURL is required by web services like Grammarly
-    let baseURL = URL(string: "http://localhost")
+    // Non-nil baseURL is required by Grammarly and opening local files
+    let baseURL = URL(string: EditorWebView.baseURL)
     webView.loadHTMLString(html, baseURL: baseURL)
 
     return webView
