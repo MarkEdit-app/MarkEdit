@@ -104,9 +104,7 @@ final class EditorViewController: NSViewController {
     ].joined(separator: "\n\n")
 
     // Non-nil baseURL is required by Grammarly and opening local files
-    let baseURL = URL(string: EditorWebView.baseURL)
-    webView.loadHTMLString(html, baseURL: baseURL)
-
+    webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
     return webView
   }()
 

@@ -209,12 +209,12 @@ private extension EditorViewController {
   }
 
   @IBAction func copyPandocCommand(_ sender: Any?) {
-    guard let fileURL = document?.fileURL, let format = (sender as? NSMenuItem)?.identifier?.rawValue else {
+    guard let document, let format = (sender as? NSMenuItem)?.identifier?.rawValue else {
       Logger.log(.error, "Failed to copy pandoc command")
       return
     }
 
-    copyPandocCommand(url: fileURL, format: format)
+    copyPandocCommand(document: document, format: format)
   }
 
   @IBAction func learnPandoc(_ sender: Any?) {

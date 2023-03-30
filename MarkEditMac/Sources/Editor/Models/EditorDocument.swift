@@ -36,8 +36,12 @@ final class EditorDocument: NSDocument {
     }
   }
 
-  var folderURL: URL? {
-    textBundle != nil ? fileURL : fileURL?.deletingLastPathComponent()
+  var baseURL: URL? {
+    textBundle != nil ? fileURL : folderURL
+  }
+
+  var textFileURL: URL? {
+    fileURL?.appendingPathComponent(textBundle?.textFileName ?? "")
   }
 
   private weak var hostViewController: EditorViewController?
@@ -82,8 +86,13 @@ extension EditorDocument {
     true
   }
 
+  override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
+    // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
+    textBundle == nil ? ["net.daringfireball.markdown"] : ["org.textbundle.package"]
+  }
+
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    "md"
+    typeName.isTextBundle ? "textbundle" : "md"
   }
 }
 
@@ -182,8 +191,6 @@ extension EditorDocument {
       return try super.duplicate()
     }
 
-    // We currently don't support creating text bundles,
-    // this will just duplicate the Markdown file inside it.
     return try NSDocumentController.shared.duplicateDocument(
       withContentsOf: fileURL,
       copying: true,
