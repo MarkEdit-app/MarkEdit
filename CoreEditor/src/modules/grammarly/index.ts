@@ -7,14 +7,8 @@ let plugin: Grammarly.GrammarlyEditorPluginElement | undefined = undefined;
  * Connect to a Grammarly instance: https://developer.grammarly.com/.
  */
 export function connect(clientID: string, redirectURI: string) {
-  const element = document.querySelector('div[contenteditable=true]');
-  if (!(element instanceof HTMLElement)) {
-    console.error('Failed to retrieve contentEditable from the DOM tree');
-    return;
-  }
-
   const setUp = (sdk: Grammarly.EditorSDK) => {
-    plugin = sdk.addPlugin(element, {
+    plugin = sdk.addPlugin(window.editor.contentDOM, {
       activation: 'immediate',
       oauthRedirectUri: redirectURI,
     });
