@@ -22,6 +22,7 @@ export function connect(clientID: string, redirectURI: string) {
     // Don't let Grammarly steal the focus, typing is more important
     window.editor.focus();
     grammarly = sdk;
+    storage.isConnected = true;
   };
 
   if (grammarly === undefined) {
@@ -40,9 +41,8 @@ export function connect(clientID: string, redirectURI: string) {
 }
 
 export function disconnect() {
-  if (plugin !== undefined) {
-    plugin.disconnect();
-  }
+  plugin?.disconnect();
+  storage.isConnected = false;
 }
 
 /**
@@ -90,3 +90,57 @@ export function centerActiveDialog() {
     });
   }, 500);
 }
+
+/**
+ * Learn more: https://github.com/grammarly/grammarly-for-developers/discussions/569
+ */
+export function trottleMutations() {
+  // eslint-disable-next-line no-global-assign
+  MutationObserver = new Proxy(MutationObserver, {
+    construct(target, args) {
+      return new target(mutations => {
+        const callback = args[0];
+        if (typeof callback !== 'function') {
+          return;
+        }
+
+        // When scroll fast, Grammarly can generate thousands of mutations
+        if (storage.isIdle && (callback.toString() as string).includes('updateText')) {
+          return;
+        }
+
+        callback(mutations);
+      });
+    },
+  });
+}
+
+/**
+ * Learn more: https://github.com/grammarly/grammarly-for-developers/discussions/569
+ */
+export function setIdle(isIdle: boolean) {
+  storage.isIdle = storage.isConnected && isIdle;
+  if (storage.mutateTimer !== undefined) {
+    clearTimeout(storage.mutateTimer);
+  }
+
+  if (storage.isIdle || !storage.isConnected) {
+    return;
+  }
+
+  // This triggers a MutationObserver change, which leads to Grammarly to re-check
+  storage.mutateTimer = setTimeout(() => {
+    const element = window.editor.contentDOM;
+    element.setAttribute('x-grammarly-date', `${Date.now()}`);
+  }, 900);
+}
+
+const storage: {
+  isConnected: boolean;
+  isIdle: boolean;
+  mutateTimer: ReturnType<typeof setTimeout> | undefined;
+} = {
+  isConnected: false,
+  isIdle: true,
+  mutateTimer: undefined,
+};
