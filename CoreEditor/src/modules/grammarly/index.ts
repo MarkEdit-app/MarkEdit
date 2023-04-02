@@ -7,8 +7,9 @@ let plugin: Grammarly.GrammarlyEditorPluginElement | undefined = undefined;
  * Connect to a Grammarly instance: https://developer.grammarly.com/.
  */
 export function connect(clientID: string, redirectURI: string) {
+  const contentDOM = window.editor.contentDOM;
   const setUp = (sdk: Grammarly.EditorSDK) => {
-    plugin = sdk.addPlugin(window.editor.contentDOM, {
+    plugin = sdk.addPlugin(contentDOM, {
       activation: 'immediate',
       oauthRedirectUri: redirectURI,
     });
@@ -124,8 +125,8 @@ export function setIdle(isIdle: boolean) {
 
   // This triggers a MutationObserver change, which leads to Grammarly to re-check
   storage.mutateTimer = setTimeout(() => {
-    const element = window.editor.contentDOM;
-    element.setAttribute('x-grammarly-date', `${Date.now()}`);
+    const contentDOM = window.editor.contentDOM;
+    contentDOM.setAttribute('x-grammarly-date', `${Date.now()}`);
   }, 900);
 }
 
