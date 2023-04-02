@@ -1,42 +1,31 @@
 import * as Grammarly from '@grammarly/editor-sdk';
 
-let grammarly: Grammarly.EditorSDK | undefined = undefined;
-let plugin: Grammarly.GrammarlyEditorPluginElement | undefined = undefined;
-
 /**
  * Connect to a Grammarly instance: https://developer.grammarly.com/.
  */
-export function connect(clientID: string, redirectURI: string) {
-  const contentDOM = window.editor.contentDOM;
-  const setUp = (sdk: Grammarly.EditorSDK) => {
-    plugin = sdk.addPlugin(contentDOM, {
+export async function connect(clientID: string, redirectURI: string) {
+  try {
+    if (grammarly.sdk === undefined) {
+      grammarly.sdk = await Grammarly.init(clientID);
+    }
+
+    // Unfornately, plugin.connect() won't bring the plugin back,
+    // we must call addPlugin every time we re-enable Grammarly.
+    grammarly.plugin = grammarly.sdk.addPlugin(window.editor.contentDOM, {
       activation: 'immediate',
       oauthRedirectUri: redirectURI,
     });
 
     // Don't let Grammarly steal the focus, typing is more important
     window.editor.focus();
-    grammarly = sdk;
     storage.isConnected = true;
-  };
-
-  if (grammarly === undefined) {
-    (async() => {
-      try {
-        setUp(await Grammarly.init(clientID));
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  } else {
-    // Unfornately, plugin.connect() won't bring the plugin back,
-    // we have to call addPlugin again
-    setUp(grammarly);
+  } catch (error) {
+    console.error(error);
   }
 }
 
 export function disconnect() {
-  plugin?.disconnect();
+  grammarly.plugin?.disconnect();
   storage.isConnected = false;
 }
 
@@ -46,8 +35,8 @@ export function disconnect() {
  * @param url URL that contains auth information
  */
 export function completeOAuth(url: string) {
-  if (grammarly !== undefined) {
-    grammarly.handleOAuthCallback(url);
+  if (grammarly.sdk !== undefined) {
+    grammarly.sdk.handleOAuthCallback(url);
   } else {
     console.error('Grammarly is not initialized yet');
   }
@@ -129,6 +118,14 @@ export function setIdle(isIdle: boolean) {
     contentDOM.setAttribute('x-grammarly-date', `${Date.now()}`);
   }, 900);
 }
+
+const grammarly: {
+  sdk: Grammarly.EditorSDK | undefined;
+  plugin: Grammarly.GrammarlyEditorPluginElement | undefined;
+} = {
+  sdk: undefined,
+  plugin: undefined,
+};
 
 const storage: {
   isConnected: boolean;
