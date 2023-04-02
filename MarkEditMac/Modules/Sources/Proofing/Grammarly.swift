@@ -19,14 +19,16 @@ public final class Grammarly {
 
   public func toggle(bridge: WebBridgeGrammarly) {
     enabled.toggle()
-    update(bridge: bridge)
+    update(bridge: bridge, wasReset: false)
   }
 
-  public func update(bridge: WebBridgeGrammarly) {
-    if enabled {
-      bridge.connect(clientID: clientID, redirectURI: redirectURI)
-    } else {
-      bridge.disconnect()
+  public func update(bridge: WebBridgeGrammarly, wasReset: Bool) {
+    DispatchQueue.afterDelay(seconds: (enabled && wasReset) ? 0.5 : 0.0) {
+      if self.enabled {
+        bridge.connect(clientID: self.clientID, redirectURI: self.redirectURI)
+      } else {
+        bridge.disconnect()
+      }
     }
   }
 
