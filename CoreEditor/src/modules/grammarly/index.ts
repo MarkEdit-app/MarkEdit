@@ -89,7 +89,7 @@ export function trottleMutations() {
         }
 
         // When scroll fast, Grammarly's updateText() function can generate thousands of mutations
-        if (storage.isIdle && (callback.toString() as string).includes('updateText')) {
+        if (storage.isIdle && `${callback}`.includes('updateText')) {
           return;
         }
 
