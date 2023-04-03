@@ -1,9 +1,30 @@
+import { KeyBinding } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { ensureSyntaxTree, syntaxTree } from '@codemirror/language';
 import { HeadingInfo } from './types';
 import { frontMatterRange } from '../frontMatter';
 import { scrollToSelection } from '../selection';
 import selectWithRanges from '../selection/selectWithRanges';
+
+// Override the system default behavior, it was not necessary until macOS 13.3
+export const tocKeymap: KeyBinding[] = [
+  {
+    key: 'Alt-Mod-ArrowUp',
+    preventDefault: true,
+    run: () => {
+      selectPreviousSection();
+      return true;
+    },
+  },
+  {
+    key: 'Alt-Mod-ArrowDown',
+    preventDefault: true,
+    run: () => {
+      selectNextSection();
+      return true;
+    },
+  },
+];
 
 export function getTableOfContents() {
   const editor = window.editor;

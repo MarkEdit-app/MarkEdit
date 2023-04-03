@@ -25,6 +25,7 @@ import { gutterExtensions } from './styling/nodes/gutter';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
+import { tocKeymap } from './modules/toc';
 
 const theme = new Compartment;
 const gutters = new Compartment;
@@ -89,6 +90,7 @@ export function extensions(options: { lineBreak?: string }) {
       // By default CodeMirror disables tab (character) insertion (https://codemirror.net/examples/tab/),
       // however, MarkEdit runs on a WebView instead of browsers, we do want to bind the tab key.
       ...indentationKeymap,
+      ...tocKeymap,
     ]),
 
     // Markdown
