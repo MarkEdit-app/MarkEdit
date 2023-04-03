@@ -9,7 +9,7 @@ import WebKit
 /**
  Receive messages sent from the web, execute functions and get back to the web.
  */
-public final class EditorMessageHandler: NSObject, WKScriptMessageHandler {
+public final class EditorMessageHandler: NSObject, WKScriptMessageHandlerWithReply {
   private let modules: NativeModules
   private let webViewProvider: (() -> WKWebView?)
 
@@ -18,98 +18,42 @@ public final class EditorMessageHandler: NSObject, WKScriptMessageHandler {
     self.webViewProvider = webViewProvider
   }
 
-  public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+  @MainActor public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+    let assertFail: (String) -> (Any?, String?) = { message in
+      Logger.assertFail(message)
+      return (nil, message)
+    }
+
     guard message.name == "bridge", let body = message.body as? [String: Any] else {
-      Logger.assertFail("Invalid message payload")
-      return
+      return assertFail("Invalid message payload")
     }
 
     guard let moduleName = body["moduleName"] as? String else {
-      Logger.assertFail("Invalid module name")
-      return
+      return assertFail("Invalid module name")
     }
 
     guard let methodName = body["methodName"] as? String else {
-      Logger.assertFail("Invalid method name")
-      return
+      return assertFail("Invalid method name")
     }
 
     guard let invokeNative = modules[moduleName]?[methodName] else {
-      Logger.assertFail("Invalid native method")
-      return
+      return assertFail("Invalid native method")
     }
 
     guard let parameters = (body["parameters"] as? String)?.toData() else {
-      Logger.assertFail("Invalid parameters")
-      return
+      return assertFail("Invalid parameters")
     }
 
-    guard let messageID = body["id"] as? String else {
-      Logger.assertFail("Invalid message id")
-      return
+    guard let result = invokeNative(parameters) else {
+      return assertFail("Missing result from native method: \(methodName)")
     }
 
-    Logger.log(.debug, "Invoke native: \(moduleName).\(methodName)")
-    if let result = invokeNative(parameters) {
-      reply(id: messageID, result: result)
-    } else {
-      Logger.log(.error, "Missing result from native method: \(methodName)")
-    }
-  }
-}
-
-// MARK: - Private
-
-private extension EditorMessageHandler {
-  /// Reply to a message sent by JavaScript.
-  func reply(id: String, result: Result<Encodable?, Error>) {
-    guard let webView = webViewProvider() else {
-      Logger.log(.error, "Missing WebView to proceed")
-      return
-    }
-
-    struct NativeReply: Encodable {
-      let id: String
-      let result: AnyEncodable?
-      let error: String?
-    }
-
-    if case .failure(let error) = result {
-      Logger.assertFail(error.localizedDescription)
-    }
-
-    let reply: NativeReply
+    Logger.log(.debug, "Invoked native: \(moduleName).\(methodName)")
     switch result {
     case .success(let value):
-      if let value = value {
-        reply = NativeReply(id: id, result: AnyEncodable(value: value), error: nil)
-      } else {
-        reply = NativeReply(id: id, result: nil, error: nil)
-      }
+      return (value, nil)
     case .failure(let error):
-      reply = NativeReply(id: id, result: nil, error: error.localizedDescription)
+      return (nil, error.localizedDescription)
     }
-
-    DispatchQueue.onMainThread {
-      webView.invoke(path: "window.handleNativeReply", message: reply)
-    }
-  }
-}
-
-/// Encodable wrapper for generics.
-///
-/// https://www.dabby.dev/article/2019-04-25-any-encodable.
-private struct AnyEncodable: Encodable {
-  let value: Encodable
-
-  func encode(to encoder: Encoder) throws {
-    var container = encoder.singleValueContainer()
-    try value.encode(to: &container)
-  }
-}
-
-private extension Encodable {
-  func encode(to container: inout SingleValueEncodingContainer) throws {
-    try container.encode(self)
   }
 }

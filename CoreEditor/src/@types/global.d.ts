@@ -1,7 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { Config, Dynamics } from '../config';
 import { WebModule } from '../bridge/webModule';
-import { NativeReply } from '../bridge/nativeModule';
 import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModuleCompletion } from '../bridge/native/completion';
 import { NativeModulePreview } from '../bridge/native/preview';
@@ -15,7 +14,7 @@ interface WebKit {
   messageHandlers?: {
     bridge?: {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      postMessage: (object: any) => void;
+      postMessage: (object: any) => Promise<any>;
     };
   };
 }
@@ -33,7 +32,6 @@ declare global {
       preview: NativeModulePreview;
       tokenizer: NativeModuleTokenizer;
     };
-    handleNativeReply: (reply: NativeReply) => void;
   }
 
   interface ImportMetaEnv {

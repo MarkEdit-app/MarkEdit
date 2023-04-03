@@ -77,7 +77,7 @@ final class EditorViewController: NSViewController {
     }
 
     let controller = WKUserContentController()
-    controller.add(handler, name: "bridge")
+    controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
     let config: WKWebViewConfiguration = .newConfig()
     config.processPool = EditorReusePool.shared.processPool
