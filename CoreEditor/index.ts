@@ -14,7 +14,7 @@ import { WebModuleTableOfContentsImpl } from './src/bridge/web/toc';
 import { WebModuleGrammarlyImpl } from './src/bridge/web/grammarly';
 
 import { pseudoDocument } from './src/@test/mock';
-import { createNativeModule, handleNativeReply } from './src/bridge/nativeModule';
+import { createNativeModule } from './src/bridge/nativeModule';
 import { NativeModuleCore } from './src/bridge/native/core';
 import { NativeModuleCompletion } from './src/bridge/native/completion';
 import { NativeModulePreview } from './src/bridge/native/preview';
@@ -69,7 +69,6 @@ window.nativeModules = {
 
 window.onload = () => {
   window.config = config;
-  window.handleNativeReply = handleNativeReply;
   window.nativeModules.core.notifyWindowDidLoad();
 
   // On Prod, text is reset by the native code

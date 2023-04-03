@@ -1,4 +1,3 @@
-import { v4 as UUID } from 'uuid';
 import { isProd, isWebKit } from '../common/env';
 
 /**
@@ -7,17 +6,6 @@ import { isProd, isWebKit } from '../common/env';
 export interface NativeModule {
   name: string;
 }
-
-/**
- * Reply sent back from native.
- */
-export interface NativeReply {
-  id: string;
-  result?: unknown;
-  error?: string;
-}
-
-const callbacks = new Map<string, (reply: NativeReply) => void>();
 
 /**
  * Create a Proxy for redirecting messages to native by relying on messageHandlers.
@@ -34,19 +22,7 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
 
       // eslint-disable-next-line compat/compat
       return args => new Promise((resolve, reject) => {
-        // Context is saved to callbacks,
-        // we will retrieve it in handleNativeReply later
-        const id = UUID();
-        callbacks.set(id, (reply: NativeReply) => {
-          if (reply.error === undefined) {
-            resolve(reply.result);
-          } else {
-            reject(new Error(reply.error));
-          }
-        });
-
         const message = {
-          id,
           moduleName,
           methodName: p,
           parameters: JSON.stringify(args ?? {}),
@@ -54,7 +30,8 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
 
         // Message is serialized and sent to native here
         if (isWebKit) {
-          window.webkit?.messageHandlers?.bridge?.postMessage(message);
+          // eslint-disable-next-line promise/prefer-await-to-then
+          window.webkit?.messageHandlers?.bridge?.postMessage(message).then(resolve, reject);
         }
 
         if (!isProd) {
@@ -63,17 +40,4 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
       });
     },
   });
-}
-
-/**
- * Native invokes this to reply to a message sent by web.
- */
-export function handleNativeReply(reply: NativeReply) {
-  const callback = callbacks.get(reply.id);
-  if (callback == undefined) {
-    return;
-  }
-
-  callback(reply);
-  callbacks.delete(reply.id);
 }
