@@ -16,13 +16,8 @@ final class EditorReusePool {
   let processPool = WKProcessPool()
 
   func warmUp() {
-    // The theory here is that loading resources from WKWebViews is expensive,
-    // we make a pool that always keeps two instances in memory,
-    // if users open more than two editors, it's expected to be slower.
-    controllerPool.append(contentsOf: [
-      EditorViewController(),
-      EditorViewController(),
-    ])
+    // Initialize the main instance as soon as the app launches
+    controllerPool.append(EditorViewController())
   }
 
   func dequeueViewController() -> EditorViewController {
@@ -30,7 +25,15 @@ final class EditorReusePool {
       return reusable
     }
 
-    return EditorViewController()
+    let controller = EditorViewController()
+    if controllerPool.count < 2 {
+      // The theory here is that loading resources from WKWebViews is expensive,
+      // we make a pool that always keeps two instances in memory,
+      // if users open more than two editors, it's expected to be slower.
+      controllerPool.append(controller)
+    }
+
+    return controller
   }
 
   /// All editors, whether with or without a visible window.

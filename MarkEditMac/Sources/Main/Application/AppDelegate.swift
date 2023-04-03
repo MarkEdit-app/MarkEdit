@@ -25,10 +25,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var lineEndingsLFItem: NSMenuItem?
   @IBOutlet weak var lineEndingsCRLFItem: NSMenuItem?
   @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
-
   @IBOutlet weak var editUndoItem: NSMenuItem?
   @IBOutlet weak var editRedoItem: NSMenuItem?
-
   @IBOutlet weak var formatBulletItem: NSMenuItem?
   @IBOutlet weak var formatNumberingItem: NSMenuItem?
   @IBOutlet weak var formatTodoItem: NSMenuItem?
@@ -36,7 +34,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var formatCodeBlockItem: NSMenuItem?
   @IBOutlet weak var formatMathItem: NSMenuItem?
   @IBOutlet weak var formatMathBlockItem: NSMenuItem?
-
   @IBOutlet weak var windowFloatingItem: NSMenuItem?
 
   private var appearanceObservation: NSKeyValueObservation?
@@ -53,15 +50,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     EditorReusePool.shared.warmUp()
     EditorCustomization.createFiles()
-
-    // Initialize this earlier instead of making it lazy,
-    // the window size relies on the SwiftUI content view size, it takes time.
-    settingsWindowController = SettingsRootViewController.withTabs([
-      .editor,
-      .assistant,
-      .general,
-      .window,
-    ])
 
     NotificationCenter.default.addObserver(
       self,
@@ -99,7 +87,21 @@ private extension AppDelegate {
   }
 
   @IBAction func showPreferences(_ sender: Any?) {
-    settingsWindowController?.showWindow(self)
+    if settingsWindowController == nil {
+      settingsWindowController = SettingsRootViewController.withTabs([
+        .editor,
+        .assistant,
+        .general,
+        .window,
+      ])
+
+      // The window size relies on the SwiftUI content view size, it takes time
+      DispatchQueue.main.async {
+        self.settingsWindowController?.showWindow(self)
+      }
+    } else {
+      settingsWindowController?.showWindow(self)
+    }
   }
 
   @IBAction func showHelp(_ sender: Any?) {
