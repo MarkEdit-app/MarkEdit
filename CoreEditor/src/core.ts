@@ -8,6 +8,7 @@ import * as themes from './styling/themes';
 import * as history from './modules/history';
 import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
+import * as grammarly from './modules/grammarly';
 
 export enum ReplaceGranularity {
   wholeDocument = 'wholeDocument',
@@ -49,11 +50,21 @@ export function resetEditor(doc: string) {
   const scrollDOM = editor.scrollDOM;
   fixWebKitWheelIssues(scrollDOM);
 
-  // Dismiss the completion panel whenever the dom scrolls
   scrollDOM.addEventListener('scroll', () => {
+    // Dismiss the completion panel whenever the dom scrolls
     if (completion.isPanelVisible()) {
       window.nativeModules.completion.cancelCompletion();
     }
+
+    // Trick to stop Grammarly from working until scroll stops
+    storage.scrollTimer = (() => {
+      if (storage.scrollTimer !== undefined) {
+        clearTimeout(storage.scrollTimer);
+      }
+
+      grammarly.setIdle(true);
+      return setTimeout(() => grammarly.setIdle(false), 100);
+    })();
   });
 
   // Recofigure, window.config might have changed
@@ -126,3 +137,7 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   // however, it just works™.
   scrollDOM.addEventListener('wheel', () => { /* no-op */ });
 }
+
+const storage: { scrollTimer: ReturnType<typeof setTimeout> | undefined } = {
+  scrollTimer: undefined,
+};

@@ -200,7 +200,7 @@ extension EditorViewController {
         autocorrect: true
       ))
 
-      Grammarly.shared.update(bridge: self.bridge.grammarly)
+      Grammarly.shared.update(bridge: self.bridge.grammarly, wasReset: true)
     }
   }
 

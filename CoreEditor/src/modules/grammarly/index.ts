@@ -1,48 +1,32 @@
 import * as Grammarly from '@grammarly/editor-sdk';
 
-let grammarly: Grammarly.EditorSDK | undefined = undefined;
-let plugin: Grammarly.GrammarlyEditorPluginElement | undefined = undefined;
-
 /**
  * Connect to a Grammarly instance: https://developer.grammarly.com/.
  */
-export function connect(clientID: string, redirectURI: string) {
-  const element = document.querySelector('div[contenteditable=true]');
-  if (!(element instanceof HTMLElement)) {
-    console.error('Failed to retrieve contentEditable from the DOM tree');
-    return;
-  }
+export async function connect(clientID: string, redirectURI: string) {
+  try {
+    if (grammarly.sdk === undefined) {
+      grammarly.sdk = await Grammarly.init(clientID);
+    }
 
-  const setUp = (sdk: Grammarly.EditorSDK) => {
-    plugin = sdk.addPlugin(element, {
+    // Unfornately, plugin.connect() won't bring the plugin back,
+    // we must call addPlugin every time we re-enable Grammarly.
+    grammarly.plugin = grammarly.sdk.addPlugin(window.editor.contentDOM, {
       activation: 'immediate',
       oauthRedirectUri: redirectURI,
     });
 
     // Don't let Grammarly steal the focus, typing is more important
     window.editor.focus();
-    grammarly = sdk;
-  };
-
-  if (grammarly === undefined) {
-    (async() => {
-      try {
-        setUp(await Grammarly.init(clientID));
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  } else {
-    // Unfornately, plugin.connect() won't bring the plugin back,
-    // we have to call addPlugin again
-    setUp(grammarly);
+    storage.isConnected = true;
+  } catch (error) {
+    console.error(error);
   }
 }
 
 export function disconnect() {
-  if (plugin !== undefined) {
-    plugin.disconnect();
-  }
+  grammarly.plugin?.disconnect();
+  storage.isConnected = false;
 }
 
 /**
@@ -51,8 +35,8 @@ export function disconnect() {
  * @param url URL that contains auth information
  */
 export function completeOAuth(url: string) {
-  if (grammarly !== undefined) {
-    grammarly.handleOAuthCallback(url);
+  if (grammarly.sdk !== undefined) {
+    grammarly.sdk.handleOAuthCallback(url);
   } else {
     console.error('Grammarly is not initialized yet');
   }
@@ -90,3 +74,65 @@ export function centerActiveDialog() {
     });
   }, 500);
 }
+
+/**
+ * Learn more: https://github.com/grammarly/grammarly-for-developers/discussions/569
+ */
+export function trottleMutations() {
+  // eslint-disable-next-line no-global-assign
+  MutationObserver = new Proxy(MutationObserver, {
+    construct(target, args) {
+      return new target(mutations => {
+        const callback = args[0];
+        if (typeof callback !== 'function') {
+          return;
+        }
+
+        // When scroll fast, Grammarly's updateText() function can generate thousands of mutations
+        if (storage.isIdle && `${callback}`.includes('updateText')) {
+          return;
+        }
+
+        callback(mutations);
+      });
+    },
+  });
+}
+
+/**
+ * Learn more: https://github.com/grammarly/grammarly-for-developers/discussions/569
+ */
+export function setIdle(isIdle: boolean) {
+  storage.isIdle = storage.isConnected && isIdle;
+  if (storage.mutateTimer !== undefined) {
+    clearTimeout(storage.mutateTimer);
+  }
+
+  if (storage.isIdle || !storage.isConnected) {
+    return;
+  }
+
+  // This triggers a MutationObserver change, which leads to Grammarly to re-check
+  storage.mutateTimer = setTimeout(() => {
+    const contentDOM = window.editor.contentDOM;
+    contentDOM.setAttribute('x-grammarly-date', `${Date.now()}`);
+  }, 900);
+}
+
+const grammarly: {
+  sdk: Grammarly.EditorSDK | undefined;
+  plugin: Grammarly.GrammarlyEditorPluginElement | undefined;
+} = {
+  sdk: undefined,
+  plugin: undefined,
+};
+
+const storage: {
+  isConnected: boolean;
+  isIdle: boolean;
+  mutateTimer: ReturnType<typeof setTimeout> | undefined;
+} = {
+  isConnected: false,
+  isIdle: true,
+  mutateTimer: undefined,
+};
