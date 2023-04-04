@@ -16,8 +16,9 @@ final class EditorReusePool {
   let processPool = WKProcessPool()
 
   func warmUp() {
-    // Initialize the main instance as soon as the app launches
-    controllerPool.append(EditorViewController())
+    if controllerPool.isEmpty {
+      controllerPool.append(EditorViewController())
+    }
   }
 
   func dequeueViewController() -> EditorViewController {

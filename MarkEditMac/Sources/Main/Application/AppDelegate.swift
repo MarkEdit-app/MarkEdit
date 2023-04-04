@@ -47,8 +47,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     UserDefaults.overwriteTextCheckerOnce()
     NSSpellChecker.swizzleCorrectionIndicatorOnce
-
-    EditorReusePool.shared.warmUp()
     EditorCustomization.createFiles()
 
     NotificationCenter.default.addObserver(

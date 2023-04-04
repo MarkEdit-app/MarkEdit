@@ -11,6 +11,10 @@ extension AppDelegate {
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
     switch AppPreferences.General.newWindowBehavior {
     case .openDocument:
+      DispatchQueue.afterDelay(seconds: 0.5) {
+        EditorReusePool.shared.warmUp()
+      }
+
       sender.showOpenPanel()
       return false
     case .newDocument:
