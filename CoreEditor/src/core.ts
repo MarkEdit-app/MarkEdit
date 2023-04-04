@@ -5,10 +5,10 @@ import replaceSelections from './modules/commands/replaceSelections';
 
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
-import * as history from './modules/history';
 import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
 import * as grammarly from './modules/grammarly';
+import * as selection from './modules/selection';
 
 export enum ReplaceGranularity {
   wholeDocument = 'wholeDocument',
@@ -34,18 +34,10 @@ export function resetEditor(doc: string) {
     }),
   });
 
-  // Dirty trick, the line number height is not initially correct because of window animations,
-  // this approach forces a layout pass.
-  if (window.config.showLineNumbers) {
-    editingState.isDirty = true;
-    setTimeout(() => editingState.isDirty = false, 50);
-    editor.dispatch({ changes: { from: 0, insert: '\u200b' } });
-    editor.dispatch({ changes: { from: 0, to: 1, insert: '' } });
-    history.clearHistory();
-  }
 
   editor.focus();
   window.editor = editor;
+  selection.scrollCaretToVisible(); // coordsAtPos ensures the line number height
 
   const scrollDOM = editor.scrollDOM;
   fixWebKitWheelIssues(scrollDOM);

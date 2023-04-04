@@ -1,16 +1,4 @@
-import { ChangeSet } from '@codemirror/state';
-import { historyField, undo as undoCommand, redo as redoCommand, undoDepth, redoDepth } from '@codemirror/commands';
-
-// Weirdly, CodeMirror doesn't expose HistoryState as a public interface,
-// define it here and leverage tests to ensure its existence.
-interface HistoryState {
-  done?: HistoryEvent[];
-  undone?: HistoryEvent[];
-}
-
-interface HistoryEvent {
-  changes?: ChangeSet;
-}
+import { undo as undoCommand, redo as redoCommand, undoDepth, redoDepth } from '@codemirror/commands';
 
 /**
  * In the client codebase, we need to bind the native undo to this function.
@@ -32,15 +20,4 @@ export function canUndo() {
 
 export function canRedo() {
   return redoDepth(window.editor.state) > 0;
-}
-
-export function clearHistory() {
-  try {
-    const editor = window.editor;
-    const history = editor.state.field(historyField) as HistoryState;
-    history.done = [];
-    history.undone = [];
-  } catch (error) {
-    console.error(error);
-  }
 }

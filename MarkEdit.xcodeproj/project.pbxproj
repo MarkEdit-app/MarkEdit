@@ -233,9 +233,9 @@
 				870A51A4294700DE0095C7EB /* MarkEditMac */,
 				870FF838298BD7DC00E4AE99 /* MarkEditMacTests */,
 				872924042951525C007156B1 /* PreviewExtension */,
-				8743B26229593B2000F83DAE /* Build.xcconfig */,
 				870A51A3294700DE0095C7EB /* Products */,
 				874823CC29B0BD980067EC49 /* Frameworks */,
+				8743B26229593B2000F83DAE /* Build.xcconfig */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
