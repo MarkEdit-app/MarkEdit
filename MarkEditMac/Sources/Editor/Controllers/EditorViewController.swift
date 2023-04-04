@@ -97,14 +97,20 @@ final class EditorViewController: NSViewController {
     #endif
     }
 
-    let html = [
-      AppPreferences.editorConfig.toHtml,
-      EditorCustomization.style.contents,
-      EditorCustomization.script.contents,
-    ].joined(separator: "\n\n")
+    let theme = AppTheme.current.editorTheme
+    DispatchQueue.global(qos: .userInitiated).async {
+      let html = [
+        AppPreferences.editorConfig(theme: theme).toHtml,
+        EditorCustomization.style.contents,
+        EditorCustomization.script.contents,
+      ].joined(separator: "\n\n")
 
-    // Non-nil baseURL is required by Grammarly and opening local files
-    webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
+      DispatchQueue.main.async {
+        // Non-nil baseURL is required by Grammarly and opening local files
+        webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
+      }
+    }
+
     return webView
   }()
 
