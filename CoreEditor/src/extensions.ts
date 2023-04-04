@@ -47,13 +47,24 @@ window.dynamics = {
   indentUnit,
 };
 
+interface Options {
+  lineBreak?: string;
+}
+
+export function minimal(options: Options) {
+  return [
+    ...core(options),
+    markdown({ base: markdownLanguage, extensions: markdownExtensions }),
+  ];
+}
+
 // Make this a function because some resources (e.g., phrases) require lazy loading
-export function extensions(options: { lineBreak?: string }) {
+export function full(options: Options) {
   return [
     // Basic
+    ...core(options),
     highlightSpecialChars(),
     history(),
-    drawSelection(),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
@@ -62,15 +73,9 @@ export function extensions(options: { lineBreak?: string }) {
     closeBrackets(),
     rectangularSelection(),
     crosshairCursor(),
-    activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
     highlightActiveLineGutter(),
     highlightSelectionMatches(),
     localizePhrases(),
-
-    // Line behaviors
-    lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
-    gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
-    lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
 
     // Search
     search({
@@ -101,15 +106,25 @@ export function extensions(options: { lineBreak?: string }) {
     }),
 
     // Styling
-    theme.of(loadTheme(window.config.theme)),
     invisibles.of([]),
     selectedLines.of([]),
-    renderExtensions,
     actionExtensions,
 
     // Input handling
     wordTokenizer(),
     interceptInputs(),
     observeChanges(),
+  ];
+}
+
+function core(options: Options) {
+  return [
+    drawSelection(),
+    lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
+    lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
+    gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
+    activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
+    theme.of(loadTheme(window.config.theme)),
+    renderExtensions,
   ];
 }
