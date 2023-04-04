@@ -40,7 +40,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
   }
 
   func preparePreviewOfFile(at url: URL) async throws {
-    let data = try Data(contentsOf: url)
+    let data = try Data(contentsOf: textFileURL(of: url))
     let config = EditorConfig(
       text: data.toString() ?? "",
       theme: effectiveTheme,
@@ -75,6 +75,19 @@ private extension PreviewViewController {
     // To keep the app size smaller, we don't have bridge here,
     // construct script literals directly.
     webView.evaluateJavaScript("setTheme(`\(effectiveTheme)`)")
+  }
+
+  func textFileURL(of url: URL) -> URL {
+    // The text.* file inside a text bundle
+    if url.pathExtension.lowercased() == "textbundle", let contents = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) {
+      return contents.first {
+        let filename = $0.lastPathComponent.lowercased()
+        return filename.hasPrefix("text.") && filename != "text.html"
+      } ?? url
+    }
+
+    // Markdown file
+    return url
   }
 }
 
