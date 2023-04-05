@@ -97,6 +97,7 @@ final class EditorViewController: NSViewController {
     #endif
     }
 
+    // Getting the current theme has to be on main thread
     let theme = AppTheme.current.editorTheme
     DispatchQueue.global(qos: .userInitiated).async {
       let html = [

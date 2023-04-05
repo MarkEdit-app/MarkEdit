@@ -38,10 +38,11 @@ export function resetEditor(doc: string) {
     extensions: extensions.minimal(options),
   });
 
-  // To let users see the content asap, we reconfigure with all extensions later
+  // To let users see the content asap, we reconfigure with all extensions later,
+  // we use 350 here because it usually takes 300ms to finish launch.
   setTimeout(() => {
     editor.dispatch({
-      effects: StateEffect.reconfigure.of(extensions.full(options)),
+      effects: StateEffect.reconfigure.of(extensions.all(options)),
     });
   }, 350);
 
