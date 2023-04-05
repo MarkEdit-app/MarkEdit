@@ -11,7 +11,7 @@ import {
 } from '@codemirror/view';
 
 import { Compartment, EditorState } from '@codemirror/state';
-import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
+import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap, LanguageDescription } from '@codemirror/language';
 import { history, defaultKeymap, historyKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
@@ -47,13 +47,37 @@ window.dynamics = {
   indentUnit,
 };
 
-// Make this a function because some resources (e.g., phrases) require lazy loading
-export function extensions(options: { lineBreak?: string }) {
+interface Options {
+  lineBreak?: string;
+}
+
+// Minimal extensions, mainly focusing on text rendering
+export function minimal(options: Options, codeLanguages?: LanguageDescription[]) {
+  return [
+    drawSelection(),
+    lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
+    lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
+    gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
+    activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
+    theme.of(loadTheme(window.config.theme)),
+    renderExtensions,
+    markdown({
+      base: markdownLanguage,
+      extensions: markdownExtensions,
+      codeLanguages,
+    }),
+  ];
+}
+
+// All available extensions.
+//
+// Make this a function because some resources (e.g., phrases) require lazy loading.
+export function all(options: Options) {
   return [
     // Basic
+    ...minimal(options, languages),
     highlightSpecialChars(),
     history(),
-    drawSelection(),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
@@ -62,15 +86,9 @@ export function extensions(options: { lineBreak?: string }) {
     closeBrackets(),
     rectangularSelection(),
     crosshairCursor(),
-    activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
     highlightActiveLineGutter(),
     highlightSelectionMatches(),
     localizePhrases(),
-
-    // Line behaviors
-    lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
-    gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
-    lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
 
     // Search
     search({
@@ -93,18 +111,9 @@ export function extensions(options: { lineBreak?: string }) {
       ...tocKeymap,
     ]),
 
-    // Markdown
-    markdown({
-      base: markdownLanguage,
-      codeLanguages: languages,
-      extensions: markdownExtensions,
-    }),
-
     // Styling
-    theme.of(loadTheme(window.config.theme)),
     invisibles.of([]),
     selectedLines.of([]),
-    renderExtensions,
     actionExtensions,
 
     // Input handling

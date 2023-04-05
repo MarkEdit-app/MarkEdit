@@ -204,10 +204,10 @@ enum AppPreferences {
 }
 
 extension AppPreferences {
-  static var editorConfig: EditorConfig {
+  static func editorConfig(theme: String) -> EditorConfig {
     EditorConfig(
       text: "",
-      theme: AppTheme.current.editorTheme,
+      theme: theme,
       fontFamily: Editor.fontStyle.cssFontFamily,
       fontSize: Editor.fontSize,
       showLineNumbers: Editor.showLineNumbers,
