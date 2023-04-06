@@ -9,6 +9,7 @@ import { createDecoPlugin } from '../helper';
 import { selectedTextDecoration } from './selection';
 import { frontMatterRange } from '../../modules/frontMatter';
 import { startEffect, stopEffect } from '../matchers/stateful';
+import { isConnected as isGrammarlyConnected } from '../../modules/grammarly';
 
 // Originally learned from: https://github.com/ChromeDevTools/devtools-frontend/blob/main/front_end/ui/components/text_editor/config.ts
 //
@@ -85,7 +86,8 @@ export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: 
 }
 
 function alwaysRenderInvisibles() {
-  return window.config.invisiblesBehavior === InvisiblesBehavior.always;
+  // Rendering whitespace using renderWhitespaceBeforeCaret will stop Grammarly from working
+  return window.config.invisiblesBehavior === InvisiblesBehavior.always && !isGrammarlyConnected();
 }
 
 /**
