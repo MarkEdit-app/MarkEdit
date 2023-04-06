@@ -1,9 +1,8 @@
 import { EditorView } from '@codemirror/view';
-import { StateEffect } from '@codemirror/state';
+import { extensions } from './extensions';
 import { editingState } from './common/store';
 import replaceSelections from './modules/commands/replaceSelections';
 
-import * as extensions from './extensions';
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
@@ -27,24 +26,13 @@ export function resetEditor(doc: string) {
     window.editor.destroy();
   }
 
-  const options = {
-    lineBreak: lineEndings.getLineBreak(doc, window.config.defaultLineBreak),
-  };
-
-  // Bootstrap the editor with only minimal extensions
   const editor = new EditorView({
     doc,
     parent: document.querySelector('#editor') ?? document.body,
-    extensions: extensions.minimal(options),
+    extensions: extensions({
+      lineBreak: lineEndings.getLineBreak(doc, window.config.defaultLineBreak),
+    }),
   });
-
-  // To let users see the content asap, we reconfigure with all extensions later,
-  // we use 350 here because it usually takes 300ms to finish launch.
-  setTimeout(() => {
-    editor.dispatch({
-      effects: StateEffect.reconfigure.of(extensions.all(options)),
-    });
-  }, 350);
 
   editor.focus();
   window.editor = editor;
