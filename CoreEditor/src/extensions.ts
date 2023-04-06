@@ -59,7 +59,10 @@ export function minimal(options: Options, codeLanguages?: LanguageDescription[])
     lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
     gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
     activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
+    indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
     theme.of(loadTheme(window.config.theme)),
+    invisibles.of([]),
+    selectedLines.of([]),
     renderExtensions,
     markdown({
       base: markdownLanguage,
@@ -80,7 +83,6 @@ export function all(options: Options) {
     history(),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
-    indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
     indentOnInput(),
     bracketMatching(),
     closeBrackets(),
@@ -112,8 +114,6 @@ export function all(options: Options) {
     ]),
 
     // Styling
-    invisibles.of([]),
-    selectedLines.of([]),
     actionExtensions,
 
     // Input handling
