@@ -7,6 +7,8 @@ import { setInvisiblesBehavior } from '../config';
  */
 export async function connect(clientID: string, redirectURI: string) {
   try {
+    const editor = window.editor;
+    const selection = editor.state.selection;
     if (grammarly.sdk === undefined) {
       grammarly.sdk = await Grammarly.init(clientID);
     }
@@ -36,7 +38,8 @@ export async function connect(clientID: string, redirectURI: string) {
     });
 
     // Don't let Grammarly steal the focus, typing is more important
-    window.editor.focus();
+    editor.focus();
+    setTimeout(() => editor.dispatch({ selection }), 5);
     storage.isConnected = true;
   } catch (error) {
     console.error(error);
