@@ -63,4 +63,5 @@ export interface Dynamics {
   lineWrapping?: Compartment;
   lineEndings?: Compartment;
   indentUnit?: Compartment;
+  selectionHighlight?: Compartment;
 }

@@ -35,6 +35,7 @@ const selectedLines = new Compartment;
 const lineWrapping = new Compartment;
 const lineEndings = new Compartment;
 const indentUnit = new Compartment;
+const selectionHighlight = new Compartment;
 
 window.dynamics = {
   theme,
@@ -45,6 +46,7 @@ window.dynamics = {
   lineWrapping,
   lineEndings,
   indentUnit,
+  selectionHighlight,
 };
 
 // Make this a function because some resources (e.g., phrases) require lazy loading
@@ -64,7 +66,7 @@ export function extensions(options: { lineBreak?: string }) {
     crosshairCursor(),
     activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
     highlightActiveLineGutter(),
-    highlightSelectionMatches(),
+    selectionHighlight.of(highlightSelectionMatches()),
     localizePhrases(),
 
     // Line behaviors
