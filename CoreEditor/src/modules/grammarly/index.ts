@@ -1,4 +1,5 @@
 import * as Grammarly from '@grammarly/editor-sdk';
+import { highlightSelectionMatches } from '@codemirror/search';
 import { InvisiblesBehavior } from '../../config';
 import { setInvisiblesBehavior } from '../config';
 
@@ -20,12 +21,21 @@ export async function connect(clientID: string, redirectURI: string) {
       oauthRedirectUri: redirectURI,
     });
 
-    // Toggle InvisiblesBehavior.selection/never because it stops Grammarly from working
+    // Here we apply two workarounds:
+    //  1. Toggle InvisiblesBehavior.selection/never because it stops Grammarly from working
+    //  2. Toggle selectionHighlight extension for the same reason
+    //
+    // The reason here is that these extensions create temporary <span> elements,
+    // which break text selections when accepting Grammarly suggestions.
     grammarly.plugin.addEventListener('suggestion-card-open', () => {
       storage.invisibleBehavior = window.config.invisiblesBehavior;
       if (storage.invisibleBehavior === InvisiblesBehavior.selection) {
         setInvisiblesBehavior(InvisiblesBehavior.never);
       }
+
+      editor.dispatch({
+        effects: window.dynamics.selectionHighlight?.reconfigure([]),
+      });
     });
 
     grammarly.plugin.addEventListener('suggestion-card-close', () => {
@@ -33,7 +43,11 @@ export async function connect(clientID: string, redirectURI: string) {
         if (storage.invisibleBehavior === InvisiblesBehavior.selection) {
           setInvisiblesBehavior(InvisiblesBehavior.selection);
         }
+
         storage.invisibleBehavior = undefined;
+        editor.dispatch({
+          effects: window.dynamics.selectionHighlight?.reconfigure(highlightSelectionMatches()),
+        });
       }, 100);
     });
 
