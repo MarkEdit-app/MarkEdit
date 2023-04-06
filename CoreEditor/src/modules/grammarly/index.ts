@@ -1,4 +1,6 @@
 import * as Grammarly from '@grammarly/editor-sdk';
+import { InvisiblesBehavior } from '../../config';
+import { setInvisiblesBehavior } from '../config';
 
 /**
  * Connect to a Grammarly instance: https://developer.grammarly.com/.
@@ -14,6 +16,23 @@ export async function connect(clientID: string, redirectURI: string) {
     grammarly.plugin = grammarly.sdk.addPlugin(window.editor.contentDOM, {
       activation: 'immediate',
       oauthRedirectUri: redirectURI,
+    });
+
+    // Toggle InvisiblesBehavior.selection/never because it stops Grammarly from working
+    grammarly.plugin.addEventListener('suggestion-card-open', () => {
+      storage.invisibleBehavior = window.config.invisiblesBehavior;
+      if (storage.invisibleBehavior === InvisiblesBehavior.selection) {
+        setInvisiblesBehavior(InvisiblesBehavior.never);
+      }
+    });
+
+    grammarly.plugin.addEventListener('suggestion-card-close', () => {
+      setTimeout(() => {
+        if (storage.invisibleBehavior === InvisiblesBehavior.selection) {
+          setInvisiblesBehavior(InvisiblesBehavior.selection);
+        }
+        storage.invisibleBehavior = undefined;
+      }, 100);
     });
 
     // Don't let Grammarly steal the focus, typing is more important
@@ -119,6 +138,10 @@ export function setIdle(isIdle: boolean) {
   }, 900);
 }
 
+export function isConnected() {
+  return storage.isConnected;
+}
+
 const grammarly: {
   sdk: Grammarly.EditorSDK | undefined;
   plugin: Grammarly.GrammarlyEditorPluginElement | undefined;
@@ -131,8 +154,10 @@ const storage: {
   isConnected: boolean;
   isIdle: boolean;
   mutateTimer: ReturnType<typeof setTimeout> | undefined;
+  invisibleBehavior: InvisiblesBehavior | undefined;
 } = {
   isConnected: false,
   isIdle: true,
   mutateTimer: undefined,
+  invisibleBehavior: undefined,
 };
