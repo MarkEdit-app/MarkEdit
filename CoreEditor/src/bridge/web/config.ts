@@ -63,7 +63,7 @@ export class WebModuleConfigImpl implements WebModuleConfig {
   }
 
   setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void {
-    setInvisiblesBehavior(behavior);
+    setInvisiblesBehavior(behavior, true);
   }
 
   setTypewriterMode({ enabled }: { enabled: boolean }): void {

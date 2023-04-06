@@ -34,9 +34,15 @@ export function setShowActiveLineIndicator(enabled: boolean) {
   styling.setShowActiveLineIndicator(enabled && !editingState.hasSelection);
 }
 
-export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
+export function setInvisiblesBehavior(behavior: InvisiblesBehavior, updateSelection = false) {
   window.config.invisiblesBehavior = behavior;
   styling.setInvisiblesBehavior(behavior);
+
+  // Force a selection update to ensure invisible for selections
+  if (updateSelection && behavior === InvisiblesBehavior.selection) {
+    const selection = window.editor.state.selection;
+    window.editor.dispatch({ selection });
+  }
 }
 
 export function setTypewriterMode(enabled: boolean) {
