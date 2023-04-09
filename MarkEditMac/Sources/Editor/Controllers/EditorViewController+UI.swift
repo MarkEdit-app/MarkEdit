@@ -16,10 +16,12 @@ extension EditorViewController {
     wrapper.addSubview(findPanel)
     wrapper.addSubview(panelDivider)
     wrapper.addSubview(webView)
+    wrapper.addSubview(loadingIndicator)
     wrapper.addSubview(statusView)
 
     layoutPanels()
     layoutWebView()
+    layoutLoadingIndicator()
     layoutStatusView()
 
     // Trigger an additional layout loop to correct view (find panels) positions
@@ -90,6 +92,19 @@ extension EditorViewController {
       width: view.bounds.width,
       height: panelDivider.frame.minY
     )
+  }
+
+  func layoutLoadingIndicator() {
+    let size: Double = 72
+    loadingIndicator.frame = CGRect(
+      x: (view.bounds.width - size) * 0.5,
+      y: (view.bounds.height - size) * 0.5,
+      width: size,
+      height: size
+    )
+
+    // Hide the indicator when the window is small enough
+    loadingIndicator.isHidden = view.bounds.width < 200 || view.bounds.height < 200
   }
 
   func layoutStatusView() {

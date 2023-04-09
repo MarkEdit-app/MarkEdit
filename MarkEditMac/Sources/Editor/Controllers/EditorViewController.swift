@@ -51,6 +51,14 @@ final class EditorViewController: NSViewController {
     DividerView()
   }()
 
+  private(set) lazy var loadingIndicator = {
+    let view = NSImageView()
+    view.image = NSImage(named: "AppIcon")
+
+    Logger.assert(view.image != nil, "Missing AppIcon from the main bundle")
+    return view
+  }()
+
   private(set) lazy var statusView = {
     let view = EditorStatusView { [weak self] in
       self?.showGotoLineWindow(nil)
@@ -154,6 +162,7 @@ final class EditorViewController: NSViewController {
 
     layoutPanels()
     layoutWebView()
+    layoutLoadingIndicator()
     layoutStatusView()
   }
 
@@ -206,6 +215,15 @@ extension EditorViewController {
         spellcheck: true,
         autocorrect: true
       ))
+
+      // We only need the indicator for cold launch because it's slower
+      if self.loadingIndicator.superview != nil {
+        NSAnimationContext.runAnimationGroup { _ in
+          self.loadingIndicator.update().alphaValue = 0
+        } completionHandler: {
+          self.loadingIndicator.removeFromSuperview()
+        }
+      }
 
       Grammarly.shared.update(bridge: self.bridge.grammarly, wasReset: true)
     }
