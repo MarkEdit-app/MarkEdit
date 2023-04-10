@@ -8,5 +8,7 @@
 import XCTest
 
 final class MarkEditMacTests: XCTestCase {
-  // no-op
+  func testExistenceOfAppIcon() {
+    XCTAssertNotNil(NSImage(named: "AppIcon"), "Missing AppIcon from the main bundle")
+  }
 }
