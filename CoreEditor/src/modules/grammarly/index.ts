@@ -124,9 +124,12 @@ export function trottleMutations() {
           return;
         }
 
-        // When scroll fast, Grammarly's updateText() function can generate thousands of mutations
-        if (storage.isIdle && `${callback}`.includes('updateText')) {
-          return;
+        // When scroll fast, Grammarly's update functions can generate thousands of mutations
+        if (storage.isIdle) {
+          const source = callback.toString() as string;
+          if (source.includes('updateText') || (source.includes('isConnected') && source.includes('"IFRAME"'))) {
+            return;
+          }
         }
 
         callback(mutations);
