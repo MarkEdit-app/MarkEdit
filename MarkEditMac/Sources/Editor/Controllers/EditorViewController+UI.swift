@@ -95,6 +95,10 @@ extension EditorViewController {
   }
 
   func layoutLoadingIndicator() {
+    guard !loadingIndicator.hasUnfinishedAnimations else {
+      return
+    }
+
     let size: Double = 72
     loadingIndicator.frame = CGRect(
       x: (view.bounds.width - size) * 0.5,

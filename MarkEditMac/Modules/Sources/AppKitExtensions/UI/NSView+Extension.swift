@@ -57,6 +57,10 @@ public extension NSView {
     }
   }
 
+  var hasUnfinishedAnimations: Bool {
+    layer?.animationKeys()?.isEmpty == false
+  }
+
   /// Check if the view itself or one of its descendants is the first responder in a window.
   func isFirstResponder(in window: NSWindow?) -> Bool {
     (window?.firstResponder as? NSView)?.belongs(to: self) ?? false
@@ -77,6 +81,39 @@ public extension NSView {
 
   func update(_ animated: Bool = true) -> Self {
     animated ? animator() : self
+  }
+
+  /// Transform the view to a scale while keeping it centered during the animation.
+  func scaleTo(_ scale: Double, duration: TimeInterval? = nil) {
+    scaleUnitSquare(to: CGSize(width: scale, height: scale))
+    frame = CGRect(
+      x: frame.origin.x,
+      y: frame.origin.y,
+      width: frame.width * scale,
+      height: frame.height * scale
+    )
+
+    let animation = CABasicAnimation()
+    if let duration {
+      animation.duration = duration
+    }
+
+    animation.fromValue = CATransform3DMakeScale(1.0, 1.0, 1.0)
+    animation.toValue = CATransform3DMakeScale(scale, scale, 1.0)
+    layer?.add(animation, forKey: "transform.scale")
+
+    NSAnimationContext.runAnimationGroup { context in
+      context.timingFunction = CAMediaTimingFunction(name: .linear)
+      if let duration {
+        context.duration = duration
+      }
+
+      // Translate the frame to keep it centered
+      animator().frame.origin = CGPoint(
+        x: frame.origin.x - (frame.size.width * (1.0 - 1.0 / scale)) * 0.5,
+        y: frame.origin.y - (frame.size.height * (1.0 - 1.0 / scale)) * 0.5
+      )
+    }
   }
 
   /// Enumerate all descendants, recursively, self first.

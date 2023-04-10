@@ -54,6 +54,15 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
+
+    // We only need the indicator for cold launch because it's slower
+    NSAnimationContext.runAnimationGroup { _ in
+      loadingIndicator.animator().alphaValue = 0
+    } completionHandler: {
+      self.loadingIndicator.removeFromSuperview()
+    }
+
+    loadingIndicator.scaleTo(2.0)
   }
 
   func editorCoreTextDidChange(_ sender: EditorModuleCore) {
