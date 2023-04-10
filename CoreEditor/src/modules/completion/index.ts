@@ -1,5 +1,5 @@
 import { editingState } from '../../common/store';
-import anchorAtPos from '../tokenizer/anchorAtPos';
+import { anchorAtPos, isValidAnchor } from '../tokenizer/anchorAtPos';
 
 /**
  * The start of a multi-stage completion process:
@@ -30,6 +30,12 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
     const editor = window.editor;
     const state = editor.state;
     const pos = state.selection.main.anchor;
+    const anchor = anchorAtPos(pos);
+
+    // Defensive fix for string slicing issue
+    if (!isValidAnchor(anchor)) {
+      return console.error(`Invalid anchor at pos: ${pos}`);
+    }
 
     const fullText = (() => {
       const position = editor.coordsAtPos(pos)?.top ?? 0;
@@ -47,7 +53,6 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
       }
     })();
 
-    const anchor = anchorAtPos(pos);
     window.nativeModules.completion.requestCompletions({ anchor, fullText });
   }, afterDelay);
 }

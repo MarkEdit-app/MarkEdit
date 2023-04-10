@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import { TextTokenizeAnchor } from './types';
-import anchorAtPos from './anchorAtPos';
+import { anchorAtPos, isValidAnchor } from './anchorAtPos';
 
 /**
  * For double-click, leverage native methods to tokenize the selection.
@@ -14,6 +14,11 @@ export async function handleDoubleClick(event: MouseEvent) {
 
   const line = editor.state.doc.lineAt(pos);
   const anchor = anchorAtPos(pos);
+
+  // Defensive fix for string slicing issue
+  if (!isValidAnchor(anchor)) {
+    return console.error(`Invalid anchor at pos: ${pos}`);
+  }
 
   // On Apple platforms, this eventually leverages NLTokenizer
   const result = await window.nativeModules.tokenizer.tokenize({ anchor });
