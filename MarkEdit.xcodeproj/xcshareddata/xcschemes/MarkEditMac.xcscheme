@@ -51,6 +51,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Kill Debug Process"
+               scriptText = "id=$(pgrep MarkEdit || true)&#10;path=$(which `ps -o comm= -p $id`)&#10;&#10;if [[ $path == *&quot;/Build/Products/Debug/&quot;* ]]; then&#10;  kill $id&#10;fi&#10;">
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
