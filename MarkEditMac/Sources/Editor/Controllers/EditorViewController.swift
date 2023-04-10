@@ -216,15 +216,6 @@ extension EditorViewController {
         autocorrect: true
       ))
 
-      // We only need the indicator for cold launch because it's slower
-      if self.loadingIndicator.superview != nil {
-        NSAnimationContext.runAnimationGroup { _ in
-          self.loadingIndicator.update().alphaValue = 0
-        } completionHandler: {
-          self.loadingIndicator.removeFromSuperview()
-        }
-      }
-
       Grammarly.shared.update(bridge: self.bridge.grammarly, wasReset: true)
     }
   }
