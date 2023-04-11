@@ -41,17 +41,17 @@ final class NativeBridgeCore: NativeBridge {
     self.module = module
   }
 
-  private func notifyWindowDidLoad(parameters: Data) -> Result<Encodable?, Error>? {
+  private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
     return .success(nil)
   }
 
-  private func notifyTextDidChange(parameters: Data) -> Result<Encodable?, Error>? {
+  private func notifyTextDidChange(parameters: Data) -> Result<Any?, Error>? {
     module.notifyTextDidChange()
     return .success(nil)
   }
 
-  private func notifySelectionDidChange(parameters: Data) -> Result<Encodable?, Error>? {
+  private func notifySelectionDidChange(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var lineColumn: LineColumnInfo
       var contentEdited: Bool

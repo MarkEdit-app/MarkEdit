@@ -11,20 +11,15 @@ import MarkEditCore
 public final class EditorModuleTokenizer: NativeModuleTokenizer {
   public init() {}
 
-  public func tokenize(anchor: TextTokenizeAnchor) -> String {
+  public func tokenize(anchor: TextTokenizeAnchor) -> [String: Any] {
     let tokenizer = NLTokenizer(unit: .word)
     tokenizer.string = anchor.text
 
     let pos = anchor.text.index(anchor.text.startIndex, offsetBy: anchor.pos)
     let bounds = bounds(in: tokenizer.tokenRange(at: pos), text: anchor.text)
 
-    struct Result: Encodable {
-      let from: Int
-      let to: Int
-    }
-
     // Always select at least one character
-    return Result(from: bounds.lower, to: max(bounds.upper, bounds.lower + 1)).jsonEncoded
+    return ["from": bounds.lower, "to": max(bounds.upper, bounds.lower + 1)]
   }
 
   public func moveWordBackward(anchor: TextTokenizeAnchor) -> Int {

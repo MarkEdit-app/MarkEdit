@@ -38,7 +38,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
   }
   {{#methods}}
 
-  private func {{methodName}}(parameters: Data) -> Result<Encodable?, Error>? {
+  private func {{methodName}}(parameters: Data) -> Result<Any?, Error>? {
     {{#parameters.length}}
     struct Message: Decodable {
       {{#parameters}}

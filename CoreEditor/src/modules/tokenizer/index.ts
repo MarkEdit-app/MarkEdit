@@ -21,7 +21,7 @@ export async function handleDoubleClick(event: MouseEvent) {
   }
 
   // On Apple platforms, this eventually leverages NLTokenizer
-  const result: { from: number; to: number } = JSON.parse(await window.nativeModules.tokenizer.tokenize({ anchor }));
+  const result: { from: number; to: number } = await window.nativeModules.tokenizer.tokenize({ anchor });
   const from = result.from + line.from;
   const to = result.to + line.from;
 

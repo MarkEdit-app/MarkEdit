@@ -57,7 +57,7 @@ final class NativeBridgeCompletion: NativeBridge {
     self.module = module
   }
 
-  private func requestCompletions(parameters: Data) -> Result<Encodable?, Error>? {
+  private func requestCompletions(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
       var fullText: String?
@@ -75,32 +75,32 @@ final class NativeBridgeCompletion: NativeBridge {
     return .success(nil)
   }
 
-  private func commitCompletion(parameters: Data) -> Result<Encodable?, Error>? {
+  private func commitCompletion(parameters: Data) -> Result<Any?, Error>? {
     module.commitCompletion()
     return .success(nil)
   }
 
-  private func cancelCompletion(parameters: Data) -> Result<Encodable?, Error>? {
+  private func cancelCompletion(parameters: Data) -> Result<Any?, Error>? {
     module.cancelCompletion()
     return .success(nil)
   }
 
-  private func selectPrevious(parameters: Data) -> Result<Encodable?, Error>? {
+  private func selectPrevious(parameters: Data) -> Result<Any?, Error>? {
     module.selectPrevious()
     return .success(nil)
   }
 
-  private func selectNext(parameters: Data) -> Result<Encodable?, Error>? {
+  private func selectNext(parameters: Data) -> Result<Any?, Error>? {
     module.selectNext()
     return .success(nil)
   }
 
-  private func selectTop(parameters: Data) -> Result<Encodable?, Error>? {
+  private func selectTop(parameters: Data) -> Result<Any?, Error>? {
     module.selectTop()
     return .success(nil)
   }
 
-  private func selectBottom(parameters: Data) -> Result<Encodable?, Error>? {
+  private func selectBottom(parameters: Data) -> Result<Any?, Error>? {
     module.selectBottom()
     return .success(nil)
   }

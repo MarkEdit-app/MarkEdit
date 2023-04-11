@@ -12,7 +12,8 @@
       }
     },
     "predefinedTypes": [
-      "CodeGen_Int"
+      "CodeGen_Int",
+      "CodeGen_Dict"
     ],
     "defaultCustomTags": {},
     "dropInterfaceIPrefix": true
@@ -39,7 +40,8 @@
       "namedTypesTemplatePath": "swift-shared-types.mustache",
       "namedTypesOutputPath": "../../../MarkEditCore/Sources/EditorSharedTypes.swift",
       "typeNameMap": {
-        "CodeGen_Int": "Int"
+        "CodeGen_Int": "Int",
+        "CodeGen_Dict": "[String: Any]"
       }
     }
   }

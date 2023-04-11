@@ -11,7 +11,7 @@ import Foundation
 import MarkEditCore
 
 public protocol NativeModuleTokenizer: NativeModule {
-  func tokenize(anchor: TextTokenizeAnchor) -> String
+  func tokenize(anchor: TextTokenizeAnchor) -> [String: Any]
   func moveWordBackward(anchor: TextTokenizeAnchor) -> Int
   func moveWordForward(anchor: TextTokenizeAnchor) -> Int
 }
@@ -41,7 +41,7 @@ final class NativeBridgeTokenizer: NativeBridge {
     self.module = module
   }
 
-  private func tokenize(parameters: Data) -> Result<Encodable?, Error>? {
+  private func tokenize(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
     }
@@ -58,7 +58,7 @@ final class NativeBridgeTokenizer: NativeBridge {
     return .success(result)
   }
 
-  private func moveWordBackward(parameters: Data) -> Result<Encodable?, Error>? {
+  private func moveWordBackward(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
     }
@@ -75,7 +75,7 @@ final class NativeBridgeTokenizer: NativeBridge {
     return .success(result)
   }
 
-  private func moveWordForward(parameters: Data) -> Result<Encodable?, Error>? {
+  private func moveWordForward(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
     }

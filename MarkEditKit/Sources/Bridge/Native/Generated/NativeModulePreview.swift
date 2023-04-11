@@ -33,7 +33,7 @@ final class NativeBridgePreview: NativeBridge {
     self.module = module
   }
 
-  private func show(parameters: Data) -> Result<Encodable?, Error>? {
+  private func show(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var code: String
       var type: PreviewType
