@@ -11,7 +11,7 @@ import MarkEditCore
 public final class EditorModuleTokenizer: NativeModuleTokenizer {
   public init() {}
 
-  public func tokenize(anchor: TextTokenizeAnchor) -> TextTokenizeResult {
+  public func tokenize(anchor: TextTokenizeAnchor) -> [String: Any] {
     let tokenizer = NLTokenizer(unit: .word)
     tokenizer.string = anchor.text
 
@@ -19,7 +19,7 @@ public final class EditorModuleTokenizer: NativeModuleTokenizer {
     let bounds = bounds(in: tokenizer.tokenRange(at: pos), text: anchor.text)
 
     // Always select at least one character
-    return TextTokenizeResult(from: bounds.lower, to: max(bounds.upper, bounds.lower + 1))
+    return ["from": bounds.lower, "to": max(bounds.upper, bounds.lower + 1)]
   }
 
   public func moveWordBackward(anchor: TextTokenizeAnchor) -> Int {

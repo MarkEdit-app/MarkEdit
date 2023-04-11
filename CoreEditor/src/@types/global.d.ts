@@ -7,6 +7,8 @@ import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type CodeGen_Dict = any & { _brand: never };
   type CodeGen_Int = number & { _brand: never };
 }
 
