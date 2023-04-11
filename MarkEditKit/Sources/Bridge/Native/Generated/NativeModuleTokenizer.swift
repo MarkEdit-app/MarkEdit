@@ -11,7 +11,7 @@ import Foundation
 import MarkEditCore
 
 public protocol NativeModuleTokenizer: NativeModule {
-  func tokenize(anchor: TextTokenizeAnchor) -> TextTokenizeResult
+  func tokenize(anchor: TextTokenizeAnchor) -> String
   func moveWordBackward(anchor: TextTokenizeAnchor) -> Int
   func moveWordForward(anchor: TextTokenizeAnchor) -> Int
 }
@@ -90,15 +90,5 @@ final class NativeBridgeTokenizer: NativeBridge {
 
     let result = module.moveWordForward(anchor: message.anchor)
     return .success(result)
-  }
-}
-
-public struct TextTokenizeResult: Encodable, Equatable {
-  public var from: Int
-  public var to: Int
-
-  public init(from: Int, to: Int) {
-    self.from = from
-    self.to = to
   }
 }
