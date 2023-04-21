@@ -349,6 +349,7 @@ export const languages = [
     name: "Ruby",
     alias: ["jruby","macruby","rake","rb","rbx"],
     extensions: ["rb"],
+    filename: /^(Gemfile|Rakefile)$/,
     load() {
       return import("@codemirror/legacy-modes/mode/ruby").then(m => legacy(m.ruby))
     }
