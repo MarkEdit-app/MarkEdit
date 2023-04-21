@@ -205,7 +205,11 @@ export const deleteMarkupBackward: StateCommand = ({state, dispatch}) => {
         if (pos - line.from > spaceEnd && !/\S/.test(line.text.slice(spaceEnd, pos - line.from)))
           return {range: EditorSelection.cursor(line.from + spaceEnd),
                   changes: {from: line.from + spaceEnd, to: pos}}
-        if (pos - line.from == spaceEnd) {
+        if (pos - line.from == spaceEnd &&
+            // Only apply this if we're on the line that has the
+            // construct's syntax, or there's only indentation in the
+            // target range
+            (!inner.item || line.from <= inner.item.from || !/\S/.test(line.text.slice(0, inner.to)))) {
           let start = line.from + inner.from
           // Replace a list item marker with blank space
           if (inner.item && inner.node.from < inner.item.from && /\S/.test(line.text.slice(inner.from, inner.to)))
