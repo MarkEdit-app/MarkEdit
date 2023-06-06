@@ -118,7 +118,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Selection
     '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
-      backgroundColor: colors.selection,
+      backgroundColor: `${colors.selection} !important`, // #180 !important is needed by macOS 14 sdk
     },
     '.cm-activeLine': {
       backgroundColor: colors.activeLine,
