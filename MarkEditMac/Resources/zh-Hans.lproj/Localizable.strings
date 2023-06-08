@@ -160,6 +160,9 @@
 /* No comment provided by engineer. */
 "Initial Content" = "初始内容";
 
+/* Whether to allow inline predictions */
+"Inline Predictions" = "输入预测";
+
 /* Toolbar item to insert code */
 "Insert Code" = "插入代码";
 

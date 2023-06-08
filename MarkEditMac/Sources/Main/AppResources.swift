@@ -130,6 +130,7 @@ enum Localized {
     static let guessedWords = String(localized: "Guessed words", comment: "Option for guessed words suggestion")
     static let completionHint = String(localized: "Press ⌥ ESC to show the panel.", comment: "Hint for using word completion")
     static let autocomplete = String(localized: "Autocomplete:", comment: "Label for autocomplete options")
+    static let inlinePredictions = String(localized: "Inline Predictions", comment: "Whether to allow inline predictions")
     static let suggestWhileTyping = String(localized: "Suggest while typing", comment: "Whether to suggest while typing")
 
     // General
