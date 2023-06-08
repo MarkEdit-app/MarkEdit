@@ -51,8 +51,8 @@ private extension NSSpellChecker {
           of: type,
           primaryString: primaryString,
           alternativeStrings: [],
-          forStringIn: .zero,
-          view: NSView(),
+          forStringIn: CGRect(x: 1e5, y: 1e5, width: 0, height: 0), // Insane rect to make it invisble
+          view: view,
           completionHandler: completionBlock
         )
       }
@@ -65,7 +65,7 @@ private extension NSSpellChecker {
     }
 
     // We also want to avoid the overlap of the two panels
-    guard !NSApp.windows.contains(where: { $0 is TextCompletionPanelProtocol }) else {
+    guard !NSApp.windows.contains(where: { $0.isVisible && $0 is TextCompletionPanelProtocol }) else {
       return dummyAction()
     }
 
