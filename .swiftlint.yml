@@ -390,10 +390,6 @@ opt_in_rules:
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#nsobject-prefer-isequal
   - nsobject_prefer_isequal
 
-  # Rationale: Provides consistency in coding style.
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-capture-list
-  - unused_capture_list
-
   # Rationale: Prevents issues with using unowned.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#unowned-variable-capture
   - unowned_variable_capture
@@ -405,9 +401,6 @@ opt_in_rules:
   # Rationale: Provides consistency in coding style.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#legacy-multiple
   - legacy_multiple
-
-  # Prefer using `AnyObject` over `class` for class-only protocols.
-  - anyobject_protocol
 
   # Closure end should have the same indentation as the line that started it.
   - closure_end_indentation
