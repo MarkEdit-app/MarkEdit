@@ -153,8 +153,7 @@ export function setFocusMode(enabled: boolean) {
     const style = document.createElement('style');
     style.textContent = `
       .cm-line:not(.cm-selectedLineRange), .cm-gutterElement:not(.cm-activeLineGutter) {
-        filter: grayscale(1);
-        opacity: 0.3;
+        opacity: 0.25;
       }
     `;
 
