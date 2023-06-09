@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SettingsUI
+import WebKit
+import MarkEditKit
 
 struct AssistantSettingsView: View {
   @State private var insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
@@ -14,7 +16,9 @@ struct AssistantSettingsView: View {
   @State private var wordsInDocument = AppPreferences.Assistant.wordsInDocument
   @State private var standardWords = AppPreferences.Assistant.standardWords
   @State private var guessedWords = AppPreferences.Assistant.guessedWords
+  @State private var inlinePredictions = AppPreferences.Assistant.inlinePredictions
   @State private var suggestWhileTyping = AppPreferences.Assistant.suggestWhileTyping
+  private let supportsInlinePredictions = WKWebViewConfiguration().supportsInlinePredictions
 
   var body: some View {
     SettingsForm {
@@ -70,11 +74,22 @@ struct AssistantSettingsView: View {
       }
 
       Section {
-        Toggle(isOn: $suggestWhileTyping) {
-          Text(Localized.Settings.suggestWhileTyping)
-        }
-        .onChange(of: suggestWhileTyping) {
-          AppPreferences.Assistant.suggestWhileTyping = $0
+        VStack(alignment: .leading) {
+          if supportsInlinePredictions {
+            Toggle(isOn: $inlinePredictions) {
+              Text(Localized.Settings.inlinePredictions)
+            }
+            .onChange(of: inlinePredictions) {
+              AppPreferences.Assistant.inlinePredictions = $0
+            }
+          }
+
+          Toggle(isOn: $suggestWhileTyping) {
+            Text(Localized.Settings.suggestWhileTyping)
+          }
+          .onChange(of: suggestWhileTyping) {
+            AppPreferences.Assistant.suggestWhileTyping = $0
+          }
         }
         .formLabel(alignment: .top, Localized.Settings.autocomplete)
       }

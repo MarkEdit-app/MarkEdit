@@ -79,6 +79,11 @@ extension EditorViewController {
     bridge.config.setIndentUnit(unit: unit.characters)
   }
 
+  func setInlinePredictions(enabled: Bool) {
+    // [macOS 14] Changing this won't work without recreating the WebView
+    webView.configuration.setAllowsInlinePredictions(enabled)
+  }
+
   func setSuggestWhileTyping(enabled: Bool) {
     bridge.config.setSuggestWhileTyping(enabled: enabled)
   }

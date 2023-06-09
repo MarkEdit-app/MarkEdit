@@ -157,6 +157,13 @@ enum AppPreferences {
     @Storage(key: "assistant.guessed-words", defaultValue: false)
     static var guessedWords: Bool
 
+    @Storage(key: "assistant.inline-predictions", defaultValue: true)
+    static var inlinePredictions: Bool {
+      didSet {
+        performUpdates { $0.setInlinePredictions(enabled: inlinePredictions) }
+      }
+    }
+
     @Storage(key: "assistant.suggest-while-typing", defaultValue: false)
     static var suggestWhileTyping: Bool {
       didSet {

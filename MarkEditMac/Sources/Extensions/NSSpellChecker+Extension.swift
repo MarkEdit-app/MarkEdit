@@ -43,15 +43,30 @@ private extension NSSpellChecker {
     view: NSView,
     completionHandler completionBlock: ((String?) -> Void)? = nil
   ) {
+    let dummyAction = {
+      // We previously was able to just ignore the call,
+      // since macOS 14, it hangs working with inline predictions.
+      if #available(macOS 14.0, *) {
+        self.swizzled_showCorrectionIndicator(
+          of: type,
+          primaryString: primaryString,
+          alternativeStrings: [],
+          forStringIn: CGRect(x: 1e5, y: 1e5, width: 0, height: 0), // Insane rect to make it invisble
+          view: view,
+          completionHandler: completionBlock
+        )
+      }
+    }
+
     // We prefer completion over correction,
     // when suggestWhileTyping is enabled we don't show correction indicators.
     guard !AppPreferences.Assistant.suggestWhileTyping else {
-      return
+      return dummyAction()
     }
 
     // We also want to avoid the overlap of the two panels
-    guard !NSApp.windows.contains(where: { $0 is TextCompletionPanelProtocol }) else {
-      return
+    guard !NSApp.windows.contains(where: { $0.isVisible && $0 is TextCompletionPanelProtocol }) else {
+      return dummyAction()
     }
 
     swizzled_showCorrectionIndicator(

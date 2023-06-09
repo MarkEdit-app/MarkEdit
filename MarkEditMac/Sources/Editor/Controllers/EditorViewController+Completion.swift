@@ -73,8 +73,13 @@ extension EditorViewController {
 extension EditorViewController {
   func updateCompletionPanel(isVisible: Bool) {
     let changed = completionContext.isPanelVisible != isVisible
-    completionContext.appearance = view.effectiveAppearance
-    completionContext.isPanelVisible = isVisible
+    if isVisible {
+      completionContext.appearance = view.effectiveAppearance
+    }
+
+    if completionContext.isPanelVisible != isVisible {
+      completionContext.isPanelVisible = isVisible
+    }
 
     if changed {
       bridge.completion.setState(panelVisible: isVisible)
