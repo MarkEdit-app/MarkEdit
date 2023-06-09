@@ -51,7 +51,7 @@ private extension NSSpellChecker {
           of: type,
           primaryString: primaryString,
           alternativeStrings: [],
-          forStringIn: CGRect(x: 1e5, y: 1e5, width: 0, height: 0), // Insane rect to make it invisble
+          forStringIn: CGRect(x: 1e5, y: 1e5, width: 0, height: 0), // Insane rect to make it invisible
           view: view,
           completionHandler: completionBlock
         )
