@@ -12,11 +12,11 @@ struct AppTheme {
   let editorTheme: String
   let windowBackground: NSColor // Pre-define colors to style the window for initial launch
 
-  static var current: AppTheme {
+  static var current: Self {
     NSApplication.shared.isDarkMode ? darkTheme : lightTheme
   }
 
-  static func withName(_ name: String) -> AppTheme {
+  static func withName(_ name: String) -> Self {
     allCases.first { $0.editorTheme == name } ?? GitHubLight
   }
 

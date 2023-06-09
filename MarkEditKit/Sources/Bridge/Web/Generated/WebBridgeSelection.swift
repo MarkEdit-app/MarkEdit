@@ -17,7 +17,8 @@ public final class WebBridgeSelection {
     self.webView = webView
   }
 
-  @MainActor public func getText() async throws -> String {
+  @MainActor
+  public func getText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.selection.getText") {
         continuation.resume(with: $0)
@@ -25,7 +26,8 @@ public final class WebBridgeSelection {
     }
   }
 
-  @MainActor public func getRect(pos: Int) async throws -> JSRect? {
+  @MainActor
+  public func getRect(pos: Int) async throws -> JSRect? {
     struct Message: Encodable {
       let pos: Int
     }

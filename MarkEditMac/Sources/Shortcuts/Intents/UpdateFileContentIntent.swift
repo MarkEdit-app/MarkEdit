@@ -46,7 +46,8 @@ struct UpdateFileContentIntent: AppIntent {
   @Parameter(title: "Save Changes")
   var saveChanges: Bool
 
-  @MainActor func perform() async throws -> some IntentResult {
+  @MainActor
+  func perform() async throws -> some IntentResult {
     guard let activeController else {
       throw IntentError.missingDocument
     }

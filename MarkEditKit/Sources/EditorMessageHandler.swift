@@ -18,7 +18,8 @@ public final class EditorMessageHandler: NSObject, WKScriptMessageHandlerWithRep
     self.webViewProvider = webViewProvider
   }
 
-  @MainActor public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+  @MainActor
+  public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
     let assertFail: (String) -> (Any?, String?) = { message in
       Logger.assertFail(message)
       return (nil, message)

@@ -25,7 +25,8 @@ public final class WebBridgeHistory {
     webView?.invoke(path: "webModules.history.redo", completion: completion)
   }
 
-  @MainActor public func canUndo() async throws -> Bool {
+  @MainActor
+  public func canUndo() async throws -> Bool {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.history.canUndo") {
         continuation.resume(with: $0)
@@ -33,7 +34,8 @@ public final class WebBridgeHistory {
     }
   }
 
-  @MainActor public func canRedo() async throws -> Bool {
+  @MainActor
+  public func canRedo() async throws -> Bool {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.history.canRedo") {
         continuation.resume(with: $0)

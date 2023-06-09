@@ -18,7 +18,8 @@ struct EvaluateJavaScriptIntent: AppIntent {
   @Parameter(title: "Content", inputOptions: String.IntentInputOptions(capitalizationType: .none, multiline: true, autocorrect: false, smartQuotes: false, smartDashes: false))
   var content: String
 
-  @MainActor func perform() async throws -> some IntentResult {
+  @MainActor
+  func perform() async throws -> some IntentResult {
     guard let activeController else {
       throw IntentError.missingDocument
     }

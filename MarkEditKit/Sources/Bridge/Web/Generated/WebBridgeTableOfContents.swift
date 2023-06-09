@@ -17,7 +17,8 @@ public final class WebBridgeTableOfContents {
     self.webView = webView
   }
 
-  @MainActor public func getTableOfContents() async throws -> [HeadingInfo] {
+  @MainActor
+  public func getTableOfContents() async throws -> [HeadingInfo] {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.toc.getTableOfContents") {
         continuation.resume(with: $0)
