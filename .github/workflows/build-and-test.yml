@@ -9,9 +9,10 @@ on:
 jobs:
   markedit-mac:
     name: MarkEditMac
-    runs-on: macos-latest
+    runs-on: macos-13
     env:
       node-version: '18.x'
+      DEVELOPER_DIR: /Applications/Xcode_14.3.app/Contents/Developer
 
     defaults:
       run:
