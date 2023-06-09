@@ -20,7 +20,8 @@ struct CreateNewDocumentIntent: AppIntent {
   @Parameter(title: "Initial Content")
   var initialContent: String?
 
-  @MainActor func perform() async throws -> some IntentResult {
+  @MainActor
+  func perform() async throws -> some IntentResult {
     NSDocumentController.shared.newDocument(nil)
     NSApp.activate(ignoringOtherApps: true)
 

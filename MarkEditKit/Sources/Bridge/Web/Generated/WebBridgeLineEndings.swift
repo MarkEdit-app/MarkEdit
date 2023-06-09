@@ -17,7 +17,8 @@ public final class WebBridgeLineEndings {
     self.webView = webView
   }
 
-  @MainActor public func getLineEndings() async throws -> LineEndings {
+  @MainActor
+  public func getLineEndings() async throws -> LineEndings {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.lineEndings.getLineEndings") {
         continuation.resume(with: $0)
