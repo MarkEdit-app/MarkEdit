@@ -9,7 +9,7 @@ on:
 jobs:
   markedit-mac:
     name: MarkEditMac
-    runs-on: macos-latest
+    runs-on: macos-13
     env:
       node-version: '18.x'
 

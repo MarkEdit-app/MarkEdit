@@ -98,13 +98,7 @@ final class EditorViewController: NSViewController {
     webView.menuDelegate = self
 
     if #available(macOS 13.3, *) {
-    #if compiler(>=5.8) // Xcode 14.3
       webView.isInspectable = true
-    #else
-      if webView.responds(to: sel_getUid("isInspectable")) {
-        webView.setValue(true, forKey: "inspectable")
-      }
-    #endif
     }
 
     // Getting the current theme has to be on main thread
