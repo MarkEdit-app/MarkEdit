@@ -8,7 +8,6 @@
 import AppIntents
 import MarkEditKit
 
-@available(macOS 13.0, *)
 struct UpdateFileContentIntent: AppIntent {
   enum Granularity: String, AppEnum {
     case wholeDocument

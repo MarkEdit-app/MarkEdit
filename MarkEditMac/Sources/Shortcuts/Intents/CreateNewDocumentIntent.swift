@@ -8,7 +8,6 @@
 import AppKit
 import AppIntents
 
-@available(macOS 13.0, *)
 struct CreateNewDocumentIntent: AppIntent {
   static var title: LocalizedStringResource = "Create New Document"
   static var description = IntentDescription("Create a new document, with an optional parameter to specify the initial content.")

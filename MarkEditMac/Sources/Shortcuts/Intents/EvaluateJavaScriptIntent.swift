@@ -7,7 +7,6 @@
 
 import AppIntents
 
-@available(macOS 13.0, *)
 struct EvaluateJavaScriptIntent: AppIntent {
   static var title: LocalizedStringResource = "Evaluate JavaScript"
   static var description = IntentDescription("Evaluate JavaScript and get the result on the active document, throws an error if no editor is opened.")

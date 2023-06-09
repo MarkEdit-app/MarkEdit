@@ -7,7 +7,6 @@
 
 import AppIntents
 
-@available(macOS 13.0, *)
 extension AppIntent {
   /// Returns the current active editor, or nil if not applicable.
   @MainActor var activeController: EditorViewController? {
