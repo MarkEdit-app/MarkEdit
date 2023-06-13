@@ -42,11 +42,40 @@ const parent = document.querySelector('#editor') ?? document.body;
 window.editor = new EditorView({ doc, parent, extensions });
 styling.setUp(config, loadTheme(config.theme).accentColor);
 
+// Track scroll progress because we don't have scrollView in WKWebView on macOS
+scrollDidChange();
+document.addEventListener('scroll', scrollDidChange);
+
 // To keep the app size smaller, we don't have bridge here,
 // inject function to window directly.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-(window as any).setTheme = (name: string) => {
+const bridge = (window as any);
+const storage: { scrollbarOffset?: number } = {};
+
+bridge.setTheme = (name: string) => {
   styling.setTheme(loadTheme(name));
+};
+
+bridge.startDragging = (location: number) => {
+  // scrollbarOffset is the distance between the top of the scrollbar and the mouse location
+  const { scrollbarTop } = scrollerGeometryValues();
+  storage.scrollbarOffset = location - scrollbarTop;
+};
+
+bridge.updateDragging = (location: number) => {
+  if (storage.scrollbarOffset === undefined) {
+    return;
+  }
+
+  // Basically, the scrollbar needs to move with the mouse position,
+  // we need to take the initial scrollbar offset into account.
+  const { clientHeight, scrollHeight, scrollbarHeight } = scrollerGeometryValues();
+  const percentage = (location - storage.scrollbarOffset) / (clientHeight - scrollbarHeight);
+  window.scrollTo({ top: percentage * (scrollHeight - clientHeight) });
+};
+
+bridge.cancelDragging = () => {
+  storage.scrollbarOffset = undefined;
 };
 
 // There're only two themes in the preview extension,
@@ -57,4 +86,24 @@ function loadTheme(name: string) {
   } else {
     return GitHubLight();
   }
+}
+
+function scrollDidChange() {
+  const { scrollbarHeight, scrollbarTop } = scrollerGeometryValues();
+  window.webkit?.messageHandlers?.bridge?.postMessage({
+    top: scrollbarTop,
+    bottom: scrollbarTop + scrollbarHeight,
+  });
+}
+
+function scrollerGeometryValues() {
+  const container = document.documentElement;
+  const clientHeight = container.clientHeight;
+  const scrollHeight = container.scrollHeight;
+  const scrollbarHeight = clientHeight * (clientHeight / container.offsetHeight);
+
+  const progress = container.scrollTop / (container.scrollHeight - clientHeight);
+  const scrollbarTop = progress * (clientHeight - scrollbarHeight);
+
+  return { clientHeight, scrollHeight, scrollbarHeight, scrollbarTop };
 }
