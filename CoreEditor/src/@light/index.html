@@ -11,7 +11,14 @@
   <script type=module src="./index.ts"></script>
   <style>
     html, body {
-      overflow: scroll !important;
+      overflow: auto !important;
+      background-color: #ffffff; /* github-light */
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        background-color: #0d1116; /* github-dark */
+      }
     }
 
     .cm-editor {
