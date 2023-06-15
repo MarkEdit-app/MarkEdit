@@ -1,5 +1,5 @@
 import { editingState } from '../../common/store';
-import { anchorAtPos, isValidAnchor } from '../tokenizer/anchorAtPos';
+import { anchorAtPos } from '../tokenizer/anchorAtPos';
 
 /**
  * The start of a multi-stage completion process:
@@ -32,8 +32,9 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
     const pos = state.selection.main.anchor;
     const anchor = anchorAtPos(pos);
 
-    // Defensive fix for string slicing issue
-    if (!isValidAnchor(anchor)) {
+    // Defensive fix for string slicing issue,
+    // the pos at the end of a string is valid and it's the most common case for word completion.
+    if (anchor.pos < 0 && anchor.pos > anchor.text.length) {
       return console.error(`Invalid anchor at pos: ${pos}`);
     }
 

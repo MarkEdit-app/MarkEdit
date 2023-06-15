@@ -14,11 +14,3 @@ export function anchorAtPos(pos: number): TextTokenizeAnchor {
     offset: offset as CodeGen_Int,
   };
 }
-
-/**
- * Returns true when the anchor is valid, we ran into rare cases where string slicing throws exceptions.
- */
-export function isValidAnchor(anchor: TextTokenizeAnchor) {
-  // The pos at the end of a string is valid and it's the most common case for word completion
-  return anchor.pos >= 0 && anchor.pos <= anchor.text.length;
-}
