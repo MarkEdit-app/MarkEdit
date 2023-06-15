@@ -19,10 +19,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       config.setValue(false, forKey: "drawsBackground")
     }
 
-    let webView = WKWebView(frame: .zero, configuration: config)
-    webView.layer?.masksToBounds = true
-    webView.layer?.cornerRadius = 6 // [macOS 14] It's not clipped by default
-    return webView
+    return WKWebView(frame: .zero, configuration: config)
   }()
 
   override var nibName: NSNib.Name? {
@@ -31,7 +28,14 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.wantsLayer = true
     view.addSubview(webView)
+
+    if #available(macOS 14.0, *) {
+      // [macOS 14] It's not clipped by default
+      view.layer?.masksToBounds = true
+      view.layer?.cornerRadius = 6
+    }
 
     addEventMonitorsForDragging()
     updateBackgroundColor()
@@ -94,7 +98,6 @@ private extension PreviewViewController {
 
   func updateBackgroundColor() {
     // To hide the transparent background of the scrolling overflow
-    view.wantsLayer = true
     view.layer?.backgroundColor = (isDarkMode ? NSColor(red: 13.0 / 255, green: 17.0 / 255, blue: 22.0 / 255, alpha: 1) : NSColor.white).cgColor
   }
 
