@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import { TextTokenizeAnchor } from './types';
-import { anchorAtPos, isValidAnchor } from './anchorAtPos';
+import { anchorAtPos } from './anchorAtPos';
 
 /**
  * For double-click, leverage native methods to tokenize the selection.
@@ -16,7 +16,7 @@ export async function handleDoubleClick(event: MouseEvent) {
   const anchor = anchorAtPos(pos);
 
   // Defensive fix for string slicing issue
-  if (!isValidAnchor(anchor)) {
+  if (anchor.pos < 0 && anchor.pos >= anchor.text.length) {
     return console.error(`Invalid anchor at pos: ${pos}`);
   }
 
