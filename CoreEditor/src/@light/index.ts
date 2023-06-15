@@ -42,10 +42,6 @@ const parent = document.querySelector('#editor') ?? document.body;
 window.editor = new EditorView({ doc, parent, extensions });
 styling.setUp(config, loadTheme(config.theme).accentColor);
 
-// Track scroll progress because we don't have scrollView in WKWebView on macOS
-scrollDidChange();
-document.addEventListener('scroll', scrollDidChange);
-
 // To keep the app size smaller, we don't have bridge here,
 // inject function to window directly.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,20 +54,21 @@ bridge.setTheme = (name: string) => {
 
 bridge.startDragging = (location: number) => {
   // scrollbarOffset is the distance between the top of the scrollbar and the mouse location
-  const { scrollbarTop } = scrollerGeometryValues();
+  const { scrollbarTop, scrollbarHeight } = scrollerGeometryValues();
   storage.scrollbarOffset = location - scrollbarTop;
+
+  // When it's outside the scrollbar, scroll smoothly to that position,
+  // note this might not be 100% accurate as CodeMirror render the document lazily,
+  // long documents may not have correct scrollHeight at the moment.
+  if (location < scrollbarTop || location > scrollbarTop + scrollbarHeight) {
+    scrollToMouseLocation(location, scrollbarHeight * 0.5, 'smooth');
+  }
 };
 
 bridge.updateDragging = (location: number) => {
-  if (storage.scrollbarOffset === undefined) {
-    return;
+  if (storage.scrollbarOffset !== undefined) {
+    scrollToMouseLocation(location, storage.scrollbarOffset);
   }
-
-  // Basically, the scrollbar needs to move with the mouse position,
-  // we need to take the initial scrollbar offset into account.
-  const { clientHeight, scrollHeight, scrollbarHeight } = scrollerGeometryValues();
-  const percentage = (location - storage.scrollbarOffset) / (clientHeight - scrollbarHeight);
-  window.scrollTo({ top: percentage * (scrollHeight - clientHeight) });
 };
 
 bridge.cancelDragging = () => {
@@ -88,11 +85,14 @@ function loadTheme(name: string) {
   }
 }
 
-function scrollDidChange() {
-  const { scrollbarHeight, scrollbarTop } = scrollerGeometryValues();
-  window.webkit?.messageHandlers?.bridge?.postMessage({
-    top: scrollbarTop,
-    bottom: scrollbarTop + scrollbarHeight,
+function scrollToMouseLocation(location: number, scrollbarOffset: number, behavior: ScrollBehavior = 'auto') {
+  // Basically, the scrollbar needs to move with the mouse position,
+  // we need to take the initial scrollbar offset into account.
+  const { clientHeight, scrollHeight, scrollbarHeight } = scrollerGeometryValues();
+  const percentage = (location - scrollbarOffset) / (clientHeight - scrollbarHeight);
+  window.scrollTo({
+    top: percentage * (scrollHeight - clientHeight),
+    behavior,
   });
 }
 

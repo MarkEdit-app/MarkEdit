@@ -12,18 +12,12 @@ import MarkEditCore
 
 final class PreviewViewController: NSViewController, QLPreviewingController {
   private var appearanceObservation: NSKeyValueObservation?
-  private var scrollbarTop: Double = 0
-  private var scrollbarBottom: Double = 0
 
   private lazy var webView: WKWebView = {
     let config = WKWebViewConfiguration()
     if config.responds(to: sel_getUid("_drawsBackground")) {
       config.setValue(false, forKey: "drawsBackground")
     }
-
-    let controller = WKUserContentController()
-    controller.add(MessageHandler(host: self), contentWorld: .page, name: "bridge")
-    config.userContentController = controller
 
     let webView = WKWebView(frame: .zero, configuration: config)
     webView.layer?.masksToBounds = true
@@ -129,20 +123,6 @@ private extension PreviewViewController {
 // #194 Dragging behavior in preview extension is wacky,
 // override the event handling and make a homemade scrolling strategy.
 private extension PreviewViewController {
-  class MessageHandler: NSObject, WKScriptMessageHandler {
-    private weak var host: PreviewViewController?
-
-    init(host: PreviewViewController? = nil) {
-      self.host = host
-    }
-
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-      let locations = message.body as? [String: Double]
-      host?.scrollbarTop = locations?["top"] ?? 0
-      host?.scrollbarBottom = locations?["bottom"] ?? 0
-    }
-  }
-
   var overrideDragging: Bool {
     // Don't handle floating windows,
     // which is typically a larger window triggered by pressing spacebar in Finder.
@@ -173,7 +153,7 @@ private extension PreviewViewController {
     let scrollerWidth = NSScroller.scrollerWidth(for: .regular, scrollerStyle: .overlay)
 
     // Dragging is started only if the click is inside the scroller
-    if location.y > scrollbarTop && location.y < scrollbarBottom && (isRightToLeft ? location.x < scrollerWidth : location.x > view.frame.width - scrollerWidth) {
+    if isRightToLeft ? location.x < scrollerWidth : location.x > view.frame.width - scrollerWidth {
       webView.evaluateJavaScript("startDragging(\(location.y))")
       return true
     } else {
