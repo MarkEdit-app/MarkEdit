@@ -126,15 +126,9 @@ private extension PreviewViewController {
 // #194 Dragging behavior in preview extension is wacky,
 // override the event handling and make a homemade scrolling strategy.
 private extension PreviewViewController {
-  var overrideDragging: Bool {
-    // Don't handle floating windows,
-    // which is typically a larger window triggered by pressing spacebar in Finder.
-    NSApp.windows.allSatisfy { $0.level == .normal }
-  }
-
   func addEventMonitorsForDragging() {
     NSEvent.addLocalMonitorForEvents(matching: .leftMouseDown) { [weak self] event in
-      guard let self, self.overrideDragging else {
+      guard let self, self.overrideDragging(event: event) else {
         return event
       }
 
@@ -142,13 +136,19 @@ private extension PreviewViewController {
     }
 
     NSEvent.addLocalMonitorForEvents(matching: .leftMouseDragged) { [weak self] event in
-      guard let self, self.overrideDragging else {
+      guard let self, self.overrideDragging(event: event) else {
         return event
       }
 
       self.updateDragging(event: event)
       return nil
     }
+  }
+
+  func overrideDragging(event: NSEvent) -> Bool {
+    // Don't handle floating windows,
+    // which is typically a larger window triggered by pressing spacebar in Finder.
+    view.window?.level != .floating && event.window === view.window
   }
 
   func startDragging(event: NSEvent) -> Bool {
