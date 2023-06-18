@@ -56,7 +56,7 @@ It's recommended to override build settings by adding a `Local.xcconfig` file un
 
 ## Testing MarkEdit Locally
 
-Unit tests are run automatically by [GitHub actions](https://github.com/MarkEdit-app/MarkEdit/actions), you can also run them on your machine.
+Unit tests are run automatically by [GitHub Actions](https://github.com/MarkEdit-app/MarkEdit/actions), you can also run them on your machine.
 
 ### Testing CoreEditor
 
