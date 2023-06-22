@@ -94,6 +94,7 @@ final class EditorViewController: NSViewController {
     config.userContentController = controller
 
     let webView = EditorWebView(frame: .zero, configuration: config)
+    webView.allowsMagnification = true
     webView.uiDelegate = self
     webView.menuDelegate = self
 

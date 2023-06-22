@@ -19,7 +19,9 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       config.setValue(false, forKey: "drawsBackground")
     }
 
-    return WKWebView(frame: .zero, configuration: config)
+    let webView = WKWebView(frame: .zero, configuration: config)
+    webView.allowsMagnification = true
+    return webView
   }()
 
   override var nibName: NSNib.Name? {

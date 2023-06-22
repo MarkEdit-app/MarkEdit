@@ -202,6 +202,9 @@
 /* Class = "NSMenu"; title = "Services"; ObjectID = "hz9-B4-Xy5"; */
 "hz9-B4-Xy5.title" = "服务";
 
+/* Class = "NSMenuItem"; title = "Zoom Out"; ObjectID = "i0b-gh-V2Y"; */
+"i0b-gh-V2Y.title" = "缩小";
+
 /* Class = "NSMenuItem"; title = "Open…"; ObjectID = "IAo-SY-fd9"; */
 "IAo-SY-fd9.title" = "打开…";
 
@@ -270,6 +273,9 @@
 
 /* Class = "NSMenuItem"; title = "Export to EPUB"; ObjectID = "ORv-QM-Kju"; */
 "ORv-QM-Kju.title" = "导出到 EPUB";
+
+/* Class = "NSMenuItem"; title = "Zoom In"; ObjectID = "oTO-fv-8dv"; */
+"oTO-fv-8dv.title" = "放大";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
 "OwM-mh-QMV.title" = "查找上一个";
@@ -342,6 +348,9 @@
 
 /* Class = "NSMenuItem"; title = "Math Block"; ObjectID = "Sqc-7N-3lD"; */
 "Sqc-7N-3lD.title" = "块状公式";
+
+/* Class = "NSMenuItem"; title = "Actual Size"; ObjectID = "Sqh-CT-2fi"; */
+"Sqh-CT-2fi.title" = "实际大小";
 
 /* Class = "NSMenu"; title = "Window"; ObjectID = "Td7-aD-5lo"; */
 "Td7-aD-5lo.title" = "窗口";

@@ -30,6 +30,7 @@ public final class Previewer: NSViewController {
     config.userContentController = controller
 
     let webView = WKWebView(frame: .zero, configuration: config)
+    webView.allowsMagnification = true
     return webView
   }()
 
