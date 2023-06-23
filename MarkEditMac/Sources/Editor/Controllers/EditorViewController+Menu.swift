@@ -42,6 +42,18 @@ extension EditorViewController: NSMenuItemValidation {
       return tableOfContentsMenuButton != nil
     }
 
+    if menuItem.action == #selector(actualSize(_:)) {
+      return abs(webView.magnification - 1.0) > .ulpOfOne
+    }
+
+    if menuItem.action == #selector(zoomIn(_:)) {
+      return webView.magnification < Constants.maximumZoomLevel
+    }
+
+    if menuItem.action == #selector(zoomOut(_:)) {
+      return webView.magnification > Constants.minimumZoomLevel
+    }
+
     if menuItem.action == #selector(toggleWindowFloating(_:)) {
       return view.window?.isKeyWindow == true
     }
@@ -301,6 +313,22 @@ private extension EditorViewController {
   }
 }
 
+// MARK: - View
+
+private extension EditorViewController {
+  @IBAction func actualSize(_ sender: Any?) {
+    webView.magnification = 1.0
+  }
+
+  @IBAction func zoomIn(_ sender: Any?) {
+    webView.magnification = min(Constants.maximumZoomLevel, webView.magnification + 0.1)
+  }
+
+  @IBAction func zoomOut(_ sender: Any?) {
+    webView.magnification = max(Constants.minimumZoomLevel, webView.magnification - 0.1)
+  }
+}
+
 // MARK: - Window
 
 private extension EditorViewController {
@@ -312,6 +340,11 @@ private extension EditorViewController {
 // MARK: - Private
 
 private extension EditorViewController {
+  enum Constants {
+    static let minimumZoomLevel: Double = 1.0
+    static let maximumZoomLevel: Double = 3.0
+  }
+
   func notifyFontSizeChanged() {
     NotificationCenter.default.post(
       name: .fontSizeChanged,
