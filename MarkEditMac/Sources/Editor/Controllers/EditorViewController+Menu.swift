@@ -34,31 +34,28 @@ extension EditorViewController: NSMenuItemValidation {
       return document?.fileURL != nil
     }
 
-    if menuItem.action == #selector(performPaste(_:)) {
+    switch menuItem.action {
+    case #selector(performPaste(_:)):
       return NSPasteboard.general.canPaste
-    }
-
-    if menuItem.action == #selector(openTableOfContents(_:)) {
+    case #selector(openTableOfContents(_:)):
       return tableOfContentsMenuButton != nil
-    }
-
-    if menuItem.action == #selector(actualSize(_:)) {
+    case #selector(resetFontSize(_:)):
+      return abs(AppPreferences.Editor.fontSize - FontPicker.defaultFontSize) > .ulpOfOne
+    case #selector(makeFontBigger(_:)):
+      return AppPreferences.Editor.fontSize < FontPicker.maximumFontSize
+    case #selector(makeFontSmaller(_:)):
+      return AppPreferences.Editor.fontSize > FontPicker.minimumFontSize
+    case #selector(actualSize(_:)):
       return abs(webView.magnification - 1.0) > .ulpOfOne
-    }
-
-    if menuItem.action == #selector(zoomIn(_:)) {
+    case #selector(zoomIn(_:)):
       return webView.magnification < Constants.maximumZoomLevel
-    }
-
-    if menuItem.action == #selector(zoomOut(_:)) {
+    case #selector(zoomOut(_:)):
       return webView.magnification > Constants.minimumZoomLevel
-    }
-
-    if menuItem.action == #selector(toggleWindowFloating(_:)) {
+    case #selector(toggleWindowFloating(_:)):
       return view.window?.isKeyWindow == true
+    default:
+      return true
     }
-
-    return true
   }
 }
 
@@ -252,6 +249,10 @@ private extension EditorViewController {
     NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil)
   }
 
+  @IBAction func selectAllText(_ sender: Any?) {
+    bridge.selection.selectAll()
+  }
+
   @IBAction func gotoLine(_ sender: Any?) {
     showGotoLineWindow(sender)
   }
@@ -268,28 +269,18 @@ private extension EditorViewController {
     bridge.toc.selectNextSection()
   }
 
+  @IBAction func resetFontSize(_ sender: Any?) {
+    AppPreferences.Editor.fontSize = FontPicker.defaultFontSize
+    notifyFontSizeChanged()
+  }
+
   @IBAction func makeFontBigger(_ sender: Any?) {
-    let fontSize = AppPreferences.Editor.fontSize
-    if fontSize < FontPicker.maximumFontSize {
-      AppPreferences.Editor.fontSize = fontSize + 1
-      notifyFontSizeChanged()
-    } else {
-      NSSound.beep()
-    }
+    AppPreferences.Editor.fontSize = min(FontPicker.maximumFontSize, AppPreferences.Editor.fontSize + 1)
+    notifyFontSizeChanged()
   }
 
   @IBAction func makeFontSmaller(_ sender: Any?) {
-    let fontSize = AppPreferences.Editor.fontSize
-    if fontSize > FontPicker.minimumFontSize {
-      AppPreferences.Editor.fontSize = fontSize - 1
-      notifyFontSizeChanged()
-    } else {
-      NSSound.beep()
-    }
-  }
-
-  @IBAction func resetFontSize(_ sender: Any?) {
-    AppPreferences.Editor.fontSize = FontPicker.defaultFontSize
+    AppPreferences.Editor.fontSize = max(FontPicker.minimumFontSize, AppPreferences.Editor.fontSize - 1)
     notifyFontSizeChanged()
   }
 

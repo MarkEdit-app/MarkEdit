@@ -1,6 +1,6 @@
 import { WebModule } from '../webModule';
 import { JSRect } from '../../@types/JSRect';
-import { selectedMainText, scrollToSelection, getRect, gotoLine } from '../../modules/selection';
+import { selectedMainText, selectAll, scrollToSelection, getRect, gotoLine } from '../../modules/selection';
 
 /**
  * @shouldExport true
@@ -8,6 +8,7 @@ import { selectedMainText, scrollToSelection, getRect, gotoLine } from '../../mo
  * @overrideModuleName WebBridgeSelection
  */
 export interface WebModuleSelection extends WebModule {
+  selectAll(): void;
   getText(): string;
   getRect({ pos }: { pos: CodeGen_Int }): JSRect | undefined;
   scrollToSelection(): void;
@@ -15,6 +16,10 @@ export interface WebModuleSelection extends WebModule {
 }
 
 export class WebModuleSelectionImpl implements WebModuleSelection {
+  selectAll(): void {
+    selectAll();
+  }
+
   getText(): string {
     return selectedMainText();
   }
