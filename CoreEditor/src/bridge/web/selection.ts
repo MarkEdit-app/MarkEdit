@@ -8,24 +8,24 @@ import { selectedMainText, selectAll, scrollToSelection, getRect, gotoLine } fro
  * @overrideModuleName WebBridgeSelection
  */
 export interface WebModuleSelection extends WebModule {
-  selectAll(): void;
   getText(): string;
   getRect({ pos }: { pos: CodeGen_Int }): JSRect | undefined;
+  selectAll(): void;
   scrollToSelection(): void;
   gotoLine({ lineNumber }: { lineNumber: CodeGen_Int }): void;
 }
 
 export class WebModuleSelectionImpl implements WebModuleSelection {
-  selectAll(): void {
-    selectAll();
-  }
-
   getText(): string {
     return selectedMainText();
   }
 
   getRect({ pos }: { pos: CodeGen_Int }): JSRect | undefined {
     return getRect(pos);
+  }
+
+  selectAll(): void {
+    selectAll();
   }
 
   scrollToSelection(): void {

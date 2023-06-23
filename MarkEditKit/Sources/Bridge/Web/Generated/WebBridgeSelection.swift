@@ -17,10 +17,6 @@ public final class WebBridgeSelection {
     self.webView = webView
   }
 
-  public func selectAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    webView?.invoke(path: "webModules.selection.selectAll", completion: completion)
-  }
-
   @MainActor
   public func getText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
@@ -45,6 +41,10 @@ public final class WebBridgeSelection {
         continuation.resume(with: $0)
       }
     }
+  }
+
+  public func selectAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.selection.selectAll", completion: completion)
   }
 
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
