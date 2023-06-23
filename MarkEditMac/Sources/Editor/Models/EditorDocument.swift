@@ -208,7 +208,7 @@ extension EditorDocument {
     }
 
     // Ideally we should be able to print WKWebView,
-    // but it doesn't work very well even on Ventura.
+    // but it doesn't work well because of the lazily rendering strategy used in CodeMirror.
     //
     // For now let's just print plain text,
     // we don't expect printing to be used a lot.
