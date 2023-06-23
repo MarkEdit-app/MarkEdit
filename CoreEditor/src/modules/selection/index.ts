@@ -65,6 +65,13 @@ export function selectWholeLineIfNeeded(event: MouseEvent) {
   }
 }
 
+export function selectAll() {
+  const editor = window.editor;
+  editor.dispatch({
+    selection: EditorSelection.range(0, editor.state.doc.length),
+  });
+}
+
 export function scrollToSelection(strategy: 'nearest' | 'start' | 'end' | 'center' = 'center', margin = 5) {
   const editor = window.editor;
   const range = editor.state.selection.main;

@@ -43,6 +43,10 @@ public final class WebBridgeSelection {
     }
   }
 
+  public func selectAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.selection.selectAll", completion: completion)
+  }
+
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.scrollToSelection", completion: completion)
   }
