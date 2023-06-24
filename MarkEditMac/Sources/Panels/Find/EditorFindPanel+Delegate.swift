@@ -11,21 +11,21 @@ import AppKit
 
 extension EditorFindPanel: NSSearchFieldDelegate {
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-    if selector == #selector(insertTab(_:)) && mode == .replace {
+    switch (selector, mode) {
+    case (#selector(insertTab(_:)), .replace):
       // Focus on the replace panel
       delegate?.editorFindPanelDidPressTabKey(self)
       return true
-    } else if selector == #selector(insertNewline(_:)) {
+    case (#selector(insertNewline(_:)), _):
       // Navigate between search results
       if NSApplication.shared.shiftKeyIsPressed {
         delegate?.editorFindPanelDidClickPrevious(self)
       } else {
         delegate?.editorFindPanelDidClickNext(self)
       }
-
       return true
+    default:
+      return false
     }
-
-    return false
   }
 }

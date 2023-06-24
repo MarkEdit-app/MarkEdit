@@ -78,12 +78,13 @@ final class GotoLineView: NSView {
 
 extension GotoLineView: NSTextFieldDelegate {
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-    if selector == #selector(insertNewline(_:)) {
+    switch selector {
+    case #selector(insertNewline(_:)):
       performGotoLine()
       return true
+    default:
+      return false
     }
-
-    return false
   }
 }
 

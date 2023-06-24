@@ -8,11 +8,12 @@ import Foundation
 
 public extension LineEndings {
   var characters: String {
-    if self == .crlf {
+    switch self {
+    case .crlf:
       return "\r\n"
-    } else if self == .cr {
+    case .cr:
       return "\r"
-    } else {
+    default:
       // LF is the preferred line endings on modern macOS
       return "\n"
     }
