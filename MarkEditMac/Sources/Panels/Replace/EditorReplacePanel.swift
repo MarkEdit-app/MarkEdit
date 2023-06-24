@@ -89,11 +89,12 @@ extension EditorReplacePanel: NSTextFieldDelegate {
   }
 
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-    if selector == #selector(insertNewline(_:)) && replaceButtons.isEnabled {
+    switch (selector, replaceButtons.isEnabled) {
+    case (#selector(insertNewline(_:)), true):
       delegate?.editorReplacePanelDidClickReplaceNext(self)
       return true
+    default:
+      return false
     }
-
-    return false
   }
 }
