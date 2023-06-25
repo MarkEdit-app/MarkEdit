@@ -147,6 +147,7 @@ extension EditorViewController {
       height: max(1, rect.height)
     )
 
+    presentedPopover = popover
     popover.show(relativeTo: rect, of: focusTrackingView, preferredEdge: .maxX)
   }
 }
