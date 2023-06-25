@@ -14,6 +14,8 @@ extension EditorViewController {
     let popover = NSPopover()
     popover.behavior = .transient
     popover.contentViewController = Previewer(code: code, type: type)
+
+    previewingPopover = popover
     presentPopover(popover, rect: rect)
   }
 }

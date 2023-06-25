@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line } from '@codemirror/state';
-import { getJSRect } from '../../common/utils';
+import { getClientRect } from '../../common/utils';
 
 import selectedRanges from './selectedRanges';
 import selectWholeLineAt from './selectWholeLineAt';
@@ -86,7 +86,7 @@ export function getRect(pos: number) {
     return undefined;
   }
 
-  return getJSRect(rect);
+  return getClientRect(rect);
 }
 
 export function gotoLine(lineNumber: number) {

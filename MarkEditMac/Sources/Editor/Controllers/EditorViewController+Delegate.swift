@@ -65,6 +65,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     loadingIndicator.scaleTo(2.0)
   }
 
+  func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore) {
+    // Viewport scale changed, perform cancel where we dismiss panels and popovers
+    cancelOperation(sender)
+  }
+
   func editorCoreTextDidChange(_ sender: EditorModuleCore) {
     document?.updateChangeCount(.changeDone)
 

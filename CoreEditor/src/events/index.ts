@@ -41,6 +41,14 @@ export function startObserving() {
     editingState.compositionEnded = true;
   });
 
+  document.addEventListener('scroll', () => {
+    // Dismiss the completion panel whenever the document scrolls,
+    // it happens usually when the page is scaled, i.e., it's not the actual size.
+    if (completion.isPanelVisible()) {
+      window.nativeModules.completion.cancelCompletion();
+    }
+  });
+
   observeEventsForTokenization();
   observeEventsForCompletion();
 }
