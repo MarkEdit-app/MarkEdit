@@ -8,6 +8,7 @@ import Foundation
 
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
+  func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
   func editorCoreTextDidChange(_ sender: EditorModuleCore)
   func editorCore(
     _ sender: EditorModuleCore,
@@ -25,6 +26,10 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyWindowDidLoad() {
     delegate?.editorCoreWindowDidLoad(self)
+  }
+
+  public func notifyViewportScaleDidChange() {
+    delegate?.editorCoreViewportScaleDidChange(self)
   }
 
   public func notifyTextDidChange() {

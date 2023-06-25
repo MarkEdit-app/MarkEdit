@@ -1,4 +1,4 @@
-import { getJSRect } from '../../common/utils';
+import { getClientRect } from '../../common/utils';
 
 export enum PreviewType {
   mermaid = 'mermaid',
@@ -31,7 +31,7 @@ export function showPreview(event: MouseEvent) {
   }
 
   const type = target.getAttribute('data-type') as PreviewType;
-  window.nativeModules.preview.show({ code, type, rect: getJSRect(rect) });
+  window.nativeModules.preview.show({ code, type, rect: getClientRect(rect) });
 
   event.preventDefault();
   event.stopPropagation();

@@ -1,6 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
+import { getViewportScale } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import * as styling from './styling/config';
@@ -66,6 +67,15 @@ export function resetEditor(doc: string) {
     lineColumn: { line: 1 as CodeGen_Int, column: 1 as CodeGen_Int, length: 0 as CodeGen_Int },
     contentEdited: false,
   });
+
+  // Observe viewport scale changes, i.e., pinch to zoom
+  window.visualViewport?.addEventListener('resize', () => {
+    const viewportScale = getViewportScale();
+    if (Math.abs(viewportScale - storage.viewportScale) > 0.001) {
+      window.nativeModules.core.notifyViewportScaleDidChange();
+      storage.viewportScale = viewportScale;
+    }
+  });
 }
 
 /**
@@ -129,6 +139,10 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   scrollDOM.addEventListener('wheel', () => { /* no-op */ });
 }
 
-const storage: { scrollTimer: ReturnType<typeof setTimeout> | undefined } = {
+const storage: {
+  scrollTimer: ReturnType<typeof setTimeout> | undefined;
+  viewportScale: number;
+} = {
   scrollTimer: undefined,
+  viewportScale: 1.0,
 };

@@ -16,6 +16,7 @@ final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
   var hasUnfinishedAnimations = false
   var safeAreaObservation: NSKeyValueObservation?
+  weak var presentedPopover: NSPopover?
 
   var editorText: String? {
     get async {
@@ -180,6 +181,8 @@ final class EditorViewController: NSViewController {
     if completionContext.isPanelVisible {
       cancelCompletion()
     }
+
+    presentedPopover?.close()
   }
 
   override var representedObject: Any? {

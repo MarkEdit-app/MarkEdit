@@ -12,6 +12,7 @@ import MarkEditCore
 
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
+  func notifyViewportScaleDidChange()
   func notifyTextDidChange()
   func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool)
 }
@@ -25,6 +26,9 @@ final class NativeBridgeCore: NativeBridge {
   lazy var methods: [String: NativeMethod] = [
     "notifyWindowDidLoad": { [weak self] in
       self?.notifyWindowDidLoad(parameters: $0)
+    },
+    "notifyViewportScaleDidChange": { [weak self] in
+      self?.notifyViewportScaleDidChange(parameters: $0)
     },
     "notifyTextDidChange": { [weak self] in
       self?.notifyTextDidChange(parameters: $0)
@@ -43,6 +47,11 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
+    return .success(nil)
+  }
+
+  private func notifyViewportScaleDidChange(parameters: Data) -> Result<Any?, Error>? {
+    module.notifyViewportScaleDidChange()
     return .success(nil)
   }
 

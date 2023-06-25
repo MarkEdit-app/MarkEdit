@@ -139,13 +139,15 @@ extension EditorViewController {
       webView.addSubview(focusTrackingView)
     }
 
+    // The origin has to be inside the viewport, and the size cannot be zero
     focusTrackingView.frame = CGRect(
-      x: rect.minX,
-      y: rect.minY,
-      width: max(1, rect.width), // It can be zero, which is invalid
-      height: rect.height
+      x: max(0, rect.minX),
+      y: max(0, rect.minY),
+      width: max(1, rect.width),
+      height: max(1, rect.height)
     )
 
+    presentedPopover = popover
     popover.show(relativeTo: rect, of: focusTrackingView, preferredEdge: .maxX)
   }
 }
