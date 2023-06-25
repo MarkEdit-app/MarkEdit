@@ -30,7 +30,7 @@ public struct FontPicker: View {
       ZStack {
         // Just to steal the bezel UI from TextField
         TextField(text: .constant("")) {}
-          .focusable(false) // Doesn't work on Monterey
+          .focusable(false)
           .allowsHitTesting(false)
 
         Text(configuration.localizedInfo(style: selectedFontStyle, size: selectedFontSize))
