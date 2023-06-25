@@ -1,5 +1,7 @@
 # MarkEdit
 
+[![](https://img.shields.io/badge/Platform-macOS_12.0+-blue?color=007bff)](https://apps.apple.com/app/id1669953820) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
+
 MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
 
 <a href="https://apps.apple.com/app/id1669953820" target="_blank"><img alt="Download on the Mac App Store" src="https://user-images.githubusercontent.com/6745066/216816394-706b5104-42f3-4cc4-96c9-471a9356d1a8.svg"></a>
@@ -52,7 +54,7 @@ After successfully building `CoreEditor`, open `MarkEdit.xcodeproj`, and build t
 
 It's recommended to override build settings by adding a `Local.xcconfig` file under the root folder, including code signing identity, development team, etc.
 
-> Note that you should always use the latest version of Xcode.
+> Note that you should always use the latest stable release of Xcode.
 
 ## Testing MarkEdit Locally
 
