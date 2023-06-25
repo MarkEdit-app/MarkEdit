@@ -46,8 +46,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     UserDefaults.overwriteTextCheckerOnce()
-    NSSpellChecker.swizzleCorrectionIndicatorOnce
     EditorCustomization.createFiles()
+
+    NSSpellChecker.swizzleInlineCompletionEnabledOnce
+    NSSpellChecker.swizzleCorrectionIndicatorOnce
 
     NotificationCenter.default.addObserver(
       self,
@@ -67,7 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 // MARK: - Private
 
 private extension AppDelegate {
-  @objc private func windowDidResignKey(_ notification: Notification) {
+  @objc func windowDidResignKey(_ notification: Notification) {
     // Cancel completion when an editor is no longer the key window
     if let editor = (notification.object as? NSWindow)?.contentViewController as? EditorViewController {
       editor.cancelCompletion()

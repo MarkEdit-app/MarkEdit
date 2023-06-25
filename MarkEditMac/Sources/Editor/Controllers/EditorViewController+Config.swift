@@ -80,8 +80,8 @@ extension EditorViewController {
   }
 
   func setInlinePredictions(enabled: Bool) {
-    // [macOS 14] Changing this won't work without recreating the WebView
-    webView.configuration.setAllowsInlinePredictions(enabled)
+    let webKitEnabled = NSSpellChecker.InlineCompletion.webKitEnabled
+    webView.configuration.setAllowsInlinePredictions(enabled && webKitEnabled)
   }
 
   func setSuggestWhileTyping(enabled: Bool) {

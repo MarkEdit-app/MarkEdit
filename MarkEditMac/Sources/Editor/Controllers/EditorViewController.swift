@@ -89,7 +89,7 @@ final class EditorViewController: NSViewController {
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
     let config: WKWebViewConfiguration = .newConfig()
-    config.setAllowsInlinePredictions(AppPreferences.Assistant.inlinePredictions)
+    config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
 
     config.processPool = EditorReusePool.shared.processPool
     config.userContentController = controller

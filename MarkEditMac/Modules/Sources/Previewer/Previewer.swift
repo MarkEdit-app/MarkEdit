@@ -109,10 +109,10 @@ public final class Previewer: NSViewController {
 
 // MARK: - WKScriptMessageHandler
 
-extension Previewer {
+private extension Previewer {
   // Break the retain cycle inside message handler,
   // to keep it simple, we are not using a delegate here.
-  private class MessageHandler: NSObject, WKScriptMessageHandler {
+  class MessageHandler: NSObject, WKScriptMessageHandler {
     private weak var host: Previewer?
 
     init(host: Previewer? = nil) {
@@ -124,7 +124,7 @@ extension Previewer {
     }
   }
 
-  private func didReceive(message: WKScriptMessage) {
+  func didReceive(message: WKScriptMessage) {
     if let body = message.body as? [String: Double], let height = body["height"], height > 0 {
       popover?.contentSize = CGSize(width: view.frame.width, height: max(height, Constants.minimumHeight))
     }

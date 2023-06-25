@@ -7,16 +7,44 @@
 import Foundation
 
 public extension NSObject {
+  /// Exchange two class methods during runtime.
+  static func exchangeClassMethods(originalSelector: Selector, swizzledSelector: Selector) {
+    exchangeImplementations(
+      originalSelector: originalSelector,
+      originalMethod: class_getClassMethod(Self.self, originalSelector),
+      swizzledSelector: swizzledSelector,
+      swizzledMethod: class_getClassMethod(Self.self, swizzledSelector)
+    )
+  }
+
   /// Exchange two instance methods during runtime.
   static func exchangeInstanceMethods(originalSelector: Selector, swizzledSelector: Selector) {
-    let type = Self.self
+    exchangeImplementations(
+      originalSelector: originalSelector,
+      originalMethod: class_getInstanceMethod(Self.self, originalSelector),
+      swizzledSelector: swizzledSelector,
+      swizzledMethod: class_getInstanceMethod(Self.self, swizzledSelector)
+    )
+  }
+}
 
-    guard let originalMethod = class_getInstanceMethod(type, originalSelector) else {
+// MARK: - Private
+
+private extension NSObject {
+  /// Exchange two implementations during runtime.
+  static func exchangeImplementations(
+    originalSelector: Selector,
+    originalMethod: Method?,
+    swizzledSelector: Selector,
+    swizzledMethod: Method?
+  ) {
+    let type = Self.self
+    guard let originalMethod else {
       Logger.assertFail("Failed to swizzle: \(type), missing original method")
       return
     }
 
-    guard let swizzledMethod = class_getInstanceMethod(type, swizzledSelector) else {
+    guard let swizzledMethod else {
       Logger.assertFail("Failed to swizzle: \(type), missing swizzled method")
       return
     }
