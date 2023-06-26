@@ -81,7 +81,7 @@ extension EditorViewController {
 
   func setInlinePredictions(enabled: Bool) {
     let webKitEnabled = NSSpellChecker.InlineCompletion.webKitEnabled
-    webView.configuration.setAllowsInlinePredictions(enabled && webKitEnabled)
+    webView.configuration.setAllowsInlinePredictions(webKitEnabled)
   }
 
   func setSuggestWhileTyping(enabled: Bool) {
