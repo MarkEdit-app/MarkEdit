@@ -15,7 +15,7 @@ export const selectedTextDecoration = ViewPlugin.fromClass(class {
   }
 
   update(update: ViewUpdate) {
-    if (!update.selectionSet) {
+    if (!selectionHasChanged(update)) {
       return;
     }
 
@@ -40,7 +40,7 @@ export const selectedLinesDecoration = ViewPlugin.fromClass(class {
   }
 
   update(update: ViewUpdate) {
-    if (update.selectionSet) {
+    if (selectionHasChanged(update)) {
       this.updateDecos();
     }
   }
@@ -59,3 +59,8 @@ export const selectedLinesDecoration = ViewPlugin.fromClass(class {
     this.decorations = builder.finish();
   }
 }, { decorations: instance => instance.decorations });
+
+function selectionHasChanged(update: ViewUpdate) {
+  // selectionSet is false when the selected text is cut
+  return update.selectionSet || update.docChanged;
+}
