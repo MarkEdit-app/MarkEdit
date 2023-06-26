@@ -70,7 +70,7 @@ extension EditorViewController {
 
 // MARK: - Panels
 
-extension EditorViewController {
+private extension EditorViewController {
   func updateCompletionPanel(isVisible: Bool) {
     let changed = completionContext.isPanelVisible != isVisible
     if isVisible {
@@ -90,7 +90,7 @@ extension EditorViewController {
     }
   }
 
-  private func updateCompletionPanel(completions: [String]) {
+  func updateCompletionPanel(completions: [String]) {
     guard completionContext.isPanelVisible else {
       return
     }
@@ -105,7 +105,7 @@ extension EditorViewController {
     }
   }
 
-  private func updateCompletionPanel(completions: [String], caretRect: CGRect) {
+  func updateCompletionPanel(completions: [String], caretRect: CGRect) {
     guard completionContext.isPanelVisible, let parentWindow = view.window else {
       return
     }

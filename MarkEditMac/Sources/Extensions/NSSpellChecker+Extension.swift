@@ -13,6 +13,39 @@ import TextCompletion
  NSSpellChecker is pretty much a black box, this extension uses runtime skills to hack it around.
  */
 extension NSSpellChecker {
+  /**
+   For macOS Sonoma and higher, manage inline prediction features in the app.
+
+   We need this because changing `allowsInlinePredictions` in `WKWebViewConfiguration` won't work without creating a new `WKWebView`.
+
+   Internally, [WebKit](https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/mac/WebViewImpl.mm) checks the `isAutomaticInlineCompletionEnabled` SPI, which can be swizzled.
+
+   If `isAutomaticInlineCompletionEnabled` exists, we swizzle it and return the value set by the user and make the configuration always true. Otherwise, we just set the configuration to the value set by the user.
+   */
+  enum InlineCompletion {
+    static var webKitEnabled: Bool {
+      if NSSpellChecker.supportsInlineCompletion {
+        return true
+      } else {
+        return AppPreferences.Assistant.inlinePredictions
+      }
+    }
+
+    static var spellCheckerEnabled = AppPreferences.Assistant.inlinePredictions
+    fileprivate static let spellCheckerSelector = sel_getUid("isAutomaticInlineCompletionEnabled")
+  }
+
+  static let swizzleInlineCompletionEnabledOnce: () = {
+    guard supportsInlineCompletion else {
+      return
+    }
+
+    NSSpellChecker.exchangeClassMethods(
+      originalSelector: InlineCompletion.spellCheckerSelector,
+      swizzledSelector: #selector(getter: swizzled_isAutomaticInlineCompletionEnabled)
+    )
+  }()
+
   static let swizzleCorrectionIndicatorOnce: () = {
     NSSpellChecker.exchangeInstanceMethods(
       originalSelector: #selector(showCorrectionIndicator(of:primaryString:alternativeStrings:forStringIn:view:completionHandler:)),
@@ -35,7 +68,24 @@ extension NSSpellChecker {
 // MARK: - Private
 
 private extension NSSpellChecker {
-  @objc private func swizzled_showCorrectionIndicator(
+  static var supportsInlineCompletion: Bool {
+    guard #available(macOS 14.0, *) else {
+      return false
+    }
+
+    guard responds(to: InlineCompletion.spellCheckerSelector) else {
+      Logger.assertFail("The isAutomaticInlineCompletionEnabled selector was changed")
+      return false
+    }
+
+    return true
+  }
+
+  @objc static var swizzled_isAutomaticInlineCompletionEnabled: Bool {
+    InlineCompletion.spellCheckerEnabled
+  }
+
+  @objc func swizzled_showCorrectionIndicator(
     of type: NSSpellChecker.CorrectionIndicatorType,
     primaryString: String,
     alternativeStrings: [String],

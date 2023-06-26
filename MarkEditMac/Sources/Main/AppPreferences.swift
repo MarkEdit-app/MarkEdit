@@ -160,6 +160,7 @@ enum AppPreferences {
     @Storage(key: "assistant.inline-predictions", defaultValue: true)
     static var inlinePredictions: Bool {
       didSet {
+        NSSpellChecker.InlineCompletion.spellCheckerEnabled = inlinePredictions
         performUpdates { $0.setInlinePredictions(enabled: inlinePredictions) }
       }
     }
