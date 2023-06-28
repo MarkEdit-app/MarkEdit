@@ -41,6 +41,10 @@ jobs:
         run: |
           xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditCoreTests -destination 'platform=macOS'
 
+      - name: Test MarkEditMacTests
+        run: |
+          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditMacTests -destination 'platform=macOS'
+
       - name: Test ModulesTests
         run: |
           xcodebuild test -project ../MarkEdit.xcodeproj -scheme ModulesTests -destination 'platform=macOS'
