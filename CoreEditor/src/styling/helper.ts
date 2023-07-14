@@ -34,9 +34,10 @@ export function shadowableTextColor(input: string) {
     return { 'color': input, 'text-shadow': 'none' };
   }
 
+  const style: { [key: string]: string } = {};
   return input.split('; ').reduce((acc, cur) => {
     const parts = cur.split(': ');
     acc[parts[0]] = parts[1];
     return acc;
-  }, {});
+  }, style);
 }
