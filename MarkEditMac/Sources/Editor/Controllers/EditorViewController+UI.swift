@@ -123,14 +123,34 @@ extension EditorViewController {
   }
 
   func handleMouseMoved(_ event: NSEvent) {
-    guard NSCursor.current != NSCursor.arrow else {
-      return
+    // WKWebView contentEditable keeps showing i-beam, fix that
+    if NSCursor.current != NSCursor.arrow {
+      let location = event.locationInWindow.y
+      if location > view.frame.height - view.safeAreaInsets.top && location < view.frame.height {
+        NSCursor.arrow.push()
+      }
     }
 
-    // WKWebView contentEditable keeps showing i-beam, fix that
-    let location = event.locationInWindow.y
-    if location > view.frame.height - view.safeAreaInsets.top && location < view.frame.height {
-      NSCursor.arrow.push()
+    let trackingRect = {
+      var bounds = view.bounds
+      bounds.size.height -= view.safeAreaInsets.top
+      return bounds
+    }()
+
+    // WebKit doesn't update hover state reliably, e.g., "mouseup" outside the window,
+    // propagate a native event to help update the UI.
+    let mouseExitedWindow = !trackingRect.contains(event.locationInWindow)
+    if mouseExitedWindow != self.mouseExitedWindow {
+      let clientX = event.locationInWindow.x
+      let clientY = event.locationInWindow.y
+
+      if mouseExitedWindow {
+        bridge.core.handleMouseExited(clientX: clientX, clientY: clientY)
+      } else {
+        bridge.core.handleMouseEntered(clientX: clientX, clientY: clientY)
+      }
+
+      self.mouseExitedWindow = mouseExitedWindow
     }
   }
 

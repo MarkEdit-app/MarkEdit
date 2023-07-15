@@ -66,11 +66,6 @@ export function resetEditor(doc: string) {
     })();
   });
 
-  const gutterDOM = document.querySelector('.cm-gutters') as HTMLElement | null;
-  if (gutterDOM !== null) {
-    gutterDOM.addEventListener('mouseenter', () => styling.setGutterHoverDelay(false));
-  }
-
   // Recofigure, window.config might have changed
   styling.setUp(window.config, themes.loadTheme(window.config.theme).accentColor);
 
@@ -136,6 +131,27 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
 
 export function markEditorDirty(isDirty: boolean) {
   editingState.isDirty = isDirty;
+}
+
+export function handleMouseEntered(clientX: number, _clientY: number) {
+  const gutterDOM = document.querySelector('.cm-gutters') as HTMLElement | null;
+  if (gutterDOM === null) {
+    return;
+  }
+
+  const gutterRect = gutterDOM.getBoundingClientRect();
+  const rightToLeft = gutterRect.left > 20;
+
+  // Check if the point is inside the gutters, RTL is guessed with a margin.
+  //
+  // To keep it simple, this doesn't take magnification into account.
+  if (clientX > 0 && clientX < gutterRect.width || rightToLeft && clientX > gutterRect.left && clientX < gutterRect.right) {
+    styling.setGutterHovered(true);
+  }
+}
+
+export function handleMouseExited(_clientX: number, _clientY: number) {
+  styling.setGutterHovered(false);
 }
 
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {

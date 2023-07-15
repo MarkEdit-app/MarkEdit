@@ -1,5 +1,15 @@
 import { WebModule } from '../webModule';
-import { ReplaceGranularity, resetEditor, clearEditor, getEditorText, insertText, replaceText, markEditorDirty } from '../../core';
+import {
+  ReplaceGranularity,
+  resetEditor,
+  clearEditor,
+  getEditorText,
+  insertText,
+  replaceText,
+  markEditorDirty,
+  handleMouseEntered,
+  handleMouseExited,
+} from '../../core';
 
 /**
  * @shouldExport true
@@ -13,6 +23,8 @@ export interface WebModuleCore extends WebModule {
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
   markEditorDirty({ isDirty }: { isDirty: boolean }): void;
+  handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number } ): void;
+  handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number } ): void;
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
@@ -38,5 +50,13 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   markEditorDirty({ isDirty }: { isDirty: boolean }): void {
     markEditorDirty(isDirty);
+  }
+
+  handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number }): void {
+    handleMouseEntered(clientX, clientY);
+  }
+
+  handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void {
+    handleMouseExited(clientX, clientY);
   }
 }

@@ -15,6 +15,7 @@ import TextCompletion
 final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
   var hasUnfinishedAnimations = false
+  var mouseExitedWindow = false
   var safeAreaObservation: NSKeyValueObservation?
   weak var presentedPopover: NSPopover?
 
