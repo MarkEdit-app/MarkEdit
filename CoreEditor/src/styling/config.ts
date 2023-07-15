@@ -20,6 +20,7 @@ export default interface StyleSheets {
   invisibles?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
+  gutterHoverDelay?: HTMLStyleElement;
 }
 
 export function setUp(config: Config, accentColor: string) {
@@ -46,11 +47,7 @@ export function setTheme(theme: EditorTheme) {
 
 export function setAccentColor(accentColor: string) {
   if (styleSheets.accentColor === undefined) {
-    const style = document.createElement('style');
-    style.textContent = '.cm-md-header {}';
-
-    styleSheets.accentColor = style;
-    document.head.appendChild(style);
+    styleSheets.accentColor = createStyleSheet('.cm-md-header {}');
   }
 
   updateStyleSheet(styleSheets.accentColor, style => {
@@ -61,11 +58,7 @@ export function setAccentColor(accentColor: string) {
 
 export function setFontFamily(fontFamily: string) {
   if (styleSheets.fontFamily === undefined) {
-    const style = document.createElement('style');
-    style.textContent = '.cm-content * {}';
-
-    styleSheets.fontFamily = style;
-    document.head.appendChild(style);
+    styleSheets.fontFamily = createStyleSheet('.cm-content * {}');
   }
 
   updateStyleSheet(styleSheets.fontFamily, style => style.fontFamily = fontFamily);
@@ -73,16 +66,12 @@ export function setFontFamily(fontFamily: string) {
 
 export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
-    const style = document.createElement('style');
-    style.textContent = `
+    styleSheets.fontSize = createStyleSheet(`
       .cm-editor:not(.cm-md-frontMatter *) {}
       .cm-md-heading1:not(.cm-md-frontMatter *) {}
       .cm-md-heading2:not(.cm-md-frontMatter *) {}
       .cm-md-heading3:not(.cm-md-frontMatter *) {}
-    `;
-
-    styleSheets.fontSize = style;
-    document.head.appendChild(style);
+    `);
   }
 
   updateStyleSheet(styleSheets.fontSize, (style, rule) => {
@@ -122,8 +111,7 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
   }
 
   if (styleSheets.invisibles === undefined) {
-    const style = document.createElement('style');
-    style.textContent = `
+    styleSheets.invisibles = createStyleSheet(`
       .cm-visibleTab:not(.cm-selectedTextRange *) {
         background-color: #00000000;
       }
@@ -131,11 +119,7 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
       .cm-visibleSpace:not(.cm-selectedTextRange *)::before {
         color: #00000000;
       }
-    `;
-
-    style.disabled = true;
-    styleSheets.invisibles = style;
-    document.head.appendChild(style);
+    `, false);
   }
 
   styleSheets.invisibles.disabled = behavior !== InvisiblesBehavior.selection;
@@ -150,16 +134,11 @@ export function setFocusMode(enabled: boolean) {
   }
 
   if (styleSheets.focusMode === undefined) {
-    const style = document.createElement('style');
-    style.textContent = `
+    styleSheets.focusMode = createStyleSheet(`
       .cm-line:not(.cm-selectedLineRange), .cm-gutterElement:not(.cm-activeLineGutter) {
         opacity: 0.25;
       }
-    `;
-
-    style.disabled = true;
-    styleSheets.focusMode = style;
-    document.head.appendChild(style);
+    `, false);
   }
 
   styleSheets.focusMode.disabled = !enabled;
@@ -176,12 +155,30 @@ export function setLineWrapping(enabled: boolean) {
 
 export function setLineHeight(lineHeight: number) {
   if (styleSheets.lineHeight === undefined) {
-    const style = document.createElement('style');
-    style.textContent = '.cm-line {}';
-
-    styleSheets.lineHeight = style;
-    document.head.appendChild(style);
+    styleSheets.lineHeight = createStyleSheet('.cm-line {}');
   }
 
   updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight * 100}%`);
+}
+
+export function setGutterHoverDelay(enabled: boolean) {
+  if (styleSheets.gutterHoverDelay === undefined) {
+    // To work around :hover is not reset when mouse is released outside the window
+    styleSheets.gutterHoverDelay = createStyleSheet(`
+      .cm-gutters:hover .cm-foldGutter:not(:hover), .cm-foldGutter:hover {
+        transition-delay: 3000000s;
+      }
+    `, false);
+  }
+
+  styleSheets.gutterHoverDelay.disabled = !enabled;
+}
+
+function createStyleSheet(styleText: string, enabled = true) {
+  const style = document.createElement('style');
+  style.textContent = styleText;
+  style.disabled = !enabled;
+
+  document.head.appendChild(style);
+  return style;
 }

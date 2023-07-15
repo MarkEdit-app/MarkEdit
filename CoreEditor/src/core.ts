@@ -63,6 +63,11 @@ export function resetEditor(doc: string) {
     })();
   });
 
+  const gutterDOM = document.querySelector('.cm-gutters') as HTMLElement | null;
+  if (gutterDOM !== null) {
+    gutterDOM.addEventListener('mouseenter', () => styling.setGutterHoverDelay(false));
+  }
+
   // Recofigure, window.config might have changed
   styling.setUp(window.config, themes.loadTheme(window.config.theme).accentColor);
 
