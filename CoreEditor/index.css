@@ -23,7 +23,7 @@ html, body {
   -webkit-user-select: none;
 
   /* To work around a Safari bug where :hover is not cleared when mouse is outside the window */
-  margin: 1px;
+  margin: 0px 1px;
 }
 
 /* Markdown */

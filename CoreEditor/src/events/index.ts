@@ -1,5 +1,6 @@
 import isMetaKey from './isMetaKey';
 import { editingState } from '../common/store';
+import { setGutterHoverDelay } from '../styling/config';
 
 import * as completion from '../modules/completion';
 import * as grammarly from '../modules/grammarly';
@@ -27,10 +28,12 @@ export function startObserving() {
 
   document.addEventListener('mousedown', event => {
     link.handleMouseDown(event);
+    setGutterHoverDelay(true);
   }, true);
 
   document.addEventListener('mouseup', event => {
     link.handleMouseUp(event);
+    setGutterHoverDelay(false);
   }, true);
 
   document.addEventListener('compositionstart', () => {
