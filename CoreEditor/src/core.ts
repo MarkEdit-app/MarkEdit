@@ -37,7 +37,11 @@ export function resetEditor(doc: string) {
 
   editor.focus();
   window.editor = editor;
-  selection.scrollCaretToVisible(); // coordsAtPos ensures the line number height
+
+  // coordsAtPos ensures the line number height
+  selection.scrollCaretToVisible();
+  // Makes sure the content doesn't have unwanted inset
+  editor.dispatch({ effects: EditorView.scrollIntoView(0) });
 
   const scrollDOM = editor.scrollDOM;
   fixWebKitWheelIssues(scrollDOM);
