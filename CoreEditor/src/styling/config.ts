@@ -7,6 +7,7 @@ import { invisiblesExtension } from './nodes/invisible';
 import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
+import { isMouseDown } from '../events';
 
 /**
  * Style sheets that can be changed dynamically.
@@ -20,7 +21,6 @@ export default interface StyleSheets {
   invisibles?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
-  gutterHoverDelay?: HTMLStyleElement;
 }
 
 export function setUp(config: Config, accentColor: string) {
@@ -30,6 +30,10 @@ export function setUp(config: Config, accentColor: string) {
   setInvisiblesBehavior(config.invisiblesBehavior);
   setFocusMode(config.focusMode);
   setLineHeight(config.lineHeight);
+
+  if (config.showLineNumbers) {
+    enableGutterHoverEffects();
+  }
 }
 
 export function setTheme(theme: EditorTheme) {
@@ -88,6 +92,10 @@ export function setShowLineNumbers(enabled: boolean) {
     editor.dispatch({
       effects: window.dynamics.gutters?.reconfigure(enabled ? gutterExtensions : []),
     });
+  }
+
+  if (enabled) {
+    enableGutterHoverEffects();
   }
 }
 
@@ -161,17 +169,32 @@ export function setLineHeight(lineHeight: number) {
   updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight * 100}%`);
 }
 
-export function setGutterHoverDelay(enabled: boolean) {
-  if (styleSheets.gutterHoverDelay === undefined) {
-    // To work around :hover is not reset when mouse is released outside the window
-    styleSheets.gutterHoverDelay = createStyleSheet(`
-      .cm-gutters:hover .cm-foldGutter:not(:hover), .cm-foldGutter:hover {
-        transition-delay: 3000000s;
-      }
-    `, false);
+export function setGutterHovered(hovered: boolean) {
+  const className = 'cm-gutterHover';
+  const gutterDOM = document.querySelector('.cm-foldGutter') as HTMLElement | null;
+
+  if (hovered) {
+    gutterDOM?.classList.add(className);
+  } else {
+    gutterDOM?.classList.remove(className);
+  }
+}
+
+function enableGutterHoverEffects() {
+  const gutterDOM = document.querySelector('.cm-gutters') as HTMLElement | null;
+  if (gutterDOM === null) {
+    return;
   }
 
-  styleSheets.gutterHoverDelay.disabled = !enabled;
+  // Intead of using the :hover pseudo class,
+  // which is not reliable on WebKit when releasing the mouse outside the window,
+  // we handle hover state manually and expose methods to native.
+  gutterDOM.addEventListener('mouseleave', () => setGutterHovered(false));
+  gutterDOM.addEventListener('mouseenter', () => {
+    if (!isMouseDown()) {
+      setGutterHovered(true);
+    }
+  });
 }
 
 function createStyleSheet(styleText: string, enabled = true) {

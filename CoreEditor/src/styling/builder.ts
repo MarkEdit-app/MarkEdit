@@ -40,6 +40,9 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     opacity: '0',
     transition: '0.4s',
   },
+  '.cm-foldGutter.cm-gutterHover': {
+    opacity: '1',
+  },
   '.cm-foldGutter, .cm-foldPlaceholder': {
     /* We don't use ui-monospace here because ▶︎ and ••• look very big */
     fontFamily: 'monospace',
@@ -53,9 +56,6 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-gutters': {
     borderRight: 'none',
     fontFamily: 'ui-monospace, monospace',
-  },
-  '.cm-gutters:hover .cm-foldGutter:not(:hover), .cm-foldGutter:hover': {
-    opacity: '1',
   },
   '.cm-activeLineGutter': {
     backgroundColor: 'inherit',

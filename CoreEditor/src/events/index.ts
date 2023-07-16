@@ -1,6 +1,5 @@
 import isMetaKey from './isMetaKey';
 import { editingState } from '../common/store';
-import { setGutterHoverDelay } from '../styling/config';
 
 import * as completion from '../modules/completion';
 import * as grammarly from '../modules/grammarly';
@@ -27,13 +26,13 @@ export function startObserving() {
   });
 
   document.addEventListener('mousedown', event => {
+    storage.isMouseDown = true;
     link.handleMouseDown(event);
-    setGutterHoverDelay(true);
   }, true);
 
   document.addEventListener('mouseup', event => {
+    storage.isMouseDown = false;
     link.handleMouseUp(event);
-    setGutterHoverDelay(false);
   }, true);
 
   document.addEventListener('compositionstart', () => {
@@ -54,6 +53,10 @@ export function startObserving() {
 
   observeEventsForTokenization();
   observeEventsForCompletion();
+}
+
+export function isMouseDown() {
+  return storage.isMouseDown;
 }
 
 function observeEventsForTokenization() {
@@ -106,3 +109,5 @@ function observeEventsForCompletion() {
     }
   }, true);
 }
+
+const storage: { isMouseDown: boolean } = { isMouseDown: false };

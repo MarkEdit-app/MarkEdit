@@ -22,8 +22,8 @@ html, body {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
 
-  /* To work around a Safari bug where :hover is not cleared when mouse is outside the window */
-  margin: 0px 1px;
+  /* To work around a WebKit bug where :hover is not cleared when mouse is outside the window */
+  margin: 1px;
 }
 
 /* Markdown */
