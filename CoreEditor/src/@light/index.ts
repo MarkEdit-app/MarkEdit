@@ -42,6 +42,9 @@ const parent = document.querySelector('#editor') ?? document.body;
 window.editor = new EditorView({ doc, parent, extensions });
 styling.setUp(config, loadTheme(config.theme).accentColor);
 
+// Makes sure the content doesn't have unwanted inset
+window.editor.dispatch({ effects: EditorView.scrollIntoView(0) });
+
 // To keep the app size smaller, we don't have bridge here,
 // inject function to window directly.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
