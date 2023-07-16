@@ -54,18 +54,29 @@ public struct FontPicker: View {
       )
 
       Menu {
-        Button(configuration.defaultFontName) {
-          changeFontStyle(.systemDefault)
-        }
-        Button(configuration.monoFontName) {
-          changeFontStyle(.systemMono)
-        }
-        Button(configuration.roundedFontName) {
-          changeFontStyle(.systemRounded)
-        }
-        Button(configuration.serifFontName) {
-          changeFontStyle(.systemSerif)
-        }
+        systemFontButton(
+          style: .systemDefault,
+          name: configuration.defaultFontName,
+          design: .default
+        )
+
+        systemFontButton(
+          style: .systemMono,
+          name: configuration.monoFontName,
+          design: .monospaced
+        )
+
+        systemFontButton(
+          style: .systemRounded,
+          name: configuration.roundedFontName,
+          design: .rounded
+        )
+
+        systemFontButton(
+          style: .systemSerif,
+          name: configuration.serifFontName,
+          design: .serif
+        )
 
         Divider()
 
@@ -98,6 +109,14 @@ public struct FontPicker: View {
 private extension FontPicker {
   var selectedFont: NSFont {
     selectedFontStyle.fontWith(size: selectedFontSize)
+  }
+
+  func systemFontButton(style: FontStyle, name: String, design: Font.Design) -> some View {
+    Button {
+      changeFontStyle(style)
+    } label: {
+      Text(name).font(.system(.body, design: design))
+    }
   }
 
   func changeFontStyle(_ fontStyle: FontStyle) {
