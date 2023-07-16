@@ -27,12 +27,15 @@ export function resetEditor(doc: string) {
     window.editor.destroy();
   }
 
-  const editor = new EditorView({
+  const lineBreak = lineEndings.getLineBreak(
     doc,
+    window.config.defaultLineBreak
+  );
+
+  const editor = new EditorView({
+    doc: lineEndings.normalizeLineBreaks(doc, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
-    extensions: extensions({
-      lineBreak: lineEndings.getLineBreak(doc, window.config.defaultLineBreak),
-    }),
+    extensions: extensions({ lineBreak }),
   });
 
   editor.focus();

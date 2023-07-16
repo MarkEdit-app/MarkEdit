@@ -1,3 +1,5 @@
+import { getEditorText } from '../../core';
+
 /**
  * Format the content, usually gets called when saving files.
  *
@@ -10,7 +12,7 @@ export default function formatContent(insertFinalNewline: boolean, trimTrailingW
 
   if (insertFinalNewline) {
     // We don't need to ensure final newline when it's empty
-    const text = state.doc.toString();
+    const text = getEditorText();
     if (text.length > 0 && !text.endsWith(state.lineBreak)) {
       editor.dispatch({
         changes: {

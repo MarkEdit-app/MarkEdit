@@ -67,4 +67,25 @@ export function getLineBreak(string: string, defaultValue?: string) {
   }
 }
 
+export function normalizeLineBreaks(input: string, lineBreak: string | undefined) {
+  if (lineBreak === undefined) {
+    return input;
+  }
+
+  // 1. \r\n -> \n
+  // 2. \r -> \n
+  // 3. \n -> lineBreak if necessary
+  //
+  // Order matters; it may not be the fastest, but it's easy to understand.
+  let output = input;
+  output = output.replace(new RegExp(CHARS.CRLF, 'g'), CHARS.LF);
+  output = output.replace(new RegExp(CHARS.CR, 'g'), CHARS.LF);
+
+  if (lineBreak !== CHARS.LF) {
+    output = output.replace(new RegExp(CHARS.LF, 'g'), lineBreak);
+  }
+
+  return output;
+}
+
 export type { LineEndings };
