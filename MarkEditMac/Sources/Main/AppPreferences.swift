@@ -45,14 +45,14 @@ enum AppPreferences {
     @Storage(key: "editor.light-theme", defaultValue: AppTheme.GitHubLight.editorTheme)
     static var lightTheme: String {
       didSet {
-        AppTheme.current.updateAppearance()
+        AppTheme.current.updateAppearance(animateChanges: true)
       }
     }
 
     @Storage(key: "editor.dark-theme", defaultValue: AppTheme.GitHubDark.editorTheme)
     static var darkTheme: String {
       didSet {
-        AppTheme.current.updateAppearance()
+        AppTheme.current.updateAppearance(animateChanges: true)
       }
     }
 
