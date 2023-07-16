@@ -7,6 +7,7 @@
 
 import XCTest
 import WebKit
+import AppKitExtensions
 
 final class RuntimeTests: XCTestCase {
   func testExistenceOfAllowsInlinePredictions() {
@@ -76,6 +77,12 @@ final class RuntimeTests: XCTestCase {
 
     wait(for: [expectation])
     XCTAssertNotNil(popover.contentViewController?.view.window?.value(forKey: "_popover"))
+  }
+
+  func testRetrievingToolbarEffectView() {
+    let window = NSWindow()
+    window.makeKeyAndOrderFront(nil)
+    XCTAssertNotNil(window.toolbarEffectView)
   }
 }
 
