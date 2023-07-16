@@ -26,9 +26,9 @@ struct AppTheme {
   }
 
   /// Trigger theme update for all editors.
-  func updateAppearance() {
+  func updateAppearance(animateChanges: Bool = false) {
     EditorReusePool.shared.viewControllers().forEach {
-      $0.setTheme(self)
+      $0.setTheme(self, animated: animateChanges)
     }
   }
 }

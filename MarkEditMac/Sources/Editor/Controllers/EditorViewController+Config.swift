@@ -11,6 +11,30 @@ import MarkEditCore
 import MarkEditKit
 
 extension EditorViewController {
+  func setTheme(_ theme: AppTheme, animated: Bool) {
+    guard animated else {
+      return setTheme(theme)
+    }
+
+    webView.takeSnapshot(with: nil) { image, error in
+      guard error == nil, let image else {
+        return self.setTheme(theme)
+      }
+
+      // Perform a cross-dissolve effect to make theme switching smoother
+      let snapshotView = NSImageView(image: image)
+      snapshotView.frame = self.webView.bounds
+      self.view.addSubview(snapshotView)
+      self.setTheme(theme)
+
+      NSAnimationContext.runAnimationGroup { _ in
+        snapshotView.animator().alphaValue = 0
+      } completionHandler: {
+        snapshotView.removeFromSuperview()
+      }
+    }
+  }
+
   func setTheme(_ theme: AppTheme) {
     updateWindowColors(theme)
     bridge.config.setTheme(name: theme.editorTheme)
