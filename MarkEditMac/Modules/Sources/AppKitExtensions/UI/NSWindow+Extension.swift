@@ -17,7 +17,6 @@ public extension NSWindow {
       effectView.superview?.className.hasPrefix("NSTitlebar") == true
     }
 
-    assert(result != nil, "Failed to find NSVisualEffectView in toolbar")
     return result
   }
 
