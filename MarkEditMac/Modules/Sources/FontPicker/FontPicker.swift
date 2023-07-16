@@ -111,17 +111,17 @@ private extension FontPicker {
     selectedFontStyle.fontWith(size: selectedFontSize)
   }
 
-  func changeFontStyle(_ fontStyle: FontStyle) {
-    selectedFontStyle = fontStyle
-    handlers.fontStyleDidChange(fontStyle)
-  }
-
   func systemFontButton(style: FontStyle, name: String, design: Font.Design) -> some View {
     Button {
       changeFontStyle(style)
     } label: {
       Text(name).font(.system(.body, design: design))
     }
+  }
+
+  func changeFontStyle(_ fontStyle: FontStyle) {
+    selectedFontStyle = fontStyle
+    handlers.fontStyleDidChange(fontStyle)
   }
 
   func changeFontSize(_ fontSize: Double) {
