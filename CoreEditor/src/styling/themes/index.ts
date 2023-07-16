@@ -13,7 +13,7 @@ import MinimalDark from './minimal-dark';
 import SynthWave84 from './synthwave84';
 import NightOwl from './night-owl';
 
-const themes = {
+const themes: { [key: string]: (() => EditorTheme) | undefined } = {
   'github-light': GitHubLight,
   'github-dark': GitHubDark,
   'xcode-light': XcodeLight,

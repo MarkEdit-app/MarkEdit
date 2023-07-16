@@ -33,4 +33,16 @@ describe('LineEndings module', () => {
     expect(lineEndings.getLineBreak('', '\r')).toBe('\r');
     expect(lineEndings.getLineBreak('', '\r\n')).toBe('\r\n');
   });
+
+  test('test normalizing line breaks', () => {
+    expect(lineEndings.normalizeLineBreaks('Hello\nWorld', undefined)).toBe('Hello\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\nWorld', '\n')).toBe('Hello\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\n\r\nWorld', '\n')).toBe('Hello\n\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\n\n\r\nWorld', '\n')).toBe('Hello\n\n\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\n\r\rWorld', '\n')).toBe('Hello\n\n\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\r\nWorld', '\n')).toBe('Hello\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\r\nWorld', '\r')).toBe('Hello\rWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\r\nWorld', '\r\n')).toBe('Hello\r\nWorld');
+    expect(lineEndings.normalizeLineBreaks('Hello\r\n\r\n\n\nWorld', '\r\n')).toBe('Hello\r\n\r\n\r\n\r\nWorld');
+  });
 });
