@@ -37,7 +37,8 @@ export function startObserving() {
 
     // If the mouse is released on gutters, consider as a hover effect
     if ((event.target as HTMLElement | null)?.closest('.cm-gutters') !== null) {
-      setGutterHovered(true);
+      // Delay because 'mouseleave' can emit false positives
+      setTimeout(() => setGutterHovered(true), 5);
     }
   }, true);
 
