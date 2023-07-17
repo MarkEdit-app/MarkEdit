@@ -47,7 +47,7 @@ export function resetEditor(doc: string) {
   editor.dispatch({ effects: EditorView.scrollIntoView(0) });
 
   const scrollDOM = editor.scrollDOM;
-  scrollDOM.scrollTo({ top: 0, behavior: 'instant' }); // scrollIntoView doesn't work when the app is idle
+  scrollDOM.scrollTo({ top: 0 }); // scrollIntoView doesn't work when the app is idle
   fixWebKitWheelIssues(scrollDOM);
 
   scrollDOM.addEventListener('scroll', () => {
