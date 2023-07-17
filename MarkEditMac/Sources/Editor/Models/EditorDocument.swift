@@ -248,8 +248,7 @@ private extension EditorDocument {
     stringValue = editorText
     saveAction()
 
-    // The editor is no longer dirty because changes are saved
-    hostViewController?.markEditorDirty(false)
+    updateChangeCount(.changeCleared)
     unblockUserInteraction()
   }
 }

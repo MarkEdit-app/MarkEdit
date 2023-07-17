@@ -18,7 +18,7 @@ extension EditorViewController {
       return Logger.assertFail("Invalid lineEndings: \(item.tag)")
     }
 
-    document?.updateChangeCount(.changeDone)
+    document?.save(sender)
     bridge.lineEndings.setLineEndings(lineEndings: lineEndings)
   }
 }

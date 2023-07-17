@@ -6,7 +6,6 @@ import {
   getEditorText,
   insertText,
   replaceText,
-  markEditorDirty,
   handleMouseEntered,
   handleMouseExited,
 } from '../../core';
@@ -22,7 +21,6 @@ export interface WebModuleCore extends WebModule {
   getEditorText(): string;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
-  markEditorDirty({ isDirty }: { isDirty: boolean }): void;
   handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number } ): void;
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number } ): void;
 }
@@ -46,10 +44,6 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void {
     replaceText(text, granularity);
-  }
-
-  markEditorDirty({ isDirty }: { isDirty: boolean }): void {
-    markEditorDirty(isDirty);
   }
 
   handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number }): void {

@@ -220,8 +220,4 @@ extension EditorViewController {
       Grammarly.shared.update(bridge: self.bridge.grammarly, wasReset: true)
     }
   }
-
-  func markEditorDirty(_ isDirty: Bool) {
-    bridge.core.markEditorDirty(isDirty: isDirty)
-  }
 }

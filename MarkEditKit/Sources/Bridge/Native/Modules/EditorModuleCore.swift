@@ -9,7 +9,7 @@ import Foundation
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
-  func editorCoreTextDidChange(_ sender: EditorModuleCore)
+  func editorCoreTextDidChange(_ sender: EditorModuleCore, undoDepth: Int)
   func editorCore(
     _ sender: EditorModuleCore,
     selectionDidChange lineColumn: LineColumnInfo,
@@ -32,8 +32,8 @@ public final class EditorModuleCore: NativeModuleCore {
     delegate?.editorCoreViewportScaleDidChange(self)
   }
 
-  public func notifyTextDidChange() {
-    delegate?.editorCoreTextDidChange(self)
+  public func notifyTextDidChange(undoDepth: Int) {
+    delegate?.editorCoreTextDidChange(self, undoDepth: undoDepth)
   }
 
   public func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool) {
