@@ -32,7 +32,8 @@ export function setUp(config: Config, accentColor: string) {
   setLineHeight(config.lineHeight);
 
   if (config.showLineNumbers) {
-    enableGutterHoverEffects();
+    // Delay because when the window is resizing, the mouse can enter and leave gutters rapidly
+    setTimeout(enableGutterHoverEffects, 500);
   }
 }
 

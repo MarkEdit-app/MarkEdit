@@ -140,7 +140,7 @@ extension EditorViewController {
     // WebKit doesn't update hover state reliably, e.g., "mouseup" outside the window,
     // propagate a native event to help update the UI.
     let mouseExitedWindow = !trackingRect.contains(event.locationInWindow)
-    if mouseExitedWindow != self.mouseExitedWindow {
+    if mouseExitedWindow != self.mouseExitedWindow && AppPreferences.Editor.showLineNumbers {
       let clientX = event.locationInWindow.x
       let clientY = event.locationInWindow.y
 

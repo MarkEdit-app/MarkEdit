@@ -28,18 +28,29 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     NSApplication.shared.closeOpenPanels()
   }
 
+  func windowDidResignMain(_ notification: Notification) {
+    if AppPreferences.Editor.showLineNumbers {
+      // In theory, this is not indeed, but we've seen wrong state without this
+      editorViewController?.bridge.core.handleMouseExited(clientX: 0, clientY: 0)
+    }
+  }
+
   func windowDidResize(_ notification: Notification) {
     window?.saveFrame(usingName: windowFrameAutosaveName)
   }
 
   func windowWillClose(_ notification: Notification) {
-    (contentViewController as? EditorViewController)?.clearEditor()
+    editorViewController?.clearEditor()
   }
 }
 
 // MARK: - Private
 
 private extension EditorWindowController {
+  var editorViewController: EditorViewController? {
+    contentViewController as? EditorViewController
+  }
+
   func saveWindowRect() {
   #if DEBUG
     guard ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] != "YES" else {
