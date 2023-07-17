@@ -131,6 +131,11 @@ extension EditorDocument {
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
+    // The default implementation checks hasUnautosavedChanges and fails fast
+    guard hasUnautosavedChanges else {
+      return
+    }
+
     await saveAsynchronously {
       Task {
         try await super.autosave(withImplicitCancellability: implicitlyCancellable)
