@@ -1,6 +1,5 @@
 import { EditorView } from '@codemirror/view';
 import { extensions } from './extensions';
-import { editingState } from './common/store';
 import { getViewportScale } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
@@ -128,10 +127,6 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
       replaceSelections(text);
       break;
   }
-}
-
-export function markEditorDirty(isDirty: boolean) {
-  editingState.isDirty = isDirty;
 }
 
 export function handleMouseEntered(clientX: number, _clientY: number) {

@@ -125,6 +125,8 @@ extension EditorDocument {
       if sender != nil {
         hostViewController?.cancelCompletion()
       }
+
+      updateChangeCount(.changeCleared)
     }
   }
 
@@ -132,6 +134,7 @@ extension EditorDocument {
     await saveAsynchronously {
       Task {
         try await super.autosave(withImplicitCancellability: implicitlyCancellable)
+        updateChangeCount(.changeAutosaved)
       }
     }
   }
@@ -247,9 +250,6 @@ private extension EditorDocument {
 
     stringValue = editorText
     saveAction()
-
-    // The editor is no longer dirty because changes are saved
-    hostViewController?.markEditorDirty(false)
     unblockUserInteraction()
   }
 }

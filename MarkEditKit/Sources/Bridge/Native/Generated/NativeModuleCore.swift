@@ -13,7 +13,7 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyViewportScaleDidChange()
-  func notifyTextDidChange()
+  func notifyTextDidChange(undoDepth: Int)
   func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool)
 }
 
@@ -56,7 +56,19 @@ final class NativeBridgeCore: NativeBridge {
   }
 
   private func notifyTextDidChange(parameters: Data) -> Result<Any?, Error>? {
-    module.notifyTextDidChange()
+    struct Message: Decodable {
+      var undoDepth: Int
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyTextDidChange(undoDepth: message.undoDepth)
     return .success(nil)
   }
 

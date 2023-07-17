@@ -70,8 +70,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
     cancelOperation(sender)
   }
 
-  func editorCoreTextDidChange(_ sender: EditorModuleCore) {
-    document?.updateChangeCount(.changeDone)
+  func editorCoreTextDidChange(_ sender: EditorModuleCore, undoDepth: Int) {
+    document?.updateChangeCount(undoDepth: undoDepth)
 
     if findPanel.mode != .hidden {
       Task {
