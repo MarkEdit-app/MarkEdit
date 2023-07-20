@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { undo, redo, canUndo, canRedo } from '../../modules/history';
+import { undo, redo, canUndo, canRedo, saveHistory } from '../../modules/history';
 
 /**
  * @shouldExport true
@@ -11,6 +11,7 @@ export interface WebModuleHistory extends WebModule {
   redo(): void;
   canUndo(): boolean;
   canRedo(): boolean;
+  saveHistory(): void;
 }
 
 export class WebModuleHistoryImpl implements WebModuleHistory {
@@ -28,5 +29,9 @@ export class WebModuleHistoryImpl implements WebModuleHistory {
 
   canRedo(): boolean {
     return canRedo();
+  }
+
+  saveHistory(): void {
+    saveHistory();
   }
 }

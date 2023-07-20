@@ -26,6 +26,15 @@ export function setText(doc: string) {
   });
 }
 
+export function insertText(text: string) {
+  window.editor.dispatch({
+    changes: {
+      insert: text,
+      from: window.editor.state.doc.length,
+    },
+  });
+}
+
 export function getText() {
   return window.editor.state.doc.toString();
 }

@@ -1,10 +1,10 @@
 import { EditorView } from '@codemirror/view';
-import { undoDepth } from '@codemirror/commands';
 import { InvisiblesBehavior } from '../../config';
 import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
 import { startCompletion, isPanelVisible } from '../completion';
+import { isContentDirty } from '../history';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
@@ -67,9 +67,7 @@ export function observeChanges() {
       // It would be great if we could also provide the updated text here,
       // but it's time-consuming for large payload,
       // we want to be responsive for every key stroke.
-      window.nativeModules.core.notifyTextDidChange({
-        undoDepth: undoDepth(window.editor.state) as CodeGen_Int,
-      });
+      window.nativeModules.core.notifyTextDidChange({ isDirty: isContentDirty() });
     }
 
     if (update.selectionSet) {

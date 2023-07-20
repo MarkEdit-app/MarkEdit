@@ -42,4 +42,8 @@ public final class WebBridgeHistory {
       }
     }
   }
+
+  public func saveHistory(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.history.saveHistory", completion: completion)
+  }
 }

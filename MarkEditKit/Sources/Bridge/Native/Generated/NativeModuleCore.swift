@@ -13,7 +13,7 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyViewportScaleDidChange()
-  func notifyTextDidChange(undoDepth: Int)
+  func notifyTextDidChange(isDirty: Bool)
   func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool)
 }
 
@@ -57,7 +57,7 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyTextDidChange(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var undoDepth: Int
+      var isDirty: Bool
     }
 
     let message: Message
@@ -68,7 +68,7 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifyTextDidChange(undoDepth: message.undoDepth)
+    module.notifyTextDidChange(isDirty: message.isDirty)
     return .success(nil)
   }
 
