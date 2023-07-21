@@ -17,6 +17,7 @@ final class EditorDocument: NSDocument {
   var fileData: Data?
   var textBundle: TextBundleWrapper?
   var stringValue = ""
+  var isDying = false
 
   var canUndo: Bool {
     get async {
@@ -130,6 +131,15 @@ extension EditorDocument {
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
     await saveAsynchronously {
+      // The default autosave doesn't work when the app is about to terminate,
+      // it is because we have to do it in an asynchronous way.
+      //
+      // To work around this, check a flag to save the document manually.
+      if isDying, let fileURL, let fileType {
+        try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
+        return
+      }
+
       Task {
         try await super.autosave(withImplicitCancellability: implicitlyCancellable)
       }
