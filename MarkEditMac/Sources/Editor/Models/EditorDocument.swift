@@ -129,11 +129,6 @@ extension EditorDocument {
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
-    // The default implementation checks hasUnautosavedChanges and fails fast
-    guard hasUnautosavedChanges else {
-      return
-    }
-
     await saveAsynchronously {
       Task {
         try await super.autosave(withImplicitCancellability: implicitlyCancellable)
@@ -235,10 +230,6 @@ private extension EditorDocument {
   }
 
   func saveAsynchronously(saveAction: () -> Void) async {
-    defer {
-      bridge?.history.saveHistory()
-    }
-
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
@@ -260,6 +251,8 @@ private extension EditorDocument {
 
     stringValue = editorText
     saveAction()
+
+    bridge?.history.markContentClean()
     unblockUserInteraction()
   }
 }

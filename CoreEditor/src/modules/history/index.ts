@@ -22,9 +22,11 @@ export function canRedo() {
   return redoDepth(window.editor.state) > 0;
 }
 
-export function saveHistory() {
+export function markContentClean() {
   // This function is called when the user saves the document, we save the current undo depth,
-  // when text changes, we use this value to calculate the "isDirty" state.
+  // as a result, the content is treated as "clean".
+  //
+  // When text changes, we use this value to calculate the "isDirty" state.
   storage.savedUndoDepth = undoDepth(window.editor.state);
 }
 

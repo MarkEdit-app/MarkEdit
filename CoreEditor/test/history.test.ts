@@ -1,6 +1,6 @@
 import { history, undo, redo } from '@codemirror/commands';
 import { describe, expect, test } from '@jest/globals';
-import { canUndo, canRedo, saveHistory, isContentDirty } from '../src/modules/history';
+import { canUndo, canRedo, markContentClean, isContentDirty } from '../src/modules/history';
 import * as editor from '../src/@test/editor';
 
 describe('History module', () => {
@@ -32,14 +32,14 @@ describe('History module', () => {
     undo(window.editor);
     expect(isContentDirty()).toBeFalsy();
 
-    saveHistory();
+    markContentClean();
     expect(isContentDirty()).toBeFalsy();
 
     editor.insertText('\n');
     editor.insertText('\n');
     expect(isContentDirty()).toBeTruthy();
 
-    saveHistory();
+    markContentClean();
     expect(isContentDirty()).toBeFalsy();
 
     undo(window.editor);
