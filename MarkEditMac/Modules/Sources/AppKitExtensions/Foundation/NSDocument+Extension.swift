@@ -11,12 +11,9 @@ public extension NSDocument {
     fileURL?.deletingLastPathComponent()
   }
 
-  /// Update the change count to exactly `undoDepth`.
-  func updateChangeCount(undoDepth: Int) {
-    updateChangeCount(.changeCleared)
-
-    for _ in 0 ..< undoDepth {
-      updateChangeCount(.changeDone)
-    }
+  func markContentDirty(_ isDirty: Bool) {
+    // The undo stack is implemented in CoreEditor entirely,
+    // there are only two meaningful change count values: 0 (saved) or 1 (dirty).
+    updateChangeCount(isDirty ? .changeDone : .changeCleared)
   }
 }

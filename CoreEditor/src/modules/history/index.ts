@@ -21,3 +21,17 @@ export function canUndo() {
 export function canRedo() {
   return redoDepth(window.editor.state) > 0;
 }
+
+export function saveHistory() {
+  // This function is called when the user saves the document, we save the current undo depth,
+  // when text changes, we use this value to calculate the "isDirty" state.
+  storage.savedUndoDepth = undoDepth(window.editor.state);
+}
+
+export function isContentDirty() {
+  // The content is "dirty" when the current undo depth is not the same as the saved depth,
+  // i.e., there re unsaved changes.
+  return storage.savedUndoDepth !== undoDepth(window.editor.state);
+}
+
+const storage: { savedUndoDepth: number } = { savedUndoDepth: 0 };

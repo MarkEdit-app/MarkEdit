@@ -20,19 +20,19 @@ final class EditorDocument: NSDocument {
 
   var canUndo: Bool {
     get async {
-      (try? await hostViewController?.bridge.history.canUndo()) ?? false
+      (try? await bridge?.history.canUndo()) ?? false
     }
   }
 
   var canRedo: Bool {
     get async {
-      (try? await hostViewController?.bridge.history.canRedo()) ?? false
+      (try? await bridge?.history.canRedo()) ?? false
     }
   }
 
   var lineEndings: LineEndings? {
     get async {
-      try? await hostViewController?.bridge.lineEndings.getLineEndings()
+      try? await bridge?.lineEndings.getLineEndings()
     }
   }
 
@@ -125,8 +125,6 @@ extension EditorDocument {
       if sender != nil {
         hostViewController?.cancelCompletion()
       }
-
-      updateChangeCount(.changeCleared)
     }
   }
 
@@ -139,7 +137,6 @@ extension EditorDocument {
     await saveAsynchronously {
       Task {
         try await super.autosave(withImplicitCancellability: implicitlyCancellable)
-        updateChangeCount(.changeAutosaved)
       }
     }
   }
@@ -233,14 +230,22 @@ extension EditorDocument {
 // MARK: - Private
 
 private extension EditorDocument {
+  var bridge: WebModuleBridge? {
+    hostViewController?.bridge
+  }
+
   func saveAsynchronously(saveAction: () -> Void) async {
+    defer {
+      bridge?.history.saveHistory()
+    }
+
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
     // Format when saving files, only if at least one option is enabled
     if insertFinalNewline || trimTrailingWhitespace {
       await withCheckedContinuation { continuation in
-        hostViewController?.bridge.format.formatContent(
+        bridge?.format.formatContent(
           insertFinalNewline: insertFinalNewline,
           trimTrailingWhitespace: trimTrailingWhitespace
         ) { _ in
