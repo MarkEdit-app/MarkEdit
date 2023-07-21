@@ -59,6 +59,15 @@ extension EditorViewController: NSMenuItemValidation {
   }
 }
 
+// MARK: - Application
+
+extension EditorViewController {
+  @IBAction func terminate(_ sender: Any?) {
+    document?.isDying = true
+    NSApplication.shared.terminate(sender)
+  }
+}
+
 // MARK: - Formatting
 
 extension EditorViewController {
