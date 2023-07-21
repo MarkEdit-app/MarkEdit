@@ -9,6 +9,7 @@ import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
 import * as grammarly from './modules/grammarly';
 import * as selection from './modules/selection';
+import * as history from './modules/history';
 
 export enum ReplaceGranularity {
   wholeDocument = 'wholeDocument',
@@ -83,6 +84,9 @@ export function resetEditor(doc: string) {
       storage.viewportScale = viewportScale;
     }
   });
+
+  // The content should be initially clean
+  history.markContentClean();
 }
 
 /**
@@ -93,6 +97,9 @@ export function clearEditor() {
   editor.dispatch({
     changes: { from: 0, to: editor.state.doc.length, insert: '' },
   });
+
+  // Idle state should be treated as clean
+  history.markContentClean();
 }
 
 export function getEditorText() {
