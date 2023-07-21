@@ -63,11 +63,25 @@ export function interceptInputs() {
  */
 export function observeChanges() {
   return EditorView.updateListener.of(update => {
+    // Ignore all events when the editor is idle
+    if (editingState.isIdle && window.editor.state.doc.length === 0) {
+      return;
+    }
+
     if (update.docChanged) {
       // It would be great if we could also provide the updated text here,
       // but it's time-consuming for large payload,
       // we want to be responsive for every key stroke.
       window.nativeModules.core.notifyTextDidChange({ isDirty: isContentDirty() });
+
+      // Make sure the main selection is always centered for typewriter mode
+      if (window.config.typewriterMode) {
+        scrollToSelection('center');
+      } else {
+        // We need this because we have different line height for headings,
+        // CodeMirror doesn't by default fix the offset issue.
+        scrollCaretToVisible();
+      }
     }
 
     if (update.selectionSet) {
@@ -92,17 +106,6 @@ export function observeChanges() {
 
       // Render the special invisible before the main caret
       renderWhitespaceBeforeCaret();
-    }
-
-    if (update.docChanged) {
-      // Make sure the main selection is always centered for typewriter mode
-      if (window.config.typewriterMode) {
-        scrollToSelection('center');
-      } else {
-        // We need this because we have different line height for headings,
-        // CodeMirror doesn't by default fix the offset issue.
-        scrollCaretToVisible();
-      }
     }
   });
 }
