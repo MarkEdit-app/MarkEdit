@@ -26,11 +26,18 @@ public extension NSApplication {
     //
     // It can be reproduced after saving an iCloud file and quickly showing the openPanel,
     // even the built-in TextEdit.app has this problem.
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+    let validateOpenPanels = {
       self.openPanels.forEach {
         $0.validateVisibleColumns()
       }
     }
+
+    // Ideally, we should observe changes using a File Coordinators or Kernel Queues,
+    // but it is overly complicated.
+    //
+    // Validating twice with delays should be able to cover 90% of the cases.
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: validateOpenPanels)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: validateOpenPanels)
   }
 
   func closeOpenPanels() {
