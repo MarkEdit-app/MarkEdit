@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { extensions } from './extensions';
+import { editingState } from './common/store';
 import { getViewportScale } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
@@ -22,6 +23,9 @@ export enum ReplaceGranularity {
  * @param doc Initial content
  */
 export function resetEditor(doc: string) {
+  // Idle state change should always go first
+  editingState.isIdle = false;
+
   // eslint-disable-next-line
   if (window.editor && window.editor.destroy) {
     window.editor.destroy();
@@ -93,13 +97,13 @@ export function resetEditor(doc: string) {
  * Clear the editor, set the content to empty.
  */
 export function clearEditor() {
+  // Idle state change should always go first
+  editingState.isIdle = true;
+
   const editor = window.editor;
   editor.dispatch({
     changes: { from: 0, to: editor.state.doc.length, insert: '' },
   });
-
-  // Idle state should be treated as clean
-  history.markContentClean();
 }
 
 export function getEditorText() {
