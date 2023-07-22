@@ -201,6 +201,11 @@ extension EditorViewController {
 // MARK: - Document
 
 private extension EditorViewController {
+  @IBAction func performClose(_ sender: Any?) {
+    document?.isDying = true
+    view.window?.performClose(sender)
+  }
+
   @IBAction func createNewTab(_ sender: Any?) {
     // The easiest way to always create tab regardless of the tabbing mode,
     // just temporarily overwrite the mode to preferred and switch back later.

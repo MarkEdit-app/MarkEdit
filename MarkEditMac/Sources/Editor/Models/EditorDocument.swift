@@ -64,6 +64,7 @@ final class EditorDocument: NSDocument {
       windowController.window?.setFrame(autosavedFrame, display: false)
     }
 
+    isDying = false
     hostViewController = contentVC
     hostViewController?.representedObject = self
 
@@ -135,9 +136,9 @@ extension EditorDocument {
       // it is because we have to do it in an asynchronous way.
       //
       // To work around this, check a flag to save the document manually.
-      if isDying, let fileURL, let fileType {
+      if isDying && hasUnautosavedChanges, let fileURL, let fileType {
         try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
-        return
+        fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
       }
 
       Task {
