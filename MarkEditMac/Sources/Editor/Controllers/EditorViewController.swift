@@ -197,8 +197,15 @@ final class EditorViewController: NSViewController {
 
 extension EditorViewController {
   func clearEditor() {
-    bridge.core.clearEditor()
     updateTextFinderMode(.hidden, searchTerm: "")
+
+    // The delay is in theory not necessary,
+    // because autosave happens before closing the window.
+    //
+    // Just in case someone introduces race conditions.
+    DispatchQueue.afterDelay(seconds: 0.2) {
+      self.bridge.core.clearEditor()
+    }
   }
 
   func resetEditor() {
