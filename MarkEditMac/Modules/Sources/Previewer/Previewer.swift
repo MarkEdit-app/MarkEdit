@@ -29,7 +29,7 @@ public final class Previewer: NSViewController {
     let config: WKWebViewConfiguration = .newConfig()
     config.userContentController = controller
 
-    let webView = WKWebView(frame: .zero, configuration: config)
+    let webView = PreviewWebView(frame: .zero, configuration: config)
     webView.allowsMagnification = true
     return webView
   }()
@@ -128,5 +128,28 @@ private extension Previewer {
     if let body = message.body as? [String: Double], let height = body["height"], height > 0 {
       popover?.contentSize = CGSize(width: view.frame.width, height: max(height, Constants.minimumHeight))
     }
+  }
+}
+
+// MARK: - PreviewWebView
+
+private final class PreviewWebView: WKWebView {
+  override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
+    menu.items.forEach { item in
+      // Hide the "Reload" item because it makes the content empty
+      if item.identifier?.rawValue == "WKMenuItemIdentifierReload" {
+        item.isHidden = true
+      }
+
+      #if !DEBUG
+        // Hide the "Inspect Element" item for release builds,
+        // because as soon as the popover dismisses, the inspector will be closed.
+        if item.identifier?.rawValue == "WKMenuItemIdentifierInspectElement" {
+          item.isHidden = true
+        }
+      #endif
+    }
+
+    super.willOpenMenu(menu, with: event)
   }
 }
