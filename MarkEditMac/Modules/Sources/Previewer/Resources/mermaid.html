@@ -19,14 +19,14 @@
 <body>
   <div id="container" style="text-align: center;"></div>
   <script type="module">
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.esm.min.mjs";
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.2.4/dist/mermaid.esm.min.mjs";
 
     const isDarkMode = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     const theme = isDarkMode ? "dark" : "default";
     mermaid.initialize({ theme, startOnLoad: false });
 
     const container = document.querySelector("#container");
-    mermaid.render("graph", "{{DATA}}".code, html => container.innerHTML = html);
+    mermaid.render("graph", "{{DATA}}".code).then(result => container.innerHTML = result.svg);
   </script>
 </body>
 </html>
