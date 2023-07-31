@@ -38,7 +38,7 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
     let tokenizer = NLTokenizer(unit: .word)
     tokenizer.string = anchor.text
 
-    let pos = anchor.text.index(anchor.text.startIndex, offsetBy: max(0, anchor.pos - 1))
+    let pos = anchor.text.utf16.index(anchor.text.startIndex, offsetBy: max(0, anchor.pos - 1))
     let range = tokenizer.tokenRange(at: pos)
 
     // Figure out the partial word range with one tokenization pass
