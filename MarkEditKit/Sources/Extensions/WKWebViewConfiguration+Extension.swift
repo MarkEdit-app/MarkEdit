@@ -32,16 +32,25 @@ public extension WKWebViewConfiguration {
       return false
     }
 
-    // [macOS 14] WebKit hasn't yet exposed this as public, even it's documented
-    return responds(to: sel_getUid("setAllowsInlinePredictions:"))
+    #if compiler(>=5.9)
+      return true
+    #else
+      return responds(to: sel_getUid("setAllowsInlinePredictions:"))
+    #endif
   }
 
-  func setAllowsInlinePredictions(_ allowsInlinePredictions: Bool) {
+  func setAllowsInlinePredictions(_ newValue: Bool) {
     guard supportsInlinePredictions else {
       return
     }
 
-    // [macOS 14] WebKit hasn't yet exposed this as public, even it's documented
-    setValue(allowsInlinePredictions, forKey: "allowsInlinePredictions")
+    #if compiler(>=5.9)
+      if #available(macOS 14.0, *) {
+        allowsInlinePredictions = newValue
+        return
+      }
+    #endif
+
+    setValue(newValue, forKey: "allowsInlinePredictions")
   }
 }

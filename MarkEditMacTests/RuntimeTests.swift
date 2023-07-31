@@ -15,10 +15,11 @@ final class RuntimeTests: XCTestCase {
       return
     }
 
-    // [macOS 14] Remove after WebKit exposes this as public
-    let configuration = WKWebViewConfiguration()
-    configuration.setValue(true, forKey: "allowsInlinePredictions")
-    testExistenceOfSelector(object: configuration, selector: "setAllowsInlinePredictions:")
+    #if compiler(<5.9)
+      let configuration = WKWebViewConfiguration()
+      configuration.setValue(true, forKey: "allowsInlinePredictions")
+      testExistenceOfSelector(object: configuration, selector: "setAllowsInlinePredictions:")
+    #endif
   }
 
   func testExistenceOfDrawsBackground() {
