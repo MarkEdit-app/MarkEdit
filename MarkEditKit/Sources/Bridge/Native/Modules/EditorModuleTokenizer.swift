@@ -15,7 +15,7 @@ public final class EditorModuleTokenizer: NativeModuleTokenizer {
     let tokenizer = NLTokenizer(unit: .word)
     tokenizer.string = anchor.text
 
-    let pos = anchor.text.index(anchor.text.startIndex, offsetBy: anchor.pos)
+    let pos = anchor.text.utf16.index(anchor.text.startIndex, offsetBy: anchor.pos)
     let bounds = bounds(in: tokenizer.tokenRange(at: pos), text: anchor.text)
 
     // Always select at least one character
