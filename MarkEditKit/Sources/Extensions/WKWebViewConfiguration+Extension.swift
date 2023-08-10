@@ -47,10 +47,9 @@ public extension WKWebViewConfiguration {
     #if compiler(>=5.9)
       if #available(macOS 14.0, *) {
         allowsInlinePredictions = newValue
-        return
       }
+    #else
+      setValue(newValue, forKey: "allowsInlinePredictions")
     #endif
-
-    setValue(newValue, forKey: "allowsInlinePredictions")
   }
 }
