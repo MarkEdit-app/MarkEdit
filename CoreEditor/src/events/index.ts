@@ -15,6 +15,10 @@ export function startObserving() {
   });
 
   document.addEventListener('keydown', event => {
+    if (!event.key.startsWith('Arrow')) {
+      editingState.keystrokeTime = Date.now();
+    }
+
     if (isMetaKey(event)) {
       link.startClickable();
     } else {
