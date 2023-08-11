@@ -24,7 +24,7 @@ const renderInvisibles = createDecoPlugin(() => {
     // If we always show invisibles and just inserted a whitespace, we simply skip.
     //
     // The reason behind this is that <span> elements created for invisibles can break autocorrect features,
-    // we will resume the whitespace rendering in EditorView.updateListener.
+    // we will resume the skipped rendering in EditorView.updateListener.
     if (alwaysRenderInvisibles() && invisible === ' ' && (currentTime - editingState.keystrokeTime < 500) && pos === window.editor.state.selection.main.anchor - 1) {
       editingState.invisibleSkippedTime = currentTime;
       return null;

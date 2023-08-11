@@ -15,6 +15,7 @@ export function startObserving() {
   });
 
   document.addEventListener('keydown', event => {
+    // Arrow keys are not considered keystrokes, they don't trigger text change
     if (!event.key.startsWith('Arrow')) {
       editingState.keystrokeTime = Date.now();
     }

@@ -82,7 +82,7 @@ export function observeChanges() {
         scrollCaretToVisible();
       }
 
-      // Resume the skipped invisible rendering
+      // Resume the skipped invisible rendering with a delay
       if (Date.now() - editingState.invisibleSkippedTime < 500) {
         setTimeout(refreshFocus, 500);
       }
