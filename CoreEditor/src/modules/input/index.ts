@@ -84,7 +84,8 @@ export function observeChanges() {
 
       // Resume the skipped invisible rendering with a delay
       if (Date.now() - editingState.invisibleSkippedTime < 500) {
-        setTimeout(refreshFocus, 500);
+        editingState.keystrokeTime = 0;
+        setTimeout(refreshFocus, 300);
       }
     }
 
