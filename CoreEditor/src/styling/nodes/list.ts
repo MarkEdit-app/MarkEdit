@@ -5,6 +5,9 @@ import { createDecos } from '../matchers/lexer';
 const canvas = document.createElement('canvas');
 const className = 'cm-md-indentedList';
 
+/**
+ * Decorate list items with indentation info.
+ */
 const lineDecoPlugin = createDecoPlugin(() => {
   return createDecos('ListItem', listItem => {
     if (shouldDisablePlugins()) {
@@ -58,6 +61,10 @@ const lineDecoPlugin = createDecoPlugin(() => {
   });
 });
 
+/**
+ * Indentations make the active line background partially drawn,
+ * draw extra background with a layer to fill the entire line.
+ */
 const activeLineFiller = layer({
   class: 'cm-md-listActiveLine',
   above: false,
@@ -112,17 +119,17 @@ function shouldDisablePlugins() {
 function getTextIndent(text: string) {
   const font = `${window.config.fontSize}px ${window.config.fontFamily}`;
   const key = text + font;
-  const cached = widthCache[key];
-  if (cached) {
-    return cached;
+  const cachedValue = cachedIndents[key];
+  if (cachedValue) {
+    return cachedValue;
   }
 
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
   context.font = font;
 
   const metrics = context.measureText(text);
-  widthCache[key] = metrics.width;
+  cachedIndents[key] = metrics.width;
   return metrics.width;
 }
 
-const widthCache: { [key: string]: number } = {};
+const cachedIndents: { [key: string]: number } = {};
