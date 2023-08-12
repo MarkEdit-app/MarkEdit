@@ -41,7 +41,7 @@ export function createWidgetDeco(nodeName: string, builder: (node: SyntaxNodeRef
  * @param nodeName Node name, such as "ATXHeading1" for headings
  * @param builder Closure to create the Decoration
  */
-function createDecos(nodeName: string, builder: (node: SyntaxNodeRef) => Range<Decoration> | null) {
+export function createDecos(nodeName: string, builder: (node: SyntaxNodeRef) => Range<Decoration> | null) {
   const editor = window.editor;
   const ranges: Range<Decoration>[] = [];
 

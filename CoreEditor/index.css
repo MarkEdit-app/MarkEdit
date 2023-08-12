@@ -31,3 +31,12 @@ html, body {
 .cm-md-header:not(.cm-md-frontMatter *) {
   font-weight: bold;
 }
+
+.cm-md-indentedList {
+  display: inline-block;
+}
+
+.cm-md-indentedList .cm-visibleSpace:before {
+  text-indent: 0px;
+  margin-inline-start: 0px;
+}

@@ -4,6 +4,7 @@ import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdo
 import { tags } from './builder';
 import { inlineCodeStyle, fencedCodeStyle, previewMermaid, previewMath } from './nodes/code';
 import { linkStyle } from './nodes/link';
+import { indentedListStyle } from './nodes/list';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
 
@@ -26,11 +27,14 @@ export const markdownExtensions: MarkdownConfig[] = [
 
 /**
  * Extensions used in all scenarios.
+ *
+ * Order matters, smaller tokens go first.
  */
 export const renderExtensions = [
   inlineCodeStyle,
   fencedCodeStyle,
   linkStyle,
+  indentedListStyle,
   tableStyle,
   frontMatterStyle,
 ];
