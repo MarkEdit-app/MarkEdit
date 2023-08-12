@@ -6,8 +6,9 @@ import { setInvisiblesBehavior } from '../config';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty } from '../history';
 import { tokenizePosition } from '../tokenizer';
-import { scrollCaretToVisible, scrollToSelection, refreshFocus } from '../../modules/selection';
+import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
+import { renderWhitespaceBeforeCaret } from '../../styling/nodes/invisible';
 
 import selectedRange from '../selection/selectedRanges';
 import wrapBlock from './wrapBlock';
@@ -81,12 +82,6 @@ export function observeChanges() {
         // CodeMirror doesn't by default fix the offset issue.
         scrollCaretToVisible();
       }
-
-      // Resume the skipped invisible rendering with a delay
-      if (Date.now() - editingState.invisibleSkippedTime < 500) {
-        editingState.keystrokeTime = 0;
-        setTimeout(refreshFocus, 300);
-      }
     }
 
     if (update.selectionSet) {
@@ -108,6 +103,9 @@ export function observeChanges() {
         // it makes the selection easier to read.
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
       }
+
+      // Render the special invisible before the main caret
+      renderWhitespaceBeforeCaret();
     }
   });
 }
