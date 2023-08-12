@@ -15,7 +15,7 @@ struct UpdateFileContentIntent: AppIntent {
     case selection
 
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Granularity")
-    static var caseDisplayRepresentations: [Granularity: DisplayRepresentation] = [
+    static var caseDisplayRepresentations: [Self: DisplayRepresentation] = [
       .wholeDocument: "Whole Document",
       .selection: "Selection",
     ]
