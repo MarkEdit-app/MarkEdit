@@ -133,13 +133,3 @@ export function scrollPositionToVisible(pos: number) {
     return scrollToSelection('end', margin);
   }
 }
-
-/**
- * Refresh the current focus to force a rendering process.
- */
-export function refreshFocus() {
-  const editor = window.editor;
-  editor.dispatch({
-    selection: editor.state.selection,
-  });
-}
