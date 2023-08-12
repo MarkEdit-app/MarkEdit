@@ -28,6 +28,11 @@ html, body {
 
 /* Markdown */
 
+.cm-md-link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .cm-md-header:not(.cm-md-frontMatter *) {
   font-weight: bold;
 }

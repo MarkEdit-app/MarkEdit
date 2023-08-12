@@ -1,3 +1,4 @@
+import { Compartment } from '@codemirror/state';
 import StyleSheets from '../styling/config';
 
 export const editingState = {
@@ -7,3 +8,4 @@ export const editingState = {
 };
 
 export const styleSheets: StyleSheets = {};
+export const clickableLinks: Compartment[] = [];
