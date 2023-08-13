@@ -58,9 +58,7 @@ class Layer extends RectangleMarker {
     }
 
     elt.style.backgroundColor = colors.activeLine;
-    if (colors.lineBorder !== undefined) {
-      elt.style.boxShadow = buildInnerBorder(2.5, colors.lineBorder);
-    }
+    elt.style.boxShadow = buildInnerBorder(2.5, colors.lineBorder);
   }
 }
 
