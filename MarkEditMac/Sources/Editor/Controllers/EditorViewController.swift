@@ -183,6 +183,7 @@ final class EditorViewController: NSViewController {
       cancelCompletion()
     }
 
+    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
     presentedPopover?.close()
   }
 
