@@ -6,6 +6,7 @@ import * as completion from '../modules/completion';
 import * as grammarly from '../modules/grammarly';
 import * as selection from '../modules/selection';
 import * as tokenizer from '../modules/tokenizer';
+import * as invisible from '../styling/nodes/invisible';
 import * as link from '../styling/nodes/link';
 
 export function startObserving() {
@@ -16,7 +17,7 @@ export function startObserving() {
 
   document.addEventListener('keydown', event => {
     if (event.key === ' ') {
-      editingState.spaceInsertedTime = Date.now();
+      invisible.renderWhitespaceBeforeCaret();
     }
 
     if (isMetaKey(event)) {

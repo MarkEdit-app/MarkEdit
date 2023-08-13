@@ -8,7 +8,6 @@ import { isContentDirty } from '../history';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
-import { renderWhitespaceBeforeCaret } from '../../styling/nodes/invisible';
 
 import selectedRange from '../selection/selectedRanges';
 import wrapBlock from './wrapBlock';
@@ -103,9 +102,6 @@ export function observeChanges() {
         // it makes the selection easier to read.
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
       }
-
-      // Render the special invisible before the main caret
-      renderWhitespaceBeforeCaret();
     }
   });
 }
