@@ -2,12 +2,8 @@ import { Extension } from '@codemirror/state';
 
 export type ColorScheme = 'light' | 'dark';
 
-export interface BaseColors {
-  accent: string;
-  text: string;
-}
-
 export interface EditorColors {
+  accent: string;
   text: string;
   comment: string;
   background: string;
@@ -25,6 +21,6 @@ export interface EditorColors {
 }
 
 export interface EditorTheme {
-  accentColor: string;
+  colors: EditorColors;
   extension: Extension;
 }

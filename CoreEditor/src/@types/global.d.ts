@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { Config, Dynamics } from '../config';
+import { EditorColors } from '../styling/types';
 import { WebModule } from '../bridge/webModule';
 import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModuleCompletion } from '../bridge/native/completion';
@@ -26,6 +27,7 @@ declare global {
     webkit?: WebKit;
     editor: EditorView;
     config: Config;
+    colors?: EditorColors;
     dynamics: Dynamics;
     webModules: Record<string, WebModule>;
     nativeModules: {

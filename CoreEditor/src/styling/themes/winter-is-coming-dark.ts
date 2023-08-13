@@ -1,29 +1,26 @@
-import { EditorTheme } from '../types';
+import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
 import { darkBase as base } from './colors';
 
-const colors = {
+const colors: EditorColors = {
   accent: '#5abeb0',
   text: '#ffffff',
   comment: '#999999',
+  background: '#282822',
+  caret: '#219fd5',
+  selection: '#103362',
+  activeLine: '#0c499477',
+  matchingBracket: '#22567e',
+  lineNumber: '#219fd5',
+  searchMatch: '#103362',
+  selectionHighlight: '#1033627f',
+  visibleSpace: '#3b3a32',
+  lighterBackground: '#3b3a32ee',
+  bracketBorder: '#888888',
 };
 
 function theme() {
-  return buildTheme({
-    text: colors.text,
-    comment: colors.comment,
-    background: '#282822',
-    caret: '#219fd5',
-    selection: '#103362',
-    activeLine: '#0c499477',
-    matchingBracket: '#22567e',
-    lineNumber: '#219fd5',
-    searchMatch: '#103362',
-    selectionHighlight: '#1033627f',
-    visibleSpace: '#3b3a32',
-    lighterBackground: '#3b3a32ee',
-    bracketBorder: '#888888',
-  }, 'dark');
+  return buildTheme(colors, 'dark');
 }
 
 function highlight() {
@@ -53,7 +50,7 @@ function highlight() {
 
 export default function WinterIsComingDark(): EditorTheme {
   return {
-    accentColor: colors.accent,
+    colors,
     extension: [theme(), highlight()],
   };
 }

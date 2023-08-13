@@ -1,5 +1,5 @@
 import { EditorView, highlightActiveLine } from '@codemirror/view';
-import { EditorTheme } from './themes';
+import { EditorColors, EditorTheme } from './types';
 import { Config, InvisiblesBehavior } from '../config';
 import { editingState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
@@ -23,8 +23,8 @@ export default interface StyleSheets {
   lineHeight?: HTMLStyleElement;
 }
 
-export function setUp(config: Config, accentColor: string) {
-  setAccentColor(accentColor);
+export function setUp(config: Config, colors: EditorColors) {
+  setEditorColors(colors);
   setFontFamily(config.fontFamily);
   setFontSize(config.fontSize);
   setInvisiblesBehavior(config.invisiblesBehavior);
@@ -47,18 +47,20 @@ export function setTheme(theme: EditorTheme) {
     });
   }
 
-  setAccentColor(theme.accentColor);
+  setEditorColors(theme.colors);
 }
 
-export function setAccentColor(accentColor: string) {
+export function setEditorColors(colors: EditorColors) {
   if (styleSheets.accentColor === undefined) {
     styleSheets.accentColor = createStyleSheet('.cm-md-header {}');
   }
 
   updateStyleSheet(styleSheets.accentColor, style => {
-    const cssColor = shadowableTextColor(accentColor);
+    const cssColor = shadowableTextColor(colors.accent);
     Object.keys(cssColor).forEach(key => style.setProperty(key, cssColor[key] as string));
   });
+
+  window.colors = colors;
 }
 
 export function setFontFamily(fontFamily: string) {

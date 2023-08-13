@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { HighlightStyle, TagStyle, syntaxHighlighting } from '@codemirror/language';
 import { Tag, tags as defaultTags } from '@lezer/highlight';
 import { StyleSpec } from 'style-mod';
-import { ColorScheme, BaseColors, EditorColors } from './types';
+import { ColorScheme, EditorColors } from './types';
 import { shadowableTextColor } from './helper';
 
 // Extend tags by adding Markdown-specific ones
@@ -200,7 +200,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
   return EditorView.theme(combined, { dark: scheme === 'dark' });
 }
 
-function buildHighlight(colors: BaseColors, specs: readonly TagStyle[], scheme?: ColorScheme) {
+function buildHighlight(colors: EditorColors, specs: readonly TagStyle[], scheme?: ColorScheme) {
   const style = HighlightStyle.define([
     ...[
       {
