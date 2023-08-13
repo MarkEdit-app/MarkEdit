@@ -37,10 +37,7 @@ const lineDecoPlugin = createDecoPlugin(() => {
     const deco = Decoration.line({
       class: className,
       attributes: {
-        style: `
-          text-indent: -${indent}px;
-          margin-inline-start: ${indent}px;
-        `,
+        style: `text-indent: -${indent}px; margin-inline-start: ${indent}px;`,
       },
     });
 
@@ -75,9 +72,14 @@ const activeLineFiller = layer({
 
     // Fill all active lines that are decorated as indented list
     const lists = [...document.querySelectorAll(`.cm-activeLine.${className}`)] as HTMLElement[];
-    return lists.map(list => new BackgroundMarker(list));
+    return lists.map(list => new BackgroundMarker(list, storage.cachedTheme));
   },
   update: update => {
+    if (window.config.theme !== storage.cachedTheme) {
+      storage.cachedTheme = window.config.theme;
+      return true;
+    }
+
     return update.selectionSet || update.docChanged || update.viewportChanged || update.geometryChanged;
   },
 });
@@ -96,7 +98,7 @@ export const indentedListStyle = [
 class BackgroundMarker extends RectangleMarker {
   private readonly color: string;
 
-  constructor(anchor: HTMLElement) {
+  constructor(anchor: HTMLElement, private readonly theme?: string) {
     const rect = anchor.getBoundingClientRect();
     super('cm-md-listActiveBackground', 0, anchor.offsetTop, anchor.offsetLeft, rect.bottom - rect.top);
 
@@ -106,8 +108,21 @@ class BackgroundMarker extends RectangleMarker {
 
   draw() {
     const elt = super.draw();
-    elt.style.backgroundColor = this.color;
+    this.render(elt);
     return elt;
+  }
+
+  update(elt: HTMLElement, prev: BackgroundMarker): boolean {
+    this.render(elt);
+    return super.update(elt, prev);
+  }
+
+  eq(other: BackgroundMarker): boolean {
+    return this.theme === other.theme && super.eq(other);
+  }
+
+  private render(elt: HTMLElement) {
+    elt.style.backgroundColor = this.color;
   }
 }
 
@@ -119,7 +134,7 @@ function shouldDisablePlugins() {
 function getTextIndent(text: string) {
   const font = `${window.config.fontSize}px ${window.config.fontFamily}`;
   const key = text + font;
-  const cachedValue = cachedIndents[key];
+  const cachedValue = storage.cachedIndents[key];
   if (cachedValue) {
     return cachedValue;
   }
@@ -128,8 +143,14 @@ function getTextIndent(text: string) {
   context.font = font;
 
   const metrics = context.measureText(text);
-  cachedIndents[key] = metrics.width;
+  storage.cachedIndents[key] = metrics.width;
   return metrics.width;
 }
 
-const cachedIndents: { [key: string]: number } = {};
+const storage: {
+  cachedIndents: { [key: string]: number };
+  cachedTheme?: string;
+} = {
+  cachedIndents: {},
+  cachedTheme: undefined,
+};
