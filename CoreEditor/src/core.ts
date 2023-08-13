@@ -72,7 +72,7 @@ export function resetEditor(doc: string) {
   });
 
   // Recofigure, window.config might have changed
-  styling.setUp(window.config, themes.loadTheme(window.config.theme).accentColor);
+  styling.setUp(window.config, themes.loadTheme(window.config.theme).colors);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifySelectionDidChange({

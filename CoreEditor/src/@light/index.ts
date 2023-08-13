@@ -40,7 +40,7 @@ const doc = config.text;
 const parent = document.querySelector('#editor') ?? document.body;
 
 window.editor = new EditorView({ doc, parent, extensions });
-styling.setUp(config, loadTheme(config.theme).accentColor);
+styling.setUp(config, loadTheme(config.theme).colors);
 
 // Makes sure the content doesn't have unwanted inset
 window.editor.dispatch({ effects: EditorView.scrollIntoView(0) });

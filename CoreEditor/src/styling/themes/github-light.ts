@@ -1,34 +1,26 @@
-import { EditorTheme } from '../types';
+import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
 import { lightBase as base } from './colors';
 
-const colors = {
+const colors: EditorColors = {
   accent: '#0550ae',
   text: '#24292f',
   comment: '#6e7781',
+  background: '#ffffff',
+  caret: '#0a69da',
+  selection: '#add6ff',
   activeLine: '#eaeef27f',
+  matchingBracket: '#cee9d6',
+  lineNumber: '#8c959f',
   searchMatch: '#fae17d7f',
   selectionHighlight: '#4ac26b50',
   visibleSpace: '#afb8c1',
   lighterBackground: '#afb8c133',
+  bracketBorder: '#83d296',
 };
 
 function theme() {
-  return buildTheme({
-    text: colors.text,
-    comment: colors.comment,
-    background: '#ffffff',
-    caret: '#0a69da',
-    selection: '#add6ff',
-    activeLine: colors.activeLine,
-    matchingBracket: '#cee9d6',
-    lineNumber: '#8c959f',
-    searchMatch: colors.searchMatch,
-    selectionHighlight: colors.selectionHighlight,
-    visibleSpace: colors.visibleSpace,
-    lighterBackground: colors.lighterBackground,
-    bracketBorder: '#83d296',
-  });
+  return buildTheme(colors);
 }
 
 function highlight() {
@@ -48,7 +40,7 @@ function highlight() {
 
 export default function GitHubLight(): EditorTheme {
   return {
-    accentColor: colors.accent,
+    colors,
     extension: [theme(), highlight()],
   };
 }

@@ -1,29 +1,30 @@
-import { EditorTheme } from '../types';
+import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
 import { darkBase as base } from './colors';
 
-const colors = {
-  accent: '#5dd8ff',
+const palette = {
   text: '#ffffffd9',
-  comment: '#6c7986',
   brown: '#bf8555',
 };
 
+const colors: EditorColors = {
+  accent: '#5dd8ff',
+  text: palette.text,
+  comment: '#6c7986',
+  background: '#1f1f24',
+  caret: palette.text,
+  selection: '#515b70',
+  activeLine: '#23252b',
+  matchingBracket: '#67b7a440',
+  lineNumber: '#747478',
+  searchMatch: '#545558',
+  selectionHighlight: '#4d5465',
+  visibleSpace: '#424d5b',
+  lighterBackground: '#424d5b40',
+};
+
 function theme() {
-  return buildTheme({
-    text: colors.text,
-    comment: colors.comment,
-    background: '#1f1f24',
-    caret: colors.text,
-    selection: '#515b70',
-    activeLine: '#23252b',
-    matchingBracket: '#67b7a440',
-    lineNumber: '#747478',
-    searchMatch: '#545558',
-    selectionHighlight: '#4d5465',
-    visibleSpace: '#424d5b',
-    lighterBackground: '#424d5b40',
-  }, 'dark');
+  return buildTheme(colors, 'dark');
 }
 
 function highlight() {
@@ -40,18 +41,18 @@ function highlight() {
     { tag: tags.url, color: '#41a1c0' },
     { tag: tags.propertyName, color: colors.text },
     { tag: tags.tagName, color: colors.accent },
-    { tag: tags.attributeName, color: colors.brown },
+    { tag: tags.attributeName, color: palette.brown },
     { tag: tags.definition(tags.variableName), color: '#67b7a4' },
     { tag: [tags.quote, tags.quoteMark], color: '#92a1b1', fontStyle: 'italic' },
     { tag: [tags.atom, tags.bool, tags.number], color: '#d0bf69' },
-    { tag: tags.emphasis, color: colors.brown, fontStyle: 'italic' },
+    { tag: tags.emphasis, color: palette.brown, fontStyle: 'italic' },
     { tag: tags.strong, color: '#d0a8ff', fontWeight: 'bold' },
   ], 'dark');
 }
 
 export default function XcodeDark(): EditorTheme {
   return {
-    accentColor: colors.accent,
+    colors,
     extension: [theme(), highlight()],
   };
 }

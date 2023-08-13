@@ -1,29 +1,30 @@
-import { EditorTheme } from '../types';
+import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
 import { lightBase as light, darkBase as dark } from './colors';
 import { colors as fallback } from './github-dark';
 
-const colors = {
+const palette = {
   accent: '#ffffff',
-  background: '#000000',
+};
+
+const colors: EditorColors = {
+  accent: palette.accent,
   text: light.gray4,
+  comment: light.gray1,
+  background: '#000000',
+  caret: palette.accent,
+  lineNumber: dark.gray1,
+  matchingBracket: dark.gray3,
+  selection: dark.gray5,
+  activeLine: fallback.activeLine,
+  searchMatch: fallback.searchMatch,
+  selectionHighlight: fallback.selectionHighlight,
+  visibleSpace: fallback.visibleSpace,
+  lighterBackground: fallback.lighterBackground,
 };
 
 function theme() {
-  return buildTheme({
-    text: colors.text,
-    comment: light.gray1,
-    background: colors.background,
-    caret: colors.accent,
-    lineNumber: dark.gray1,
-    matchingBracket: dark.gray3,
-    selection: dark.gray5,
-    activeLine: fallback.activeLine,
-    searchMatch: fallback.searchMatch,
-    selectionHighlight: fallback.selectionHighlight,
-    visibleSpace: fallback.visibleSpace,
-    lighterBackground: fallback.lighterBackground,
-  }, 'dark');
+  return buildTheme(colors, 'dark');
 }
 
 function highlight() {
@@ -42,7 +43,7 @@ function highlight() {
 
 export default function MinimalDark(): EditorTheme {
   return {
-    accentColor: colors.accent,
+    colors,
     extension: [theme(), highlight()],
   };
 }

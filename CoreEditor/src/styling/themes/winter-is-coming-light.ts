@@ -1,29 +1,26 @@
-import { EditorTheme } from '../types';
+import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
 import { lightBase as base } from './colors';
 
-const colors = {
+const colors: EditorColors = {
   accent: '#034c7c',
   text: '#3e3e3e',
   comment: '#357b42',
+  background: '#ffffff',
+  caret: '#4eb4d8',
+  selection: '#cee1f0',
+  activeLine: '#b0c0b033',
+  matchingBracket: '#b9d9e8',
+  lineNumber: '#2f86d2',
+  searchMatch: '#cee1f0',
+  selectionHighlight: '#cee1f07f',
+  visibleSpace: '#c4c5cd',
+  lighterBackground: '#c4c5cd33',
+  bracketBorder: '#b9b9b9',
 };
 
 function theme() {
-  return buildTheme({
-    text: colors.text,
-    comment: colors.comment,
-    background: '#ffffff',
-    caret: '#4eb4d8',
-    selection: '#cee1f0',
-    activeLine: '#b0c0b033',
-    matchingBracket: '#b9d9e8',
-    lineNumber: '#2f86d2',
-    searchMatch: '#cee1f0',
-    selectionHighlight: '#cee1f07f',
-    visibleSpace: '#c4c5cd',
-    lighterBackground: '#c4c5cd33',
-    bracketBorder: '#b9b9b9',
-  });
+  return buildTheme(colors);
 }
 
 function highlight() {
@@ -55,7 +52,7 @@ function highlight() {
 
 export default function WinterIsComingLight(): EditorTheme {
   return {
-    accentColor: colors.accent,
+    colors,
     extension: [theme(), highlight()],
   };
 }

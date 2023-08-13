@@ -78,6 +78,6 @@ window.onload = () => {
   }
 };
 
-styling.setUp(config, themes.loadTheme(config.theme).accentColor);
+styling.setUp(config, themes.loadTheme(config.theme).colors);
 events.startObserving();
 grammarly.trottleMutations();
