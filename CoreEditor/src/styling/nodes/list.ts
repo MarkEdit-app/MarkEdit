@@ -1,4 +1,4 @@
-import { Decoration, layer, RectangleMarker } from '@codemirror/view';
+import { Decoration } from '@codemirror/view';
 import { createDecoPlugin } from '../helper';
 import { createDecos } from '../matchers/lexer';
 
@@ -6,9 +6,9 @@ const canvas = document.createElement('canvas');
 const className = 'cm-md-indentedList';
 
 /**
- * Decorate list items with indentation info.
+ * List item indentation, text is always aligned to bullets for soft breaks.
  */
-const lineDecoPlugin = createDecoPlugin(() => {
+export const indentedListStyle = createDecoPlugin(() => {
   return createDecos('ListItem', listItem => {
     if (shouldDisablePlugins()) {
       return null;
@@ -58,74 +58,6 @@ const lineDecoPlugin = createDecoPlugin(() => {
   });
 });
 
-/**
- * Indentations make the active line background partially drawn,
- * draw extra background with a layer to fill the entire line.
- */
-const activeLineFiller = layer({
-  class: 'cm-md-listActiveLine',
-  above: false,
-  markers: () => {
-    if (shouldDisablePlugins()) {
-      return [];
-    }
-
-    // Fill all active lines that are decorated as indented list
-    const lists = [...document.querySelectorAll(`.cm-activeLine.${className}`)] as HTMLElement[];
-    return lists.map(list => new BackgroundMarker(list, storage.cachedTheme));
-  },
-  update: update => {
-    if (window.config.theme !== storage.cachedTheme) {
-      storage.cachedTheme = window.config.theme;
-      return true;
-    }
-
-    return update.selectionSet || update.docChanged || update.viewportChanged || update.geometryChanged;
-  },
-});
-
-/**
- * List item indentation, text is always aligned to bullets for soft breaks.
- */
-export const indentedListStyle = [
-  lineDecoPlugin,
-  activeLineFiller,
-];
-
-/**
- * Marker that extends active line background color to fill its parent.
- */
-class BackgroundMarker extends RectangleMarker {
-  private readonly color: string;
-
-  constructor(anchor: HTMLElement, private readonly theme?: string) {
-    const rect = anchor.getBoundingClientRect();
-    super('cm-md-listActiveBackground', 0, anchor.offsetTop, anchor.offsetLeft, rect.bottom - rect.top);
-
-    const style = getComputedStyle(anchor);
-    this.color = style.backgroundColor;
-  }
-
-  draw() {
-    const elt = super.draw();
-    this.render(elt);
-    return elt;
-  }
-
-  update(elt: HTMLElement, prev: BackgroundMarker): boolean {
-    this.render(elt);
-    return super.update(elt, prev);
-  }
-
-  eq(other: BackgroundMarker): boolean {
-    return this.theme === other.theme && super.eq(other);
-  }
-
-  private render(elt: HTMLElement) {
-    elt.style.backgroundColor = this.color;
-  }
-}
-
 function shouldDisablePlugins() {
   // Indented style is meaningful only when line wrapping is enabled
   return !window.config.lineWrapping;
@@ -149,8 +81,6 @@ function getTextIndent(text: string) {
 
 const storage: {
   cachedIndents: { [key: string]: number };
-  cachedTheme?: string;
 } = {
   cachedIndents: {},
-  cachedTheme: undefined,
 };

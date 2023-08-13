@@ -36,4 +36,8 @@ export function isContentDirty() {
   return storage.savedUndoDepth !== undoDepth(window.editor.state);
 }
 
-const storage: { savedUndoDepth: number } = { savedUndoDepth: 0 };
+const storage: {
+  savedUndoDepth: number;
+} = {
+  savedUndoDepth: 0,
+};

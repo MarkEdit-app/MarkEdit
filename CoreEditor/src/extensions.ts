@@ -20,6 +20,7 @@ import { languages } from './@vendor/language-data';
 
 import { loadTheme } from './styling/themes';
 import { markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
+import { lineIndicatorLayer } from './styling/nodes/line';
 import { gutterExtensions } from './styling/nodes/gutter';
 
 import { localizePhrases } from './modules/localization';
@@ -108,6 +109,7 @@ export function extensions(options: { lineBreak?: string }) {
     selectedLines.of([]),
     renderExtensions,
     actionExtensions,
+    lineIndicatorLayer,
 
     // Input handling
     wordTokenizer(),

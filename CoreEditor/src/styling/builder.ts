@@ -121,13 +121,14 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       backgroundColor: `${colors.selection} !important`, // #180 !important is needed by macOS 14 sdk
     },
     '.cm-activeLine': {
-      backgroundColor: colors.activeLine,
-      boxShadow: innerBorder(2.5, colors.lineBorder),
+      // Just disable here, see lineIndicatorLayer
+      backgroundColor: 'transparent !important',
+      boxShadow: 'none !important',
     },
     // Brackets
     '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
       backgroundColor: colors.matchingBracket,
-      boxShadow: innerBorder(1.5, colors.bracketBorder),
+      boxShadow: buildInnerBorder(1.5, colors.bracketBorder),
     },
     // Gutters
     '.cm-gutters': {
@@ -229,8 +230,8 @@ function buildHighlight(colors: EditorColors, specs: readonly TagStyle[], scheme
 /**
  * Please use box-shadow to create inner borders.
  */
-function innerBorder(width: number, color?: string) {
+function buildInnerBorder(width: number, color?: string) {
   return color !== undefined ? `inset 0px 0px 0px ${width}px ${color}` : 'none';
 }
 
-export { buildTheme, buildHighlight, tags };
+export { buildTheme, buildHighlight, buildInnerBorder, tags };
