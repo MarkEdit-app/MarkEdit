@@ -15,7 +15,7 @@ export interface Localizable {
   unfoldLine: string;
   // Others
   previewButtonTitle: string;
-  cmdClickToFollowLink: string;
+  cmdClickToOpenLink: string;
 }
 
 /**
