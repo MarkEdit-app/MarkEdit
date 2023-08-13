@@ -43,6 +43,9 @@
 /* Menu item: clear recents */
 "Clear Recents" = "清除最近";
 
+/* Tooltip for links */
+"Cmd-Click to follow link" = "Cmd 点击打开链接";
+
 /* Column name for table creation */
 "Column" = "列";
 

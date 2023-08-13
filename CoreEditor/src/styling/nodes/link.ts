@@ -10,7 +10,13 @@ export const linkStyle = createDecoPlugin(() => {
     regexp,
     boundary: /\S/,
     decorate: (add, from, to, match) => {
-      const deco = Decoration.mark({ class: className });
+      const deco = Decoration.mark({
+        class: className,
+        attributes: {
+          title: window.config.localizable?.cmdClickToFollowLink ?? '',
+        },
+      });
+
       if (match[3]) {
         // Markdown links, only decorate the part inside parentheses
         add(from + match[3].length, to - 1, deco);
