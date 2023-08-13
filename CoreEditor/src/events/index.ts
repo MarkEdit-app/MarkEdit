@@ -15,6 +15,10 @@ export function startObserving() {
   });
 
   document.addEventListener('keydown', event => {
+    if (event.key === ' ') {
+      editingState.spaceInsertedTime = Date.now();
+    }
+
     if (isMetaKey(event)) {
       link.startClickable();
     } else {
