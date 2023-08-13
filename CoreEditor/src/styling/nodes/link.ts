@@ -13,7 +13,7 @@ export const linkStyle = createDecoPlugin(() => {
       const deco = Decoration.mark({
         class: className,
         attributes: {
-          title: window.config.localizable?.cmdClickToFollowLink ?? '',
+          title: window.config.localizable?.cmdClickToOpenLink ?? '',
         },
       });
 

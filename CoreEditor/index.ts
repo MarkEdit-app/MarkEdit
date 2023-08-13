@@ -43,7 +43,7 @@ const config: Config = isProd ? ('{{EDITOR_CONFIG}}' as any) : {
   suggestWhileTyping: false,
   localizable: {
     previewButtonTitle: 'preview',
-    cmdClickToFollowLink: 'Cmd-Click to follow link',
+    cmdClickToOpenLink: '⌘-click to open link',
   },
 };
 
