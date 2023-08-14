@@ -61,7 +61,7 @@ class Layer extends RectangleMarker {
   eq(other: Layer): boolean {
     const almostEq = (a: number, b: number): boolean => {
       return Math.abs(a - b) < 0.001;
-    }
+    };
 
     return this.theme === other.theme &&
     almostEq(this.rect.x, other.rect.x) &&
