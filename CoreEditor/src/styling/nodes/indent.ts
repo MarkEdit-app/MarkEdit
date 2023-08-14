@@ -3,33 +3,27 @@ import { createDecoPlugin } from '../helper';
 import { createDecos } from '../matchers/lexer';
 
 const canvas = document.createElement('canvas');
-const className = 'cm-md-indentedList';
+const className = 'cm-md-contentIndent';
 
 /**
- * List item indentation, text is always aligned to bullets for soft breaks.
+ * Content indentation for lists and blockquotes, content is always aligned to marks for soft breaks.
  */
-export const indentedListStyle = createDecoPlugin(() => {
-  return createDecos('ListItem', listItem => {
+export const contentIndentStyle = createDecoPlugin(() => {
+  return createDecos(['ListMark', 'QuoteMark'], markNode => {
     // Fail fast if line wrapping is disabled
     if (!window.config.lineWrapping) {
       return null;
     }
 
-    const listMark = listItem.node.getChild('ListMark');
-    if (listMark === null) {
-      // Theoretically, this should not happen if the list is valid
-      return null;
-    }
-
     const editor = window.editor;
-    const line = editor.state.doc.lineAt(listItem.from);
+    const line = editor.state.doc.lineAt(markNode.from);
     const text = line.text;
 
     // For example: " 1.  Hello",
     // we need to find the position of the last whitespace before "H".
     //
     // As a result, we will use " 1.  " to calculate the indent.
-    let index = listMark.to - line.from;
+    let index = markNode.to - line.from;
     while (text.charAt(index) === ' ' && index < text.length) {
       ++index;
     }
@@ -45,16 +39,16 @@ export const indentedListStyle = createDecoPlugin(() => {
     // Remember to use line decoration instead of mark decoration,
     // see: https://discuss.codemirror.net/t/6968
     //
-    // Another reason is that list items can be nested, take the following example:
+    // Another reason is that items can be nested, take the following example:
     //  - Hello
     //    - World
     //
-    // When iterating through "Hello", the listItem node contains "World" too.
+    // When iterating through "Hello", the itemNode contains "World" too.
     // Over-decorating "World" could arise if we used node ranges to create mark decorations,
     // and remember that node ranges exclude leading spaces.
     //
     // Instead, use line ranges to create line decorations for the current line,
-    // because list items are separated by line breaks.
+    // because items are separated by line breaks.
     return deco.range(line.from, line.from);
   });
 });

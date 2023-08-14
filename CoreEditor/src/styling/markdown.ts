@@ -2,9 +2,9 @@ import { styleTags } from '@lezer/highlight';
 import { MarkdownConfig } from '@lezer/markdown';
 import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdownMathParser';
 import { tags } from './builder';
+import { contentIndentStyle } from './nodes/indent';
 import { inlineCodeStyle, fencedCodeStyle, previewMermaid, previewMath } from './nodes/code';
 import { linkStyle } from './nodes/link';
-import { indentedListStyle } from './nodes/list';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
 
@@ -34,7 +34,7 @@ export const renderExtensions = [
   inlineCodeStyle,
   fencedCodeStyle,
   linkStyle,
-  indentedListStyle,
+  contentIndentStyle,
   tableStyle,
   frontMatterStyle,
 ];

@@ -38,18 +38,19 @@ export function createWidgetDeco(nodeName: string, builder: (node: SyntaxNodeRef
  *
  * https://github.com/lezer-parser/markdown/blob/main/src/markdown.ts
  *
- * @param nodeName Node name, such as "ATXHeading1" for headings
+ * @param nodeName Node name(s), such as "ATXHeading1" for headings
  * @param builder Closure to create the Decoration
  */
-export function createDecos(nodeName: string, builder: (node: SyntaxNodeRef) => Range<Decoration> | null) {
+export function createDecos(nodeName: string | string[], builder: (node: SyntaxNodeRef) => Range<Decoration> | null) {
   const editor = window.editor;
   const ranges: Range<Decoration>[] = [];
+  const nodeNames = typeof nodeName === 'string' ? [nodeName] : nodeName;
 
   for (const { from, to } of editor.visibleRanges) {
     syntaxTree(editor.state).iterate({
       from, to,
       enter: node => {
-        if (node.name === nodeName) {
+        if (nodeNames.includes(node.name)) {
           const range = builder(node);
           if (range) {
             ranges.push(range);
