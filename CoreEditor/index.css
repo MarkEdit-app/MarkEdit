@@ -32,11 +32,11 @@ html, body {
   font-weight: bold;
 }
 
-.cm-md-indentedList {
+.cm-md-contentIndent {
   display: inline-block;
 }
 
-.cm-md-indentedList .cm-visibleSpace:before {
+.cm-md-contentIndent .cm-visibleSpace:before {
   text-indent: 0px;
   margin-inline-start: 0px;
 }
