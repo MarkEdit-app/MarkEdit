@@ -31,10 +31,20 @@ export const lineIndicatorLayer = layer({
 });
 
 class Layer extends RectangleMarker {
+  // Used to implement the equals function
+  private readonly rect: DOMRect;
+
   constructor(content: HTMLElement, line: HTMLElement, private readonly theme?: string) {
     const lineRect = line.getBoundingClientRect();
     const contentRect = content.getBoundingClientRect();
     super('cm-md-activeIndicator', contentRect.left, line.offsetTop, contentRect.width, lineRect.height);
+
+    this.rect = new DOMRect(
+      contentRect.left,   // x
+      line.offsetTop,     // y
+      contentRect.width,  // width
+      lineRect.height,    // height
+    );
   }
 
   draw() {
@@ -49,7 +59,15 @@ class Layer extends RectangleMarker {
   }
 
   eq(other: Layer): boolean {
-    return this.theme === other.theme && super.eq(other);
+    const almostEq = (a: number, b: number): boolean => {
+      return Math.abs(a - b) < 0.001;
+    }
+
+    return this.theme === other.theme &&
+    almostEq(this.rect.x, other.rect.x) &&
+    almostEq(this.rect.y, other.rect.y) &&
+    almostEq(this.rect.width, other.rect.width) &&
+    almostEq(this.rect.height, other.rect.height);
   }
 
   private render(elt: HTMLElement) {
