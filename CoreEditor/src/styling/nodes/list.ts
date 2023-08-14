@@ -10,7 +10,8 @@ const className = 'cm-md-indentedList';
  */
 export const indentedListStyle = createDecoPlugin(() => {
   return createDecos('ListItem', listItem => {
-    if (shouldDisablePlugins()) {
+    // Fail fast if line wrapping is disabled
+    if (!window.config.lineWrapping) {
       return null;
     }
 
@@ -57,11 +58,6 @@ export const indentedListStyle = createDecoPlugin(() => {
     return deco.range(line.from, line.from);
   });
 });
-
-function shouldDisablePlugins() {
-  // Indented style is meaningful only when line wrapping is enabled
-  return !window.config.lineWrapping;
-}
 
 function getTextIndent(text: string) {
   const font = `${window.config.fontSize}px ${window.config.fontFamily}`;

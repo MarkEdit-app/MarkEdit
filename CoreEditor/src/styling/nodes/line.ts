@@ -11,6 +11,7 @@ export const lineIndicatorLayer = layer({
   class: 'cm-md-activeLine',
   above: false,
   markers: editor => {
+    // Fail fast if line indicator is disabled
     if (!window.config.showActiveLineIndicator) {
       return [];
     }
