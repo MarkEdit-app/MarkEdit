@@ -9,22 +9,14 @@ const className = 'cm-md-contentIndent';
  * Content indentation for lists and blockquotes, content is always aligned to marks for soft breaks.
  */
 export const contentIndentStyle = createDecoPlugin(() => {
-  return createDecos(['ListItem', 'Blockquote'], itemNode => {
+  return createDecos(['ListMark', 'QuoteMark'], markNode => {
     // Fail fast if line wrapping is disabled
     if (!window.config.lineWrapping) {
       return null;
     }
 
-    const markName = itemNode.name === 'ListItem' ? 'ListMark' : 'QuoteMark';
-    const markNode = itemNode.node.getChild(markName);
-
-    // Theoretically, this should not happen if the node is valid
-    if (markNode === null) {
-      return null;
-    }
-
     const editor = window.editor;
-    const line = editor.state.doc.lineAt(itemNode.from);
+    const line = editor.state.doc.lineAt(markNode.from);
     const text = line.text;
 
     // For example: " 1.  Hello",
