@@ -12,33 +12,27 @@ import { refreshEditFocus } from '../../modules/selection';
 const typingInterval = 300;
 const focusUpdateInterval = 15;
 
-// Originally learned from: https://github.com/ChromeDevTools/devtools-frontend/blob/main/front_end/ui/components/text_editor/config.ts
-//
-// We don't use the built-in highlightWhitespace extension,
-// because it doesn't take custom font size into account.
-//
-// In Markdown rendering, we have different font sizes for headers,
-// we need to figure out proper font size and set it to the pseudo class.
-const renderInvisibles = createDecoPlugin(() => {
-  return createMarkDeco(/\t| +/g, (match, pos) => {
-    const invisible = match[0];
+// The difference is that renderInvisiblesSelection doesn't match continuous spaces,
+// which doesn't work well with selectedTextDecoration because nodes can be nested.
+const renderInvisiblesAlways = renderInvisibles(/\t| +/g);
+const renderInvisiblesSelection = renderInvisibles(/\t| /g);
 
-    // If we always show invisibles and just inserted a whitespace, we skip drawing in this render pass.
-    //
-    // The reason behind this is that <span> elements created for invisibles can break autocorrect features,
-    // we will redraw the skipped whitespace in renderWhitespaceBeforeCaret.
-    if (
-      (alwaysRenderInvisibles()) &&
-      (invisible === ' ') &&
-      (Date.now() - storage.spaceInsertedTime < typingInterval) &&
-      (pos === caretTextPosition() - 1)
-    ) {
-      return null;
-    }
+export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: boolean) {
+  if (behavior === InvisiblesBehavior.always) {
+    return renderInvisiblesAlways;
+  }
 
-    return getOrCreateDeco(invisible, pos);
-  });
-});
+  if (behavior === InvisiblesBehavior.selection) {
+    // renderInvisiblesSelection must go before selectedTextDecoration
+    return hasSelection ? [renderInvisiblesSelection, selectedTextDecoration] : selectedTextDecoration;
+  }
+
+  if (behavior === InvisiblesBehavior.trailing) {
+    return highlightTrailingWhitespace();
+  }
+
+  return [];
+}
 
 // This function renders the space before the main caret by forcing a focus change.
 //
@@ -68,20 +62,32 @@ export function renderWhitespaceBeforeCaret() {
   }, focusUpdateInterval);
 }
 
-export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: boolean) {
-  if (behavior === InvisiblesBehavior.always) {
-    return renderInvisibles;
-  }
+// Originally learned from: https://github.com/ChromeDevTools/devtools-frontend/blob/main/front_end/ui/components/text_editor/config.ts
+//
+// We don't use the built-in highlightWhitespace extension,
+// because it doesn't take custom font size into account.
+//
+// In Markdown rendering, we have different font sizes for headers,
+// we need to figure out proper font size and set it to the pseudo class.
+function renderInvisibles(regexp: RegExp) {
+  return createDecoPlugin(() => createMarkDeco(regexp, (match, pos) => {
+    const invisible = match[0];
 
-  if (behavior === InvisiblesBehavior.selection) {
-    return hasSelection ? [renderInvisibles, selectedTextDecoration] : selectedTextDecoration;
-  }
+    // If we always show invisibles and just inserted a whitespace, we skip drawing in this render pass.
+    //
+    // The reason behind this is that <span> elements created for invisibles can break autocorrect features,
+    // we will redraw the skipped whitespace in renderWhitespaceBeforeCaret.
+    if (
+      (alwaysRenderInvisibles()) &&
+      (invisible === ' ') &&
+      (Date.now() - storage.spaceInsertedTime < typingInterval) &&
+      (pos === caretTextPosition() - 1)
+    ) {
+      return null;
+    }
 
-  if (behavior === InvisiblesBehavior.trailing) {
-    return highlightTrailingWhitespace();
-  }
-
-  return [];
+    return getOrCreateDeco(invisible, pos);
+  }));
 }
 
 function alwaysRenderInvisibles() {
