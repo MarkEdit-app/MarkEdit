@@ -122,4 +122,8 @@ function observeEventsForCompletion() {
   }, true);
 }
 
-const storage: { isMouseDown: boolean } = { isMouseDown: false };
+const storage: {
+  isMouseDown: boolean;
+} = {
+  isMouseDown: false,
+};
