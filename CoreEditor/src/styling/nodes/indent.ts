@@ -1,6 +1,6 @@
 import { Decoration } from '@codemirror/view';
 import { createDecoPlugin } from '../helper';
-import { createDecos } from '../matchers/lexer';
+import { createDecos } from '../matchers/lezer';
 
 const canvas = document.createElement('canvas');
 const className = 'cm-md-contentIndent';

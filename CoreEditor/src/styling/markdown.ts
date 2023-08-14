@@ -3,7 +3,7 @@ import { MarkdownConfig } from '@lezer/markdown';
 import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdownMathParser';
 import { tags } from './builder';
 import { contentIndentStyle } from './nodes/indent';
-import { inlineCodeStyle, fencedCodeStyle, previewMermaid, previewMath } from './nodes/code';
+import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './nodes/code';
 import { linkStyle } from './nodes/link';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
@@ -32,7 +32,7 @@ export const markdownExtensions: MarkdownConfig[] = [
  */
 export const renderExtensions = [
   inlineCodeStyle,
-  fencedCodeStyle,
+  codeBlockStyle,
   linkStyle,
   contentIndentStyle,
   tableStyle,

@@ -1,0 +1,86 @@
+import { Decoration } from '@codemirror/view';
+import { Range } from '@codemirror/state';
+import { syntaxTree } from '@codemirror/language';
+import { SyntaxNodeRef } from '@lezer/common';
+import { WidgetView } from '../../views/types';
+
+/**
+ * Create mark decorations.
+ *
+ * @param nodeName Node name(s), such as "ATXHeading1" for headings
+ * @param className Class to decorate the node
+ */
+export function createMarkDeco(nodeName: string | string[], className: string) {
+  return createDecos(nodeName, node => {
+    return Decoration.mark({ class: className }).range(node.from, node.to);
+  });
+}
+
+/**
+ * Create widget decorations.
+ *
+ * @param nodeName Node name(s), such as "ATXHeading1" for headings
+ * @param builder Closure to create a widget decoration
+ */
+export function createWidgetDeco(nodeName: string | string[], builder: (node: SyntaxNodeRef) => WidgetView | null) {
+  return createDecos(nodeName, node => {
+    const widget = builder(node);
+    if (widget === null) {
+      return null;
+    } else {
+      return Decoration.widget({ widget, side: 1 }).range(widget.pos);
+    }
+  });
+}
+
+/**
+ * Create line decorations.
+ *
+ * @param nodeName Node name(s), such as "FencedCode" for ``` code blocks
+ * @param className Class to decorate the node
+ */
+export function createLineDeco(nodeName: string | string[], className: string) {
+  return createDecos(nodeName, node => {
+    const doc = window.editor.state.doc;
+    const decos: Range<Decoration>[] = [];
+    const start = doc.lineAt(node.from).number;
+    const end = doc.lineAt(node.to).number;
+
+    // Generate deco for each line
+    for (let index = start; index <= end; ++index) {
+      const line = doc.line(index);
+      const deco = Decoration.line({ class: className });
+      decos.push(deco.range(line.from, line.from));
+    }
+
+    return decos;
+  });
+}
+
+/**
+ * Build decorations by leveraging language lexers.
+ *
+ * https://github.com/lezer-parser/markdown/blob/main/src/markdown.ts
+ *
+ * @param nodeName Node name(s), such as "ATXHeading1" for headings
+ * @param builder Closure to create the Decoration(s)
+ */
+export function createDecos(nodeName: string | string[], builder: (node: SyntaxNodeRef) => Range<Decoration> | Range<Decoration>[] | null) {
+  const editor = window.editor;
+  const ranges: Range<Decoration>[] = [];
+  const nodeNames = Array.isArray(nodeName) ? nodeName : [nodeName];
+
+  for (const { from, to } of editor.visibleRanges) {
+    syntaxTree(editor.state).iterate({
+      from, to,
+      enter: node => {
+        if (nodeNames.includes(node.name)) {
+          const range = builder(node) ?? [];
+          ranges.push(...Array.isArray(range) ? range : [range]);
+        }
+      },
+    });
+  }
+
+  return Decoration.set(ranges);
+}

@@ -79,7 +79,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     position: 'absolute',
     pointerEvents: 'none',
   },
-  '.cm-md-monospace, .cm-md-monospace *, .cm-md-fencedCode *, .cm-md-table *': {
+  '.cm-md-monospace, .cm-md-monospace *, .cm-md-codeBlock *, .cm-md-table *': {
     fontFamily: 'ui-monospace, monospace',
   },
 };
