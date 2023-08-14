@@ -109,7 +109,7 @@ export function extensions(options: { lineBreak?: string }) {
     selectedLines.of([]),
     renderExtensions,
     actionExtensions,
-    lineIndicatorLayer,
+    lineIndicatorLayer, // Must after highlightActiveLine
 
     // Input handling
     wordTokenizer(),

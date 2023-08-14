@@ -121,7 +121,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       backgroundColor: `${colors.selection} !important`, // #180 !important is needed by macOS 14 sdk
     },
     '.cm-activeLine': {
-      // Just disable here, see lineIndicatorLayer
+      // Intentionally hide the effects here, use lineIndicatorLayer to render instead
       backgroundColor: 'transparent !important',
       boxShadow: 'none !important',
     },

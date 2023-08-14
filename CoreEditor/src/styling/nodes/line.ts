@@ -2,10 +2,10 @@ import { RectangleMarker, layer } from '@codemirror/view';
 import { buildInnerBorder } from '../builder';
 
 /**
- * Indentations make the active line background partially drawn,
- * use this home-made version to have full-width active line indicator.
+ * Line level indentations make the background of active lines partially drawn,
+ * use this home-made version to have full-width indicators.
  *
- * It just finds all active lines and creates wider layers to replace them.
+ * It just finds all active lines and creates wider layers to "replace" them.
  */
 export const lineIndicatorLayer = layer({
   class: 'cm-md-activeLine',
@@ -21,6 +21,7 @@ export const lineIndicatorLayer = layer({
     return lines.map(line => new Layer(content, line, storage.cachedTheme));
   },
   update: update => {
+    // Theme changed, the update object doesn't have sufficient info
     if (window.config.theme !== storage.cachedTheme) {
       storage.cachedTheme = window.config.theme;
       return true;
@@ -31,7 +32,7 @@ export const lineIndicatorLayer = layer({
 });
 
 class Layer extends RectangleMarker {
-  // Used to implement the equals function
+  // Used for object equality
   private readonly rect: DOMRect;
 
   constructor(content: HTMLElement, line: HTMLElement, private readonly theme?: string) {
@@ -39,6 +40,7 @@ class Layer extends RectangleMarker {
     const contentRect = content.getBoundingClientRect();
     super('cm-md-activeIndicator', contentRect.left, line.offsetTop, contentRect.width, lineRect.height);
 
+    // The rect is wider than lineRect, it fills the entire contentDOM
     this.rect = new DOMRect(
       contentRect.left,   // x
       line.offsetTop,     // y
@@ -72,12 +74,8 @@ class Layer extends RectangleMarker {
 
   private render(elt: HTMLElement) {
     const colors = window.colors;
-    if (colors === undefined) {
-      return;
-    }
-
-    elt.style.backgroundColor = colors.activeLine;
-    elt.style.boxShadow = buildInnerBorder(2.5, colors.lineBorder);
+    elt.style.backgroundColor = colors?.activeLine ?? '';
+    elt.style.boxShadow = buildInnerBorder(2.5, colors?.lineBorder);
   }
 }
 
