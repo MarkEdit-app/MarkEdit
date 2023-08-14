@@ -1,4 +1,4 @@
-import { createMarkDeco, createWidgetDeco } from '../matchers/lexer';
+import { createLineDeco, createWidgetDeco } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../../views';
 import { PreviewType, showPreview } from '../../modules/preview';
@@ -7,7 +7,7 @@ import { PreviewType, showPreview } from '../../modules/preview';
  * Always use monospace font for Table.
  */
 export const tableStyle = createDecoPlugin(() => {
-  return createMarkDeco('Table', 'cm-md-monospace cm-md-table');
+  return createLineDeco('Table', 'cm-md-monospace cm-md-table');
 });
 
 /**
@@ -15,8 +15,8 @@ export const tableStyle = createDecoPlugin(() => {
  */
 export const previewTable = createDecoPlugin(() => {
   return createWidgetDeco('Table', node => {
-    const header = node.node.firstChild?.node;
-    if (header?.name !== 'TableHeader') {
+    const header = node.node.getChild('TableHeader');
+    if (header === null) {
       return null;
     }
 

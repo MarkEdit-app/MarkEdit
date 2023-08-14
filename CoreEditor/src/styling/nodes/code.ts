@@ -1,4 +1,4 @@
-import { createMarkDeco, createWidgetDeco } from '../matchers/lexer';
+import { createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../../views';
 import { PreviewType, showPreview } from '../../modules/preview';
@@ -13,8 +13,8 @@ export const inlineCodeStyle = createDecoPlugin(() => {
 /**
  * Always use monospace font for FencedCode.
  */
-export const fencedCodeStyle = createDecoPlugin(() => {
-  return createMarkDeco('FencedCode', 'cm-md-monospace cm-md-fencedCode');
+export const codeBlockStyle = createDecoPlugin(() => {
+  return createLineDeco(['FencedCode', 'CodeBlock'], 'cm-md-monospace cm-md-codeBlock');
 });
 
 /**
