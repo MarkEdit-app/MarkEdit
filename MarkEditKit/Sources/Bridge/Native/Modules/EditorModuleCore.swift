@@ -9,11 +9,11 @@ import Foundation
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
-  func editorCoreTextDidChange(_ sender: EditorModuleCore, isDirty: Bool)
-  func editorCore(
+  func editorCoreViewDidUpdate(
     _ sender: EditorModuleCore,
-    selectionDidChange lineColumn: LineColumnInfo,
-    contentEdited: Bool
+    contentEdited: Bool,
+    isDirty: Bool,
+    selectedLineColumn: LineColumnInfo
   )
 }
 
@@ -32,11 +32,16 @@ public final class EditorModuleCore: NativeModuleCore {
     delegate?.editorCoreViewportScaleDidChange(self)
   }
 
-  public func notifyTextDidChange(isDirty: Bool) {
-    delegate?.editorCoreTextDidChange(self, isDirty: isDirty)
-  }
-
-  public func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool) {
-    delegate?.editorCore(self, selectionDidChange: lineColumn, contentEdited: contentEdited)
+  public func notifyViewDidUpdate(
+    contentEdited: Bool,
+    isDirty: Bool,
+    selectedLineColumn: LineColumnInfo
+  ) {
+    delegate?.editorCoreViewDidUpdate(
+      self,
+      contentEdited: contentEdited,
+      isDirty: isDirty,
+      selectedLineColumn: selectedLineColumn
+    )
   }
 }

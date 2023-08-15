@@ -22,13 +22,13 @@ export function startObserving() {
 
     if (isMetaKey(event)) {
       link.startClickable();
-    } else {
-      link.stopClickable();
     }
   });
 
-  document.addEventListener('keyup', () => {
-    link.stopClickable();
+  document.addEventListener('keyup', event => {
+    if (isMetaKey(event)) {
+      link.stopClickable();
+    }
   });
 
   document.addEventListener('mousedown', event => {

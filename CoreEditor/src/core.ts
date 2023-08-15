@@ -75,9 +75,14 @@ export function resetEditor(doc: string) {
   styling.setUp(window.config, themes.loadTheme(window.config.theme).colors);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
-  window.nativeModules.core.notifySelectionDidChange({
-    lineColumn: { line: 1 as CodeGen_Int, column: 1 as CodeGen_Int, length: 0 as CodeGen_Int },
+  window.nativeModules.core.notifyViewDidUpdate({
     contentEdited: false,
+    isDirty: false,
+    selectedLineColumn: {
+      line: 1 as CodeGen_Int,
+      column: 1 as CodeGen_Int,
+      length: 0 as CodeGen_Int,
+    },
   });
 
   // Observe viewport scale changes, i.e., pinch to zoom
