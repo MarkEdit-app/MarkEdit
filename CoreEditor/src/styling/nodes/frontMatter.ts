@@ -1,5 +1,5 @@
 import { Decoration } from '@codemirror/view';
-import { createDecoPlugin } from '../helper';
+import { createDecoPlugin, lineDecoRanges } from '../helper';
 import { frontMatterRange } from '../../modules/frontMatter';
 
 /**
@@ -13,6 +13,5 @@ export const frontMatterStyle = createDecoPlugin(() => {
 
   // We don't have a cm6 parser for yaml just yet,
   // let's simply decorate the front matter section with a class.
-  const deco = Decoration.mark({ class: 'cm-md-frontMatter' }).range(range.from, range.to);
-  return Decoration.set(deco);
+  return Decoration.set(lineDecoRanges(range.from, range.to, 'cm-md-frontMatter'));
 });

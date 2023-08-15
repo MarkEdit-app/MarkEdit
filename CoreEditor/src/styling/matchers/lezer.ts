@@ -3,6 +3,7 @@ import { Range } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
 import { WidgetView } from '../../views/types';
+import { lineDecoRanges } from '../helper';
 
 /**
  * Create mark decorations.
@@ -40,21 +41,7 @@ export function createWidgetDeco(nodeName: string | string[], builder: (node: Sy
  * @param className Class to decorate the node
  */
 export function createLineDeco(nodeName: string | string[], className: string) {
-  return createDecos(nodeName, node => {
-    const doc = window.editor.state.doc;
-    const decos: Range<Decoration>[] = [];
-    const start = doc.lineAt(node.from).number;
-    const end = doc.lineAt(node.to).number;
-
-    // Generate deco for each line
-    for (let index = start; index <= end; ++index) {
-      const line = doc.line(index);
-      const deco = Decoration.line({ class: className });
-      decos.push(deco.range(line.from, line.from));
-    }
-
-    return decos;
-  });
+  return createDecos(nodeName, node => lineDecoRanges(node.from, node.to, className));
 }
 
 /**

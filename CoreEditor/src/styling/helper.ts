@@ -1,5 +1,5 @@
 import { Decoration, DOMEventHandlers, EditorView, ViewPlugin } from '@codemirror/view';
-import { RangeSet } from '@codemirror/state';
+import { Range, RangeSet } from '@codemirror/state';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createDecoPlugin(builder: () => RangeSet<Decoration>, eventHandlers?: DOMEventHandlers<any>) {
@@ -10,6 +10,25 @@ export function createDecoPlugin(builder: () => RangeSet<Decoration>, eventHandl
     }),
     eventHandlers,
   });
+}
+
+/**
+ * Get line deco ranges for a text range, which can be multiple lines.
+ */
+export function lineDecoRanges(from: number, to: number, className: string) {
+  const doc = window.editor.state.doc;
+  const decos: Range<Decoration>[] = [];
+  const start = doc.lineAt(from).number;
+  const end = doc.lineAt(to).number;
+
+  // Generate the range for each line
+  for (let index = start; index <= end; ++index) {
+    const line = doc.line(index);
+    const deco = Decoration.line({ class: className });
+    decos.push(deco.range(line.from, line.from));
+  }
+
+  return decos;
 }
 
 export function updateStyleSheet(element: HTMLStyleElement | null, update: (style: CSSStyleDeclaration, rule: CSSStyleRule) => void) {
