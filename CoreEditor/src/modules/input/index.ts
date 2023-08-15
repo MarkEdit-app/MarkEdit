@@ -1,6 +1,5 @@
 import { EditorView } from '@codemirror/view';
 import { InvisiblesBehavior } from '../../config';
-import { isMouseDown } from '../../events';
 import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
@@ -97,32 +96,16 @@ export function observeChanges() {
       }
     }
 
-    // Handle native updates, use a timer to avoid calling native frequently
+    // Handle native updates
     if (update.docChanged || update.selectionSet) {
-      if (storage.nativeUpdater !== undefined) {
-        clearTimeout(storage.nativeUpdater);
-        storage.nativeUpdater = undefined;
-      }
-
-      // When the mouse is down and a selection is set,
-      // the user is likely to be quickly selecting text.
-      const updateInterval = (isMouseDown() && update.selectionSet) ? 20 : 100;
-      storage.nativeUpdater = setTimeout(() => {
-        // It would be great if we could also provide the updated text here,
-        // but it's time-consuming for large payload,
-        // we want to be responsive for every key stroke.
-        window.nativeModules.core.notifyViewDidUpdate({
-          contentEdited: update.docChanged,
-          isDirty: isContentDirty(),
-          selectedLineColumn: selectedLineColumn(),
-        });
-      }, updateInterval);
+      // It would be great if we could also provide the updated text here,
+      // but it's time-consuming for large payload,
+      // we want to be responsive for every key stroke.
+      window.nativeModules.core.notifyViewDidUpdate({
+        contentEdited: update.docChanged,
+        isDirty: isContentDirty(),
+        selectedLineColumn: selectedLineColumn(),
+      });
     }
   });
 }
-
-const storage: {
-  nativeUpdater: ReturnType<typeof setTimeout> | undefined;
-} = {
-  nativeUpdater: undefined,
-};
