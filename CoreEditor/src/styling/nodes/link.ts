@@ -55,18 +55,17 @@ export function handleMouseUp(event: MouseEvent) {
   const link = extractLink(event.target);
   if (link !== undefined) {
     window.open(link, '_blank');
-    stopClickable();
   }
 }
 
 function forEachLink(handler: (element: HTMLElement) => void) {
-  const links = [...document.querySelectorAll(`.${className}`)] as HTMLElement[];
+  const links = document.querySelectorAll(`.${className}`);
   links.forEach(handler);
 }
 
 function extractLink(target: EventTarget | null) {
   const selector = `.${className}`;
-  const element = (target as HTMLElement).closest<HTMLElement>(selector);
+  const element = (target as HTMLElement | null)?.closest<HTMLElement>(selector);
 
   // The link is clickable when it has an underline
   if (element?.style.textDecoration !== 'underline') {

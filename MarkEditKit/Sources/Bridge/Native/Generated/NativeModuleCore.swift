@@ -13,8 +13,7 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyViewportScaleDidChange()
-  func notifyTextDidChange(isDirty: Bool)
-  func notifySelectionDidChange(lineColumn: LineColumnInfo, contentEdited: Bool)
+  func notifyViewDidUpdate(contentEdited: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
 }
 
 public extension NativeModuleCore {
@@ -30,11 +29,8 @@ final class NativeBridgeCore: NativeBridge {
     "notifyViewportScaleDidChange": { [weak self] in
       self?.notifyViewportScaleDidChange(parameters: $0)
     },
-    "notifyTextDidChange": { [weak self] in
-      self?.notifyTextDidChange(parameters: $0)
-    },
-    "notifySelectionDidChange": { [weak self] in
-      self?.notifySelectionDidChange(parameters: $0)
+    "notifyViewDidUpdate": { [weak self] in
+      self?.notifyViewDidUpdate(parameters: $0)
     },
   ]
 
@@ -55,27 +51,11 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyTextDidChange(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyViewDidUpdate(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var isDirty: Bool
-    }
-
-    let message: Message
-    do {
-      message = try decoder.decode(Message.self, from: parameters)
-    } catch {
-      Logger.assertFail("Failed to decode parameters: \(parameters)")
-      return .failure(error)
-    }
-
-    module.notifyTextDidChange(isDirty: message.isDirty)
-    return .success(nil)
-  }
-
-  private func notifySelectionDidChange(parameters: Data) -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var lineColumn: LineColumnInfo
       var contentEdited: Bool
+      var isDirty: Bool
+      var selectedLineColumn: LineColumnInfo
     }
 
     let message: Message
@@ -86,7 +66,7 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifySelectionDidChange(lineColumn: message.lineColumn, contentEdited: message.contentEdited)
+    module.notifyViewDidUpdate(contentEdited: message.contentEdited, isDirty: message.isDirty, selectedLineColumn: message.selectedLineColumn)
     return .success(nil)
   }
 }

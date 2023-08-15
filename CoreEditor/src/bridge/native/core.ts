@@ -9,6 +9,5 @@ import { LineColumnInfo } from '../../modules/selection/types';
 export interface NativeModuleCore extends NativeModule {
   notifyWindowDidLoad(): void;
   notifyViewportScaleDidChange(): void;
-  notifyTextDidChange({ isDirty }: { isDirty: boolean }): void;
-  notifySelectionDidChange({ lineColumn, contentEdited }: { lineColumn: LineColumnInfo; contentEdited: boolean }): void;
+  notifyViewDidUpdate({ contentEdited, isDirty, selectedLineColumn }: { contentEdited: boolean; isDirty: boolean; selectedLineColumn: LineColumnInfo }): void;
 }

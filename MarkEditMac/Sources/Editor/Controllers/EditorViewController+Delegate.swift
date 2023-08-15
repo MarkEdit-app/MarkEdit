@@ -70,27 +70,26 @@ extension EditorViewController: EditorModuleCoreDelegate {
     cancelOperation(sender)
   }
 
-  func editorCoreTextDidChange(_ sender: EditorModuleCore, isDirty: Bool) {
-    document?.markContentDirty(isDirty)
-
-    if findPanel.mode != .hidden {
-      Task {
-        if let count = try? await bridge.search.numberOfMatches() {
-          updateTextFinderPanels(numberOfItems: count)
-        }
-      }
-    }
-  }
-
-  func editorCore(
+  func editorCoreViewDidUpdate(
     _ sender: EditorModuleCore,
-    selectionDidChange lineColumn: LineColumnInfo,
-    contentEdited: Bool
+    contentEdited: Bool,
+    isDirty: Bool,
+    selectedLineColumn: LineColumnInfo
   ) {
-    statusView.updateLineColumn(lineColumn)
+    statusView.updateLineColumn(selectedLineColumn)
     layoutStatusView()
 
-    if !contentEdited {
+    if contentEdited {
+      document?.markContentDirty(isDirty)
+
+      if findPanel.mode != .hidden {
+        Task {
+          if let count = try? await bridge.search.numberOfMatches() {
+            updateTextFinderPanels(numberOfItems: count)
+          }
+        }
+      }
+    } else {
       cancelCompletion()
     }
   }

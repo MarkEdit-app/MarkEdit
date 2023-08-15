@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { InvisiblesBehavior } from '../../config';
+import { isMouseDown } from '../../events';
 import { editingState } from '../../common/store';
 import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
@@ -25,7 +26,7 @@ export function wordTokenizer() {
     // we simply just leave the selection as is and handle the updates in a "dblclick" event handler.
     return {
       get(_event, _extend, _multiple) { return editor.state.selection; },
-      update(_update) { /* no-op */},
+      update(_update) { /* no-op */ },
     };
   });
 }
@@ -68,11 +69,6 @@ export function observeChanges() {
     }
 
     if (update.docChanged) {
-      // It would be great if we could also provide the updated text here,
-      // but it's time-consuming for large payload,
-      // we want to be responsive for every key stroke.
-      window.nativeModules.core.notifyTextDidChange({ isDirty: isContentDirty() });
-
       // Make sure the main selection is always centered for typewriter mode
       if (window.config.typewriterMode) {
         scrollToSelection('center');
@@ -84,9 +80,6 @@ export function observeChanges() {
     }
 
     if (update.selectionSet) {
-      const lineColumn = selectedLineColumn();
-      window.nativeModules.core.notifySelectionDidChange({ lineColumn, contentEdited: update.docChanged });
-
       const hasSelection = selectedRange().some(range => !range.empty);
       const updateActiveLine = editingState.hasSelection !== hasSelection;
       editingState.hasSelection = hasSelection;
@@ -103,5 +96,33 @@ export function observeChanges() {
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
       }
     }
+
+    // Handle native updates, use a timer to avoid calling native frequently
+    if (update.docChanged || update.selectionSet) {
+      if (storage.nativeUpdater !== undefined) {
+        clearTimeout(storage.nativeUpdater);
+        storage.nativeUpdater = undefined;
+      }
+
+      // When the mouse is down and a selection is set,
+      // the user is likely to be quickly selecting text.
+      const updateInterval = (isMouseDown() && update.selectionSet) ? 20 : 100;
+      storage.nativeUpdater = setTimeout(() => {
+        // It would be great if we could also provide the updated text here,
+        // but it's time-consuming for large payload,
+        // we want to be responsive for every key stroke.
+        window.nativeModules.core.notifyViewDidUpdate({
+          contentEdited: update.docChanged,
+          isDirty: isContentDirty(),
+          selectedLineColumn: selectedLineColumn(),
+        });
+      }, updateInterval);
+    }
   });
 }
+
+const storage: {
+  nativeUpdater: ReturnType<typeof setTimeout> | undefined;
+} = {
+  nativeUpdater: undefined,
+};
