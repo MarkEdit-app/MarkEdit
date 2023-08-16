@@ -241,6 +241,11 @@ private extension EditorDocument {
   }
 
   func saveAsynchronously(saveAction: () -> Void) async {
+    // In viewing mode (aka version browsing), saveAction is directly skipped
+    guard !isInViewingMode else {
+      return
+    }
+
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
