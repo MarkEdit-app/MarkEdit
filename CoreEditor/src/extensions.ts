@@ -51,7 +51,10 @@ window.dynamics = {
 };
 
 // Make this a function because some resources (e.g., phrases) require lazy loading
-export function extensions(options: { lineBreak?: string }) {
+export function extensions(options: {
+  readOnly: boolean;
+  lineBreak?: string;
+}) {
   return [
     // Basic
     highlightSpecialChars(),
@@ -69,6 +72,12 @@ export function extensions(options: { lineBreak?: string }) {
     highlightActiveLineGutter(),
     selectionHighlight.of(highlightSelectionMatches()),
     localizePhrases(),
+
+    // Read-only
+    ...options.readOnly ? [
+      EditorView.editable.of(false),
+      EditorState.readOnly.of(true),
+    ] : [],
 
     // Line behaviors
     lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),

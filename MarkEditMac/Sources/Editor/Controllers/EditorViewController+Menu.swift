@@ -30,6 +30,11 @@ extension EditorViewController: NSMenuItemValidation {
   ]
 
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    // Disable formatting operations for read-only mode
+    if isReadOnly && menuItem.menu === NSApp.appDelegate?.textFormatMenu {
+      return false
+    }
+
     if let action = menuItem.action, Self.fileActions.contains(action) {
       return document?.fileURL != nil
     }

@@ -21,8 +21,9 @@ export enum ReplaceGranularity {
  * Reset the editor to the initial state.
  *
  * @param doc Initial content
+ * @param readOnly Whether to make the editor read-only
  */
-export function resetEditor(doc: string) {
+export function resetEditor(doc: string, readOnly = false) {
   // Idle state change should always go first
   editingState.isIdle = false;
 
@@ -39,7 +40,7 @@ export function resetEditor(doc: string) {
   const editor = new EditorView({
     doc: lineEndings.normalizeLineBreaks(doc, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
-    extensions: extensions({ lineBreak }),
+    extensions: extensions({ readOnly, lineBreak }),
   });
 
   editor.focus();
