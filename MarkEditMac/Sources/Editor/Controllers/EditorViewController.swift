@@ -29,6 +29,10 @@ final class EditorViewController: NSViewController {
     }
   }
 
+  var isReadOnly: Bool {
+    document?.isInViewingMode ?? false
+  }
+
   lazy var bridge = WebModuleBridge(
     webView: webView
   )
@@ -218,7 +222,7 @@ extension EditorViewController {
     // it gets fixed after resetting the text, but takes time especially for huge documents.
     webView.isHidden = true
 
-    bridge.core.resetEditor(text: text) { _ in
+    bridge.core.resetEditor(text: text, readOnly: isReadOnly) { _ in
       self.webView.isHidden = false
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,

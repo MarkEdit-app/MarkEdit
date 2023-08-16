@@ -17,13 +17,15 @@ public final class WebBridgeCore {
     self.webView = webView
   }
 
-  public func resetEditor(text: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func resetEditor(text: String, readOnly: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
+      let readOnly: Bool
     }
 
     let message = Message(
-      text: text
+      text: text,
+      readOnly: readOnly
     )
 
     webView?.invoke(path: "webModules.core.resetEditor", message: message, completion: completion)
