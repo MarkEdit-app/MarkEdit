@@ -131,6 +131,8 @@ function fullExtensions(options: { lineBreak?: string }) {
 
 /**
  * The minimum set of extensions used in read-only mode.
+ *
+ * Don't share the code with @light builds, which increase the bundle size.
  */
 function readOnlyExtensions() {
   return [
