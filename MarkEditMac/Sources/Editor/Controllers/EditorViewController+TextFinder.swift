@@ -10,6 +10,11 @@ import MarkEditKit
 
 extension EditorViewController {
   func updateTextFinderMode(_ mode: EditorFindMode, searchTerm: String? = nil) {
+    // In viewing mode, always set the mode to hidden and hide the search field,
+    // this is to break a mystery retain cycle caused by NSDocument version browsing.
+    let mode = isReadOnly ? .hidden : mode
+    findPanel.searchField.isHidden = isReadOnly
+
     if mode != .hidden {
       // Move the focus to find panel, with a delay to make the focus ring animation more natural
       DispatchQueue.afterDelay(seconds: 0.15) {
