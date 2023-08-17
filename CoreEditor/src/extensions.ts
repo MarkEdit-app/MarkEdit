@@ -140,10 +140,10 @@ function readOnlyExtensions() {
     highlightSpecialChars(),
     EditorView.editable.of(false),
     EditorState.readOnly.of(true),
-    EditorView.lineWrapping,
 
-    // Gutters
+    // Line behaviors
     gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
+    lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
 
     // Markdown
     markdown({
