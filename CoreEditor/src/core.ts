@@ -8,6 +8,7 @@ import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
 import * as completion from './modules/completion';
+import * as diff from './modules/diff';
 import * as grammarly from './modules/grammarly';
 import * as selection from './modules/selection';
 import * as history from './modules/history';
@@ -21,9 +22,14 @@ export enum ReplaceGranularity {
  * Reset the editor to the initial state.
  *
  * @param doc Initial content
+ * @param revision Optionally, provide a revision to show diff
  * @param readOnly Whether to make the editor read-only
  */
-export function resetEditor(doc: string, readOnly = false) {
+export function resetEditor(
+  doc: string,
+  revision: string | undefined = undefined,
+  readOnly = false,
+) {
   // Idle state change should always go first
   editingState.isIdle = false;
 
@@ -37,8 +43,16 @@ export function resetEditor(doc: string, readOnly = false) {
     window.config.defaultLineBreak
   );
 
+  const textToDraw = (() => {
+    if (revision !== undefined) {
+      return diff.generateDiff(revision, doc);
+    }
+
+    return doc;
+  })();
+
   const editor = new EditorView({
-    doc: lineEndings.normalizeLineBreaks(doc, lineBreak),
+    doc: lineEndings.normalizeLineBreaks(textToDraw, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
     extensions: extensions({ readOnly, lineBreak }),
   });

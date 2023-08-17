@@ -17,6 +17,7 @@ final class EditorDocument: NSDocument {
   var fileData: Data?
   var textBundle: TextBundleWrapper?
   var stringValue = ""
+  var latestRevision: String?
   var isDying = false
 
   var canUndo: Bool {
@@ -110,6 +111,7 @@ extension EditorDocument {
       DispatchQueue.main.async {
         self.fileData = data
         self.stringValue = newValue
+        self.latestRevision = self.isInViewingMode ? Revisions.latest : nil
         self.hostViewController?.representedObject = self
       }
     }
@@ -173,6 +175,15 @@ extension EditorDocument {
         Logger.log(.error, error.localizedDescription)
       }
     }
+  }
+}
+
+// MARK: Version Browsing
+
+extension EditorDocument {
+  override func browseVersions(_ sender: Any?) {
+    Revisions.latest = stringValue
+    super.browseVersions(sender)
   }
 }
 
@@ -271,4 +282,8 @@ private extension EditorDocument {
     bridge?.history.markContentClean()
     unblockUserInteraction()
   }
+}
+
+private enum Revisions {
+  static var latest: String?
 }
