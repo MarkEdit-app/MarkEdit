@@ -34,6 +34,12 @@ export function startClickable() {
   forEachLink(link => {
     link.style.cursor = 'pointer';
     link.style.textDecoration = 'underline';
+
+    // Find the actual text node and use its color
+    const text = [...link.children].find(node => node.textContent !== null);
+    if (text !== undefined) {
+      link.style.textDecorationColor = getComputedStyle(text).color;
+    }
   });
 }
 
@@ -41,6 +47,7 @@ export function stopClickable() {
   forEachLink(link => {
     link.style.cursor = '';
     link.style.textDecoration = '';
+    link.style.textDecorationColor = '';
   });
 }
 
