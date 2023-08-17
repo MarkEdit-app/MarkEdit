@@ -55,6 +55,14 @@ export function extensions(options: {
   readOnly: boolean;
   lineBreak?: string;
 }) {
+  if (options.readOnly) {
+    return readOnlyExtensions();
+  } else {
+    return fullExtensions(options);
+  }
+}
+
+function fullExtensions(options: { lineBreak?: string }) {
   return [
     // Basic
     highlightSpecialChars(),
@@ -72,12 +80,6 @@ export function extensions(options: {
     highlightActiveLineGutter(),
     selectionHighlight.of(highlightSelectionMatches()),
     localizePhrases(),
-
-    // Read-only
-    ...options.readOnly ? [
-      EditorView.editable.of(false),
-      EditorState.readOnly.of(true),
-    ] : [],
 
     // Line behaviors
     lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
@@ -124,5 +126,33 @@ export function extensions(options: {
     wordTokenizer(),
     interceptInputs(),
     observeChanges(),
+  ];
+}
+
+/**
+ * The minimum set of extensions used in read-only mode.
+ *
+ * Don't share the code with @light builds, which increase the bundle size.
+ */
+function readOnlyExtensions() {
+  return [
+    // Basic
+    highlightSpecialChars(),
+    EditorView.editable.of(false),
+    EditorState.readOnly.of(true),
+    EditorView.lineWrapping,
+
+    // Gutters
+    gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
+
+    // Markdown
+    markdown({
+      base: markdownLanguage,
+      extensions: markdownExtensions,
+    }),
+
+    // Styling
+    theme.of(loadTheme(window.config.theme)),
+    renderExtensions,
   ];
 }
