@@ -20,7 +20,7 @@ import { languages } from './@vendor/language-data';
 
 import { loadTheme } from './styling/themes';
 import { markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
-import { renderDiffs } from './styling/nodes/diff';
+import { highlightDiffs } from './styling/nodes/diff';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { gutterExtensions } from './styling/nodes/gutter';
 
@@ -155,6 +155,6 @@ function readOnlyExtensions() {
     // Styling
     theme.of(loadTheme(window.config.theme)),
     renderExtensions,
-    renderDiffs,
+    highlightDiffs,
   ];
 }

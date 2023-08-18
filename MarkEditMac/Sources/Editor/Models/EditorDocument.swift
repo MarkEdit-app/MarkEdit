@@ -182,6 +182,11 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func browseVersions(_ sender: Any?) {
+    // We don't have a way to retrieve the latest revision,
+    // save a copy before opening the version browser.
+    //
+    // This works when only one version browser can be open at a time,
+    // which seems to be the case so far.
     Revisions.latest = stringValue
     super.browseVersions(sender)
   }

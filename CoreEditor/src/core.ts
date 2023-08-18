@@ -43,16 +43,18 @@ export function resetEditor(
     window.config.defaultLineBreak
   );
 
-  const textToDraw = (() => {
-    if (revision !== undefined) {
-      return diff.generateDiff(revision, doc);
+  // Returns either the original doc,
+  // or content that contains the diff with labels.
+  const initialContent = (() => {
+    if (revision === undefined) {
+      return doc;
     }
 
-    return doc;
+    return diff.generateDiffs(revision, doc);
   })();
 
   const editor = new EditorView({
-    doc: lineEndings.normalizeLineBreaks(textToDraw, lineBreak),
+    doc: lineEndings.normalizeLineBreaks(initialContent, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
     extensions: extensions({ readOnly, lineBreak }),
   });

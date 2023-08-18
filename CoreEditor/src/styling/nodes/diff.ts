@@ -4,7 +4,15 @@ import { createDecoPlugin } from '../helper';
 const regexp = /{{md-diff-(added|removed)}}/g;
 const classPrefix = 'cm-md-diff';
 
-export const renderDiffs = createDecoPlugin(() => {
+/**
+ * Highlights diff content like this:
+ *
+ * {{md-diff-added}} This line is new
+ * {{md-diff-removed}} This line was removed
+ *
+ * Labels are used to locate the changes and will be hidden visually.
+ */
+export const highlightDiffs = createDecoPlugin(() => {
   const matcher = new MatchDecorator({
     regexp: regexp,
     boundary: /\S/,
@@ -16,7 +24,7 @@ export const renderDiffs = createDecoPlugin(() => {
         class: `${classPrefix}-${match[1]}`,
       }));
 
-      // Remove the label
+      // Hide the label visually
       add(from, to, Decoration.replace({}));
     },
   });
