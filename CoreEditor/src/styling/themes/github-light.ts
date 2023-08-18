@@ -15,6 +15,8 @@ const colors: EditorColors = {
   searchMatch: '#fae17d7f',
   selectionHighlight: '#4ac26b50',
   visibleSpace: '#afb8c1',
+  diffAdded: '#e6faeb',
+  diffRemoved: '#fff0f0',
   lighterBackground: '#afb8c133',
   bracketBorder: '#83d296',
 };

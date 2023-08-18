@@ -183,6 +183,12 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-md-frontMatter *': {
       color: colors.comment,
     },
+    '.cm-md-diff-added': {
+      backgroundColor: colors.diffAdded,
+    },
+    '.cm-md-diff-removed': {
+      backgroundColor: colors.diffRemoved,
+    },
   };
 
   const combined = { ...sharedStyles };

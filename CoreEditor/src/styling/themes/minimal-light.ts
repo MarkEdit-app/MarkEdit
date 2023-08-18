@@ -19,6 +19,8 @@ const colors: EditorColors = {
   activeLine: fallback.activeLine,
   searchMatch: fallback.searchMatch,
   selectionHighlight: fallback.selectionHighlight,
+  diffAdded: fallback.diffAdded,
+  diffRemoved: fallback.diffRemoved,
   visibleSpace: fallback.visibleSpace,
   lighterBackground: fallback.lighterBackground,
 };

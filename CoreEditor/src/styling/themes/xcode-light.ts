@@ -19,6 +19,8 @@ const colors: EditorColors = {
   lineNumber: '#a6a6a6',
   searchMatch: '#e4e4e4',
   selectionHighlight: '#e9eef9',
+  diffAdded: base.diffAdded,
+  diffRemoved: base.diffRemoved,
   visibleSpace: '#cccccc',
   lighterBackground: '#cccccc4c',
 };

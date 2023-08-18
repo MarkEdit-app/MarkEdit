@@ -43,21 +43,3 @@ html, body {
   text-indent: 0px;
   margin-inline-start: 0px;
 }
-
-.cm-md-diff-added {
-  background-color: #e2fde2;
-}
-
-.cm-md-diff-removed {
-  background-color: #ffe5e5;
-}
-
-@media (prefers-color-scheme: dark) {
-  .cm-md-diff-added {
-    background-color: #405c40;
-  }
-
-  .cm-md-diff-removed {
-    background-color: #633e3e;
-  }
-}

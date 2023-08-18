@@ -16,6 +16,8 @@ export interface EditorColors {
   selectionHighlight: string;
   visibleSpace: string;
   lighterBackground: string;
+  diffAdded: string;
+  diffRemoved: string;
   lineBorder?: string;
   bracketBorder?: string;
 }
