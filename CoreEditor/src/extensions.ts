@@ -20,7 +20,6 @@ import { languages } from './@vendor/language-data';
 
 import { loadTheme } from './styling/themes';
 import { markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
-import { highlightDiffs } from './styling/nodes/diff';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { gutterExtensions } from './styling/nodes/gutter';
 
@@ -28,6 +27,12 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
+
+// Read-only mode
+import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
+import { tableStyle } from './styling/nodes/table';
+import { frontMatterStyle } from './styling/nodes/frontMatter';
+import { highlightDiffs } from './styling/nodes/diff';
 
 const theme = new Compartment;
 const gutters = new Compartment;
@@ -154,7 +159,10 @@ function readOnlyExtensions() {
 
     // Styling
     theme.of(loadTheme(window.config.theme)),
-    renderExtensions,
+    inlineCodeStyle,
+    codeBlockStyle,
+    tableStyle,
+    frontMatterStyle,
     highlightDiffs,
   ];
 }

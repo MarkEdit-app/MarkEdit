@@ -11,12 +11,14 @@ import { diffLines } from 'diff';
 export function generateDiffs(oldValue: string, newValue: string) {
   const parts = diffLines(oldValue, newValue);
   return parts.map(part => {
+    const count = part.count;
+    const value = part.value;
     if (part.added === true) {
-      return `{{md-diff-added}}${part.value}`;
+      return `{{md-diff-added-${count}}}${value}`;
     } else if (part.removed === true) {
-      return `{{md-diff-removed}}${part.value}`;
+      return `{{md-diff-removed-${count}}}${value}`;
     } else {
-      return part.value;
+      return value;
     }
   }).join('');
 }
