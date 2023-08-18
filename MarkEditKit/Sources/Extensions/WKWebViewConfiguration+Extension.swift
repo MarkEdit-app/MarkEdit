@@ -7,17 +7,14 @@
 import WebKit
 
 public extension WKWebViewConfiguration {
-  static func newConfig() -> Self {
-    let config = Self()
-    if config.responds(to: sel_getUid("_drawsBackground")) {
+  static func newConfig() -> WKWebViewConfiguration {
+    class Configuration: WKWebViewConfiguration {
       // To mimic settable isOpaque on iOS,
       // which is required for the background color and initial white flash in dark mode
-      config.setValue(false, forKey: "drawsBackground")
-    } else {
-      Logger.assertFail("Failed to overwrite drawsBackground in WKWebViewConfiguration")
+      @objc func _drawsBackground() -> Bool { false }
     }
 
-    // https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/API/Cocoa/WKPreferences.mm
+    let config = Configuration()
     if config.preferences.responds(to: sel_getUid("_developerExtrasEnabled")) {
       config.preferences.setValue(true, forKey: "developerExtrasEnabled")
     } else {
