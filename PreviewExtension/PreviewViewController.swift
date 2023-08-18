@@ -14,12 +14,11 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
   private var appearanceObservation: NSKeyValueObservation?
 
   private lazy var webView: WKWebView = {
-    let config = WKWebViewConfiguration()
-    if config.responds(to: sel_getUid("_drawsBackground")) {
-      config.setValue(false, forKey: "drawsBackground")
+    class Configuration: WKWebViewConfiguration {
+      @objc func _drawsBackground() -> Bool { false }
     }
 
-    let webView = WKWebView(frame: .zero, configuration: config)
+    let webView = WKWebView(frame: .zero, configuration: Configuration())
     webView.allowsMagnification = true
     return webView
   }()
