@@ -128,6 +128,10 @@ extension EditorViewController {
   }
 
   func handleMouseMoved(_ event: NSEvent) {
+    guard view.window?.isMainWindow == true else {
+      return
+    }
+
     // WKWebView contentEditable keeps showing i-beam, fix that
     if NSCursor.current != NSCursor.arrow {
       let location = event.locationInWindow.y
