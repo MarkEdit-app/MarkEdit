@@ -17,6 +17,7 @@ final class EditorDocument: NSDocument {
   var fileData: Data?
   var textBundle: TextBundleWrapper?
   var stringValue = ""
+  var latestRevision: String?
   var isDying = false
 
   var canUndo: Bool {
@@ -110,6 +111,7 @@ extension EditorDocument {
       DispatchQueue.main.async {
         self.fileData = data
         self.stringValue = newValue
+        self.latestRevision = self.isInViewingMode ? Revisions.latest : nil
         self.hostViewController?.representedObject = self
       }
     }
@@ -173,6 +175,20 @@ extension EditorDocument {
         Logger.log(.error, error.localizedDescription)
       }
     }
+  }
+}
+
+// MARK: Version Browsing
+
+extension EditorDocument {
+  override func browseVersions(_ sender: Any?) {
+    // We don't have a way to retrieve the latest revision,
+    // save a copy before opening the version browser.
+    //
+    // This works when only one version browser can be open at a time,
+    // which seems to be the case so far.
+    Revisions.latest = stringValue
+    super.browseVersions(sender)
   }
 }
 
@@ -271,4 +287,8 @@ private extension EditorDocument {
     bridge?.history.markContentClean()
     unblockUserInteraction()
   }
+}
+
+private enum Revisions {
+  static var latest: String?
 }

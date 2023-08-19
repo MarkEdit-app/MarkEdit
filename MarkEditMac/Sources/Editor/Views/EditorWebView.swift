@@ -14,6 +14,7 @@ enum EditorWebViewMenuAction {
 }
 
 protocol EditorWebViewMenuDelegate: AnyObject {
+  func editorWebViewIsReadOnly(_ sender: EditorWebView) -> Bool
   func editorWebView(_ sender: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
 }
 
@@ -32,7 +33,17 @@ final class EditorWebView: WKWebView {
         return false
       }
 
+      // Hide the "Reload" item, useful for read-only mode
+      if item.identifier?.rawValue == "WKMenuItemIdentifierReload" {
+        item.isHidden = true
+      }
+
       return true
+    }
+
+    // Keep items minimal for ready-only mode
+    if menuDelegate?.editorWebViewIsReadOnly(self) == true {
+      return super.willOpenMenu(menu, with: event)
     }
 
     menu.addItem(.separator())

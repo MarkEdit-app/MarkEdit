@@ -16,7 +16,7 @@ import {
  * @overrideModuleName WebBridgeCore
  */
 export interface WebModuleCore extends WebModule {
-  resetEditor({ text, readOnly }: { text: string; readOnly: boolean }): void;
+  resetEditor({ text, revision, readOnly }: { text: string; revision?: string; readOnly: boolean }): void;
   clearEditor(): void;
   getEditorText(): string;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
@@ -26,8 +26,8 @@ export interface WebModuleCore extends WebModule {
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
-  resetEditor({ text, readOnly }: { text: string; readOnly: boolean }): void {
-    resetEditor(text, readOnly);
+  resetEditor({ text, revision, readOnly }: { text: string; revision?: string; readOnly: boolean }): void {
+    resetEditor(text, revision, readOnly);
   }
 
   clearEditor(): void {

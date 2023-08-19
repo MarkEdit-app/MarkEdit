@@ -30,9 +30,16 @@ extension EditorViewController: NSMenuItemValidation {
   ]
 
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-    // Disable formatting operations for read-only mode
-    if isReadOnly && menuItem.menu === NSApp.appDelegate?.textFormatMenu {
-      return false
+    // Disable all edit actions for read-only mode
+    if isReadOnly {
+      guard let menu = menuItem.menu, let delegate = NSApp.appDelegate else {
+        return false
+      }
+
+      return !menu.isDescendantOf(menu: delegate.mainEditMenu)
+          && !menu.isDescendantOf(menu: delegate.reopenFileMenu)
+          && !menu.isDescendantOf(menu: delegate.lineEndingsMenu)
+          && !menu.isDescendantOf(menu: delegate.textFormatMenu)
     }
 
     if let action = menuItem.action, Self.fileActions.contains(action) {

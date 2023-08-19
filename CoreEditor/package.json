@@ -22,9 +22,11 @@
     "@codemirror/view": "^6.0.0",
     "@grammarly/editor-sdk": "^2.0.0",
     "@lezer/common": "^1.0.0",
+    "diff": "^5.1.0",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
+    "@types/diff": "^5.0.3",
     "@types/eslint": "^8.4.10",
     "@types/jest": "^29.4.0",
     "@types/js-yaml": "^4.0.0",
