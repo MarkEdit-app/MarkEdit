@@ -3,8 +3,8 @@ import { diffLines } from 'diff';
 /**
  * Generates diff content like this:
  *
- * {{md-diff-added}} This line is new
- * {{md-diff-removed}} This line was removed
+ * {{md-diff-added-n}} This line is new
+ * {{md-diff-removed-n}} This line was removed
  *
  * Labels are used to locate the changes and will be hidden visually.
  */
