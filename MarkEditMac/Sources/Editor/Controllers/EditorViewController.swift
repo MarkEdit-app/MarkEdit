@@ -232,7 +232,8 @@ extension EditorViewController {
       Grammarly.shared.update(bridge: self.bridge.grammarly, wasReset: true)
     }
 
-    // Hide unnecessary views for read-only
+    // Disable unnecessary UI elements for read-only
+    view.window?.toolbar?.allowsUserCustomization = !isReadOnly
     findPanel.searchField.isHidden = isReadOnly
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
