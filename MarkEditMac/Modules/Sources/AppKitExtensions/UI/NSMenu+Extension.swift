@@ -33,4 +33,21 @@ public extension NSMenu {
     addItem(item)
     removeItem(item)
   }
+
+  func isDescendantOf(menu: NSMenu?) -> Bool {
+    guard let menu else {
+      return false
+    }
+
+    var node: NSMenu? = self
+    while node != nil {
+      if node === menu {
+        return true
+      }
+
+      node = node?.supermenu
+    }
+
+    return false
+  }
 }
