@@ -233,7 +233,10 @@ extension EditorViewController {
     }
 
     // Disable unnecessary UI elements for read-only
-    view.window?.toolbar?.allowsUserCustomization = !isReadOnly
+    if let identifier = view.window?.toolbar?.identifier, !identifier.isEmpty {
+      view.window?.toolbar?.allowsUserCustomization = !isReadOnly
+    }
+
     findPanel.searchField.isHidden = isReadOnly
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
