@@ -38,6 +38,10 @@ extension EditorViewController: WKUIDelegate {
 // MARK: - EditorWebViewMenuDelegate
 
 extension EditorViewController: EditorWebViewMenuDelegate {
+  func editorWebViewIsReadOnly(_ sender: EditorWebView) -> Bool {
+    isReadOnly
+  }
+
   func editorWebView(_ sender: EditorWebView, didSelect menuAction: EditorWebViewMenuAction) {
     switch menuAction {
     case .findSelection:
