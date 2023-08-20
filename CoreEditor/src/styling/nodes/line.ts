@@ -41,22 +41,12 @@ class Layer extends RectangleMarker {
     const lineRect = line.getBoundingClientRect();
     const contentRect = content.getBoundingClientRect();
 
-    // We use box shadow to draw inner borders, use an inset to hide the left and right borders
-    const borderInset = (() => {
-      if (window.colors?.lineBorder === undefined) {
-        return 0;
-      }
-
-      // Slightly bigger to avoid precision issues
-      return borderWidth + 1;
-    })();
-
     // The rect is wider than lineRect, it fills the entire contentDOM
     const rectToDraw = new DOMRect(
-      contentRect.left - borderInset,       // x
-      line.offsetTop,                       // y
-      contentRect.width + borderInset * 2,  // width
-      lineRect.height,                      // height
+      contentRect.left,   // x
+      line.offsetTop,     // y
+      contentRect.width,  // width
+      lineRect.height,    // height
     );
 
     super('cm-md-activeIndicator', rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
