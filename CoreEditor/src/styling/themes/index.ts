@@ -12,6 +12,10 @@ import MinimalLight from './minimal-light';
 import MinimalDark from './minimal-dark';
 import SynthWave84 from './synthwave84';
 import NightOwl from './night-owl';
+import RosePineDawn from './rose-pine-dawn';
+import RosePine from './rose-pine';
+import SolarizedLight from './solarized-light';
+import SolarizedDark from './solarized-dark';
 
 const themes: { [key: string]: (() => EditorTheme) | undefined } = {
   'github-light': GitHubLight,
@@ -26,6 +30,10 @@ const themes: { [key: string]: (() => EditorTheme) | undefined } = {
   'minimal-dark': MinimalDark,
   'synthwave84': SynthWave84,
   'night-owl': NightOwl,
+  'rose-pine-dawn': RosePineDawn,
+  'rose-pine': RosePine,
+  'solarized-light': SolarizedLight,
+  'solarized-dark': SolarizedDark,
 };
 
 export function loadTheme(name: string): EditorTheme {

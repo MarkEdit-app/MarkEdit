@@ -124,11 +124,11 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
   if (styleSheets.invisibles === undefined) {
     styleSheets.invisibles = createStyleSheet(`
       .cm-visibleTab:not(.cm-selectedTextRange *) {
-        background-color: #00000000;
+        background-color: #0000;
       }
 
       .cm-visibleSpace:not(.cm-selectedTextRange *)::before {
-        color: #00000000;
+        color: #0000;
       }
     `, false);
   }

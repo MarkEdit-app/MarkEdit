@@ -14,7 +14,7 @@ const colors: EditorColors = {
   background: '#282a36',
   caret: '#aeafad',
   selection: '#44475a',
-  activeLine: '#00000000',
+  activeLine: '#0000',
   matchingBracket: '#263032',
   lineNumber: palette.gray,
   searchMatch: '#ffffff40',
