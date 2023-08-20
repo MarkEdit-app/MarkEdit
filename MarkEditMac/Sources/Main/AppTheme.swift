@@ -46,6 +46,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
       MinimalLight, MinimalDark,
       SynthWave84,
       NightOwl,
+      RosePineDawn,
     ]
   }
 
@@ -145,6 +146,14 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     )
   }
 
+  static var RosePineDawn: Self {
+    Self(
+      isDark: false,
+      editorTheme: "rose-pine-dawn",
+      windowBackground: NSColor(hexCode: 0xfaf4ed)
+    )
+  }
+
   var description: String {
     switch self {
     case Self.GitHubLight:
@@ -171,6 +180,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
       return "SynthWave '84"
     case Self.NightOwl:
       return "Night Owl"
+    case Self.RosePineDawn:
+      return "Rosé Pine Dawn"
     default:
       fatalError("Invalid theme was found")
     }
