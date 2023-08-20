@@ -30,7 +30,7 @@ function theme() {
   return buildTheme(colors);
 }
 
-function highlight() {
+function highlight(palette: { grass: string }, colors: EditorColors) {
   // Order matters, don't change it unless you fully understand how it works
   return buildHighlight(colors, [
     { tag: [tags.definitionKeyword, tags.tagName], color: colors.accent },
@@ -52,8 +52,8 @@ function highlight() {
 export default function SolarizedLight(): EditorTheme {
   return {
     colors,
-    extension: [theme(), highlight()],
+    extension: [theme(), highlight(palette, colors)],
   };
 }
 
-export { colors };
+export { colors, highlight };

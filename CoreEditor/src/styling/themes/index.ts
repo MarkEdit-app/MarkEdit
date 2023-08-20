@@ -15,6 +15,7 @@ import NightOwl from './night-owl';
 import RosePineDawn from './rose-pine-dawn';
 import RosePine from './rose-pine';
 import SolarizedLight from './solarized-light';
+import SolarizedDark from './solarized-dark';
 
 const themes: { [key: string]: (() => EditorTheme) | undefined } = {
   'github-light': GitHubLight,
@@ -32,6 +33,7 @@ const themes: { [key: string]: (() => EditorTheme) | undefined } = {
   'rose-pine-dawn': RosePineDawn,
   'rose-pine': RosePine,
   'solarized-light': SolarizedLight,
+  'solarized-dark': SolarizedDark,
 };
 
 export function loadTheme(name: string): EditorTheme {
