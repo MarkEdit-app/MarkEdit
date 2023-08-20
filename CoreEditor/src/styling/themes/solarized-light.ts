@@ -20,9 +20,9 @@ const colors: EditorColors = {
   searchMatch: '#f4c09d',
   selectionHighlight: '#f4c09d99',
   visibleSpace: '#586e7580',
+  lighterBackground: '#586e7526',
   diffAdded: base.diffAdded,
   diffRemoved: base.diffRemoved,
-  lighterBackground: '#586e7526',
   bracketBorder: '#b9b9b9',
 };
 
