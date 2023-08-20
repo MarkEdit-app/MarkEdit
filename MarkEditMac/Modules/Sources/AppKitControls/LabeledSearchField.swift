@@ -8,6 +8,8 @@ import AppKit
 import AppKitExtensions
 
 public final class LabeledSearchField: NSSearchField {
+  private let bezelView = BezelView()
+
   private let labelView = {
     let label = LabelView()
     label.font = .systemFont(ofSize: 10)
@@ -17,6 +19,7 @@ public final class LabeledSearchField: NSSearchField {
 
   public init() {
     super.init(frame: .zero)
+    addSubview(bezelView)
     addSubview(labelView)
   }
 
@@ -27,6 +30,7 @@ public final class LabeledSearchField: NSSearchField {
 
   override public func layout() {
     super.layout()
+    bezelView.frame = bounds
 
     labelView.sizeToFit()
     labelView.frame = CGRect(
@@ -44,6 +48,11 @@ public final class LabeledSearchField: NSSearchField {
         height: clipView.frame.height
       )
     }
+  }
+
+  override public func draw(_ dirtyRect: NSRect) {
+    // Ignore the bezel and background color by only drawing interior
+    cell?.drawInterior(withFrame: dirtyRect, in: self)
   }
 
   public func updateLabel(text: String) {
