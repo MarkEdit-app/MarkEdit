@@ -14,7 +14,10 @@ extension EditorFindPanel: NSSearchFieldDelegate {
     switch (selector, mode) {
     case (#selector(insertTab(_:)), .replace):
       // Focus on the replace panel
-      delegate?.editorFindPanelDidPressTabKey(self)
+      delegate?.editorFindPanelDidPressTabKey(self, isBacktab: false)
+      return true
+    case (#selector(insertBacktab(_:)), _):
+      delegate?.editorFindPanelDidPressTabKey(self, isBacktab: true)
       return true
     case (#selector(insertNewline(_:)), _):
       // Navigate between search results

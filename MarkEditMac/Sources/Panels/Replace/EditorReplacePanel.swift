@@ -9,6 +9,7 @@ import AppKit
 
 protocol EditorReplacePanelDelegate: AnyObject {
   func editorReplacePanel(_ sender: EditorReplacePanel, replacementDidChange replacement: String)
+  func editorReplacePanelDidPressTabKey(_ sender: EditorReplacePanel, isBacktab: Bool)
   func editorReplacePanelDidClickReplaceNext(_ sender: EditorReplacePanel)
   func editorReplacePanelDidClickReplaceAll(_ sender: EditorReplacePanel)
 }
@@ -88,6 +89,12 @@ extension EditorReplacePanel: NSTextFieldDelegate {
 
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
     switch (selector, replaceButtons.isEnabled) {
+    case (#selector(insertTab(_:)), _):
+      delegate?.editorReplacePanelDidPressTabKey(self, isBacktab: false)
+      return true
+    case (#selector(insertBacktab(_:)), _):
+      delegate?.editorReplacePanelDidPressTabKey(self, isBacktab: true)
+      return true
     case (#selector(insertNewline(_:)), true):
       delegate?.editorReplacePanelDidClickReplaceNext(self)
       return true
