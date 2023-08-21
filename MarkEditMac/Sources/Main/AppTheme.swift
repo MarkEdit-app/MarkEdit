@@ -10,7 +10,11 @@ import AppKit
 struct AppTheme {
   let isDark: Bool
   let editorTheme: String
-  let windowBackground: NSColor // Pre-define colors to style the window for initial launch
+  // Pre-defined colors to style the window for initial launch
+  let windowBackground: NSColor
+  // If true, the toolbar has more tinted effect based on windowBackground,
+  // usually it's for dark themes, some light themes also need this, such as solarized.
+  let prefersTintedToolbar: Bool
 
   static var current: Self {
     NSApplication.shared.isDarkMode ? darkTheme : lightTheme
@@ -55,7 +59,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: false,
       editorTheme: "github-light",
-      windowBackground: NSColor(hexCode: 0xffffff)
+      windowBackground: NSColor(hexCode: 0xffffff),
+      prefersTintedToolbar: false
     )
   }
 
@@ -63,7 +68,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "github-dark",
-      windowBackground: NSColor(hexCode: 0x0d1116)
+      windowBackground: NSColor(hexCode: 0x0d1116),
+      prefersTintedToolbar: true
     )
   }
 
@@ -71,7 +77,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: false,
       editorTheme: "xcode-light",
-      windowBackground: NSColor(hexCode: 0xffffff)
+      windowBackground: NSColor(hexCode: 0xffffff),
+      prefersTintedToolbar: false
     )
   }
 
@@ -79,7 +86,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "xcode-dark",
-      windowBackground: NSColor(hexCode: 0x1f1f24)
+      windowBackground: NSColor(hexCode: 0x1f1f24),
+      prefersTintedToolbar: true
     )
   }
 
@@ -87,7 +95,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "dracula",
-      windowBackground: NSColor(hexCode: 0x282a36)
+      windowBackground: NSColor(hexCode: 0x282a36),
+      prefersTintedToolbar: true
     )
   }
 
@@ -95,7 +104,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "cobalt",
-      windowBackground: NSColor(hexCode: 0x193549)
+      windowBackground: NSColor(hexCode: 0x193549),
+      prefersTintedToolbar: true
     )
   }
 
@@ -103,7 +113,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: false,
       editorTheme: "winter-is-coming-light",
-      windowBackground: NSColor(hexCode: 0xffffff)
+      windowBackground: NSColor(hexCode: 0xffffff),
+      prefersTintedToolbar: false
     )
   }
 
@@ -111,7 +122,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "winter-is-coming-dark",
-      windowBackground: NSColor(hexCode: 0x282822)
+      windowBackground: NSColor(hexCode: 0x282822),
+      prefersTintedToolbar: true
     )
   }
 
@@ -119,7 +131,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: false,
       editorTheme: "minimal-light",
-      windowBackground: NSColor(hexCode: 0xffffff)
+      windowBackground: NSColor(hexCode: 0xffffff),
+      prefersTintedToolbar: false
     )
   }
 
@@ -127,7 +140,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "minimal-dark",
-      windowBackground: NSColor(hexCode: 0x000000)
+      windowBackground: NSColor(hexCode: 0x000000),
+      prefersTintedToolbar: true
     )
   }
 
@@ -135,7 +149,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "synthwave84",
-      windowBackground: NSColor(hexCode: 0x252335)
+      windowBackground: NSColor(hexCode: 0x252335),
+      prefersTintedToolbar: true
     )
   }
 
@@ -143,7 +158,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "night-owl",
-      windowBackground: NSColor(hexCode: 0x011627)
+      windowBackground: NSColor(hexCode: 0x011627),
+      prefersTintedToolbar: true
     )
   }
 
@@ -151,7 +167,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: false,
       editorTheme: "rose-pine-dawn",
-      windowBackground: NSColor(hexCode: 0xfaf4ed)
+      windowBackground: NSColor(hexCode: 0xfaf4ed),
+      prefersTintedToolbar: true
     )
   }
 
@@ -159,7 +176,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "rose-pine",
-      windowBackground: NSColor(hexCode: 0x191724)
+      windowBackground: NSColor(hexCode: 0x191724),
+      prefersTintedToolbar: true
     )
   }
 
@@ -167,7 +185,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: false,
       editorTheme: "solarized-light",
-      windowBackground: NSColor(hexCode: 0xfdf6e3)
+      windowBackground: NSColor(hexCode: 0xfdf6e3),
+      prefersTintedToolbar: true
     )
   }
 
@@ -175,7 +194,8 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "solarized-dark",
-      windowBackground: NSColor(hexCode: 0x012b36)
+      windowBackground: NSColor(hexCode: 0x012b36),
+      prefersTintedToolbar: true
     )
   }
 

@@ -66,6 +66,9 @@ extension EditorViewController {
     view.window?.backgroundColor = backgroundColor
     view.window?.toolbarContainerView?.layerBackgroundColor = backgroundColor
 
+    let prefersTintedToolbar = theme.prefersTintedToolbar
+    (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
+
     statusView.setBackgroundColor(backgroundColor)
     findPanel.setBackgroundColor(backgroundColor)
     replacePanel.setBackgroundColor(backgroundColor)
