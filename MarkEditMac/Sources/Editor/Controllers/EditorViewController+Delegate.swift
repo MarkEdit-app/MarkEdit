@@ -169,8 +169,12 @@ extension EditorViewController: EditorFindPanelDelegate {
     updateTextFinderQuery()
   }
 
-  func editorFindPanelDidPressTabKey(_ sender: EditorFindPanel) {
-    replacePanel.textField.startEditing(in: view.window)
+  func editorFindPanelDidPressTabKey(_ sender: EditorFindPanel, isBacktab: Bool) {
+    if isBacktab {
+      view.window?.makeFirstResponder(webView)
+    } else {
+      replacePanel.textField.startEditing(in: view.window)
+    }
   }
 
   func editorFindPanelDidClickNext(_ sender: EditorFindPanel) {
@@ -187,6 +191,14 @@ extension EditorViewController: EditorFindPanelDelegate {
 extension EditorViewController: EditorReplacePanelDelegate {
   func editorReplacePanel(_ sender: EditorReplacePanel, replacementDidChange replacement: String) {
     updateTextFinderQuery()
+  }
+
+  func editorReplacePanelDidPressTabKey(_ sender: EditorReplacePanel, isBacktab: Bool) {
+    if isBacktab {
+      findPanel.searchField.startEditing(in: view.window)
+    } else {
+      view.window?.makeFirstResponder(webView)
+    }
   }
 
   func editorReplacePanelDidClickReplaceNext(_ sender: EditorReplacePanel) {
