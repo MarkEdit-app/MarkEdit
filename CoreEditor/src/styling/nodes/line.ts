@@ -36,6 +36,7 @@ export const lineIndicatorLayer = layer({
 class Layer extends RectangleMarker {
   // Used for object equality
   private readonly rect: DOMRect;
+  private readonly element = document.createElement('div');
 
   constructor(content: HTMLElement, line: HTMLElement, private readonly theme?: string) {
     const lineRect = line.getBoundingClientRect();
@@ -51,17 +52,40 @@ class Layer extends RectangleMarker {
 
     super('cm-md-activeIndicator', rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
     this.rect = rectToDraw;
+
+    // We use box shadow to draw inner borders, use an inset to hide the left and right borders
+    const borderInset = (() => {
+      if (window.colors?.lineBorder === undefined) {
+        return 0;
+      }
+
+      // Slightly bigger to avoid precision issues
+      return Math.ceil(borderWidth);
+    })();
+
+    const style = this.element.style;
+    style.position = 'absolute';
+    style.left = `${-borderInset}px`;
+    style.top = '0px';
+    style.height = '100%';
+    style.width = `calc(100% + ${borderInset * 2}px)`;
   }
 
   draw() {
-    const elt = super.draw();
-    this.render(elt);
-    return elt;
+    const wrapper = super.draw();
+    wrapper.style.overflow = 'hidden';
+
+    if (this.element.parentElement === null) {
+      wrapper.appendChild(this.element);
+    }
+
+    this.render(wrapper);
+    return wrapper;
   }
 
-  update(elt: HTMLElement, prev: Layer): boolean {
-    this.render(elt);
-    return super.update(elt, prev);
+  update(wrapper: HTMLElement, prev: Layer): boolean {
+    this.render(wrapper);
+    return super.update(wrapper, prev);
   }
 
   eq(other: Layer): boolean {
@@ -76,10 +100,10 @@ class Layer extends RectangleMarker {
     almostEq(this.rect.height, other.rect.height);
   }
 
-  private render(elt: HTMLElement) {
+  private render(_wrapper: HTMLElement) {
     const colors = window.colors;
-    elt.style.backgroundColor = colors?.activeLine ?? '';
-    elt.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
+    this.element.style.backgroundColor = colors?.activeLine ?? '';
+    this.element.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
   }
 }
 
