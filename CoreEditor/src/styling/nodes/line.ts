@@ -2,6 +2,7 @@ import { RectangleMarker, layer } from '@codemirror/view';
 import { buildInnerBorder } from '../builder';
 
 const borderWidth = 2.5;
+const layerClass = 'cm-md-activeIndicator';
 
 /**
  * Line level indentations make the background of active lines partially drawn,
@@ -25,6 +26,10 @@ export const lineIndicatorLayer = layer({
   update: update => {
     // Theme changed, the update object doesn't have sufficient info
     if (window.config.theme !== storage.cachedTheme) {
+      // The layer doesn't redraw without this, we haven't figured out the reason...
+      const layers = document.querySelectorAll(`.${layerClass}`);
+      layers.forEach(layer => layer.remove());
+
       storage.cachedTheme = window.config.theme;
       return true;
     }
@@ -50,7 +55,7 @@ class Layer extends RectangleMarker {
       lineRect.height,    // height
     );
 
-    super('cm-md-activeIndicator', rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
+    super(layerClass, rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
     this.rect = rectToDraw;
 
     // We use box shadow to draw inner borders, use an inset to hide the left and right borders
@@ -79,12 +84,12 @@ class Layer extends RectangleMarker {
       wrapper.appendChild(this.element);
     }
 
-    this.render(wrapper);
+    this.updateColors();
     return wrapper;
   }
 
   update(wrapper: HTMLElement, prev: Layer): boolean {
-    this.render(wrapper);
+    this.updateColors();
     return super.update(wrapper, prev);
   }
 
@@ -100,7 +105,7 @@ class Layer extends RectangleMarker {
     almostEq(this.rect.height, other.rect.height);
   }
 
-  private render(_wrapper: HTMLElement) {
+  private updateColors() {
     const colors = window.colors;
     this.element.style.backgroundColor = colors?.activeLine ?? '';
     this.element.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
