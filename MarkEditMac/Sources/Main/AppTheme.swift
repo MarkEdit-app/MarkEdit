@@ -230,9 +230,9 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     case Self.RosePine:
       return "Rosé Pine"
     case Self.SolarizedLight:
-      return "Solarized Light"
+      return "Solarized (Light)"
     case Self.SolarizedDark:
-      return "Solarized Dark"
+      return "Solarized (Dark)"
     default:
       fatalError("Invalid theme was found")
     }
