@@ -22,6 +22,12 @@ final class EditorWindow: NSWindow {
     }
   }
 
+  var prefersTintedToolbar: Bool = false {
+    didSet {
+      layoutIfNeeded()
+    }
+  }
+
   override var toolbar: NSToolbar? {
     get {
       super.toolbar
@@ -47,7 +53,7 @@ final class EditorWindow: NSWindow {
 
     // Slightly change the toolbar effect to match editor better
     if let view = toolbarEffectView {
-      view.alphaValue = effectiveAppearance.isDarkMode ? 0.3 : 0.7
+      view.alphaValue = prefersTintedToolbar ? 0.3 : 0.7
       view.isHidden = reduceTransparency == true
 
       // Blend the color of contents behind the window
