@@ -23,9 +23,7 @@ final class EditorReplacePanel: EditorPanelView {
   }
 
   private(set) lazy var textField = {
-    let textField = NSTextField()
-    textField.placeholderString = Localized.Search.replace
-    textField.bezelStyle = .roundedBezel
+    let textField = EditorReplaceTextField()
     textField.delegate = self
     return textField
   }()
