@@ -14,8 +14,8 @@ const focusUpdateInterval = 15;
 
 // The difference is that renderInvisiblesSelection doesn't match continuous spaces,
 // which doesn't work well with selectedTextDecoration because nodes can be nested.
-const renderInvisiblesAlways = renderInvisibles(/\t| +/g);
-const renderInvisiblesSelection = renderInvisibles(/\t| /g);
+const renderInvisiblesAlways = renderInvisibles(/\t| +/g, false);
+const renderInvisiblesSelection = renderInvisibles(/\t| /g, true);
 
 export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: boolean) {
   if (behavior === InvisiblesBehavior.always) {
@@ -69,14 +69,22 @@ export function renderWhitespaceBeforeCaret() {
 //
 // In Markdown rendering, we have different font sizes for headers,
 // we need to figure out proper font size and set it to the pseudo class.
-function renderInvisibles(regexp: RegExp) {
+function renderInvisibles(regexp: RegExp, selectionOnly: boolean) {
   return createDecoPlugin(() => createMarkDeco(regexp, (match, pos) => {
-    const invisible = match[0];
+    // If it's for selection only and the position is not in any selection,
+    // we won't show the invisible.
+    if (selectionOnly) {
+      const ranges = window.editor.state.selection.ranges;
+      if (!ranges.some(range => range.from <= pos && range.to > pos)) {
+        return null;
+      }
+    }
 
     // If we always show invisibles and just inserted a whitespace, we skip drawing in this render pass.
     //
     // The reason behind this is that <span> elements created for invisibles can break autocorrect features,
     // we will redraw the skipped whitespace in renderWhitespaceBeforeCaret.
+    const invisible = match[0];
     if (
       (alwaysRenderInvisibles()) &&
       (invisible === ' ') &&
