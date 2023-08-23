@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87067E2629755D5C0052E795 /* EditorStatusView.swift */; };
+		87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87091B992A963C6B00F5EF0D /* EditorTextInput.swift */; };
 		8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */; };
 		870A51AA294700E00095C7EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 870A51A9294700E00095C7EB /* Assets.xcassets */; };
 		870A51AD294700E00095C7EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 870A51AB294700E00095C7EB /* Main.storyboard */; };
@@ -114,6 +115,7 @@
 
 /* Begin PBXFileReference section */
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
+		87091B992A963C6B00F5EF0D /* EditorTextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextInput.swift; sourceTree = "<group>"; };
 		8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantSettingsView.swift; sourceTree = "<group>"; };
 		870A51A2294700DE0095C7EB /* MarkEdit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarkEdit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		870A51A9294700E00095C7EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 		87A73AB1294C4B0A006A710E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				87091B992A963C6B00F5EF0D /* EditorTextInput.swift */,
 				8752CEB5295B2F8800BA9D5B /* EditorPanelView.swift */,
 				87A73AB2294C4B27006A710E /* EditorWebView.swift */,
 				87067E2629755D5C0052E795 /* EditorStatusView.swift */,
@@ -676,6 +679,7 @@
 				8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */,
 				873126E4297BAC9C001521A0 /* EditorViewController+Pandoc.swift in Sources */,
 				87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */,
+				87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */,
 				87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */,
 				8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */,
 				87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */,

@@ -249,6 +249,7 @@ private extension EditorViewController {
       return
     }
 
+    startWebViewEditing()
     bridge.toc.gotoHeader(headingInfo: headingInfo)
   }
 }

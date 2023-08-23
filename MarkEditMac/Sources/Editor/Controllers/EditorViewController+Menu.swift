@@ -42,6 +42,19 @@ extension EditorViewController: NSMenuItemValidation {
           && !menu.isDescendantOf(menu: delegate.textFormatMenu)
     }
 
+    // When webView is not the firstResponder, disable some menus entirely
+    if view.window?.firstResponder != webView {
+      let disabledMenus = [
+        NSApp.appDelegate?.textFormatMenu,
+        NSApp.appDelegate?.editCommandsMenu,
+        NSApp.appDelegate?.editFindMenu,
+      ]
+
+      if disabledMenus.contains(where: { menuItem.menu?.isDescendantOf(menu: $0) == true }) {
+        return false
+      }
+    }
+
     if let action = menuItem.action, Self.fileActions.contains(action) {
       return document?.fileURL != nil
     }
@@ -263,20 +276,19 @@ private extension EditorViewController {
 
 private extension EditorViewController {
   @IBAction func undo(_ sender: Any?) {
-    bridge.history.undo()
+    currentInput?.performTextAction(.undo, sender: sender)
   }
 
   @IBAction func redo(_ sender: Any?) {
-    bridge.history.redo()
-  }
-
-  @IBAction func performPaste(_ sender: Any?) {
-    NSPasteboard.general.sanitize()
-    NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil)
+    currentInput?.performTextAction(.redo, sender: sender)
   }
 
   @IBAction func selectAllText(_ sender: Any?) {
-    bridge.selection.selectAll()
+    currentInput?.performTextAction(.selectAll, sender: sender)
+  }
+
+  @IBAction func performPaste(_ sender: Any?) {
+    currentInput?.performTextAction(.paste, sender: sender)
   }
 
   @IBAction func gotoLine(_ sender: Any?) {
@@ -288,10 +300,12 @@ private extension EditorViewController {
   }
 
   @IBAction func selectPreviousSection(_ sender: Any?) {
+    startWebViewEditing()
     bridge.toc.selectPreviousSection()
   }
 
   @IBAction func selectNextSection(_ sender: Any?) {
+    startWebViewEditing()
     bridge.toc.selectNextSection()
   }
 
@@ -360,6 +374,13 @@ private extension EditorViewController {
   enum Constants {
     static let minimumZoomLevel: Double = 1.0
     static let maximumZoomLevel: Double = 3.0
+  }
+
+  var currentInput: EditorTextInput? {
+    let textInput = view.window?.firstResponder as? EditorTextInput
+    Logger.assert(textInput != nil, "The firstResponder is not EditorTextInput")
+
+    return textInput
   }
 
   func notifyFontSizeChanged() {

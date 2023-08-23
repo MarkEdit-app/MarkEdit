@@ -13,9 +13,14 @@ enum EditorWebViewMenuAction {
   case selectAllOccurrences
 }
 
-protocol EditorWebViewMenuDelegate: AnyObject {
-  func editorWebViewIsReadOnly(_ sender: EditorWebView) -> Bool
-  func editorWebView(_ sender: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
+protocol EditorWebViewActionDelegate: AnyObject {
+  func editorWebViewIsReadOnly(_ webView: EditorWebView) -> Bool
+  func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
+  func editorWebView(
+    _ webView: EditorWebView,
+    didPerform textAction: EditorTextAction,
+    sender: Any?
+  )
 }
 
 /**
@@ -23,7 +28,7 @@ protocol EditorWebViewMenuDelegate: AnyObject {
  */
 final class EditorWebView: WKWebView {
   static let baseURL = URL(string: "http://localhost/")
-  weak var menuDelegate: EditorWebViewMenuDelegate?
+  weak var actionDelegate: EditorWebViewActionDelegate?
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
     // https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
@@ -42,7 +47,7 @@ final class EditorWebView: WKWebView {
     }
 
     // Keep items minimal for ready-only mode
-    if menuDelegate?.editorWebViewIsReadOnly(self) == true {
+    if actionDelegate?.editorWebViewIsReadOnly(self) == true {
       return super.willOpenMenu(menu, with: event)
     }
 
@@ -66,10 +71,10 @@ final class EditorWebView: WKWebView {
 
 private extension EditorWebView {
   @objc func findSelection(_ sender: NSMenuItem) {
-    menuDelegate?.editorWebView(self, didSelect: .findSelection)
+    actionDelegate?.editorWebView(self, didSelect: .findSelection)
   }
 
   @objc func selectAllOccurrences(_ sender: NSMenuItem) {
-    menuDelegate?.editorWebView(self, didSelect: .selectAllOccurrences)
+    actionDelegate?.editorWebView(self, didSelect: .selectAllOccurrences)
   }
 }

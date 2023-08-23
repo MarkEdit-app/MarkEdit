@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var openFileInMenu: NSMenu?
   @IBOutlet weak var reopenFileMenu: NSMenu?
   @IBOutlet weak var lineEndingsMenu: NSMenu?
+  @IBOutlet weak var editCommandsMenu: NSMenu?
+  @IBOutlet weak var editFindMenu: NSMenu?
   @IBOutlet weak var textFormatMenu: NSMenu?
   @IBOutlet weak var formatHeadersMenu: NSMenu?
 
