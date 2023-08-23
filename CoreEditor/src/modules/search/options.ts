@@ -4,5 +4,6 @@ export default interface SearchOptions {
   literal: boolean;
   regexp: boolean;
   wholeWord: boolean;
+  refocus: boolean;
   replace?: string;
 }

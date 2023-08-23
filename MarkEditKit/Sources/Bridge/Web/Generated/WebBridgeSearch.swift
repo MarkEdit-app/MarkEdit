@@ -46,12 +46,28 @@ public final class WebBridgeSearch {
     }
   }
 
-  public func findNext(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    webView?.invoke(path: "webModules.search.findNext", completion: completion)
+  public func findNext(search: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let search: String
+    }
+
+    let message = Message(
+      search: search
+    )
+
+    webView?.invoke(path: "webModules.search.findNext", message: message, completion: completion)
   }
 
-  public func findPrevious(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    webView?.invoke(path: "webModules.search.findPrevious", completion: completion)
+  public func findPrevious(search: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let search: String
+    }
+
+    let message = Message(
+      search: search
+    )
+
+    webView?.invoke(path: "webModules.search.findPrevious", message: message, completion: completion)
   }
 
   public func replaceNext(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
@@ -82,14 +98,16 @@ public struct SearchOptions: Codable {
   public var literal: Bool
   public var regexp: Bool
   public var wholeWord: Bool
+  public var refocus: Bool
   public var replace: String?
 
-  public init(search: String, caseSensitive: Bool, literal: Bool, regexp: Bool, wholeWord: Bool, replace: String?) {
+  public init(search: String, caseSensitive: Bool, literal: Bool, regexp: Bool, wholeWord: Bool, refocus: Bool, replace: String?) {
     self.search = search
     self.caseSensitive = caseSensitive
     self.literal = literal
     self.regexp = regexp
     self.wholeWord = wholeWord
+    self.refocus = refocus
     self.replace = replace
   }
 }
