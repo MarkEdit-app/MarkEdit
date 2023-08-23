@@ -19,8 +19,8 @@ import {
 export interface WebModuleSearch extends WebModule {
   setState({ enabled }: { enabled: boolean }): void;
   updateQuery({ options }: { options: SearchOptions }): CodeGen_Int;
-  findNext(): void;
-  findPrevious(): void;
+  findNext({ search }: { search: string }): void;
+  findPrevious({ search }: { search: string }): void;
   replaceNext(): void;
   replaceAll(): void;
   selectAllOccurrences(): void;
@@ -36,12 +36,12 @@ export class WebModuleSearchImpl implements WebModuleSearch {
     return updateQuery(options) as CodeGen_Int;
   }
 
-  findNext(): void {
-    findNext();
+  findNext({ search }: { search: string }): void {
+    findNext(search);
   }
 
-  findPrevious(): void {
-    findPrevious();
+  findPrevious({ search }: { search: string }): void {
+    findPrevious(search);
   }
 
   replaceNext(): void {

@@ -34,14 +34,13 @@ extension EditorViewController {
     }
 
     hasUnfinishedAnimations = true
-    bridge.search.setState(enabled: mode != .hidden)
-
     findPanel.mode = mode
     findPanel.resetMenu()
 
     // Move the focus back to editor
     if mode == .hidden {
       view.window?.makeFirstResponder(webView)
+      bridge.search.setState(enabled: false)
     }
 
     // Unhide the replace panel, see below for details about this UI trick
@@ -68,17 +67,15 @@ extension EditorViewController {
     }
   }
 
-  func updateTextFinderQuery() {
-    let searchTerm = findPanel.searchField.stringValue
-    let replacement = replacePanel.textField.stringValue
-
+  func updateTextFinderQuery(refocus: Bool = true) {
     let options = SearchOptions(
       search: searchTerm,
       caseSensitive: AppPreferences.Search.caseSensitive,
       literal: AppPreferences.Search.literalSearch,
       regexp: AppPreferences.Search.regularExpression,
       wholeWord: AppPreferences.Search.wholeWord,
-      replace: replacement
+      refocus: refocus,
+      replace: replacePanel.textField.stringValue
     )
 
     findPanel.searchField.addToRecents(searchTerm: searchTerm)
@@ -92,7 +89,6 @@ extension EditorViewController {
   }
 
   func updateTextFinderPanels(numberOfItems: Int) {
-    let searchTerm = findPanel.searchField.stringValue
     findPanel.updateResult(numberOfItems: numberOfItems, emptyInput: searchTerm.isEmpty)
     replacePanel.updateResult(numberOfItems: numberOfItems)
   }
@@ -107,19 +103,19 @@ extension EditorViewController {
 
       findPanel.searchField.stringValue = text
       DispatchQueue.afterDelay(seconds: 0.2) { // 0.2 is the animation duration of panel
-        self.updateTextFinderQuery()
+        self.updateTextFinderQuery(refocus: false)
       }
     }
   }
 
   func findNextInTextFinder() {
     prepareFinderNavigation()
-    bridge.search.findNext()
+    bridge.search.findNext(search: searchTerm)
   }
 
   func findPreviousInTextFinder() {
     prepareFinderNavigation()
-    bridge.search.findPrevious()
+    bridge.search.findPrevious(search: searchTerm)
   }
 
   func replaceNextInTextFinder() {
@@ -138,6 +134,10 @@ extension EditorViewController {
 // MARK: - Private
 
 private extension EditorViewController {
+  var searchTerm: String {
+    findPanel.searchField.stringValue
+  }
+
   func prepareFinderNavigation() {
     if findPanel.numberOfItems == 1 {
       NSSound.beep()
