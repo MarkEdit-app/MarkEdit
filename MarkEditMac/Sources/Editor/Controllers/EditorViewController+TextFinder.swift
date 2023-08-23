@@ -17,7 +17,7 @@ extension EditorViewController {
 
     if mode != .hidden {
       // Move the focus to find panel, with a delay to make the focus ring animation more natural
-      DispatchQueue.afterDelay(seconds: 0.15) {
+      DispatchQueue.afterDelay(seconds: 0.1) {
         self.findPanel.searchField.startEditing(in: self.view.window)
       }
     }
