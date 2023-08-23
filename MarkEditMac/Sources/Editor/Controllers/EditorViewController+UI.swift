@@ -137,7 +137,7 @@ extension EditorViewController {
   }
 
   func handleMouseMoved(_ event: NSEvent) {
-    guard view.window?.isMainWindow == true else {
+    guard view.window?.isKeyWindow == true else {
       return
     }
 
@@ -170,6 +170,10 @@ extension EditorViewController {
 
       self.mouseExitedWindow = mouseExitedWindow
     }
+  }
+
+  func startWebViewEditing() {
+    view.window?.makeFirstResponder(webView)
   }
 
   func presentPopover(_ popover: NSPopover, rect: CGRect) {

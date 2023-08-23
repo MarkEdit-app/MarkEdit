@@ -818,6 +818,8 @@ Gw
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MarkEdit" customModuleProvider="target">
                     <connections>
                         <outlet property="copyPandocCommandMenu" destination="QZC-LS-WMo" id="GLu-1M-G8M"/>
+                        <outlet property="editCommandsMenu" destination="9un-8n-UQZ" id="TkW-D6-2rF"/>
+                        <outlet property="editFindMenu" destination="1b7-l0-nxx" id="qe6-lW-EOG"/>
                         <outlet property="editRedoItem" destination="6dh-zS-Vam" id="fN4-hA-Oqr"/>
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>

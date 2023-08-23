@@ -102,7 +102,7 @@ final class EditorViewController: NSViewController {
     let webView = EditorWebView(frame: .zero, configuration: config)
     webView.allowsMagnification = true
     webView.uiDelegate = self
-    webView.menuDelegate = self
+    webView.actionDelegate = self
 
     if #available(macOS 13.3, *) {
       webView.isInspectable = true

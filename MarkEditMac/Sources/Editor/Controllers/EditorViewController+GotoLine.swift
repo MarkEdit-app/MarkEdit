@@ -25,6 +25,7 @@ extension EditorViewController {
       placeholder: Localized.Document.gotoLine,
       iconName: Icons.arrowUturnBackwardCircle
     ) { [weak self] lineNumber in
+      self?.startWebViewEditing()
       self?.bridge.selection.gotoLine(lineNumber: lineNumber)
     }
 

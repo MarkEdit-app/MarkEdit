@@ -39,7 +39,7 @@ extension EditorViewController {
 
     // Move the focus back to editor
     if mode == .hidden {
-      view.window?.makeFirstResponder(webView)
+      startWebViewEditing()
       bridge.search.setState(enabled: false)
     }
 

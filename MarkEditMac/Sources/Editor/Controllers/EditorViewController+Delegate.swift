@@ -35,19 +35,37 @@ extension EditorViewController: WKUIDelegate {
   }
 }
 
-// MARK: - EditorWebViewMenuDelegate
+// MARK: - EditorWebViewActionDelegate
 
-extension EditorViewController: EditorWebViewMenuDelegate {
-  func editorWebViewIsReadOnly(_ sender: EditorWebView) -> Bool {
+extension EditorViewController: EditorWebViewActionDelegate {
+  func editorWebViewIsReadOnly(_ webView: EditorWebView) -> Bool {
     isReadOnly
   }
 
-  func editorWebView(_ sender: EditorWebView, didSelect menuAction: EditorWebViewMenuAction) {
+  func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction) {
     switch menuAction {
     case .findSelection:
       findSelection(self)
     case .selectAllOccurrences:
       selectAllOccurrences()
+    }
+  }
+
+  func editorWebView(
+    _ webView: EditorWebView,
+    didPerform textAction: EditorTextAction,
+    sender: Any?
+  ) {
+    switch textAction {
+    case .undo:
+      bridge.history.undo()
+    case .redo:
+      bridge.history.redo()
+    case .selectAll:
+      bridge.selection.selectAll()
+    case .paste:
+      NSPasteboard.general.sanitize()
+      NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil)
     }
   }
 }
@@ -171,7 +189,7 @@ extension EditorViewController: EditorFindPanelDelegate {
 
   func editorFindPanelDidPressTabKey(_ sender: EditorFindPanel, isBacktab: Bool) {
     if isBacktab {
-      view.window?.makeFirstResponder(webView)
+      startWebViewEditing()
     } else {
       replacePanel.textField.startEditing(in: view.window)
     }
@@ -197,7 +215,7 @@ extension EditorViewController: EditorReplacePanelDelegate {
     if isBacktab {
       findPanel.searchField.startEditing(in: view.window)
     } else {
-      view.window?.makeFirstResponder(webView)
+      startWebViewEditing()
     }
   }
 
