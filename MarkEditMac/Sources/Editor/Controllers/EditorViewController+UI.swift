@@ -77,7 +77,7 @@ extension EditorViewController {
   func layoutPanels(animated: Bool = false) {
     findPanel.update(animated).frame = CGRect(
       x: 0,
-      y: view.bounds.height - view.safeAreaInsets.top - (findPanel.mode == .hidden ? 0 : findPanel.frame.height),
+      y: contentHeight - (findPanel.mode == .hidden ? 0 : findPanel.frame.height),
       width: view.bounds.width,
       height: findPanel.frame.height
     )
@@ -94,11 +94,17 @@ extension EditorViewController {
   }
 
   func layoutWebView(animated: Bool = false) {
+    // Move the view instead of changing its height,
+    // because resizing would introduce unnecessary updates,
+    // which results in sluggish animation.
+    let height = contentHeight
+    let offset = panelDivider.frame.minY - height
+
     webView.update(animated).frame = CGRect(
       x: 0,
-      y: 0,
+      y: offset,
       width: view.bounds.width,
-      height: panelDivider.frame.minY
+      height: height
     )
   }
 
@@ -138,14 +144,14 @@ extension EditorViewController {
     // WKWebView contentEditable keeps showing i-beam, fix that
     if NSCursor.current != NSCursor.arrow {
       let location = event.locationInWindow.y
-      if location > view.frame.height - view.safeAreaInsets.top && location < view.frame.height {
+      if location > contentHeight && location < view.frame.height {
         NSCursor.arrow.push()
       }
     }
 
     let trackingRect = {
       var bounds = view.bounds
-      bounds.size.height -= view.safeAreaInsets.top
+      bounds.size.height = contentHeight
       return bounds
     }()
 
@@ -181,5 +187,13 @@ extension EditorViewController {
 
     presentedPopover = popover
     popover.show(relativeTo: rect, of: focusTrackingView, preferredEdge: .maxX)
+  }
+}
+
+// MARK: - Private
+
+private extension EditorViewController {
+  var contentHeight: Double {
+    view.bounds.height - view.safeAreaInsets.top
   }
 }
