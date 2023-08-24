@@ -19,6 +19,8 @@ export const markdownExtensions: MarkdownConfig[] = [
         ListMark: tags.listMark,
         QuoteMark: tags.quoteMark,
         LinkMark: tags.linkMark,
+        'SetextHeading1/...': tags.setextHeading1,
+        'SetextHeading2/...': tags.setextHeading2,
       }),
     ],
   },

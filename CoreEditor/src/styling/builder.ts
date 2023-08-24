@@ -14,6 +14,8 @@ const tags = {
   listMark: Tag.define(),
   quoteMark: Tag.define(),
   linkMark: Tag.define(),
+  setextHeading1: Tag.define(),
+  setextHeading2: Tag.define(),
 };
 
 // Here we define color independent theme styles,
@@ -100,6 +102,8 @@ const sharedHighlights = [
   { tag: tags.heading4, class: 'cm-md-header cm-md-heading4' },
   { tag: tags.heading5, class: 'cm-md-header cm-md-heading5' },
   { tag: tags.heading6, class: 'cm-md-header cm-md-heading6' },
+  { tag: tags.setextHeading1, class: 'cm-md-header cm-md-heading1 cm-md-setext-heading1' },
+  { tag: tags.setextHeading2, class: 'cm-md-header cm-md-heading2 cm-md-setext-heading2' },
 ];
 
 function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
