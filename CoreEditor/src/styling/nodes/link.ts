@@ -1,11 +1,22 @@
 import { Decoration, MatchDecorator } from '@codemirror/view';
 import { createDecoPlugin } from '../helper';
+import { isMetaKeyDown } from '../../events';
 
 // Fragile approach, but we only use it for link clicking, it should be fine
 const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|(\[.*?\]\()(.+?)\)/g;
 const className = 'cm-md-link';
 
+declare global {
+  interface Window {
+    _startLinkClickable: (_: HTMLElement) => void;
+    _stopLinkClickable: (_: HTMLElement) => void;
+  }
+}
+
 export const linkStyle = createDecoPlugin(() => {
+  window._startLinkClickable = startClickable;
+  window._stopLinkClickable = stopClickable;
+
   const matcher = new MatchDecorator({
     regexp,
     boundary: /\S/,
@@ -14,6 +25,8 @@ export const linkStyle = createDecoPlugin(() => {
         class: className,
         attributes: {
           title: window.config.localizable?.cmdClickToOpenLink ?? '',
+          onmouseenter: '_startLinkClickable(this)',
+          onmouseleave: '_stopLinkClickable(this)',
         },
       });
 
@@ -30,25 +43,37 @@ export const linkStyle = createDecoPlugin(() => {
   return matcher.createDeco(window.editor);
 });
 
-export function startClickable() {
-  forEachLink(link => {
-    link.style.cursor = 'pointer';
-    link.style.textDecoration = 'underline';
+export function startClickable(inputElement?: HTMLElement) {
+  const linkElement = inputElement ?? storage.focusedElement;
+  storage.focusedElement = linkElement;
 
-    // Find the actual text node and use its color
-    const text = [...link.children].find(node => node.textContent !== null);
-    if (text !== undefined) {
-      link.style.textDecorationColor = getComputedStyle(text).color;
-    }
-  });
+  if (linkElement === undefined || !isMetaKeyDown()) {
+    return;
+  }
+
+  linkElement.title = '';
+  linkElement.style.cursor = 'pointer';
+  linkElement.style.textDecoration = 'underline';
+
+  // Find the actual text node and use its color
+  const text = [...linkElement.children].find(node => node.textContent !== null);
+  if (text !== undefined) {
+    linkElement.style.textDecorationColor = getComputedStyle(text).color;
+  }
 }
 
-export function stopClickable() {
-  forEachLink(link => {
-    link.style.cursor = '';
-    link.style.textDecoration = '';
-    link.style.textDecorationColor = '';
-  });
+export function stopClickable(inputElement?: HTMLElement) {
+  const linkElement = inputElement ?? storage.focusedElement;
+  storage.focusedElement = inputElement ? undefined : storage.focusedElement;
+
+  if (linkElement === undefined) {
+    return;
+  }
+
+  linkElement.title = window.config.localizable?.cmdClickToOpenLink ?? '';
+  linkElement.style.cursor = '';
+  linkElement.style.textDecoration = '';
+  linkElement.style.textDecorationColor = '';
 }
 
 export function handleMouseDown(event: MouseEvent) {
@@ -65,17 +90,18 @@ export function handleMouseUp(event: MouseEvent) {
   }
 }
 
-function forEachLink(handler: (element: HTMLElement) => void) {
-  const links = document.querySelectorAll(`.${className}`);
-  links.forEach(handler);
-}
-
 function extractLink(target: EventTarget | null) {
   const selector = `.${className}`;
   const element = (target as HTMLElement | null)?.closest<HTMLElement>(selector);
 
-  // The link is clickable when it has an underline
-  if (element?.style.textDecoration !== 'underline') {
+  // The element doesn't belong to a Markdown link
+  if (element === null || element === undefined) {
+    return undefined;
+  }
+
+  // The link is clickable when it has an underline,
+  // use includes because Chrome merges textDecorationColor into textDecoration.
+  if (!element.style.textDecoration.includes('underline')) {
     return undefined;
   }
 
@@ -88,3 +114,9 @@ function extractLink(target: EventTarget | null) {
 
   return link;
 }
+
+const storage: {
+  focusedElement: HTMLElement | undefined;
+} = {
+  focusedElement: undefined,
+};

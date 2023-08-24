@@ -10,6 +10,14 @@ import * as invisible from '../styling/nodes/invisible';
 import * as link from '../styling/nodes/link';
 
 export function startObserving() {
+  // When window loses focus, clear internal states
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      storage.isMouseDown = false;
+      storage.isMetaKeyDown = false;
+    }
+  });
+
   document.addEventListener('click', event => {
     grammarly.centerActiveDialog();
     selection.selectWholeLineIfNeeded(event);
@@ -21,12 +29,14 @@ export function startObserving() {
     }
 
     if (isMetaKey(event)) {
+      storage.isMetaKeyDown = true;
       link.startClickable();
     }
   });
 
   document.addEventListener('keyup', event => {
     if (isMetaKey(event)) {
+      storage.isMetaKeyDown = false;
       link.stopClickable();
     }
   });
@@ -69,6 +79,10 @@ export function startObserving() {
 
 export function isMouseDown() {
   return storage.isMouseDown;
+}
+
+export function isMetaKeyDown() {
+  return storage.isMetaKeyDown;
 }
 
 function observeEventsForTokenization() {
@@ -124,6 +138,8 @@ function observeEventsForCompletion() {
 
 const storage: {
   isMouseDown: boolean;
+  isMetaKeyDown: boolean;
 } = {
   isMouseDown: false,
+  isMetaKeyDown: false,
 };
