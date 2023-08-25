@@ -67,6 +67,7 @@ extension EditorViewController: NSToolbarDelegate {
       case .insertTable: return insertTableItem
       case .insertCode: return insertCodeItem
       case .textFormat: return textFormatItem
+      case .statistics: return statisticsItem
       case .shareDocument: return shareDocumentItem
       case .copyPandocCommand: return copyPandocCommandItem
       default: return nil
@@ -208,6 +209,12 @@ private extension EditorViewController {
 
   var textFormatItem: NSToolbarItem {
     .with(identifier: .textFormat, menu: NSApp.appDelegate?.textFormatMenu?.copiedMenu)
+  }
+
+  var statisticsItem: NSToolbarItem {
+    .with(identifier: .statistics) { [weak self] in
+      print(String(describing: self))
+    }
   }
 
   var shareDocumentItem: NSToolbarItem {

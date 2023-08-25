@@ -55,6 +55,7 @@ enum Localized {
     static let insertTable = String(localized: "Table", comment: "Toolbar item to insert table")
     static let insertCode = String(localized: "Insert Code", comment: "Toolbar item to insert code")
     static let textFormat = String(localized: "Text Format", comment: "Toolbar item to use text format menu")
+    static let statistics = String(localized: "Statistics", comment: "Toolbar item to show statistics")
     static let shareDocument = String(localized: "Share this document", comment: "Toolbar item to share the document")
     static let copyPandocCommand = String(localized: "Copy Pandoc Command", comment: "Toolbar item to copy pandoc command")
   }
@@ -174,6 +175,7 @@ enum Icons {
   static let chevronLeft = "chevron.left"
   static let chevronRight = "chevron.right"
   static let curlybracesSquare = "curlybraces.square"
+  static let exclamationmarkCircle = "exclamationmark.circle"
   static let gearshape = "gearshape"
   static let italic = "italic"
   static let link = "link"
