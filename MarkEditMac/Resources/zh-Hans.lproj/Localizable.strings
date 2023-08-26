@@ -40,6 +40,9 @@
 /* Toggle case sensitive search */
 "Case Sensitive" = "大小写敏感";
 
+/* Statistics label: count characters */
+"Characters" = "字符数量";
+
 /* Line endings used on Classic Mac OS */
 "Classic Mac OS (CR)" = "Classic Mac OS (CR)";
 
@@ -105,6 +108,9 @@
 
 /* No comment provided by engineer. */
 "Evaluate JavaScript with ${content}" = "使用 ${content} 运行 JavaScript";
+
+/* Statistics label: count file size */
+"File Size" = "文件大小";
 
 /* Find mode in search menu */
 "Find" = "查找";
@@ -244,6 +250,9 @@
 /* Menu item for selecting custom fonts */
 "Open Font Panel..." = "打开字体面板…";
 
+/* Statistics label: count paragraphs */
+"Paragraphs" = "段落数量";
+
 /* Label for indent unit settings */
 "Prefer Indent Using:" = "缩进偏好：";
 
@@ -264,6 +273,9 @@
 
 /* Toolbar item to toggle blockquote */
 "Quote" = "引用";
+
+/* Statistics label: count read time */
+"Read Time" = "阅读时间";
 
 /* Menu item: recent searches */
 "Recent Searches" = "最近的搜索";
@@ -304,6 +316,9 @@
 /* Option to show selection status */
 "Selection status" = "选择状态";
 
+/* Statistics label: count sentences */
+"Sentences" = "句子数量";
+
 /* Toolbar item to share the document */
 "Share this document" = "分享此文档";
 
@@ -312,6 +327,9 @@
 
 /* Option for standard words suggestion */
 "Standard words" = "标准单词";
+
+/* Toolbar item to show statistics */
+"Statistics" = "统计数据";
 
 /* Toolbar item to toggle strikethrough */
 "Strikethrough" = "删除线";
@@ -399,6 +417,9 @@
 
 /* Line endings used on Windows */
 "Windows (CRLF)" = "Windows (CRLF)";
+
+/* Statistics label: count words */
+"Words" = "单词数量";
 
 /* Option for words in documents suggestion */
 "Words in document" = "文档中的单词";

@@ -79,6 +79,15 @@ enum Localized {
     static let gotoLine = String(localized: "Go to Line", comment: "Placeholder text for goto line window")
   }
 
+  enum Statistics {
+    static let characters = String(localized: "Characters", comment: "Statistics label: count characters")
+    static let words = String(localized: "Words", comment: "Statistics label: count words")
+    static let sentences = String(localized: "Sentences", comment: "Statistics label: count sentences")
+    static let paragraphs = String(localized: "Paragraphs", comment: "Statistics label: count paragraphs")
+    static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
+    static let readTime = String(localized: "Read Time", comment: "Statistics label: count read time")
+  }
+
   enum Settings {
     // Editor
     static let editor = String(localized: "Editor", comment: "Window title for editor settings")

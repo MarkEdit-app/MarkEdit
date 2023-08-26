@@ -28,10 +28,17 @@ extension EditorViewController {
 
       let popover = NSPopover()
       popover.behavior = .transient
-      popover.contentViewController = StatisticsViewController(
+      popover.contentViewController = StatisticsController(
         sourceText: sourceText,
+        fileURL: document?.fileURL,
         localizable: StatisticsLocalizable(
-          mainTitle: mainTitle
+          mainTitle: mainTitle,
+          characters: Localized.Statistics.characters,
+          words: Localized.Statistics.words,
+          sentences: Localized.Statistics.sentences,
+          paragraphs: Localized.Statistics.paragraphs,
+          fileSize: Localized.Statistics.fileSize,
+          readTime: Localized.Statistics.readTime
         )
       )
 
