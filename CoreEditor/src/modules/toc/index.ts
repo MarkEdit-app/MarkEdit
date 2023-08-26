@@ -63,7 +63,7 @@ export function getTableOfContents() {
 
       // ATXHeading can have up to 3 leading spaces and arbitrary number of spaces between # and visible characters,
       // example of a valid section header: "   #  Hello"
-      const title = state.doc.sliceString(node.from, node.to).replace(/ {0,3}#+ +/, '');
+      const title = state.sliceDoc(node.from, node.to).replace(/ {0,3}#+ +/, '');
       const level = parseInt(match[1]);
 
       results.push({

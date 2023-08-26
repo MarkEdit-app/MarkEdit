@@ -12,9 +12,9 @@ export default function wrapBlock(mark: string, editor: EditorView) {
     return false;
   }
 
-  const doc = editor.state.doc;
+  const state = editor.state;
   editor.dispatch(editor.state.changeByRange(({ from, to }) => {
-    const selection = doc.sliceString(from, to);
+    const selection = state.sliceDoc(from, to);
     const replacement = from === to ? mark : `${mark}${selection}${mark}`;
     const newPos = from + mark.length;
     return {

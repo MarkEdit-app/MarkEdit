@@ -5,15 +5,15 @@ import { load as loadYaml } from 'js-yaml';
  */
 export function frontMatterRange() {
   const editor = window.editor;
-  const doc = editor.state.doc;
+  const state = editor.state;
 
   // Fail fast, it's not possible to be front matter
-  if (doc.sliceString(0, 3) !== '---') {
+  if (state.sliceDoc(0, 3) !== '---') {
     return undefined;
   }
 
   // Definition: https://jekyllrb.com/docs/front-matter/
-  const match = /^---\n(.+?)\n---/s.exec(doc.toString());
+  const match = /^---\n(.+?)\n---/s.exec(state.doc.toString());
   if (match && isYaml(match[1])) {
     return { from: 0, to: match[0].length };
   }

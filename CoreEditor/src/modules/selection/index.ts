@@ -50,7 +50,7 @@ export function linesWithRange(from: number, to: number) {
 export function selectedMainText(): string {
   const state = window.editor.state;
   const { from, to } = state.selection.main;
-  return state.doc.sliceString(from, to);
+  return state.sliceDoc(from, to);
 }
 
 /**

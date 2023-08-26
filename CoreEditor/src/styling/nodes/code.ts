@@ -23,7 +23,7 @@ export const codeBlockStyle = createDecoPlugin(() => {
 export const previewMermaid = createDecoPlugin(() => {
   return createWidgetDeco('CodeInfo', node => {
     const state = window.editor.state;
-    if (state.doc.sliceString(node.from, node.to) !== 'mermaid') {
+    if (state.sliceDoc(node.from, node.to) !== 'mermaid') {
       return null;
     }
 
@@ -37,7 +37,7 @@ export const previewMermaid = createDecoPlugin(() => {
       return null;
     }
 
-    const code = state.doc.sliceString(node.to + 1, boundary.from);
+    const code = state.sliceDoc(node.to + 1, boundary.from);
     if (code.trim().length === 0) {
       return null;
     }
@@ -53,7 +53,7 @@ export const previewMermaid = createDecoPlugin(() => {
 export const previewMath = createDecoPlugin(() => {
   return createWidgetDeco('BlockMath', node => {
     const state = window.editor.state;
-    const code = state.doc.sliceString(node.from + 2, node.to - 2); // 2 is the length of "$$"
+    const code = state.sliceDoc(node.from + 2, node.to - 2); // 2 is the length of "$$"
     if (code.trim().length === 0) {
       return null;
     }
