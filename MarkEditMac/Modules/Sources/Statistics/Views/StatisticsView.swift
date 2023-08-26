@@ -11,11 +11,13 @@ struct StatisticsView: View {
   private let sourceText: String
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
+  private let tokenizedResult: Tokenizer.Result
 
   init(sourceText: String, fileURL: URL?, localizable: StatisticsLocalizable) {
     self.sourceText = sourceText
     self.fileURL = fileURL
     self.localizable = localizable
+    self.tokenizedResult = Tokenizer.tokenize(text: sourceText)
   }
 
   var body: some View {
@@ -30,38 +32,42 @@ struct StatisticsView: View {
         StatisticsCell(
           iconName: Icons.characters,
           titleText: localizable.characters,
-          valueText: "2302"
+          valueText: "\(sourceText.count)"
         )
 
         StatisticsCell(
           iconName: Icons.words,
           titleText: localizable.words,
-          valueText: "532"
+          valueText: "\(tokenizedResult.words)"
         )
 
         StatisticsCell(
           iconName: Icons.sentences,
           titleText: localizable.sentences,
-          valueText: "82"
+          valueText: "\(tokenizedResult.sentences)"
         )
 
         StatisticsCell(
           iconName: Icons.paragraphs,
           titleText: localizable.paragraphs,
-          valueText: "25"
+          valueText: "\(tokenizedResult.paragraphs)"
         )
 
-        StatisticsCell(
-          iconName: Icons.fileSize,
-          titleText: localizable.fileSize,
-          valueText: "10 KB"
-        )
+        if let fileSize = FileSize.readableSize(of: fileURL) {
+          StatisticsCell(
+            iconName: Icons.fileSize,
+            titleText: localizable.fileSize,
+            valueText: fileSize
+          )
+        }
 
-        StatisticsCell(
-          iconName: Icons.readTime,
-          titleText: localizable.readTime,
-          valueText: "2m"
-        )
+        if let readTime = ReadTime.compute(numberOfWords: tokenizedResult.words) {
+          StatisticsCell(
+            iconName: Icons.readTime,
+            titleText: localizable.readTime,
+            valueText: readTime
+          )
+        }
       }
       .padding(.horizontal, 10)
       .frame(maxWidth: .infinity)
