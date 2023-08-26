@@ -43,11 +43,11 @@ final class EditorStatusView: NSView, BackgroundTheming {
   func updateLineColumn(_ info: LineColumnInfo) {
     let title = {
       // Don't localize the labels
-      let lineColumn = "Ln \(info.line), Col \(info.column)"
-      if info.length > 0 {
-        return "\(lineColumn) (\(info.length))"
-      } else {
+      let lineColumn = "Ln \(info.lineNumber), Col \(info.columnText.count + 1)"
+      if info.selectionText.isEmpty {
         return lineColumn
+      } else {
+        return "\(lineColumn) (\(info.selectionText.count))"
       }
     }()
 

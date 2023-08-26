@@ -1,5 +1,5 @@
 export interface LineColumnInfo {
-  line: CodeGen_Int;
-  column: CodeGen_Int;
-  length: CodeGen_Int;
+  lineNumber: CodeGen_Int;
+  columnText: string;
+  selectionText: string;
 }

@@ -96,9 +96,9 @@ export function resetEditor(
     contentEdited: false,
     isDirty: false,
     selectedLineColumn: {
-      line: 1 as CodeGen_Int,
-      column: 1 as CodeGen_Int,
-      length: 0 as CodeGen_Int,
+      lineNumber: 1 as CodeGen_Int,
+      columnText: '',
+      selectionText: '',
     },
   });
 
