@@ -72,13 +72,13 @@ final class NativeBridgeCore: NativeBridge {
 }
 
 public struct LineColumnInfo: Decodable, Equatable {
-  public var line: Int
-  public var column: Int
-  public var length: Int
+  public var lineNumber: Int
+  public var columnText: String
+  public var selectionText: String
 
-  public init(line: Int, column: Int, length: Int) {
-    self.line = line
-    self.column = column
-    self.length = length
+  public init(lineNumber: Int, columnText: String, selectionText: String) {
+    self.lineNumber = lineNumber
+    self.columnText = columnText
+    self.selectionText = selectionText
   }
 }

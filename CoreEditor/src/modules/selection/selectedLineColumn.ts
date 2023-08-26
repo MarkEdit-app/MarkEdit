@@ -6,13 +6,12 @@ import { LineColumnInfo } from './types';
 export function selectedLineColumn(): LineColumnInfo {
   const editor = window.editor;
   const state = editor.state;
-  const selection = editor.state.selection.main;
+  const selection = state.selection.main;
   const line = state.doc.lineAt(selection.head);
-  const column = selection.head - line.from + 1;
 
   return {
-    line: line.number as CodeGen_Int,
-    column: column as CodeGen_Int,
-    length: (selection.to - selection.from) as CodeGen_Int,
+    lineNumber: line.number as CodeGen_Int,
+    columnText: state.sliceDoc(line.from, selection.head),
+    selectionText: state.sliceDoc(selection.from, selection.to),
   };
 }
