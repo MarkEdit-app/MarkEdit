@@ -21,7 +21,7 @@ export const previewTable = createDecoPlugin(() => {
     }
 
     const state = window.editor.state;
-    const code = state.doc.sliceString(node.from, node.to);
+    const code = state.sliceDoc(node.from, node.to);
     return new PreviewWidget(code, PreviewType.table, header.to);
   });
 }, { mouseup: showPreview });

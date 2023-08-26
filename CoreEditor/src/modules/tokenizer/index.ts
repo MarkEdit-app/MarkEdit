@@ -99,6 +99,6 @@ export function tokenizePosition(event: MouseEvent) {
  */
 function useBuiltIn(pos: number) {
   // We don't care about ascii characters, tokenization is more meaningful for languages like Chinese and Japanese.
-  const character = window.editor.state.doc.sliceString(pos, pos + 1);
+  const character = window.editor.state.sliceDoc(pos, pos + 1);
   return /[ -~]/.test(character);
 }

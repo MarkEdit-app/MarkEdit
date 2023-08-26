@@ -8,13 +8,13 @@ import { EditorSelection } from '@codemirror/state';
  */
 export default function toggleBlockWithMarks(leftMark: string, rightMark: string) {
   const editor = window.editor;
-  const doc = editor.state.doc;
+  const state = editor.state;
 
   // Take care of all updates and merge them into a single one
   const updates = editor.state.changeByRange(({ from, to }) => {
     const startPos = from;
     const endPos = to;
-    const selectedText = doc.sliceString(from, to);
+    const selectedText = state.sliceDoc(from, to);
 
     const startTestPos = startPos - leftMark.length;
     const endTestPos = endPos + rightMark.length;
@@ -22,9 +22,9 @@ export default function toggleBlockWithMarks(leftMark: string, rightMark: string
     let matched = false;
     let newPos = 0;
 
-    if (startTestPos >= 0 && endTestPos <= doc.length) {
-      const leftTest = doc.sliceString(startTestPos, startTestPos + leftMark.length);
-      const rightTest = doc.sliceString(endTestPos - rightMark.length, endTestPos);
+    if (startTestPos >= 0 && endTestPos <= state.doc.length) {
+      const leftTest = state.sliceDoc(startTestPos, startTestPos + leftMark.length);
+      const rightTest = state.sliceDoc(endTestPos - rightMark.length, endTestPos);
       matched = leftTest === leftMark && rightTest === rightMark;
     }
 
