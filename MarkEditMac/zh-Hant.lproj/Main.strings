@@ -361,9 +361,6 @@
 /* Class = "NSMenuItem"; title = "Commands"; ObjectID = "tqa-Ue-2Ms"; */
 "tqa-Ue-2Ms.title" = "操作指令";
 
-/* Class = "NSMenuItem"; title = "Data Detectors"; ObjectID = "tRr-pd-1PS"; */
-"tRr-pd-1PS.title" = "資料偵測器";
-
 /* Class = "NSMenu"; title = "Open In..."; ObjectID = "Tuy-2U-frg"; */
 "Tuy-2U-frg.title" = "使用應用打開…";
 
