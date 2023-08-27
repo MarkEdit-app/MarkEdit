@@ -25,7 +25,22 @@ extension EditorViewController {
   }
 
   func showTableOfContentsMenu() {
-    tableOfContentsMenuButton?.performClick(nil)
+    // Pop up the menu relative to the toolbar item
+    if let tableOfContentsMenuButton {
+      tableOfContentsMenuButton.performClick(nil)
+      return
+    }
+
+    // Pop up the menu relative to the document title view
+    if let menu = (tableOfContentsItem as? NSMenuToolbarItem)?.menu,
+       let sourceView = view.window?.toolbarTitleView {
+      menu.popUp(
+        positioning: nil,
+        at: CGPoint(x: sourceView.bounds.maxX, y: sourceView.bounds.maxY),
+        in: sourceView
+      )
+      return
+    }
   }
 }
 
@@ -113,7 +128,7 @@ private extension EditorViewController {
     menu.items = [label, .separator()]
     menu.autoenablesItems = false
 
-    return NSToolbarItem.with(identifier: .tableOfContents, menu: menu)
+    return .with(identifier: .tableOfContents, menu: menu)
   }
 
   var formatHeadersItem: NSToolbarItem {
@@ -158,7 +173,7 @@ private extension EditorViewController {
       NSApp.appDelegate?.formatTodoItem,
     ].compactMap { $0?.copiedItem }
 
-    return NSToolbarItem.with(identifier: .toggleList, menu: menu)
+    return .with(identifier: .toggleList, menu: menu)
   }
 
   var toggleBlockquoteItem: NSToolbarItem {
@@ -188,7 +203,7 @@ private extension EditorViewController {
       NSApp.appDelegate?.formatMathBlockItem,
     ].compactMap { $0?.copiedItem }
 
-    return NSToolbarItem.with(identifier: .insertCode, menu: menu)
+    return .with(identifier: .insertCode, menu: menu)
   }
 
   var textFormatItem: NSToolbarItem {
