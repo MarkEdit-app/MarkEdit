@@ -303,10 +303,6 @@ private extension EditorViewController {
     showGotoLineWindow(sender)
   }
 
-  @IBAction func toggleStatistics(_ sender: Any?) {
-    toggleStatisticsPopover(sourceView: statisticsSourceView)
-  }
-
   @IBAction func openTableOfContents(_ sender: Any?) {
     if let presentedMenu {
       return presentedMenu.cancelTracking()
@@ -355,6 +351,10 @@ private extension EditorViewController {
     }
 
     bridge.format.performEditCommand(command: command)
+  }
+
+  @IBAction func toggleStatistics(_ sender: Any?) {
+    toggleStatisticsPopover(sourceView: statisticsSourceView)
   }
 
   @IBAction func toggleGrammarly(_ sender: Any?) {
