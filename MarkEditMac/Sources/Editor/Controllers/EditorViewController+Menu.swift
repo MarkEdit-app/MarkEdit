@@ -16,6 +16,16 @@ extension EditorViewController: NSMenuDelegate {
   func menuNeedsUpdate(_ menu: NSMenu) {
     updateToolbarItemMenus(menu)
   }
+
+  func menuWillOpen(_ menu: NSMenu) {
+    presentedMenu = menu
+  }
+
+  func menuDidClose(_ menu: NSMenu) {
+    DispatchQueue.main.async {
+      self.presentedMenu = nil
+    }
+  }
 }
 
 // MARK: - NSMenuItemValidation
@@ -294,7 +304,14 @@ private extension EditorViewController {
   }
 
   @IBAction func openTableOfContents(_ sender: Any?) {
-    showTableOfContentsMenu()
+    if let presentedMenu {
+      return presentedMenu.cancelTracking()
+    }
+
+    // [macOS 14] +enableWindowReuse crash, DispatchQueue would not work
+    RunLoop.main.perform {
+      self.showTableOfContentsMenu()
+    }
   }
 
   @IBAction func selectPreviousSection(_ sender: Any?) {

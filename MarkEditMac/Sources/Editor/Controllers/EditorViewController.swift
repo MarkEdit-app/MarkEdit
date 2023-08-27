@@ -17,6 +17,8 @@ final class EditorViewController: NSViewController {
   var hasUnfinishedAnimations = false
   var mouseExitedWindow = false
   var safeAreaObservation: NSKeyValueObservation?
+
+  weak var presentedMenu: NSMenu?
   weak var presentedPopover: NSPopover?
 
   var editorText: String? {
