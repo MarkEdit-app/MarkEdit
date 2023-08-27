@@ -183,6 +183,7 @@ final class EditorViewController: NSViewController {
   }
 
   override func cancelOperation(_ sender: Any?) {
+    super.cancelOperation(sender)
     if completionContext.isPanelVisible {
       cancelCompletion()
     }
