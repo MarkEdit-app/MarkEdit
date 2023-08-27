@@ -8,16 +8,22 @@ import AppKit
 
 public extension NSWindow {
   var toolbarContainerView: NSView? {
-    toolbarEffectView?.superview
+    rootView?.firstDescendant { (view: NSView) in
+      view.className == "NSTitlebarView"
+    }
   }
 
   var toolbarEffectView: NSVisualEffectView? {
-    let result = rootView?.firstDescendant { (effectView: NSVisualEffectView) in
-      // What we want is an NSVisualEffectView child of an NSTitlebarView
-      effectView.superview?.className.hasPrefix("NSTitlebar") == true
-    }
+    // What we want is an NSVisualEffectView child of an NSTitlebarView
+    toolbarContainerView?.subviews.compactMap {
+      $0 as? NSVisualEffectView
+    }.first
+  }
 
-    return result
+  var toolbarTitleView: NSView? {
+    toolbarContainerView?.firstDescendant { (view: NSView) in
+      view is NSTextField
+    }
   }
 
   /// Change the frame size, treat the top-left corner as the anchor point.
@@ -53,7 +59,7 @@ public extension NSWindow {
   ///
   /// There's no public API to programmatically show the menu assigned to an NSToolbarItem.
   func popUpButton(with menuIdentifier: NSUserInterfaceItemIdentifier) -> NSPopUpButton? {
-    contentView?.superview?.firstDescendant { (button: NSPopUpButton) in
+    rootView?.firstDescendant { (button: NSPopUpButton) in
       button.menu?.identifier == menuIdentifier
     }
   }

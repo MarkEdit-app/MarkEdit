@@ -62,8 +62,6 @@ extension EditorViewController: NSMenuItemValidation {
     switch menuItem.action {
     case #selector(performPaste(_:)):
       return NSPasteboard.general.canPaste
-    case #selector(openTableOfContents(_:)):
-      return tableOfContentsMenuButton != nil
     case #selector(resetFontSize(_:)):
       return abs(AppPreferences.Editor.fontSize - FontPicker.defaultFontSize) > .ulpOfOne
     case #selector(makeFontBigger(_:)):
