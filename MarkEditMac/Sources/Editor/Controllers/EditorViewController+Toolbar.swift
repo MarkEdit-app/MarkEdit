@@ -13,6 +13,13 @@ extension EditorViewController {
     view.window?.popUpButton(with: Constants.tableOfContentsMenuIdentifier)
   }
 
+  var statisticsSourceView: NSView? {
+    // Present the popover relative to the toolbar item
+    view.window?.toolbarButton(with: statisticsItem.itemIdentifier) ??
+    // Present the popover relative to the document title view
+    view.window?.toolbarTitleView
+  }
+
   private enum Constants {
     static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
     static let normalizedButtonSize: Double = 15 // "bold" icon looks bigger than expected, fix it
@@ -213,15 +220,7 @@ private extension EditorViewController {
 
   var statisticsItem: NSToolbarItem {
     .with(identifier: .statistics) { [weak self] in
-      guard let identifier = self?.statisticsItem.itemIdentifier else {
-        return Logger.assertFail("Missing statisticsItem identifier")
-      }
-
-      guard let sourceView = self?.view.window?.toolbarButton(with: identifier) else {
-        return Logger.assertFail("Missing statisticsItem sourceView")
-      }
-
-      self?.toggleStatistics(sourceView: sourceView)
+      self?.toggleStatisticsPopover(sourceView: self?.statisticsSourceView)
     }
   }
 

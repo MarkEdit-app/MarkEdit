@@ -303,6 +303,10 @@ private extension EditorViewController {
     showGotoLineWindow(sender)
   }
 
+  @IBAction func toggleStatistics(_ sender: Any?) {
+    toggleStatisticsPopover(sourceView: statisticsSourceView)
+  }
+
   @IBAction func openTableOfContents(_ sender: Any?) {
     if let presentedMenu {
       return presentedMenu.cancelTracking()

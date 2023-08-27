@@ -302,6 +302,11 @@ Gw
                                                 <action selector="gotoLine:" target="Ady-hI-5gd" id="puP-5D-Fgc"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Statistics" keyEquivalent="I" id="Bvk-zs-CQB" userLabel="Statistics">
+                                            <connections>
+                                                <action selector="toggleStatistics:" target="Ady-hI-5gd" id="aCq-vt-CmH"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Table of Contents" id="REb-f5-kpc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Table of Contents" id="BxI-nv-Xa5">

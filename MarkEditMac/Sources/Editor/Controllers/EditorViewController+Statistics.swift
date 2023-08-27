@@ -6,12 +6,18 @@
 //
 
 import AppKit
+import MarkEditKit
 import Statistics
 
 extension EditorViewController {
-  func toggleStatistics(sourceView: NSView) {
+  func toggleStatisticsPopover(sourceView: NSView?) {
     guard presentedPopover == nil else {
       presentedPopover?.close()
+      return
+    }
+
+    guard let sourceView else {
+      Logger.assertFail("Missing sourceView to proceed")
       return
     }
 

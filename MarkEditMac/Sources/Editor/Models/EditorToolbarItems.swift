@@ -50,6 +50,7 @@ extension NSToolbarItem {
     case .toggleStrikethrough: return "⌃ ⌘ S"
     case .insertLink: return "⌘ K"
     case .insertImage: return "⌃ ⌘ K"
+    case .statistics: return "⇧ ⌘ I"
     default: return nil
     }
   }
