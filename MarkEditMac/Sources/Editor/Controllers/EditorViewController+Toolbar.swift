@@ -32,6 +32,8 @@ extension EditorViewController {
   }
 
   func showTableOfContentsMenu() {
+    presentedPopover?.close()
+
     // Pop up the menu relative to the toolbar item
     if let tableOfContentsMenuButton {
       tableOfContentsMenuButton.performClick(nil)
@@ -43,7 +45,7 @@ extension EditorViewController {
        let sourceView = view.window?.toolbarTitleView {
       menu.popUp(
         positioning: nil,
-        at: CGPoint(x: sourceView.bounds.maxX, y: sourceView.bounds.maxY),
+        at: CGPoint(x: sourceView.bounds.minX, y: sourceView.bounds.maxY + 15),
         in: sourceView
       )
       return

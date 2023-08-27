@@ -47,8 +47,8 @@ public final class StatisticsController: NSViewController {
 
     let spinner = NSProgressIndicator()
     spinner.style = .spinning
-    spinner.translatesAutoresizingMaskIntoConstraints = false
     spinner.startAnimation(nil)
+    spinner.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(spinner)
 
     NSLayoutConstraint.activate([
@@ -59,16 +59,17 @@ public final class StatisticsController: NSViewController {
     DispatchQueue.global(qos: .userInitiated).async {
       // Natural language processing is time-consuming for large documents
       let tokenizedResult = Tokenizer.tokenize(text: self.sourceText)
-      // Render the result view and remove the spinner on main thread
+
+      // Remove the spinner and show the result view on main thread
       DispatchQueue.main.async {
+        spinner.stopAnimation(nil)
+        spinner.removeFromSuperview()
+
         let contentView = NSHostingView(rootView: StatisticsView(
           tokenizedResult: tokenizedResult,
           fileURL: self.fileURL,
           localizable: self.localizable
         ))
-
-        spinner.stopAnimation(nil)
-        spinner.removeFromSuperview()
 
         self.contentView = contentView
         self.view.addSubview(contentView)

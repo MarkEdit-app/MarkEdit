@@ -22,6 +22,8 @@ extension EditorViewController {
     }
 
     Task {
+      // Extract the source to show the statistics view,
+      // use the selected text if the selection is not empty.
       let (sourceText, fileURL, mainTitle) = await {
         let selectedText = (try? await bridge.selection.getText()) ?? ""
         let mainTitle = Localized.Toolbar.statistics
@@ -44,8 +46,8 @@ extension EditorViewController {
           words: Localized.Statistics.words,
           sentences: Localized.Statistics.sentences,
           paragraphs: Localized.Statistics.paragraphs,
-          fileSize: Localized.Statistics.fileSize,
-          readTime: Localized.Statistics.readTime
+          readTime: Localized.Statistics.readTime,
+          fileSize: Localized.Statistics.fileSize
         )
       )
 

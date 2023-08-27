@@ -7,6 +7,9 @@
 import Foundation
 import NaturalLanguage
 
+/**
+ NLP based tokenizer to count words, sentences, etc.
+ */
 enum Tokenizer {
   struct Result {
     let characters: Int

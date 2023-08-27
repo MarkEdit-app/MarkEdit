@@ -12,8 +12,8 @@ public struct StatisticsLocalizable {
   let words: String
   let sentences: String
   let paragraphs: String
-  let fileSize: String
   let readTime: String
+  let fileSize: String
 
   public init(
     mainTitle: String,
@@ -21,15 +21,15 @@ public struct StatisticsLocalizable {
     words: String,
     sentences: String,
     paragraphs: String,
-    fileSize: String,
-    readTime: String
+    readTime: String,
+    fileSize: String
   ) {
     self.mainTitle = mainTitle
     self.characters = characters
     self.words = words
     self.sentences = sentences
     self.paragraphs = paragraphs
-    self.fileSize = fileSize
     self.readTime = readTime
+    self.fileSize = fileSize
   }
 }

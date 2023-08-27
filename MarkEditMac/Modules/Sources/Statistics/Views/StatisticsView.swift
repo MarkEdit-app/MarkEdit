@@ -55,7 +55,7 @@ struct StatisticsView: View {
           valueText: "\(tokenizedResult.paragraphs)"
         )
 
-        if let readTime = ReadTime.compute(numberOfWords: tokenizedResult.words) {
+        if let readTime = ReadTime.estimated(of: tokenizedResult.words) {
           StatisticsCell(
             iconName: Icons.readTime,
             titleText: localizable.readTime,

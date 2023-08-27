@@ -6,6 +6,9 @@
 
 import Foundation
 
+/**
+ Utility to get human-readable file size.
+ */
 enum FileSize {
   static func readableSize(of fileURL: URL?) -> String? {
     guard let filePath = fileURL?.path else {

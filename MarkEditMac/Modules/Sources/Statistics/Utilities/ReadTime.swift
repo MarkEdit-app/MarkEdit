@@ -6,8 +6,11 @@
 
 import Foundation
 
+/**
+ Utility to estimate time needed for reading.
+ */
 enum ReadTime {
-  static func compute(numberOfWords: Int) -> String? {
+  static func estimated(of numberOfWords: Int) -> String? {
     let seconds = ceil((Double(numberOfWords) / 225) * 60)
     let formatter = DateComponentsFormatter()
 
