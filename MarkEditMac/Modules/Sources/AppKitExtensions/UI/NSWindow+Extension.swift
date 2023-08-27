@@ -68,7 +68,7 @@ public extension NSWindow {
   ///
   /// There's something called `NSToolbarItem.view`, it's non-nil only when we overwrite it.
   func toolbarButton(with itemIdentifier: NSToolbarItem.Identifier) -> NSButton? {
-    contentView?.superview?.firstDescendant { (button: NSButton) in
+    rootView?.firstDescendant { (button: NSButton) in
       guard button.className.hasPrefix("NSToolbar") else {
         return false
       }
