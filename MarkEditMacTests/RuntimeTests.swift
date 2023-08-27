@@ -85,6 +85,12 @@ final class RuntimeTests: XCTestCase {
     window.makeKeyAndOrderFront(nil)
     XCTAssertNotNil(window.toolbarEffectView)
   }
+
+  func testPrivateAppKitClasses() {
+    testExistenceOfClass(named: "_NSKeyboardFocusClipView")
+    testExistenceOfClass(named: "NSTitlebarView")
+    testExistenceOfClass(named: "NSToolbarButton")
+  }
 }
 
 // MARK: - Private
@@ -92,5 +98,9 @@ final class RuntimeTests: XCTestCase {
 private extension RuntimeTests {
   func testExistenceOfSelector(object: AnyObject, selector: String) {
     XCTAssert(object.responds(to: sel_getUid(selector)), "Missing \(selector) in \(object.self)")
+  }
+
+  func testExistenceOfClass(named className: String) {
+    XCTAssertNotNil(NSClassFromString(className), "Class \(className) cannot be found")
   }
 }
