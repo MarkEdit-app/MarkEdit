@@ -16,12 +16,13 @@ extension EditorViewController {
     }
 
     Task {
-      let (sourceText, mainTitle) = await {
+      let (sourceText, fileURL, mainTitle) = await {
         let selectedText = (try? await bridge.selection.getText()) ?? ""
         let mainTitle = Localized.Toolbar.statistics
 
         return (
           selectedText.isEmpty ? (await editorText ?? "") : selectedText,
+          selectedText.isEmpty ? document?.fileURL : nil,
           selectedText.isEmpty ? mainTitle : "\(mainTitle) (\(Localized.Settings.selection))"
         )
       }()
@@ -30,7 +31,7 @@ extension EditorViewController {
       popover.behavior = .transient
       popover.contentViewController = StatisticsController(
         sourceText: sourceText,
-        fileURL: document?.fileURL,
+        fileURL: fileURL,
         localizable: StatisticsLocalizable(
           mainTitle: mainTitle,
           characters: Localized.Statistics.characters,

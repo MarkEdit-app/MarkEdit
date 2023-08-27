@@ -9,6 +9,7 @@ import NaturalLanguage
 
 enum Tokenizer {
   struct Result {
+    let characters: Int
     let words: Int
     let sentences: Int
     let paragraphs: Int
@@ -16,6 +17,7 @@ enum Tokenizer {
 
   static func tokenize(text: String) -> Result {
     Result(
+      characters: text.count,
       words: tokenize(text: text, unit: .word),
       sentences: tokenize(text: text, unit: .sentence),
       paragraphs: tokenize(text: text, unit: .paragraph)

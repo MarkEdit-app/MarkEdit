@@ -8,16 +8,18 @@ import AppKit
 import SwiftUI
 
 struct StatisticsView: View {
-  private let sourceText: String
+  private let tokenizedResult: Tokenizer.Result
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
-  private let tokenizedResult: Tokenizer.Result
 
-  init(sourceText: String, fileURL: URL?, localizable: StatisticsLocalizable) {
-    self.sourceText = sourceText
+  init(
+    tokenizedResult: Tokenizer.Result,
+    fileURL: URL?,
+    localizable: StatisticsLocalizable
+  ) {
+    self.tokenizedResult = tokenizedResult
     self.fileURL = fileURL
     self.localizable = localizable
-    self.tokenizedResult = Tokenizer.tokenize(text: sourceText)
   }
 
   var body: some View {
@@ -32,7 +34,7 @@ struct StatisticsView: View {
         StatisticsCell(
           iconName: Icons.characters,
           titleText: localizable.characters,
-          valueText: "\(sourceText.count)"
+          valueText: "\(tokenizedResult.characters)"
         )
 
         StatisticsCell(
@@ -53,14 +55,6 @@ struct StatisticsView: View {
           valueText: "\(tokenizedResult.paragraphs)"
         )
 
-        if let fileSize = FileSize.readableSize(of: fileURL) {
-          StatisticsCell(
-            iconName: Icons.fileSize,
-            titleText: localizable.fileSize,
-            valueText: fileSize
-          )
-        }
-
         if let readTime = ReadTime.compute(numberOfWords: tokenizedResult.words) {
           StatisticsCell(
             iconName: Icons.readTime,
@@ -68,8 +62,16 @@ struct StatisticsView: View {
             valueText: readTime
           )
         }
+
+        if let fileSize = FileSize.readableSize(of: fileURL) {
+          StatisticsCell(
+            iconName: Icons.fileSize,
+            titleText: localizable.fileSize,
+            valueText: fileSize
+          )
+        }
       }
-      .padding(.horizontal, 10)
+      .padding(.horizontal, 8)
       .frame(maxWidth: .infinity)
 
       Spacer()

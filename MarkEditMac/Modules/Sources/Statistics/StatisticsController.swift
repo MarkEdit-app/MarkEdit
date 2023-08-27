@@ -16,15 +16,15 @@ public final class StatisticsController: NSViewController {
     static let contentHeight: Double = 288
   }
 
-  private let contentView: NSView
+  private let sourceText: String
+  private let fileURL: URL?
+  private let localizable: StatisticsLocalizable
+  private var contentView: NSView?
 
   public init(sourceText: String, fileURL: URL?, localizable: StatisticsLocalizable) {
-    self.contentView = NSHostingView(rootView: StatisticsView(
-      sourceText: sourceText,
-      fileURL: fileURL,
-      localizable: localizable
-    ))
-
+    self.sourceText = sourceText
+    self.fileURL = fileURL
+    self.localizable = localizable
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -40,12 +40,45 @@ public final class StatisticsController: NSViewController {
       width: Constants.contentWidth,
       height: Constants.contentHeight
     ))
+  }
 
-    view.addSubview(contentView)
+  override public func viewDidLoad() {
+    super.viewDidLoad()
+
+    let spinner = NSProgressIndicator()
+    spinner.style = .spinning
+    spinner.translatesAutoresizingMaskIntoConstraints = false
+    spinner.startAnimation(nil)
+    view.addSubview(spinner)
+
+    NSLayoutConstraint.activate([
+      spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+    ])
+
+    DispatchQueue.global(qos: .userInitiated).async {
+      // Natural language processing is time-consuming for large documents
+      let tokenizedResult = Tokenizer.tokenize(text: self.sourceText)
+      // Render the result view and remove the spinner on main thread
+      DispatchQueue.main.async {
+        let contentView = NSHostingView(rootView: StatisticsView(
+          tokenizedResult: tokenizedResult,
+          fileURL: self.fileURL,
+          localizable: self.localizable
+        ))
+
+        spinner.stopAnimation(nil)
+        spinner.removeFromSuperview()
+
+        self.contentView = contentView
+        self.view.addSubview(contentView)
+        self.view.needsLayout = true
+      }
+    }
   }
 
   override public func viewDidLayout() {
     super.viewDidLayout()
-    contentView.frame = view.bounds
+    contentView?.frame = view.bounds
   }
 }
