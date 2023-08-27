@@ -84,8 +84,8 @@ enum Localized {
     static let words = String(localized: "Words", comment: "Statistics label: count words")
     static let sentences = String(localized: "Sentences", comment: "Statistics label: count sentences")
     static let paragraphs = String(localized: "Paragraphs", comment: "Statistics label: count paragraphs")
-    static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
     static let readTime = String(localized: "Read Time", comment: "Statistics label: count read time")
+    static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
   }
 
   enum Settings {

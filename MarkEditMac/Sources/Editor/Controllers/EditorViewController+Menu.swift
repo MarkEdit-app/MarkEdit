@@ -354,7 +354,10 @@ private extension EditorViewController {
   }
 
   @IBAction func toggleStatistics(_ sender: Any?) {
-    toggleStatisticsPopover(sourceView: statisticsSourceView)
+    // To wait for the menu to reset its state
+    DispatchQueue.main.async {
+      self.toggleStatisticsPopover(sourceView: self.statisticsSourceView)
+    }
   }
 
   @IBAction func toggleGrammarly(_ sender: Any?) {

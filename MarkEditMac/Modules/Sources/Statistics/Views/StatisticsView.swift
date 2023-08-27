@@ -88,6 +88,6 @@ private enum Icons {
   static let words = "text.bubble"
   static let sentences = "textformat.abc.dottedunderline"
   static let paragraphs = "paragraphsign"
-  static let fileSize = "doc.text.below.ecg"
   static let readTime = "stopwatch"
+  static let fileSize = "doc.text.below.ecg"
 }
