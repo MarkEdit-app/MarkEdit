@@ -54,7 +54,7 @@ public final class StatisticsController: NSViewController {
     NSLayoutConstraint.activate([
       spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-      spinner.widthAnchor.constraint(equalToConstant: 24),
+      spinner.widthAnchor.constraint(equalTo: spinner.heightAnchor),
       spinner.heightAnchor.constraint(equalToConstant: 24),
     ])
 
