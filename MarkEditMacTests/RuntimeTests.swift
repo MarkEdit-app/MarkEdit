@@ -88,6 +88,7 @@ final class RuntimeTests: XCTestCase {
 
   func testPrivateAppKitClasses() {
     testExistenceOfClass(named: "_NSKeyboardFocusClipView")
+    testExistenceOfClass(named: "NSToolbarFullScreenWindow")
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
   }

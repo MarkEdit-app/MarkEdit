@@ -8,7 +8,7 @@ import AppKit
 
 public extension NSWindow {
   var toolbarContainerView: NSView? {
-    rootView?.firstDescendant { (view: NSView) in
+    toolbarRootView?.firstDescendant { (view: NSView) in
       view.className == "NSTitlebarView"
     }
   }
@@ -59,7 +59,7 @@ public extension NSWindow {
   ///
   /// There's no public API to programmatically show the menu assigned to an NSToolbarItem.
   func popUpButton(with menuIdentifier: NSUserInterfaceItemIdentifier) -> NSPopUpButton? {
-    rootView?.firstDescendant { (button: NSPopUpButton) in
+    toolbarRootView?.firstDescendant { (button: NSPopUpButton) in
       button.menu?.identifier == menuIdentifier
     }
   }
@@ -68,7 +68,7 @@ public extension NSWindow {
   ///
   /// There's something called `NSToolbarItem.view`, it's non-nil only when we overwrite it.
   func toolbarButton(with itemIdentifier: NSToolbarItem.Identifier) -> NSButton? {
-    rootView?.firstDescendant { (button: NSButton) in
+    toolbarRootView?.firstDescendant { (button: NSButton) in
       guard button.className == "NSToolbarButton" else {
         return false
       }
@@ -85,12 +85,23 @@ public extension NSWindow {
 // MARK: - Private
 
 private extension NSWindow {
-  var rootView: NSView? {
-    var node = contentView
+  var toolbarRootView: NSView? {
+    var node = toolbarHostingWindow.contentView
     while node?.superview != nil {
       node = node?.superview
     }
 
     return node
+  }
+
+  var toolbarHostingWindow: NSWindow {
+    guard NSApp.presentationOptions.contains(.fullScreen) else {
+      return self
+    }
+
+    // NSToolbarFullScreenWindow is used when the app is in full-screen mode
+    return NSApp.windows.first {
+      $0.isKeyWindow && $0.className.hasPrefix("NSToolbarFullScreen")
+    } ?? self
   }
 }
