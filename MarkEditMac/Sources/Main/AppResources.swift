@@ -55,6 +55,7 @@ enum Localized {
     static let insertTable = String(localized: "Table", comment: "Toolbar item to insert table")
     static let insertCode = String(localized: "Insert Code", comment: "Toolbar item to insert code")
     static let textFormat = String(localized: "Text Format", comment: "Toolbar item to use text format menu")
+    static let statistics = String(localized: "Statistics", comment: "Toolbar item to show statistics")
     static let shareDocument = String(localized: "Share this document", comment: "Toolbar item to share the document")
     static let copyPandocCommand = String(localized: "Copy Pandoc Command", comment: "Toolbar item to copy pandoc command")
   }
@@ -76,6 +77,15 @@ enum Localized {
     static let openDocument = String(localized: "Open Document", comment: "Menu item: open an existing document")
     static let newDocument = String(localized: "New Document", comment: "Menu item: create a new document")
     static let gotoLine = String(localized: "Go to Line", comment: "Placeholder text for goto line window")
+  }
+
+  enum Statistics {
+    static let characters = String(localized: "Characters", comment: "Statistics label: count characters")
+    static let words = String(localized: "Words", comment: "Statistics label: count words")
+    static let sentences = String(localized: "Sentences", comment: "Statistics label: count sentences")
+    static let paragraphs = String(localized: "Paragraphs", comment: "Statistics label: count paragraphs")
+    static let readTime = String(localized: "Read Time", comment: "Statistics label: count read time")
+    static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
   }
 
   enum Settings {
@@ -171,6 +181,7 @@ enum Icons {
   static let arrowUturnBackwardCircle = "arrow.uturn.backward.circle"
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"
+  static let chartPie = "chart.pie"
   static let chevronLeft = "chevron.left"
   static let chevronRight = "chevron.right"
   static let curlybracesSquare = "curlybraces.square"

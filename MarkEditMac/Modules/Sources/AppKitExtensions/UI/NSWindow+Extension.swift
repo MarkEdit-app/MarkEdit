@@ -63,6 +63,23 @@ public extension NSWindow {
       button.menu?.identifier == menuIdentifier
     }
   }
+
+  /// Returns the underlying view of an NSToolbarItem, your trustworthy friend.
+  ///
+  /// There's something called `NSToolbarItem.view`, it's non-nil only when we overwrite it.
+  func toolbarButton(with itemIdentifier: NSToolbarItem.Identifier) -> NSButton? {
+    rootView?.firstDescendant { (button: NSButton) in
+      guard button.className == "NSToolbarButton" else {
+        return false
+      }
+
+      guard let item = button.value(forKey: "item") as? NSToolbarItem else {
+        return false
+      }
+
+      return item.itemIdentifier == itemIdentifier
+    }
+  }
 }
 
 // MARK: - Private

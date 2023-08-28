@@ -175,23 +175,6 @@ extension EditorViewController {
   func startWebViewEditing() {
     view.window?.makeFirstResponder(webView)
   }
-
-  func presentPopover(_ popover: NSPopover, rect: CGRect) {
-    if focusTrackingView.superview == nil {
-      webView.addSubview(focusTrackingView)
-    }
-
-    // The origin has to be inside the viewport, and the size cannot be zero
-    focusTrackingView.frame = CGRect(
-      x: max(0, rect.minX),
-      y: max(0, rect.minY),
-      width: max(1, rect.width),
-      height: max(1, rect.height)
-    )
-
-    presentedPopover = popover
-    popover.show(relativeTo: rect, of: focusTrackingView, preferredEdge: .maxX)
-  }
 }
 
 // MARK: - Private

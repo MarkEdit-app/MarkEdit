@@ -100,6 +100,9 @@
 /* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "buJ-ug-pKt"; */
 "buJ-ug-pKt.title" = "檢索所選內容";
 
+/* Class = "NSMenuItem"; title = "Statistics"; ObjectID = "Bvk-zs-CQB"; */
+"Bvk-zs-CQB.title" = "統計數字";
+
 /* Class = "NSMenuItem"; title = "Save As…"; ObjectID = "Bw7-FT-i3A"; */
 "Bw7-FT-i3A.title" = "儲存為…";
 

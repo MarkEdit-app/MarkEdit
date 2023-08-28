@@ -572,6 +572,11 @@ Gw
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="vuH-Ou-wb9"/>
+                                        <menuItem title="Statistics" keyEquivalent="I" id="Bvk-zs-CQB" userLabel="Statistics">
+                                            <connections>
+                                                <action selector="toggleStatistics:" target="Ady-hI-5gd" id="aCq-vt-CmH"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Grammarly" keyEquivalent="g" id="4Hc-LC-ge9">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>

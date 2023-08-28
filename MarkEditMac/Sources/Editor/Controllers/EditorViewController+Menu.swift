@@ -353,6 +353,13 @@ private extension EditorViewController {
     bridge.format.performEditCommand(command: command)
   }
 
+  @IBAction func toggleStatistics(_ sender: Any?) {
+    // To wait for the menu to reset its state
+    DispatchQueue.main.async {
+      self.toggleStatisticsPopover(sourceView: self.statisticsSourceView)
+    }
+  }
+
   @IBAction func toggleGrammarly(_ sender: Any?) {
     (sender as? NSMenuItem)?.toggle()
     Grammarly.shared.toggle(bridge: bridge.grammarly)

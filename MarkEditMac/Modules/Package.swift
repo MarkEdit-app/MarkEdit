@@ -34,6 +34,10 @@ let package = Package(
       targets: ["SettingsUI"]
     ),
     .library(
+      name: "Statistics",
+      targets: ["Statistics"]
+    ),
+    .library(
       name: "TextBundle",
       targets: ["TextBundle"]
     ),
@@ -93,6 +97,14 @@ let package = Package(
       name: "SettingsUI",
       dependencies: ["AppKitExtensions"],
       path: "Sources/SettingsUI",
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
+    .target(
+      name: "Statistics",
+      dependencies: ["AppKitExtensions"],
+      path: "Sources/Statistics",
       plugins: [
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
       ]

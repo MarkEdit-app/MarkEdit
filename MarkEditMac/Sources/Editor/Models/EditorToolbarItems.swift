@@ -50,6 +50,7 @@ extension NSToolbarItem {
     case .toggleStrikethrough: return "⌃ ⌘ S"
     case .insertLink: return "⌘ K"
     case .insertImage: return "⌃ ⌘ K"
+    case .statistics: return "⇧ ⌘ I"
     default: return nil
     }
   }
@@ -69,6 +70,7 @@ extension NSToolbarItem.Identifier {
   static let insertTable = newItem("insertTable")
   static let insertCode = newItem("insertCode")
   static let textFormat = newItem("textFormat")
+  static let statistics = newItem("statistics")
   static let shareDocument = newItem("shareDocument")
   static let copyPandocCommand = newItem("copyPandocCommand")
 
@@ -97,6 +99,7 @@ extension NSToolbarItem.Identifier {
       .insertTable,
       .insertCode,
       .textFormat,
+      .statistics,
       .shareDocument,
       .copyPandocCommand,
       .space,
@@ -127,6 +130,7 @@ private extension NSToolbarItem.Identifier {
     case .insertTable: return Localized.Toolbar.insertTable
     case .insertCode: return Localized.Toolbar.insertCode
     case .textFormat: return Localized.Toolbar.textFormat
+    case .statistics: return Localized.Toolbar.statistics
     case .shareDocument: return Localized.Toolbar.shareDocument
     case .copyPandocCommand: return Localized.Toolbar.copyPandocCommand
     default: fatalError("Unexpected toolbar item identifier: \(self)")
@@ -148,6 +152,7 @@ private extension NSToolbarItem.Identifier {
     case .insertTable: return Icons.tablecells
     case .insertCode: return Icons.curlybracesSquare
     case .textFormat: return Icons.textformat
+    case .statistics: return Icons.chartPie
     case .shareDocument: return Icons.squareAndArrowUp
     case .copyPandocCommand: return Icons.terminal
     default: fatalError("Unexpected toolbar item identifier: \(self)")

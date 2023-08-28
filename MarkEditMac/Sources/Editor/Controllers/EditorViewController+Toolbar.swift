@@ -13,6 +13,13 @@ extension EditorViewController {
     view.window?.popUpButton(with: Constants.tableOfContentsMenuIdentifier)
   }
 
+  var statisticsSourceView: NSView? {
+    // Present the popover relative to the toolbar item
+    view.window?.toolbarButton(with: statisticsItem.itemIdentifier) ??
+    // Present the popover relative to the document title view
+    view.window?.toolbarTitleView
+  }
+
   private enum Constants {
     static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
     static let normalizedButtonSize: Double = 15 // "bold" icon looks bigger than expected, fix it
@@ -25,6 +32,8 @@ extension EditorViewController {
   }
 
   func showTableOfContentsMenu() {
+    presentedPopover?.close()
+
     // Pop up the menu relative to the toolbar item
     if let tableOfContentsMenuButton {
       tableOfContentsMenuButton.performClick(nil)
@@ -36,7 +45,7 @@ extension EditorViewController {
        let sourceView = view.window?.toolbarTitleView {
       menu.popUp(
         positioning: nil,
-        at: CGPoint(x: sourceView.bounds.maxX, y: sourceView.bounds.maxY),
+        at: CGPoint(x: sourceView.bounds.minX, y: sourceView.bounds.maxY + 15),
         in: sourceView
       )
       return
@@ -67,6 +76,7 @@ extension EditorViewController: NSToolbarDelegate {
       case .insertTable: return insertTableItem
       case .insertCode: return insertCodeItem
       case .textFormat: return textFormatItem
+      case .statistics: return statisticsItem
       case .shareDocument: return shareDocumentItem
       case .copyPandocCommand: return copyPandocCommandItem
       default: return nil
@@ -208,6 +218,12 @@ private extension EditorViewController {
 
   var textFormatItem: NSToolbarItem {
     .with(identifier: .textFormat, menu: NSApp.appDelegate?.textFormatMenu?.copiedMenu)
+  }
+
+  var statisticsItem: NSToolbarItem {
+    .with(identifier: .statistics) { [weak self] in
+      self?.toggleStatisticsPopover(sourceView: self?.statisticsSourceView)
+    }
   }
 
   var shareDocumentItem: NSToolbarItem {

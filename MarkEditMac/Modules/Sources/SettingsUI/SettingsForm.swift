@@ -30,7 +30,7 @@ public struct SettingsForm: View {
   public var body: some View {
     let sections = builder()
     Form {
-      ForEach(0 ..< sections.count, id: \.self) { index in
+      ForEach(0..<sections.count, id: \.self) { index in
         sections[index]
         VStack {}.padding(.bottom, index < sections.count - 1 ? 12 : 0)
       }
