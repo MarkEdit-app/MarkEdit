@@ -144,3 +144,5 @@ export function refreshEditFocus() {
     userEvent: 'select', // Fake a user event
   });
 }
+
+export { selectedLineColumn } from './selectedLineColumn';

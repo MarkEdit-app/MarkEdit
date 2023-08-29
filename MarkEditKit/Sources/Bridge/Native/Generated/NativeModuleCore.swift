@@ -13,7 +13,8 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyViewportScaleDidChange()
-  func notifyViewDidUpdate(contentEdited: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
+  func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
+  func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
 }
 
 public extension NativeModuleCore {
@@ -31,6 +32,9 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyViewDidUpdate": { [weak self] in
       self?.notifyViewDidUpdate(parameters: $0)
+    },
+    "notifyCompositionEnded": { [weak self] in
+      self?.notifyCompositionEnded(parameters: $0)
     },
   ]
 
@@ -54,6 +58,7 @@ final class NativeBridgeCore: NativeBridge {
   private func notifyViewDidUpdate(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var contentEdited: Bool
+      var compositionEnded: Bool
       var isDirty: Bool
       var selectedLineColumn: LineColumnInfo
     }
@@ -66,7 +71,24 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifyViewDidUpdate(contentEdited: message.contentEdited, isDirty: message.isDirty, selectedLineColumn: message.selectedLineColumn)
+    module.notifyViewDidUpdate(contentEdited: message.contentEdited, compositionEnded: message.compositionEnded, isDirty: message.isDirty, selectedLineColumn: message.selectedLineColumn)
+    return .success(nil)
+  }
+
+  private func notifyCompositionEnded(parameters: Data) -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var selectedLineColumn: LineColumnInfo
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyCompositionEnded(selectedLineColumn: message.selectedLineColumn)
     return .success(nil)
   }
 }

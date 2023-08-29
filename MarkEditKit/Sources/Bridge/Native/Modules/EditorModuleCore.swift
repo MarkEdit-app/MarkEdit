@@ -12,9 +12,11 @@ public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreViewDidUpdate(
     _ sender: EditorModuleCore,
     contentEdited: Bool,
+    compositionEnded: Bool,
     isDirty: Bool,
     selectedLineColumn: LineColumnInfo
   )
+  func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo)
 }
 
 public final class EditorModuleCore: NativeModuleCore {
@@ -34,14 +36,20 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyViewDidUpdate(
     contentEdited: Bool,
+    compositionEnded: Bool,
     isDirty: Bool,
     selectedLineColumn: LineColumnInfo
   ) {
     delegate?.editorCoreViewDidUpdate(
       self,
       contentEdited: contentEdited,
+      compositionEnded: compositionEnded,
       isDirty: isDirty,
       selectedLineColumn: selectedLineColumn
     )
+  }
+
+  public func notifyCompositionEnded(selectedLineColumn: LineColumnInfo) {
+    delegate?.editorCoreCompositionEnded(self, selectedLineColumn: selectedLineColumn)
   }
 }

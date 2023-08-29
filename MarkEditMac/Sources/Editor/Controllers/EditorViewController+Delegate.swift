@@ -95,11 +95,17 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreViewDidUpdate(
     _ sender: EditorModuleCore,
     contentEdited: Bool,
+    compositionEnded: Bool,
     isDirty: Bool,
     selectedLineColumn: LineColumnInfo
   ) {
-    statusView.updateLineColumn(selectedLineColumn)
-    layoutStatusView()
+    if compositionEnded {
+      // Update the selection only when composition ended,
+      // to avoid flickers caused by unstable updates.
+      //
+      // This is meaningful especially for input methods like Pinyin.
+      editorCoreCompositionEnded(sender, selectedLineColumn: selectedLineColumn)
+    }
 
     if contentEdited {
       document?.markContentDirty(isDirty)
@@ -114,6 +120,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     } else {
       cancelCompletion()
     }
+  }
+
+  func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo) {
+    statusView.updateLineColumn(selectedLineColumn)
+    layoutStatusView()
   }
 }
 
