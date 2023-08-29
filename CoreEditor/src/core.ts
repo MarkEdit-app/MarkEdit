@@ -94,6 +94,7 @@ export function resetEditor(
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifyViewDidUpdate({
     contentEdited: false,
+    compositionEnded: true,
     isDirty: false,
     selectedLineColumn: {
       lineNumber: 1 as CodeGen_Int,

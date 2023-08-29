@@ -1,12 +1,11 @@
 import { EditorView } from '@codemirror/view';
 import { InvisiblesBehavior } from '../../config';
 import { editingState } from '../../common/store';
-import { selectedLineColumn } from '../selection/selectedLineColumn';
 import { setInvisiblesBehavior } from '../config';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty } from '../history';
 import { tokenizePosition } from '../tokenizer';
-import { scrollCaretToVisible, scrollToSelection } from '../../modules/selection';
+import { scrollCaretToVisible, scrollToSelection, selectedLineColumn } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
 
 import selectedRange from '../selection/selectedRanges';
@@ -103,6 +102,7 @@ export function observeChanges() {
       // we want to be responsive for every key stroke.
       window.nativeModules.core.notifyViewDidUpdate({
         contentEdited: update.docChanged,
+        compositionEnded: editingState.compositionEnded,
         isDirty: isContentDirty(),
         selectedLineColumn: selectedLineColumn(),
       });

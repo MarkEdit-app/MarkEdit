@@ -63,6 +63,12 @@ export function startObserving() {
 
   document.addEventListener('compositionend', () => {
     editingState.compositionEnded = true;
+
+    // Input methods like Pinyin may not trigger 'inputHandler' on 'compositionend',
+    // manually update the selection with an additional call.
+    window.nativeModules.core.notifyCompositionEnded({
+      selectedLineColumn: selection.selectedLineColumn(),
+    });
   });
 
   document.addEventListener('scroll', () => {
