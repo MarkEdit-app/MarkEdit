@@ -101,7 +101,7 @@ private extension NSWindow {
 
     // NSToolbarFullScreenWindow is used when the app is in full-screen mode
     return NSApp.windows.first {
-      $0.isKeyWindow && $0.className.hasPrefix("NSToolbarFullScreen")
+      $0.isMainWindow && $0.className.hasPrefix("NSToolbarFullScreen")
     } ?? self
   }
 }
