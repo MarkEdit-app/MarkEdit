@@ -101,7 +101,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
   ) {
     if compositionEnded {
       // Update the selection only when composition ended,
-      // to avoid flickers caused by unstable updates.
+      // to avoid flickers caused by false positives of text selections,
+      // i.e., marked text is considered "selected".
       //
       // This is meaningful especially for input methods like Pinyin.
       editorCoreCompositionEnded(sender, selectedLineColumn: selectedLineColumn)
