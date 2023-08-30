@@ -133,7 +133,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
       }
 
       // Fallback to local files, e.g., file:///Users/cyan/...
-      return baseURL.appendingPathComponent(link)
+      return baseURL.appendingPathComponent(link.removingPercentEncoding ?? link)
     }()
 
     // Open or reveal, fallback to opening the document folder if failed
