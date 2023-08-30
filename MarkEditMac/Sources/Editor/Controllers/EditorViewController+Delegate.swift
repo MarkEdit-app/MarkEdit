@@ -24,13 +24,6 @@ extension EditorViewController: WKUIDelegate {
       Grammarly.shared.startOAuth(bridge: bridge.grammarly)
     }
 
-    // Instead of creating a new WebView, opening the link using the system default behavior.
-    //
-    // It's a local file when it starts with baseURL, replace it with folder path.
-    if let url = URL(string: url.absoluteString.replacingOccurrences(of: EditorWebView.baseURL?.absoluteString ?? "", with: document?.baseURL?.absoluteString ?? "")) {
-      NSWorkspace.shared.openOrReveal(url: url)
-    }
-
     return nil
   }
 }
@@ -126,6 +119,27 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo) {
     statusView.updateLineColumn(selectedLineColumn)
     layoutStatusView()
+  }
+
+  func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String) {
+    guard let baseURL = document?.baseURL else {
+      return Logger.assertFail("The document should always have a baseURL")
+    }
+
+    let url = {
+      // Try url with schemes first, e.g., https://markedit.app
+      if let url = URL(string: link), url.scheme?.isEmpty == false {
+        return url
+      }
+
+      // Fallback to local files, e.g., file:///Users/cyan/...
+      return baseURL.appendingPathComponent(link)
+    }()
+
+    // Open or reveal, fallback to opening the document folder if failed
+    if !NSWorkspace.shared.openOrReveal(url: url) {
+      NSWorkspace.shared.activateFileViewerSelecting([baseURL])
+    }
   }
 }
 

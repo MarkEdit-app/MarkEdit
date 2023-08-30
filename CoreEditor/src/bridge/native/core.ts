@@ -11,4 +11,5 @@ export interface NativeModuleCore extends NativeModule {
   notifyViewportScaleDidChange(): void;
   notifyViewDidUpdate(args: { contentEdited: boolean; compositionEnded: boolean; isDirty: boolean; selectedLineColumn: LineColumnInfo }): void;
   notifyCompositionEnded({ selectedLineColumn }: { selectedLineColumn: LineColumnInfo }): void;
+  notifyLinkClicked({ link }: { link: string }): void;
 }

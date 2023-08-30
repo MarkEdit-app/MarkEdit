@@ -15,6 +15,7 @@ public protocol NativeModuleCore: NativeModule {
   func notifyViewportScaleDidChange()
   func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
   func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
+  func notifyLinkClicked(link: String)
 }
 
 public extension NativeModuleCore {
@@ -35,6 +36,9 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyCompositionEnded": { [weak self] in
       self?.notifyCompositionEnded(parameters: $0)
+    },
+    "notifyLinkClicked": { [weak self] in
+      self?.notifyLinkClicked(parameters: $0)
     },
   ]
 
@@ -89,6 +93,23 @@ final class NativeBridgeCore: NativeBridge {
     }
 
     module.notifyCompositionEnded(selectedLineColumn: message.selectedLineColumn)
+    return .success(nil)
+  }
+
+  private func notifyLinkClicked(parameters: Data) -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var link: String
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyLinkClicked(link: message.link)
     return .success(nil)
   }
 }

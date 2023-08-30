@@ -17,6 +17,7 @@ public protocol EditorModuleCoreDelegate: AnyObject {
     selectedLineColumn: LineColumnInfo
   )
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo)
+  func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String)
 }
 
 public final class EditorModuleCore: NativeModuleCore {
@@ -51,5 +52,9 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyCompositionEnded(selectedLineColumn: LineColumnInfo) {
     delegate?.editorCoreCompositionEnded(self, selectedLineColumn: selectedLineColumn)
+  }
+
+  public func notifyLinkClicked(link: String) {
+    delegate?.editorCoreLinkClicked(self, link: link)
   }
 }
