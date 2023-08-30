@@ -1,4 +1,4 @@
-import { isProd, isWebKit } from '../common/env';
+import { isWebKit } from '../common/env';
 
 /**
  * Module used to send message to native.
@@ -32,9 +32,7 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
         if (isWebKit) {
           // eslint-disable-next-line promise/prefer-await-to-then
           window.webkit?.messageHandlers?.bridge?.postMessage(message).then(resolve, reject);
-        }
-
-        if (!isProd) {
+        } else {
           console.log(message);
         }
       });

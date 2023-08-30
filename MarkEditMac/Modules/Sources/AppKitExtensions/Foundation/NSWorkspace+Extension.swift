@@ -29,7 +29,7 @@ public extension NSWorkspace {
 
   /// Open the URL if we can, otherwise reveal it in Finder.
   ///
-  /// The return value indicates whether it's successfully opened.
+  /// The return value indicates whether it's successfully opened or revealed.
   @discardableResult
   func openOrReveal(url: URL) -> Bool {
     // It's not a local file or we have read access, we just open it
@@ -38,7 +38,11 @@ public extension NSWorkspace {
     }
 
     // Otherwise, we can only reveal it in Finder
-    activateFileViewerSelecting([url])
+    if FileManager.default.fileExists(atPath: url.path) {
+      activateFileViewerSelecting([url])
+      return true
+    }
+
     return false
   }
 }

@@ -13,8 +13,7 @@ export function startObserving() {
   // When window loses focus, clear internal states
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
-      storage.isMouseDown = false;
-      storage.isMetaKeyDown = false;
+      resetKeyStates();
     }
   });
 
@@ -89,6 +88,11 @@ export function isMouseDown() {
 
 export function isMetaKeyDown() {
   return storage.isMetaKeyDown;
+}
+
+export function resetKeyStates() {
+  storage.isMouseDown = false;
+  storage.isMetaKeyDown = false;
 }
 
 function observeEventsForTokenization() {
