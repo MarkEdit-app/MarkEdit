@@ -4,6 +4,7 @@ import { Tag, tags as defaultTags } from '@lezer/highlight';
 import { StyleSpec } from 'style-mod';
 import { ColorScheme, EditorColors } from './types';
 import { shadowableTextColor } from './helper';
+import { isChrome } from '../common/env';
 
 // Extend tags by adding Markdown-specific ones
 const tags = {
@@ -68,7 +69,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   // Extended
   '.cm-visibleTab': (() => {
     // Chrome right now doesn't support mask-image, prefix them with -webkit- for testing purpose
-    const prefix = /Chrome/.test(navigator.userAgent) ? '-webkit-mask' : 'mask';
+    const prefix = isChrome ? '-webkit-mask' : 'mask';
     const attributes: { [key: string]: string } = {};
     attributes[`${prefix}-image`] = 'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20"><path stroke="%23888" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M190.5 5l6 5m-6 5l6-5M1 10h195"/></svg>\')';
     attributes[`${prefix}-size`] = 'auto 100%';
