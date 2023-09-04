@@ -43,7 +43,7 @@ final class EditorDocument: NSDocument {
   }
 
   var textFileURL: URL? {
-    fileURL?.appendingPathComponent(textBundle?.textFileName ?? "")
+    fileURL?.appending(path: textBundle?.textFileName ?? "", directoryHint: .notDirectory)
   }
 
   private weak var hostViewController: EditorViewController?

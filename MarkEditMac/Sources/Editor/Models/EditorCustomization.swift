@@ -51,7 +51,7 @@ final class EditorCustomization {
       for: .documentDirectory,
       in: .userDomainMask
     )
-    .first?.appendingPathComponent(fileType.fileName)
+    .first?.appending(path: fileType.fileName, directoryHint: .notDirectory)
   }
 
   var contents: String {

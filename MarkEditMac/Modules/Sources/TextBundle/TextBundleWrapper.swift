@@ -42,7 +42,7 @@ public struct TextBundleWrapper {
   }
 
   public func textFilePath(baseURL: URL) -> String? {
-    baseURL.appendingPathComponent(textFileName).path
+    baseURL.appending(path: textFileName, directoryHint: .notDirectory).path
   }
 
   /// Create a new FileWrapper with text file data.
