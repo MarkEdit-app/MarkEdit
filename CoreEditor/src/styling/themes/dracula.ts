@@ -18,7 +18,7 @@ const colors: EditorColors = {
   matchingBracket: '#263032',
   lineNumber: palette.gray,
   searchMatch: '#ffffff40',
-  selectionHighlight: '#4244507f',
+  selectionHighlight: '#424450',
   visibleSpace: '#ffffff1a',
   lighterBackground: '#ffffff0d',
   diffAdded: '#3e473d',
