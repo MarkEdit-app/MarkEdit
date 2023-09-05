@@ -11,11 +11,9 @@ import WebKit
  */
 public final class EditorMessageHandler: NSObject, WKScriptMessageHandlerWithReply {
   private let modules: NativeModules
-  private let webViewProvider: (() -> WKWebView?)
 
-  public init(modules: NativeModules, webViewProvider: @escaping (() -> WKWebView?)) {
+  public init(modules: NativeModules) {
     self.modules = modules
-    self.webViewProvider = webViewProvider
   }
 
   @MainActor

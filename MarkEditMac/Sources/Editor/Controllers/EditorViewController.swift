@@ -88,10 +88,7 @@ final class EditorViewController: NSViewController {
       EditorModuleTokenizer(),
     ])
 
-    let handler = EditorMessageHandler(modules: modules) { [weak self] in
-      self?.webView
-    }
-
+    let handler = EditorMessageHandler(modules: modules)
     let controller = WKUserContentController()
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
