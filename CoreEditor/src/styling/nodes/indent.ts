@@ -63,10 +63,7 @@ function getTextIndent(text: string) {
 
   const width = (() => {
     if (measurableFonts().includes(window.config.fontFamily)) {
-      // Preferred approach, works for system fonts
-      const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-      ctx.font = font;
-      return `${ctx.measureText(text).width}px`;
+      return measureTextPreferred(text, font);
     } else {
       return measureTextFallback(text, font);
     }
@@ -76,8 +73,17 @@ function getTextIndent(text: string) {
   return width;
 }
 
+function measureTextPreferred(text: string, font: string) {
+  // Preferred approach, works for built-in fonts
+  const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+  context.font = font;
+
+  const width = context.measureText(text).width;
+  return `${width}px`;
+}
+
 function measureTextFallback(text: string, font: string) {
-  // It's similar to measureText, with an actual element created to fit more fonts
+  // It's similar to context.measureText, with an actual element created to fit more fonts
   const element = document.createElement('div');
   element.style.position = 'absolute';
   element.style.visibility = 'hidden';
