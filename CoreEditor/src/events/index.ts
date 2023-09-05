@@ -10,13 +10,6 @@ import * as invisible from '../styling/nodes/invisible';
 import * as link from '../styling/nodes/link';
 
 export function startObserving() {
-  // When window loses focus, clear internal states
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') {
-      resetKeyStates();
-    }
-  });
-
   document.addEventListener('click', event => {
     grammarly.centerActiveDialog();
     selection.selectWholeLineIfNeeded(event);

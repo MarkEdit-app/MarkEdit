@@ -35,6 +35,10 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     }
   }
 
+  func windowDidResignKey(_ notification: Notification) {
+    editorViewController?.bridge.core.handleFocusLost()
+  }
+
   func windowDidResize(_ notification: Notification) {
     window?.saveFrame(usingName: windowFrameAutosaveName)
   }
