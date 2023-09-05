@@ -58,22 +58,12 @@ class Layer extends RectangleMarker {
     super(layerClass, rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
     this.rect = rectToDraw;
 
-    // We use box shadow to draw inner borders, use an inset to hide the left and right borders
-    const borderInset = (() => {
-      if (window.colors?.lineBorder === undefined) {
-        return 0;
-      }
-
-      // Slightly bigger to avoid precision issues
-      return Math.ceil(borderWidth);
-    })();
-
     const style = this.element.style;
     style.position = 'absolute';
-    style.left = `${-borderInset}px`;
+    style.left = '0px';
     style.top = '0px';
     style.height = '100%';
-    style.width = `calc(100% + ${borderInset * 2}px)`;
+    style.width = '100%';
   }
 
   draw() {
