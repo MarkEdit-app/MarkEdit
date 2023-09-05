@@ -32,7 +32,7 @@ export const contentIndentStyle = createDecoPlugin(() => {
     const deco = Decoration.line({
       class: className,
       attributes: {
-        style: `text-indent: -${indent}px; margin-inline-start: ${indent}px;`,
+        style: `text-indent: -${indent}; margin-inline-start: ${indent};`,
       },
     });
 
@@ -61,16 +61,56 @@ function getTextIndent(text: string) {
     return cachedValue;
   }
 
+  const width = (() => {
+    if (measurableFonts().includes(window.config.fontFamily)) {
+      return measureTextPreferred(text, font);
+    } else {
+      return measureTextFallback(text, font);
+    }
+  })();
+
+  storage.cachedIndents[key] = width;
+  return width;
+}
+
+function measureTextPreferred(text: string, font: string) {
+  // Preferred approach, works for built-in fonts
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
   context.font = font;
 
-  const metrics = context.measureText(text);
-  storage.cachedIndents[key] = metrics.width;
-  return metrics.width;
+  const width = context.measureText(text).width;
+  return `${width}px`;
+}
+
+function measureTextFallback(text: string, font: string) {
+  // It's similar to context.measureText, with an actual element created to fit more fonts
+  const element = document.createElement('div');
+  element.style.position = 'absolute';
+  element.style.visibility = 'hidden';
+  element.style.left = '-9999px';
+  element.style.font = font;
+  element.innerText = text.replace(/ /g, '\u00a0'); // &nbsp;
+
+  document.body.appendChild(element);
+  const width = getComputedStyle(element).width; // This value is rounded
+
+  document.body.removeChild(element);
+  return width;
+}
+
+function measurableFonts() {
+  // measureText doesn't work well with some fonts, e.g., Iosevka
+  return [
+    'monospace',
+    'system-ui',
+    'ui-monospace',
+    'ui-rounded',
+    'ui-serif',
+  ];
 }
 
 const storage: {
-  cachedIndents: { [key: string]: number };
+  cachedIndents: { [key: string]: string };
 } = {
   cachedIndents: {},
 };
