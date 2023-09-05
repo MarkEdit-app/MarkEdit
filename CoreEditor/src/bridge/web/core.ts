@@ -6,6 +6,7 @@ import {
   getEditorText,
   insertText,
   replaceText,
+  handleFocusLost,
   handleMouseEntered,
   handleMouseExited,
 } from '../../core';
@@ -21,6 +22,7 @@ export interface WebModuleCore extends WebModule {
   getEditorText(): string;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
+  handleFocusLost(): void;
   handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number } ): void;
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number } ): void;
 }
@@ -44,6 +46,10 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void {
     replaceText(text, granularity);
+  }
+
+  handleFocusLost(): void {
+    handleFocusLost();
   }
 
   handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number }): void {

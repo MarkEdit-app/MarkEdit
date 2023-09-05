@@ -76,6 +76,10 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.replaceText", message: message, completion: completion)
   }
 
+  public func handleFocusLost(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.core.handleFocusLost", completion: completion)
+  }
+
   public func handleMouseEntered(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let clientX: Double

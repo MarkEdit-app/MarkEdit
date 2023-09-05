@@ -4,6 +4,7 @@ import { editingState } from './common/store';
 import { getViewportScale } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
+import * as events from './events';
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
@@ -161,6 +162,10 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
       replaceSelections(text);
       break;
   }
+}
+
+export function handleFocusLost() {
+  events.resetKeyStates();
 }
 
 export function handleMouseEntered(clientX: number, _clientY: number) {
