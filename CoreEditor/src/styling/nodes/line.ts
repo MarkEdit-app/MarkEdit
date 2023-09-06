@@ -41,7 +41,6 @@ export const lineIndicatorLayer = layer({
 class Layer extends RectangleMarker {
   // Used for object equality
   private readonly rect: DOMRect;
-  private readonly element = document.createElement('div');
 
   constructor(content: HTMLElement, line: HTMLElement, private readonly theme?: string) {
     const lineRect = line.getBoundingClientRect();
@@ -57,30 +56,17 @@ class Layer extends RectangleMarker {
 
     super(layerClass, rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
     this.rect = rectToDraw;
-
-    const style = this.element.style;
-    style.position = 'absolute';
-    style.left = '0px';
-    style.top = '0px';
-    style.height = '100%';
-    style.width = '100%';
   }
 
   draw() {
-    const wrapper = super.draw();
-    wrapper.style.overflow = 'hidden';
-
-    if (this.element.parentElement === null) {
-      wrapper.appendChild(this.element);
-    }
-
-    this.updateColors();
-    return wrapper;
+    const element = super.draw();
+    this.updateColors(element);
+    return element;
   }
 
-  update(wrapper: HTMLElement, prev: Layer): boolean {
-    this.updateColors();
-    return super.update(wrapper, prev);
+  update(element: HTMLElement, prev: Layer): boolean {
+    this.updateColors(element);
+    return super.update(element, prev);
   }
 
   eq(other: Layer): boolean {
@@ -95,10 +81,10 @@ class Layer extends RectangleMarker {
     almostEq(this.rect.height, other.rect.height);
   }
 
-  private updateColors() {
+  private updateColors(element: HTMLElement) {
     const colors = window.colors;
-    this.element.style.backgroundColor = colors?.activeLine ?? '';
-    this.element.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
+    element.style.backgroundColor = colors?.activeLine ?? '';
+    element.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
   }
 }
 
