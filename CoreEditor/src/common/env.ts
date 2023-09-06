@@ -1,2 +1,2 @@
 export const isChrome = /Chrome/.test(navigator.userAgent);
-export const isWebKit = typeof window.webkit?.messageHandlers === 'object';
+export const isReleaseMode = typeof window.webkit?.messageHandlers === 'object';

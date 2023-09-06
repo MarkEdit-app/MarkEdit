@@ -1,6 +1,6 @@
 import { Decoration, MatchDecorator } from '@codemirror/view';
 import { createDecoPlugin } from '../helper';
-import { isWebKit } from '../../common/env';
+import { isReleaseMode } from '../../common/env';
 import { isMetaKeyDown } from '../../events';
 
 // Fragile approach, but we only use it for link clicking, it should be fine
@@ -90,7 +90,7 @@ export function handleMouseUp(event: MouseEvent) {
     return;
   }
 
-  if (isWebKit) {
+  if (isReleaseMode) {
     window.nativeModules.core.notifyLinkClicked({ link });
   } else {
     // Test only branch

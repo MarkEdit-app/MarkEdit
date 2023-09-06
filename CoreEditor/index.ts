@@ -1,5 +1,5 @@
 import { Config, InvisiblesBehavior } from './src/config';
-import { isChrome, isWebKit } from './src/common/env';
+import { isChrome, isReleaseMode } from './src/common/env';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
 import { WebModuleCoreImpl } from './src/bridge/web/core';
@@ -28,7 +28,7 @@ import * as grammarly from './src/modules/grammarly';
 
 // "{{EDITOR_CONFIG}}" will be replaced with a JSON literal in production
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const config: Config = isWebKit ? ('{{EDITOR_CONFIG}}' as any) : {
+const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
   text: pseudoDocument,
   theme: 'github-light',
   fontFamily: isChrome ? 'monospace' : 'ui-monospace',
@@ -73,7 +73,7 @@ window.onload = () => {
   window.nativeModules.core.notifyWindowDidLoad();
 
   // On Prod, text is reset by the native code
-  if (!isWebKit) {
+  if (!isReleaseMode) {
     core.resetEditor(config.text);
   }
 };

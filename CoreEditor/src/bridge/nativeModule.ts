@@ -1,4 +1,4 @@
-import { isWebKit } from '../common/env';
+import { isReleaseMode } from '../common/env';
 
 /**
  * Module used to send message to native.
@@ -29,7 +29,7 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
         };
 
         // Message is serialized and sent to native here
-        if (isWebKit) {
+        if (isReleaseMode) {
           // eslint-disable-next-line promise/prefer-await-to-then
           window.webkit?.messageHandlers?.bridge?.postMessage(message).then(resolve, reject);
         } else {
