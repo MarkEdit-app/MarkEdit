@@ -68,7 +68,16 @@ export function setFontFamily(fontFamily: string) {
     styleSheets.fontFamily = createStyleSheet('.cm-content * {}');
   }
 
-  updateStyleSheet(styleSheets.fontFamily, style => style.fontFamily = fontFamily);
+  updateStyleSheet(styleSheets.fontFamily, style => {
+    const fontFamilies = [
+      fontFamily,
+      'ui-monospace', 'monospace', 'Menlo',
+      'system-ui', 'Helvetica', 'Arial', 'sans-serif',
+    ];
+
+    // Set is ordered, it can safely dedupe items without messing up the order
+    style.fontFamily = [...new Set(fontFamilies)].join(', ');
+  });
 }
 
 export function setFontSize(fontSize: number) {
