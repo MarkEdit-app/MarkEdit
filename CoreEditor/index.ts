@@ -1,5 +1,5 @@
 import { Config, InvisiblesBehavior } from './src/config';
-import { isChrome, isReleaseMode } from './src/common/env';
+import { isReleaseMode } from './src/common/env';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
 import { WebModuleCoreImpl } from './src/bridge/web/core';
@@ -31,7 +31,7 @@ import * as grammarly from './src/modules/grammarly';
 const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
   text: pseudoDocument,
   theme: 'github-light',
-  fontFamily: isChrome ? 'monospace' : 'ui-monospace',
+  fontFamily: 'ui-monospace',
   fontSize: 17,
   showLineNumbers: true,
   showActiveLineIndicator: true,
