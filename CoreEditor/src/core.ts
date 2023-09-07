@@ -104,12 +104,11 @@ export function resetEditor(
     },
   });
 
+  // Work around a WebKit bug, text jiggles back and forth when resizing the window
+  window.addEventListener('resize', () => editor.requestMeasure());
+
   // Observe viewport scale changes, i.e., pinch to zoom
   window.visualViewport?.addEventListener('resize', () => {
-    // Work around a WebKit bug, text jiggles back and forth when resizing the window
-    editor.requestMeasure();
-
-    // Update native views after viewport scale is changed
     const viewportScale = getViewportScale();
     if (Math.abs(viewportScale - storage.viewportScale) > 0.001) {
       window.nativeModules.core.notifyViewportScaleDidChange();
