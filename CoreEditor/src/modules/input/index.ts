@@ -5,7 +5,7 @@ import { setInvisiblesBehavior } from '../config';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty } from '../history';
 import { tokenizePosition } from '../tokenizer';
-import { scrollCaretToVisible, scrollToSelection, selectedLineColumn } from '../../modules/selection';
+import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, refreshEditFocus } from '../../modules/selection';
 import { setShowActiveLineIndicator } from '../../styling/config';
 
 import selectedRange from '../selection/selectedRanges';
@@ -77,7 +77,9 @@ export function observeChanges() {
       }
     }
 
-    if (update.selectionSet) {
+    // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
+    // always check `docChanged` too.
+    if (update.selectionSet || update.docChanged) {
       const hasSelection = selectedRange().some(range => !range.empty);
       const updateActiveLine = editingState.hasSelection !== hasSelection;
       editingState.hasSelection = hasSelection;
@@ -92,11 +94,14 @@ export function observeChanges() {
         // Clear active line background when there's selection,
         // it makes the selection easier to read.
         setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
-      }
-    }
 
-    // Handle native updates
-    if (update.docChanged || update.selectionSet) {
+        // Toggling extensions does not trigger an immediate repaint,
+        // refresh the focus manually.
+        refreshEditFocus();
+      }
+
+      // Handle native updates.
+      //
       // It would be great if we could also provide the updated text here,
       // but it's time-consuming for large payload,
       // we want to be responsive for every key stroke.
