@@ -203,6 +203,29 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   // This fix doesn't make any sense, it cannot be explained,
   // however, it just works™.
   scrollDOM.addEventListener('wheel', () => { /* no-op */ });
+
+  // Dirty fix to a CodeMirror bug,
+  // dragging the scrollbar is super laggy because of unnecessary updates.
+  //
+  // Better to fix CodeMirror at some point.
+  scrollDOM.addEventListener('mousedown', event => {
+    const target = event.target as HTMLElement;
+    const clientX = event.clientX;
+    const clientWidth = target.clientWidth;
+    const scrollbarWidth = 15; // Just a random guess, not necessary to be precise
+
+    const shouldPreventDefault = (() => {
+      if (target.dir === 'rtl') {
+        return clientX < scrollbarWidth;
+      } else {
+        return clientX > clientWidth - scrollbarWidth;
+      }
+    })();
+
+    if (shouldPreventDefault) {
+      event.preventDefault();
+    }
+  });
 }
 
 const storage: {
