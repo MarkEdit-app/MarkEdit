@@ -17,7 +17,7 @@
   </style>
 </head>
 <body>
-  <div id="container" style="text-align: center;"></div>
+  <div id="container" style="text-align: center; visibility: hidden;"></div>
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
 
@@ -26,7 +26,10 @@
     mermaid.initialize({ theme, startOnLoad: false });
 
     const container = document.querySelector("#container");
-    mermaid.render("graph", "{{DATA}}".code).then(result => container.innerHTML = result.svg);
+    mermaid.render("graph", "{{DATA}}".code).then(result => {
+      container.innerHTML = result.svg;
+      requestAnimationFrame(() => container.style.visibility = 'visible');
+    });
   </script>
 </body>
 </html>
