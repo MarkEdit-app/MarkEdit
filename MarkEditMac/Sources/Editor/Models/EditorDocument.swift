@@ -122,7 +122,7 @@ extension EditorDocument {
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
     Task {
-      await saveAsynchronously {
+      await saveAsynchronously(formatContent: true) {
         super.save(sender)
       }
 
@@ -133,7 +133,7 @@ extension EditorDocument {
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
-    await saveAsynchronously {
+    await saveAsynchronously(formatContent: false) {
       // The default autosave doesn't work when the app is about to terminate,
       // it is because we have to do it in an asynchronous way.
       //
@@ -256,7 +256,7 @@ private extension EditorDocument {
     hostViewController?.bridge
   }
 
-  func saveAsynchronously(saveAction: () -> Void) async {
+  func saveAsynchronously(formatContent: Bool, saveAction: () -> Void) async {
     // In viewing mode (aka version browsing), saveAction is directly skipped
     guard !isInViewingMode else {
       return
@@ -266,7 +266,7 @@ private extension EditorDocument {
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
     // Format when saving files, only if at least one option is enabled
-    if insertFinalNewline || trimTrailingWhitespace {
+    if formatContent && (insertFinalNewline || trimTrailingWhitespace) {
       await withCheckedContinuation { continuation in
         bridge?.format.formatContent(
           insertFinalNewline: insertFinalNewline,
