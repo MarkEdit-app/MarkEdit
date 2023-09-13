@@ -5,6 +5,7 @@
 //
 
 import AppKit
+import CoreText
 
 public struct FontPickerConfiguration {
   let selectedFontStyle: FontStyle
@@ -41,7 +42,7 @@ extension FontPickerConfiguration {
       case .systemSerif:
         return serifFontName
       case let .customFont(name):
-        return name
+        return CTFontCopyDisplayName(CTFontCreateWithName(name as CFString, size, nil)) as String
       }
     }()
 
