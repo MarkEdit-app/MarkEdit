@@ -28,7 +28,7 @@ import AppKitExtensions
     case .systemSerif:
       return "ui-serif"
     case let .customFont(name):
-      return name
+      return NSFont(name: name, size: NSFont.systemFontSize)?.cssFontFamily ?? name
     }
   }
 
