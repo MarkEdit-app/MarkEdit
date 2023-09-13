@@ -6,6 +6,12 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 <a href="https://apps.apple.com/app/id1669953820" target="_blank"><img alt="Download on the Mac App Store" src="https://user-images.githubusercontent.com/6745066/216816394-706b5104-42f3-4cc4-96c9-471a9356d1a8.svg"></a>
 
+## Platform Compatibility
+
+To be focused, we only support the latest two major macOS releases. For now, they are macOS Ventura and macOS Sonoma.
+
+Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12).
+
 ## Screenshots
 
 ![Screenshots 01](/Screenshots/01.png)
