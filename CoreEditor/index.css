@@ -17,10 +17,6 @@ html, body {
 
   /* selectionMatch doesn't work well with some fonts, such as system-ui, ui-rounded */
   font-kerning: none;
-
-  /* These are not needed in theory, but we have seen weird bold font rendering without them */
-  font-smooth: auto;
-  -webkit-font-smoothing: auto;
 }
 
 .cm-gutters {
