@@ -26,6 +26,11 @@ public struct FontPicker: View {
   }
 
   public var body: some View {
+    let selectedFontName = configuration.localizedInfo(
+      style: selectedFontStyle,
+      size: selectedFontSize
+    )
+
     HStack {
       ZStack {
         // Just to steal the bezel UI from TextField
@@ -33,10 +38,11 @@ public struct FontPicker: View {
           .focusable(false)
           .allowsHitTesting(false)
 
-        Text(configuration.localizedInfo(style: selectedFontStyle, size: selectedFontSize))
+        Text(selectedFontName)
           .font(Font(selectedFontStyle.fontWith(size: 12)))
           .padding(.horizontal, 5)
           .truncationMode(.middle)
+          .help(selectedFontName)
       }
       .frame(width: 190, height: 19, alignment: .center)
 
