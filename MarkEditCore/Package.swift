@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
   name: "MarkEditCore",
   platforms: [
-    .iOS(.v15),
-    .macOS(.v12),
+    .iOS(.v16),
+    .macOS(.v13),
   ],
   products: [
     .library(

@@ -29,13 +29,9 @@ public struct FontPicker: View {
     HStack {
       ZStack {
         // Just to steal the bezel UI from TextField
-        if #available(macOS 13.0, *) {
-          TextField(text: .constant("")) {}
-            .focusable(false) // Doesn't work on Monterey
-            .allowsHitTesting(false)
-        } else {
-          LegacyTextFieldBezel()
-        }
+        TextField(text: .constant("")) {}
+          .focusable(false)
+          .allowsHitTesting(false)
 
         Text(configuration.localizedInfo(style: selectedFontStyle, size: selectedFontSize))
           .font(Font(selectedFontStyle.fontWith(size: 12)))

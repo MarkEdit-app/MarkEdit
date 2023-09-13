@@ -7,7 +7,6 @@
 
 import Foundation
 
-@available(macOS 13.0, *)
 enum IntentError: Error, CustomLocalizedStringResourceConvertible {
   case missingDocument
 
