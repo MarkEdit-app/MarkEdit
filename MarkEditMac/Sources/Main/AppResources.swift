@@ -11,8 +11,8 @@ import MarkEditCore
 /**
  To make localization work, always use `String(localized:comment:)` directly and add to this file.
 
- Besides, we use `xcloc` files to do the translation work:
- https://developer.apple.com/documentation/xcode/exporting-localizations
+ Besides, we use `string catalogs` to do the translation work:
+ https://developer.apple.com/documentation/xcode/localizing-and-varying-text-with-a-string-catalog
 
  The only exception to not using this file for localization is the app intents,
  where we rely on `LocalizedStringResource` instead.
