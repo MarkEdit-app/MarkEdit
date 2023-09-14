@@ -5,7 +5,7 @@ import { InvisiblesBehavior } from '../../config';
 import { calculateFontSize } from './heading';
 import { createMarkDeco } from '../matchers/regex';
 import { createDecoPlugin } from '../helper';
-import { selectedTextDecoration } from './selection';
+import { selectedVisiblesDecoration } from './selection';
 import { frontMatterRange } from '../../modules/frontMatter';
 import { refreshEditFocus } from '../../modules/selection';
 
@@ -13,7 +13,7 @@ const typingInterval = 300;
 const focusUpdateInterval = 15;
 
 // The difference is that renderInvisiblesSelection doesn't match continuous spaces,
-// which doesn't work well with selectedTextDecoration because nodes can be nested.
+// which doesn't work well with selectedVisiblesDecoration because nodes can be nested.
 const renderInvisiblesAlways = renderInvisibles(/\t| +/g, false);
 const renderInvisiblesSelection = renderInvisibles(/\t| /g, true);
 
@@ -23,8 +23,8 @@ export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: 
   }
 
   if (behavior === InvisiblesBehavior.selection) {
-    // renderInvisiblesSelection must go before selectedTextDecoration
-    return hasSelection ? [renderInvisiblesSelection, selectedTextDecoration] : selectedTextDecoration;
+    // renderInvisiblesSelection must go before selectedVisiblesDecoration
+    return hasSelection ? [renderInvisiblesSelection, selectedVisiblesDecoration] : selectedVisiblesDecoration;
   }
 
   if (behavior === InvisiblesBehavior.trailing) {
