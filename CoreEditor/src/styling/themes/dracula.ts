@@ -43,7 +43,7 @@ function highlight() {
     { tag: [tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: palette.yellow },
     { tag: tags.contentSeparator, color: palette.gray },
     { tag: tags.definition(tags.propertyName), color: palette.gold },
-    { tag: tags.strong, color: palette.gold, fontWeight: 'bold' },
+    { tag: tags.strong, color: palette.gold, fontWeight: 'bolder' },
     { tag: tags.linkMark, color: colors.text },
   ], 'dark');
 }

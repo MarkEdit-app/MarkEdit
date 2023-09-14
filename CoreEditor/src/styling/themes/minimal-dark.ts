@@ -38,7 +38,7 @@ function highlight() {
     { tag: [tags.contentSeparator, tags.definition(tags.variableName), tags.function(tags.propertyName)], color: colors.accent },
     { tag: [tags.meta, tags.comment], color: light.gray1, fontStyle: 'italic' },
     { tag: [tags.url, tags.tagName, tags.codeInfo], color: light.gray3 },
-    { tag: tags.strong, color: colors.accent, fontWeight: 'bold' },
+    { tag: tags.strong, color: colors.accent, fontWeight: 'bolder' },
     { tag: tags.emphasis, color: colors.accent, fontStyle: 'italic' },
   ], 'dark');
 }

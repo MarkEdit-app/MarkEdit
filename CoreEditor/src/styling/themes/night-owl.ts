@@ -43,7 +43,7 @@ function highlight() {
     { tag: [tags.linkMark, tags.self, tags.angleBracket], color: '#7fdbca' },
     { tag: tags.listMark, color: '#d9f5dd' },
     { tag: tags.url, color: '#ff869a' },
-    { tag: tags.strong, color: palette.yellow, fontWeight: 'bold' },
+    { tag: tags.strong, color: palette.yellow, fontWeight: 'bolder' },
     { tag: tags.emphasis, color: palette.purple, fontStyle: 'italic' },
     { tag: tags.labelName, color: colors.accent },
     { tag: tags.className, color: '#ffcb8b' },

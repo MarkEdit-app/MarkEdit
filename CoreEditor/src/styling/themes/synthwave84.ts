@@ -53,7 +53,7 @@ function highlight() {
     { tag: [tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#ff8b38' },
     { tag: [tags.name, tags.character, tags.definition(tags.name), tags.definition(tags.propertyName)], ...shadowableTextColor(colors.accent) },
     { tag: tags.contentSeparator, color: colors.comment },
-    { tag: tags.strong, color: palette.blue, fontWeight: 'bold' },
+    { tag: tags.strong, color: palette.blue, fontWeight: 'bolder' },
     { tag: tags.emphasis, color: palette.blue, fontStyle: 'italic' },
     { tag: tags.linkMark, color: colors.text },
     { tag: [tags.inlineCode, tags.tagName, tags.url], ...glows.green },
