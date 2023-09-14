@@ -29,16 +29,16 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setTheme", message: message, completion: completion)
   }
 
-  public func setFontFamily(fontFamily: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func setFontFace(fontFace: WebFontFace, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
-      let fontFamily: String
+      let fontFace: WebFontFace
     }
 
     let message = Message(
-      fontFamily: fontFamily
+      fontFace: fontFace
     )
 
-    webView?.invoke(path: "webModules.config.setFontFamily", message: message, completion: completion)
+    webView?.invoke(path: "webModules.config.setFontFace", message: message, completion: completion)
   }
 
   public func setFontSize(fontSize: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

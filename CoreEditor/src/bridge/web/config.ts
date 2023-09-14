@@ -1,10 +1,10 @@
 import { WebModule } from '../webModule';
-import { InvisiblesBehavior } from '../../config';
+import { WebFontFace, InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../../modules/indentation';
 
 import {
   setTheme,
-  setFontFamily,
+  setFontFace,
   setFontSize,
   setShowLineNumbers,
   setShowActiveLineIndicator,
@@ -26,7 +26,7 @@ import {
  */
 export interface WebModuleConfig extends WebModule {
   setTheme({ name }: { name: string }): void;
-  setFontFamily({ fontFamily }: { fontFamily: string }): void;
+  setFontFace({ fontFace }: { fontFace: WebFontFace }): void;
   setFontSize({ fontSize }: { fontSize: number }): void;
   setShowLineNumbers({ enabled }: { enabled: boolean } ): void;
   setShowActiveLineIndicator({ enabled }: { enabled: boolean }): void;
@@ -46,8 +46,8 @@ export class WebModuleConfigImpl implements WebModuleConfig {
     setTheme(name);
   }
 
-  setFontFamily({ fontFamily }: { fontFamily: string }): void {
-    setFontFamily(fontFamily);
+  setFontFace({ fontFace }: { fontFace: WebFontFace }): void {
+    setFontFace(fontFace);
   }
 
   setFontSize({ fontSize }: { fontSize: number }): void {

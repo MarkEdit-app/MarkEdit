@@ -8,15 +8,27 @@ import AppKit
 
 public extension NSFont {
   var cssFontFamily: String {
-    // If the font is bold or italic, we use its name directly,
-    // because we want to apply the style to all scenarios.
-    if isBoldOrItalic {
-      return fontName
+    familyName ?? fontName
+  }
+
+  var cssFontWeight: String? {
+    guard let traits = fontDescriptor.object(forKey: .traits) as? [NSFontDescriptor.TraitKey: Any],
+          let weight = traits[.weight] as? Double, weight != NSFont.Weight.regular.rawValue,
+          let index = Self.sortedWeights.firstIndex(where: { $0.rawValue > weight }) else {
+      return nil
     }
 
-    // Otherwise, we use its family name to avoid font synthesis,
-    // which is buggy in WebKit on macOS, i.e., bold text gets bolder and blurry.
-    return familyName ?? fontName
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight
+    return String(index * 100)
+  }
+
+  var cssFontStyle: String? {
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/font-style
+    if fontDescriptor.symbolicTraits.contains(.italic) {
+      return "italic"
+    }
+
+    return nil
   }
 
   static func monospacedSystemFont(ofSize fontSize: Double) -> NSFont {
@@ -30,15 +42,33 @@ public extension NSFont {
   static func serifSystemFont(ofSize fontSize: Double, weight: NSFont.Weight = .regular) -> NSFont {
     .systemFont(ofSize: fontSize, weight: weight).withDesign(.serif)
   }
+
+  convenience init?(name: String) {
+    self.init(name: name, size: NSFont.systemFontSize)
+  }
 }
 
 // MARK: - Private
 
 private extension NSFont {
-  var isBoldOrItalic: Bool {
-    let traits = fontDescriptor.symbolicTraits
-    return traits.contains(.bold) || traits.contains(.italic)
-  }
+  static let sortedWeights: [NSFont.Weight] = [
+    .ultraLight,
+    .thin,
+    .light,
+    .regular,
+    .medium,
+    .semibold,
+    .bold,
+    .heavy,
+    .black,
+    .init(100), // Impossible value as an upper bound
+  ].sorted {
+      // In css, "ultra light" is thicker than "thin", it is the opposite in Cocoa,
+      // sort to avoid unexpected behaviors.
+      //
+      // Note these values are not 1:1 mapping.
+      $0.rawValue < $1.rawValue
+    }
 
   func withDesign(_ design: NSFontDescriptor.SystemDesign) -> NSFont {
     guard let descriptor = fontDescriptor.withDesign(design) else {

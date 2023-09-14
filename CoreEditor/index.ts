@@ -31,7 +31,7 @@ import * as grammarly from './src/modules/grammarly';
 const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
   text: pseudoDocument,
   theme: 'github-light',
-  fontFamily: 'ui-monospace',
+  fontFace: { family: 'ui-monospace' },
   fontSize: 17,
   showLineNumbers: true,
   showActiveLineIndicator: true,

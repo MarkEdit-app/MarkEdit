@@ -57,7 +57,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
     let config = EditorConfig(
       text: data.toString() ?? "",
       theme: effectiveTheme,
-      fontFamily: "ui-monospace",
+      fontFace: WebFontFace(family: "ui-monospace", weight: nil, style: nil),
       fontSize: 12,
       showLineNumbers: false,
       showActiveLineIndicator: false,

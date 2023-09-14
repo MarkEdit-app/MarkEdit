@@ -9,6 +9,8 @@ import AppKitExtensions
 
 /**
  FontStyle is an abstraction of either system fonts or custom fonts.
+
+ For now, system fonts are all default, while custom fonts can have weight or style specified.
  */
 @frozen public enum FontStyle: Codable {
   case systemDefault
@@ -28,8 +30,24 @@ import AppKitExtensions
     case .systemSerif:
       return "ui-serif"
     case let .customFont(name):
-      return NSFont(name: name, size: NSFont.systemFontSize)?.cssFontFamily ?? name
+      return NSFont(name: name)?.cssFontFamily ?? name
     }
+  }
+
+  public var cssFontWeight: String? {
+    if case let .customFont(name) = self {
+      return NSFont(name: name)?.cssFontWeight
+    }
+
+    return nil
+  }
+
+  public var cssFontStyle: String? {
+    if case let .customFont(name) = self {
+      return NSFont(name: name)?.cssFontStyle
+    }
+
+    return nil
   }
 
   public func fontWith(size: Double, weight: NSFont.Weight = .regular) -> NSFont {
