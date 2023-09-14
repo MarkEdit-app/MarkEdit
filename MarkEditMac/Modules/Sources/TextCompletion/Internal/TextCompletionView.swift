@@ -37,7 +37,7 @@ struct TextCompletionView: View {
             ForEach(0..<state.items.count, id: \.self) { index in
               ZStack(alignment: .leading) {
                 if index == state.selectedIndex {
-                  Color.accent.clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                  Color.accent.clipShape(RoundedRectangle(cornerRadius: 3.5, style: .continuous))
                 }
 
                 Text(state.items[index])
