@@ -30,7 +30,7 @@ public enum EditorInvisiblesBehavior: String, Codable {
 }
 
 /// "CGRect-fashion" rect.
-public struct JSRect: Codable {
+public struct WebRect: Codable {
   public var x: Double
   public var y: Double
   public var width: Double

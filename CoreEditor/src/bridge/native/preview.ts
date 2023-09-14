@@ -1,6 +1,6 @@
 import { NativeModule } from '../nativeModule';
 import { PreviewType } from '../../modules/preview';
-import { JSRect } from '../../@types/JSRect';
+import { WebRect } from '../../@types/WebRect';
 
 /**
  * @shouldExport true
@@ -8,5 +8,5 @@ import { JSRect } from '../../@types/JSRect';
  * @bridgeName NativeBridgePreview
  */
 export interface NativeModulePreview extends NativeModule {
-  show({ code, type, rect }: { code: string; type: PreviewType; rect: JSRect }): void;
+  show({ code, type, rect }: { code: string; type: PreviewType; rect: WebRect }): void;
 }
