@@ -12,7 +12,7 @@ import Foundation
 public struct EditorConfig: Encodable {
   let text: String
   let theme: String
-  let fontFamily: String
+  let fontFace: WebFontFace
   let fontSize: Double
   let showLineNumbers: Bool
   let showActiveLineIndicator: Bool
@@ -30,7 +30,7 @@ public struct EditorConfig: Encodable {
   public init(
     text: String,
     theme: String,
-    fontFamily: String,
+    fontFace: WebFontFace,
     fontSize: Double,
     showLineNumbers: Bool,
     showActiveLineIndicator: Bool,
@@ -47,7 +47,7 @@ public struct EditorConfig: Encodable {
   ) {
     self.text = text
     self.theme = theme
-    self.fontFamily = fontFamily
+    self.fontFace = fontFace
     self.fontSize = fontSize
     self.showLineNumbers = showLineNumbers
     self.showActiveLineIndicator = showActiveLineIndicator

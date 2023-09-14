@@ -36,7 +36,7 @@ export enum InvisiblesBehavior {
 export interface Config {
   text: string;
   theme: string;
-  fontFamily: string;
+  fontFace: WebFontFace;
   fontSize: number;
   showLineNumbers: boolean;
   showActiveLineIndicator: boolean;
@@ -65,4 +65,13 @@ export interface Dynamics {
   lineEndings?: Compartment;
   indentUnit?: Compartment;
   selectionHighlight?: Compartment;
+}
+
+/**
+ * Font face attributes to control the font styles.
+ */
+export interface WebFontFace {
+  family: string;
+  weight?: string;
+  style?: string;
 }

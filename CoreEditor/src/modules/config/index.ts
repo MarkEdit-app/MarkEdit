@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { indentUnit } from '@codemirror/language';
-import { InvisiblesBehavior } from '../../config';
+import { WebFontFace, InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
 import { scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
@@ -14,9 +14,9 @@ export function setTheme(name: string) {
   styling.setTheme(loadTheme(name));
 }
 
-export function setFontFamily(fontFamily: string) {
-  window.config.fontFamily = fontFamily;
-  styling.setFontFamily(fontFamily);
+export function setFontFace(fontFace: WebFontFace) {
+  window.config.fontFace = fontFace;
+  styling.setFontFace(fontFace);
 }
 
 export function setFontSize(fontSize: number) {

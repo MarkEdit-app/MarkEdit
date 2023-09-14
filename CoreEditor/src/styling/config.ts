@@ -1,6 +1,6 @@
 import { EditorView, highlightActiveLine } from '@codemirror/view';
 import { EditorColors, EditorTheme } from './types';
-import { Config, InvisiblesBehavior } from '../config';
+import { Config, WebFontFace, InvisiblesBehavior } from '../config';
 import { editingState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
@@ -16,7 +16,7 @@ import { isMouseDown } from '../events';
  */
 export default interface StyleSheets {
   accentColor?: HTMLStyleElement;
-  fontFamily?: HTMLStyleElement;
+  fontFace?: HTMLStyleElement;
   fontSize?: HTMLStyleElement;
   invisibles?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
@@ -25,7 +25,7 @@ export default interface StyleSheets {
 
 export function setUp(config: Config, colors: EditorColors) {
   setEditorColors(colors);
-  setFontFamily(config.fontFamily);
+  setFontFace(config.fontFace);
   setFontSize(config.fontSize);
   setInvisiblesBehavior(config.invisiblesBehavior);
   setFocusMode(config.focusMode);
@@ -63,14 +63,17 @@ export function setEditorColors(colors: EditorColors) {
   window.colors = colors;
 }
 
-export function setFontFamily(fontFamily: string) {
-  if (styleSheets.fontFamily === undefined) {
-    styleSheets.fontFamily = createStyleSheet('.cm-content * {}');
+export function setFontFace(fontFace: WebFontFace) {
+  if (styleSheets.fontFace === undefined) {
+    styleSheets.fontFace = createStyleSheet('.cm-content * {}');
   }
 
-  updateStyleSheet(styleSheets.fontFamily, style => {
+  updateStyleSheet(styleSheets.fontFace, style => {
+    style.fontWeight = fontFace.weight ?? 'normal';
+    style.fontStyle = fontFace.style ?? 'normal';
+
     const fontFamilies = [
-      fontFamily,
+      fontFace.family,
       'ui-monospace', 'monospace', 'Menlo',
       'system-ui', 'Helvetica', 'Arial', 'sans-serif',
     ];

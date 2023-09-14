@@ -51,8 +51,8 @@ extension EditorViewController {
     }
   }
 
-  func setFontFamily(_ fontFamily: String) {
-    bridge.config.setFontFamily(fontFamily: fontFamily)
+  func setFontFace(_ fontFace: WebFontFace) {
+    bridge.config.setFontFace(fontFace: fontFace)
   }
 
   func setFontSize(_ fontSize: Double) {

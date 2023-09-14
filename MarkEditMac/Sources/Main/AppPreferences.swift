@@ -59,7 +59,7 @@ enum AppPreferences {
     @Storage(key: "editor.font-style", defaultValue: .systemMono)
     static var fontStyle: FontStyle {
       didSet {
-        performUpdates { $0.setFontFamily(fontStyle.cssFontFamily) }
+        performUpdates { $0.setFontFace(fontStyle.webFontFace) }
       }
     }
 
@@ -211,12 +211,18 @@ enum AppPreferences {
   }
 }
 
+extension FontStyle {
+  var webFontFace: WebFontFace {
+    WebFontFace(family: cssFontFamily, weight: cssFontWeight, style: cssFontStyle)
+  }
+}
+
 extension AppPreferences {
   static func editorConfig(theme: String) -> EditorConfig {
     EditorConfig(
       text: "",
       theme: theme,
-      fontFamily: Editor.fontStyle.cssFontFamily,
+      fontFace: Editor.fontStyle.webFontFace,
       fontSize: Editor.fontSize,
       showLineNumbers: Editor.showLineNumbers,
       showActiveLineIndicator: Editor.showActiveLineIndicator,

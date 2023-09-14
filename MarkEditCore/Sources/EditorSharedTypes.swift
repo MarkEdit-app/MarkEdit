@@ -9,6 +9,19 @@
 
 import Foundation
 
+/// Font face attributes to control the font styles.
+public struct WebFontFace: Codable {
+  public var family: String
+  public var weight: String?
+  public var style: String?
+
+  public init(family: String, weight: String?, style: String?) {
+    self.family = family
+    self.weight = weight
+    self.style = style
+  }
+}
+
 public enum EditorInvisiblesBehavior: String, Codable {
   case never = "never"
   case selection = "selection"

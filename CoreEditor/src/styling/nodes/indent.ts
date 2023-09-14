@@ -54,7 +54,7 @@ export const contentIndentStyle = createDecoPlugin(() => {
 });
 
 function getTextIndent(text: string) {
-  const font = `${window.config.fontSize}px ${window.config.fontFamily}`;
+  const font = `${window.config.fontSize}px ${window.config.fontFace.family}`;
   const key = text + font;
   const cachedValue = storage.cachedIndents[key];
   if (cachedValue) {
@@ -62,7 +62,7 @@ function getTextIndent(text: string) {
   }
 
   const width = (() => {
-    if (measurableFonts().includes(window.config.fontFamily)) {
+    if (measurableFonts().includes(window.config.fontFace.family)) {
       return measureTextPreferred(text, font);
     } else {
       return measureTextFallback(text, font);
