@@ -69,8 +69,8 @@ export function setFontFace(fontFace: WebFontFace) {
   }
 
   updateStyleSheet(styleSheets.fontFace, style => {
-    style.fontWeight = fontFace.weight ?? 'normal';
-    style.fontStyle = fontFace.style ?? 'normal';
+    style.fontWeight = fontFace.weight ?? '';
+    style.fontStyle = fontFace.style ?? '';
 
     const fontFamilies = [
       fontFace.family,
