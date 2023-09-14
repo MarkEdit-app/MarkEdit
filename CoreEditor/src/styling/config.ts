@@ -18,7 +18,6 @@ export default interface StyleSheets {
   accentColor?: HTMLStyleElement;
   fontFace?: HTMLStyleElement;
   fontSize?: HTMLStyleElement;
-  invisibles?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
 }
@@ -132,20 +131,6 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
       effects: window.dynamics.invisibles?.reconfigure(invisiblesExtension(behavior, hasSelection)),
     });
   }
-
-  if (styleSheets.invisibles === undefined) {
-    styleSheets.invisibles = createStyleSheet(`
-      .cm-visibleTab:not(.cm-selectedTextRange *) {
-        background-color: #0000;
-      }
-
-      .cm-visibleSpace:not(.cm-selectedTextRange *)::before {
-        color: #0000;
-      }
-    `, false);
-  }
-
-  styleSheets.invisibles.disabled = behavior !== InvisiblesBehavior.selection;
 }
 
 export function setFocusMode(enabled: boolean) {

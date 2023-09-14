@@ -1,6 +1,5 @@
 import { Decoration, DecorationSet, ViewPlugin, ViewUpdate } from '@codemirror/view';
-import { RangeSetBuilder } from '@codemirror/state';
-import { linesWithRange } from '../../modules/selection';
+import { lineDecoRanges as createDeco } from '../helper';
 
 /**
  * CodeMirror only decorates the active line with a cm-activeLine class,
@@ -8,24 +7,7 @@ import { linesWithRange } from '../../modules/selection';
  *
  * This is useful for implementing features like showing whitespaces for selections.
  */
-export const selectedTextDecoration = ViewPlugin.fromClass(class {
-  decorations: DecorationSet;
-  constructor() {
-    this.decorations = Decoration.none;
-  }
-
-  update(update: ViewUpdate) {
-    if (!selectionHasChanged(update)) {
-      return;
-    }
-
-    const ranges = update.state.selection.ranges.filter(range => !range.empty);
-    const markDeco = Decoration.mark({ class: 'cm-selectedTextRange' });
-    this.decorations = Decoration.set(ranges.map(range => {
-      return markDeco.range(range.from, range.to);
-    }));
-  }
-}, { decorations: instance => instance.decorations });
+export const selectedVisiblesDecoration = createViewPlugin('cm-selectedVisible');
 
 /**
  * CodeMirror only decorates the active line with a cm-activeLine class,
@@ -33,34 +15,24 @@ export const selectedTextDecoration = ViewPlugin.fromClass(class {
  *
  * This is useful for implementing features like focus mode.
  */
-export const selectedLinesDecoration = ViewPlugin.fromClass(class {
-  decorations: DecorationSet;
-  constructor() {
-    this.updateDecos();
-  }
+export const selectedLinesDecoration = createViewPlugin('cm-selectedLineRange');
 
-  update(update: ViewUpdate) {
-    if (selectionHasChanged(update)) {
-      this.updateDecos();
+function createViewPlugin(className: string) {
+  return ViewPlugin.fromClass(class {
+    decorations: DecorationSet;
+    constructor() {
+      this.decorations = Decoration.none;
     }
-  }
 
-  updateDecos() {
-    const builder = new RangeSetBuilder<Decoration>();
-    const ranges = window.editor.state.selection.ranges;
-    const lineDeco = Decoration.line({ class: 'cm-selectedLineRange' });
-
-    for (const { from, to } of ranges) {
-      for (const line of linesWithRange(from, to)) {
-        builder.add(line.from, line.from, lineDeco);
+    update(update: ViewUpdate) {
+      // selectionSet is false when the selected text is cut
+      if (!update.selectionSet && !update.docChanged) {
+        return;
       }
+
+      const ranges = update.state.selection.ranges;
+      const lineDecos = ranges.flatMap(range => createDeco(range.from, range.to, className));
+      this.decorations = Decoration.set(lineDecos);
     }
-
-    this.decorations = builder.finish();
-  }
-}, { decorations: instance => instance.decorations });
-
-function selectionHasChanged(update: ViewUpdate) {
-  // selectionSet is false when the selected text is cut
-  return update.selectionSet || update.docChanged;
+  }, { decorations: value => value.decorations });
 }

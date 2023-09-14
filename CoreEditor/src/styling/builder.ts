@@ -77,7 +77,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     attributes[`${prefix}-repeat`] = 'no-repeat';
     return attributes;
   })(),
-  '.cm-visibleSpace:before': {
+  '.cm-visibleSpace::before': {
     content: 'attr(content)',
     position: 'absolute',
     pointerEvents: 'none',
@@ -173,13 +173,13 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-visibleTab': {
       backgroundColor: colors.visibleSpace,
     },
-    '.cm-visibleSpace:before': {
+    '.cm-visibleSpace::before': {
       color: colors.visibleSpace,
     },
-    '.cm-selectedTextRange .cm-visibleTab': {
+    '.cm-selectedVisible .cm-visibleTab': {
       backgroundColor: `${colors.text}99`,
     },
-    '.cm-selectedTextRange .cm-visibleSpace::before': {
+    '.cm-selectedVisible .cm-visibleSpace::before': {
       color: `${colors.text}99`,
     },
     '.cm-md-inlineCode': {
