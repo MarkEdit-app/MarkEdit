@@ -18,7 +18,7 @@ public final class EditorModulePreview: NativeModulePreview {
     self.delegate = delegate
   }
 
-  public func show(code: String, type: PreviewType, rect: JSRect) {
+  public func show(code: String, type: PreviewType, rect: WebRect) {
     delegate?.editorPreview(self, show: code, type: type, rect: rect.cgRect)
   }
 }

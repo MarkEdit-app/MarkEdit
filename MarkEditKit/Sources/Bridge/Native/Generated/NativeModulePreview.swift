@@ -11,7 +11,7 @@ import Foundation
 import MarkEditCore
 
 public protocol NativeModulePreview: NativeModule {
-  func show(code: String, type: PreviewType, rect: JSRect)
+  func show(code: String, type: PreviewType, rect: WebRect)
 }
 
 public extension NativeModulePreview {
@@ -37,7 +37,7 @@ final class NativeBridgePreview: NativeBridge {
     struct Message: Decodable {
       var code: String
       var type: PreviewType
-      var rect: JSRect
+      var rect: WebRect
     }
 
     let message: Message

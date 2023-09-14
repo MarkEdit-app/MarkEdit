@@ -1,4 +1,5 @@
 import { Compartment } from '@codemirror/state';
+import { WebFontFace } from './@types/WebFontFace';
 
 /**
  * @shouldExport true
@@ -67,11 +68,4 @@ export interface Dynamics {
   selectionHighlight?: Compartment;
 }
 
-/**
- * Font face attributes to control the font styles.
- */
-export interface WebFontFace {
-  family: string;
-  weight?: string;
-  style?: string;
-}
+export type { WebFontFace };

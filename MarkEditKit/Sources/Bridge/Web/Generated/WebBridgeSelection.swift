@@ -27,7 +27,7 @@ public final class WebBridgeSelection {
   }
 
   @MainActor
-  public func getRect(pos: Int) async throws -> JSRect? {
+  public func getRect(pos: Int) async throws -> WebRect? {
     struct Message: Encodable {
       let pos: Int
     }

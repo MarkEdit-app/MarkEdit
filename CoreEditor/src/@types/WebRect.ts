@@ -1,7 +1,7 @@
 /**
  * "CGRect-fashion" rect.
  */
-export interface JSRect {
+export interface WebRect {
   x: number;
   y: number;
   width: number;
