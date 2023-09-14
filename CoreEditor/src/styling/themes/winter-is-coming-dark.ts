@@ -41,7 +41,7 @@ function highlight() {
     { tag: tags.propertyName, color: '#7fdbca' },
     { tag: [tags.url, tags.tagName, tags.listMark], color: '#6dbdfa' },
     { tag: tags.emphasis, color: '#c792ea', fontStyle: 'italic' },
-    { tag: tags.strong, color: '#57cdff', fontWeight: 'bold' },
+    { tag: tags.strong, color: '#57cdff', fontWeight: 'bolder' },
     { tag: tags.linkMark, color: '#f3b8c2' },
     { tag: [tags.contentSeparator, tags.monospace], color: '#a7dbf7' },
     { tag: [tags.attributeName, tags.inlineCode, tags.codeInfo, tags.codeMark], color: '#f7ecb5' },

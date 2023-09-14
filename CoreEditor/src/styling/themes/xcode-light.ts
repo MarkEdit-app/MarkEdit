@@ -48,7 +48,7 @@ function highlight() {
     { tag: [tags.quote, tags.quoteMark], color: '#4a5560', fontStyle: 'italic' },
     { tag: [tags.atom, tags.bool, tags.number], color: '#1c00cf' },
     { tag: tags.emphasis, color: palette.brown, fontStyle: 'italic' },
-    { tag: tags.strong, color: '#3900a0', fontWeight: 'bold' },
+    { tag: tags.strong, color: '#3900a0', fontWeight: 'bolder' },
   ]);
 }
 

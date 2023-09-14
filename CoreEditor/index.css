@@ -32,7 +32,7 @@ html, body {
 /* Markdown */
 
 .cm-md-header:not(.cm-md-frontMatter *) {
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .cm-md-contentIndent {

@@ -45,7 +45,7 @@ function highlight() {
     { tag: [tags.contentSeparator, tags.definition(tags.variableName), tags.function(tags.propertyName)], color: colors.accent },
     { tag: [tags.atom, tags.bool, tags.number], color: '#ff628c' },
     { tag: tags.typeName, color: '#80ffbb' },
-    { tag: tags.strong, color: palette.cyan, fontWeight: 'bold' },
+    { tag: tags.strong, color: palette.cyan, fontWeight: 'bolder' },
     { tag: tags.self, color: '#fb94ff' },
   ], 'dark');
 }
