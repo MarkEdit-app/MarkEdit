@@ -65,7 +65,7 @@ export function setEditorColors(colors: EditorColors) {
 
 export function setFontFace(fontFace: WebFontFace) {
   if (styleSheets.fontFace === undefined) {
-    styleSheets.fontFace = createStyleSheet('.cm-content * {}');
+    styleSheets.fontFace = createStyleSheet('.cm-content {}');
   }
 
   updateStyleSheet(styleSheets.fontFace, style => {
