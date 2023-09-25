@@ -81,7 +81,7 @@ export function observeChanges() {
     // always check `docChanged` too.
     if (update.selectionSet || update.docChanged) {
       const hasSelection = selectedRange().some(range => !range.empty);
-      const updateActiveLine = editingState.hasSelection !== hasSelection;
+      const updateActiveLine = editingState.hasSelection !== hasSelection && editingState.compositionEnded;
       editingState.hasSelection = hasSelection;
 
       if (updateActiveLine) {
