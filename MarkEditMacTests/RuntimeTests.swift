@@ -10,18 +10,6 @@ import WebKit
 import AppKitExtensions
 
 final class RuntimeTests: XCTestCase {
-  func testExistenceOfAllowsInlinePredictions() {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
-    #if compiler(<5.9)
-      let configuration = WKWebViewConfiguration()
-      configuration.setValue(true, forKey: "allowsInlinePredictions")
-      testExistenceOfSelector(object: configuration, selector: "setAllowsInlinePredictions:")
-    #endif
-  }
-
   func testExistenceOfDrawsBackground() {
     let configuration = WKWebViewConfiguration()
     configuration.setValue(false, forKey: "drawsBackground")

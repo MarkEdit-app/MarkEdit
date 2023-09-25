@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-13
     env:
       node-version: '18.x'
-      DEVELOPER_DIR: /Applications/Xcode_14.3.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_15.0.app/Contents/Developer
 
     defaults:
       run:
@@ -43,7 +43,7 @@ jobs:
 
       - name: Test MarkEditMacTests
         run: |
-          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditMacTests -destination 'platform=macOS'
+          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditMacTests -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 
       - name: Test ModulesTests
         run: |

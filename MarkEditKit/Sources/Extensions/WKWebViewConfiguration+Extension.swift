@@ -29,11 +29,7 @@ public extension WKWebViewConfiguration {
       return false
     }
 
-    #if compiler(>=5.9)
-      return true
-    #else
-      return responds(to: sel_getUid("setAllowsInlinePredictions:"))
-    #endif
+    return true
   }
 
   func setAllowsInlinePredictions(_ newValue: Bool) {
@@ -41,12 +37,8 @@ public extension WKWebViewConfiguration {
       return
     }
 
-    #if compiler(>=5.9)
-      if #available(macOS 14.0, *) {
-        allowsInlinePredictions = newValue
-      }
-    #else
-      setValue(newValue, forKey: "allowsInlinePredictions")
-    #endif
+    if #available(macOS 14.0, *) {
+      allowsInlinePredictions = newValue
+    }
   }
 }
