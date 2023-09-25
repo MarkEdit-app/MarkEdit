@@ -230,9 +230,9 @@ export const deleteMarkupBackward: StateCommand = ({state, dispatch}) => {
             return {range: EditorSelection.cursor(start + insert.length),
                     changes: {from: start, to: line.from + inner.to, insert}}
           }
-          // Delete one level of indentation
+          // [MarkEdit] Delete to the position where indentation starts (original: https://github.com/codemirror/lang-markdown/blob/main/src/commands.ts#L237)
           if (start < pos)
-            return {range: EditorSelection.cursor(start), changes: {from: start, to: pos}}
+            return {range: EditorSelection.cursor(pos - 2), changes: {from: pos - 2, to: pos}}
         }
       }
     }
