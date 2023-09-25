@@ -43,7 +43,7 @@ jobs:
 
       - name: Test MarkEditMacTests
         run: |
-          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditMacTests -destination 'platform=macOS'
+          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditMacTests -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 
       - name: Test ModulesTests
         run: |
