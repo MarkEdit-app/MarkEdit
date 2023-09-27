@@ -80,8 +80,8 @@ export function observeChanges() {
     // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
     // always check `docChanged` too.
     if (update.selectionSet || update.docChanged) {
-      const hasSelection = selectedRange().some(range => !range.empty);
-      const updateActiveLine = editingState.hasSelection !== hasSelection && editingState.compositionEnded;
+      const hasSelection = !editingState.compositionEnded && selectedRange().some(range => !range.empty);
+      const updateActiveLine = editingState.compositionEnded && editingState.hasSelection !== hasSelection;
       editingState.hasSelection = hasSelection;
 
       if (updateActiveLine) {
