@@ -9,6 +9,6 @@ import XCTest
 
 final class BundleTests: XCTestCase {
   func testExistenceOfAppIcon() {
-    XCTAssert(true)
+    XCTAssertNotNil(NSImage(named: "AppIcon"), "Missing AppIcon from the main bundle")
   }
 }
