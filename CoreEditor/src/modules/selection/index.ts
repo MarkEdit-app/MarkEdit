@@ -2,6 +2,10 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line } from '@codemirror/state';
 import { getClientRect } from '../../common/utils';
 
+import { InvisiblesBehavior } from '../../config';
+import { setInvisiblesBehavior } from '../config';
+import { setShowActiveLineIndicator } from '../../styling/config';
+
 import selectedRanges from './selectedRanges';
 import selectWholeLineAt from './selectWholeLineAt';
 import searchMatchPosition from './searchMatchPosition';
@@ -132,6 +136,22 @@ export function scrollPositionToVisible(pos: number) {
   if (coords.bottom + margin > editor.dom.clientHeight) {
     return scrollToSelection('end', margin);
   }
+}
+
+export function updateActiveLine(hasSelection: boolean) {
+  // Update invisible behavior as selection changed
+  const invisiblesBehavior = window.config.invisiblesBehavior;
+  if (invisiblesBehavior === InvisiblesBehavior.selection) {
+    setInvisiblesBehavior(invisiblesBehavior);
+  }
+
+  // Clear active line background when there's selection,
+  // it makes the selection easier to read.
+  setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
+
+  // Toggling extensions does not trigger an immediate repaint,
+  // refresh the focus manually.
+  refreshEditFocus();
 }
 
 /**
