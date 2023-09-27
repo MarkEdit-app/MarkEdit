@@ -1,12 +1,9 @@
 import { EditorView } from '@codemirror/view';
-import { InvisiblesBehavior } from '../../config';
 import { editingState } from '../../common/store';
-import { setInvisiblesBehavior } from '../config';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty } from '../history';
 import { tokenizePosition } from '../tokenizer';
-import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, refreshEditFocus } from '../../modules/selection';
-import { setShowActiveLineIndicator } from '../../styling/config';
+import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
 
 import selectedRange from '../selection/selectedRanges';
 import wrapBlock from './wrapBlock';
@@ -80,24 +77,15 @@ export function observeChanges() {
     // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
     // always check `docChanged` too.
     if (update.selectionSet || update.docChanged) {
-      const hasSelection = !editingState.compositionEnded && selectedRange().some(range => !range.empty);
-      const updateActiveLine = editingState.compositionEnded && editingState.hasSelection !== hasSelection;
+      const hasSelection = selectedRange().some(range => !range.empty);
+      const selectionStateChanged = editingState.hasSelection !== hasSelection;
       editingState.hasSelection = hasSelection;
 
-      if (updateActiveLine) {
-        // Update invisible behavior as selection changed
-        const invisiblesBehavior = window.config.invisiblesBehavior;
-        if (invisiblesBehavior === InvisiblesBehavior.selection) {
-          setInvisiblesBehavior(invisiblesBehavior);
-        }
-
-        // Clear active line background when there's selection,
-        // it makes the selection easier to read.
-        setShowActiveLineIndicator(!hasSelection && window.config.showActiveLineIndicator);
-
-        // Toggling extensions does not trigger an immediate repaint,
-        // refresh the focus manually.
-        refreshEditFocus();
+      // We don't update active lines when composition is still ongoing.
+      //
+      // Instead, we will make an extra update after composition ended.
+      if (editingState.compositionEnded && selectionStateChanged) {
+        updateActiveLine(hasSelection);
       }
 
       // Handle native updates.
