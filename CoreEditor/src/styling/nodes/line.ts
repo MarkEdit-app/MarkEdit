@@ -1,7 +1,9 @@
 import { RectangleMarker, layer } from '@codemirror/view';
+import { EditorSelection } from '@codemirror/state';
 import { buildInnerBorder } from '../builder';
 
 const borderWidth = 2.5;
+const rectPadding = 2.0;
 const layerClass = 'cm-md-activeIndicator';
 
 /**
@@ -47,12 +49,48 @@ class Layer extends RectangleMarker {
     const contentRect = content.getBoundingClientRect();
 
     // The rect is wider than lineRect, it fills the entire contentDOM
-    const rectToDraw = new DOMRect(
-      contentRect.left,   // x
-      line.offsetTop,     // y
-      contentRect.width,  // width
-      lineRect.height,    // height
-    );
+    const rectToDraw = (() => {
+      // The rect that is computed based on element positions, can have precision issues
+      const fuzzyRect = new DOMRect(
+        contentRect.left,   // x
+        line.offsetTop,     // y
+        contentRect.width,  // width
+        lineRect.height,    // height
+      );
+
+      const editor = window.editor;
+      const startPos = editor.posAtCoords(lineRect);
+      if (startPos === null) {
+        return fuzzyRect;
+      }
+
+      const endPos = editor.state.doc.lineAt(startPos).to;
+      const rects = RectangleMarker.forRange(editor, 'cm-md-rectMerger', EditorSelection.range(startPos, endPos));
+      if (rects.length === 0) {
+        return fuzzyRect;
+      }
+
+      // Unfortunately, geometry values are marked private in RectangleMarker.
+      //
+      // We access them forcibly and ensure their existence with tests.
+      const testRect = rects[0];
+      if (!testRect.hasOwnProperty('top') || !testRect.hasOwnProperty('height')) {
+        return fuzzyRect;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const top = rects.reduce((acc, cur) => Math.min(acc, (cur as any).top as number), 1e9);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const height = rects.reduce((acc, cur) => acc + (cur as any).height as number, 0);
+
+      // The rect that is more accurate, it is always center aligned to the caret
+      return new DOMRect(
+        contentRect.left,         // x
+        top - rectPadding,        // y
+        contentRect.width,        // width
+        height + rectPadding * 2, // height
+      );
+    })();
 
     super(layerClass, rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
     this.rect = rectToDraw;
