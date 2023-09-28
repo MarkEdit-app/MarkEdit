@@ -28,7 +28,7 @@ export interface WebModuleConfig extends WebModule {
   setTheme({ name }: { name: string }): void;
   setFontFace({ fontFace }: { fontFace: WebFontFace }): void;
   setFontSize({ fontSize }: { fontSize: number }): void;
-  setShowLineNumbers({ enabled }: { enabled: boolean } ): void;
+  setShowLineNumbers({ enabled }: { enabled: boolean }): void;
   setShowActiveLineIndicator({ enabled }: { enabled: boolean }): void;
   setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void;
   setTypewriterMode({ enabled }: { enabled: boolean }): void;

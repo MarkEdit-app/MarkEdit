@@ -71,9 +71,18 @@ export function setFontFace(fontFace: WebFontFace) {
     style.fontWeight = fontFace.weight ?? '';
     style.fontStyle = fontFace.style ?? '';
 
+    // If the desired font is ui-monospace, prefix it with the bundled SF Mono.
+    //
+    // The reason is that the system mono fonts don't work well with visible whitespaces,
+    // some glyphs are slightly cropped.
+    //
+    // The bundled SF Mono is in woff2 format, which has better compatibility.
+    const systemMono = 'SF Mono, ui-monospace';
+    const preferredFont = fontFace.family === 'ui-monospace' ? systemMono : fontFace.family;
+
     const fontFamilies = [
-      fontFace.family,
-      'ui-monospace', 'monospace', 'Menlo',
+      preferredFont,
+      systemMono, 'monospace', 'Menlo',
       'system-ui', 'Helvetica', 'Arial', 'sans-serif',
     ];
 
