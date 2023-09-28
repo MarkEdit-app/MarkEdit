@@ -23,8 +23,8 @@ export interface WebModuleCore extends WebModule {
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
   handleFocusLost(): void;
-  handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number } ): void;
-  handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number } ): void;
+  handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number }): void;
+  handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void;
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
