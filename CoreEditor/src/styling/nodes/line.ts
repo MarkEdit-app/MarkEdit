@@ -73,8 +73,9 @@ class Layer extends RectangleMarker {
       // Unfortunately, geometry values are marked private in RectangleMarker.
       //
       // We access them forcibly and ensure their existence with tests.
-      const testRect = rects[0];
-      if (!testRect.hasOwnProperty('top') || !testRect.hasOwnProperty('height')) {
+      //
+      // eslint-disable-next-line no-prototype-builtins
+      if (!rects[0].hasOwnProperty('top') || !rects[0].hasOwnProperty('height')) {
         return fuzzyRect;
       }
 
