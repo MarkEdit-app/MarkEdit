@@ -18,10 +18,10 @@ export const lineIndicatorLayer = layer({
   markers: editor => {
     const content = editor.contentDOM;
     const lineBlocks: BlockInfo[] = [];
+    const ranges = editor.state.selection.ranges;
 
-    let ranges = editor.state.selection.ranges;
+    // Find out all lines, skip overlapping ranges
     let lastBlockPos = -1;
-
     for (const range of ranges) {
       const lineBlock = editor.lineBlockAt(range.head);
       if (lineBlock.from > lastBlockPos) {
