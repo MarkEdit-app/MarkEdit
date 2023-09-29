@@ -102,8 +102,6 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
 
     if contentEdited {
-      document?.markContentDirty(isDirty)
-
       if findPanel.mode != .hidden {
         Task {
           if let count = try? await bridge.search.numberOfMatches() {
@@ -114,6 +112,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
     } else {
       cancelCompletion()
     }
+
+    document?.markContentDirty(isDirty)
   }
 
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo) {
