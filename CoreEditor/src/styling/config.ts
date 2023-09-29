@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorColors, EditorTheme } from './types';
 import { Config, WebFontFace, InvisiblesBehavior } from '../config';
 import { editingState, styleSheets } from '../common/store';
+import { refreshEditFocus } from '../modules/selection';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
 import { lineIndicatorLayer } from './nodes/line';
@@ -157,6 +158,11 @@ export function setFocusMode(enabled: boolean) {
         opacity: 0.25;
       }
     `, false);
+
+    // The state is not initially correct without a focus refresh
+    if (enabled) {
+      setTimeout(refreshEditFocus, 5);
+    }
   }
 
   styleSheets.focusMode.disabled = !enabled;
