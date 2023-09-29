@@ -2,16 +2,16 @@ import { Decoration, DecorationSet, ViewPlugin, ViewUpdate } from '@codemirror/v
 import { lineDecoRanges as createDeco } from '../helper';
 
 /**
- * CodeMirror only decorates the active line with a cm-activeLine class,
- * we use this extension to decorate all selected ranges.
+ * We only decorate active lines with a cm-md-activeIndicator layer,
+ * use this extension to decorate all selected ranges.
  *
  * This is useful for implementing features like showing whitespaces for selections.
  */
 export const selectedVisiblesDecoration = createViewPlugin('cm-selectedVisible');
 
 /**
- * CodeMirror only decorates the active line with a cm-activeLine class,
- * we use this extension to decorate all selected lines, a line can be partially selected.
+ * We only decorate active lines with a cm-md-activeIndicator layer,
+ * use this extension to decorate all selected ranges.
  *
  * This is useful for implementing features like focus mode.
  */

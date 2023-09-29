@@ -5,7 +5,6 @@ import {
   dropCursor,
   rectangularSelection,
   crosshairCursor,
-  highlightActiveLine,
   highlightActiveLineGutter,
   keymap,
 } from '@codemirror/view';
@@ -82,7 +81,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     closeBrackets(),
     rectangularSelection(),
     crosshairCursor(),
-    activeLine.of(window.config.showActiveLineIndicator ? highlightActiveLine() : []),
+    activeLine.of(window.config.showActiveLineIndicator ? lineIndicatorLayer : []),
     highlightActiveLineGutter(),
     selectionHighlight.of(highlightSelectionMatches()),
     localizePhrases(),
@@ -126,7 +125,6 @@ function fullExtensions(options: { lineBreak?: string }) {
     selectedLines.of([]),
     renderExtensions,
     actionExtensions,
-    lineIndicatorLayer, // Must after highlightActiveLine
 
     // Input handling
     wordTokenizer(),
