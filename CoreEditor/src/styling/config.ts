@@ -1,9 +1,10 @@
-import { EditorView, highlightActiveLine } from '@codemirror/view';
+import { EditorView } from '@codemirror/view';
 import { EditorColors, EditorTheme } from './types';
 import { Config, WebFontFace, InvisiblesBehavior } from '../config';
 import { editingState, styleSheets } from '../common/store';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
+import { lineIndicatorLayer } from './nodes/line';
 import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
@@ -126,7 +127,7 @@ export function setShowActiveLineIndicator(enabled: boolean) {
   const editor = window.editor as EditorView | null;
   if (typeof editor?.dispatch === 'function') {
     editor.dispatch({
-      effects: window.dynamics.activeLine?.reconfigure(enabled ? highlightActiveLine() : []),
+      effects: window.dynamics.activeLine?.reconfigure(enabled ? lineIndicatorLayer : []),
     });
   }
 }

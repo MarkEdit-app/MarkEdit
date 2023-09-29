@@ -125,11 +125,6 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
       backgroundColor: `${colors.selection} !important`, // #180 !important is needed by macOS 14 sdk
     },
-    '.cm-activeLine': {
-      // Intentionally hide the effects here, use lineIndicatorLayer to render instead
-      backgroundColor: 'transparent !important',
-      boxShadow: 'none !important',
-    },
     // Brackets
     '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
       backgroundColor: colors.matchingBracket,

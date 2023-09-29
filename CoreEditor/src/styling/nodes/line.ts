@@ -1,4 +1,4 @@
-import { RectangleMarker, layer } from '@codemirror/view';
+import { BlockInfo, layer, RectangleMarker } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { buildInnerBorder } from '../builder';
 
@@ -16,14 +16,21 @@ export const lineIndicatorLayer = layer({
   class: 'cm-md-activeLine',
   above: false,
   markers: editor => {
-    // Fail fast if line indicator is disabled
-    if (!window.config.showActiveLineIndicator) {
-      return [];
+    const content = editor.contentDOM;
+    const lineBlocks: BlockInfo[] = [];
+
+    let ranges = editor.state.selection.ranges;
+    let lastBlockPos = -1;
+
+    for (const range of ranges) {
+      const lineBlock = editor.lineBlockAt(range.head);
+      if (lineBlock.from > lastBlockPos) {
+        lineBlocks.push(lineBlock);
+        lastBlockPos = lineBlock.from;
+      }
     }
 
-    const content = editor.contentDOM;
-    const lines = [...content.querySelectorAll('.cm-activeLine')] as HTMLElement[];
-    return lines.map(line => new Layer(content, line, storage.cachedTheme));
+    return lineBlocks.map(lineBock => new Layer(content, lineBock, storage.cachedTheme));
   },
   update: update => {
     // Theme changed, the update object doesn't have sufficient info
@@ -44,31 +51,13 @@ class Layer extends RectangleMarker {
   // Used for object equality
   private readonly rect: DOMRect;
 
-  constructor(content: HTMLElement, line: HTMLElement, private readonly theme?: string) {
-    const lineRect = line.getBoundingClientRect();
+  constructor(content: HTMLElement, lineBlock: BlockInfo, private readonly theme?: string) {
     const contentRect = content.getBoundingClientRect();
 
     // The rect is wider than lineRect, it fills the entire contentDOM
     const rectToDraw = (() => {
-      // The rect that is computed based on element positions, can have precision issues
-      const fuzzyRect = new DOMRect(
-        contentRect.left,   // x
-        line.offsetTop,     // y
-        contentRect.width,  // width
-        lineRect.height,    // height
-      );
-
-      const editor = window.editor;
-      const startPos = editor.posAtCoords(lineRect);
-      if (startPos === null) {
-        return fuzzyRect;
-      }
-
-      const endPos = editor.state.doc.lineAt(startPos).to;
-      const rects = RectangleMarker.forRange(editor, 'cm-md-rectMerger', EditorSelection.range(startPos, endPos));
-      if (rects.length === 0) {
-        return fuzzyRect;
-      }
+      const range = EditorSelection.range(lineBlock.from, lineBlock.to);
+      const rects = RectangleMarker.forRange(window.editor, 'cm-md-rectMerger', range);
 
       // Unfortunately, geometry values are marked private in RectangleMarker.
       //
@@ -76,7 +65,8 @@ class Layer extends RectangleMarker {
       //
       // eslint-disable-next-line no-prototype-builtins
       if (!rects[0].hasOwnProperty('top') || !rects[0].hasOwnProperty('height')) {
-        return fuzzyRect;
+        console.error('RectangleMarker no longer has top and height');
+        return new DOMRect(0, 0, 0, 0);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,7 +74,7 @@ class Layer extends RectangleMarker {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const height = rects.reduce((acc, cur) => acc + (cur as any).height as number, 0);
 
-      // The rect that is more accurate, it is always center aligned to the caret
+      // The rect that is slightly taller than the caret, centered vertically
       return new DOMRect(
         contentRect.left,         // x
         top - rectPadding,        // y
