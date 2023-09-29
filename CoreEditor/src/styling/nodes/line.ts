@@ -58,6 +58,10 @@ class Layer extends RectangleMarker {
     const rectToDraw = (() => {
       const range = EditorSelection.range(lineBlock.from, lineBlock.to);
       const rects = RectangleMarker.forRange(window.editor, 'cm-md-rectMerger', range);
+      if (rects.length === 0) {
+        console.error('Invalid RectangleMarker length');
+        return new DOMRect(0, 0, 0, 0);
+      }
 
       // Unfortunately, geometry values are marked private in RectangleMarker.
       //
