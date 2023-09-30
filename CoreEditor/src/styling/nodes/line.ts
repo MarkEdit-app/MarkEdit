@@ -63,20 +63,8 @@ class Layer extends RectangleMarker {
         return new DOMRect(0, 0, 0, 0);
       }
 
-      // Unfortunately, geometry values are marked private in RectangleMarker.
-      //
-      // We access them forcibly and ensure their existence with tests.
-      //
-      // eslint-disable-next-line no-prototype-builtins
-      if (!rects[0].hasOwnProperty('top') || !rects[0].hasOwnProperty('height')) {
-        console.error('RectangleMarker no longer has top and height');
-        return new DOMRect(0, 0, 0, 0);
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const top = rects.reduce((acc, cur) => Math.min(acc, (cur as any).top as number), 1e9);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const height = rects.reduce((acc, cur) => acc + (cur as any).height as number, 0);
+      const top = rects.reduce((acc, cur) => Math.min(acc, cur.top), 1e9);
+      const height = rects.reduce((acc, cur) => acc + cur.height, 0);
 
       // The rect that is slightly taller than the caret, centered vertically
       return new DOMRect(
