@@ -66,12 +66,10 @@ export function startObserving() {
     });
   });
 
+  // It happens usually when the page is scaled, i.e., it's not the actual size
   document.addEventListener('scroll', () => {
-    // Dismiss the completion panel whenever the document scrolls,
-    // it happens usually when the page is scaled, i.e., it's not the actual size.
-    if (completion.isPanelVisible()) {
-      window.nativeModules.completion.cancelCompletion();
-    }
+    clearTimeout(storage.scrollTimer);
+    storage.scrollTimer = setTimeout(() => window.nativeModules.core.notifyContentOffsetDidChange(), 100);
   });
 
   observeEventsForTokenization();
@@ -143,9 +141,11 @@ function observeEventsForCompletion() {
 }
 
 const storage: {
+  scrollTimer: ReturnType<typeof setTimeout> | undefined;
   isMouseDown: boolean;
   isMetaKeyDown: boolean;
 } = {
+  scrollTimer: undefined,
   isMouseDown: false,
   isMetaKeyDown: false,
 };
