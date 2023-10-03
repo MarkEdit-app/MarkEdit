@@ -1,6 +1,7 @@
 import { BlockInfo, layer, RectangleMarker } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { buildInnerBorder } from '../builder';
+import { getViewportScale } from '../../common/utils';
 
 const borderWidth = 2.5;
 const rectPadding = 2.0;
@@ -63,15 +64,16 @@ class Layer extends RectangleMarker {
         return new DOMRect(0, 0, 0, 0);
       }
 
+      const scale = getViewportScale();
       const top = rects.reduce((acc, cur) => Math.min(acc, cur.top), 1e9);
       const height = rects.reduce((acc, cur) => acc + cur.height, 0);
 
       // The rect that is slightly taller than the caret, centered vertically
       return new DOMRect(
-        contentRect.left,         // x
-        top - rectPadding,        // y
-        contentRect.width,        // width
-        height + rectPadding * 2, // height
+        contentRect.left,           // x
+        top - rectPadding,          // y
+        contentRect.width * scale,  // width
+        height + rectPadding * 2,   // height
       );
     })();
 
