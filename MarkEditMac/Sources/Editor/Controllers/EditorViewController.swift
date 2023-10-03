@@ -220,6 +220,7 @@ extension EditorViewController {
     // Toggling isHidden because line numbers are initially rendered as only "1",
     // it gets fixed after resetting the text, but takes time especially for huge documents.
     webView.isHidden = true
+    webView.magnification = 1.0
 
     bridge.core.resetEditor(text: text, revision: document?.latestRevision, readOnly: isReadOnly) { _ in
       self.webView.isHidden = false
