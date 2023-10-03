@@ -32,7 +32,7 @@ extension EditorViewController {
     NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [weak self] event in
       // Press backspace or option to cancel the correction indicator,
       // it ensures a smoother word completion experience.
-      if (event.keyCode == 51 || event.keyCode == 58), let self {
+      if event.keyCode == 51 || event.keyCode == 58, let self {
         NSSpellChecker.shared.declineCorrectionIndicator(for: self.webView)
       }
 
