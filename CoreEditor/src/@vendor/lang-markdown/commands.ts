@@ -162,9 +162,9 @@ export const insertNewlineContinueMarkup: StateCommand = ({state, dispatch}) => 
     }
     let from = pos
     while (from > line.from && /\s/.test(line.text.charAt(from - line.from - 1))) from--
-    insert = state.lineBreak + normalizeIndent(insert, state)
-    changes.push({from, to: pos, insert})
-    return {range: EditorSelection.cursor(from + insert.length), changes}
+    insert = normalizeIndent(insert, state)
+    changes.push({from, to: pos, insert: state.lineBreak + insert})
+    return {range: EditorSelection.cursor(from + insert.length + 1), changes}
   })
   if (dont) return false
   dispatch(state.update(changes, {scrollIntoView: true, userEvent: "input"}))
