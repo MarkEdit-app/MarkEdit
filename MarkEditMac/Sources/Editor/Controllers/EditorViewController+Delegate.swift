@@ -116,6 +116,10 @@ extension EditorViewController: EditorModuleCoreDelegate {
     document?.markContentDirty(isDirty)
   }
 
+  func editorCoreContentOffsetDidChange(_ sender: EditorModuleCore) {
+    cancelOperation(sender)
+  }
+
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo) {
     statusView.updateLineColumn(selectedLineColumn)
     layoutStatusView()

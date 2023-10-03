@@ -14,6 +14,7 @@ public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyViewportScaleDidChange()
   func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
+  func notifyContentOffsetDidChange()
   func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
   func notifyLinkClicked(link: String)
 }
@@ -33,6 +34,9 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyViewDidUpdate": { [weak self] in
       self?.notifyViewDidUpdate(parameters: $0)
+    },
+    "notifyContentOffsetDidChange": { [weak self] in
+      self?.notifyContentOffsetDidChange(parameters: $0)
     },
     "notifyCompositionEnded": { [weak self] in
       self?.notifyCompositionEnded(parameters: $0)
@@ -76,6 +80,11 @@ final class NativeBridgeCore: NativeBridge {
     }
 
     module.notifyViewDidUpdate(contentEdited: message.contentEdited, compositionEnded: message.compositionEnded, isDirty: message.isDirty, selectedLineColumn: message.selectedLineColumn)
+    return .success(nil)
+  }
+
+  private func notifyContentOffsetDidChange(parameters: Data) -> Result<Any?, Error>? {
+    module.notifyContentOffsetDidChange()
     return .success(nil)
   }
 

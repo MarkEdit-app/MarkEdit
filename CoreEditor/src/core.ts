@@ -8,7 +8,6 @@ import * as events from './events';
 import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
-import * as completion from './modules/completion';
 import * as diff from './modules/diff';
 import * as grammarly from './modules/grammarly';
 import * as selection from './modules/selection';
@@ -73,20 +72,17 @@ export function resetEditor(
   fixWebKitWheelIssues(scrollDOM);
 
   scrollDOM.addEventListener('scroll', () => {
-    // Dismiss the completion panel whenever the dom scrolls
-    if (completion.isPanelVisible()) {
-      window.nativeModules.completion.cancelCompletion();
+    if (storage.scrollTimer !== undefined) {
+      clearTimeout(storage.scrollTimer);
+      storage.scrollTimer = undefined;
     }
 
     // Trick to stop Grammarly from working until scroll stops
-    storage.scrollTimer = (() => {
-      if (storage.scrollTimer !== undefined) {
-        clearTimeout(storage.scrollTimer);
-      }
-
-      grammarly.setIdle(true);
-      return setTimeout(() => grammarly.setIdle(false), 100);
-    })();
+    grammarly.setIdle(true);
+    storage.scrollTimer = setTimeout(() => {
+      grammarly.setIdle(false);
+      window.nativeModules.core.notifyContentOffsetDidChange();
+    }, 100);
   });
 
   // Recofigure, window.config might have changed

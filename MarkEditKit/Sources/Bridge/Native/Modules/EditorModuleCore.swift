@@ -16,6 +16,7 @@ public protocol EditorModuleCoreDelegate: AnyObject {
     isDirty: Bool,
     selectedLineColumn: LineColumnInfo
   )
+  func editorCoreContentOffsetDidChange(_ sender: EditorModuleCore)
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo)
   func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String)
 }
@@ -48,6 +49,10 @@ public final class EditorModuleCore: NativeModuleCore {
       isDirty: isDirty,
       selectedLineColumn: selectedLineColumn
     )
+  }
+
+  public func notifyContentOffsetDidChange() {
+    delegate?.editorCoreContentOffsetDidChange(self)
   }
 
   public func notifyCompositionEnded(selectedLineColumn: LineColumnInfo) {
