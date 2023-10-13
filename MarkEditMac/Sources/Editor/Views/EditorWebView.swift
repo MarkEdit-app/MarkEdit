@@ -15,6 +15,7 @@ enum EditorWebViewMenuAction {
 
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnly(_ webView: EditorWebView) -> Bool
+  func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
   func editorWebView(
     _ webView: EditorWebView,
@@ -29,6 +30,11 @@ protocol EditorWebViewActionDelegate: AnyObject {
 final class EditorWebView: WKWebView {
   static let baseURL = URL(string: "http://localhost/")
   weak var actionDelegate: EditorWebViewActionDelegate?
+
+  override func mouseDown(with event: NSEvent) {
+    super.mouseDown(with: event)
+    actionDelegate?.editorWebView(self, mouseDownWith: event)
+  }
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
     // https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp

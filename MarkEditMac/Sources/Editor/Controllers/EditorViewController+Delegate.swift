@@ -35,6 +35,10 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isReadOnly
   }
 
+  func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent) {
+    cancelCompletion()
+  }
+
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction) {
     switch menuAction {
     case .findSelection:
