@@ -15,6 +15,10 @@ public extension NSApplication {
     currentEvent?.modifierFlags.contains(.shift) == true
   }
 
+  var optionKeyIsPressed: Bool {
+    currentEvent?.modifierFlags.contains(.option) == true
+  }
+
   func showOpenPanel() {
     if let openPanel = windows.first(where: { $0 is NSOpenPanel }) {
       openPanel.makeKeyAndOrderFront(self)
