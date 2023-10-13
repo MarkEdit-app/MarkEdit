@@ -108,6 +108,12 @@ private extension NSSpellChecker {
       }
     }
 
+    // When the option key is held,
+    // the user may press esc to show text completion.
+    guard !NSApplication.shared.optionKeyIsPressed else {
+      return dummyAction()
+    }
+
     // We prefer completion over correction,
     // when suggestWhileTyping is enabled we don't show correction indicators.
     guard !AppPreferences.Assistant.suggestWhileTyping else {

@@ -49,6 +49,11 @@ extension EditorViewController {
       ) ?? [])
     }
 
+    // If there is an exact match, always make it the first element
+    if let index = completions.firstIndex(of: prefix), index > 0 {
+      completions.insert(completions.remove(at: index), at: 0)
+    }
+
     updateCompletionPanel(isVisible: !completions.isEmpty)
     updateCompletionPanel(completions: completions.deduplicated)
   }
