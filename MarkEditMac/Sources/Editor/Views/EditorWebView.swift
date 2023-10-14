@@ -37,16 +37,15 @@ final class EditorWebView: WKWebView {
   }
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
-    // https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
     menu.items = menu.items.filter { item in
-      // Disable Font and Paragraph Direction
-      if item.submenu?.items.contains(where: { $0.tag == 41 || $0.tag == 52 }) == true {
+      // Disable "Reload", which is useful for read-only mode
+      if item.tag == WKContextMenuItemTag.reload.rawValue {
         return false
       }
 
-      // Hide the "Reload" item, useful for read-only mode
-      if item.identifier?.rawValue == "WKMenuItemIdentifierReload" {
-        item.isHidden = true
+      // Disable "Font", "Paragraph Direction", "Selection Direction"
+      if item.submenuContains(anyOf: .showFonts, .defaultDirection, .textDirectionDefault) {
+        return false
       }
 
       return true
@@ -83,4 +82,22 @@ private extension EditorWebView {
   @objc func selectAllOccurrences(_ sender: NSMenuItem) {
     actionDelegate?.editorWebView(self, didSelect: .selectAllOccurrences)
   }
+}
+
+private extension NSMenuItem {
+  func submenuContains(anyOf tags: WKContextMenuItemTag...) -> Bool {
+    tags.contains { tag in
+      submenu?.items.contains { $0.tag == tag.rawValue } == true
+    }
+  }
+}
+
+/**
+ https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
+ */
+private enum WKContextMenuItemTag: Int {
+  case reload = 12
+  case showFonts = 41
+  case defaultDirection = 52
+  case textDirectionDefault = 59
 }
