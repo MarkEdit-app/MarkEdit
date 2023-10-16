@@ -18,7 +18,19 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       @objc func _drawsBackground() -> Bool { false }
     }
 
-    let webView = WKWebView(frame: .zero, configuration: Configuration())
+    class WebView: WKWebView {
+      override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
+        menu.items.forEach {
+          if $0.identifier?.rawValue == "WKMenuItemIdentifierReload" {
+            $0.isHidden = true
+          }
+        }
+
+        super.willOpenMenu(menu, with: event)
+      }
+    }
+
+    let webView = WebView(frame: .zero, configuration: Configuration())
     webView.allowsMagnification = true
     return webView
   }()
