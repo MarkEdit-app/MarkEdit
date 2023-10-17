@@ -1,4 +1,5 @@
 import { EditorView } from '@codemirror/view';
+import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
 import { getViewportScale } from './common/utils';
@@ -149,6 +150,7 @@ export function insertText(text: string, from: number, to: number) {
   const editor = window.editor;
   editor.dispatch({
     changes: { from, to, insert: text },
+    selection: EditorSelection.cursor(from + text.length),
   });
 }
 
