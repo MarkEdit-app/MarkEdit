@@ -1,4 +1,4 @@
-// Thanks to https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.ts
+// Thanks to https://github.com/laurent22/joplin/blob/dev/packages/editor/CodeMirror/markdown/markdownMathParser.ts
 
 import { tags, Tag } from "@lezer/highlight";
 import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from "@lezer/common";
