@@ -23,7 +23,6 @@
 		870F178E2985775B00003DA7 /* AppKitControls in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178D2985775B00003DA7 /* AppKitControls */; };
 		870F17902985775B00003DA7 /* AppKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178F2985775B00003DA7 /* AppKitExtensions */; };
 		870F17922985775B00003DA7 /* Previewer in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17912985775B00003DA7 /* Previewer */; };
-		870F17942985775B00003DA7 /* Proofing in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17932985775B00003DA7 /* Proofing */; };
 		870F17962985775B00003DA7 /* SettingsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17952985775B00003DA7 /* SettingsUI */; };
 		870FF83A298BD7DC00E4AE99 /* BundleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870FF839298BD7DC00E4AE99 /* BundleTests.swift */; };
 		871A2F4D2A4BD22F0080E3F5 /* RuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871A2F4C2A4BD22F0080E3F5 /* RuntimeTests.swift */; };
@@ -205,7 +204,6 @@
 			files = (
 				870F177D29855CA500003DA7 /* MarkEditKit in Frameworks */,
 				870F17902985775B00003DA7 /* AppKitExtensions in Frameworks */,
-				870F17942985775B00003DA7 /* Proofing in Frameworks */,
 				8790ABDB2A98FF610083825C /* Statistics in Frameworks */,
 				87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */,
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
@@ -528,7 +526,6 @@
 				870F178D2985775B00003DA7 /* AppKitControls */,
 				870F178F2985775B00003DA7 /* AppKitExtensions */,
 				870F17912985775B00003DA7 /* Previewer */,
-				870F17932985775B00003DA7 /* Proofing */,
 				870F17952985775B00003DA7 /* SettingsUI */,
 				8775A77A29867012005867BF /* FontPicker */,
 				874823CD29B0BD980067EC49 /* TextCompletion */,
@@ -1137,10 +1134,6 @@
 		870F17912985775B00003DA7 /* Previewer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Previewer;
-		};
-		870F17932985775B00003DA7 /* Proofing */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Proofing;
 		};
 		870F17952985775B00003DA7 /* SettingsUI */ = {
 			isa = XCSwiftPackageProductDependency;

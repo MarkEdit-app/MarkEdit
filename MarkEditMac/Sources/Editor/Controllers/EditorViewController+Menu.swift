@@ -8,7 +8,6 @@
 import AppKit
 import MarkEditKit
 import FontPicker
-import Proofing
 
 // MARK: - NSMenuDelegate
 
@@ -360,9 +359,10 @@ private extension EditorViewController {
     }
   }
 
-  @IBAction func toggleGrammarly(_ sender: Any?) {
-    (sender as? NSMenuItem)?.toggle()
-    Grammarly.shared.toggle(bridge: bridge.grammarly)
+  @IBAction func getGrammarly(_ sender: Any?) {
+    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#grammarly") {
+      NSWorkspace.shared.open(url)
+    }
   }
 }
 

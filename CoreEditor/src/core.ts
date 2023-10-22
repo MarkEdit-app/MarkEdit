@@ -10,7 +10,6 @@ import * as styling from './styling/config';
 import * as themes from './styling/themes';
 import * as lineEndings from './modules/lineEndings';
 import * as diff from './modules/diff';
-import * as grammarly from './modules/grammarly';
 import * as selection from './modules/selection';
 import * as history from './modules/history';
 
@@ -78,10 +77,7 @@ export function resetEditor(
       storage.scrollTimer = undefined;
     }
 
-    // Trick to stop Grammarly from working until scroll stops
-    grammarly.setIdle(true);
     storage.scrollTimer = setTimeout(() => {
-      grammarly.setIdle(false);
       window.nativeModules.core.notifyContentOffsetDidChange();
     }, 100);
   });

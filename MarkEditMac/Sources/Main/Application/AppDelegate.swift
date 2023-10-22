@@ -6,7 +6,6 @@
 
 import AppKit
 import AppKitExtensions
-import Proofing
 import SettingsUI
 
 @NSApplicationMain
@@ -59,12 +58,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       name: NSWindow.didResignKeyNotification,
       object: nil
     )
-  }
-
-  func application(_ application: NSApplication, open urls: [URL]) {
-    if let url = urls.first(where: { $0.host == Grammarly.shared.redirectHost }) {
-      Grammarly.shared.completeOAuth(url: url)
-    }
   }
 }
 

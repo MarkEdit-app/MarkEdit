@@ -9,7 +9,6 @@ import AppKitControls
 import WebKit
 import MarkEditCore
 import MarkEditKit
-import Proofing
 import TextCompletion
 
 final class EditorViewController: NSViewController {
@@ -117,7 +116,7 @@ final class EditorViewController: NSViewController {
       ].joined(separator: "\n\n")
 
       DispatchQueue.main.async {
-        // Non-nil baseURL is required by Grammarly and opening local files
+        // Non-nil baseURL is required by scenarios like opening local files
         webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
       }
     }
@@ -228,8 +227,6 @@ extension EditorViewController {
         spellcheck: true,
         autocorrect: true
       ))
-
-      Grammarly.shared.update(bridge: self.bridge.grammarly, wasReset: true)
     }
 
     // Disable unnecessary UI elements for read-only

@@ -9,7 +9,6 @@ import AppKit
 import WebKit
 import MarkEditCore
 import MarkEditKit
-import Proofing
 
 // MARK: - WKUIDelegate
 
@@ -17,11 +16,6 @@ extension EditorViewController: WKUIDelegate {
   func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
     guard let url = navigationAction.request.url else {
       return nil
-    }
-
-    // Capture the bridge for Grammarly OAuth requests
-    if url.absoluteString.contains("grammarly.com") {
-      Grammarly.shared.startOAuth(bridge: bridge.grammarly)
     }
 
     // Instead of creating a new WebView, opening the link using the system default behavior.

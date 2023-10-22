@@ -20,7 +20,6 @@
     "@codemirror/search": "^6.0.0",
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
-    "@grammarly/editor-sdk": "^2.0.0",
     "@lezer/common": "^1.0.0",
     "diff": "^5.1.0",
     "js-yaml": "^4.1.0"

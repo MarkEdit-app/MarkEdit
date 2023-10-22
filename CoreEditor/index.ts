@@ -11,7 +11,6 @@ import { WebModuleSelectionImpl } from './src/bridge/web/selection';
 import { WebModuleFormatImpl } from './src/bridge/web/format';
 import { WebModuleSearchImpl } from './src/bridge/web/search';
 import { WebModuleTableOfContentsImpl } from './src/bridge/web/toc';
-import { WebModuleGrammarlyImpl } from './src/bridge/web/grammarly';
 
 import { pseudoDocument } from './src/@test/mock';
 import { createNativeModule } from './src/bridge/nativeModule';
@@ -24,7 +23,6 @@ import * as core from './src/core';
 import * as styling from './src/styling/config';
 import * as themes from './src/styling/themes';
 import * as events from './src/events';
-import * as grammarly from './src/modules/grammarly';
 
 // "{{EDITOR_CONFIG}}" will be replaced with a JSON literal in production
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,7 +56,6 @@ window.webModules = {
   format: new WebModuleFormatImpl(),
   search: new WebModuleSearchImpl(),
   toc: new WebModuleTableOfContentsImpl(),
-  grammarly: new WebModuleGrammarlyImpl(),
 };
 
 window.nativeModules = {
@@ -80,4 +77,3 @@ window.onload = () => {
 
 styling.setUp(config, themes.loadTheme(config.theme).colors);
 events.startObserving();
-grammarly.trottleMutations();
