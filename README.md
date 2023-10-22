@@ -97,6 +97,4 @@ Thanks in advance.
 
 MarkEdit is built on top of the awesome [CodeMirror 6](https://codemirror.net/) project.
 
-MarkEdit has built-in proofing support based on [Grammarly](https://grammarly.com/).
-
 MarkEdit uses [ts-gyb](https://github.com/microsoft/ts-gyb) to generate lots of boilerplate code.

@@ -26,10 +26,6 @@ let package = Package(
       targets: ["Previewer"]
     ),
     .library(
-      name: "Proofing",
-      targets: ["Proofing"]
-    ),
-    .library(
       name: "SettingsUI",
       targets: ["SettingsUI"]
     ),
@@ -81,14 +77,6 @@ let package = Package(
       resources: [
         .process("Resources"),
       ],
-      plugins: [
-        .plugin(name: "SwiftLint", package: "MarkEditTools"),
-      ]
-    ),
-    .target(
-      name: "Proofing",
-      dependencies: ["MarkEditKit"],
-      path: "Sources/Proofing",
       plugins: [
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
       ]
