@@ -240,6 +240,7 @@ extension AppPreferences {
         return Editor.invisiblesBehavior
       #endif
       }(),
+      readOnlyMode: false,
       typewriterMode: Editor.typewriterMode,
       focusMode: Editor.focusMode,
       lineWrapping: Editor.lineWrapping,

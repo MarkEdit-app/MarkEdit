@@ -1,8 +1,9 @@
 import { EditorView } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
 import { indentUnit } from '@codemirror/language';
 import { WebFontFace, InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
-import { scrollToSelection } from '../selection';
+import { refreshEditFocus, scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
 import { loadTheme } from '../../styling/themes';
 
@@ -42,6 +43,21 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior, updateSelect
   if (updateSelection && behavior === InvisiblesBehavior.selection) {
     const selection = window.editor.state.selection;
     window.editor.dispatch({ selection });
+  }
+}
+
+export function setReadOnlyMode(enabled: boolean) {
+  window.editor.dispatch({
+    effects: window.dynamics.readOnly?.reconfigure(enabled ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
+  });
+
+  window.config.readOnlyMode = enabled;
+  refreshEditFocus();
+
+  if (enabled) {
+    window.editor.contentDOM.blur();
+  } else {
+    window.editor.contentDOM.focus();
   }
 }
 

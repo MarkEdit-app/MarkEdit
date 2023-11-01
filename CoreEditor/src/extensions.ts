@@ -34,6 +34,7 @@ import { frontMatterStyle } from './styling/nodes/frontMatter';
 import { highlightDiffs } from './styling/nodes/diff';
 
 const theme = new Compartment;
+const readOnly = new Compartment;
 const gutters = new Compartment;
 const invisibles = new Compartment;
 const activeLine = new Compartment;
@@ -45,6 +46,7 @@ const selectionHighlight = new Compartment;
 
 window.dynamics = {
   theme,
+  readOnly,
   gutters,
   invisibles,
   activeLine,
@@ -69,6 +71,16 @@ export function extensions(options: {
 
 function fullExtensions(options: { lineBreak?: string }) {
   return [
+    // Read-only
+    readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
+    EditorState.transactionFilter.of(transaction => {
+      if (window.config.readOnlyMode && transaction.docChanged) {
+        return [];
+      } else {
+        return transaction;
+      }
+    }),
+
     // Basic
     highlightSpecialChars(),
     history(),
@@ -144,6 +156,7 @@ function previewExtensions() {
     highlightSpecialChars(),
     EditorView.editable.of(false),
     EditorState.readOnly.of(true),
+    EditorState.transactionFilter.of(tr => tr.docChanged ? [] : tr),
 
     // Line behaviors
     gutters.of(window.config.showLineNumbers ? gutterExtensions : []),

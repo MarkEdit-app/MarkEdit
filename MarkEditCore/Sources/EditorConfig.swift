@@ -17,6 +17,7 @@ public struct EditorConfig: Encodable {
   let showLineNumbers: Bool
   let showActiveLineIndicator: Bool
   let invisiblesBehavior: EditorInvisiblesBehavior
+  let readOnlyMode: Bool
   let typewriterMode: Bool
   let focusMode: Bool
   let lineWrapping: Bool
@@ -35,6 +36,7 @@ public struct EditorConfig: Encodable {
     showLineNumbers: Bool,
     showActiveLineIndicator: Bool,
     invisiblesBehavior: EditorInvisiblesBehavior,
+    readOnlyMode: Bool,
     typewriterMode: Bool,
     focusMode: Bool,
     lineWrapping: Bool,
@@ -52,6 +54,7 @@ public struct EditorConfig: Encodable {
     self.showLineNumbers = showLineNumbers
     self.showActiveLineIndicator = showActiveLineIndicator
     self.invisiblesBehavior = invisiblesBehavior
+    self.readOnlyMode = readOnlyMode
     self.typewriterMode = typewriterMode
     self.focusMode = focusMode
     self.lineWrapping = lineWrapping
