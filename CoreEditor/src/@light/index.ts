@@ -23,6 +23,7 @@ const extensions = [
   highlightSpecialChars(),
   EditorView.editable.of(false),
   EditorState.readOnly.of(true),
+  EditorState.transactionFilter.of(tr => tr.docChanged ? [] : tr),
   EditorView.lineWrapping,
 
   // Markdown

@@ -17,6 +17,10 @@ export const lineIndicatorLayer = layer({
   class: 'cm-md-activeLine',
   above: false,
   markers: editor => {
+    if (window.config.readOnlyMode) {
+      return [];
+    }
+
     const content = editor.contentDOM;
     const lineBlocks: BlockInfo[] = [];
     const ranges = editor.state.selection.ranges;

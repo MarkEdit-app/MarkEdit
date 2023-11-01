@@ -27,13 +27,14 @@ import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
 
-// Read-only mode
+// Revision mode
 import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
 import { tableStyle } from './styling/nodes/table';
 import { frontMatterStyle } from './styling/nodes/frontMatter';
 import { highlightDiffs } from './styling/nodes/diff';
 
 const theme = new Compartment;
+const readOnly = new Compartment;
 const gutters = new Compartment;
 const invisibles = new Compartment;
 const activeLine = new Compartment;
@@ -45,6 +46,7 @@ const selectionHighlight = new Compartment;
 
 window.dynamics = {
   theme,
+  readOnly,
   gutters,
   invisibles,
   activeLine,
@@ -57,11 +59,11 @@ window.dynamics = {
 
 // Make this a function because some resources (e.g., phrases) require lazy loading
 export function extensions(options: {
-  readOnly: boolean;
+  revisionMode: boolean;
   lineBreak?: string;
 }) {
-  if (options.readOnly) {
-    return readOnlyExtensions();
+  if (options.revisionMode) {
+    return revisionExtensions();
   } else {
     return fullExtensions(options);
   }
@@ -69,6 +71,16 @@ export function extensions(options: {
 
 function fullExtensions(options: { lineBreak?: string }) {
   return [
+    // Read-only
+    readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
+    EditorState.transactionFilter.of(transaction => {
+      if (window.config.readOnlyMode && transaction.docChanged) {
+        return [];
+      } else {
+        return transaction;
+      }
+    }),
+
     // Basic
     highlightSpecialChars(),
     history(),
@@ -134,16 +146,17 @@ function fullExtensions(options: { lineBreak?: string }) {
 }
 
 /**
- * The minimum set of extensions used in read-only mode.
+ * The minimum set of extensions used in revision mode.
  *
  * Don't share the code with @light builds, which increase the bundle size.
  */
-function readOnlyExtensions() {
+function revisionExtensions() {
   return [
     // Basic
     highlightSpecialChars(),
     EditorView.editable.of(false),
     EditorState.readOnly.of(true),
+    EditorState.transactionFilter.of(tr => tr.docChanged ? [] : tr),
 
     // Line behaviors
     gutters.of(window.config.showLineNumbers ? gutterExtensions : []),

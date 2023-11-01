@@ -42,6 +42,7 @@ export interface Config {
   showLineNumbers: boolean;
   showActiveLineIndicator: boolean;
   invisiblesBehavior: InvisiblesBehavior;
+  readOnlyMode: boolean;
   typewriterMode: boolean;
   focusMode: boolean;
   lineWrapping: boolean;
@@ -58,6 +59,7 @@ export interface Config {
  */
 export interface Dynamics {
   theme: Compartment;
+  readOnly?: Compartment;
   gutters?: Compartment;
   invisibles?: Compartment;
   activeLine?: Compartment;

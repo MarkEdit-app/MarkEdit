@@ -34,6 +34,7 @@ const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
   showLineNumbers: true,
   showActiveLineIndicator: true,
   invisiblesBehavior: InvisiblesBehavior.always,
+  readOnlyMode: false,
   typewriterMode: false,
   focusMode: false,
   lineWrapping: true,

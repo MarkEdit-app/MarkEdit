@@ -28,6 +28,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
   @IBOutlet weak var editUndoItem: NSMenuItem?
   @IBOutlet weak var editRedoItem: NSMenuItem?
+  @IBOutlet weak var editReadOnlyItem: NSMenuItem?
   @IBOutlet weak var formatBulletItem: NSMenuItem?
   @IBOutlet weak var formatNumberingItem: NSMenuItem?
   @IBOutlet weak var formatTodoItem: NSMenuItem?

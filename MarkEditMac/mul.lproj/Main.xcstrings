@@ -1273,6 +1273,30 @@
         }
       }
     },
+    "ex0-rS-Zlm.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Read Only Mode\"; ObjectID = \"ex0-rS-Zlm\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Read Only Mode"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只读模式"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只讀模式"
+          }
+        }
+      }
+    },
     "F2S-fz-NVQ.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"Help\"; ObjectID = \"F2S-fz-NVQ\";",
       "extractionState" : "extracted_with_value",

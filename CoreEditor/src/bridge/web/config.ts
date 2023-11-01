@@ -9,6 +9,7 @@ import {
   setShowLineNumbers,
   setShowActiveLineIndicator,
   setInvisiblesBehavior,
+  setReadOnlyMode,
   setTypewriterMode,
   setFocusMode,
   setLineWrapping,
@@ -31,6 +32,7 @@ export interface WebModuleConfig extends WebModule {
   setShowLineNumbers({ enabled }: { enabled: boolean }): void;
   setShowActiveLineIndicator({ enabled }: { enabled: boolean }): void;
   setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void;
+  setReadOnlyMode({ enabled }: { enabled: boolean }): void;
   setTypewriterMode({ enabled }: { enabled: boolean }): void;
   setFocusMode({ enabled }: { enabled: boolean }): void;
   setLineWrapping({ enabled }: { enabled: boolean }): void;
@@ -64,6 +66,10 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setInvisiblesBehavior({ behavior }: { behavior: InvisiblesBehavior }): void {
     setInvisiblesBehavior(behavior, true);
+  }
+
+  setReadOnlyMode({ enabled }: { enabled: boolean }): void {
+    setReadOnlyMode(enabled);
   }
 
   setTypewriterMode({ enabled }: { enabled: boolean }): void {

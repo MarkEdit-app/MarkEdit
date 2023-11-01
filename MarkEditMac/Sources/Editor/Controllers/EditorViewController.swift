@@ -30,7 +30,10 @@ final class EditorViewController: NSViewController {
     }
   }
 
-  var isReadOnly: Bool {
+  /// Whether the content is editable, the user can toggle the read-only state at any time.
+  var isReadOnlyMode = false
+  /// Whether the revisions of the document are being reviewed, i.e., version browsing mode.
+  var isRevisionMode: Bool {
     document?.isInViewingMode ?? false
   }
 
@@ -221,7 +224,7 @@ extension EditorViewController {
     webView.isHidden = true
     webView.magnification = 1.0
 
-    bridge.core.resetEditor(text: text, revision: document?.latestRevision, readOnly: isReadOnly) { _ in
+    bridge.core.resetEditor(text: text, revision: document?.latestRevision, revisionMode: isRevisionMode) { _ in
       self.webView.isHidden = false
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
@@ -229,12 +232,12 @@ extension EditorViewController {
       ))
     }
 
-    // Disable unnecessary UI elements for read-only
+    // Disable unnecessary UI elements for revision mode
     if let identifier = view.window?.toolbar?.identifier, !identifier.isEmpty {
-      view.window?.toolbar?.allowsUserCustomization = !isReadOnly
+      view.window?.toolbar?.allowsUserCustomization = !isRevisionMode
     }
 
-    findPanel.searchField.isHidden = isReadOnly
+    findPanel.searchField.isHidden = isRevisionMode
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
 }

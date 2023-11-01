@@ -74,6 +74,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       showLineNumbers: false,
       showActiveLineIndicator: false,
       invisiblesBehavior: .always,
+      readOnlyMode: false,
       typewriterMode: false,
       focusMode: false,
       lineWrapping: true,

@@ -14,7 +14,8 @@ enum EditorWebViewMenuAction {
 }
 
 protocol EditorWebViewActionDelegate: AnyObject {
-  func editorWebViewIsReadOnly(_ webView: EditorWebView) -> Bool
+  func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
+  func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
   func editorWebView(
@@ -38,7 +39,7 @@ final class EditorWebView: WKWebView {
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
     menu.items = menu.items.filter { item in
-      // Disable "Reload", which is useful for read-only mode
+      // Disable "Reload", which is useful for revision mode
       if item.tag == WKContextMenuItemTag.reload.rawValue {
         return false
       }
@@ -51,8 +52,8 @@ final class EditorWebView: WKWebView {
       return true
     }
 
-    // Keep items minimal for ready-only mode
-    if actionDelegate?.editorWebViewIsReadOnly(self) == true {
+    // Keep items minimal for revision mode
+    if actionDelegate?.editorWebViewIsRevisionMode(self) == true {
       return super.willOpenMenu(menu, with: event)
     }
 
@@ -60,12 +61,13 @@ final class EditorWebView: WKWebView {
     menu.addItem(withTitle: Localized.Search.findSelection, action: #selector(findSelection(_:)))
     menu.addItem(withTitle: Localized.Search.selectAllOccurrences, action: #selector(selectAllOccurrences(_:)))
 
-    menu.addItem({
+    // Only add text format items when it's not read-only
+    if !(actionDelegate?.editorWebViewIsReadOnlyMode(self) ?? false) {
       let item = NSMenuItem()
       item.title = Localized.Toolbar.textFormat
       item.submenu = NSApp.appDelegate?.textFormatMenu?.copiedMenu
-      return item
-    }())
+      menu.addItem(item)
+    }
 
     menu.addItem(.separator())
     super.willOpenMenu(menu, with: event)

@@ -89,6 +89,18 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setInvisiblesBehavior", message: message, completion: completion)
   }
 
+  public func setReadOnlyMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let enabled: Bool
+    }
+
+    let message = Message(
+      enabled: enabled
+    )
+
+    webView?.invoke(path: "webModules.config.setReadOnlyMode", message: message, completion: completion)
+  }
+
   public func setTypewriterMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
