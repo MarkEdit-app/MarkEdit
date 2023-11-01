@@ -1334,6 +1334,23 @@
         }
       }
     },
+    "New Filename Extension:" : {
+      "comment" : "Filename extension for new files",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新文件扩展名："
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新文件副檔名："
+          }
+        }
+      }
+    },
     "New Window Behavior:" : {
       "comment" : "Behavior when creating new windows",
       "localizations" : {

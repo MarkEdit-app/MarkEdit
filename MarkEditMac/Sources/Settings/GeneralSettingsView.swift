@@ -13,6 +13,7 @@ struct GeneralSettingsView: View {
   @State private var appearance = AppPreferences.General.appearance
   @State private var newWindowBehavior = AppPreferences.General.newWindowBehavior
   @State private var quitAlwaysKeepsWindows = AppPreferences.General.quitAlwaysKeepsWindows
+  @State private var newFilenameExtension = AppPreferences.General.newFilenameExtension
   @State private var defaultTextEncoding = AppPreferences.General.defaultTextEncoding
   @State private var defaultLineEndings = AppPreferences.General.defaultLineEndings
 
@@ -48,6 +49,16 @@ struct GeneralSettingsView: View {
       }
 
       Section {
+        Picker(Localized.Settings.newFilenameExtension, selection: $newFilenameExtension) {
+          Text(NewFilenameExtension.md.rawValue).tag(NewFilenameExtension.md)
+          Text(NewFilenameExtension.markdown.rawValue).tag(NewFilenameExtension.markdown)
+          Text(NewFilenameExtension.txt.rawValue).tag(NewFilenameExtension.txt)
+        }
+        .onChange(of: newFilenameExtension) { newFilenameExtension in
+          AppPreferences.General.newFilenameExtension = newFilenameExtension
+        }
+        .formMenuPicker()
+
         Picker(Localized.Settings.defaultTextEncoding, selection: $defaultTextEncoding) {
           ForEach(EditorTextEncoding.allCases, id: \.self) {
             Text($0.description)
@@ -60,6 +71,7 @@ struct GeneralSettingsView: View {
         .onChange(of: defaultTextEncoding) {
           AppPreferences.General.defaultTextEncoding = $0
         }
+        .formMenuPicker()
 
         Picker(Localized.Settings.defaultLineEndings, selection: $defaultLineEndings) {
           Text(Localized.Settings.macOSLineEndings).tag(LineEndings.lf)

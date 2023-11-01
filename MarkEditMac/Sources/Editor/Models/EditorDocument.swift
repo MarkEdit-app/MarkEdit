@@ -91,11 +91,11 @@ extension EditorDocument {
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
     // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    textBundle == nil ? ["net.daringfireball.markdown"] : ["org.textbundle.package"]
+    textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    typeName.isTextBundle ? "textbundle" : "md"
+    typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
   }
 }
 
