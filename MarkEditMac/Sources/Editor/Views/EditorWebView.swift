@@ -14,7 +14,7 @@ enum EditorWebViewMenuAction {
 }
 
 protocol EditorWebViewActionDelegate: AnyObject {
-  func editorWebViewIsInPreviewMode(_ webView: EditorWebView) -> Bool
+  func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
   func editorWebView(
@@ -38,7 +38,7 @@ final class EditorWebView: WKWebView {
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
     menu.items = menu.items.filter { item in
-      // Disable "Reload", which is useful for preview mode
+      // Disable "Reload", which is useful for revision mode
       if item.tag == WKContextMenuItemTag.reload.rawValue {
         return false
       }
@@ -51,8 +51,8 @@ final class EditorWebView: WKWebView {
       return true
     }
 
-    // Keep items minimal for preview mode
-    if actionDelegate?.editorWebViewIsInPreviewMode(self) == true {
+    // Keep items minimal for revision mode
+    if actionDelegate?.editorWebViewIsRevisionMode(self) == true {
       return super.willOpenMenu(menu, with: event)
     }
 

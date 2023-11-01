@@ -23,12 +23,12 @@ export enum ReplaceGranularity {
  *
  * @param doc Initial content
  * @param revision Optionally, provide a revision to show diff
- * @param previewMode Whether to set the editor to preview mode
+ * @param revisionMode Whether to set the editor to revision mode
  */
 export function resetEditor(
   doc: string,
   revision: string | undefined = undefined,
-  previewMode = false,
+  revisionMode = false,
 ) {
   // Idle state change should always go first
   editingState.isIdle = false;
@@ -56,7 +56,7 @@ export function resetEditor(
   const editor = new EditorView({
     doc: lineEndings.normalizeLineBreaks(initialContent, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
-    extensions: extensions({ previewMode, lineBreak }),
+    extensions: extensions({ revisionMode, lineBreak }),
   });
 
   editor.focus();

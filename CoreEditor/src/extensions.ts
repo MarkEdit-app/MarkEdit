@@ -27,7 +27,7 @@ import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
 
-// Preview mode
+// Revision mode
 import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
 import { tableStyle } from './styling/nodes/table';
 import { frontMatterStyle } from './styling/nodes/frontMatter';
@@ -59,11 +59,11 @@ window.dynamics = {
 
 // Make this a function because some resources (e.g., phrases) require lazy loading
 export function extensions(options: {
-  previewMode: boolean;
+  revisionMode: boolean;
   lineBreak?: string;
 }) {
-  if (options.previewMode) {
-    return previewExtensions();
+  if (options.revisionMode) {
+    return revisionExtensions();
   } else {
     return fullExtensions(options);
   }
@@ -146,11 +146,11 @@ function fullExtensions(options: { lineBreak?: string }) {
 }
 
 /**
- * The minimum set of extensions used in preview mode.
+ * The minimum set of extensions used in revision mode.
  *
  * Don't share the code with @light builds, which increase the bundle size.
  */
-function previewExtensions() {
+function revisionExtensions() {
   return [
     // Basic
     highlightSpecialChars(),
