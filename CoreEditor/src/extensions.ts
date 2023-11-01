@@ -27,7 +27,7 @@ import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
 
-// Read-only mode
+// Preview mode
 import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
 import { tableStyle } from './styling/nodes/table';
 import { frontMatterStyle } from './styling/nodes/frontMatter';
@@ -57,11 +57,11 @@ window.dynamics = {
 
 // Make this a function because some resources (e.g., phrases) require lazy loading
 export function extensions(options: {
-  readOnly: boolean;
+  previewMode: boolean;
   lineBreak?: string;
 }) {
-  if (options.readOnly) {
-    return readOnlyExtensions();
+  if (options.previewMode) {
+    return previewExtensions();
   } else {
     return fullExtensions(options);
   }
@@ -134,11 +134,11 @@ function fullExtensions(options: { lineBreak?: string }) {
 }
 
 /**
- * The minimum set of extensions used in read-only mode.
+ * The minimum set of extensions used in preview mode.
  *
  * Don't share the code with @light builds, which increase the bundle size.
  */
-function readOnlyExtensions() {
+function previewExtensions() {
   return [
     // Basic
     highlightSpecialChars(),

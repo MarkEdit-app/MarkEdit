@@ -30,7 +30,7 @@ final class EditorViewController: NSViewController {
     }
   }
 
-  var isReadOnly: Bool {
+  var isInPreviewMode: Bool {
     document?.isInViewingMode ?? false
   }
 
@@ -221,7 +221,7 @@ extension EditorViewController {
     webView.isHidden = true
     webView.magnification = 1.0
 
-    bridge.core.resetEditor(text: text, revision: document?.latestRevision, readOnly: isReadOnly) { _ in
+    bridge.core.resetEditor(text: text, revision: document?.latestRevision, previewMode: isInPreviewMode) { _ in
       self.webView.isHidden = false
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
@@ -229,12 +229,12 @@ extension EditorViewController {
       ))
     }
 
-    // Disable unnecessary UI elements for read-only
+    // Disable unnecessary UI elements for preview mode
     if let identifier = view.window?.toolbar?.identifier, !identifier.isEmpty {
-      view.window?.toolbar?.allowsUserCustomization = !isReadOnly
+      view.window?.toolbar?.allowsUserCustomization = !isInPreviewMode
     }
 
-    findPanel.searchField.isHidden = isReadOnly
+    findPanel.searchField.isHidden = isInPreviewMode
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
 }

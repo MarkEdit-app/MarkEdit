@@ -72,7 +72,7 @@ extension EditorViewController {
   }
 
   func setShowSelectionStatus(enabled: Bool) {
-    statusView.isHidden = isReadOnly || !enabled
+    statusView.isHidden = isInPreviewMode || !enabled
   }
 
   func setTypewriterMode(enabled: Bool) {

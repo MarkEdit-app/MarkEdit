@@ -57,7 +57,7 @@ extension EditorViewController {
 
 extension EditorViewController: NSToolbarDelegate {
   func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
-    guard !isReadOnly else {
+    guard !isInPreviewMode else {
       return nil
     }
 

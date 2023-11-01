@@ -39,8 +39,8 @@ extension EditorViewController: NSMenuItemValidation {
   ]
 
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-    // Disable all edit actions for read-only mode
-    if isReadOnly {
+    // Disable all edit actions for preview mode
+    if isInPreviewMode {
       guard let menu = menuItem.menu, let delegate = NSApp.appDelegate else {
         return false
       }

@@ -32,8 +32,8 @@ extension EditorViewController: WKUIDelegate {
 // MARK: - EditorWebViewActionDelegate
 
 extension EditorViewController: EditorWebViewActionDelegate {
-  func editorWebViewIsReadOnly(_ webView: EditorWebView) -> Bool {
-    isReadOnly
+  func editorWebViewIsInPreviewMode(_ webView: EditorWebView) -> Bool {
+    isInPreviewMode
   }
 
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent) {
