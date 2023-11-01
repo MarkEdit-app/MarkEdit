@@ -16,8 +16,11 @@ extension EditorViewController {
     wrapper.addSubview(findPanel)
     wrapper.addSubview(panelDivider)
     wrapper.addSubview(webView)
-    wrapper.addSubview(loadingIndicator)
     wrapper.addSubview(statusView)
+
+    if !hasFinishedLoading {
+      wrapper.addSubview(loadingIndicator)
+    }
 
     layoutPanels()
     layoutWebView()

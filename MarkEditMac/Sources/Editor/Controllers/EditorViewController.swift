@@ -61,8 +61,12 @@ final class EditorViewController: NSViewController {
     DividerView()
   }()
 
-  private(set) lazy var loadingIndicator = {
-    let view = NSImageView()
+  private(set) lazy var loadingIndicator: NSView = {
+    class View: NSImageView {
+      override func hitTest(_ point: NSPoint) -> NSView? { nil }
+    }
+
+    let view = View()
     view.image = NSImage(named: "AppIcon")
 
     Logger.assert(view.image != nil, "Missing AppIcon from the main bundle")
