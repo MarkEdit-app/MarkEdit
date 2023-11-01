@@ -21,6 +21,9 @@ enum AppPreferences {
     @Storage(key: "general.new-window-behavior", defaultValue: .openDocument)
     static var newWindowBehavior: NewWindowBehavior
 
+    @Storage(key: "general.new-filename-extension", defaultValue: .md)
+    static var newFilenameExtension: NewFilenameExtension
+
     @Storage(key: "general.default-text-encoding", defaultValue: .utf8)
     static var defaultTextEncoding: EditorTextEncoding
 
@@ -309,6 +312,25 @@ enum LineHeight: Codable {
 enum NewWindowBehavior: Codable {
   case openDocument
   case newDocument
+}
+
+enum NewFilenameExtension: String, Codable {
+  case md
+  case markdown
+  case txt
+
+  /// Exported types, used as a key in `UTExportedTypeDeclarations` only.
+  var exportedType: String {
+    switch self {
+    case .md:
+      return "net.daringfireball.markdown"
+    case .markdown:
+      // Declare a special key, otherwise it always refers to net.daringfireball.markdown -> md
+      return "app.markedit.markdown"
+    case .txt:
+      return "public.plain-text"
+    }
+  }
 }
 
 enum ToolbarMode: Codable {

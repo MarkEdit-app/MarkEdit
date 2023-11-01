@@ -153,6 +153,7 @@ enum Localized {
     static let newWindowBehavior = String(localized: "New Window Behavior:", comment: "Behavior when creating new windows")
     static let windowRestoration = String(localized: "Window Restoration:", comment: "Label for window restoration options")
     static let quitAlwaysKeepsWindows = String(localized: "Quit always keeps windows", comment: "Whether to keep windows when quit the app")
+    static let newFilenameExtension = String(localized: "New Filename Extension:", comment: "Filename extension for new files")
     static let defaultTextEncoding = String(localized: "Default Text Encoding:", comment: "Text encoding for opening and saving files")
     static let defaultLineEndings = String(localized: "Default Line Endings:", comment: "Line endings for creating new files")
     static let macOSLineEndings = String(localized: "macOS / Unix (LF)", comment: "Line endings used on macOS and Unix")
