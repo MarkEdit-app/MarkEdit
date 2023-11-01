@@ -26,9 +26,8 @@ extension EditorViewController {
     var completions = [String]()
 
     if AppPreferences.Assistant.wordsInDocument {
-      // Remove tokens if they "cannot be completed", usually means they are not a word
-      let isWord = completions.contains { $0.equalsIgnoreCase(prefix) }
-      completions.append(contentsOf: tokenizedWords.filter { isWord || $0 != prefix })
+      // Remove tokens if they are exactly the same as the typing prefix
+      completions.append(contentsOf: tokenizedWords.filter { $0 != prefix })
     }
 
     if AppPreferences.Assistant.standardWords {

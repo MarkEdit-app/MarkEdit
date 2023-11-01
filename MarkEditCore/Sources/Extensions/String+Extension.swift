@@ -21,10 +21,6 @@ public extension String {
     data(using: encoding)
   }
 
-  func equalsIgnoreCase(_ another: String) -> Bool {
-    caseInsensitiveCompare(another) == .orderedSame
-  }
-
   func hasPrefixIgnoreCase(_ prefix: String) -> Bool {
     range(of: prefix, options: [.anchored, .caseInsensitive]) != nil
   }
