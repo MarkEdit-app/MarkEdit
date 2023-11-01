@@ -30,6 +30,8 @@ final class EditorViewController: NSViewController {
     }
   }
 
+  /// Whether the content is editable, the user can toggle the read-only state at any time.
+  var isReadOnlyMode = false
   /// Whether the revisions of the document are being reviewed, i.e., version browsing mode.
   var isRevisionMode: Bool {
     document?.isInViewingMode ?? false

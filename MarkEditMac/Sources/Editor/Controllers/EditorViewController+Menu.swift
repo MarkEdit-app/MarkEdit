@@ -39,10 +39,15 @@ extension EditorViewController: NSMenuItemValidation {
   ]
 
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-    // Disable all edit actions for revision mode
-    if isRevisionMode {
+    // Disable all edit actions for read-only mode or revision mode
+    if isReadOnlyMode || isRevisionMode {
       guard let menu = menuItem.menu, let delegate = NSApp.appDelegate else {
         return false
+      }
+
+      // The "Read Only Mode" toggle should always be enabled
+      if isReadOnlyMode && menuItem == delegate.editReadOnlyItem {
+        return true
       }
 
       return !menu.isDescendantOf(menu: delegate.mainEditMenu)
@@ -350,6 +355,12 @@ private extension EditorViewController {
     }
 
     bridge.format.performEditCommand(command: command)
+  }
+
+  @IBAction func toggleReadOnlyMode(_ sender: Any?) {
+    (sender as? NSMenuItem)?.toggle()
+    isReadOnlyMode.toggle()
+    bridge.config.setReadOnlyMode(enabled: isReadOnlyMode)
   }
 
   @IBAction func toggleStatistics(_ sender: Any?) {

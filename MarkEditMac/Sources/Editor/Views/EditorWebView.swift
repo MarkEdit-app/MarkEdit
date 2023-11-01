@@ -14,6 +14,7 @@ enum EditorWebViewMenuAction {
 }
 
 protocol EditorWebViewActionDelegate: AnyObject {
+  func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
   func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
@@ -60,12 +61,13 @@ final class EditorWebView: WKWebView {
     menu.addItem(withTitle: Localized.Search.findSelection, action: #selector(findSelection(_:)))
     menu.addItem(withTitle: Localized.Search.selectAllOccurrences, action: #selector(selectAllOccurrences(_:)))
 
-    menu.addItem({
+    // Only add text format items when it's not read-only
+    if !(actionDelegate?.editorWebViewIsReadOnlyMode(self) ?? false) {
       let item = NSMenuItem()
       item.title = Localized.Toolbar.textFormat
       item.submenu = NSApp.appDelegate?.textFormatMenu?.copiedMenu
-      return item
-    }())
+      menu.addItem(item)
+    }
 
     menu.addItem(.separator())
     super.willOpenMenu(menu, with: event)

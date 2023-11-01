@@ -572,6 +572,11 @@ Gw
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="vuH-Ou-wb9"/>
+                                        <menuItem title="Read Only Mode" keyEquivalent="R" id="ex0-rS-Zlm">
+                                            <connections>
+                                                <action selector="toggleReadOnlyMode:" target="Ady-hI-5gd" id="GbK-v1-jri"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Statistics" keyEquivalent="I" id="Bvk-zs-CQB" userLabel="Statistics">
                                             <connections>
                                                 <action selector="toggleStatistics:" target="Ady-hI-5gd" id="aCq-vt-CmH"/>
@@ -825,6 +830,7 @@ Gw
                         <outlet property="copyPandocCommandMenu" destination="QZC-LS-WMo" id="GLu-1M-G8M"/>
                         <outlet property="editCommandsMenu" destination="9un-8n-UQZ" id="TkW-D6-2rF"/>
                         <outlet property="editFindMenu" destination="1b7-l0-nxx" id="qe6-lW-EOG"/>
+                        <outlet property="editReadOnlyItem" destination="ex0-rS-Zlm" id="GjQ-VO-cGs"/>
                         <outlet property="editRedoItem" destination="6dh-zS-Vam" id="fN4-hA-Oqr"/>
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>
