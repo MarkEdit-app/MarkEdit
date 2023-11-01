@@ -11,6 +11,8 @@ targets:
 - Modules.AppKitExtensions
 - Modules.FontPicker
 - Modules.Previewer
-- Modules.Proofing
 - Modules.SettingsUI
+- Modules.Statistics
+- Modules.TextBundle
+- Modules.TextCompletion
 - PreviewExtension
