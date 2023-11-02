@@ -25,6 +25,30 @@
         }
       }
     },
+    "0DE-Av-fBj.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Version History\"; ObjectID = \"0DE-Av-fBj\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version History"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本记录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本紀錄"
+          }
+        }
+      }
+    },
     "1b7-l0-nxx.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"Find\"; ObjectID = \"1b7-l0-nxx\";",
       "extractionState" : "extracted_with_value",
@@ -2805,6 +2829,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "跳至所選範圍"
+          }
+        }
+      }
+    },
+    "s40-D9-CoM.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Check for Updates...\"; ObjectID = \"s40-D9-CoM\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Check for Updates..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查更新…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檢查更新…"
           }
         }
       }

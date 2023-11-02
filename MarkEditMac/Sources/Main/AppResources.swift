@@ -173,6 +173,16 @@ enum Localized {
     static let reduceTransparencyLabel = String(localized: "Reduce Transparency:", comment: "Label for the option to reduce window transparency")
     static let reduceTransparencyDescription = String(localized: "Remove the toolbar blur", comment: "Explanation for the option to reduce window transparency")
   }
+
+  enum Updater {
+    static let upToDateTitle = String(localized: "You're up-to-date!", comment: "Title for the up-to-date info")
+    static let upToDateMessage = String(localized: "MarkEdit %@ is currently the latest version.", comment: "Message for the up-to-date info")
+    static let newVersionAvailable = String(localized: "MarkEdit %@ is available!", comment: "Title for new version available")
+    static let learnMore = String(localized: "Learn More", comment: "Title for the \"Learn More\" button")
+    static let notNow = String(localized: "Not Now", comment: "Title for the \"Not Now\" button")
+    static let remindMeLater = String(localized: "Remind Me Later", comment: "Title for the \"Remind Me Later\" button")
+    static let skipThisVersion = String(localized: "Skip This Version", comment: "Title for the \"Skip This Version\" button")
+  }
 }
 
 // Icon set used in the app: https://developer.apple.com/sf-symbols/
