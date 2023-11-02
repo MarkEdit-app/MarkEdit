@@ -38,7 +38,7 @@ Please consider starring this project and leaving a nice review on the [Mac App 
 
 ## Using MarkEdit
 
-Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki) for details.
+Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki/Manual) for details.
 
 ## Development
 
