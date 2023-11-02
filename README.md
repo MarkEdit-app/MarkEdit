@@ -40,48 +40,9 @@ Please consider starring this project and leaving a nice review on the [Mac App 
 
 Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki) for details.
 
-## Building MarkEdit
+## Development
 
-### Building CoreEditor
-
-After checking out the project, go to the root folder of the repository and run:
-
-```
-cd CoreEditor
-yarn install
-yarn build
-```
-
-> To test the editor in a dev environment, run `yarn dev` instead, web interfaces are exposed to `window.webModules`.
-
-### Building MarkEditMac
-
-After successfully building `CoreEditor`, open `MarkEdit.xcodeproj`, and build the `MarkEditMac` target.
-
-It's recommended to override build settings by adding a `Local.xcconfig` file under the root folder, including code signing identity, development team, etc.
-
-> Note that you should always use the latest stable release of Xcode.
-
-## Testing MarkEdit Locally
-
-Unit tests are run automatically by [GitHub Actions](https://github.com/MarkEdit-app/MarkEdit/actions), you can also run them on your machine.
-
-### Testing CoreEditor
-
-Make sure dependencies are installed and run:
-
-```
-cd CoreEditor
-yarn test
-```
-
-### Testing MarkEditMac
-
-MarkEditMac consists of several targets, here's an example of testing `MarkEditCoreTests`:
-
-```
-xcodebuild test -project MarkEdit.xcodeproj -scheme MarkEditCoreTests -destination 'platform=macOS'
-```
+Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki/Development) for details.
 
 ## Contributing to MarkEdit
 
