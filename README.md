@@ -1,10 +1,16 @@
 # MarkEdit
 
-[![](https://img.shields.io/badge/Platform-macOS_13.0+-blue?color=007bff)](https://apps.apple.com/app/id1669953820) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
+[![](https://img.shields.io/badge/Platform-macOS_13.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit/releases/latest) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
 
 MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
 
-<a href="https://apps.apple.com/app/id1669953820" target="_blank"><img alt="Download on the Mac App Store" src="https://user-images.githubusercontent.com/6745066/216816394-706b5104-42f3-4cc4-96c9-471a9356d1a8.svg"></a>
+## Installation
+
+Just download the <a href="https://github.com/MarkEdit-app/MarkEdit/releases/latest" target="_blank">latest release</a>, double-click to open it and drag `MarkEdit.app` to `Applications`.
+
+MarkEdit checks for updates automatically, you can also check manually via the main `MarkEdit` menu, or view version history [here](https://github.com/MarkEdit-app/MarkEdit/releases).
+
+> We used to publish MarkEdit to the Mac App Store, [but no longer](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy#be-a-good-macos-citizen). Don't worry about the security, releases are signed with a certificate from an identified developer and [notarized](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution).
 
 ## Platform Compatibility
 
@@ -32,9 +38,9 @@ To learn more, refer to [Philosophy](https://github.com/MarkEdit-app/MarkEdit/wi
 
 ## Why is MarkEdit Free
 
-MarkEdit is completely free and open source, with no advertising or promotions for other services. We ship it because we love it, and we don't expect any revenue from it.
+MarkEdit is completely free and open source, with no advertising or promotions for other services. We make it mostly because we need it, and we ship it just in case you need it too.
 
-Please consider starring this project and leaving a nice review on the [Mac App Store](https://markedit.app), your support is all we need.
+Please consider starring or contributing to this project.
 
 ## Using MarkEdit
 
