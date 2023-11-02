@@ -49,6 +49,8 @@
 		8752CEB6295B2F8800BA9D5B /* EditorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8752CEB5295B2F8800BA9D5B /* EditorPanelView.swift */; };
 		8757F7FC2AAC815F001957DD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8757F7FB2AAC815F001957DD /* Localizable.xcstrings */; };
 		876578FA2993853500A1388A /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 876578F92993853500A1388A /* index.html */; };
+		8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8765FD242AF28F1000C645A8 /* AppUpdater.swift */; };
+		8765FD292AF291D300C645A8 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8765FD282AF291D300C645A8 /* AppVersion.swift */; };
 		8767BBAF295A8BA500BFACAE /* EditorViewController+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */; };
 		8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */; };
 		8767BBB5295AD62700BFACAE /* EditorReplaceButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */; };
@@ -163,6 +165,8 @@
 		8757F7FA2AAC815F001957DD /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		8757F7FB2AAC815F001957DD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		876578F92993853500A1388A /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = "CoreEditor/src/@light/dist/index.html"; sourceTree = SOURCE_ROOT; };
+		8765FD242AF28F1000C645A8 /* AppUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdater.swift; sourceTree = "<group>"; };
+		8765FD282AF291D300C645A8 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+UI.swift"; sourceTree = "<group>"; };
 		8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Delegate.swift"; sourceTree = "<group>"; };
 		8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceButtons.swift; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 				870F1797298577A000003DA7 /* Panels */,
 				874BE6F229BB37D5002F83BA /* Shortcuts */,
 				8780AC0A29822C5500065EF4 /* Settings */,
+				8765FD262AF291A300C645A8 /* Updater */,
 				87850C8429482A6A00D1A952 /* Extensions */,
 			);
 			path = Sources;
@@ -413,6 +418,15 @@
 				874BE70D29BB73CA002F83BA /* UpdateFileContentIntent.swift */,
 			);
 			path = Intents;
+			sourceTree = "<group>";
+		};
+		8765FD262AF291A300C645A8 /* Updater */ = {
+			isa = PBXGroup;
+			children = (
+				8765FD282AF291D300C645A8 /* AppVersion.swift */,
+				8765FD242AF28F1000C645A8 /* AppUpdater.swift */,
+			);
+			path = Updater;
 			sourceTree = "<group>";
 		};
 		8767BBAC295A893200BFACAE /* Controllers */ = {
@@ -673,6 +687,7 @@
 				874BE70229BB5889002F83BA /* GetFileContentIntent.swift in Sources */,
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
+				8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */,
 				874BE6F729BB57AC002F83BA /* IntentError.swift in Sources */,
 				87AA1224296560AE00BE4719 /* EditorViewController+HyperLink.swift in Sources */,
 				8725E0802977EEB3006A4961 /* EditorToolbarItems.swift in Sources */,
@@ -701,6 +716,7 @@
 				8767BBAF295A8BA500BFACAE /* EditorViewController+UI.swift in Sources */,
 				87AAEDF52958258C00C8E61C /* EditorFindPanel+UI.swift in Sources */,
 				87A73AB5294C4B48006A710E /* EditorFindPanel.swift in Sources */,
+				8765FD292AF291D300C645A8 /* AppVersion.swift in Sources */,
 				874BE70829BB62BA002F83BA /* CreateNewDocumentIntent.swift in Sources */,
 				870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */,
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,

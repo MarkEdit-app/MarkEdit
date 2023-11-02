@@ -59,6 +59,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       name: NSWindow.didResignKeyNotification,
       object: nil
     )
+
+    DispatchQueue.afterDelay(seconds: 2) {
+      Task {
+        await AppUpdater.checkForUpdates(explicitly: false)
+      }
+    }
   }
 }
 
@@ -79,6 +85,12 @@ private extension AppDelegate {
       if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
         NSApp.closeOpenPanels()
       }
+    }
+  }
+
+  @IBAction func checkForUpdates(_ sender: Any?) {
+    Task {
+      await AppUpdater.checkForUpdates(explicitly: true)
     }
   }
 
@@ -108,6 +120,12 @@ private extension AppDelegate {
 
   @IBAction func openIssueTracker(_ sender: Any?) {
     if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/issues") {
+      NSWorkspace.shared.open(url)
+    }
+  }
+
+  @IBAction func openVersionHistory(_ sender: Any?) {
+    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/releases") {
       NSWorkspace.shared.open(url)
     }
   }

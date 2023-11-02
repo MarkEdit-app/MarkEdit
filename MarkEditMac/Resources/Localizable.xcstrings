@@ -1148,6 +1148,23 @@
         }
       }
     },
+    "Learn More" : {
+      "comment" : "Title for the \"Learn More\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "了解更多"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "瞭解更多"
+          }
+        }
+      }
+    },
     "Light" : {
       "comment" : "Always use light mode for the app",
       "localizations" : {
@@ -1263,6 +1280,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOS / Unix (LF)"
+          }
+        }
+      }
+    },
+    "MarkEdit %@ is available!" : {
+      "comment" : "Title for new version available",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit %@ 已发布！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit %@ 已釋出！"
+          }
+        }
+      }
+    },
+    "MarkEdit %@ is currently the latest version." : {
+      "comment" : "Message for the up-to-date info",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit %@ 是目前最新的版本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit %@ 是目前最新的版本。"
           }
         }
       }
@@ -1398,6 +1449,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正常"
+          }
+        }
+      }
+    },
+    "Not Now" : {
+      "comment" : "Title for the \"Not Now\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等下再说"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等下再說"
           }
         }
       }
@@ -1657,6 +1725,23 @@
         }
       }
     },
+    "Remind Me Later" : {
+      "comment" : "Title for the \"Remind Me Later\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后提醒我"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍後提醒我"
+          }
+        }
+      }
+    },
     "Remove the toolbar blur" : {
       "comment" : "Explanation for the option to reduce window transparency",
       "localizations" : {
@@ -1856,6 +1941,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示："
+          }
+        }
+      }
+    },
+    "Skip This Version" : {
+      "comment" : "Title for the \"Skip This Version\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳过这个版本"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳過這個版本"
           }
         }
       }
@@ -2431,6 +2533,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "按編輯器的寬度換行"
+          }
+        }
+      }
+    },
+    "You're up-to-date!" : {
+      "comment" : "Title for the up-to-date info",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您已安装最新版本！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您已安裝最新版本！"
           }
         }
       }

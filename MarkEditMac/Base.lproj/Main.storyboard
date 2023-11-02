@@ -22,6 +22,12 @@
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Check for Updates..." id="s40-D9-CoM">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="checkForUpdates:" target="Voe-Tx-rLC" id="KoB-Gc-HGX"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
                                         <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
                                             <connections>
@@ -814,6 +820,12 @@ Gw
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="openIssueTracker:" target="Voe-Tx-rLC" id="rd4-7Y-b3U"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Version History" id="0DE-Av-fBj">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openVersionHistory:" target="Voe-Tx-rLC" id="fsU-GM-N8j"/>
                                             </connections>
                                         </menuItem>
                                     </items>

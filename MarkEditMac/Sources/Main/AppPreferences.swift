@@ -212,6 +212,11 @@ enum AppPreferences {
       }
     }
   }
+
+  enum Updater {
+    @Storage(key: "updater.skipped-versions", defaultValue: [])
+    static var skippedVersions: [String]
+  }
 }
 
 extension FontStyle {
