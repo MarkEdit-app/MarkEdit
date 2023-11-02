@@ -10,7 +10,7 @@ import MarkEditKit
 
 enum AppUpdater {
   private enum Constants {
-    static let api = "https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest"
+    static let endpoint = "https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest"
     static let decoder = {
       let decoder = JSONDecoder()
       decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -19,8 +19,8 @@ enum AppUpdater {
   }
 
   static func checkForUpdates(explicitly: Bool) async {
-    guard let url = URL(string: Constants.api) else {
-      return Logger.assertFail("Failed to create the URL: \(Constants.api)")
+    guard let url = URL(string: Constants.endpoint) else {
+      return Logger.assertFail("Failed to create the URL: \(Constants.endpoint)")
     }
 
     guard let (data, response) = try? await URLSession.shared.data(from: url) else {
@@ -49,7 +49,7 @@ private extension AppUpdater {
       return Logger.assertFail("Invalid current version string")
     }
 
-    // Check if the new version was skipped
+    // Check if the new version was skipped for implicit updates
     guard explicitly || !AppPreferences.Updater.skippedVersions.contains(newVersion.name) else {
       return
     }

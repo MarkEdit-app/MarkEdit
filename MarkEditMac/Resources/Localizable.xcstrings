@@ -1307,13 +1307,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MarkEdit %@ 是目前最新的版本。"
+            "value" : "MarkEdit %@ 是目前的最新版本。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MarkEdit %@ 是目前最新的版本。"
+            "value" : "MarkEdit %@ 是目前的最新版本。"
           }
         }
       }
