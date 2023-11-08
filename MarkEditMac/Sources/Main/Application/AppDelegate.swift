@@ -60,6 +60,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       object: nil
     )
 
+    DispatchQueue.afterDelay(seconds: 0.3) {
+      EditorReusePool.shared.warmUp()
+    }
+
     DispatchQueue.afterDelay(seconds: 2) {
       Task {
         await AppUpdater.checkForUpdates(explicitly: false)
