@@ -219,7 +219,7 @@ extension EditorViewController {
   }
 
   func resetEditor() {
-    guard hasFinishedLoading, let text = document?.stringValue else {
+    guard hasFinishedLoading else {
       return
     }
 
@@ -228,7 +228,7 @@ extension EditorViewController {
     webView.isHidden = true
     webView.magnification = 1.0
 
-    bridge.core.resetEditor(text: text, revision: document?.latestRevision, revisionMode: isRevisionMode) { _ in
+    bridge.core.resetEditor(text: document?.stringValue ?? "", revision: document?.latestRevision, revisionMode: isRevisionMode) { _ in
       self.webView.isHidden = false
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
