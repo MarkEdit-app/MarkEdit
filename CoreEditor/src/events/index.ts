@@ -49,13 +49,17 @@ export function startObserving() {
 
   document.addEventListener('compositionstart', () => {
     editingState.compositionEnded = false;
+    storage.selectedTextBeforeCompose = editingState.hasSelection;
   });
 
   document.addEventListener('compositionend', () => {
     editingState.compositionEnded = true;
 
     // When composition has just finished, the selection is considered empty
-    selection.updateActiveLine(false);
+    if (storage.selectedTextBeforeCompose) {
+      selection.updateActiveLine(false);
+      storage.selectedTextBeforeCompose = false;
+    }
 
     // Input methods like Pinyin may not trigger 'inputHandler' on 'compositionend',
     // manually update the selection with an additional call.
@@ -142,8 +146,10 @@ const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
   isMouseDown: boolean;
   isMetaKeyDown: boolean;
+  selectedTextBeforeCompose: boolean;
 } = {
   scrollTimer: undefined,
   isMouseDown: false,
   isMetaKeyDown: false,
+  selectedTextBeforeCompose: false,
 };

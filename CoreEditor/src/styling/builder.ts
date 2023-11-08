@@ -116,7 +116,9 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Caret
     '.cm-content': {
-      caretColor: colors.caret,
+      // CodeMirror uses border-left-color of cm-cursor to draw the caret,
+      // we need to disable this as it draws an extra caret in macOS Sonoma.
+      caretColor: 'transparent',
     },
     '.cm-cursor, .cm-dropCursor': {
       borderLeftColor: colors.caret,

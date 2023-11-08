@@ -52,7 +52,8 @@ public final class LabeledSearchField: NSSearchField {
 
   override public func draw(_ dirtyRect: NSRect) {
     // Ignore the bezel and background color by only drawing interior
-    cell?.drawInterior(withFrame: dirtyRect, in: self)
+    let frame = if #available(macOS 14.0, *) { bounds } else { dirtyRect }
+    cell?.drawInterior(withFrame: frame, in: self)
   }
 
   public func updateLabel(text: String) {
