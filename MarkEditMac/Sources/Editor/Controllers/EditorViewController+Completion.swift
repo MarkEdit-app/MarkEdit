@@ -17,11 +17,11 @@ extension EditorViewController {
     partialRange: NSRange,
     tokenizedWords: [String]
   ) {
-    guard !prefix.isEmpty else {
+    guard !prefix.isEmpty || anchor.afterSpace else {
       return cancelCompletion()
     }
 
-    completionContext.fromIndex = anchor.offset + partialRange.location
+    completionContext.fromIndex = anchor.offset + (anchor.afterSpace ? 1 : 0) + partialRange.location
     completionContext.toIndex = completionContext.fromIndex + partialRange.length
     var completions = [String]()
 
