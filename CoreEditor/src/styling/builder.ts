@@ -26,10 +26,22 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-content': {
     paddingRight: '12px',
     paddingBottom: '50vh',
+
+    // CodeMirror uses border-left-color of cm-cursor to draw the caret,
+    // we need to disable this as it draws an extra caret in macOS Sonoma.
+    caretColor: 'transparent',
   },
+  // Mimic the macOS Sonoma rounded caret
   '.cm-cursor': {
     borderLeftWidth: '2px',
+    borderRadius: '1px',
   },
+  // Mimic the macOS Sonoma caret breathing
+  '&.cm-focused > .cm-scroller > .cm-cursorLayer': {
+    animation: 'cm-blink 1.05s infinite !important',
+  },
+  '@keyframes cm-blink': { '0%': { opacity: 1 }, '20%': { opacity: 0 }, '40%': { opacity: 0 }, '60%': { opacity: 1 } },
+  '@keyframes cm-blink2': { '0%': { opacity: 1 }, '20%': { opacity: 0 }, '40%': { opacity: 0 }, '60%': { opacity: 1 } },
   '.cm-lineWrapping': {
     // Prefer pre-wrap over break-spaces because trailing whitespaces can lead to extra line breaks,
     // it can be an issue for whitespace rendering, especially for "selection" mode.
@@ -113,12 +125,6 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '&': {
       color: colors.text,
       backgroundColor: colors.background,
-    },
-    // Caret
-    '.cm-content': {
-      // CodeMirror uses border-left-color of cm-cursor to draw the caret,
-      // we need to disable this as it draws an extra caret in macOS Sonoma.
-      caretColor: 'transparent',
     },
     '.cm-cursor, .cm-dropCursor': {
       borderLeftColor: colors.caret,
