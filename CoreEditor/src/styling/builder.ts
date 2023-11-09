@@ -38,10 +38,10 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   },
   // Mimic the macOS Sonoma caret breathing
   '&.cm-focused > .cm-scroller > .cm-cursorLayer': {
-    animation: 'cm-blink 1.05s infinite !important',
+    animation: 'cm-blink infinite', // Remove the "steps(1)" to have fade effects
   },
-  '@keyframes cm-blink': { '0%': { opacity: 1 }, '20%': { opacity: 0 }, '40%': { opacity: 0 }, '60%': { opacity: 1 } },
-  '@keyframes cm-blink2': { '0%': { opacity: 1 }, '20%': { opacity: 0 }, '40%': { opacity: 0 }, '60%': { opacity: 1 } },
+  '@keyframes cm-blink': { '40%, 90%': { opacity: 1 }, '60%, 70%': { opacity: 0 } },
+  '@keyframes cm-blink2': { '40%, 90%': { opacity: 1 }, '60%, 70%': { opacity: 0 } },
   '.cm-lineWrapping': {
     // Prefer pre-wrap over break-spaces because trailing whitespaces can lead to extra line breaks,
     // it can be an issue for whitespace rendering, especially for "selection" mode.
