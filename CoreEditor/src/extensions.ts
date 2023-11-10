@@ -84,7 +84,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     // Basic
     highlightSpecialChars(),
     history(),
-    drawSelection(),
+    drawSelection({ cursorBlinkRate: 1000 }),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
