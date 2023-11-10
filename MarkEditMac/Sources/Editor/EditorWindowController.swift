@@ -8,6 +8,7 @@ import AppKit
 
 final class EditorWindowController: NSWindowController, NSWindowDelegate {
   var autosavedFrame: CGRect?
+  var needsUpdateFocus = false
 
   required init?(coder: NSCoder) {
     super.init(coder: coder)
@@ -35,7 +36,15 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     }
   }
 
+  func windowDidBecomeKey(_ notification: Notification) {
+    if needsUpdateFocus {
+      editorViewController?.bridge.selection.refreshEditFocus()
+      needsUpdateFocus = false
+    }
+  }
+
   func windowDidResignKey(_ notification: Notification) {
+    needsUpdateFocus = true
     editorViewController?.bridge.core.handleFocusLost()
   }
 
