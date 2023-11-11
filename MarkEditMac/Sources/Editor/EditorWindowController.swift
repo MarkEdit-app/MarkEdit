@@ -45,6 +45,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
   func windowDidResignKey(_ notification: Notification) {
     needsUpdateFocus = true
+    editorViewController?.cancelCompletion()
     editorViewController?.bridge.core.handleFocusLost()
   }
 
