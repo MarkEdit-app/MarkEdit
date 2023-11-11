@@ -101,6 +101,7 @@ function measureTextFallback(text: string, font: string) {
 function measurableFonts() {
   // measureText doesn't work well with some fonts, e.g., Iosevka
   return [
+    'SF Mono',
     'monospace',
     'system-ui',
     'ui-monospace',
