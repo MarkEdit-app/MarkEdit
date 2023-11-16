@@ -8,6 +8,8 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 Just download the <a href="https://github.com/MarkEdit-app/MarkEdit/releases/latest" target="_blank">latest release</a>, double-click to open it and drag `MarkEdit.app` to `Applications`.
 
+<img src="./Screenshots/install.png" width="540" alt="Install MarkEdit">
+
 MarkEdit checks for updates automatically, you can also check manually via the main `MarkEdit` menu, or view version history [here](https://github.com/MarkEdit-app/MarkEdit/releases).
 
 > We used to publish MarkEdit to the Mac App Store, [but no longer](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy#be-a-good-macos-citizen). Don't worry about the security, releases are signed with a certificate from an identified developer and [notarized](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution).
