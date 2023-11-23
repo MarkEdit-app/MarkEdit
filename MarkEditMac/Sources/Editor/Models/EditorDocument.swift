@@ -89,15 +89,6 @@ extension EditorDocument {
     true
   }
 
-  override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
-    // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
-  }
-
-  override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
-  }
-
   override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
     // Closing a new document, force sync to make sure the content is propagated.
     //
@@ -109,6 +100,15 @@ extension EditorDocument {
     }
 
     return super.canClose(withDelegate: delegate, shouldClose: shouldCloseSelector, contextInfo: contextInfo)
+  }
+
+  override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
+    // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
+    textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
+  }
+
+  override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
+    typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
   }
 }
 
