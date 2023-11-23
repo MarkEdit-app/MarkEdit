@@ -97,6 +97,19 @@ extension EditorDocument {
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
     typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
   }
+
+  override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
+    // Closing a new document, force sync to make sure the content is propagated.
+    //
+    // Don't use `isDraft` here because it's false when closing a document with no files on disk.
+    if fileURL == nil {
+      Task {
+        await saveAsynchronously(userInitiated: true) {}
+      }
+    }
+
+    return super.canClose(withDelegate: delegate, shouldClose: shouldCloseSelector, contextInfo: contextInfo)
+  }
 }
 
 // MARK: - Reading and Writing

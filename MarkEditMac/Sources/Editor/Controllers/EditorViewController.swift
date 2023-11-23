@@ -14,6 +14,7 @@ import TextCompletion
 final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
   var hasUnfinishedAnimations = false
+  var hasBeenEdited = false
   var mouseExitedWindow = false
   var safeAreaObservation: NSKeyValueObservation?
 
@@ -241,6 +242,7 @@ extension EditorViewController {
       view.window?.toolbar?.allowsUserCustomization = !isRevisionMode
     }
 
+    hasBeenEdited = false
     findPanel.searchField.isHidden = isRevisionMode
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
