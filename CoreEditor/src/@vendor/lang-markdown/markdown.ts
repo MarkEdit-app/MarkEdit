@@ -68,7 +68,13 @@ export function mkLang(parser: MarkdownParser) {
 /// Language support for strict CommonMark.
 export const commonmarkLanguage = mkLang(commonmark)
 
-const extended = commonmark.configure([GFM, Subscript, Superscript, Emoji])
+const extended = commonmark.configure([GFM, Subscript, Superscript, Emoji, {
+  props: [
+    foldNodeProp.add({
+      Table: (tree, state) => ({from: state.doc.lineAt(tree.from).to, to: tree.to})
+    })
+  ]
+}])
 
 /// Language support for [GFM](https://github.github.com/gfm/) plus
 /// subscript, superscript, and emoji syntax.

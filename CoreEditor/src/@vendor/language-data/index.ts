@@ -259,7 +259,7 @@ export const languages = [
   }),
   LanguageDescription.of({
     name: "Kotlin",
-    extensions: ["kt"],
+    extensions: ["kt", "kts"],
     load() {
       return import("@codemirror/legacy-modes/mode/clike").then(m => legacy(m.kotlin))
     }
