@@ -122,7 +122,9 @@ extension EditorViewController: EditorModuleCoreDelegate {
       cancelCompletion()
     }
 
-    document?.markContentDirty(isDirty)
+    // The content is always dirty if it was edited as a temporary document
+    hasBeenEdited = hasBeenEdited || contentEdited
+    document?.markContentDirty(isDirty || (hasBeenEdited && document?.fileURL == nil))
   }
 
   func editorCoreContentOffsetDidChange(_ sender: EditorModuleCore) {
