@@ -18,17 +18,26 @@ final class EditorDocument: NSDocument {
   var textBundle: TextBundleWrapper?
   var stringValue = ""
   var latestRevision: String?
+  var isReadOnlyMode = false
   var isDying = false
 
   var canUndo: Bool {
     get async {
-      (try? await bridge?.history.canUndo()) ?? false
+      if isReadOnlyMode {
+        return false
+      }
+
+      return (try? await bridge?.history.canUndo()) ?? false
     }
   }
 
   var canRedo: Bool {
     get async {
-      (try? await bridge?.history.canRedo()) ?? false
+      if isReadOnlyMode {
+        return false
+      }
+
+      return (try? await bridge?.history.canRedo()) ?? false
     }
   }
 
