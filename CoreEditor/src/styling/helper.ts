@@ -28,6 +28,7 @@ export function lineDecoRanges(from: number, to: number, className: string) {
     decos.push(deco.range(line.from, line.from));
   }
 
+  // Ranges are already sorted
   return decos;
 }
 

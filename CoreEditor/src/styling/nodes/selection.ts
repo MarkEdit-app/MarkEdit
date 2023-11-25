@@ -32,7 +32,7 @@ function createViewPlugin(className: string) {
 
       const ranges = update.state.selection.ranges;
       const lineDecos = ranges.flatMap(range => createDeco(range.from, range.to, className));
-      this.decorations = Decoration.set(lineDecos);
+      this.decorations = Decoration.set(lineDecos.sort((lhs, rhs) => lhs.from - rhs.from));
     }
   }, { decorations: value => value.decorations });
 }
