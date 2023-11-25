@@ -69,5 +69,5 @@ export function createDecos(nodeName: string | string[], builder: (node: SyntaxN
     });
   }
 
-  return Decoration.set(ranges);
+  return Decoration.set(ranges.sort((lhs, rhs) => lhs.from - rhs.from));
 }
