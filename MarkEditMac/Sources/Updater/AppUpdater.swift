@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import MarkEditKit
 
 enum AppUpdater {
@@ -70,7 +71,7 @@ private extension AppUpdater {
 
     let alert = NSAlert()
     alert.messageText = String(format: Localized.Updater.newVersionAvailable, newVersion.name)
-    alert.informativeText = newVersion.body
+    alert.markdownBody = newVersion.body
     alert.addButton(withTitle: Localized.Updater.learnMore)
 
     if explicitly {
