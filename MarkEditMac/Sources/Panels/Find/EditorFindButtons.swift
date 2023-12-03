@@ -9,11 +9,16 @@ import AppKit
 import AppKitControls
 
 final class EditorFindButtons: RoundedButtonGroup {
+  private enum Constants {
+    static let iconWidth: Double = 9
+    static let iconHeight: Double = 9
+  }
+
   init(leftAction: @escaping (() -> Void), rightAction: @escaping (() -> Void)) {
-    let leftButton = IconOnlyButton(symbolName: Icons.chevronLeft, accessibilityLabel: Localized.General.previous)
+    let leftButton = IconOnlyButton(symbolName: Icons.chevronLeft, iconWidth: Constants.iconWidth, iconHeight: Constants.iconHeight, accessibilityLabel: Localized.General.previous)
     leftButton.addAction(leftAction)
 
-    let rightButton = IconOnlyButton(symbolName: Icons.chevronRight, accessibilityLabel: Localized.General.next)
+    let rightButton = IconOnlyButton(symbolName: Icons.chevronRight, iconWidth: Constants.iconWidth, iconHeight: Constants.iconHeight, accessibilityLabel: Localized.General.next)
     rightButton.addAction(rightAction)
 
     super.init(leftButton: leftButton, rightButton: rightButton)

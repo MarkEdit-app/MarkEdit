@@ -7,7 +7,12 @@
 import AppKit
 
 public final class IconOnlyButton: NonBezelButton {
-  public init(symbolName: String, accessibilityLabel: String? = nil) {
+  public init(
+    symbolName: String,
+    iconWidth: Double? = nil,
+    iconHeight: Double? = nil,
+    accessibilityLabel: String? = nil
+  ) {
     super.init()
     toolTip = accessibilityLabel
 
@@ -18,8 +23,8 @@ public final class IconOnlyButton: NonBezelButton {
       addSubview(iconView)
 
       NSLayoutConstraint.activate([
-        iconView.widthAnchor.constraint(equalToConstant: iconImage.size.width),
-        iconView.heightAnchor.constraint(equalToConstant: iconImage.size.height),
+        iconView.widthAnchor.constraint(equalToConstant: iconWidth ?? iconImage.size.width),
+        iconView.heightAnchor.constraint(equalToConstant: iconHeight ?? iconImage.size.height),
         iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
         iconView.centerYAnchor.constraint(equalTo: centerYAnchor),
       ])

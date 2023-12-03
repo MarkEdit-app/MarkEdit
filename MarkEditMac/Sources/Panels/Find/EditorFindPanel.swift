@@ -45,8 +45,13 @@ final class EditorFindPanel: EditorPanelView {
 
   private(set) lazy var doneButton = {
     let button = NSButton()
-    button.title = Localized.General.done
     button.bezelStyle = .roundRect
+
+    button.attributedTitle = NSAttributedString(
+      string: Localized.General.done,
+      attributes: [.font: NSFont.systemFont(ofSize: 12)]
+    )
+
     return button
   }()
 
