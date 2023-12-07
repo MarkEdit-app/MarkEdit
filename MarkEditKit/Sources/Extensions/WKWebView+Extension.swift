@@ -62,7 +62,8 @@ private extension WKWebView {
   }
 
   func invoke(path: String, message: Encodable, completion: ((Result<Any?, InvokeError>) -> Void)? = nil) {
-    let script = "\(path)(\(message.jsonEncoded))"
+    let module = path.components(separatedBy: ".").first ?? "undefined"
+    let script = "typeof \(module) === 'object' ? \(path)(\(message.jsonEncoded)) : undefined"
     evaluateJavaScript(script) { result, error in
       if let error {
         Logger.log(.error, error.localizedDescription)
