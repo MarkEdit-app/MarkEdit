@@ -77,6 +77,7 @@
 		87BEF30129A88F6800596E17 /* EditorCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* EditorCustomization.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
 		87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */; };
+		87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB61F2B284AAD00A3056F /* AppHacks.swift */; };
 		87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE081A294DDA49004AD33A /* AppTheme.swift */; };
 		87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE0824294DF340004AD33A /* EditorFindButtons.swift */; };
 		87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */; };
@@ -192,6 +193,7 @@
 		87BFF238298AAC75006C31E4 /* MarkEditTools */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditTools; sourceTree = "<group>"; };
 		87C3CBFA29545944002A3436 /* MarkEditKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditKit; sourceTree = "<group>"; };
 		87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceTextField.swift; sourceTree = "<group>"; };
+		87DCB61F2B284AAD00A3056F /* AppHacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHacks.swift; sourceTree = "<group>"; };
 		87DE081A294DDA49004AD33A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		87DE0824294DF340004AD33A /* EditorFindButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindButtons.swift; sourceTree = "<group>"; };
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				871C99592973F1C2003FF3A7 /* Application */,
+				87DCB61F2B284AAD00A3056F /* AppHacks.swift */,
 				873D6401295FCC3E0095DEF7 /* AppResources.swift */,
 				87DE081A294DDA49004AD33A /* AppTheme.swift */,
 				87AAEE0129585ADC00C8E61C /* AppPreferences.swift */,
@@ -688,6 +691,7 @@
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
 				8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */,
+				87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */,
 				874BE6F729BB57AC002F83BA /* IntentError.swift in Sources */,
 				87AA1224296560AE00BE4719 /* EditorViewController+HyperLink.swift in Sources */,
 				8725E0802977EEB3006A4961 /* EditorToolbarItems.swift in Sources */,
