@@ -27,6 +27,10 @@ extension EditorViewController {
     layoutLoadingIndicator()
     layoutStatusView()
 
+    // Initially hide panels to prevent being found by VoiceOver
+    findPanel.isHidden = true
+    replacePanel.isHidden = true
+
     // Trigger an additional layout loop to correct view (find panels) positions
     safeAreaObservation = view.observe(\.safeAreaInsets) { view, _ in
       view.needsLayout = true

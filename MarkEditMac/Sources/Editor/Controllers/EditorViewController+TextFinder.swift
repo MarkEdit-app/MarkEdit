@@ -43,7 +43,11 @@ extension EditorViewController {
       bridge.search.setState(enabled: false)
     }
 
-    // Unhide the replace panel, see below for details about this UI trick
+    // Unhide panels by checking the mode, see below for details about this UI trick
+    if mode != .hidden {
+      findPanel.isHidden = false
+    }
+
     if mode == .replace {
       replacePanel.isHidden = false
     }
@@ -59,8 +63,12 @@ extension EditorViewController {
     } completionHandler: {
       self.hasUnfinishedAnimations = false
 
-      // Must set isHidden because it is behind the find panel,
-      // alpha = 0 still tracks mouse, which makes the cursor "i-beam" for the magnifier
+      // Must leverage isHidden to control the visibility,
+      // because alpha = 0 still tracks mouse and visible to VoiceOver.
+      if mode == .hidden {
+        self.findPanel.isHidden = true
+      }
+
       if mode != .replace {
         self.replacePanel.isHidden = true
       }

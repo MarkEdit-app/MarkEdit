@@ -30,4 +30,8 @@ public final class IconOnlyButton: NonBezelButton {
       ])
     }
   }
+
+  override public func accessibilityLabel() -> String? {
+    toolTip
+  }
 }
