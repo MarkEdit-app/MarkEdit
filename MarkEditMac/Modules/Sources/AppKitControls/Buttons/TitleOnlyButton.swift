@@ -25,4 +25,8 @@ public final class TitleOnlyButton: NonBezelButton {
       labelView.centerYAnchor.constraint(equalTo: centerYAnchor),
     ])
   }
+
+  override public func accessibilityLabel() -> String? {
+    labelView.stringValue
+  }
 }
