@@ -5,6 +5,7 @@
 //  Created by cyan on 6/28/23.
 //
 
+@testable import MarkEdit
 import XCTest
 import WebKit
 import AppKitExtensions
@@ -79,6 +80,14 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfClass(named: "NSToolbarFullScreenWindow")
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
+  }
+
+  func testPrivateAccessibilityBundles() {
+    let type: AnyClass? = NSObject.axbbmClass
+    XCTAssertNotNil(type, "Missing AXBBundleManager")
+
+    let object = type?.value(forKey: "defaultManager") as? AnyObject
+    XCTAssertEqual(object?.responds(to: sel_getUid("loadAXBundles")), true, "Missing loadAXBundles")
   }
 }
 
