@@ -17,7 +17,7 @@ final class EditorStatusView: NSView, BackgroundTheming {
 
   init(handler: @escaping () -> Void) {
     super.init(frame: .zero)
-    self.toolTip = Localized.Document.gotoLine
+    self.toolTip = Localized.Document.gotoLineLabel
 
     button.addAction(handler)
     addSubview(button)

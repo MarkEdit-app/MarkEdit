@@ -76,7 +76,8 @@ enum Localized {
   enum Document {
     static let openDocument = String(localized: "Open Document", comment: "Menu item: open an existing document")
     static let newDocument = String(localized: "New Document", comment: "Menu item: create a new document")
-    static let gotoLine = String(localized: "Go to Line", comment: "Placeholder text for goto line window")
+    static let gotoLineLabel = String(localized: "Go to Line", comment: "Placeholder text for goto line window")
+    static let gotoLineHelp = String(localized: "Enter the line number and hit return", comment: "Help text for goto line window")
   }
 
   enum Statistics {

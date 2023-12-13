@@ -576,6 +576,23 @@
         }
       }
     },
+    "Enter the line number and hit return" : {
+      "comment" : "Help text for goto line window",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入行号并按下回车键"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輸入行號並按下回車鍵"
+          }
+        }
+      }
+    },
     "Evaluate JavaScript" : {
       "localizations" : {
         "zh-Hans" : {

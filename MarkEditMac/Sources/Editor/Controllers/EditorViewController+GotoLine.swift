@@ -22,7 +22,8 @@ extension EditorViewController {
 
     let window = GotoLineWindow(
       relativeTo: parentRect,
-      placeholder: Localized.Document.gotoLine,
+      placeholder: Localized.Document.gotoLineLabel,
+      accessibilityHelp: Localized.Document.gotoLineHelp,
       iconName: Icons.arrowUturnBackwardCircle
     ) { [weak self] lineNumber in
       self?.startWebViewEditing()
