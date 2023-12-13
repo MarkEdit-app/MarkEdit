@@ -5,7 +5,7 @@
 //  Created by cyan on 12/12/23.
 //
 
-import Foundation
+import AppKit
 import MarkEditKit
 
 // [macOS 14] Performance regression, there's a good chance to hang at launch
@@ -60,9 +60,15 @@ extension NSObject {
 // MARK: - Private
 
 private extension NSObject {
-  @objc func swizzled_loadAXBundles() {
-    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
-      self.swizzled_loadAXBundles()
+  @objc func swizzled_loadAXBundles() -> Bool {
+    guard !NSWorkspace.shared.isVoiceOverEnabled else {
+      return self.swizzled_loadAXBundles()
     }
+
+    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+      _ = self.swizzled_loadAXBundles()
+    }
+
+    return true
   }
 }
