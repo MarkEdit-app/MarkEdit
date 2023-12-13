@@ -16,6 +16,7 @@ public final class GotoLineWindow: NSWindow {
   public init(
     relativeTo parentRect: CGRect,
     placeholder: String,
+    accessibilityHelp: String,
     iconName: String,
     handler: @escaping (Int) -> Void
   ) {
@@ -36,6 +37,7 @@ public final class GotoLineWindow: NSWindow {
     self.contentView = GotoLineView(
       frame: rect,
       placeholder: placeholder,
+      accessibilityHelp: accessibilityHelp,
       iconName: iconName,
       handler: handler
     )

@@ -31,7 +31,7 @@ final class GotoLineView: NSView {
 
   private let handler: (Int) -> Void
 
-  init(frame: CGRect, placeholder: String, iconName: String, handler: @escaping (Int) -> Void) {
+  init(frame: CGRect, placeholder: String, accessibilityHelp: String, iconName: String, handler: @escaping (Int) -> Void) {
     self.handler = handler
     super.init(frame: frame)
 
@@ -47,6 +47,7 @@ final class GotoLineView: NSView {
     addSubview(iconView)
 
     textField.placeholderString = placeholder
+    textField.setAccessibilityHelp(accessibilityHelp)
     textField.delegate = self
     textField.translatesAutoresizingMaskIntoConstraints = false
     addSubview(textField)

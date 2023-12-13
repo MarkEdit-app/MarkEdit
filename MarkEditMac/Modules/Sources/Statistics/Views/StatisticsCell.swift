@@ -23,6 +23,8 @@ struct StatisticsCell: View {
         .lineLimit(1)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
+    .accessibilityElement()
+    .accessibilityLabel([titleText, valueText].joined(separator: " "))
     .frame(height: 32)
     Divider()
   }
