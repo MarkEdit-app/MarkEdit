@@ -15,6 +15,12 @@ public extension WKWebViewConfiguration {
     }
 
     let config = Configuration()
+    if config.responds(to: sel_getUid("_delaysWebProcessLaunchUntilFirstLoad")) {
+      config.setValue(false, forKey: "delaysWebProcessLaunchUntilFirstLoad")
+    } else {
+      Logger.assertFail("Failed to overwrite delaysWebProcessLaunchUntilFirstLoad")
+    }
+
     if config.preferences.responds(to: sel_getUid("_developerExtrasEnabled")) {
       config.preferences.setValue(true, forKey: "developerExtrasEnabled")
     } else {

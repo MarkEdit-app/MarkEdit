@@ -17,6 +17,12 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
   }
 
+  func testExistenceOfDelaysWebProcessLaunchUntilFirstLoad() {
+    let configuration = WKWebViewConfiguration()
+    configuration.setValue(false, forKey: "delaysWebProcessLaunchUntilFirstLoad")
+    testExistenceOfSelector(object: configuration, selector: "_delaysWebProcessLaunchUntilFirstLoad")
+  }
+
   func testExistenceOfDeveloperExtras() {
     let preferences = WKWebViewConfiguration().preferences
     preferences.setValue(true, forKey: "developerExtrasEnabled")
