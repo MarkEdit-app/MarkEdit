@@ -31,7 +31,7 @@ extension NSObject {
   /**
    Loading this bundle is extremely slow, move it to background thread with method swizzling.
    */
-  static func swizzleAccessibilityBundles() {
+  static let swizzleAccessibilityBundlesOnce: () = {
     guard #available(macOS 14.0, *) else {
       return
     }
@@ -43,7 +43,7 @@ extension NSObject {
     let originalSelector = sel_getUid("loadAXBundles")
     let swizzledSelector = #selector(swizzled_loadAXBundles)
 
-    guard let originalMethod = class_getInstanceMethod(axbbmClass, originalSelector), let swizzledMethod = class_getInstanceMethod(Self.self, swizzledSelector) else {
+    guard let originalMethod = class_getInstanceMethod(axbbmClass, originalSelector), let swizzledMethod = class_getInstanceMethod(NSObject.self, swizzledSelector) else {
       return Logger.assertFail("Failed to get the method to swizzle")
     }
 
@@ -54,7 +54,7 @@ extension NSObject {
       swizzledSelector: swizzledSelector,
       swizzledMethod: swizzledMethod
     )
-  }
+  }()
 }
 
 // MARK: - Private

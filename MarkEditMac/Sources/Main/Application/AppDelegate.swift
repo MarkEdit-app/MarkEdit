@@ -50,7 +50,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     UserDefaults.overwriteTextCheckerOnce()
     EditorCustomization.createFiles()
 
-    NSObject.swizzleAccessibilityBundles()
+    NSObject.swizzleAccessibilityBundlesOnce
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
     NSSpellChecker.swizzleCorrectionIndicatorOnce
 
