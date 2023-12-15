@@ -14,7 +14,12 @@ export const inlineCodeStyle = createDecoPlugin(() => {
  * Always use monospace font for FencedCode.
  */
 export const codeBlockStyle = createDecoPlugin(() => {
-  return createLineDeco(['FencedCode', 'CodeBlock'], 'cm-md-monospace cm-md-codeBlock');
+  return createLineDeco(['FencedCode', 'CodeBlock'], 'cm-md-monospace cm-md-codeBlock', {
+    'spellcheck': 'false',
+    'autocorrect': 'off',
+    'autocomplete': 'off',
+    'autocapitalize': 'off',
+  });
 });
 
 /**

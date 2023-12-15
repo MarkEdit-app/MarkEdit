@@ -15,7 +15,7 @@ export function createDecoPlugin(builder: () => RangeSet<Decoration>, eventHandl
 /**
  * Get line deco ranges for a text range, which can be multiple lines.
  */
-export function lineDecoRanges(from: number, to: number, className: string) {
+export function lineDecoRanges(from: number, to: number, className: string, attributes?: { [key: string]: string }) {
   const doc = window.editor.state.doc;
   const decos: Range<Decoration>[] = [];
   const start = doc.lineAt(from).number;
@@ -24,7 +24,7 @@ export function lineDecoRanges(from: number, to: number, className: string) {
   // Generate the range for each line
   for (let index = start; index <= end; ++index) {
     const line = doc.line(index);
-    const deco = Decoration.line({ class: className });
+    const deco = Decoration.line({ class: className, attributes });
     decos.push(deco.range(line.from, line.from));
   }
 
