@@ -40,8 +40,8 @@ export function createWidgetDeco(nodeName: string | string[], builder: (node: Sy
  * @param nodeName Node name(s), such as "FencedCode" for ``` code blocks
  * @param className Class to decorate the node
  */
-export function createLineDeco(nodeName: string | string[], className: string) {
-  return createDecos(nodeName, node => lineDecoRanges(node.from, node.to, className));
+export function createLineDeco(nodeName: string | string[], className: string, attributes?: { [key: string]: string }) {
+  return createDecos(nodeName, node => lineDecoRanges(node.from, node.to, className, attributes));
 }
 
 /**
