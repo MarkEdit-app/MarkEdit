@@ -211,6 +211,12 @@ function enableGutterHoverEffects() {
       setGutterHovered(true);
     }
   });
+
+  // Delay setting the transition to work around the issue mentioned in #436
+  const foldGutter = document.querySelector('.cm-foldGutter') as HTMLElement | null;
+  if (foldGutter !== null) {
+    foldGutter.style.transition = '0.4s';
+  }
 }
 
 function createStyleSheet(styleText: string, enabled = true) {
