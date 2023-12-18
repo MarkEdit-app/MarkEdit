@@ -63,6 +63,7 @@ export function resetEditor(
   window.editor = editor;
 
   // coordsAtPos ensures the line number height
+  editor.requestMeasure();
   selection.scrollCaretToVisible();
   // Makes sure the content doesn't have unwanted inset
   editor.dispatch({ effects: EditorView.scrollIntoView(0) });

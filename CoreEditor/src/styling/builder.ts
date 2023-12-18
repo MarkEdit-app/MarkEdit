@@ -53,7 +53,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-foldGutter': {
     padding: '0 4px',
     opacity: '0',
-    transition: '0.4s',
+    transition: '0s', // See #436
   },
   '.cm-foldGutter.cm-gutterHover': {
     opacity: '1',
