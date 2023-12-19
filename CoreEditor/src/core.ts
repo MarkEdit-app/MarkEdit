@@ -62,9 +62,16 @@ export function resetEditor(
   editor.focus();
   window.editor = editor;
 
-  // coordsAtPos ensures the line number height
-  editor.requestMeasure();
-  selection.scrollCaretToVisible();
+  const ensureLineHeight = () => {
+    // coordsAtPos ensures the line number height
+    selection.scrollCaretToVisible();
+  };
+
+  // Ensure twice, the first one is for initial launch,
+  // the latter is for a special case where the window moves to the background during launch.
+  ensureLineHeight();
+  setTimeout(ensureLineHeight, 600);
+
   // Makes sure the content doesn't have unwanted inset
   editor.dispatch({ effects: EditorView.scrollIntoView(0) });
 
