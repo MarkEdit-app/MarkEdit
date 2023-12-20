@@ -37,6 +37,7 @@ public struct FontPicker: View {
         TextField(text: .constant("")) {}
           .focusable(false)
           .allowsHitTesting(false)
+          .accessibilityHidden(true)
 
         Text(selectedFontName)
           .font(Font(selectedFontStyle.fontWith(size: 12)))
