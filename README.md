@@ -8,7 +8,7 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 ## Platform Compatibility
 
-To be focused, we only support the latest two major macOS releases. For now, they are macOS Ventura and macOS Sonoma.
+To be focused, we only support the latest two major macOS releases. For now, they are [macOS Ventura](https://www.apple.com/newsroom/2022/10/macos-ventura-is-now-available/) and [macOS Sonoma](https://www.apple.com/newsroom/2023/09/macos-sonoma-is-available-today/).
 
 Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12).
 
