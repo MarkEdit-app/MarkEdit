@@ -26,6 +26,7 @@ extension AppDelegate {
     case .openDocument:
       menu.addItem(withTitle: Localized.Document.newDocument) {
         NSDocumentController.shared.newDocument(nil)
+        NSApp.activate(ignoringOtherApps: true)
       }
     case .newDocument:
       menu.addItem(withTitle: Localized.Document.openDocument) {
