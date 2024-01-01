@@ -1,3 +1,5 @@
+<img src="./Icon.png" width="96">
+
 # MarkEdit
 
 [![](https://img.shields.io/badge/Platform-macOS_13.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit/releases/latest) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
