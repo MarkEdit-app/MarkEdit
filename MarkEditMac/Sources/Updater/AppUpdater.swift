@@ -29,6 +29,12 @@ enum AppUpdater {
     }
 
     guard let status = (response as? HTTPURLResponse)?.statusCode, status == 200 else {
+      if explicitly {
+        DispatchQueue.main.async {
+          presentError()
+        }
+      }
+
       return Logger.log(.error, "Failed to get the update")
     }
 
@@ -45,6 +51,18 @@ enum AppUpdater {
 // MARK: - Private
 
 private extension AppUpdater {
+  static func presentError() {
+    let alert = NSAlert()
+    alert.messageText = Localized.Updater.updateFailedTitle
+    alert.informativeText = Localized.Updater.updateFailedMessage
+    alert.addButton(withTitle: Localized.Updater.checkVersionHistory)
+    alert.addButton(withTitle: Localized.Updater.notNow)
+
+    if alert.runModal() == .alertFirstButtonReturn, let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/releases") {
+      NSWorkspace.shared.open(url)
+    }
+  }
+
   static func presentUpdate(newVersion: AppVersion, explicitly: Bool) {
     guard let currentVersion = Bundle.main.shortVersionString else {
       return Logger.assertFail("Invalid current version string")
@@ -87,11 +105,7 @@ private extension AppUpdater {
         NSWorkspace.shared.open(url)
       }
     case .alertThirdButtonReturn: // Skip This Version
-      AppPreferences.Updater.skippedVersions = {
-        var versions = Set(AppPreferences.Updater.skippedVersions)
-        versions.insert(newVersion.name)
-        return Array(versions)
-      }()
+      AppPreferences.Updater.skippedVersions.insert(newVersion.name)
     default:
       break
     }

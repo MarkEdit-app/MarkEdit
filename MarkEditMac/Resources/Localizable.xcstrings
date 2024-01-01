@@ -256,6 +256,23 @@
         }
       }
     },
+    "Check Version History" : {
+      "comment" : "Title for the \"Check Version History\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看版本记录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檢視版本記錄"
+          }
+        }
+      }
+    },
     "Classic Mac OS (CR)" : {
       "comment" : "Line endings used on Classic Mac OS",
       "localizations" : {
@@ -638,6 +655,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 ${content} 執行 JavaScript"
+          }
+        }
+      }
+    },
+    "Failed to get the update." : {
+      "comment" : "Title for failed to get the update",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法获取更新。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法获取更新。"
           }
         }
       }
@@ -1534,6 +1568,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "段落數量"
+          }
+        }
+      }
+    },
+    "Please check your network connection or get the latest release from the version history." : {
+      "comment" : "Message for failed to get the update",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查您的网络连接，或从版本记录中获取最新版本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請檢查您的網路連線，或從版本記錄中獲取最新版本。"
           }
         }
       }
