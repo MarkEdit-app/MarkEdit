@@ -14,7 +14,7 @@ public enum Logger {
       file = url.lastPathComponent
     }
 
-    os_log(level, log: .default, "\(file):\(line), \(function) -> \(message())")
+    os_logger.log(level: level, "\(file):\(line), \(function) -> \(message())")
   }
 
   public static func assertFail(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
@@ -27,3 +27,5 @@ public enum Logger {
     }
   }
 }
+
+private let os_logger = os.Logger()
