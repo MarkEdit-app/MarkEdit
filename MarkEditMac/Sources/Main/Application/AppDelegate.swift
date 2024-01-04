@@ -70,6 +70,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
     }
+
+    // Check for updates on a weekly basis, for users who never quit apps
+    Timer.scheduledTimer(withTimeInterval: 7 * 24 * 60 * 60, repeats: true) { _ in
+      Task {
+        await AppUpdater.checkForUpdates(explicitly: false)
+      }
+    }
   }
 }
 
