@@ -326,12 +326,13 @@ enum NewFilenameExtension: String, Codable {
   case txt
 
   /// Exported types, used as a key in `UTExportedTypeDeclarations` only.
+  ///
+  /// Markdown types are customized, like `app.markedit.*`, to avoid unpredictable association by the system.
   var exportedType: String {
     switch self {
     case .md:
-      return "net.daringfireball.markdown"
+      return "app.markedit.md"
     case .markdown:
-      // Declare a special key, otherwise it always refers to net.daringfireball.markdown -> md
       return "app.markedit.markdown"
     case .txt:
       return "public.plain-text"
