@@ -15,7 +15,6 @@ import TextBundle
  */
 final class EditorDocument: NSDocument {
   var fileData: Data?
-  var textBundle: TextBundleWrapper?
   var stringValue = ""
   var latestRevision: String?
   var isReadOnlyMode = false
@@ -55,6 +54,8 @@ final class EditorDocument: NSDocument {
     fileURL?.appending(path: textBundle?.textFileName ?? "", directoryHint: .notDirectory)
   }
 
+  private var textBundle: TextBundleWrapper?
+  private var suggestedFilename: String?
   private weak var hostViewController: EditorViewController?
 
   override func makeWindowControllers() {
@@ -94,21 +95,39 @@ extension EditorDocument {
     true
   }
 
+  override var displayName: String? {
+    get {
+      suggestedFilename ?? super.displayName
+    }
+    set {
+      super.displayName = newValue
+    }
+  }
+
   override func canAsynchronouslyWrite(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) -> Bool {
     true
   }
 
   override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
+    let canClose = {
+      super.canClose(
+        withDelegate: delegate,
+        shouldClose: shouldCloseSelector,
+        contextInfo: contextInfo
+      )
+    }
+
+    guard fileURL == nil else {
+      // Closing an existing document
+      return canClose()
+    }
+
     // Closing a new document, force sync to make sure the content is propagated.
     //
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
-    if fileURL == nil {
-      Task {
-        await saveAsynchronously(userInitiated: true) {}
-      }
+    Task {
+      await saveAsynchronously(userInitiated: true, saveAction: canClose)
     }
-
-    return super.canClose(withDelegate: delegate, shouldClose: shouldCloseSelector, contextInfo: contextInfo)
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
@@ -299,11 +318,17 @@ private extension EditorDocument {
       }
     }
 
-    guard let editorText = await hostViewController?.editorText else {
-      return
+    if let editorText = await hostViewController?.editorText {
+      stringValue = editorText
     }
 
-    stringValue = editorText
+    // If a leading H1 is given, use it as the suggested filename, it will be used to override the displayName
+    if let heading = await hostViewController?.tableOfContents?.first, heading.level == 1 {
+      suggestedFilename = heading.title
+    } else {
+      suggestedFilename = nil
+    }
+
     saveAction()
     unblockUserInteraction()
 

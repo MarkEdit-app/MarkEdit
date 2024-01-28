@@ -31,6 +31,16 @@ final class EditorViewController: NSViewController {
     }
   }
 
+  var tableOfContents: [HeadingInfo]? {
+    get async {
+      guard hasFinishedLoading else {
+        return nil
+      }
+
+      return try? await bridge.toc.getTableOfContents()
+    }
+  }
+
   /// Whether the content is editable, the user can toggle the read-only state at any time.
   var isReadOnlyMode: Bool {
     get {
