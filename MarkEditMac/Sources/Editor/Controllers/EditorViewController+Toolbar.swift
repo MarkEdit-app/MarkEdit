@@ -245,7 +245,7 @@ private extension EditorViewController {
     }
 
     Task {
-      let tableOfContents = try? await self.bridge.toc.getTableOfContents()
+      let tableOfContents = await tableOfContents
       tableOfContents?.forEach { info in
         let title = info.title.components(separatedBy: .newlines).first ?? info.title
         let item = menu.addItem(withTitle: title, action: #selector(self.gotoHeader(_:)))
