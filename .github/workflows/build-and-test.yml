@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-13
     env:
       node-version: '20.x'
-      DEVELOPER_DIR: /Applications/Xcode_15.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
     defaults:
       run:
