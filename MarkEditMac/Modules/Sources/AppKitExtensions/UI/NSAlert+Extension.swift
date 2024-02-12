@@ -52,6 +52,12 @@ private extension NSAlert {
       textView.string = markdown
     }
 
+    textView.textStorage?.addAttribute(
+      .foregroundColor,
+      value: NSColor.labelColor,
+      range: NSRange(location: 0, length: textView.attributedString().length)
+    )
+
     let contentSize = CGSize(width: Constants.contentWidth, height: 0)
     textView.frame = CGRect(origin: CGPoint(x: Constants.contentPadding, y: 0), size: contentSize)
     textView.sizeToFit()
