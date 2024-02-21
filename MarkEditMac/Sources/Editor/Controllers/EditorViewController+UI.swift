@@ -43,8 +43,15 @@ extension EditorViewController {
         NSSpellChecker.shared.declineCorrectionIndicator(for: self.webView)
       }
 
-      // Press tab key to accept the first spellcheck suggestion
+      // Press tab key
       if event.keyCode == 48, let self {
+        // It looks like contenteditable works differently compared to NSTextView,
+        // the first responder must be self.view to handle tab switching.
+        if event.modifierFlags.contains(.control) {
+          self.view.window?.makeFirstResponder(self.view)
+        }
+
+        // Accept the first spellcheck suggestion
         NSSpellChecker.shared.dismissCorrectionIndicator(for: self.webView)
       }
 
@@ -181,6 +188,11 @@ extension EditorViewController {
 
   func startWebViewEditing() {
     view.window?.makeFirstResponder(webView)
+  }
+
+  func refreshEditFocus() {
+    startWebViewEditing()
+    bridge.selection.refreshEditFocus()
   }
 }
 

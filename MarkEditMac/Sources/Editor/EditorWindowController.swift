@@ -38,7 +38,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
   func windowDidBecomeKey(_ notification: Notification) {
     if needsUpdateFocus {
-      editorViewController?.bridge.selection.refreshEditFocus()
+      editorViewController?.refreshEditFocus()
       needsUpdateFocus = false
     }
   }
