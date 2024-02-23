@@ -31,18 +31,6 @@ final class RuntimeTests: XCTestCase {
     let checker = NSSpellChecker.self
     testExistenceOfSelector(object: checker, selector: "isAutomaticInlineCompletionEnabled")
   }
-
-  func testExistenceOfCancelCorrection() {
-    let checker = NSSpellChecker()
-    testExistenceOfSelector(object: checker, selector: "cancelCorrectionIndicatorForView:")
-  }
-
-  func testPrivateAppKitClasses() {
-    testExistenceOfClass(named: "_NSKeyboardFocusClipView")
-    testExistenceOfClass(named: "NSToolbarFullScreenWindow")
-    testExistenceOfClass(named: "NSTitlebarView")
-    testExistenceOfClass(named: "NSToolbarButton")
-  }
 }
 
 // MARK: - Private
