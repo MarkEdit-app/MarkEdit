@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var reopenFileMenu: NSMenu?
   @IBOutlet weak var lineEndingsMenu: NSMenu?
   @IBOutlet weak var editCommandsMenu: NSMenu?
+  @IBOutlet weak var editTableOfContentsMenu: NSMenu?
+  @IBOutlet weak var editFontMenu: NSMenu?
   @IBOutlet weak var editFindMenu: NSMenu?
   @IBOutlet weak var textFormatMenu: NSMenu?
   @IBOutlet weak var formatHeadersMenu: NSMenu?
@@ -28,7 +30,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
   @IBOutlet weak var editUndoItem: NSMenuItem?
   @IBOutlet weak var editRedoItem: NSMenuItem?
+  @IBOutlet weak var editGotoLineItem: NSMenuItem?
   @IBOutlet weak var editReadOnlyItem: NSMenuItem?
+  @IBOutlet weak var editStatisticsItem: NSMenuItem?
   @IBOutlet weak var formatBulletItem: NSMenuItem?
   @IBOutlet weak var formatNumberingItem: NSMenuItem?
   @IBOutlet weak var formatTodoItem: NSMenuItem?
