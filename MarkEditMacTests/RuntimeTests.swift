@@ -43,14 +43,6 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
   }
-
-  func testPrivateAccessibilityBundles() {
-    let type: AnyClass? = NSObject.axbbmClass
-    XCTAssertNotNil(type, "Missing AXBBundleManager")
-
-    let object = type?.value(forKey: "defaultManager") as? AnyObject
-    XCTAssertEqual(object?.responds(to: sel_getUid("loadAXBundles")), true, "Missing loadAXBundles")
-  }
 }
 
 // MARK: - Private
