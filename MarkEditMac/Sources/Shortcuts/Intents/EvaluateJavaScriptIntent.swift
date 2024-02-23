@@ -18,7 +18,7 @@ struct EvaluateJavaScriptIntent: AppIntent {
   var content: String
 
   @MainActor
-  func perform() async throws -> some IntentResult {
+  func perform() async throws -> some ReturnsValue<String> {
     guard let activeController else {
       throw IntentError.missingDocument
     }
