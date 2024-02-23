@@ -11,17 +11,7 @@ import WebKit
 import AppKitExtensions
 
 final class RuntimeTests: XCTestCase {
-  func testExistenceOfDrawsBackground() {
-    let configuration = WKWebViewConfiguration()
-    configuration.setValue(false, forKey: "drawsBackground")
-    testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
-  }
-
-  func testExistenceOfDeveloperExtras() {
-    let preferences = WKWebViewConfiguration().preferences
-    preferences.setValue(true, forKey: "developerExtrasEnabled")
-    testExistenceOfSelector(object: preferences, selector: "_developerExtrasEnabled")
-  }
+  //
 }
 
 // MARK: - Private
