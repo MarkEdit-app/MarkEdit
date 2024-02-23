@@ -39,21 +39,33 @@ extension EditorViewController: NSMenuItemValidation {
   ]
 
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-    // Disable all edit actions for read-only mode or revision mode
+    // Disable most edit actions for read-only mode or revision mode
     if isReadOnlyMode || isRevisionMode {
       guard let menu = menuItem.menu, let delegate = NSApp.appDelegate else {
         return false
       }
 
-      // The "Read Only Mode" toggle should always be enabled
-      if isReadOnlyMode && menuItem == delegate.editReadOnlyItem {
-        return true
+      // Enable a few menus and items for "Read Only Mode", mostly navigation related
+      if isReadOnlyMode {
+        // Table of Contents, Font, Find
+        let menus = [delegate.editTableOfContentsMenu, delegate.editFontMenu, delegate.editFindMenu]
+        if menus.contains(where: { menu.isDescendantOf(menu: $0) }) {
+          return true
+        }
+
+        // Goto to Line, Read Only Mode, Statistics
+        let items = [delegate.editGotoLineItem, delegate.editReadOnlyItem, delegate.editStatisticsItem]
+        if items.contains(menuItem) {
+          return true
+        }
       }
 
-      return !menu.isDescendantOf(menu: delegate.mainEditMenu)
-          && !menu.isDescendantOf(menu: delegate.reopenFileMenu)
-          && !menu.isDescendantOf(menu: delegate.lineEndingsMenu)
-          && !menu.isDescendantOf(menu: delegate.textFormatMenu)
+      return [
+        delegate.mainEditMenu,
+        delegate.reopenFileMenu,
+        delegate.lineEndingsMenu,
+        delegate.textFormatMenu,
+      ].allSatisfy { !menu.isDescendantOf(menu: $0) }
     }
 
     // When webView is not the firstResponder, disable some menus entirely
