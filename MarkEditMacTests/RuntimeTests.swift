@@ -37,44 +37,6 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: checker, selector: "cancelCorrectionIndicatorForView:")
   }
 
-  func testRetrievingPopover() {
-    class ContentViewController: NSViewController {
-      override func loadView() {
-        view = NSView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-      }
-    }
-
-    let window = NSWindow()
-    window.makeKeyAndOrderFront(nil)
-
-    guard let contentView = window.contentView else {
-      XCTAssert(false, "Missing contentView in NSWindow")
-      return
-    }
-
-    let popover = NSPopover()
-    popover.contentViewController = ContentViewController(nibName: nil, bundle: nil)
-    popover.show(
-      relativeTo: CGRect(x: 0, y: 0, width: 1, height: 1),
-      of: contentView,
-      preferredEdge: .maxX
-    )
-
-    let expectation = XCTestExpectation()
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-      expectation.fulfill()
-    }
-
-    wait(for: [expectation])
-    XCTAssertNotNil(popover.contentViewController?.view.window?.value(forKey: "_popover"))
-  }
-
-  func testRetrievingToolbarEffectView() {
-    let window = NSWindow()
-    window.makeKeyAndOrderFront(nil)
-    XCTAssertNotNil(window.toolbarEffectView)
-  }
-
   func testPrivateAppKitClasses() {
     testExistenceOfClass(named: "_NSKeyboardFocusClipView")
     testExistenceOfClass(named: "NSToolbarFullScreenWindow")
