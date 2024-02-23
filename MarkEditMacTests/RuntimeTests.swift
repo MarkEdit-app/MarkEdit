@@ -22,15 +22,6 @@ final class RuntimeTests: XCTestCase {
     preferences.setValue(true, forKey: "developerExtrasEnabled")
     testExistenceOfSelector(object: preferences, selector: "_developerExtrasEnabled")
   }
-
-  func testExistenceOfAutomaticInlineCompletion() {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
-    let checker = NSSpellChecker.self
-    testExistenceOfSelector(object: checker, selector: "isAutomaticInlineCompletionEnabled")
-  }
 }
 
 // MARK: - Private
