@@ -12,11 +12,15 @@ struct GetFileContentIntent: AppIntent {
   static var description = IntentDescription("Get file content of the active document, throws an error if no editor is opened.")
 
   @MainActor
-  func perform() async throws -> some ReturnsValue {
+  func perform() async throws -> some ReturnsValue<IntentFile> {
     guard let fileURL = activeController?.document?.textFileURL else {
       throw IntentError.missingDocument
     }
 
-    return .result(value: IntentFile(fileURL: fileURL))
+    guard let fileData = try? Data(contentsOf: fileURL) else {
+      throw IntentError.missingDocument
+    }
+
+    return .result(value: IntentFile(data: fileData, filename: fileURL.lastPathComponent))
   }
 }
