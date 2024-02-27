@@ -17,10 +17,6 @@ struct GetFileContentIntent: AppIntent {
       throw IntentError.missingDocument
     }
 
-    guard let fileData = try? Data(contentsOf: fileURL) else {
-      throw IntentError.missingDocument
-    }
-
-    return .result(value: IntentFile(data: fileData, filename: fileURL.lastPathComponent))
+    return .result(value: IntentFile(fileURL: fileURL))
   }
 }
