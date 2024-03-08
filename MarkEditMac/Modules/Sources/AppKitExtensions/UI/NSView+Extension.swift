@@ -61,6 +61,10 @@ public extension NSView {
     layer?.animationKeys()?.isEmpty == false
   }
 
+  var isFirstResponder: Bool {
+    isFirstResponder(in: window)
+  }
+
   /// Check if the view itself or one of its descendants is the first responder in a window.
   func isFirstResponder(in window: NSWindow?) -> Bool {
     (window?.firstResponder as? NSView)?.belongs(to: self) ?? false

@@ -14,4 +14,8 @@ public extension NSTextField {
 
     window?.makeFirstResponder(self)
   }
+
+  func selectAll() {
+    currentEditor()?.selectAll(self)
+  }
 }
