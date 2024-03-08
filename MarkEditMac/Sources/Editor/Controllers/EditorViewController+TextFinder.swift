@@ -18,7 +18,9 @@ extension EditorViewController {
     if mode != .hidden {
       // Move the focus to find panel, with a delay to make the focus ring animation more natural
       DispatchQueue.afterDelay(seconds: 0.1) {
-        self.findPanel.searchField.startEditing(in: self.view.window)
+        let textField = mode == .replace ? self.replacePanel.textField : self.findPanel.searchField
+        textField.startEditing(in: self.view.window)
+        textField.selectAll()
       }
     }
 
@@ -29,7 +31,8 @@ extension EditorViewController {
       }
     }
 
-    guard findPanel.mode != mode else {
+    // If the target mode is find and the current mode is not hidden, we will also skip
+    guard findPanel.mode != mode, mode != .find || findPanel.mode == .hidden else {
       return
     }
 
@@ -72,6 +75,22 @@ extension EditorViewController {
       if mode != .replace {
         self.replacePanel.isHidden = true
       }
+    }
+  }
+
+  func updateTextFinderModeIfNeeded(_ event: NSEvent) {
+    guard findPanel.isFirstResponder || replacePanel.isFirstResponder else {
+      return
+    }
+
+    // Handle keyboard events when focus is not in the editor
+    switch event.deviceIndependentFlags {
+    case .command:
+      updateTextFinderMode(.find)
+    case [.option, .command]:
+      updateTextFinderMode(.replace)
+    default:
+      break
     }
   }
 
