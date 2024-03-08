@@ -1,6 +1,5 @@
 import isMetaKey from './isMetaKey';
 import { editingState } from '../common/store';
-import { setGutterHovered } from '../styling/config';
 
 import * as completion from '../modules/completion';
 import * as selection from '../modules/selection';
@@ -39,12 +38,6 @@ export function startObserving() {
   document.addEventListener('mouseup', event => {
     storage.isMouseDown = false;
     link.handleMouseUp(event);
-
-    // If the mouse is released on gutters, consider as a hover effect
-    if ((event.target as HTMLElement | null)?.closest('.cm-gutters') !== null) {
-      // Delay because 'mouseleave' can emit false positives
-      setTimeout(() => setGutterHovered(true), 5);
-    }
   }, true);
 
   document.addEventListener('compositionstart', () => {
