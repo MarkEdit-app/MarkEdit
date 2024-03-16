@@ -12,6 +12,7 @@ import MarkEditCore
 
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
+  func notifyBackgroundColorDidChange(color: Int)
   func notifyViewportScaleDidChange()
   func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
   func notifyContentOffsetDidChange()
@@ -28,6 +29,9 @@ final class NativeBridgeCore: NativeBridge {
   lazy var methods: [String: NativeMethod] = [
     "notifyWindowDidLoad": { [weak self] in
       self?.notifyWindowDidLoad(parameters: $0)
+    },
+    "notifyBackgroundColorDidChange": { [weak self] in
+      self?.notifyBackgroundColorDidChange(parameters: $0)
     },
     "notifyViewportScaleDidChange": { [weak self] in
       self?.notifyViewportScaleDidChange(parameters: $0)
@@ -55,6 +59,23 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
+    return .success(nil)
+  }
+
+  private func notifyBackgroundColorDidChange(parameters: Data) -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var color: Int
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyBackgroundColorDidChange(color: message.color)
     return .success(nil)
   }
 

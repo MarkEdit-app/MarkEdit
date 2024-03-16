@@ -8,6 +8,7 @@ import { LineColumnInfo } from '../../modules/selection/types';
  */
 export interface NativeModuleCore extends NativeModule {
   notifyWindowDidLoad(): void;
+  notifyBackgroundColorDidChange({ color }: { color: CodeGen_Int }): void;
   notifyViewportScaleDidChange(): void;
   notifyViewDidUpdate(args: { contentEdited: boolean; compositionEnded: boolean; isDirty: boolean; selectedLineColumn: LineColumnInfo }): void;
   notifyContentOffsetDidChange(): void;

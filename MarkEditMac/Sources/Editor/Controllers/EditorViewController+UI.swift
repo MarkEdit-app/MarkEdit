@@ -77,11 +77,11 @@ extension EditorViewController {
     view.window?.acceptsMouseMovedEvents = true
     view.window?.appearance = AppTheme.current.resolvedAppearance
 
-    updateWindowColors(AppTheme.current)
+    updateWindowColors(.current)
   }
 
   func updateWindowColors(_ theme: AppTheme) {
-    let backgroundColor = theme.windowBackground
+    let backgroundColor = webBackgroundColor ?? theme.windowBackground
     view.window?.backgroundColor = backgroundColor
     view.window?.toolbarContainerView?.layerBackgroundColor = backgroundColor
 
