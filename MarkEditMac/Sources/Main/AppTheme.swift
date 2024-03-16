@@ -140,7 +140,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "minimal-dark",
-      windowBackground: NSColor(hexCode: 0x000000),
+      windowBackground: NSColor(hexCode: 0x1e1e1e),
       prefersTintedToolbar: true
     )
   }
