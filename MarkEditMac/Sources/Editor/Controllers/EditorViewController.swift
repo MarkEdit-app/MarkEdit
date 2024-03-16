@@ -16,6 +16,7 @@ final class EditorViewController: NSViewController {
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
   var mouseExitedWindow = false
+  var webBackgroundColor: NSColor?
   var safeAreaObservation: NSKeyValueObservation?
 
   weak var presentedMenu: NSMenu?

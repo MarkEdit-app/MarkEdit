@@ -89,6 +89,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     loadingIndicator.scaleTo(2.0)
   }
 
+  func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32) {
+    webBackgroundColor = NSColor(hexCode: color)
+    updateWindowColors(.current)
+  }
+
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore) {
     // Viewport scale changed, perform cancel where we dismiss panels and popovers
     cancelOperation(sender)
