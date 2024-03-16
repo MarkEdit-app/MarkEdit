@@ -12,7 +12,7 @@ const colors: EditorColors = {
   text: dark.gray4,
   comment: dark.gray1,
   background: '#ffffff',
-  caret: palette.accent,
+  caret: '#007aff',
   lineNumber: light.gray1,
   matchingBracket: light.gray3,
   selection: light.gray5,
