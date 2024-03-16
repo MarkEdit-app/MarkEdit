@@ -101,22 +101,11 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
 
 // Here we define color independent highlight styles
 const sharedHighlights = [
-  // Basic
   { tag: tags.strong, fontWeight: 'bolder' },
   { tag: [tags.emphasis, tags.quote], fontStyle: 'italic' },
   { tag: tags.strikethrough, textDecoration: 'line-through' },
   { tag: tags.link, textDecoration: 'underline' },
   { tag: tags.monospace, fontFamily: 'ui-monospace, monospace' },
-
-  // Markdown
-  { tag: tags.heading1, class: 'cm-md-header cm-md-heading1' },
-  { tag: tags.heading2, class: 'cm-md-header cm-md-heading2' },
-  { tag: tags.heading3, class: 'cm-md-header cm-md-heading3' },
-  { tag: tags.heading4, class: 'cm-md-header cm-md-heading4' },
-  { tag: tags.heading5, class: 'cm-md-header cm-md-heading5' },
-  { tag: tags.heading6, class: 'cm-md-header cm-md-heading6' },
-  { tag: tags.setextHeading1, class: 'cm-md-header cm-md-heading1 cm-md-setext-heading1' },
-  { tag: tags.setextHeading2, class: 'cm-md-header cm-md-heading2 cm-md-setext-heading2' },
 ];
 
 function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
