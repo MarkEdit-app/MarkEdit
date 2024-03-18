@@ -18,7 +18,7 @@ import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 
 import { loadTheme } from './styling/themes';
-import { markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
+import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { gutterExtensions } from './styling/nodes/gutter';
 
@@ -132,6 +132,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     }),
 
     // Styling
+    classHighlighters,
     theme.of(loadTheme(window.config.theme)),
     invisibles.of([]),
     selectedLines.of([]),

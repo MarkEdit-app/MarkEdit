@@ -1,4 +1,5 @@
-import { styleTags } from '@lezer/highlight';
+import { syntaxHighlighting } from '@codemirror/language';
+import { classHighlighter, tagHighlighter, styleTags } from '@lezer/highlight';
 import { MarkdownConfig } from '@lezer/markdown';
 import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdownMathParser';
 import { tags } from './builder';
@@ -7,6 +8,29 @@ import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './
 import { linkStyle } from './nodes/link';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
+
+export const classHighlighters = [
+  syntaxHighlighting(classHighlighter),
+  syntaxHighlighting(tagHighlighter([
+    { tag: tags.heading1, class: 'cm-md-header cm-md-heading1' },
+    { tag: tags.heading2, class: 'cm-md-header cm-md-heading2' },
+    { tag: tags.heading3, class: 'cm-md-header cm-md-heading3' },
+    { tag: tags.heading4, class: 'cm-md-header cm-md-heading4' },
+    { tag: tags.heading5, class: 'cm-md-header cm-md-heading5' },
+    { tag: tags.heading6, class: 'cm-md-header cm-md-heading6' },
+    { tag: tags.setextHeading1, class: 'cm-md-header cm-md-heading1 cm-md-setext-heading1' },
+    { tag: tags.setextHeading2, class: 'cm-md-header cm-md-heading2 cm-md-setext-heading2' },
+    { tag: tags.strong, class: 'cm-md-bold' },
+    { tag: tags.emphasis, class: 'cm-md-italic' },
+    { tag: tags.strikethrough, class: 'cm-md-strikethrough' },
+    { tag: tags.url, class: 'cm-md-url' },
+    { tag: tags.linkMark, class: 'cm-md-linkMark' },
+    { tag: tags.listMark, class: 'cm-md-listMark' },
+    { tag: tags.quote, class: 'cm-md-quote' },
+    { tag: tags.quoteMark, class: 'cm-md-quoteMark' },
+    { tag: tags.contentSeparator, class: 'cm-md-horizontalRule' },
+  ])),
+];
 
 // https://github.com/lezer-parser/markdown/blob/main/src/markdown.ts
 export const markdownExtensions: MarkdownConfig[] = [
