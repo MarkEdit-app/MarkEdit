@@ -3,7 +3,7 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
 
 import { Config } from '../config';
-import { markdownExtensions, renderExtensions } from '../styling/markdown';
+import { classHighlighters, markdownExtensions, renderExtensions } from '../styling/markdown';
 
 import GitHubLight from '../styling/themes/github-light';
 import GitHubDark from '../styling/themes/github-dark';
@@ -33,6 +33,7 @@ const extensions = [
   }),
 
   // Styling
+  classHighlighters,
   theme.of(loadTheme(config.theme)),
   renderExtensions,
 ];
