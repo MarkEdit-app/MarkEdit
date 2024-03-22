@@ -76,6 +76,9 @@ export function resetEditor(
   // Makes sure the content doesn't have unwanted inset
   editor.dispatch({ effects: EditorView.scrollIntoView(0) });
 
+  const contentDOM = editor.contentDOM;
+  contentDOM.addEventListener('blur', handleFocusLost);
+
   const scrollDOM = editor.scrollDOM;
   scrollDOM.scrollTo({ top: 0 }); // scrollIntoView doesn't work when the app is idle
   fixWebKitWheelIssues(scrollDOM);
