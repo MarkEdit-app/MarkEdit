@@ -10,7 +10,7 @@ const headingProp = new NodeProp<number>()
 const commonmark = baseParser.configure({
   props: [
     foldNodeProp.add(type => {
-      return !type.is("Block") || type.is("Document") || isHeading(type) != null ? undefined
+      return !type.is("Block") || type.is("Document") || isHeading(type) != null || isList(type) ? undefined
         : (tree, state) => ({from: state.doc.lineAt(tree.from).to, to: tree.to})
     }),
     headingProp.add(isHeading),
@@ -26,6 +26,10 @@ const commonmark = baseParser.configure({
 function isHeading(type: NodeType) {
   let match = /^(?:ATX|Setext)Heading(\d)$/.exec(type.name)
   return match ? +match[1] : undefined
+}
+
+function isList(type: NodeType) {
+  return type.name == "OrderedList" || type.name == "BulletList"
 }
 
 // [MarkEdit] We prefer empty sections to be foldable (original: https://github.com/codemirror/lang-markdown/blob/main/src/markdown.ts#L31)
