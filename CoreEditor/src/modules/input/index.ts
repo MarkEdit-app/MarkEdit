@@ -64,13 +64,13 @@ export function observeChanges() {
     }
 
     if (update.docChanged) {
+      // We need this because we have different line height for headings,
+      // CodeMirror doesn't by default fix the offset issue.
+      scrollCaretToVisible();
+      
       // Make sure the main selection is always centered for typewriter mode
       if (window.config.typewriterMode) {
         scrollToSelection('center');
-      } else {
-        // We need this because we have different line height for headings,
-        // CodeMirror doesn't by default fix the offset issue.
-        scrollCaretToVisible();
       }
     }
 
