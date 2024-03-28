@@ -21,10 +21,16 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
   }
 
-  func testExistenceOfDeveloperExtras() {
+  func testExistenceOfDeveloperTools() {
     let preferences = WKWebViewConfiguration().preferences
     preferences.setValue(true, forKey: "developerExtrasEnabled")
     testExistenceOfSelector(object: preferences, selector: "_developerExtrasEnabled")
+
+    let webView = WKWebView()
+    testExistenceOfSelector(object: webView, selector: "_inspector")
+
+    let inspector = webView.perform(sel_getUid("_inspector")).takeUnretainedValue()
+    testExistenceOfSelector(object: inspector, selector: "show")
   }
 
   func testExistenceOfAutomaticInlineCompletion() {
