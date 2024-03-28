@@ -20,7 +20,12 @@ final class EditorViewController: NSViewController {
   var safeAreaObservation: NSKeyValueObservation?
 
   weak var presentedMenu: NSMenu?
-  weak var presentedPopover: NSPopover?
+  weak var presentedPopover: NSPopover? {
+    willSet {
+      // Close the existing popover to ensure that only one is presented
+      presentedPopover?.close()
+    }
+  }
 
   var editorText: String? {
     get async {
