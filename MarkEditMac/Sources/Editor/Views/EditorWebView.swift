@@ -52,6 +52,16 @@ final class EditorWebView: WKWebView {
       return true
     }
 
+    // Just a hint for the keyboard shortcut, not actually functional
+    //
+    // WKWebView.showInspector() in WKWebView+Extension.swift does the heavy lifting
+    menu.items.forEach {
+      if $0.identifier?.rawValue == "WKMenuItemIdentifierInspectElement" {
+        $0.keyEquivalent = "i"
+        $0.keyEquivalentModifierMask = [.option, .command]
+      }
+    }
+
     // Keep items minimal for revision mode
     if actionDelegate?.editorWebViewIsRevisionMode(self) == true {
       return super.willOpenMenu(menu, with: event)

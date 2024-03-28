@@ -37,6 +37,7 @@
 		873126E4297BAC9C001521A0 /* EditorViewController+Pandoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873126E3297BAC9C001521A0 /* EditorViewController+Pandoc.swift */; };
 		873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873ACD4629644E2F00431498 /* EditorViewController+Encoding.swift */; };
 		873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873D6401295FCC3E0095DEF7 /* AppResources.swift */; };
+		874065792BB505F500B5CE5A /* EditorViewController+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874065782BB505F500B5CE5A /* EditorViewController+Events.swift */; };
 		874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */ = {isa = PBXBuildFile; productRef = 874823CD29B0BD980067EC49 /* TextCompletion */; };
 		874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874AAE2D2959F197000E0E84 /* EditorReplacePanel.swift */; };
 		874BE6F429BB37FA002F83BA /* IntentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874BE6F329BB37FA002F83BA /* IntentProvider.swift */; };
@@ -151,6 +152,7 @@
 		873126E3297BAC9C001521A0 /* EditorViewController+Pandoc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Pandoc.swift"; sourceTree = "<group>"; };
 		873ACD4629644E2F00431498 /* EditorViewController+Encoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Encoding.swift"; sourceTree = "<group>"; };
 		873D6401295FCC3E0095DEF7 /* AppResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResources.swift; sourceTree = "<group>"; };
+		874065782BB505F500B5CE5A /* EditorViewController+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Events.swift"; sourceTree = "<group>"; };
 		8743B26229593B2000F83DAE /* Build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Build.xcconfig; sourceTree = "<group>"; };
 		874AAE2D2959F197000E0E84 /* EditorReplacePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplacePanel.swift; sourceTree = "<group>"; };
 		874BE6F329BB37FA002F83BA /* IntentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentProvider.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 			children = (
 				870A51B4294702AF0095C7EB /* EditorViewController.swift */,
 				8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */,
+				874065782BB505F500B5CE5A /* EditorViewController+Events.swift */,
 				870F17672985285B00003DA7 /* EditorViewController+Config.swift */,
 				8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */,
 				87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */,
@@ -724,6 +727,7 @@
 				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
 				87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */,
 				873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */,
+				874065792BB505F500B5CE5A /* EditorViewController+Events.swift in Sources */,
 				87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */,
 				87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */,
 			);

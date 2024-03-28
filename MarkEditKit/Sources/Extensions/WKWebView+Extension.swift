@@ -8,6 +8,27 @@ import WebKit
 import MarkEditCore
 
 /**
+ WKWebView extension to show inspector programmatically.
+ */
+
+public extension WKWebView {
+  func showInspector() {
+    let objectSel = sel_getUid("_inspector")
+    let methodSel = sel_getUid("show")
+
+    guard responds(to: objectSel), let inspector = perform(objectSel)?.takeUnretainedValue() else {
+      return Logger.assertFail("Missing object \"_inspector\" in: \(self)")
+    }
+
+    guard inspector.responds(to: methodSel) else {
+      return Logger.assertFail("Missing method \"show\" in: \(inspector)")
+    }
+
+    _ = inspector.perform(methodSel)
+  }
+}
+
+/**
  WKWebView extension to encode and decode messages.
  */
 extension WKWebView {

@@ -14,8 +14,9 @@ public extension NSEvent {
 }
 
 public extension UInt16 {
-  static let kVK_ANSI_F: UInt16 = 0x03
-  static let kVK_Tab: UInt16 = 0x30
-  static let kVK_Delete: UInt16 = 0x33
-  static let kVK_Option: UInt16 = 0x3A
+  static let kVK_ANSI_F: Self = 0x03
+  static let kVK_ANSI_I: Self = 0x22
+  static let kVK_Tab: Self = 0x30
+  static let kVK_Delete: Self = 0x33
+  static let kVK_Option: Self = 0x3A
 }
