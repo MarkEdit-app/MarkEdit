@@ -8,20 +8,18 @@ import AppKit
 import AppKitExtensions
 import SettingsUI
 
+@main
 final class AppDelegate: NSObject, NSApplicationDelegate {
-  @main
-  private enum Main {
-    static func main() {
-      NSObject.swizzleAccessibilityBundlesOnce
-      NSSpellChecker.swizzleInlineCompletionEnabledOnce
-      NSSpellChecker.swizzleCorrectionIndicatorOnce
+  static func main() {
+    NSObject.swizzleAccessibilityBundlesOnce
+    NSSpellChecker.swizzleInlineCompletionEnabledOnce
+    NSSpellChecker.swizzleCorrectionIndicatorOnce
 
-      let app = NSApplication.shared
-      let delegate = AppDelegate()
+    let app = NSApplication.shared
+    let delegate = Self()
 
-      app.delegate = delegate
-      _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
-    }
+    app.delegate = delegate
+    _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
   }
 
   @IBOutlet weak var mainFileMenu: NSMenu?
