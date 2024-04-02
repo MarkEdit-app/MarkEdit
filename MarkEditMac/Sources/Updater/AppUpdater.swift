@@ -58,8 +58,8 @@ private extension AppUpdater {
     alert.addButton(withTitle: Localized.Updater.checkVersionHistory)
     alert.addButton(withTitle: Localized.Updater.notNow)
 
-    if alert.runModal() == .alertFirstButtonReturn, let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/releases") {
-      NSWorkspace.shared.open(url)
+    if alert.runModal() == .alertFirstButtonReturn {
+      NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/releases")
     }
   }
 
@@ -101,9 +101,7 @@ private extension AppUpdater {
 
     switch alert.runModal() {
     case .alertFirstButtonReturn: // Learn More
-      if let url = URL(string: newVersion.htmlUrl) {
-        NSWorkspace.shared.open(url)
-      }
+      NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
     case .alertThirdButtonReturn: // Skip This Version
       AppPreferences.Updater.skippedVersions.insert(newVersion.name)
     default:

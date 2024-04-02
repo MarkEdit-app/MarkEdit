@@ -45,4 +45,14 @@ public extension NSWorkspace {
 
     return false
   }
+
+  @discardableResult
+  func safelyOpenURL(string: String) -> Bool {
+    guard let url = URL(string: string) else {
+      assertionFailure("Failed to create the URL: \(string)")
+      return false
+    }
+
+    return open(url)
+  }
 }

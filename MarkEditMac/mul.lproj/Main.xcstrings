@@ -649,6 +649,30 @@
         }
       }
     },
+    "aSl-kC-hp8.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Development Guide\"; ObjectID = \"aSl-kC-hp8\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Development Guide"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发指南"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開發指南"
+          }
+        }
+      }
+    },
     "aTl-1u-JFS.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Print…\"; ObjectID = \"aTl-1u-JFS\";",
       "extractionState" : "extracted_with_value",
@@ -1993,6 +2017,30 @@
         }
       }
     },
+    "KrK-C3-Ckx.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Developer\"; ObjectID = \"KrK-C3-Ckx\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Developer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发者"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開發者"
+          }
+        }
+      }
+    },
     "LE2-aR-0XJ.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Bring All to Front\"; ObjectID = \"LE2-aR-0XJ\";",
       "extractionState" : "extracted_with_value",
@@ -2565,6 +2613,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "設定頁面…"
+          }
+        }
+      }
+    },
+    "qjf-Yo-EMd.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Developer\"; ObjectID = \"qjf-Yo-EMd\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Developer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发者"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開發者"
           }
         }
       }
@@ -3385,6 +3457,30 @@
         }
       }
     },
+    "WAg-qh-q9G.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Open Documents Folder\"; ObjectID = \"WAg-qh-q9G\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Documents Folder"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开应用目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開啟應用目錄"
+          }
+        }
+      }
+    },
     "WAq-55-Lug.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Bold\"; ObjectID = \"WAq-55-Lug\";",
       "extractionState" : "extracted_with_value",
@@ -3429,6 +3525,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新增"
+          }
+        }
+      }
+    },
+    "WbI-eI-YNA.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Inspect Element\"; ObjectID = \"WbI-eI-YNA\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Inspect Element"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "审查元素"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "審查元素"
           }
         }
       }

@@ -113,6 +113,14 @@ private extension AppDelegate {
     }
   }
 
+  @IBAction func openDocumentsFolder(_ sender: Any?) {
+    NSWorkspace.shared.open(URL.documentsDirectory)
+  }
+
+  @IBAction func openDevelopmentGuide(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Development")
+  }
+
   @IBAction func showPreferences(_ sender: Any?) {
     if settingsWindowController == nil {
       settingsWindowController = SettingsRootViewController.withTabs([
@@ -132,20 +140,14 @@ private extension AppDelegate {
   }
 
   @IBAction func showHelp(_ sender: Any?) {
-    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki") {
-      NSWorkspace.shared.open(url)
-    }
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki")
   }
 
   @IBAction func openIssueTracker(_ sender: Any?) {
-    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/issues") {
-      NSWorkspace.shared.open(url)
-    }
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/issues")
   }
 
   @IBAction func openVersionHistory(_ sender: Any?) {
-    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/releases") {
-      NSWorkspace.shared.open(url)
-    }
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/releases")
   }
 }
