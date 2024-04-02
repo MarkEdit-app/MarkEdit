@@ -117,6 +117,14 @@ extension EditorViewController {
   }
 }
 
+// MARK: - Developer
+
+extension EditorViewController {
+  @IBAction func inspectElement(_ sender: Any?) {
+    webView.showInspector()
+  }
+}
+
 // MARK: - Formatting
 
 extension EditorViewController {
@@ -290,9 +298,7 @@ private extension EditorViewController {
   }
 
   @IBAction func learnPandoc(_ sender: Any?) {
-    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#pandoc") {
-      NSWorkspace.shared.open(url)
-    }
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#pandoc")
   }
 }
 
@@ -383,9 +389,7 @@ private extension EditorViewController {
   }
 
   @IBAction func getGrammarly(_ sender: Any?) {
-    if let url = URL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#grammarly") {
-      NSWorkspace.shared.open(url)
-    }
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#grammarly")
   }
 }
 

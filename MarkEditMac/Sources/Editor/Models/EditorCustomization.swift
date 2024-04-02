@@ -46,19 +46,11 @@ final class EditorCustomization {
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
   }
 
-  var fileURL: URL? {
-    FileManager.default.urls(
-      for: .documentDirectory,
-      in: .userDomainMask
-    )
-    .first?.appending(path: fileType.fileName, directoryHint: .notDirectory)
+  var fileURL: URL {
+    URL.documentsDirectory.appending(path: fileType.fileName, directoryHint: .notDirectory)
   }
 
   var contents: String {
-    guard let fileURL else {
-      return ""
-    }
-
     guard let contents = (try? Data(contentsOf: fileURL))?.toString() else {
       return ""
     }
@@ -79,10 +71,6 @@ final class EditorCustomization {
   }
 
   private func createFile(_ contents: String = "") {
-    guard let fileURL else {
-      return Logger.assertFail("Missing fileURL to proceed")
-    }
-
     guard !FileManager.default.fileExists(atPath: fileURL.path) else {
       return
     }
