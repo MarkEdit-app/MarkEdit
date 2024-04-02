@@ -60,12 +60,24 @@ extension NSObject {
 // MARK: - Private
 
 private extension NSObject {
+  enum States {
+    static var loaded = false
+  }
+
   @objc func swizzled_loadAXBundles() -> Bool {
+    defer {
+      States.loaded = true
+    }
+
+    guard !States.loaded else {
+      return false
+    }
+
     guard !NSWorkspace.shared.isVoiceOverEnabled else {
       return self.swizzled_loadAXBundles()
     }
 
-    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+    DispatchQueue.global(qos: .userInitiated).async {
       _ = self.swizzled_loadAXBundles()
     }
 
