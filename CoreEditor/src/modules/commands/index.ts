@@ -9,19 +9,19 @@ import { EditCommand } from './types';
 import * as commands from '@codemirror/commands';
 
 export function toggleBold() {
-  toggleBlockWithMarks('**', '**');
+  toggleBlockWithMarks('**', '**', 'StrongEmphasis', 'EmphasisMark');
 }
 
 export function toggleItalic() {
-  toggleBlockWithMarks('*', '*');
+  toggleBlockWithMarks('*', '*', 'Emphasis', 'EmphasisMark');
 }
 
 export function toggleStrikethrough() {
-  toggleBlockWithMarks('~~', '~~');
+  toggleBlockWithMarks('~~', '~~', 'Strikethrough', 'StrikethroughMark');
 }
 
 export function toggleInlineCode() {
-  toggleBlockWithMarks('`', '`');
+  toggleBlockWithMarks('`', '`', 'InlineCode', 'CodeMark');
 }
 
 export function toggleInlineMath() {

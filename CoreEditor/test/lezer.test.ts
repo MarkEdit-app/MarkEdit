@@ -4,6 +4,30 @@ import { syntaxTree } from '@codemirror/language';
 import * as editor from '../src/@test/editor';
 
 describe('Lezer parser', () => {
+  test('test StrongEmphasis', () => {
+    editor.setUp('**Hello** World');
+
+    const types = parseTypes(window.editor);
+    expect(types).toContain('StrongEmphasis');
+    expect(types).toContain('EmphasisMark');
+  });
+
+  test('test Emphasis', () => {
+    editor.setUp('*Hello* World');
+
+    const types = parseTypes(window.editor);
+    expect(types).toContain('Emphasis');
+    expect(types).toContain('EmphasisMark');
+  });
+
+  test('test Strikethrough', () => {
+    editor.setUp('~~Hello~~ World');
+
+    const types = parseTypes(window.editor);
+    expect(types).toContain('Strikethrough');
+    expect(types).toContain('StrikethroughMark');
+  });
+
   test('test InlineCode', () => {
     editor.setUp('`Hello` World');
 
