@@ -40,6 +40,13 @@ export const languages = [
     }
   }),
   LanguageDescription.of({
+    name: "Go",
+    extensions: ["go"],
+    load() {
+      return import("@codemirror/lang-go").then(m => m.go())
+    }
+  }),
+  LanguageDescription.of({
     name: "HTML",
     alias: ["xhtml"],
     extensions: ["html", "htm", "handlebars", "hbs"],
@@ -146,7 +153,7 @@ export const languages = [
   LanguageDescription.of({
     name: "TypeScript",
     alias: ["ts"],
-    extensions: ["ts"],
+    extensions: ["ts","mts","cts"],
     load() {
       return import("@codemirror/lang-javascript").then(m => m.javascript({typescript: true}))
     }
@@ -228,13 +235,6 @@ export const languages = [
     extensions: ["fs", "fsx"],
     load() {
       return import("@codemirror/legacy-modes/mode/mllike").then(m => legacy(m.fSharp))
-    }
-  }),
-  LanguageDescription.of({
-    name: "Go",
-    extensions: ["go"],
-    load() {
-      return import("@codemirror/legacy-modes/mode/go").then(m => legacy(m.go))
     }
   }),
   LanguageDescription.of({
