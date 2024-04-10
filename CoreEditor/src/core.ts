@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
-import { disableMaybeCreateCompositionBarrier, getViewportScale, notifyBackgroundColor } from './common/utils';
+import { getViewportScale, notifyBackgroundColor } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import * as events from './events';
@@ -59,7 +59,6 @@ export function resetEditor(
     extensions: extensions({ revisionMode, lineBreak }),
   });
 
-  disableMaybeCreateCompositionBarrier(editor);
   editor.focus();
   window.editor = editor;
 
