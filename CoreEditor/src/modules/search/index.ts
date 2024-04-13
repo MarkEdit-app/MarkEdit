@@ -40,29 +40,24 @@ export function updateQuery(options: SearchOptions): number {
   const query = new SearchQuery(options);
   editor.dispatch({ effects: setSearchQuery.of(query) });
 
+  // Get ranges and refocus if needed
   const ranges = rangesFromQuery(query);
-  if (ranges !== undefined) {
-    // If refocus is enabled and there's a visible range, focus on it
-    if (options.refocus) {
-      for (const range of ranges) {
-        const rect = editor.coordsAtPos(range.from);
-        if (rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight) {
-          editor.dispatch({
-            selection: EditorSelection.range(range.from, range.to),
-          });
+  if (options.refocus) {
+    for (const range of ranges) {
+      const rect = editor.coordsAtPos(range.from);
+      if (rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight) {
+        editor.dispatch({
+          selection: EditorSelection.range(range.from, range.to),
+        });
 
-          scrollSearchMatchToVisible();
-          return ranges.length;
-        }
+        scrollSearchMatchToVisible();
+        return ranges.length;
       }
     }
-
-    selectMatch();
-    return ranges.length;
   }
 
   selectMatch();
-  return document.querySelectorAll('.cm-searchMatch').length;
+  return ranges.length;
 }
 
 export function findNext(term: string) {
@@ -102,7 +97,7 @@ export function selectAllOccurrences() {
 export function numberOfMatches(): CodeGen_Int {
   const query = getSearchQuery(window.editor.state);
   const ranges = rangesFromQuery(query);
-  return (ranges !== undefined ? ranges.length : 0) as CodeGen_Int;
+  return ranges.length as CodeGen_Int;
 }
 
 export type { SearchOptions };
