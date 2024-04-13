@@ -20,7 +20,7 @@ describe('Search module', () => {
       wholeWord: false,
     });
 
-    expect(rangesFromQuery(query)?.length).toBe(2);
+    expect(rangesFromQuery(query).length).toBe(2);
   });
 
   test('test searchOccurrences', () => {
