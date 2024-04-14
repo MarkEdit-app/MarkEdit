@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { SearchQuery } from '@codemirror/search';
+import { cursorFromQuery } from '../src/modules/search/cursorFromQuery';
 
 import matchFromQuery from '../src/modules/search/matchFromQuery';
 import rangesFromQuery from '../src/modules/search/rangesFromQuery';
@@ -9,6 +10,24 @@ import * as editor from '../src/@test/editor';
 import * as search from '../src/modules/search';
 
 describe('Search module', () => {
+  test('test cursorFromQuery', () => {
+    editor.setUp('Hello Hello');
+    search.setState(true);
+
+    const cursor = cursorFromQuery(new SearchQuery({
+      search: 'Hello',
+      caseSensitive: false,
+      literal: false,
+      regexp: false,
+      wholeWord: false,
+    }));
+
+    expect(typeof cursor?.matchAll).toBe('function');
+    expect(typeof cursor?.getReplacement).toBe('function');
+    expect(typeof cursor?.prevMatch).toBe('function');
+    expect(typeof cursor?.nextMatch).toBe('function');
+  });
+
   test('matchFromQuery', () => {
     editor.setUp('**Hello** Hello');
     search.setState(true);

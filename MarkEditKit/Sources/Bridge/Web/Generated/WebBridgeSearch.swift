@@ -46,6 +46,18 @@ public final class WebBridgeSearch {
     }
   }
 
+  public func performOperation(operation: SearchOperation, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let operation: SearchOperation
+    }
+
+    let message = Message(
+      operation: operation
+    )
+
+    webView?.invoke(path: "webModules.search.performOperation", message: message, completion: completion)
+  }
+
   public func findNext(search: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let search: String
@@ -110,4 +122,11 @@ public struct SearchOptions: Codable {
     self.refocus = refocus
     self.replace = replace
   }
+}
+
+public enum SearchOperation: String, Codable {
+  case selectAll = "selectAll"
+  case selectAllInSelection = "selectAllInSelection"
+  case replaceAll = "replaceAll"
+  case replaceAllInSelection = "replaceAllInSelection"
 }

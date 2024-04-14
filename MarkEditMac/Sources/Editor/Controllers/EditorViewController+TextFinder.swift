@@ -159,6 +159,14 @@ extension EditorViewController {
   func selectAllOccurrences() {
     bridge.search.selectAllOccurrences()
   }
+
+  func performSearchOperation(_ operation: SearchOperation) {
+    bridge.search.performOperation(operation: operation)
+
+    if operation == .selectAll || operation == .selectAllInSelection {
+      startWebViewEditing()
+    }
+  }
 }
 
 // MARK: - Private

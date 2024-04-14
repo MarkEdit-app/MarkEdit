@@ -7,6 +7,10 @@
 import AppKit
 
 public extension NSMenuItem {
+  convenience init(title: String) {
+    self.init(title: title, action: nil, keyEquivalent: "")
+  }
+
   var copiedItem: NSMenuItem? {
     copy() as? NSMenuItem
   }

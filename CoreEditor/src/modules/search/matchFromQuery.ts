@@ -1,14 +1,9 @@
 import { SearchQuery } from '@codemirror/search';
+import { cursorFromQuery } from './cursorFromQuery';
 
 export default function matchFromQuery(query: SearchQuery): { from: number; to: number } | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const anyQuery = (query as any);
-  if (typeof anyQuery.create !== 'function') {
-    return null;
-  }
-
-  const cursor = anyQuery.create();
-  if (typeof cursor.nextMatch !== 'function' || typeof cursor.prevMatch !== 'function') {
+  const cursor = cursorFromQuery(query);
+  if (cursor === null) {
     return null;
   }
 
