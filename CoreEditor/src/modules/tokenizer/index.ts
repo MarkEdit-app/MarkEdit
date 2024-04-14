@@ -1,6 +1,7 @@
 import { EditorSelection } from '@codemirror/state';
 import { TextTokenizeAnchor } from './types';
 import { anchorAtPos } from './anchorAtPos';
+import selectWithRanges from '../selection/selectWithRanges';
 
 /**
  * For double-click, leverage native methods to tokenize the selection.
@@ -25,16 +26,14 @@ export async function handleDoubleClick(event: MouseEvent) {
   const from = result.from + line.from;
   const to = result.to + line.from;
 
-  editor.dispatch({
-    // We would like to add a new selection instead of just replace the existing one,
-    // this is important for multi-selection scenarios.
-    //
-    // Also, we need to filter out ranges that creates a selection with two carets.
-    selection: EditorSelection.create([
-      ...editor.state.selection.ranges.filter(range => range.to < from || range.from > to),
-      EditorSelection.range(from, to),
-    ]),
-  });
+  // We would like to add a new selection instead of just replace the existing one,
+  // this is important for multi-selection scenarios.
+  //
+  // Also, we need to filter out ranges that creates a selection with two carets.
+  selectWithRanges([
+    ...editor.state.selection.ranges.filter(range => range.to < from || range.from > to),
+    EditorSelection.range(from, to),
+  ]);
 }
 
 /**

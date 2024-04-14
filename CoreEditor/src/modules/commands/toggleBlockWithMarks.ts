@@ -1,6 +1,7 @@
 import { EditorSelection, SelectionRange } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import selectedRanges from '../selection/selectedRanges';
+import selectWithRanges from '../selection/selectWithRanges';
 
 /**
  * Toggle selection with mark pairs, such as **bold**, _italic_.
@@ -36,9 +37,7 @@ export default function toggleBlockWithMarks(leftMark: string, rightMark: string
       rangesToKeep.push(range);
     }
 
-    editor.dispatch({
-      selection: EditorSelection.create(rangesToKeep),
-    });
+    selectWithRanges(rangesToKeep);
   }
 
   // Take care of all updates and merge them into a single one
