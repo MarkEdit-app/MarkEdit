@@ -1,11 +1,12 @@
 import { EditorSelection } from '@codemirror/state';
 import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSearchQuery } from '@codemirror/search';
-import { scrollSearchMatchToVisible, selectedMainText } from '../selection';
+import { scrollPositionToVisible, scrollSearchMatchToVisible, selectedMainText } from '../selection';
 
 import SearchOptions from './options';
+import matchFromQuery from './matchFromQuery';
 import rangesFromQuery from './rangesFromQuery';
 import searchOccurrences from './searchOccurrences';
-import selectedRanges from '../selection/selectedRanges';
+import hasSelection from '../selection/hasSelection';
 import selectWithRanges from '../selection/selectWithRanges';
 
 // Imagine this entire file as a front-end to the @codemirror/search module
@@ -30,36 +31,40 @@ export function updateQuery(options: SearchOptions): number {
   setState(true);
 
   const editor = window.editor;
-  const reselect = options.refocus && !selectedRanges().some(range => !range.empty);
-
-  const selectMatch = () => {
-    if (!reselect) {
-      return;
-    }
-
-    return findNext(options.search) || findPrevious(options.search);
-  };
-
   const query = new SearchQuery(options);
   editor.dispatch({ effects: setSearchQuery.of(query) });
 
   // Get ranges and refocus if needed
   const ranges = rangesFromQuery(query);
-  if (reselect) {
+  if (options.refocus) {
+    // Try ranges in viewport
     for (const range of ranges) {
       const rect = editor.coordsAtPos(range.from);
       if (rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight) {
-        editor.dispatch({
-          selection: EditorSelection.range(range.from, range.to),
-        });
+        if (!hasSelection()) {
+          editor.dispatch({
+            selection: EditorSelection.range(range.from, range.to),
+          });
+        }
 
-        scrollSearchMatchToVisible();
+        scrollSearchMatchToVisible(range);
         return ranges.length;
       }
     }
+
+    // Failed to get a range in viewport, try harder
+    if (hasSelection()) {
+      const match = matchFromQuery(query);
+      if (match === null) {
+        scrollSearchMatchToVisible(ranges.length > 0 ? ranges[0] : undefined);
+      } else {
+        scrollPositionToVisible(match.from);
+      }
+    } else {
+      (() => findNext(options.search) || findPrevious(options.search))();
+    }
   }
 
-  selectMatch();
   return ranges.length;
 }
 

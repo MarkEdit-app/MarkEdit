@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { EditorSelection, Line } from '@codemirror/state';
+import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
 import { getClientRect } from '../../common/utils';
 
 import { InvisiblesBehavior } from '../../config';
@@ -114,9 +114,9 @@ export function scrollCaretToVisible() {
 /**
  * Make sure selected search match is visible, with an additional margin to breath.
  */
-export function scrollSearchMatchToVisible() {
-  const pos = searchMatchPosition();
-  if (pos !== null) {
+export function scrollSearchMatchToVisible(foundRange?: SelectionRange) {
+  const pos = searchMatchPosition() ?? foundRange?.from;
+  if (pos !== undefined) {
     scrollPositionToVisible(pos);
   }
 }
@@ -126,16 +126,9 @@ export function scrollSearchMatchToVisible() {
  */
 export function scrollPositionToVisible(pos: number) {
   const editor = window.editor;
-  const coords = editor.coordsAtPos(pos);
-  const margin = 45;
-
-  if (coords === null) {
-    return console.error('Error getting coords from pos');
-  }
-
-  if (coords.bottom + margin > editor.dom.clientHeight) {
-    return scrollToSelection('end', margin);
-  }
+  editor.dispatch({
+    effects: EditorView.scrollIntoView(pos, { y: 'end', yMargin: 72 }),
+  });
 }
 
 export function updateActiveLine(hasSelection: boolean) {
