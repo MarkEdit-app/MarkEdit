@@ -1,5 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
+import hasSelection from '../selection/hasSelection';
 
 /**
  * Wrap selected blocks with a pair of mark.
@@ -8,7 +9,7 @@ import { EditorView } from '@codemirror/view';
  */
 export default function wrapBlock(mark: string, editor: EditorView) {
   // Fallback to the default behavior if all selections are empty
-  if (!editor.state.selection.ranges.some(range => !range.empty)) {
+  if (!hasSelection()) {
     return false;
   }
 
