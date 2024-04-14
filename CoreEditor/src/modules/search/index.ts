@@ -5,6 +5,7 @@ import { scrollSearchMatchToVisible, selectedMainText } from '../selection';
 import SearchOptions from './options';
 import rangesFromQuery from './rangesFromQuery';
 import searchOccurrences from './searchOccurrences';
+import selectedRanges from '../selection/selectedRanges';
 import selectWithRanges from '../selection/selectWithRanges';
 
 // Imagine this entire file as a front-end to the @codemirror/search module
@@ -29,8 +30,10 @@ export function updateQuery(options: SearchOptions): number {
   setState(true);
 
   const editor = window.editor;
+  const reselect = options.refocus && !selectedRanges().some(range => !range.empty);
+
   const selectMatch = () => {
-    if (!options.refocus) {
+    if (!reselect) {
       return;
     }
 
@@ -42,7 +45,7 @@ export function updateQuery(options: SearchOptions): number {
 
   // Get ranges and refocus if needed
   const ranges = rangesFromQuery(query);
-  if (options.refocus) {
+  if (reselect) {
     for (const range of ranges) {
       const rect = editor.coordsAtPos(range.from);
       if (rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight) {
