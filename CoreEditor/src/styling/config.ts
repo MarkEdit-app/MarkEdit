@@ -216,6 +216,7 @@ function enableGutterHoverEffects() {
   const foldGutter = document.querySelector('.cm-foldGutter') as HTMLElement | null;
   if (foldGutter !== null) {
     foldGutter.style.transition = '0.4s';
+    foldGutter.style.transitionDelay = '0.1s';
   }
 }
 

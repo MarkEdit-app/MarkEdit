@@ -16,7 +16,10 @@ extension EditorViewController {
     findPanel.searchField.isHidden = isRevisionMode
 
     if mode != .hidden {
-      // Move the focus to find panel, with a delay to make the focus ring animation more natural
+      // Move the focus to find panel, which causes the WebView to lose focus immediately
+      view.window?.makeFirstResponder(findPanel)
+
+      // Move the focus to text field, with a delay to make the focus ring animation more natural
       DispatchQueue.afterDelay(seconds: 0.1) {
         let textField = mode == .replace ? self.replacePanel.textField : self.findPanel.searchField
         textField.startEditing(in: self.view.window)
