@@ -27,8 +27,10 @@ export function setState(enabled: boolean) {
   }
 
   if (enabled) {
+    storage.enabledWithSelection = hasSelection();
     openSearchPanel(window.editor);
   } else {
+    storage.enabledWithSelection = false;
     closeSearchPanel(window.editor);
   }
 
@@ -50,7 +52,7 @@ export function updateQuery(options: SearchOptions): number {
     for (const range of ranges) {
       const rect = editor.coordsAtPos(range.from);
       if (rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight) {
-        if (!hasSelection()) {
+        if (!storage.enabledWithSelection) {
           editor.dispatch({
             selection: EditorSelection.range(range.from, range.to),
           });
@@ -62,7 +64,7 @@ export function updateQuery(options: SearchOptions): number {
     }
 
     // Failed to get a range in viewport, try harder
-    if (hasSelection()) {
+    if (storage.enabledWithSelection) {
       const match = matchFromQuery(query);
       if (match === null) {
         scrollSearchMatchToVisible(ranges.length > 0 ? ranges[0] : undefined);
@@ -117,6 +119,16 @@ export function numberOfMatches(): CodeGen_Int {
   return ranges.length as CodeGen_Int;
 }
 
+export function hasVisibleSelectedMatch() {
+  const element = document.querySelector('.cm-searchMatch-selected') as HTMLElement | null;
+  if (element === null) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  return rect.top > 0 && rect.bottom < window.editor.dom.clientHeight;
+}
+
 export function performOperation(operation: SearchOperation) {
   const options: SearchOptions = storage.options ?? {
     search: '',
@@ -142,7 +154,8 @@ export function performOperation(operation: SearchOperation) {
       break;
   }
 
-  scrollSearchMatchToVisible();
+  const selection = window.editor.state.selection.main;
+  scrollSearchMatchToVisible(selection);
 }
 
 export type { SearchOperation, SearchOptions };
@@ -161,8 +174,10 @@ function prepareNavigation(search: string) {
 
 const storage: {
   isEnabled: boolean;
+  enabledWithSelection: boolean;
   options: SearchOptions | undefined;
 } = {
   isEnabled: false,
+  enabledWithSelection: false,
   options: undefined,
 };

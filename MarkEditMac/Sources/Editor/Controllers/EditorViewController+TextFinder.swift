@@ -10,6 +10,10 @@ import MarkEditKit
 
 extension EditorViewController {
   func updateTextFinderMode(_ mode: EditorFindMode, searchTerm: String? = nil) {
+    guard !hasUnfinishedAnimations else {
+      return
+    }
+
     // In viewing mode, always set the mode to hidden and hide the search field,
     // this is to break a mystery retain cycle caused by NSDocument version browsing.
     let mode = isRevisionMode ? .hidden : mode
@@ -140,12 +144,20 @@ extension EditorViewController {
 
   func findNextInTextFinder() {
     prepareFinderNavigation()
-    bridge.search.findNext(search: searchTerm)
+
+    Task {
+      let hadSelectedMatch = (try? await bridge.search.findNext(search: searchTerm)) ?? false
+      finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
+    }
   }
 
   func findPreviousInTextFinder() {
     prepareFinderNavigation()
-    bridge.search.findPrevious(search: searchTerm)
+
+    Task {
+      let hadSelectedMatch = (try? await bridge.search.findPrevious(search: searchTerm)) ?? false
+      finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
+    }
   }
 
   func replaceNextInTextFinder() {
@@ -177,12 +189,18 @@ private extension EditorViewController {
   }
 
   func prepareFinderNavigation() {
-    if findPanel.numberOfItems == 1 {
-      NSSound.beep()
+    guard findPanel.mode == .hidden else {
+      return
     }
 
-    if findPanel.mode == .hidden {
-      updateTextFinderMode(.find)
+    updateTextFinderMode(.find)
+  }
+
+  func finishFinderNavigation(hadSelectedMatch: Bool) {
+    guard (hadSelectedMatch && findPanel.numberOfItems == 1) || findPanel.numberOfItems == 0 else {
+      return
     }
+
+    NSSound.beep()
   }
 }
