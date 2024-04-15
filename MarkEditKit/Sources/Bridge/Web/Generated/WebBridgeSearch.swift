@@ -58,7 +58,8 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.performOperation", message: message, completion: completion)
   }
 
-  public func findNext(search: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  @MainActor
+  public func findNext(search: String) async throws -> Bool {
     struct Message: Encodable {
       let search: String
     }
@@ -67,10 +68,15 @@ public final class WebBridgeSearch {
       search: search
     )
 
-    webView?.invoke(path: "webModules.search.findNext", message: message, completion: completion)
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.search.findNext", message: message) {
+        continuation.resume(with: $0)
+      }
+    }
   }
 
-  public func findPrevious(search: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  @MainActor
+  public func findPrevious(search: String) async throws -> Bool {
     struct Message: Encodable {
       let search: String
     }
@@ -79,7 +85,11 @@ public final class WebBridgeSearch {
       search: search
     )
 
-    webView?.invoke(path: "webModules.search.findPrevious", message: message, completion: completion)
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.search.findPrevious", message: message) {
+        continuation.resume(with: $0)
+      }
+    }
   }
 
   public func replaceNext(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

@@ -10,6 +10,7 @@ import {
   replaceNext,
   replaceAll,
   numberOfMatches,
+  hasVisibleSelectedMatch,
   performOperation,
 } from '../../modules/search';
 
@@ -22,8 +23,8 @@ export interface WebModuleSearch extends WebModule {
   setState({ enabled }: { enabled: boolean }): void;
   updateQuery({ options }: { options: SearchOptions }): CodeGen_Int;
   performOperation({ operation }: { operation: SearchOperation }): void;
-  findNext({ search }: { search: string }): void;
-  findPrevious({ search }: { search: string }): void;
+  findNext({ search }: { search: string }): boolean;
+  findPrevious({ search }: { search: string }): boolean;
   replaceNext(): void;
   replaceAll(): void;
   selectAllOccurrences(): void;
@@ -43,12 +44,18 @@ export class WebModuleSearchImpl implements WebModuleSearch {
     performOperation(operation);
   }
 
-  findNext({ search }: { search: string }): void {
+  findNext({ search }: { search: string }): boolean {
+    const result = hasVisibleSelectedMatch();
     findNext(search);
+
+    return result;
   }
 
-  findPrevious({ search }: { search: string }): void {
+  findPrevious({ search }: { search: string }): boolean {
+    const result = hasVisibleSelectedMatch();
     findPrevious(search);
+
+    return result;
   }
 
   replaceNext(): void {
