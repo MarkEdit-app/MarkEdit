@@ -133,7 +133,7 @@ extension EditorViewController {
 
       findPanel.searchField.stringValue = text
       DispatchQueue.afterDelay(seconds: 0.2) { // 0.2 is the animation duration of panel
-        self.updateTextFinderQuery(refocus: false)
+        self.updateTextFinderQuery()
       }
     }
   }
@@ -164,7 +164,7 @@ extension EditorViewController {
     bridge.search.performOperation(operation: operation)
 
     if operation == .selectAll || operation == .selectAllInSelection {
-      startWebViewEditing()
+      DispatchQueue.afterDelay(seconds: 0.2, execute: startWebViewEditing)
     }
   }
 }
