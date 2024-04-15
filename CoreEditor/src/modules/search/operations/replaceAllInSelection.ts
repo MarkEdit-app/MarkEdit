@@ -1,5 +1,5 @@
 import { SearchQuery } from '@codemirror/search';
-import { cursorFromQuery } from '../cursorFromQuery';
+import { cursorFromQuery } from '../queryCursor';
 import SearchOptions from '../options';
 import selectedRanges from '../../selection/selectedRanges';
 
@@ -10,8 +10,12 @@ export default function replaceAllInSelection(options: SearchOptions) {
   }
 
   const editor = window.editor;
-  const state = editor.state;
-  const changes = (cursor.matchAll(state, 1e9) ?? []).map(match => ({
+  const matches = cursor.matchAll(editor.state, 1e9) ?? [];
+  if (matches.length === 0) {
+    return;
+  }
+
+  const changes = matches.map(match => ({
     from: match.from,
     to: match.to,
     insert: cursor.getReplacement(match),

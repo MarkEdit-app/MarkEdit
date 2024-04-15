@@ -8,9 +8,9 @@ export interface QueryResult {
 
 export interface QueryCursor {
   matchAll: (state: EditorState, limit: number) => QueryResult[] | null;
-  getReplacement: (result: QueryResult) => string;
   nextMatch: (state: EditorState, from: number, to: number) => QueryResult | null;
   prevMatch: (state: EditorState, from: number, to: number) => QueryResult | null;
+  getReplacement: (result: QueryResult) => string;
 }
 
 export function cursorFromQuery(query: SearchQuery) {
@@ -21,7 +21,11 @@ export function cursorFromQuery(query: SearchQuery) {
   }
 
   const cursor = anyQuery.create();
-  if ([cursor.matchAll, cursor.getReplacement, cursor.nextMatch, cursor.prevMatch].some($ => typeof $ !== 'function')) {
+  if (typeof cursor !== 'object') {
+    return null;
+  }
+
+  if ([cursor.matchAll, cursor.nextMatch, cursor.prevMatch, cursor.getReplacement].some($ => typeof $ !== 'function')) {
     return null;
   }
 

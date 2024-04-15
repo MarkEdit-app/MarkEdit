@@ -1,7 +1,7 @@
 import { SearchQuery } from '@codemirror/search';
-import { cursorFromQuery } from './cursorFromQuery';
+import { QueryResult, cursorFromQuery } from './queryCursor';
 
-export default function matchFromQuery(query: SearchQuery): { from: number; to: number } | null {
+export default function matchFromQuery(query: SearchQuery): QueryResult | null {
   const cursor = cursorFromQuery(query);
   if (cursor === null) {
     return null;

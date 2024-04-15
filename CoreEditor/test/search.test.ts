@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { SearchQuery } from '@codemirror/search';
-import { cursorFromQuery } from '../src/modules/search/cursorFromQuery';
+import { cursorFromQuery } from '../src/modules/search/queryCursor';
 
 import matchFromQuery from '../src/modules/search/matchFromQuery';
 import rangesFromQuery from '../src/modules/search/rangesFromQuery';
