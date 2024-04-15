@@ -145,7 +145,7 @@ extension EditorViewController {
 
     let trackingRect = {
       var bounds = view.bounds
-      bounds.size.height = contentHeight
+      bounds.size.height = contentHeight - findPanelHeight
       return bounds
     }()
 
@@ -181,5 +181,9 @@ extension EditorViewController {
 private extension EditorViewController {
   var contentHeight: Double {
     view.bounds.height - view.safeAreaInsets.top
+  }
+
+  var findPanelHeight: Double {
+    findPanel.isHidden ? 0 : findPanel.frame.height
   }
 }
