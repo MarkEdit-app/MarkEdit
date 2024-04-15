@@ -1,5 +1,6 @@
 import { WebModule } from '../webModule';
 import {
+  SearchOperation,
   SearchOptions,
   setState,
   updateQuery,
@@ -9,6 +10,7 @@ import {
   replaceNext,
   replaceAll,
   numberOfMatches,
+  performOperation,
 } from '../../modules/search';
 
 /**
@@ -19,6 +21,7 @@ import {
 export interface WebModuleSearch extends WebModule {
   setState({ enabled }: { enabled: boolean }): void;
   updateQuery({ options }: { options: SearchOptions }): CodeGen_Int;
+  performOperation({ operation }: { operation: SearchOperation }): void;
   findNext({ search }: { search: string }): void;
   findPrevious({ search }: { search: string }): void;
   replaceNext(): void;
@@ -34,6 +37,10 @@ export class WebModuleSearchImpl implements WebModuleSearch {
 
   updateQuery({ options }: { options: SearchOptions }): CodeGen_Int {
     return updateQuery(options) as CodeGen_Int;
+  }
+
+  performOperation({ operation }: { operation: SearchOperation }): void {
+    performOperation(operation);
   }
 
   findNext({ search }: { search: string }): void {

@@ -1555,6 +1555,23 @@
         }
       }
     },
+    "Operations" : {
+      "comment" : "Search operations",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作"
+          }
+        }
+      }
+    },
     "Paragraphs" : {
       "comment" : "Statistics label: count paragraphs",
       "localizations" : {
@@ -1861,6 +1878,40 @@
         }
       }
     },
+    "Replace All" : {
+      "comment" : "Replace all occurrences",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部替换"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部取代"
+          }
+        }
+      }
+    },
+    "Replace All in Selection" : {
+      "comment" : "Replace all occurrences in selection",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所选内容中全部替换"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所選範圍中全部取代"
+          }
+        }
+      }
+    },
     "Save Changes" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1873,6 +1924,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存改動"
+          }
+        }
+      }
+    },
+    "Select All" : {
+      "comment" : "Select all occurrences",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全選"
+          }
+        }
+      }
+    },
+    "Select All in Selection" : {
+      "comment" : "Select all occurrences in selection",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所选内容中全选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所選範圍中進行全選"
           }
         }
       }

@@ -12,6 +12,15 @@ import selectWithRanges from '../selection/selectWithRanges';
 // Imagine this entire file as a front-end to the @codemirror/search module
 import * as search from '@codemirror/search';
 
+// Search operations
+import {
+  SearchOperation,
+  performReplaceAll,
+  performReplaceAllInSelection,
+  performSelectAll,
+  performSelectAllInSelection,
+} from './operations';
+
 export function setState(enabled: boolean) {
   if (storage.isEnabled === enabled) {
     return;
@@ -90,7 +99,7 @@ export function replaceNext() {
 }
 
 export function replaceAll() {
-  search.replaceAll(window.editor);
+  performSelectAll();
   scrollSearchMatchToVisible();
 }
 
@@ -108,7 +117,35 @@ export function numberOfMatches(): CodeGen_Int {
   return ranges.length as CodeGen_Int;
 }
 
-export type { SearchOptions };
+export function performOperation(operation: SearchOperation) {
+  const options: SearchOptions = storage.options ?? {
+    search: '',
+    caseSensitive: false,
+    literal: false,
+    regexp: false,
+    wholeWord: false,
+    refocus: false,
+  };
+
+  switch (operation) {
+    case SearchOperation.selectAll:
+      performSelectAll();
+      break;
+    case SearchOperation.selectAllInSelection:
+      performSelectAllInSelection(options);
+      break;
+    case SearchOperation.replaceAll:
+      performReplaceAll();
+      break;
+    case SearchOperation.replaceAllInSelection:
+      performReplaceAllInSelection(options);
+      break;
+  }
+
+  scrollSearchMatchToVisible();
+}
+
+export type { SearchOperation, SearchOptions };
 
 function prepareNavigation(search: string) {
   if (storage.options === undefined) {

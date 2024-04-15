@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MarkEditKit
 
 extension EditorFindPanel {
   /// Reset the search menu, generally after search mode changed.
@@ -23,10 +24,39 @@ extension EditorFindPanel {
 
     let literalItem = menu.addItem(withTitle: Localized.Search.literalSearch, action: #selector(toggleLiteralSearch(_:)))
     literalItem.setOn(AppPreferences.Search.literalSearch)
-    menu.addItem(.separator())
 
     let regexItem = menu.addItem(withTitle: Localized.Search.regularExpression, action: #selector(toggleRegularExpression(_:)))
     regexItem.setOn(AppPreferences.Search.regularExpression)
+    menu.addItem(.separator())
+
+    let operationsItem = NSMenuItem(title: Localized.Search.operations)
+    operationsItem.submenu = {
+      let menu = NSMenu()
+      menu.autoenablesItems = false
+
+      let canSelect = !searchField.stringValue.isEmpty
+      let canReplace = canSelect && mode == .replace
+
+      menu.addItem(withTitle: Localized.Search.selectAll) { [weak self] in
+        self?.performOperation(.selectAll)
+      }.isEnabled = canSelect
+
+      menu.addItem(withTitle: Localized.Search.selectAllInSelection) { [weak self] in
+        self?.performOperation(.selectAllInSelection)
+      }.isEnabled = canSelect
+
+      menu.addItem(withTitle: Localized.Search.replaceAll) { [weak self] in
+        self?.performOperation(.replaceAll)
+      }.isEnabled = canReplace
+
+      menu.addItem(withTitle: Localized.Search.replaceAllInSelection) { [weak self] in
+        self?.performOperation(.replaceAllInSelection)
+      }.isEnabled = canReplace
+
+      return menu
+    }()
+
+    menu.addItem(operationsItem)
     menu.addItem(.separator())
 
     let recentsTitleItem = menu.addItem(withTitle: Localized.Search.recentSearches)
@@ -80,5 +110,9 @@ private extension EditorFindPanel {
   func toggleMenuItem(_ item: NSMenuItem) {
     item.toggle()
     delegate?.editorFindPanelDidChangeOptions(self)
+  }
+
+  func performOperation(_ operation: SearchOperation) {
+    delegate?.editorFindPanel(self, performOperation: operation)
   }
 }
