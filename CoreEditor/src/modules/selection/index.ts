@@ -127,7 +127,7 @@ export function scrollSearchMatchToVisible(foundRange?: SelectionRange) {
 export function scrollPositionToVisible(pos: number) {
   const editor = window.editor;
   editor.dispatch({
-    effects: EditorView.scrollIntoView(pos, { y: 'end', yMargin: 72 }),
+    effects: EditorView.scrollIntoView(pos, { y: 'nearest', yMargin: 72 }),
   });
 }
 
