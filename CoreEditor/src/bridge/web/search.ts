@@ -4,6 +4,7 @@ import {
   SearchOptions,
   setState,
   updateQuery,
+  updateHasSelection,
   selectAllOccurrences,
   findNext,
   findPrevious,
@@ -22,6 +23,7 @@ import {
 export interface WebModuleSearch extends WebModule {
   setState({ enabled }: { enabled: boolean }): void;
   updateQuery({ options }: { options: SearchOptions }): CodeGen_Int;
+  updateHasSelection(): void;
   performOperation({ operation }: { operation: SearchOperation }): void;
   findNext({ search }: { search: string }): boolean;
   findPrevious({ search }: { search: string }): boolean;
@@ -38,6 +40,10 @@ export class WebModuleSearchImpl implements WebModuleSearch {
 
   updateQuery({ options }: { options: SearchOptions }): CodeGen_Int {
     return updateQuery(options) as CodeGen_Int;
+  }
+
+  updateHasSelection(): void {
+    updateHasSelection();
   }
 
   performOperation({ operation }: { operation: SearchOperation }): void {

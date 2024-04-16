@@ -46,6 +46,10 @@ public final class WebBridgeSearch {
     }
   }
 
+  public func updateHasSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.search.updateHasSelection", completion: completion)
+  }
+
   public func performOperation(operation: SearchOperation, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let operation: SearchOperation
