@@ -7,8 +7,8 @@
 import AppKit
 
 public extension NSTextField {
-  func startEditing(in window: NSWindow?) {
-    guard !isFirstResponder(in: window) else {
+  func startEditing(in window: NSWindow?, alwaysRefocus: Bool = false) {
+    guard alwaysRefocus || !isFirstResponder(in: window) else {
       return
     }
 
