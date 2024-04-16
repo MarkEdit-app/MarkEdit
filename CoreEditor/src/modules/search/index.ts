@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSearchQuery } from '@codemirror/search';
-import { scrollPositionToVisible, scrollSearchMatchToVisible, selectedMainText } from '../selection';
+import { isRectVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
 
 import SearchOptions from './options';
 import matchFromQuery from './matchFromQuery';
@@ -27,10 +27,8 @@ export function setState(enabled: boolean) {
   }
 
   if (enabled) {
-    storage.enabledWithSelection = hasSelection();
     openSearchPanel(window.editor);
   } else {
-    storage.enabledWithSelection = false;
     closeSearchPanel(window.editor);
   }
 
@@ -50,26 +48,22 @@ export function updateQuery(options: SearchOptions): number {
   if (options.refocus) {
     // Try ranges in viewport
     for (const range of ranges) {
-      const rect = editor.coordsAtPos(range.from);
-      if (rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight) {
-        if (!storage.enabledWithSelection) {
+      if (isRectVisible(range.from)) {
+        if (!storage.hasSelection) {
           editor.dispatch({
             selection: EditorSelection.range(range.from, range.to),
           });
         }
 
-        scrollSearchMatchToVisible(range);
         return ranges.length;
       }
     }
 
     // Failed to get a range in viewport, try harder
-    if (storage.enabledWithSelection) {
-      const match = matchFromQuery(query);
-      if (match === null) {
-        scrollSearchMatchToVisible(ranges.length > 0 ? ranges[0] : undefined);
-      } else {
-        scrollPositionToVisible(match.from);
+    if (storage.hasSelection) {
+      const anchor = matchFromQuery(query)?.from ?? (ranges.length > 0 ? ranges[0].from : undefined);
+      if (anchor !== undefined) {
+        scrollIntoView(anchor, 'center');
       }
     } else {
       (() => findNext(options.search) || findPrevious(options.search))();
@@ -77,6 +71,10 @@ export function updateQuery(options: SearchOptions): number {
   }
 
   return ranges.length;
+}
+
+export function updateHasSelection() {
+  storage.hasSelection = hasSelection();
 }
 
 export function findNext(term: string) {
@@ -154,8 +152,7 @@ export function performOperation(operation: SearchOperation) {
       break;
   }
 
-  const selection = window.editor.state.selection.main;
-  scrollSearchMatchToVisible(selection);
+  scrollSearchMatchToVisible();
 }
 
 export type { SearchOperation, SearchOptions };
@@ -174,10 +171,10 @@ function prepareNavigation(search: string) {
 
 const storage: {
   isEnabled: boolean;
-  enabledWithSelection: boolean;
+  hasSelection: boolean;
   options: SearchOptions | undefined;
 } = {
   isEnabled: false,
-  enabledWithSelection: false,
+  hasSelection: false,
   options: undefined,
 };

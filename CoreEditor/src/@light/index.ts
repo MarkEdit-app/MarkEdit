@@ -4,6 +4,7 @@ import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
 
 import { Config } from '../config';
 import { classHighlighters, markdownExtensions, renderExtensions } from '../styling/markdown';
+import { scrollIntoView } from '../modules/selection';
 
 import GitHubLight from '../styling/themes/github-light';
 import GitHubDark from '../styling/themes/github-dark';
@@ -45,7 +46,7 @@ window.editor = new EditorView({ doc, parent, extensions });
 styling.setUp(config, loadTheme(config.theme).colors);
 
 // Makes sure the content doesn't have unwanted inset
-window.editor.dispatch({ effects: EditorView.scrollIntoView(0) });
+scrollIntoView(0);
 
 // To keep the app size smaller, we don't have bridge here,
 // inject function to window directly.

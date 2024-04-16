@@ -40,6 +40,10 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isRevisionMode
   }
 
+  func editorWebViewResignFirstResponder(_ webView: EditorWebView) {
+    bridge.search.updateHasSelection()
+  }
+
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent) {
     cancelCompletion()
   }

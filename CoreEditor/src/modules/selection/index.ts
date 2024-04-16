@@ -10,6 +10,8 @@ import selectedRanges from './selectedRanges';
 import selectWholeLineAt from './selectWholeLineAt';
 import searchMatchPosition from './searchMatchPosition';
 
+type ScrollStrategy = 'nearest' | 'start' | 'end' | 'center';
+
 /**
  * Reverse ranges for multi-selection to keep indices correct when updating.
  */
@@ -76,14 +78,6 @@ export function selectAll() {
   });
 }
 
-export function scrollToSelection(strategy: 'nearest' | 'start' | 'end' | 'center' = 'center', margin = 5) {
-  const editor = window.editor;
-  const range = editor.state.selection.main;
-  editor.dispatch({
-    effects: EditorView.scrollIntoView(range, { y: strategy, yMargin: margin }),
-  });
-}
-
 export function getRect(pos: number) {
   const rect = window.editor.coordsAtPos(pos);
   if (rect === null) {
@@ -105,29 +99,44 @@ export function gotoLine(lineNumber: number) {
 /**
  * Make sure caret is visible, with an additional margin to breath.
  */
-export function scrollCaretToVisible() {
+export function scrollCaretToVisible(strategy: ScrollStrategy = 'end') {
   const editor = window.editor;
   const pos = editor.state.selection.main.to;
-  scrollPositionToVisible(pos);
+  const coords = editor.coordsAtPos(pos);
+  const margin = 45;
+
+  if (coords === null) {
+    return scrollIntoView(pos);
+  }
+
+  if (coords.bottom + margin > editor.dom.clientHeight) {
+    return scrollToSelection(strategy, margin);
+  }
 }
 
 /**
  * Make sure selected search match is visible, with an additional margin to breath.
  */
-export function scrollSearchMatchToVisible(foundRange?: SelectionRange) {
-  const pos = searchMatchPosition() ?? foundRange?.from;
-  if (pos !== undefined) {
-    scrollPositionToVisible(pos);
+export function scrollSearchMatchToVisible(strategy: ScrollStrategy = 'center') {
+  const pos = searchMatchPosition();
+  if (pos === null || isRectVisible(pos)) {
+    return;
   }
+
+  scrollIntoView(pos, strategy);
 }
 
 /**
- * Make sure text position is visible, with an additional margin to breath.
+ * Make sure text selection is visible, with an additional margin to breath.
  */
-export function scrollPositionToVisible(pos: number) {
-  const editor = window.editor;
-  editor.dispatch({
-    effects: EditorView.scrollIntoView(pos, { y: 'nearest', yMargin: 72 }),
+export function scrollToSelection(strategy: ScrollStrategy = 'center', margin = 5) {
+  const range = window.editor.state.selection.main;
+  scrollIntoView(range, strategy, margin);
+}
+
+export function scrollIntoView(anchor: number | SelectionRange, strategy: ScrollStrategy = 'nearest', margin = 5) {
+  window.editor.dispatch({
+    effects: EditorView.scrollIntoView(anchor, { y: strategy, yMargin: margin }),
   });
 }
 
@@ -156,6 +165,12 @@ export function refreshEditFocus() {
     selection: editor.state.selection,
     userEvent: 'select', // Fake a user event
   });
+}
+
+export function isRectVisible(pos: number) {
+  const editor = window.editor;
+  const rect = editor.coordsAtPos(pos);
+  return rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight;
 }
 
 export { selectedLineColumn } from './selectedLineColumn';

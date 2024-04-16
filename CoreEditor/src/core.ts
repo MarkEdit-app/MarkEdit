@@ -73,7 +73,7 @@ export function resetEditor(
   setTimeout(ensureLineHeight, 600);
 
   // Makes sure the content doesn't have unwanted inset
-  editor.dispatch({ effects: EditorView.scrollIntoView(0) });
+  selection.scrollIntoView(0);
 
   const contentDOM = editor.contentDOM;
   contentDOM.addEventListener('blur', handleFocusLost);

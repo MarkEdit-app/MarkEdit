@@ -16,6 +16,7 @@ enum EditorWebViewMenuAction {
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
   func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool
+  func editorWebViewResignFirstResponder(_ webView: EditorWebView)
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
   func editorWebView(
@@ -81,6 +82,11 @@ final class EditorWebView: WKWebView {
 
     menu.addItem(.separator())
     super.willOpenMenu(menu, with: event)
+  }
+
+  override func resignFirstResponder() -> Bool {
+    actionDelegate?.editorWebViewResignFirstResponder(self)
+    return super.resignFirstResponder()
   }
 }
 
