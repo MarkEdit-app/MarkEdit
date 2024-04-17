@@ -17,10 +17,12 @@ public final class WebBridgeHistory {
     self.webView = webView
   }
 
+  @MainActor
   public func undo(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.history.undo", completion: completion)
   }
 
+  @MainActor
   public func redo(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.history.redo", completion: completion)
   }
@@ -43,6 +45,7 @@ public final class WebBridgeHistory {
     }
   }
 
+  @MainActor
   public func markContentClean(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.history.markContentClean", completion: completion)
   }

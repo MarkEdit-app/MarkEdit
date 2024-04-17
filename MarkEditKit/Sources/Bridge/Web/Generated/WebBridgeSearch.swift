@@ -17,6 +17,7 @@ public final class WebBridgeSearch {
     self.webView = webView
   }
 
+  @MainActor
   public func setState(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -46,10 +47,12 @@ public final class WebBridgeSearch {
     }
   }
 
+  @MainActor
   public func updateHasSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.updateHasSelection", completion: completion)
   }
 
+  @MainActor
   public func performOperation(operation: SearchOperation, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let operation: SearchOperation
@@ -96,14 +99,17 @@ public final class WebBridgeSearch {
     }
   }
 
+  @MainActor
   public func replaceNext(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.replaceNext", completion: completion)
   }
 
+  @MainActor
   public func replaceAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.replaceAll", completion: completion)
   }
 
+  @MainActor
   public func selectAllOccurrences(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.selectAllOccurrences", completion: completion)
   }

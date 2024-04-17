@@ -21,8 +21,8 @@ public final class {{moduleName}} {
   {{#documentationLines}}
   ///{{{.}}}
   {{/documentationLines}}
-  {{#returnType}}@MainActor
-  {{/returnType}}public func {{methodName}}({{parametersDeclaration}}{{#parametersDeclaration.length}}{{^returnType}}, {{/returnType}}{{/parametersDeclaration.length}}{{^returnType}}completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil{{/returnType}}) {{#returnType}}async throws -> {{returnType}} {{/returnType}}{
+  @MainActor
+  public func {{methodName}}({{parametersDeclaration}}{{#parametersDeclaration.length}}{{^returnType}}, {{/returnType}}{{/parametersDeclaration.length}}{{^returnType}}completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil{{/returnType}}) {{#returnType}}async throws -> {{returnType}} {{/returnType}}{
     {{#parameters.length}}
     struct Message: Encodable {
       {{#parameters}}

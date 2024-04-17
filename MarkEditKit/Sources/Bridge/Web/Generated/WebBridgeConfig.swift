@@ -17,6 +17,7 @@ public final class WebBridgeConfig {
     self.webView = webView
   }
 
+  @MainActor
   public func setTheme(name: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let name: String
@@ -29,6 +30,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setTheme", message: message, completion: completion)
   }
 
+  @MainActor
   public func setFontFace(fontFace: WebFontFace, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let fontFace: WebFontFace
@@ -41,6 +43,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setFontFace", message: message, completion: completion)
   }
 
+  @MainActor
   public func setFontSize(fontSize: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let fontSize: Double
@@ -53,6 +56,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setFontSize", message: message, completion: completion)
   }
 
+  @MainActor
   public func setShowLineNumbers(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -65,6 +69,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setShowLineNumbers", message: message, completion: completion)
   }
 
+  @MainActor
   public func setShowActiveLineIndicator(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -77,6 +82,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setShowActiveLineIndicator", message: message, completion: completion)
   }
 
+  @MainActor
   public func setInvisiblesBehavior(behavior: EditorInvisiblesBehavior, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let behavior: EditorInvisiblesBehavior
@@ -89,6 +95,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setInvisiblesBehavior", message: message, completion: completion)
   }
 
+  @MainActor
   public func setReadOnlyMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -101,6 +108,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setReadOnlyMode", message: message, completion: completion)
   }
 
+  @MainActor
   public func setTypewriterMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -113,6 +121,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setTypewriterMode", message: message, completion: completion)
   }
 
+  @MainActor
   public func setFocusMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -125,6 +134,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setFocusMode", message: message, completion: completion)
   }
 
+  @MainActor
   public func setLineWrapping(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -137,6 +147,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setLineWrapping", message: message, completion: completion)
   }
 
+  @MainActor
   public func setLineHeight(lineHeight: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineHeight: Double
@@ -149,6 +160,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setLineHeight", message: message, completion: completion)
   }
 
+  @MainActor
   public func setDefaultLineBreak(lineBreak: String?, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineBreak: String?
@@ -161,6 +173,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setDefaultLineBreak", message: message, completion: completion)
   }
 
+  @MainActor
   public func setTabKeyBehavior(behavior: TabKeyBehavior, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let behavior: TabKeyBehavior
@@ -173,6 +186,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setTabKeyBehavior", message: message, completion: completion)
   }
 
+  @MainActor
   public func setIndentUnit(unit: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let unit: String
@@ -185,6 +199,7 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setIndentUnit", message: message, completion: completion)
   }
 
+  @MainActor
   public func setSuggestWhileTyping(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool

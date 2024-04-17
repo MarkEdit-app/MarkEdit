@@ -52,7 +52,7 @@ extension SettingsRootViewController {
     }
 
     // Performing in the next run loop has a better visual effect
-    DispatchQueue.afterDelay(seconds: 0.02) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
       self.view.window?.setFrameSize(CGSize(
         width: 580,
         height: contentVC.contentView.frame.size.height
@@ -65,16 +65,8 @@ extension SettingsRootViewController {
     // Mimic the effect of some 1st-party apps, such as Calendar.app,
     // don't use isHidden, it affects the layout.
     view.alphaValue = 0
-    DispatchQueue.afterDelay(seconds: 0.2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       self.view.alphaValue = 1
     }
-  }
-}
-
-// MARK: - Private
-
-private extension DispatchQueue {
-  static func afterDelay(seconds: TimeInterval, execute: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: execute)
   }
 }

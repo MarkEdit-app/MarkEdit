@@ -6,7 +6,7 @@
 
 import Foundation
 
-public struct TextCompletionLocalizable {
+public struct TextCompletionLocalizable: Sendable {
   let selectedHint: String
 
   public init(selectedHint: String) {

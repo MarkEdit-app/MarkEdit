@@ -7,6 +7,7 @@
 import AppKit
 import SwiftUI
 
+@MainActor
 final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
   private var state = TextCompletionState()
   private var mainView: NSView?

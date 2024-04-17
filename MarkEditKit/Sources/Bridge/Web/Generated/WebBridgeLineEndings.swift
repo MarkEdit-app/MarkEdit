@@ -26,6 +26,7 @@ public final class WebBridgeLineEndings {
     }
   }
 
+  @MainActor
   public func setLineEndings(lineEndings: LineEndings, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineEndings: LineEndings

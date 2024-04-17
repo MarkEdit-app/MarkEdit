@@ -19,6 +19,7 @@ public extension NSApplication {
     currentEvent?.modifierFlags.contains(.option) == true
   }
 
+  @MainActor
   func showOpenPanel() {
     if let openPanel = windows.first(where: { $0 is NSOpenPanel }) {
       openPanel.makeKeyAndOrderFront(self)
@@ -40,8 +41,8 @@ public extension NSApplication {
     // but it is overly complicated.
     //
     // Validating twice with delays should be able to cover 90% of the cases.
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: validateOpenPanels)
-    DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: validateOpenPanels)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { validateOpenPanels() }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4) { validateOpenPanels() }
   }
 
   func closeOpenPanels() {

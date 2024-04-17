@@ -43,14 +43,17 @@ public final class WebBridgeSelection {
     }
   }
 
+  @MainActor
   public func selectAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.selectAll", completion: completion)
   }
 
+  @MainActor
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.scrollToSelection", completion: completion)
   }
 
+  @MainActor
   public func gotoLine(lineNumber: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineNumber: Int
@@ -63,6 +66,7 @@ public final class WebBridgeSelection {
     webView?.invoke(path: "webModules.selection.gotoLine", message: message, completion: completion)
   }
 
+  @MainActor
   public func refreshEditFocus(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.refreshEditFocus", completion: completion)
   }

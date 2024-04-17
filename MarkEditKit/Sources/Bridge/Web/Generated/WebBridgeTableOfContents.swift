@@ -26,14 +26,17 @@ public final class WebBridgeTableOfContents {
     }
   }
 
+  @MainActor
   public func selectPreviousSection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.toc.selectPreviousSection", completion: completion)
   }
 
+  @MainActor
   public func selectNextSection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.toc.selectNextSection", completion: completion)
   }
 
+  @MainActor
   public func gotoHeader(headingInfo: HeadingInfo, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let headingInfo: HeadingInfo

@@ -24,7 +24,7 @@ struct CreateNewDocumentIntent: AppIntent {
     NSDocumentController.shared.newDocument(nil)
     NSApp.activate(ignoringOtherApps: true)
 
-    DispatchQueue.afterDelay(seconds: 0.2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       if let initialContent {
         activeController?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
       }

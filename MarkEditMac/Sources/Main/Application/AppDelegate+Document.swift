@@ -7,6 +7,7 @@
 
 import AppKit
 
+@MainActor
 extension AppDelegate {
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
     switch AppPreferences.General.newWindowBehavior {

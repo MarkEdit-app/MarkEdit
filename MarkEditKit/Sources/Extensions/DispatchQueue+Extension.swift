@@ -7,15 +7,12 @@
 import Foundation
 
 public extension DispatchQueue {
-  static func onMainThread(_ execute: @escaping () -> Void) {
+  @preconcurrency
+  static func onMainThread(_ execute: @escaping @Sendable () -> Void) {
     if Thread.isMainThread {
       execute()
     } else {
       DispatchQueue.main.async(execute: execute)
     }
-  }
-
-  static func afterDelay(seconds: TimeInterval, execute: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: execute)
   }
 }

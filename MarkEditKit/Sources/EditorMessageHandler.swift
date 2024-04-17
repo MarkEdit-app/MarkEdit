@@ -16,11 +16,10 @@ public final class EditorMessageHandler: NSObject, WKScriptMessageHandlerWithRep
     self.modules = modules
   }
 
-  @MainActor
-  public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
-    let assertFail: (String) -> (Any?, String?) = { message in
+  public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage, replyHandler: @escaping (Any?, String?) -> Void) {
+    let assertFail: (String) -> Void = { message in
       Logger.assertFail(message)
-      return (nil, message)
+      replyHandler(nil, message)
     }
 
     guard message.name == "bridge", let body = message.body as? [String: Any] else {
@@ -50,9 +49,9 @@ public final class EditorMessageHandler: NSObject, WKScriptMessageHandlerWithRep
     Logger.log(.debug, "Invoked native: \(moduleName).\(methodName)")
     switch result {
     case .success(let value):
-      return (value, nil)
+      replyHandler(value, nil)
     case .failure(let error):
-      return (nil, error.localizedDescription)
+      replyHandler(nil, error.localizedDescription)
     }
   }
 }
