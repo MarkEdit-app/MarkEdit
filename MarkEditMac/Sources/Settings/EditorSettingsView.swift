@@ -12,6 +12,7 @@ import SettingsUI
 import MarkEditCore
 import MarkEditKit
 
+@MainActor
 struct EditorSettingsView: View {
   @State private var lightTheme = AppPreferences.Editor.lightTheme
   @State private var darkTheme = AppPreferences.Editor.darkTheme

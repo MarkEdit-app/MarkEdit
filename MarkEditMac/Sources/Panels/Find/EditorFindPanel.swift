@@ -18,6 +18,7 @@ import MarkEditKit
   case replace
 }
 
+@MainActor
 protocol EditorFindPanelDelegate: AnyObject {
   func editorFindPanel(_ sender: EditorFindPanel, modeDidChange mode: EditorFindMode)
   func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String)

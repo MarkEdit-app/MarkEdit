@@ -21,6 +21,7 @@ enum EditorTextAction {
 
  For `EditorWebView`, delegate actions to controller that has access to the bridge.
  */
+@MainActor
 protocol EditorTextInput {
   func performTextAction(_ action: EditorTextAction, sender: Any?)
 }

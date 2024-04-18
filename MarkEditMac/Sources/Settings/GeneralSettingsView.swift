@@ -9,6 +9,7 @@ import SwiftUI
 import SettingsUI
 import MarkEditKit
 
+@MainActor
 struct GeneralSettingsView: View {
   @State private var appearance = AppPreferences.General.appearance
   @State private var newWindowBehavior = AppPreferences.General.newWindowBehavior

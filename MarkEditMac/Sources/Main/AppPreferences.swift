@@ -13,6 +13,7 @@ import FontPicker
 /**
  UserDefaults wrapper with handy getters and setters.
  */
+@MainActor
 enum AppPreferences {
   enum General {
     @Storage(key: "general.appearance", defaultValue: .system)
@@ -266,6 +267,7 @@ enum Appearance: Codable {
   case light
   case dark
 
+  @MainActor
   func resolved(with appearance: NSAppearance = NSApp.effectiveAppearance) -> NSAppearance? {
     switch self {
     case .system:
@@ -356,6 +358,7 @@ private extension AppPreferences {
   }
 }
 
+@MainActor
 @propertyWrapper
 struct Storage<T: Codable> {
   private let key: String
