@@ -41,6 +41,11 @@ extension EditorViewController: EditorWebViewActionDelegate {
   }
 
   func editorWebViewResignFirstResponder(_ webView: EditorWebView) {
+    // resignFirstResponder is called when webView.isHidden = true
+    guard hasFinishedLoading && !webView.isHidden else {
+      return
+    }
+
     bridge.search.updateHasSelection()
   }
 
