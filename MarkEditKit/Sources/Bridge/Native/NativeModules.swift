@@ -9,6 +9,7 @@ import Foundation
 /// Native method that will be invoked by JavaScript.
 public typealias NativeMethod = (_ parameters: Data) -> Result<Any?, Error>?
 
+@MainActor
 public protocol NativeBridge: AnyObject {
   static var name: String { get }
   var methods: [String: NativeMethod] { get }
@@ -19,10 +20,12 @@ public protocol NativeBridge: AnyObject {
 
  Don't implement NativeModule directly with controllers, it will easily introduce retain cycles.
  */
+@MainActor
 public protocol NativeModule: AnyObject {
   var bridge: NativeBridge { get }
 }
 
+@MainActor
 public struct NativeModules {
   private let bridges: [String: NativeBridge]
 

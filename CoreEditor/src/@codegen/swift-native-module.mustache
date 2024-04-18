@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol {{moduleName}}: NativeModule {
   {{#methods}}
   func {{methodName}}({{parametersDeclaration}}){{#returnType}} -> {{returnType}}{{/returnType}}
@@ -38,6 +39,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
   }
   {{#methods}}
 
+  @MainActor
   private func {{methodName}}(parameters: Data) -> Result<Any?, Error>? {
     {{#parameters.length}}
     struct Message: Decodable {

@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol NativeModulePreview: NativeModule {
   func show(code: String, type: PreviewType, rect: WebRect)
 }
@@ -33,6 +34,7 @@ final class NativeBridgePreview: NativeBridge {
     self.module = module
   }
 
+  @MainActor
   private func show(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var code: String
