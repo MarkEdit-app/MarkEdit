@@ -13,32 +13,34 @@ import MarkEditKit
 // MARK: - WKUIDelegate
 
 extension EditorViewController: WKUIDelegate {
-  func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-    guard let url = navigationAction.request.url else {
+  nonisolated func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+    MainActor.assumeIsolated {
+      guard let url = navigationAction.request.url else {
+        return nil
+      }
+
+      let basePath = document?.baseURL?.absoluteString ?? ""
+      let localPath = url.absoluteString
+        // E.g., http://localhost/
+        .replacingOccurrences(
+          of: EditorWebView.baseURL?.absoluteString ?? "",
+          with: basePath
+        )
+        // E.g., image-loader://
+        .replacingOccurrences(
+          of: "\(EditorImageLoader.scheme)://",
+          with: basePath
+        )
+
+      // Instead of creating a new WebView, opening the link using the system default behavior.
+      //
+      // It's a local file when it starts with baseURL, replace it with folder path.
+      if let url = URL(string: localPath) {
+        NSWorkspace.shared.openOrReveal(url: url)
+      }
+
       return nil
     }
-
-    let basePath = document?.baseURL?.absoluteString ?? ""
-    let localPath = url.absoluteString
-      // E.g., http://localhost/
-      .replacingOccurrences(
-        of: EditorWebView.baseURL?.absoluteString ?? "",
-        with: basePath
-      )
-      // E.g., image-loader://
-      .replacingOccurrences(
-        of: "\(EditorImageLoader.scheme)://",
-        with: basePath
-      )
-
-    // Instead of creating a new WebView, opening the link using the system default behavior.
-    //
-    // It's a local file when it starts with baseURL, replace it with folder path.
-    if let url = URL(string: localPath) {
-      NSWorkspace.shared.openOrReveal(url: url)
-    }
-
-    return nil
   }
 }
 
