@@ -69,6 +69,7 @@
 		87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87850C8529482A8600D1A952 /* NSApplication+Extension.swift */; };
 		878AABE92CB111410081C5E1 /* EditorMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878AABE82CB111410081C5E1 /* EditorMenuItem.swift */; };
 		878B7B9A2CE0DA8A00220F39 /* EditorViewController+FileVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878B7B992CE0DA7D00220F39 /* EditorViewController+FileVersion.swift */; };
+		87877E722BD0B89C0082DC73 /* Unchecked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87877E712BD0B89C0082DC73 /* Unchecked.swift */; };
 		8790ABD42A98F5F40083825C /* EditorViewController+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */; };
 		8790ABDB2A98FF610083825C /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 8790ABDA2A98FF610083825C /* Statistics */; };
 		8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790B6EB297036B2000DFC1A /* EditorWindow.swift */; };
@@ -190,6 +191,7 @@
 		87850C8529482A8600D1A952 /* NSApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApplication+Extension.swift"; sourceTree = "<group>"; };
 		878AABE82CB111410081C5E1 /* EditorMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMenuItem.swift; sourceTree = "<group>"; };
 		878B7B992CE0DA7D00220F39 /* EditorViewController+FileVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+FileVersion.swift"; sourceTree = "<group>"; };
+		87877E712BD0B89C0082DC73 /* Unchecked.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Unchecked.swift; sourceTree = "<group>"; };
 		8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Statistics.swift"; sourceTree = "<group>"; };
 		8790B6EB297036B2000DFC1A /* EditorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindow.swift; sourceTree = "<group>"; };
 		879715C82D11547F0069964D /* EditorSaveOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSaveOptionsView.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				8765FD262AF291A300C645A8 /* Updater */,
 				87850C8429482A6A00D1A952 /* Extensions */,
 				84FB00EC2C6C4ADC00850E94 /* ObjC */,
+				87877E712BD0B89C0082DC73 /* Unchecked.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */,
 				878B7B9A2CE0DA8A00220F39 /* EditorViewController+FileVersion.swift in Sources */,
 				873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */,
+				87877E722BD0B89C0082DC73 /* Unchecked.swift in Sources */,
 				870A51BC294702AF0095C7EB /* AppDelegate.swift in Sources */,
 				87FAFFD72BE0B6A300FA509D /* AppDelegate+FileSystem.swift in Sources */,
 				8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */,
@@ -846,7 +850,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
 			name = Debug;
@@ -909,7 +913,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
 			name = Release;
