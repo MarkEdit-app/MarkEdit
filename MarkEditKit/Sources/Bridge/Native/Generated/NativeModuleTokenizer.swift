@@ -21,6 +21,7 @@ public extension NativeModuleTokenizer {
   var bridge: NativeBridge { NativeBridgeTokenizer(self) }
 }
 
+@MainActor
 final class NativeBridgeTokenizer: NativeBridge {
   static let name = "tokenizer"
   lazy var methods: [String: NativeMethod] = [
@@ -42,7 +43,6 @@ final class NativeBridgeTokenizer: NativeBridge {
     self.module = module
   }
 
-  @MainActor
   private func tokenize(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
@@ -60,7 +60,6 @@ final class NativeBridgeTokenizer: NativeBridge {
     return .success(result)
   }
 
-  @MainActor
   private func moveWordBackward(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
@@ -78,7 +77,6 @@ final class NativeBridgeTokenizer: NativeBridge {
     return .success(result)
   }
 
-  @MainActor
   private func moveWordForward(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor

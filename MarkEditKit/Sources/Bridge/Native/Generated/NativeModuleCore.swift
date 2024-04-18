@@ -25,6 +25,7 @@ public extension NativeModuleCore {
   var bridge: NativeBridge { NativeBridgeCore(self) }
 }
 
+@MainActor
 final class NativeBridgeCore: NativeBridge {
   static let name = "core"
   lazy var methods: [String: NativeMethod] = [
@@ -58,13 +59,11 @@ final class NativeBridgeCore: NativeBridge {
     self.module = module
   }
 
-  @MainActor
   private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
     return .success(nil)
   }
 
-  @MainActor
   private func notifyBackgroundColorDidChange(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var color: Int
@@ -82,13 +81,11 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  @MainActor
   private func notifyViewportScaleDidChange(parameters: Data) -> Result<Any?, Error>? {
     module.notifyViewportScaleDidChange()
     return .success(nil)
   }
 
-  @MainActor
   private func notifyViewDidUpdate(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var contentEdited: Bool
@@ -109,13 +106,11 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  @MainActor
   private func notifyContentOffsetDidChange(parameters: Data) -> Result<Any?, Error>? {
     module.notifyContentOffsetDidChange()
     return .success(nil)
   }
 
-  @MainActor
   private func notifyCompositionEnded(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var selectedLineColumn: LineColumnInfo
@@ -133,7 +128,6 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  @MainActor
   private func notifyLinkClicked(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var link: String

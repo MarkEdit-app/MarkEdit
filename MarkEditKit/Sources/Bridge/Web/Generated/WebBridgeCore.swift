@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeCore {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeCore {
     self.webView = webView
   }
 
-  @MainActor
   public func resetEditor(text: String, revision: String?, revisionMode: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
@@ -34,12 +34,10 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.resetEditor", message: message, completion: completion)
   }
 
-  @MainActor
   public func clearEditor(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.core.clearEditor", completion: completion)
   }
 
-  @MainActor
   public func getEditorText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.core.getEditorText") {
@@ -48,7 +46,6 @@ public final class WebBridgeCore {
     }
   }
 
-  @MainActor
   public func insertText(text: String, from: Int, to: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
@@ -65,7 +62,6 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.insertText", message: message, completion: completion)
   }
 
-  @MainActor
   public func replaceText(text: String, granularity: ReplaceGranularity, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
@@ -80,12 +76,10 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.replaceText", message: message, completion: completion)
   }
 
-  @MainActor
   public func handleFocusLost(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.core.handleFocusLost", completion: completion)
   }
 
-  @MainActor
   public func handleMouseEntered(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let clientX: Double
@@ -100,7 +94,6 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.handleMouseEntered", message: message, completion: completion)
   }
 
-  @MainActor
   public func handleMouseExited(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let clientX: Double

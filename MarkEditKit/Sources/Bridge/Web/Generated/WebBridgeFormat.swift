@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeFormat {
   private weak var webView: WKWebView?
 
@@ -17,22 +18,18 @@ public final class WebBridgeFormat {
     self.webView = webView
   }
 
-  @MainActor
   public func toggleBold(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleBold", completion: completion)
   }
 
-  @MainActor
   public func toggleItalic(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleItalic", completion: completion)
   }
 
-  @MainActor
   public func toggleStrikethrough(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleStrikethrough", completion: completion)
   }
 
-  @MainActor
   public func toggleHeading(level: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let level: Int
@@ -45,52 +42,42 @@ public final class WebBridgeFormat {
     webView?.invoke(path: "webModules.format.toggleHeading", message: message, completion: completion)
   }
 
-  @MainActor
   public func toggleBullet(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleBullet", completion: completion)
   }
 
-  @MainActor
   public func toggleNumbering(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleNumbering", completion: completion)
   }
 
-  @MainActor
   public func toggleTodo(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleTodo", completion: completion)
   }
 
-  @MainActor
   public func toggleBlockquote(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleBlockquote", completion: completion)
   }
 
-  @MainActor
   public func toggleInlineCode(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleInlineCode", completion: completion)
   }
 
-  @MainActor
   public func toggleInlineMath(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.toggleInlineMath", completion: completion)
   }
 
-  @MainActor
   public func insertCodeBlock(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.insertCodeBlock", completion: completion)
   }
 
-  @MainActor
   public func insertMathBlock(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.insertMathBlock", completion: completion)
   }
 
-  @MainActor
   public func insertHorizontalRule(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.format.insertHorizontalRule", completion: completion)
   }
 
-  @MainActor
   public func insertHyperLink(title: String, url: String, prefix: String?, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let title: String
@@ -107,7 +94,6 @@ public final class WebBridgeFormat {
     webView?.invoke(path: "webModules.format.insertHyperLink", message: message, completion: completion)
   }
 
-  @MainActor
   public func insertTable(columnName: String, itemName: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let columnName: String
@@ -122,7 +108,6 @@ public final class WebBridgeFormat {
     webView?.invoke(path: "webModules.format.insertTable", message: message, completion: completion)
   }
 
-  @MainActor
   public func formatContent(insertFinalNewline: Bool, trimTrailingWhitespace: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let insertFinalNewline: Bool
@@ -137,7 +122,6 @@ public final class WebBridgeFormat {
     webView?.invoke(path: "webModules.format.formatContent", message: message, completion: completion)
   }
 
-  @MainActor
   public func performEditCommand(command: EditCommand, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let command: EditCommand

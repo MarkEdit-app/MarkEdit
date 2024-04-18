@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeCompletion {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeCompletion {
     self.webView = webView
   }
 
-  @MainActor
   public func startCompletion(afterDelay: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let afterDelay: Double
@@ -30,7 +30,6 @@ public final class WebBridgeCompletion {
     webView?.invoke(path: "webModules.completion.startCompletion", message: message, completion: completion)
   }
 
-  @MainActor
   public func setState(panelVisible: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let panelVisible: Bool

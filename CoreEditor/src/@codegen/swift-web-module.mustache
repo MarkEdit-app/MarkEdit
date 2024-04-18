@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class {{moduleName}} {
   private weak var webView: WKWebView?
 
@@ -21,7 +22,6 @@ public final class {{moduleName}} {
   {{#documentationLines}}
   ///{{{.}}}
   {{/documentationLines}}
-  @MainActor
   public func {{methodName}}({{parametersDeclaration}}{{#parametersDeclaration.length}}{{^returnType}}, {{/returnType}}{{/parametersDeclaration.length}}{{^returnType}}completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil{{/returnType}}) {{#returnType}}async throws -> {{returnType}} {{/returnType}}{
     {{#parameters.length}}
     struct Message: Encodable {

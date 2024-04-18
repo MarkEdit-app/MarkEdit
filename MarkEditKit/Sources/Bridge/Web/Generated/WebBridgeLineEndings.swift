@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeLineEndings {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeLineEndings {
     self.webView = webView
   }
 
-  @MainActor
   public func getLineEndings() async throws -> LineEndings {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.lineEndings.getLineEndings") {
@@ -26,7 +26,6 @@ public final class WebBridgeLineEndings {
     }
   }
 
-  @MainActor
   public func setLineEndings(lineEndings: LineEndings, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineEndings: LineEndings

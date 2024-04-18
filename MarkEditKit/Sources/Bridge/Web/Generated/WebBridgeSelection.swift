@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeSelection {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeSelection {
     self.webView = webView
   }
 
-  @MainActor
   public func getText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.selection.getText") {
@@ -26,7 +26,6 @@ public final class WebBridgeSelection {
     }
   }
 
-  @MainActor
   public func getRect(pos: Int) async throws -> WebRect? {
     struct Message: Encodable {
       let pos: Int
@@ -43,17 +42,14 @@ public final class WebBridgeSelection {
     }
   }
 
-  @MainActor
   public func selectAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.selectAll", completion: completion)
   }
 
-  @MainActor
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.scrollToSelection", completion: completion)
   }
 
-  @MainActor
   public func gotoLine(lineNumber: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineNumber: Int
@@ -66,7 +62,6 @@ public final class WebBridgeSelection {
     webView?.invoke(path: "webModules.selection.gotoLine", message: message, completion: completion)
   }
 
-  @MainActor
   public func refreshEditFocus(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.refreshEditFocus", completion: completion)
   }

@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeTextChecker {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeTextChecker {
     self.webView = webView
   }
 
-  @MainActor
   public func update(options: TextCheckerOptions, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let options: TextCheckerOptions

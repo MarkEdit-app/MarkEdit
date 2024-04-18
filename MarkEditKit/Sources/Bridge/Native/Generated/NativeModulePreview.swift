@@ -19,6 +19,7 @@ public extension NativeModulePreview {
   var bridge: NativeBridge { NativeBridgePreview(self) }
 }
 
+@MainActor
 final class NativeBridgePreview: NativeBridge {
   static let name = "preview"
   lazy var methods: [String: NativeMethod] = [
@@ -34,7 +35,6 @@ final class NativeBridgePreview: NativeBridge {
     self.module = module
   }
 
-  @MainActor
   private func show(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var code: String

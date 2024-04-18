@@ -25,6 +25,7 @@ public extension NativeModuleCompletion {
   var bridge: NativeBridge { NativeBridgeCompletion(self) }
 }
 
+@MainActor
 final class NativeBridgeCompletion: NativeBridge {
   static let name = "completion"
   lazy var methods: [String: NativeMethod] = [
@@ -58,7 +59,6 @@ final class NativeBridgeCompletion: NativeBridge {
     self.module = module
   }
 
-  @MainActor
   private func requestCompletions(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
@@ -77,37 +77,31 @@ final class NativeBridgeCompletion: NativeBridge {
     return .success(nil)
   }
 
-  @MainActor
   private func commitCompletion(parameters: Data) -> Result<Any?, Error>? {
     module.commitCompletion()
     return .success(nil)
   }
 
-  @MainActor
   private func cancelCompletion(parameters: Data) -> Result<Any?, Error>? {
     module.cancelCompletion()
     return .success(nil)
   }
 
-  @MainActor
   private func selectPrevious(parameters: Data) -> Result<Any?, Error>? {
     module.selectPrevious()
     return .success(nil)
   }
 
-  @MainActor
   private func selectNext(parameters: Data) -> Result<Any?, Error>? {
     module.selectNext()
     return .success(nil)
   }
 
-  @MainActor
   private func selectTop(parameters: Data) -> Result<Any?, Error>? {
     module.selectTop()
     return .success(nil)
   }
 
-  @MainActor
   private func selectBottom(parameters: Data) -> Result<Any?, Error>? {
     module.selectBottom()
     return .success(nil)

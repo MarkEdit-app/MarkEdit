@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeSearch {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeSearch {
     self.webView = webView
   }
 
-  @MainActor
   public func setState(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let enabled: Bool
@@ -30,7 +30,6 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.setState", message: message, completion: completion)
   }
 
-  @MainActor
   public func updateQuery(options: SearchOptions) async throws -> Int {
     struct Message: Encodable {
       let options: SearchOptions
@@ -47,12 +46,10 @@ public final class WebBridgeSearch {
     }
   }
 
-  @MainActor
   public func updateHasSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.updateHasSelection", completion: completion)
   }
 
-  @MainActor
   public func performOperation(operation: SearchOperation, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let operation: SearchOperation
@@ -65,7 +62,6 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.performOperation", message: message, completion: completion)
   }
 
-  @MainActor
   public func findNext(search: String) async throws -> Bool {
     struct Message: Encodable {
       let search: String
@@ -82,7 +78,6 @@ public final class WebBridgeSearch {
     }
   }
 
-  @MainActor
   public func findPrevious(search: String) async throws -> Bool {
     struct Message: Encodable {
       let search: String
@@ -99,22 +94,18 @@ public final class WebBridgeSearch {
     }
   }
 
-  @MainActor
   public func replaceNext(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.replaceNext", completion: completion)
   }
 
-  @MainActor
   public func replaceAll(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.replaceAll", completion: completion)
   }
 
-  @MainActor
   public func selectAllOccurrences(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.search.selectAllOccurrences", completion: completion)
   }
 
-  @MainActor
   public func numberOfMatches() async throws -> Int {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.search.numberOfMatches") {
