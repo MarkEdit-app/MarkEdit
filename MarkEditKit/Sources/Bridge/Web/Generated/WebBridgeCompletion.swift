@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeCompletion {
   private weak var webView: WKWebView?
 

@@ -7,6 +7,7 @@
 
 import AppKit
 
+@MainActor
 protocol EditorReplacePanelDelegate: AnyObject {
   func editorReplacePanel(_ sender: EditorReplacePanel, replacementDidChange replacement: String)
   func editorReplacePanelDidPressTabKey(_ sender: EditorReplacePanel, isBacktab: Bool)

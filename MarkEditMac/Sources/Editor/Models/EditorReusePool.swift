@@ -11,6 +11,7 @@ import WebKit
 /**
  Reuse pool for editors to keep WebViews in memory.
  */
+@MainActor
 final class EditorReusePool {
   static let shared = EditorReusePool()
   let processPool = WKProcessPool()

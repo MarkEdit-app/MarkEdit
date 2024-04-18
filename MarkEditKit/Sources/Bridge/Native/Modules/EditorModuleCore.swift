@@ -6,6 +6,7 @@
 
 import Foundation
 
+@MainActor
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32)

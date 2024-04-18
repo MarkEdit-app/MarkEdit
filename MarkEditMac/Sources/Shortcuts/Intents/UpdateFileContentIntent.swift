@@ -13,11 +13,16 @@ struct UpdateFileContentIntent: AppIntent {
     case wholeDocument
     case selection
 
-    static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Granularity")
-    static var caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-      .wholeDocument: "Whole Document",
-      .selection: "Selection",
-    ]
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+      TypeDisplayRepresentation(name: "Granularity")
+    }
+
+    static var caseDisplayRepresentations: [Self: DisplayRepresentation] {
+      [
+        .wholeDocument: "Whole Document",
+        .selection: "Selection",
+      ]
+    }
 
     var replaceGranularity: ReplaceGranularity {
       switch self {
@@ -27,8 +32,8 @@ struct UpdateFileContentIntent: AppIntent {
     }
   }
 
-  static var title: LocalizedStringResource = "Update File Content"
-  static var description = IntentDescription("Update file content of the active document, throws an error if no editor is opened.")
+  static let title: LocalizedStringResource = "Update File Content"
+  static let description = IntentDescription("Update file content of the active document, throws an error if no editor is opened.")
   static var parameterSummary: some ParameterSummary {
     Summary("Update file with \(\.$content)") {
       \.$granularity

@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeCore {
   private weak var webView: WKWebView?
 
@@ -37,7 +38,6 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.clearEditor", completion: completion)
   }
 
-  @MainActor
   public func getEditorText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.core.getEditorText") {

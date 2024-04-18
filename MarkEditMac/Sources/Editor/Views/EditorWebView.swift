@@ -13,6 +13,7 @@ enum EditorWebViewMenuAction {
   case selectAllOccurrences
 }
 
+@MainActor
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
   func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool

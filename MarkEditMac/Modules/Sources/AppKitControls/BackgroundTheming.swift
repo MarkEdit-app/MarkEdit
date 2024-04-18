@@ -10,6 +10,7 @@ import AppKitExtensions
 public protocol BackgroundTheming: NSView {}
 
 public extension BackgroundTheming {
+  @MainActor
   func setBackgroundColor(_ color: NSColor) {
     layerBackgroundColor = color
     needsDisplay = true

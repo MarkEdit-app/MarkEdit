@@ -16,7 +16,7 @@ struct AppTheme {
   // usually it's for dark themes, some light themes also need this, such as solarized.
   let prefersTintedToolbar: Bool
 
-  static var current: Self {
+  @MainActor static var current: Self {
     NSApplication.shared.isDarkMode ? darkTheme : lightTheme
   }
 
@@ -25,11 +25,12 @@ struct AppTheme {
   }
 
   /// Get a "resolved" appearance name based on the current effective appearance.
-  var resolvedAppearance: NSAppearance? {
+  @MainActor var resolvedAppearance: NSAppearance? {
     NSAppearance(named: NSApp.effectiveAppearance.resolvedName(isDarkMode: isDark))
   }
 
   /// Trigger theme update for all editors.
+  @MainActor
   func updateAppearance(animateChanges: Bool = false) {
     EditorReusePool.shared.viewControllers().forEach {
       $0.setTheme(self, animated: animateChanges)
@@ -241,6 +242,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
 
 // MARK: - Private
 
+@MainActor
 private extension AppTheme {
   static var lightTheme: Self {
     withName(AppPreferences.Editor.lightTheme)

@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol {{moduleName}}: NativeModule {
   {{#methods}}
   func {{methodName}}({{parametersDeclaration}}){{#returnType}} -> {{returnType}}{{/returnType}}
@@ -20,6 +21,7 @@ public extension {{moduleName}} {
   var bridge: NativeBridge { {{customTags.bridgeName}}(self) }
 }
 
+@MainActor
 final class {{customTags.bridgeName}}: NativeBridge {
   static let name = "{{customTags.invokePath}}"
   lazy var methods: [String: NativeMethod] = [

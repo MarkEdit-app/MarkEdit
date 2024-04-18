@@ -30,6 +30,7 @@ public extension NSAlert {
 // MARK: - Private
 
 private extension NSAlert {
+  @MainActor
   private enum AssociatedObjects {
     static var markdownBody: UInt8 = 0
   }

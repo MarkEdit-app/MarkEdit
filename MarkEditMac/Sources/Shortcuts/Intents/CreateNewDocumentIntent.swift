@@ -9,9 +9,9 @@ import AppKit
 import AppIntents
 
 struct CreateNewDocumentIntent: AppIntent {
-  static var title: LocalizedStringResource = "Create New Document"
-  static var description = IntentDescription("Create a new document, with an optional parameter to specify the initial content.")
-  static var openAppWhenRun = true
+  static let title: LocalizedStringResource = "Create New Document"
+  static let description = IntentDescription("Create a new document, with an optional parameter to specify the initial content.")
+  static let openAppWhenRun = true
   static var parameterSummary: some ParameterSummary {
     Summary("New Document with \(\.$initialContent)")
   }
@@ -24,7 +24,7 @@ struct CreateNewDocumentIntent: AppIntent {
     NSDocumentController.shared.newDocument(nil)
     NSApp.activate(ignoringOtherApps: true)
 
-    DispatchQueue.afterDelay(seconds: 0.2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       if let initialContent {
         activeController?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
       }

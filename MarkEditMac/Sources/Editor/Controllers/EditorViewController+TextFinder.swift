@@ -26,7 +26,7 @@ extension EditorViewController {
       textField.selectAll()
 
       // Delay showing the focus ring to make the animation more natural
-      DispatchQueue.afterDelay(seconds: 0.15) {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
         textField.focusRingType = .default
         textField.startEditing(in: self.view.window, alwaysRefocus: true)
       }
@@ -137,7 +137,7 @@ extension EditorViewController {
       }
 
       findPanel.searchField.stringValue = text
-      DispatchQueue.afterDelay(seconds: 0.2) { // 0.2 is the animation duration of panel
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // 0.2 is the animation duration of panel
         self.updateTextFinderQuery()
       }
     }
@@ -177,7 +177,7 @@ extension EditorViewController {
     bridge.search.performOperation(operation: operation)
 
     if operation == .selectAll || operation == .selectAllInSelection {
-      DispatchQueue.afterDelay(seconds: 0.2, execute: startWebViewEditing)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { self.startWebViewEditing() }
     }
   }
 }

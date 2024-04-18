@@ -20,6 +20,7 @@ public extension NSMenu {
     addItem(withTitle: string, action: selector, keyEquivalent: "")
   }
 
+  @MainActor
   @discardableResult
   func addItem(withTitle string: String, action: @escaping () -> Void) -> NSMenuItem {
     let item = addItem(withTitle: string, action: nil)

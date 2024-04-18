@@ -9,6 +9,7 @@ import AppKit
 /**
  Closure-based handlers to replace target-action.
  */
+@MainActor
 public protocol ClosureActionable: AnyObject {
   var target: AnyObject? { get set }
   var action: Selector? { get set }

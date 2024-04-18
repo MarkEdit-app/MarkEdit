@@ -13,6 +13,7 @@ import MarkEditKit
 
  Files are located at ~/Library/Containers/app.cyan.markedit/Data/Documents/
  */
+@MainActor
 final class EditorCustomization {
   enum FileType {
     case style

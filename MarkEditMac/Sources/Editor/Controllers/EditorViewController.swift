@@ -164,7 +164,13 @@ final class EditorViewController: NSViewController {
     TextCompletionContext(
       localize: TextCompletionLocalizable(selectedHint: Localized.General.selected)
     ) { [weak self] in
-      self?.commitCompletion()
+      guard let self else {
+        return
+      }
+
+      Task { @MainActor in
+        self.commitCompletion()
+      }
     }
   }()
 
@@ -238,7 +244,7 @@ extension EditorViewController {
     // because autosave happens before closing the window.
     //
     // Just in case someone introduces race conditions.
-    DispatchQueue.afterDelay(seconds: 0.2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       self.bridge.core.clearEditor()
     }
   }

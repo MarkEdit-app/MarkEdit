@@ -8,6 +8,7 @@
 import SwiftUI
 import SettingsUI
 
+@MainActor
 struct WindowSettingsView: View {
   @State private var toolbarMode = AppPreferences.Window.toolbarMode
   @State private var tabbingMode = AppPreferences.Window.tabbingMode

@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol NativeModuleTokenizer: NativeModule {
   func tokenize(anchor: TextTokenizeAnchor) -> [String: Any]
   func moveWordBackward(anchor: TextTokenizeAnchor) -> Int
@@ -20,6 +21,7 @@ public extension NativeModuleTokenizer {
   var bridge: NativeBridge { NativeBridgeTokenizer(self) }
 }
 
+@MainActor
 final class NativeBridgeTokenizer: NativeBridge {
   static let name = "tokenizer"
   lazy var methods: [String: NativeMethod] = [

@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeSearch {
   private weak var webView: WKWebView?
 
@@ -29,7 +30,6 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.setState", message: message, completion: completion)
   }
 
-  @MainActor
   public func updateQuery(options: SearchOptions) async throws -> Int {
     struct Message: Encodable {
       let options: SearchOptions
@@ -62,7 +62,6 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.performOperation", message: message, completion: completion)
   }
 
-  @MainActor
   public func findNext(search: String) async throws -> Bool {
     struct Message: Encodable {
       let search: String
@@ -79,7 +78,6 @@ public final class WebBridgeSearch {
     }
   }
 
-  @MainActor
   public func findPrevious(search: String) async throws -> Bool {
     struct Message: Encodable {
       let search: String
@@ -108,7 +106,6 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.selectAllOccurrences", completion: completion)
   }
 
-  @MainActor
   public func numberOfMatches() async throws -> Int {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.search.numberOfMatches") {

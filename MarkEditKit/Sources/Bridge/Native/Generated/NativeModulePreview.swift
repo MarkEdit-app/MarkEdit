@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol NativeModulePreview: NativeModule {
   func show(code: String, type: PreviewType, rect: WebRect)
 }
@@ -18,6 +19,7 @@ public extension NativeModulePreview {
   var bridge: NativeBridge { NativeBridgePreview(self) }
 }
 
+@MainActor
 final class NativeBridgePreview: NativeBridge {
   static let name = "preview"
   lazy var methods: [String: NativeMethod] = [

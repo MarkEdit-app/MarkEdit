@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 import SettingsUI
 
+@MainActor
 @main
 final class AppDelegate: NSObject, NSApplicationDelegate {
   static func main() {
@@ -60,7 +61,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
     NSApp.appearance = AppPreferences.General.appearance.resolved()
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
-      AppTheme.current.updateAppearance()
+      Task { @MainActor in
+        AppTheme.current.updateAppearance()
+      }
     }
 
     UserDefaults.overwriteTextCheckerOnce()
@@ -73,11 +76,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       object: nil
     )
 
-    DispatchQueue.afterDelay(seconds: 0.2) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       EditorReusePool.shared.warmUp()
     }
 
-    DispatchQueue.afterDelay(seconds: 2.0) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
       Task {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
@@ -100,7 +103,7 @@ private extension AppDelegate {
     // close openPanel once we don't have any key windows.
     //
     // Delay because there's no keyWindow during window transitions.
-    DispatchQueue.afterDelay(seconds: 0.5) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
       if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
         NSApp.closeOpenPanels()
       }

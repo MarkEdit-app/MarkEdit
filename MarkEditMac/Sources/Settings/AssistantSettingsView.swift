@@ -10,6 +10,7 @@ import SettingsUI
 import WebKit
 import MarkEditKit
 
+@MainActor
 struct AssistantSettingsView: View {
   @State private var insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
   @State private var trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace

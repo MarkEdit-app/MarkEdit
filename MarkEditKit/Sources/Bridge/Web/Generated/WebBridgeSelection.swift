@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeSelection {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeSelection {
     self.webView = webView
   }
 
-  @MainActor
   public func getText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.selection.getText") {
@@ -26,7 +26,6 @@ public final class WebBridgeSelection {
     }
   }
 
-  @MainActor
   public func getRect(pos: Int) async throws -> WebRect? {
     struct Message: Encodable {
       let pos: Int

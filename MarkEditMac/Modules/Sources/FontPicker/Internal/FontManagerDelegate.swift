@@ -9,6 +9,7 @@ import AppKit
 /**
  Shared delegate to handle font changes sent by NSFontManager.
  */
+@MainActor
 final class FontManagerDelegate {
   static let shared = FontManagerDelegate()
   var fontDidChange: ((NSFont) -> Void)?

@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeTableOfContents {
   private weak var webView: WKWebView?
 
@@ -17,7 +18,6 @@ public final class WebBridgeTableOfContents {
     self.webView = webView
   }
 
-  @MainActor
   public func getTableOfContents() async throws -> [HeadingInfo] {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.toc.getTableOfContents") {

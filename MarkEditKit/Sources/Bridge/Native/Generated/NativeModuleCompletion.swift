@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol NativeModuleCompletion: NativeModule {
   func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?)
   func commitCompletion()
@@ -24,6 +25,7 @@ public extension NativeModuleCompletion {
   var bridge: NativeBridge { NativeBridgeCompletion(self) }
 }
 
+@MainActor
 final class NativeBridgeCompletion: NativeBridge {
   static let name = "completion"
   lazy var methods: [String: NativeMethod] = [

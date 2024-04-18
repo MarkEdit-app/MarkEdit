@@ -9,6 +9,7 @@ import WebKit
 /**
  Wrapper for all web bridges.
  */
+@MainActor
 public struct WebModuleBridge {
   public let config: WebBridgeConfig
   public let core: WebBridgeCore

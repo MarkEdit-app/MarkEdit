@@ -202,7 +202,7 @@ extension EditorDocument {
 
     // Only under certain conditions we need this flow,
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
-    DispatchQueue.onMainThread {
+    DispatchQueue.main.async {
       do {
         // For text bundles, use the text.markdown file inside it
         let filePath = self.textBundle?.textFilePath(baseURL: fileURL) ?? fileURL.path

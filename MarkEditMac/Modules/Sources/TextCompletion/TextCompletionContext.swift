@@ -14,6 +14,7 @@ public protocol TextCompletionPanelProtocol {}
 /**
  Manages the state of word completions.
  */
+@MainActor
 public final class TextCompletionContext {
   public var appearance: NSAppearance? {
     get {
@@ -37,7 +38,7 @@ public final class TextCompletionContext {
   public var toIndex: Int = 0
   public var selectedText: String { panel.selectedCompletion() }
 
-  public init(localize: TextCompletionLocalizable, commitCompletion: @escaping () -> Void) {
+  public init(localize: TextCompletionLocalizable, commitCompletion: @escaping @Sendable () -> Void) {
     self.localizable = localize
     self.commitCompletion = commitCompletion
   }
@@ -110,5 +111,5 @@ public final class TextCompletionContext {
   private var wasFlipped = false
 
   private let localizable: TextCompletionLocalizable
-  private let commitCompletion: () -> Void
+  private let commitCompletion: @Sendable () -> Void
 }

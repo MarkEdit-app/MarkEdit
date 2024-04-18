@@ -332,7 +332,9 @@ private extension EditorViewController {
 
     // [macOS 14] +enableWindowReuse crash, DispatchQueue would not work
     RunLoop.main.perform {
-      self.showTableOfContentsMenu()
+      Task { @MainActor in
+        self.showTableOfContentsMenu()
+      }
     }
   }
 

@@ -55,6 +55,7 @@ private extension AppDelegate {
     windowFloatingItem?.setOn(NSApp.keyWindow?.level == .floating)
   }
 
+  @MainActor
   func reconfigureOpenFileInMenu(document: EditorDocument?) {
     openFileInMenu?.removeAllItems()
 

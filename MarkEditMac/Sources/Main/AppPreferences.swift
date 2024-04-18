@@ -48,14 +48,18 @@ enum AppPreferences {
     @Storage(key: "editor.light-theme", defaultValue: AppTheme.GitHubLight.editorTheme)
     static var lightTheme: String {
       didSet {
-        AppTheme.current.updateAppearance(animateChanges: true)
+        Task { @MainActor in
+          AppTheme.current.updateAppearance(animateChanges: true)
+        }
       }
     }
 
     @Storage(key: "editor.dark-theme", defaultValue: AppTheme.GitHubDark.editorTheme)
     static var darkTheme: String {
       didSet {
-        AppTheme.current.updateAppearance(animateChanges: true)
+        Task { @MainActor in
+          AppTheme.current.updateAppearance(animateChanges: true)
+        }
       }
     }
 
@@ -163,8 +167,10 @@ enum AppPreferences {
     @Storage(key: "assistant.inline-predictions", defaultValue: true)
     static var inlinePredictions: Bool {
       didSet {
-        NSSpellChecker.InlineCompletion.spellCheckerEnabled = inlinePredictions
-        performUpdates { $0.setInlinePredictions(enabled: inlinePredictions) }
+        Task { @MainActor in
+          NSSpellChecker.InlineCompletion.spellCheckerEnabled = inlinePredictions
+          performUpdates { $0.setInlinePredictions(enabled: inlinePredictions) }
+        }
       }
     }
 
@@ -351,8 +357,12 @@ extension NSWindow.TabbingMode: Codable {}
 // MARK: - Private
 
 private extension AppPreferences {
-  static func performUpdates(action: (EditorViewController) -> Void) {
-    EditorReusePool.shared.viewControllers().forEach { action($0) }
+  static func performUpdates(action: @escaping (EditorViewController) -> Void) {
+    Task { @MainActor in
+      for editor in EditorReusePool.shared.viewControllers() {
+        action(editor)
+      }
+    }
   }
 }
 

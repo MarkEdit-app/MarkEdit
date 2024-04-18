@@ -10,6 +10,7 @@
 import WebKit
 import MarkEditCore
 
+@MainActor
 public final class WebBridgeHistory {
   private weak var webView: WKWebView?
 
@@ -25,7 +26,6 @@ public final class WebBridgeHistory {
     webView?.invoke(path: "webModules.history.redo", completion: completion)
   }
 
-  @MainActor
   public func canUndo() async throws -> Bool {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.history.canUndo") {
@@ -34,7 +34,6 @@ public final class WebBridgeHistory {
     }
   }
 
-  @MainActor
   public func canRedo() async throws -> Bool {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.history.canRedo") {

@@ -8,6 +8,7 @@ import Foundation
 import NaturalLanguage
 import MarkEditCore
 
+@MainActor
 public protocol EditorModuleCompletionDelegate: AnyObject {
   func editorCompletion(
     _ sender: EditorModuleCompletion,

@@ -10,6 +10,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyBackgroundColorDidChange(color: Int)
@@ -24,6 +25,7 @@ public extension NativeModuleCore {
   var bridge: NativeBridge { NativeBridgeCore(self) }
 }
 
+@MainActor
 final class NativeBridgeCore: NativeBridge {
   static let name = "core"
   lazy var methods: [String: NativeMethod] = [

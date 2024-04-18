@@ -54,8 +54,14 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
     updateBackgroundColor()
 
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { [weak self] _, _ in
-      self?.updateBackgroundColor()
-      self?.updateEditorTheme()
+      guard let self else {
+        return
+      }
+
+      Task { @MainActor in
+        self.updateBackgroundColor()
+        self.updateEditorTheme()
+      }
     }
   }
 
