@@ -14,6 +14,7 @@ import FontPicker
 /**
  UserDefaults wrapper with handy getters and setters.
  */
+@MainActor
 enum AppPreferences {
   enum General {
     @Storage(key: "general.appearance", defaultValue: .system)
@@ -60,18 +61,14 @@ enum AppPreferences {
     @Storage(key: "editor.light-theme", defaultValue: AppTheme.GitHubLight.editorTheme)
     static var lightTheme: String {
       didSet {
-        Task { @MainActor in
-          AppTheme.current.updateAppearance(animateChanges: true)
-        }
+        AppTheme.current.updateAppearance(animateChanges: true)
       }
     }
 
     @Storage(key: "editor.dark-theme", defaultValue: AppTheme.GitHubDark.editorTheme)
     static var darkTheme: String {
       didSet {
-        Task { @MainActor in
-          AppTheme.current.updateAppearance(animateChanges: true)
-        }
+        AppTheme.current.updateAppearance(animateChanges: true)
       }
     }
 
@@ -179,10 +176,8 @@ enum AppPreferences {
     @Storage(key: "assistant.inline-predictions", defaultValue: true)
     static var inlinePredictions: Bool {
       didSet {
-        Task { @MainActor in
-          NSSpellChecker.InlineCompletion.spellCheckerEnabled = inlinePredictions
-          performUpdates { $0.setInlinePredictions(enabled: inlinePredictions) }
-        }
+        NSSpellChecker.InlineCompletion.spellCheckerEnabled = inlinePredictions
+        performUpdates { $0.setInlinePredictions(enabled: inlinePredictions) }
       }
     }
 
@@ -337,6 +332,7 @@ enum Appearance: Codable {
   case light
   case dark
 
+  @MainActor
   func resolved(with appearance: NSAppearance = NSApp.effectiveAppearance) -> NSAppearance? {
     switch self {
     case .system:
@@ -424,14 +420,13 @@ extension NSWindow.TabbingMode: @retroactive Codable {}
 
 private extension AppPreferences {
   static func performUpdates(action: @escaping (EditorViewController) -> Void) {
-    Task { @MainActor in
-      for editor in EditorReusePool.shared.viewControllers() {
-        action(editor)
-      }
+    for editor in EditorReusePool.shared.viewControllers() {
+      action(editor)
     }
   }
 }
 
+@MainActor
 @propertyWrapper
 struct Storage<T: Codable> {
   private let key: String
