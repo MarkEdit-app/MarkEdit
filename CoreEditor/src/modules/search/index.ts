@@ -1,12 +1,13 @@
 import { EditorSelection } from '@codemirror/state';
 import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSearchQuery } from '@codemirror/search';
-import { isRectVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
+import { isElementVisible, isPositionVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
 
 import SearchOptions from './options';
 import matchFromQuery from './matchFromQuery';
 import rangesFromQuery from './rangesFromQuery';
 import searchOccurrences from './searchOccurrences';
 import hasSelection from '../selection/hasSelection';
+import searchMatchElement from '../selection/searchMatchElement';
 import selectWithRanges from '../selection/selectWithRanges';
 
 // Imagine this entire file as a front-end to the @codemirror/search module
@@ -48,7 +49,7 @@ export function updateQuery(options: SearchOptions): number {
   if (options.refocus) {
     // Try ranges in viewport
     for (const range of ranges) {
-      if (isRectVisible(range.from)) {
+      if (isPositionVisible(range.from)) {
         if (!storage.hasSelection) {
           editor.dispatch({
             selection: EditorSelection.range(range.from, range.to),
@@ -118,13 +119,8 @@ export function numberOfMatches(): CodeGen_Int {
 }
 
 export function hasVisibleSelectedMatch() {
-  const element = document.querySelector('.cm-searchMatch-selected') as HTMLElement | null;
-  if (element === null) {
-    return false;
-  }
-
-  const rect = element.getBoundingClientRect();
-  return rect.top > 0 && rect.bottom < window.editor.dom.clientHeight;
+  const element = searchMatchElement();
+  return element !== null && isElementVisible(element);
 }
 
 export function performOperation(operation: SearchOperation) {

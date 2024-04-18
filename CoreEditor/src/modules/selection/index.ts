@@ -8,7 +8,7 @@ import { setShowActiveLineIndicator } from '../../styling/config';
 
 import selectedRanges from './selectedRanges';
 import selectWholeLineAt from './selectWholeLineAt';
-import searchMatchPosition from './searchMatchPosition';
+import searchMatchElement from './searchMatchElement';
 
 type ScrollStrategy = 'nearest' | 'start' | 'end' | 'center';
 
@@ -118,11 +118,12 @@ export function scrollCaretToVisible(strategy: ScrollStrategy = 'end') {
  * Make sure selected search match is visible, with an additional margin to breath.
  */
 export function scrollSearchMatchToVisible(strategy: ScrollStrategy = 'center') {
-  const pos = searchMatchPosition();
-  if (pos === null || isRectVisible(pos)) {
+  const element = searchMatchElement();
+  if (element === null || isElementVisible(element)) {
     return;
   }
 
+  const pos = window.editor.posAtDOM(element);
   scrollIntoView(pos, strategy);
 }
 
@@ -167,10 +168,16 @@ export function refreshEditFocus() {
   });
 }
 
-export function isRectVisible(pos: number) {
-  const editor = window.editor;
-  const rect = editor.coordsAtPos(pos);
-  return rect !== null && rect.top >= 0 && rect.top <= editor.dom.clientHeight;
+export function isElementVisible(element: Element) {
+  return isRectVisible(element.getBoundingClientRect());
+}
+
+export function isPositionVisible(pos: number) {
+  return isRectVisible(window.editor.coordsAtPos(pos));
 }
 
 export { selectedLineColumn } from './selectedLineColumn';
+
+function isRectVisible(rect: { top: number; bottom: number } | null) {
+  return rect !== null && rect.top >= 0 && rect.bottom <= window.editor.dom.clientHeight;
+}
