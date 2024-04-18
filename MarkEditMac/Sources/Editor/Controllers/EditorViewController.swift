@@ -170,18 +170,14 @@ final class EditorViewController: NSViewController {
     webView.actionDelegate = self
 
     let theme = AppTheme.current.editorTheme
-    DispatchQueue.global(qos: .userInitiated).async {
-      let html = [
-        AppPreferences.editorConfig(theme: theme).toHtml,
-        AppCustomization.editorStyle.fileContents,
-        AppCustomization.stylesDirectory.directoryContents.joined(separator: "\n"),
-      ].joined(separator: "\n\n")
+    let html = [
+      AppPreferences.editorConfig(theme: theme).toHtml,
+      AppCustomization.editorStyle.fileContents,
+      AppCustomization.stylesDirectory.directoryContents.joined(separator: "\n"),
+    ].joined(separator: "\n\n")
 
-      DispatchQueue.main.async {
-        // Non-nil baseURL is required by scenarios like opening local files
-        webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
-      }
-    }
+    // Non-nil baseURL is required by scenarios like opening local files
+    webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
 
     // [macOS 15] Detect WritingTools visibility to work around issues
     if #available(macOS 15.1, *) {
