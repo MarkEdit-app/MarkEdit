@@ -174,12 +174,16 @@ extension EditorDocument {
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
-    // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
+    MainActor.unsafeIgnoreIsolation {
+      // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
+      textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
+    }
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
+    MainActor.unsafeIgnoreIsolation {
+      typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
+    }
   }
 
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
@@ -211,7 +215,7 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
-    DispatchQueue.global(qos: .userInitiated).async {
+    MainActor.unsafeIgnoreIsolation {
       let newValue = {
         if let encoding = AppDocumentController.suggestedTextEncoding {
           return encoding.decode(data: data)
@@ -221,11 +225,9 @@ extension EditorDocument {
         return encoding.decode(data: data, guessEncoding: true)
       }()
 
-      DispatchQueue.main.async {
-        self.fileData = data
-        self.stringValue = newValue
-        self.hostViewController?.representedObject = self
-      }
+      self.fileData = data
+      self.stringValue = newValue
+      self.hostViewController?.representedObject = self
     }
   }
 
@@ -273,7 +275,7 @@ extension EditorDocument {
 
     // Only under certain conditions we need this flow,
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
-    DispatchQueue.main.async {
+    MainActor.unsafeIgnoreIsolation {
       do {
         // For text bundles, use the text.markdown file inside it
         let filePath = self.textBundle?.textFilePath(baseURL: fileURL) ?? fileURL.path
@@ -360,21 +362,25 @@ extension EditorDocument: FileVersionPickerDelegate {
 
 extension EditorDocument {
   override func read(from fileWrapper: FileWrapper, ofType typeName: String) throws {
-    guard typeName.isTextBundle else {
-      return try super.read(from: fileWrapper, ofType: typeName)
-    }
+    try MainActor.unsafeIgnoreIsolation {
+      guard typeName.isTextBundle else {
+        return try super.read(from: fileWrapper, ofType: typeName)
+      }
 
-    textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
-    try read(from: textBundle?.data ?? Data(), ofType: typeName)
+      textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
+      try read(from: textBundle?.data ?? Data(), ofType: typeName)
+    }
   }
 
   override func write(to url: URL, ofType typeName: String) throws {
-    guard typeName.isTextBundle else {
-      return try super.write(to: url, ofType: typeName)
-    }
+    try MainActor.unsafeIgnoreIsolation {
+      guard typeName.isTextBundle else {
+        return try super.write(to: url, ofType: typeName)
+      }
 
-    let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
-    try fileWrapper?.write(to: url, originalContentsURL: nil)
+      let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
+      try fileWrapper?.write(to: url, originalContentsURL: nil)
+    }
   }
 
   override func duplicate() throws -> NSDocument {
