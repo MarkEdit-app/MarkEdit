@@ -42,7 +42,7 @@ enum AppUpdater {
       return Logger.log(.error, "Failed to decode the data")
     }
 
-    DispatchQueue.onMainThread {
+    DispatchQueue.main.async {
       presentUpdate(newVersion: version, explicitly: explicitly)
     }
   }
@@ -50,6 +50,7 @@ enum AppUpdater {
 
 // MARK: - Private
 
+@MainActor
 private extension AppUpdater {
   static func presentError() {
     let alert = NSAlert()

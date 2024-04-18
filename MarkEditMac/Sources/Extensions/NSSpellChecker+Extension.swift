@@ -22,6 +22,7 @@ extension NSSpellChecker {
 
    If `isAutomaticInlineCompletionEnabled` exists, we swizzle it and return the value set by the user and make the configuration always true. Otherwise, we just set the configuration to the value set by the user.
    */
+  @MainActor
   enum InlineCompletion {
     static var webKitEnabled: Bool {
       if NSSpellChecker.supportsInlineCompletion {
@@ -35,7 +36,7 @@ extension NSSpellChecker {
     fileprivate static let spellCheckerSelector = sel_getUid("isAutomaticInlineCompletionEnabled")
   }
 
-  static let swizzleInlineCompletionEnabledOnce: () = {
+  @MainActor static let swizzleInlineCompletionEnabledOnce: () = {
     guard supportsInlineCompletion else {
       return
     }
@@ -46,7 +47,7 @@ extension NSSpellChecker {
     )
   }()
 
-  static let swizzleCorrectionIndicatorOnce: () = {
+  @MainActor static let swizzleCorrectionIndicatorOnce: () = {
     NSSpellChecker.exchangeInstanceMethods(
       originalSelector: #selector(showCorrectionIndicator(of:primaryString:alternativeStrings:forStringIn:view:completionHandler:)),
       swizzledSelector: #selector(swizzled_showCorrectionIndicator(of:primaryString:alternativeStrings:forStringIn:view:completionHandler:))
@@ -67,6 +68,7 @@ extension NSSpellChecker {
 
 // MARK: - Private
 
+@MainActor
 private extension NSSpellChecker {
   static var supportsInlineCompletion: Bool {
     guard #available(macOS 14.0, *) else {
