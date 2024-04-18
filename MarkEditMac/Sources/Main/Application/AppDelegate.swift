@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 import SettingsUI
 
+@MainActor
 @main
 final class AppDelegate: NSObject, NSApplicationDelegate {
   static func main() {
@@ -60,7 +61,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
     NSApp.appearance = AppPreferences.General.appearance.resolved()
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
-      AppTheme.current.updateAppearance()
+      Task { @MainActor in
+        AppTheme.current.updateAppearance()
+      }
     }
 
     UserDefaults.overwriteTextCheckerOnce()
