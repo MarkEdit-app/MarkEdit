@@ -183,24 +183,20 @@ final class EditorViewController: NSViewController {
     webView.disableWindowOcclusionDetection()
 
     let theme = AppTheme.current.editorTheme
-    DispatchQueue.global(qos: .userInitiated).async {
-      let styles = AppCustomization.isSafeMode ? [] : [
-        AppCustomization.editorStyle.fileContents,
-        AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
-      ]
+    let styles = AppCustomization.isSafeMode ? [] : [
+      AppCustomization.editorStyle.fileContents,
+      AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
+    ]
 
-      let html = ([
-        EditorIndexHtml.fromAppBundle(
-          config: AppPreferences.editorConfig(theme: theme),
-          userSettings: AppRuntimeConfig.jsonLiteral
-        ),
-      ] + styles).joined(separator: "\n\n")
+    let html = ([
+      EditorIndexHtml.fromAppBundle(
+        config: AppPreferences.editorConfig(theme: theme),
+        userSettings: AppRuntimeConfig.jsonLiteral
+      ),
+    ] + styles).joined(separator: "\n\n")
 
-      DispatchQueue.main.async {
-        // Non-nil baseURL is required by scenarios like opening local files
-        webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
-      }
-    }
+    // Non-nil baseURL is required by scenarios like opening local files
+    webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
 
     // [macOS 15] Detect Writing Tools visibility to work around issues
     if #available(macOS 15.1, *) {
