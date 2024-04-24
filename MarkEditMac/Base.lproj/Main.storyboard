@@ -305,7 +305,7 @@
                                         </menuItem>
                                         <menuItem title="Paste" keyEquivalent="v" id="gVA-U4-sdL">
                                             <connections>
-                                                <action selector="performPaste:" target="Ady-hI-5gd" id="QG8-DJ-mZi"/>
+                                                <action selector="paste:" target="Ady-hI-5gd" id="VF7-Zq-ipJ"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Delete" id="pa3-QI-u2k">
@@ -325,7 +325,7 @@ Gw
                                         </menuItem>
                                         <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
                                             <connections>
-                                                <action selector="selectAllText:" target="Ady-hI-5gd" id="5lj-zg-zjX"/>
+                                                <action selector="selectAll:" target="Ady-hI-5gd" id="bET-4d-Oqr"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Ts4-WW-MvM"/>

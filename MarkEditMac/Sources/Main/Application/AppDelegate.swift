@@ -9,20 +9,7 @@ import AppKitExtensions
 import SettingsUI
 
 @MainActor
-@main
 final class AppDelegate: NSObject, NSApplicationDelegate {
-  static func main() {
-    NSObject.swizzleAccessibilityBundlesOnce
-    NSSpellChecker.swizzleInlineCompletionEnabledOnce
-    NSSpellChecker.swizzleCorrectionIndicatorOnce
-
-    let app = NSApplication.shared
-    let delegate = Self()
-
-    app.delegate = delegate
-    _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
-  }
-
   @IBOutlet weak var mainFileMenu: NSMenu?
   @IBOutlet weak var mainEditMenu: NSMenu?
   @IBOutlet weak var mainWindowMenu: NSMenu?

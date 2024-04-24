@@ -71,13 +71,6 @@ export function selectWholeLineIfNeeded(event: MouseEvent) {
   }
 }
 
-export function selectAll() {
-  const editor = window.editor;
-  editor.dispatch({
-    selection: EditorSelection.range(0, editor.state.doc.length),
-  });
-}
-
 export function getRect(pos: number) {
   const rect = window.editor.coordsAtPos(pos);
   if (rect === null) {
