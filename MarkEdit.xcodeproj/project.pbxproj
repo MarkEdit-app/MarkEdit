@@ -72,6 +72,7 @@
 		87AAEDF7295825D800C8E61C /* EditorFindPanel+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEDF6295825D800C8E61C /* EditorFindPanel+Delegate.swift */; };
 		87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */; };
 		87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEE0129585ADC00C8E61C /* AppPreferences.swift */; };
+		87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACB6932BD8CA8400CE6F9E /* Application.swift */; };
 		87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BD071129699A290053EF5F /* EditorViewController+Preview.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BEF30129A88F6800596E17 /* EditorCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* EditorCustomization.swift */; };
@@ -187,6 +188,7 @@
 		87AAEDF6295825D800C8E61C /* EditorFindPanel+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorFindPanel+Delegate.swift"; sourceTree = "<group>"; };
 		87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorFindPanel+Menu.swift"; sourceTree = "<group>"; };
 		87AAEE0129585ADC00C8E61C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		87ACB6932BD8CA8400CE6F9E /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		87BD071129699A290053EF5F /* EditorViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Preview.swift"; sourceTree = "<group>"; };
 		87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+GotoLine.swift"; sourceTree = "<group>"; };
 		87BEF30029A88F6800596E17 /* EditorCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCustomization.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 		871C99592973F1C2003FF3A7 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				87ACB6932BD8CA8400CE6F9E /* Application.swift */,
 				870A51B7294702AF0095C7EB /* AppDelegate.swift */,
 				871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */,
 				871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */,
@@ -730,6 +733,7 @@
 				874065792BB505F500B5CE5A /* EditorViewController+Events.swift in Sources */,
 				87DE0825294DF340004AD33A /* EditorFindButtons.swift in Sources */,
 				87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */,
+				87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -954,7 +958,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -990,7 +994,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

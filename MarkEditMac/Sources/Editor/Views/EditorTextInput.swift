@@ -10,8 +10,6 @@ import AppKit
 enum EditorTextAction {
   case undo
   case redo
-  case selectAll
-  case paste
 }
 
 /**
@@ -33,10 +31,6 @@ extension NSText: EditorTextInput {
       undoManager?.undo()
     case .redo:
       undoManager?.redo()
-    case .selectAll:
-      selectAll(sender)
-    case .paste:
-      paste(sender)
     }
   }
 }

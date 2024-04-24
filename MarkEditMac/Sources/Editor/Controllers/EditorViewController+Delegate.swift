@@ -72,11 +72,6 @@ extension EditorViewController: EditorWebViewActionDelegate {
       bridge.history.undo()
     case .redo:
       bridge.history.redo()
-    case .selectAll:
-      bridge.selection.selectAll()
-    case .paste:
-      NSPasteboard.general.sanitize()
-      NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil)
     }
   }
 }

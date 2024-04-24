@@ -7,10 +7,6 @@
 import AppKit
 
 public extension NSPasteboard {
-  var canPaste: Bool {
-    pasteboardItems?.isEmpty == false
-  }
-
   var string: String? {
     string(forType: .string)
   }

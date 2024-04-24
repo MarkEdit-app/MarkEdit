@@ -86,8 +86,6 @@ extension EditorViewController: NSMenuItemValidation {
     }
 
     switch menuItem.action {
-    case #selector(performPaste(_:)):
-      return NSPasteboard.general.canPaste
     case #selector(resetFontSize(_:)):
       return abs(AppPreferences.Editor.fontSize - FontPicker.defaultFontSize) > .ulpOfOne
     case #selector(makeFontBigger(_:)):
@@ -311,14 +309,6 @@ private extension EditorViewController {
 
   @IBAction func redo(_ sender: Any?) {
     currentInput?.performTextAction(.redo, sender: sender)
-  }
-
-  @IBAction func selectAllText(_ sender: Any?) {
-    currentInput?.performTextAction(.selectAll, sender: sender)
-  }
-
-  @IBAction func performPaste(_ sender: Any?) {
-    currentInput?.performTextAction(.paste, sender: sender)
   }
 
   @IBAction func gotoLine(_ sender: Any?) {
