@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { startCompletion, setPanelVisible } from '../../modules/completion';
+import { startCompletion, setPanelVisible, acceptInlinePrediction } from '../../modules/completion';
 
 /**
  * @shouldExport true
@@ -9,6 +9,7 @@ import { startCompletion, setPanelVisible } from '../../modules/completion';
 export interface WebModuleCompletion extends WebModule {
   startCompletion({ afterDelay }: { afterDelay: number }): void;
   setState({ panelVisible }: { panelVisible: boolean }): void;
+  acceptInlinePrediction(): void;
 }
 
 export class WebModuleCompletionImpl implements WebModuleCompletion {
@@ -18,5 +19,9 @@ export class WebModuleCompletionImpl implements WebModuleCompletion {
 
   setState({ panelVisible }: { panelVisible: boolean }): void {
     setPanelVisible(panelVisible);
+  }
+
+  acceptInlinePrediction(): void {
+    acceptInlinePrediction();
   }
 }

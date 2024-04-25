@@ -218,6 +218,10 @@ extension EditorViewController: EditorModuleCompletionDelegate {
   func editorCompletionDidSelectBottom(_ sender: EditorModuleCompletion) {
     completionContext.selectBottom()
   }
+
+  func editorCompletionCancelInlinePrediction(_ sender: EditorModuleCompletion) {
+    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
+  }
 }
 
 // MARK: - EditorModulePreviewDelegate

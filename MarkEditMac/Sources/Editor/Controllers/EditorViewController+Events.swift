@@ -19,7 +19,7 @@ extension EditorViewController {
 
       // Press right option to accept inline prediction without adding any punctuations
       if event.keyCode == .kVK_RightOption, let self {
-        self.webView.acceptInlinePrediction()
+        self.bridge.completion.acceptInlinePrediction()
       }
 
       // Press F to potentially change the find mode or switch focus between two fields
