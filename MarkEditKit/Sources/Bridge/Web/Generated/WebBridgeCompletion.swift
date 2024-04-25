@@ -41,4 +41,8 @@ public final class WebBridgeCompletion {
 
     webView?.invoke(path: "webModules.completion.setState", message: message, completion: completion)
   }
+
+  public func acceptInlinePrediction(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.completion.acceptInlinePrediction", completion: completion)
+  }
 }

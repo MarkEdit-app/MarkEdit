@@ -19,6 +19,7 @@ public protocol NativeModuleCompletion: NativeModule {
   func selectNext()
   func selectTop()
   func selectBottom()
+  func cancelInlinePrediction()
 }
 
 public extension NativeModuleCompletion {
@@ -49,6 +50,9 @@ final class NativeBridgeCompletion: NativeBridge {
     },
     "selectBottom": { [weak self] in
       self?.selectBottom(parameters: $0)
+    },
+    "cancelInlinePrediction": { [weak self] in
+      self?.cancelInlinePrediction(parameters: $0)
     },
   ]
 
@@ -104,6 +108,11 @@ final class NativeBridgeCompletion: NativeBridge {
 
   private func selectBottom(parameters: Data) -> Result<Any?, Error>? {
     module.selectBottom()
+    return .success(nil)
+  }
+
+  private func cancelInlinePrediction(parameters: Data) -> Result<Any?, Error>? {
+    module.cancelInlinePrediction()
     return .success(nil)
   }
 }

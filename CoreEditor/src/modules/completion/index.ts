@@ -1,3 +1,4 @@
+import { EditorSelection } from '@codemirror/state';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 
@@ -68,6 +69,30 @@ export function isPanelVisible() {
 
 export function invalidateCache() {
   storage.cachedPosition = -1;
+}
+
+export async function acceptInlinePrediction() {
+  const editor = window.editor;
+  const anchor = editor.state.selection.main.anchor;
+  const prediction = (() => {
+    const line = editor.state.doc.lineAt(anchor);
+    return editor.state.sliceDoc(anchor, line.to);
+  })();
+
+  await window.nativeModules.completion.cancelInlinePrediction();
+  const line = editor.state.doc.lineAt(anchor);
+  const actual = editor.state.sliceDoc(anchor, line.to);
+
+  if (actual !== prediction) {
+    editor.dispatch({
+      changes: {
+        from: anchor,
+        to: line.to,
+        insert: prediction,
+      },
+      selection: EditorSelection.cursor(anchor + prediction.length - actual.length),
+    });
+  }
 }
 
 const storage: {

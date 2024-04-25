@@ -14,4 +14,5 @@ export interface NativeModuleCompletion extends NativeModule {
   selectNext(): void;
   selectTop(): void;
   selectBottom(): void;
+  cancelInlinePrediction(): Promise<void>;
 }

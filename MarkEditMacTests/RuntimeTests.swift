@@ -33,11 +33,6 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: inspector, selector: "show")
   }
 
-  func testExistenceOfUnmarkText() {
-    let webView = WKWebView()
-    testExistenceOfSelector(object: webView, selector: "unmarkText")
-  }
-
   func testExistenceOfAutomaticInlineCompletion() {
     guard #available(macOS 14.0, *) else {
       return
