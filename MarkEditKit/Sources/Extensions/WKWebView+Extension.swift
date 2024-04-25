@@ -26,6 +26,15 @@ public extension WKWebView {
 
     _ = inspector.perform(methodSel)
   }
+
+  func acceptInlinePrediction() {
+    let selector = sel_getUid("unmarkText")
+    guard responds(to: selector) else {
+      return Logger.assertFail("Missing method \"unmarkText\" in: \(self)")
+    }
+
+    _ = perform(selector)
+  }
 }
 
 /**
