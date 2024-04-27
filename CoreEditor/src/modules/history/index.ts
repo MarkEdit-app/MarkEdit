@@ -32,7 +32,7 @@ export function markContentClean() {
 
 export function isContentDirty() {
   // The content is "dirty" when the current undo depth is not the same as the saved depth,
-  // i.e., there re unsaved changes.
+  // i.e., there're unsaved changes.
   return storage.savedUndoDepth !== undoDepth(window.editor.state);
 }
 

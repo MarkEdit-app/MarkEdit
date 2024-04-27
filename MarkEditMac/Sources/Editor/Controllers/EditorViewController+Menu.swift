@@ -20,7 +20,7 @@ extension EditorViewController {
     let menu = NSMenu()
     menu.autoenablesItems = false
 
-    let canSelect = !findPanel.searchField.stringValue.isEmpty
+    let canSelect = findPanel.numberOfItems > 0
     let canReplace = canSelect && findPanel.mode == .replace
 
     menu.addItem(withTitle: Localized.Search.selectAll) { [weak self] in
