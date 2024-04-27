@@ -19,6 +19,7 @@ public final class LabeledSearchField: NSSearchField {
 
   public init() {
     super.init(frame: .zero)
+    usesSingleLineMode = false
     addSubview(bezelView)
     addSubview(labelView)
   }
