@@ -9,6 +9,42 @@ import AppKit
 import MarkEditKit
 import FontPicker
 
+// MARK: - NSMenu Creation
+
+extension EditorViewController {
+  var searchOperationsMenuItem: NSMenuItem? {
+    guard findPanel.mode != .hidden else {
+      return nil
+    }
+
+    let menu = NSMenu()
+    menu.autoenablesItems = false
+
+    let canSelect = !findPanel.searchField.stringValue.isEmpty
+    let canReplace = canSelect && findPanel.mode == .replace
+
+    menu.addItem(withTitle: Localized.Search.selectAll) { [weak self] in
+      self?.performSearchOperation(.selectAll)
+    }.isEnabled = canSelect
+
+    menu.addItem(withTitle: Localized.Search.selectAllInSelection) { [weak self] in
+      self?.performSearchOperation(.selectAllInSelection)
+    }.isEnabled = canSelect
+
+    menu.addItem(withTitle: Localized.Search.replaceAll) { [weak self] in
+      self?.performSearchOperation(.replaceAll)
+    }.isEnabled = canReplace
+
+    menu.addItem(withTitle: Localized.Search.replaceAllInSelection) { [weak self] in
+      self?.performSearchOperation(.replaceAllInSelection)
+    }.isEnabled = canReplace
+
+    let item = NSMenuItem(title: Localized.Search.searchOperations)
+    item.submenu = menu
+    return item
+  }
+}
+
 // MARK: - NSMenuDelegate
 
 extension EditorViewController: NSMenuDelegate {

@@ -17,6 +17,7 @@ enum EditorWebViewMenuAction {
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
   func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool
+  func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem?
   func editorWebViewResignFirstResponder(_ webView: EditorWebView)
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
@@ -67,6 +68,12 @@ final class EditorWebView: WKWebView {
     // Keep items minimal for revision mode
     if actionDelegate?.editorWebViewIsRevisionMode(self) == true {
       return super.willOpenMenu(menu, with: event)
+    }
+
+    // Operations like select all in selection, replace all in selection, etc
+    if let searchMenuItem = actionDelegate?.editorWebViewSearchOperationsMenuItem(self) {
+      menu.insertItem(searchMenuItem, at: 0)
+      menu.insertItem(.separator(), at: 1)
     }
 
     menu.addItem(.separator())

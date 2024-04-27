@@ -1555,23 +1555,6 @@
         }
       }
     },
-    "Operations" : {
-      "comment" : "Search operations",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "操作"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "操作"
-          }
-        }
-      }
-    },
     "Paragraphs" : {
       "comment" : "Statistics label: count paragraphs",
       "localizations" : {
@@ -1924,6 +1907,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存改動"
+          }
+        }
+      }
+    },
+    "Search Operations" : {
+      "comment" : "Search operations",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索操作"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜尋操作"
           }
         }
       }
