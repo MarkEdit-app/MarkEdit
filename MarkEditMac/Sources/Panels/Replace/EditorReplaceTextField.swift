@@ -13,6 +13,7 @@ final class EditorReplaceTextField: NSTextField {
 
   init() {
     super.init(frame: .zero)
+    usesSingleLineMode = false
     bezelStyle = .roundedBezel
     placeholderString = Localized.Search.replace
     addSubview(bezelView)
