@@ -40,6 +40,10 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isRevisionMode
   }
 
+  func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem? {
+    searchOperationsMenuItem
+  }
+
   func editorWebViewResignFirstResponder(_ webView: EditorWebView) {
     // resignFirstResponder is called when webView.isHidden = true
     guard hasFinishedLoading && !webView.isHidden else {
@@ -245,6 +249,10 @@ extension EditorViewController: EditorFindPanelDelegate {
 
   func editorFindPanel(_ sender: EditorFindPanel, performOperation operation: SearchOperation) {
     performSearchOperation(operation)
+  }
+
+  func editorFindPanelOperationsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem? {
+    searchOperationsMenuItem
   }
 
   func editorFindPanelDidChangeOptions(_ sender: EditorFindPanel) {

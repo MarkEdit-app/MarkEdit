@@ -29,35 +29,10 @@ extension EditorFindPanel {
     regexItem.setOn(AppPreferences.Search.regularExpression)
     menu.addItem(.separator())
 
-    let operationsItem = NSMenuItem(title: Localized.Search.operations)
-    operationsItem.submenu = {
-      let menu = NSMenu()
-      menu.autoenablesItems = false
-
-      let canSelect = !searchField.stringValue.isEmpty
-      let canReplace = canSelect && mode == .replace
-
-      menu.addItem(withTitle: Localized.Search.selectAll) { [weak self] in
-        self?.performOperation(.selectAll)
-      }.isEnabled = canSelect
-
-      menu.addItem(withTitle: Localized.Search.selectAllInSelection) { [weak self] in
-        self?.performOperation(.selectAllInSelection)
-      }.isEnabled = canSelect
-
-      menu.addItem(withTitle: Localized.Search.replaceAll) { [weak self] in
-        self?.performOperation(.replaceAll)
-      }.isEnabled = canReplace
-
-      menu.addItem(withTitle: Localized.Search.replaceAllInSelection) { [weak self] in
-        self?.performOperation(.replaceAllInSelection)
-      }.isEnabled = canReplace
-
-      return menu
-    }()
-
-    menu.addItem(operationsItem)
-    menu.addItem(.separator())
+    if let operationsItem = delegate?.editorFindPanelOperationsMenuItem(self) {
+      menu.addItem(operationsItem)
+      menu.addItem(.separator())
+    }
 
     let recentsTitleItem = menu.addItem(withTitle: Localized.Search.recentSearches)
     recentsTitleItem.tag = NSSearchField.recentsTitleMenuItemTag
@@ -110,9 +85,5 @@ private extension EditorFindPanel {
   func toggleMenuItem(_ item: NSMenuItem) {
     item.toggle()
     delegate?.editorFindPanelDidChangeOptions(self)
-  }
-
-  func performOperation(_ operation: SearchOperation) {
-    delegate?.editorFindPanel(self, performOperation: operation)
   }
 }
