@@ -18,7 +18,7 @@ extension EditorViewController {
       }
 
       // Press right option to accept inline prediction without adding any punctuations
-      if event.keyCode == .kVK_RightOption, let self {
+      if event.keyCode == .kVK_RightOption, event.deviceIndependentFlags == .option, let self {
         self.bridge.completion.acceptInlinePrediction()
       }
 
