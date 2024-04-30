@@ -247,10 +247,6 @@ extension EditorViewController: EditorFindPanelDelegate {
     updateTextFinderQuery()
   }
 
-  func editorFindPanel(_ sender: EditorFindPanel, performOperation operation: SearchOperation) {
-    performSearchOperation(operation)
-  }
-
   func editorFindPanelOperationsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem? {
     searchOperationsMenuItem
   }
