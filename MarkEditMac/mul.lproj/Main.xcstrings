@@ -1657,6 +1657,30 @@
         }
       }
     },
+    "hw9-Pl-u8s.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Grant Folder Access\"; ObjectID = \"hw9-Pl-u8s\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grant Folder Access"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予目录权限"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予目錄許可權"
+          }
+        }
+      }
+    },
     "HyV-fh-RgO.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"View\"; ObjectID = \"HyV-fh-RgO\";",
       "extractionState" : "extracted_with_value",

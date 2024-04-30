@@ -895,6 +895,23 @@
         }
       }
     },
+    "Grant Access" : {
+      "comment" : "Open panel prompt, used for granting access for the selected folder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予权限"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予許可權"
+          }
+        }
+      }
+    },
     "Granularity" : {
       "localizations" : {
         "zh-Hans" : {

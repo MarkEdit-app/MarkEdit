@@ -53,6 +53,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
 
+    startAccessingGrantedFolder()
     UserDefaults.overwriteTextCheckerOnce()
     EditorCustomization.createFiles()
 
@@ -105,6 +106,10 @@ private extension AppDelegate {
 
   @IBAction func openDocumentsFolder(_ sender: Any?) {
     NSWorkspace.shared.open(URL.documentsDirectory)
+  }
+
+  @IBAction func grantFolderAccess(_ sender: Any?) {
+    saveGrantedFolderAsBookmark()
   }
 
   @IBAction func openDevelopmentGuide(_ sender: Any?) {

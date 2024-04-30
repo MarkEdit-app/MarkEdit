@@ -55,6 +55,12 @@
                                                             <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cD9-hQ-p0k"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Grant Folder Access" id="hw9-Pl-u8s">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="grantFolderAccess:" target="Ady-hI-5gd" id="oJx-hX-FA2"/>
+                                                        </connections>
+                                                    </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="USk-ey-oWO"/>
                                                     <menuItem title="Development Guide" id="aSl-kC-hp8">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
