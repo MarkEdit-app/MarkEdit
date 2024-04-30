@@ -85,6 +85,7 @@
 		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 		87F85D5929BC95AE00F3FD37 /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87F85D5729BC95AE00F3FD37 /* AppShortcuts.strings */; };
+		87FAFFD72BE0B6A300FA509D /* AppDelegate+FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -201,6 +202,7 @@
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 		87F85D5829BC95AE00F3FD37 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppShortcuts.strings"; sourceTree = "<group>"; };
 		87F85D5B29BC962100F3FD37 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/AppShortcuts.strings"; sourceTree = "<group>"; };
+		87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+FileSystem.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,6 +349,7 @@
 			children = (
 				87ACB6932BD8CA8400CE6F9E /* Application.swift */,
 				870A51B7294702AF0095C7EB /* AppDelegate.swift */,
+				87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */,
 				871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */,
 				871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */,
 			);
@@ -679,6 +682,7 @@
 				87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */,
 				873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */,
 				870A51BC294702AF0095C7EB /* AppDelegate.swift in Sources */,
+				87FAFFD72BE0B6A300FA509D /* AppDelegate+FileSystem.swift in Sources */,
 				8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */,
 				8767BBB5295AD62700BFACAE /* EditorReplaceButtons.swift in Sources */,
 				87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */,

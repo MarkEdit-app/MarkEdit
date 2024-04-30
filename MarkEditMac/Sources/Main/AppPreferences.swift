@@ -34,6 +34,9 @@ enum AppPreferences {
       }
     }
 
+    @Storage(key: "general.granted-folder-bookmark", defaultValue: nil)
+    static var grantedFolderBookmark: Data?
+
     static var quitAlwaysKeepsWindows: Bool {
       get {
         UserDefaults.standard.bool(forKey: "NSQuitAlwaysKeepsWindows")

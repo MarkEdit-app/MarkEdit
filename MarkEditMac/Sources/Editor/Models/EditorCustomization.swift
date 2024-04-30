@@ -52,7 +52,7 @@ final class EditorCustomization {
   }
 
   var contents: String {
-    guard let contents = (try? Data(contentsOf: fileURL))?.toString() else {
+    guard let contents = (try? Data(contentsOf: fileURL.resolvingSymbolicLink))?.toString() else {
       return ""
     }
 
