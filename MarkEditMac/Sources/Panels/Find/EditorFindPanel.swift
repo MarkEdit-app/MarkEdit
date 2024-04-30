@@ -22,7 +22,6 @@ import MarkEditKit
 protocol EditorFindPanelDelegate: AnyObject {
   func editorFindPanel(_ sender: EditorFindPanel, modeDidChange mode: EditorFindMode)
   func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String)
-  func editorFindPanel(_ sender: EditorFindPanel, performOperation operation: SearchOperation)
   func editorFindPanelOperationsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem?
   func editorFindPanelDidChangeOptions(_ sender: EditorFindPanel)
   func editorFindPanelDidPressTabKey(_ sender: EditorFindPanel, isBacktab: Bool)
