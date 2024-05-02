@@ -54,6 +54,16 @@ extension NSSpellChecker {
     )
   }()
 
+  /**
+   Returns true if there's any visible correction panel.
+   */
+  static var hasVisibleCorrectionPanel: Bool {
+    NSApp.windows.contains {
+      // NSCorrectionPanel
+      $0.isVisible && $0.className == ["NSCorrection", "Panel"].joined()
+    }
+  }
+
   func declineCorrectionIndicator(for view: NSView) {
     // It's insane that this method is not public,
     // "dismissCorrectionIndicatorForView:" accepts the proposal, which is not what we want.

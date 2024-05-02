@@ -17,9 +17,15 @@ extension EditorViewController {
         NSSpellChecker.shared.declineCorrectionIndicator(for: self.webView)
       }
 
-      // Press right option to accept inline prediction without adding any punctuations
+      // Press right option
       if event.keyCode == .kVK_RightOption, event.deviceIndependentFlags == .option, let self {
-        self.bridge.completion.acceptInlinePrediction()
+        if NSSpellChecker.hasVisibleCorrectionPanel {
+          // Accept auto correction
+          NSSpellChecker.shared.dismissCorrectionIndicator(for: self.webView)
+        } else {
+          // Accept inline prediction without adding any punctuations
+          self.bridge.completion.acceptInlinePrediction()
+        }
       }
 
       // Press F to potentially change the find mode or switch focus between two fields
