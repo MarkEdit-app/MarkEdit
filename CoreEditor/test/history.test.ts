@@ -1,3 +1,5 @@
+import { EditorView } from '@codemirror/view';
+import { Transaction } from '@codemirror/state';
 import { history, undo, redo } from '@codemirror/commands';
 import { describe, expect, test } from '@jest/globals';
 import { canUndo, canRedo, markContentClean, isContentDirty } from '../src/modules/history';
@@ -51,5 +53,20 @@ describe('History module', () => {
     undo(window.editor);
     undo(window.editor);
     expect(isContentDirty()).toBeTruthy();
+  });
+
+  test('test userEvent for history actions', () => {
+    const annotations: (string | undefined) [] = [];
+    editor.setUp('Hello World', [history(), EditorView.updateListener.of(update => {
+      annotations.push(...update.transactions.map(tr => tr.annotation(Transaction.userEvent)));
+    })]);
+
+    editor.insertText('\n');
+    editor.insertText('\n');
+    undo(window.editor);
+    redo(window.editor);
+
+    expect(annotations).toContain('undo');
+    expect(annotations).toContain('redo');
   });
 });
