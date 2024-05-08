@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { editingState } from '../../common/store';
 import { startCompletion, isPanelVisible } from '../completion';
-import { isContentDirty } from '../history';
+import { isContentDirty, setHistoryExplictlyMoved } from '../history';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
 
@@ -64,6 +64,9 @@ export function observeChanges() {
     }
 
     if (update.docChanged) {
+      // This should be called before updating the native view
+      setHistoryExplictlyMoved(update);
+
       // We need this because we have different line height for headings,
       // CodeMirror doesn't by default fix the offset issue.
       scrollCaretToVisible();

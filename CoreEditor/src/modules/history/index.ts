@@ -1,3 +1,5 @@
+import { ViewUpdate } from '@codemirror/view';
+import { Transaction } from '@codemirror/state';
 import { undo as undoCommand, redo as redoCommand, undoDepth, redoDepth } from '@codemirror/commands';
 
 /**
@@ -26,18 +28,30 @@ export function markContentClean() {
   // This function is called when the user saves the document, we save the current undo depth,
   // as a result, the content is treated as "clean".
   //
-  // When text changes, we use this value to calculate the "isDirty" state.
+  // When text changes, we use these values to determine the "isDirty" state.
   storage.savedUndoDepth = undoDepth(window.editor.state);
+  storage.explictlyMoved = true;
 }
 
 export function isContentDirty() {
-  // The content is "dirty" when the current undo depth is not the same as the saved depth,
+  // The content is "dirty" when the latest change was not directly moving the history, or the current undo depth is not the same as the saved depth,
   // i.e., there're unsaved changes.
-  return storage.savedUndoDepth !== undoDepth(window.editor.state);
+  //
+  // This also means that the content is "clean" when we explicitly move the history cursor at the saved depth.
+  return !storage.explictlyMoved || (storage.savedUndoDepth !== undoDepth(window.editor.state));
+}
+
+export function setHistoryExplictlyMoved(update: ViewUpdate) {
+  storage.explictlyMoved = update.transactions.some(transaction => {
+    const userEvent = transaction.annotation(Transaction.userEvent);
+    return userEvent === 'undo' || userEvent === 'redo';
+  });
 }
 
 const storage: {
   savedUndoDepth: number;
+  explictlyMoved: boolean;
 } = {
   savedUndoDepth: 0,
+  explictlyMoved: false,
 };
