@@ -53,5 +53,5 @@ const storage: {
   explictlyMoved: boolean;
 } = {
   savedUndoDepth: 0,
-  explictlyMoved: false,
+  explictlyMoved: true, // Treat the initial state as "explicitly saved"
 };
