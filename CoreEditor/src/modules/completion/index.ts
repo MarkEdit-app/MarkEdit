@@ -1,6 +1,7 @@
 import { EditorSelection } from '@codemirror/state';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
+import { sleep } from '../../common/utils';
 
 /**
  * The start of a multi-stage completion process:
@@ -80,6 +81,8 @@ export async function acceptInlinePrediction() {
   })();
 
   await window.nativeModules.completion.cancelInlinePrediction();
+  await sleep(10);
+
   const line = editor.state.doc.lineAt(anchor);
   const actual = editor.state.sliceDoc(anchor, line.to);
 

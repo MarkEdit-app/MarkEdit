@@ -1,5 +1,10 @@
 import { Rect } from '@codemirror/view';
 
+export function sleep(milliseconds: number) {
+  // eslint-disable-next-line compat/compat
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 export function getClientRect(rect: Rect) {
   // If the scale is not 1.0, it means that the viewport is not the actual size (e.g., pinch to zoom),
   // we need to take this into account when getting the rect.
