@@ -161,7 +161,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
 
     let url = {
-      // Try url with schemes first, e.g., https://markedit.app
+      // Try url with schemes first, e.g., https://github.com
       if let url = URL(string: link), url.scheme?.isEmpty == false {
         return url
       }
