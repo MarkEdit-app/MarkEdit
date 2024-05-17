@@ -50,8 +50,9 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
     }
   }
 
-  func updateCompletions(_ completions: [String]) {
+  func updateCompletions(_ completions: [String], query: String) {
     state.items = completions
+    state.query = query
   }
 
   func selectedCompletion() -> String {
