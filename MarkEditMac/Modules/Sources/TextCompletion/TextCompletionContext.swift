@@ -45,6 +45,7 @@ public final class TextCompletionContext {
 
   public func updateCompletions(
     _ completions: [String],
+    query: String,
     parentWindow: NSWindow,
     caretRect: CGRect
   ) {
@@ -53,7 +54,7 @@ public final class TextCompletionContext {
     }
 
     // Don't make the list absurdly long
-    panel.updateCompletions(Array(completions.prefix(50)))
+    panel.updateCompletions(Array(completions.prefix(50)), query: query)
     panel.selectTop()
 
     let panelSize = TextCompletionView.panelSize(itemCount: completions.count)

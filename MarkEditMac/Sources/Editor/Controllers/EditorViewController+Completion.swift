@@ -54,7 +54,7 @@ extension EditorViewController {
     }
 
     updateCompletionPanel(isVisible: !completions.isEmpty)
-    updateCompletionPanel(completions: completions.deduplicated)
+    updateCompletionPanel(completions: completions.deduplicated, query: prefix)
   }
 
   func commitCompletion() {
@@ -94,7 +94,7 @@ private extension EditorViewController {
     }
   }
 
-  func updateCompletionPanel(completions: [String]) {
+  func updateCompletionPanel(completions: [String], query: String) {
     guard completionContext.isPanelVisible else {
       return
     }
@@ -104,18 +104,23 @@ private extension EditorViewController {
       //
       // For example, for "Hello", we are showing the panel at position relative to letter "H".
       if let caretRect = try? await bridge.selection.getRect(pos: completionContext.fromIndex) {
-        updateCompletionPanel(completions: completions, caretRect: caretRect.cgRect)
+        updateCompletionPanel(
+          completions: completions,
+          query: query,
+          caretRect: caretRect.cgRect
+        )
       }
     }
   }
 
-  func updateCompletionPanel(completions: [String], caretRect: CGRect) {
+  func updateCompletionPanel(completions: [String], query: String, caretRect: CGRect) {
     guard completionContext.isPanelVisible, let parentWindow = view.window else {
       return
     }
 
     completionContext.updateCompletions(
       completions,
+      query: query,
       parentWindow: parentWindow,
       caretRect: caretRect
     )
