@@ -100,7 +100,7 @@ export function replaceNext() {
 }
 
 export function replaceAll() {
-  performSelectAll();
+  performReplaceAll();
   scrollSearchMatchToVisible();
 }
 
