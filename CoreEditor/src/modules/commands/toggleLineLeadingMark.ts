@@ -10,12 +10,12 @@ import * as selection from '../selection';
 export default function toggleLineLeadingMark(mark: string, level: number) {
   const editor = window.editor;
   const lines = selection.reversedLines();
-  const regex = new RegExp(`^(${mark}+)( +)`);
+  const regex = new RegExp(`^( *)(${mark}+)( +)`);
 
   // Remove all marks only if all lines have exactly the destination level
   const removeMarks = !lines.some(line => {
     const match = line.text.match(regex);
-    return !match || match[1].length !== level;
+    return !match || match[2].length !== level;
   });
 
   // Iterate multiple lines reversely
@@ -26,11 +26,9 @@ export default function toggleLineLeadingMark(mark: string, level: number) {
   //
   // The downside of this approach is that updates are also reversed.
   for (const line of lines) {
-    const replace = (replacement: string) => {
+    const replace = (from: number, to: number, insert: string) => {
       editor.dispatch({
-        changes: {
-          from: line.from, to: line.to, insert: replacement,
-        },
+        changes: { from, to, insert },
       });
     };
 
@@ -39,18 +37,21 @@ export default function toggleLineLeadingMark(mark: string, level: number) {
     const repeatedMarks = mark.repeat(level);
 
     if (match) {
-      if (match[1].length === level) {
+      const from = line.from + match[1].length;
+      const markerLen = match[2].length;
+
+      if (markerLen === level) {
         if (removeMarks) {
-          // E.g., remove the leading "##"
-          replace(text.substring(match[0].length));
+          // E.g., remove the leading "## "
+          replace(from, from + markerLen + match[3].length, '');
         }
       } else {
         // E.g., change "##" to "###"
-        replace(`${repeatedMarks}${text.substring(match[1].length)}`);
+        replace(from, from + markerLen, repeatedMarks);
       }
     } else if (text.length > 0 || lines.length === 1) {
       // E.g., change "hello" to "## hello"
-      replace(`${repeatedMarks} ${text}`);
+      replace(line.from, line.from, repeatedMarks + ' ');
 
       // Place cursor to the end for empty lines
       if (text.length === 0) {
