@@ -57,6 +57,8 @@ export default function toggleListStyle(
 
     // The second pass, figures out the actual updates
     const updates: string[] = [];
+    const movedBy: number[] = [];
+
     literate((match, _, line, index) => {
       const text = line.text;
       if (match) {
@@ -65,9 +67,12 @@ export default function toggleListStyle(
           if (toggled !== undefined) {
             // Toggle between styles
             updates.push(toggled);
+            movedBy.push(toggled.length - text.length);
           } else {
             // Remove the marker directly
-            updates.push(text.substring(match[0].length));
+            const markerLen = match[0].length;
+            updates.push(text.substring(markerLen));
+            movedBy.push(-markerLen);
           }
         } else {
           // Not changed
@@ -75,7 +80,9 @@ export default function toggleListStyle(
         }
       } else if (text.length > 0 || lines.length === 1) {
         // Insert list markers to the front
-        updates.push(`${createMark(index, suggestedMark)} ${removeListMarkers(text)}`);
+        const markedText = `${createMark(index, suggestedMark)} ${removeListMarkers(text)}`;
+        updates.push(markedText);
+        movedBy.push(markedText.length - text.length);
       } else {
         // Not changed
         updates.push(text);
@@ -92,10 +99,14 @@ export default function toggleListStyle(
       },
     });
 
-    // Place cursor to the end for empty lines
-    if (lines.length === 1 && lines[0].text.length === 0) {
+    // Shift selections to ensure that the selected text remains unchanged
+    const anchor = from + (movedBy.length > 0 ? movedBy[0] : 0);
+    const head = to + movedBy.reduce((a, b) => a + b);
+
+    // The shifted range can be invalid, e.g., negative positions
+    if (anchor >= 0 && head <= editor.state.doc.length) {
       editor.dispatch({
-        selection: EditorSelection.cursor(endIndex + updates[0].length),
+        selection: EditorSelection.range(anchor, head),
       });
     }
   }
