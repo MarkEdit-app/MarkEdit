@@ -40,6 +40,9 @@ export function startObserving() {
     link.handleMouseUp(event);
   }, true);
 
+  // Handle edge cases where 'keyup' is not fired
+  document.addEventListener('contextmenu', resetKeyStates);
+
   document.addEventListener('compositionstart', () => {
     editingState.compositionEnded = false;
     storage.selectedTextBeforeCompose = editingState.hasSelection;
