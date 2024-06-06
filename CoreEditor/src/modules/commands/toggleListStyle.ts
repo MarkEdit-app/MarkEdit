@@ -91,6 +91,7 @@ export default function toggleListStyle(
 
     const startIndex = lines[0].from;
     const endIndex = lines.reverse()[0].to;
+    const movedTotal = movedBy.reduce((a, b) => a + b);
 
     // Dispatch all changes altogether
     editor.dispatch({
@@ -99,15 +100,24 @@ export default function toggleListStyle(
       },
     });
 
-    // Shift selections to ensure that the selected text remains unchanged
-    const anchor = from + (movedBy.length > 0 ? movedBy[0] : 0);
-    const head = to + movedBy.reduce((a, b) => a + b);
-
-    // The shifted range can be invalid, e.g., negative positions
-    if (anchor >= 0 && head <= editor.state.doc.length) {
+    // Extend the selection to all affected lines,
+    // because when multiple lines are selected, some list markers are also selected,
+    // we don't have a better way to handle the selection updates.
+    if (lines.length > 1) {
       editor.dispatch({
-        selection: EditorSelection.range(anchor, head),
+        selection: EditorSelection.range(startIndex, endIndex + movedTotal),
       });
+    } else {
+      // Shift selections to ensure that the selected text remains unchanged
+      const anchor = from + (movedBy.length > 0 ? movedBy[0] : 0);
+      const head = to + movedTotal;
+
+      // The shifted range can be invalid, e.g., negative positions
+      if (anchor >= 0 && head <= editor.state.doc.length) {
+        editor.dispatch({
+          selection: EditorSelection.range(anchor, head),
+        });
+      }
     }
   }
 }
