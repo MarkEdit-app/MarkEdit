@@ -40,7 +40,7 @@ export function toggleBlockquote() {
  * Toggle list markers like "- Item", "* Item", or "+ Item".
  */
 export function toggleBullet() {
-  toggleListStyle(() => /^( *[-*+] )/, (_, suggested) => suggested ?? '-');
+  toggleListStyle(() => /^( *[-*+] )(?! *\[[ xX]\]) */, (_, suggested) => suggested ?? '-');
 }
 
 /**
