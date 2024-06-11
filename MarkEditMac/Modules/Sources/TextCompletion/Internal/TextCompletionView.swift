@@ -54,7 +54,6 @@ struct TextCompletionView: View {
                 }())
                 .font(.system(size: Constants.fontSize))
                 .foregroundColor(index == state.selectedIndex ? .white : .label.opacity(0.75))
-                .fixedSize()
                 .padding([.leading, .trailing], Constants.itemPadding)
               }
               .frame(
