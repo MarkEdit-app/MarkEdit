@@ -82,9 +82,8 @@ struct TextCompletionView: View {
               )
             }
           }
-        }
-        .onChange(of: state.selectedIndex) { newIndex in
-          scrollView.scrollTo(newIndex)
+        }.onChange(of: state.selectedIndex) {
+          scrollView.scrollTo(state.selectedIndex)
         }
       }
     }

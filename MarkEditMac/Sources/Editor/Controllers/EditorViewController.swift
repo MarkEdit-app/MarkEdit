@@ -151,7 +151,7 @@ final class EditorViewController: NSViewController {
     let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
     config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
     config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
-    config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
+    config.allowsInlinePredictions = NSSpellChecker.InlineCompletion.webKitEnabled
 
     // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready
     if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
@@ -166,13 +166,10 @@ final class EditorViewController: NSViewController {
     config.userContentController = controller
 
     let webView = EditorWebView(frame: .zero, configuration: config)
+    webView.isInspectable = true
     webView.allowsMagnification = true
     webView.uiDelegate = self
     webView.actionDelegate = self
-
-    if #available(macOS 13.3, *) {
-      webView.isInspectable = true
-    }
 
     // Getting the current theme has to be on main thread
     let theme = AppTheme.current.editorTheme

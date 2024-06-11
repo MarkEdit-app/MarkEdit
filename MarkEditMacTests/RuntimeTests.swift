@@ -37,10 +37,6 @@ final class RuntimeTests: XCTestCase {
   }
 
   func testExistenceOfAutomaticInlineCompletion() {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
     let checker = NSSpellChecker.self
     testExistenceOfSelector(object: checker, selector: "isAutomaticInlineCompletionEnabled")
   }

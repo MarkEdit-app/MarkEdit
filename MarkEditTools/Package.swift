@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
   name: "MarkEditTools",
   platforms: [
-    .iOS(.v16),
-    .macOS(.v13),
+    .iOS(.v17),
+    .macOS(.v14),
   ],
   products: [
     .plugin(name: "SwiftLint", targets: ["SwiftLint"]),

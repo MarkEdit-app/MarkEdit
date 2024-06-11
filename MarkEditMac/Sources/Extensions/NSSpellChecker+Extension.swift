@@ -114,10 +114,6 @@ extension NSSpellChecker {
 @MainActor
 private extension NSSpellChecker {
   static var supportsInlineCompletion: Bool {
-    guard #available(macOS 14.0, *) else {
-      return false
-    }
-
     guard responds(to: InlineCompletion.spellCheckerSelector) else {
       Logger.assertFail("The isAutomaticInlineCompletionEnabled selector was changed")
       return false
@@ -154,16 +150,14 @@ private extension NSSpellChecker {
     let dummyAction = {
       // We previously was able to just ignore the call,
       // since macOS 14, it hangs working with inline predictions.
-      if #available(macOS 14.0, *) {
-        self.swizzled_showCorrectionIndicator(
-          of: type,
-          primaryString: primaryString,
-          alternativeStrings: [],
-          forStringIn: CGRect(x: 1e5, y: 1e5, width: 0, height: 0), // Insane rect to make it invisible
-          view: view,
-          completionHandler: completionBlock
-        )
-      }
+      self.swizzled_showCorrectionIndicator(
+        of: type,
+        primaryString: primaryString,
+        alternativeStrings: [],
+        forStringIn: CGRect(x: 1e5, y: 1e5, width: 0, height: 0), // Insane rect to make it invisible
+        view: view,
+        completionHandler: completionBlock
+      )
     }
 
     // When the option key is held,
