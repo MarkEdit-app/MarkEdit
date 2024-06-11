@@ -963,7 +963,7 @@
     },
     "Ckk-yw-fiv.title" : {
       "comment" : "Class = \"NSWindow\"; title = \"Window\"; ObjectID = \"Ckk-yw-fiv\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
