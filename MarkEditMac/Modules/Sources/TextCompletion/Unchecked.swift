@@ -6,4 +6,4 @@
 
 import Foundation
 
-extension KeyPath: @unchecked Sendable {}
+extension KeyPath: @unchecked @retroactive Sendable {}
