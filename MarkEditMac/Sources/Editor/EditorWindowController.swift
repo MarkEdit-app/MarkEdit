@@ -51,6 +51,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
   func windowDidResize(_ notification: Notification) {
     window?.saveFrame(usingName: windowFrameAutosaveName)
+    editorViewController?.cancelCompletion()
   }
 
   func windowWillClose(_ notification: Notification) {

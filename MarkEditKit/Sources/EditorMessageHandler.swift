@@ -4,19 +4,19 @@
 //  Created by cyan on 12/22/22.
 //
 
-import WebKit
+@preconcurrency import WebKit
 
 /**
  Receive messages sent from the web, execute functions and get back to the web.
  */
-public final class EditorMessageHandler: NSObject, WKScriptMessageHandlerWithReply {
+public final class EditorMessageHandler: NSObject, Sendable, WKScriptMessageHandlerWithReply {
   private let modules: NativeModules
 
   public init(modules: NativeModules) {
     self.modules = modules
   }
 
-  public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage, replyHandler: @escaping (Any?, String?) -> Void) {
+  public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage, replyHandler: @Sendable @escaping (Any?, String?) -> Void) {
     MainActor.assumeIsolated {
       let assertFail: (String) -> Void = { message in
         Logger.assertFail(message)
