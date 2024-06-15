@@ -51,6 +51,11 @@ export function startObserving() {
   document.addEventListener('compositionend', () => {
     editingState.compositionEnded = true;
 
+    // [macOS 15] 'compositionend' is received before the editor is initialized
+    if (typeof window.editor !== 'object') {
+      return;
+    }
+
     // When composition has just finished, the selection is considered empty
     if (storage.selectedTextBeforeCompose) {
       selection.updateActiveLine(false);
