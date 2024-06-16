@@ -1,7 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
-import { sleep } from '../../common/utils';
 
 /**
  * The start of a multi-stage completion process:
@@ -72,29 +71,29 @@ export function invalidateCache() {
   storage.cachedPosition = -1;
 }
 
-export async function acceptInlinePrediction() {
+export function acceptInlinePrediction(prediction: string) {
   const editor = window.editor;
   const anchor = editor.state.selection.main.anchor;
-  const prediction = (() => {
-    const line = editor.state.doc.lineAt(anchor);
-    return editor.state.sliceDoc(anchor, line.to);
-  })();
-
-  await window.nativeModules.completion.cancelInlinePrediction();
-  await sleep(10);
-
   const line = editor.state.doc.lineAt(anchor);
-  const actual = editor.state.sliceDoc(anchor, line.to);
 
-  if (actual !== prediction) {
-    editor.dispatch({
-      changes: {
-        from: anchor,
-        to: line.to,
-        insert: prediction,
-      },
-      selection: EditorSelection.cursor(anchor + prediction.length - actual.length),
-    });
+  // Generate a slice for string comparison.
+  //
+  // For example, we are typing "Hello, ple" and the prediction is "please",
+  // the slice would be "o, ple".
+  const slice = editor.state.sliceDoc(Math.max(line.from, anchor - prediction.length), anchor);
+
+  // Figure out the first offset that makes the substring a prefix of the prediction.
+  //
+  // For the "o, ple" and "please" example, the offset will be 3,
+  // so that we are replacing "ple" with "please" to accept the inline prediction.
+  for (let offset = 0; offset < slice.length; ++offset) {
+    if (prediction.startsWith(slice.substring(offset))) {
+      const from = anchor - slice.length + offset;
+      return editor.dispatch({
+        changes: { from, to: anchor, insert: prediction },
+        selection: EditorSelection.cursor(from + prediction.length),
+      });
+    }
   }
 }
 

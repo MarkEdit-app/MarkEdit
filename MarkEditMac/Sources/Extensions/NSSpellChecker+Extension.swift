@@ -34,6 +34,8 @@ extension NSSpellChecker {
 
     static var spellCheckerEnabled = AppPreferences.Assistant.inlinePredictions
     fileprivate static let spellCheckerSelector = sel_getUid("isAutomaticInlineCompletionEnabled")
+    fileprivate static let beingPresentedSelector = sel_getUid("isAutomaticInlinePredictionBeingPresented")
+    fileprivate static let showCompletionSelector = sel_getUid("showCompletionForCandidate:selectedRange:offset:inString:rect:view:completionHandler:")
   }
 
   @MainActor static let swizzleInlineCompletionEnabledOnce: () = {
@@ -44,6 +46,17 @@ extension NSSpellChecker {
     NSSpellChecker.exchangeClassMethods(
       originalSelector: InlineCompletion.spellCheckerSelector,
       swizzledSelector: #selector(getter: swizzled_isAutomaticInlineCompletionEnabled)
+    )
+  }()
+
+  @MainActor static let swizzleShowCompletionForCandidateOnce: () = {
+    guard #available(macOS 14.0, *) else {
+      return
+    }
+
+    NSSpellChecker.exchangeInstanceMethods(
+      originalSelector: InlineCompletion.showCompletionSelector,
+      swizzledSelector: #selector(swizzled_showCompletion(for:selectedRange:offset:inString:rect: view:completionHandler:))
     )
   }()
 
@@ -64,6 +77,25 @@ extension NSSpellChecker {
     }
   }
 
+  @MainActor
+  func acceptWebKitInlinePrediction(view: NSView, bridge: WebBridgeCompletion) {
+    guard #available(macOS 14.0, *) else {
+      return
+    }
+
+    guard NSSpellChecker.inlineCompletionBeingPresented else {
+      return
+    }
+
+    guard let prediction = NSSpellChecker.webKitInlinePrediction, !prediction.isEmpty else {
+      return
+    }
+
+    declineCorrectionIndicator(for: view)
+    bridge.acceptInlinePrediction(prediction: prediction)
+    NSSpellChecker.webKitInlinePrediction = nil
+  }
+
   func declineCorrectionIndicator(for view: NSView) {
     // It's insane that this method is not public,
     // "dismissCorrectionIndicatorForView:" accepts the proposal, which is not what we want.
@@ -80,6 +112,10 @@ extension NSSpellChecker {
 
 @MainActor
 private extension NSSpellChecker {
+  enum AssociatedObjects {
+    @MainActor static var webKitInlinePrediction: UInt8 = 0
+  }
+
   static var supportsInlineCompletion: Bool {
     guard #available(macOS 14.0, *) else {
       return false
@@ -91,6 +127,33 @@ private extension NSSpellChecker {
     }
 
     return true
+  }
+
+  static var inlineCompletionBeingPresented: Bool {
+    guard #available(macOS 14.0, *) else {
+      return false
+    }
+
+    guard responds(to: InlineCompletion.beingPresentedSelector) else {
+      Logger.assertFail("The isAutomaticInlinePredictionBeingPresented selector was changed")
+      return false
+    }
+
+    return (value(forKey: "\(InlineCompletion.beingPresentedSelector)") as? Bool) == true
+  }
+
+  static var webKitInlinePrediction: String? {
+    get {
+      objc_getAssociatedObject(self, &AssociatedObjects.webKitInlinePrediction) as? String
+    }
+    set {
+      objc_setAssociatedObject(
+        self,
+        &AssociatedObjects.webKitInlinePrediction,
+        newValue,
+        objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
+      )
+    }
   }
 
   @objc static var swizzled_isAutomaticInlineCompletionEnabled: Bool {
@@ -142,6 +205,36 @@ private extension NSSpellChecker {
       primaryString: primaryString,
       alternativeStrings: alternativeStrings,
       forStringIn: rectOfTypedString,
+      view: view,
+      completionHandler: completionBlock
+    )
+  }
+
+  // swiftlint:disable:next function_parameter_count
+  @objc func swizzled_showCompletion(
+    for candidate: NSTextCheckingResult,
+    selectedRange: NSRange,
+    offset: Int,
+    inString string: String,
+    rect: CGRect,
+    view: NSView,
+    completionHandler completionBlock: (([String: Any]?) -> Void)? = nil
+  ) {
+    // Prefer a trailing white space trimmed prediction
+    if view is EditorWebView {
+      NSSpellChecker.webKitInlinePrediction = candidate.replacementString?.replacingOccurrences(
+        of: "\\s+$",
+        with: "",
+        options: .regularExpression
+      )
+    }
+
+    self.swizzled_showCompletion(
+      for: candidate,
+      selectedRange: selectedRange,
+      offset: offset,
+      inString: string,
+      rect: rect,
       view: view,
       completionHandler: completionBlock
     )
