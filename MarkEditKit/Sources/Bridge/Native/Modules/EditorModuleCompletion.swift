@@ -25,7 +25,6 @@ public protocol EditorModuleCompletionDelegate: AnyObject {
   func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectTop(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectBottom(_ sender: EditorModuleCompletion)
-  func editorCompletionCancelInlinePrediction(_ sender: EditorModuleCompletion)
 }
 
 public final class EditorModuleCompletion: NativeModuleCompletion {
@@ -92,10 +91,6 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
 
   public func selectBottom() {
     delegate?.editorCompletionDidSelectBottom(self)
-  }
-
-  public func cancelInlinePrediction() {
-    delegate?.editorCompletionCancelInlinePrediction(self)
   }
 }
 

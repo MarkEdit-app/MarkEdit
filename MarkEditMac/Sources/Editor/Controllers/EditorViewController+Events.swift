@@ -24,7 +24,10 @@ extension EditorViewController {
           NSSpellChecker.shared.dismissCorrectionIndicator(for: self.webView)
         } else {
           // Accept inline prediction without adding any punctuations
-          self.bridge.completion.acceptInlinePrediction()
+          NSSpellChecker.shared.acceptWebKitInlinePrediction(
+            view: self.webView,
+            bridge: self.bridge.completion
+          )
         }
       }
 

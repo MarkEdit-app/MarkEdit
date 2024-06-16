@@ -12,6 +12,7 @@ final class Application: NSApplication {
   static func main() {
     NSObject.swizzleAccessibilityBundlesOnce
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
+    NSSpellChecker.swizzleShowCompletionForCandidateOnce
     NSSpellChecker.swizzleCorrectionIndicatorOnce
 
     let app = Self.shared

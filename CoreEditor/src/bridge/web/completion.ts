@@ -9,7 +9,7 @@ import { startCompletion, setPanelVisible, acceptInlinePrediction } from '../../
 export interface WebModuleCompletion extends WebModule {
   startCompletion({ afterDelay }: { afterDelay: number }): void;
   setState({ panelVisible }: { panelVisible: boolean }): void;
-  acceptInlinePrediction(): void;
+  acceptInlinePrediction({ prediction }: { prediction: string }): void;
 }
 
 export class WebModuleCompletionImpl implements WebModuleCompletion {
@@ -21,7 +21,7 @@ export class WebModuleCompletionImpl implements WebModuleCompletion {
     setPanelVisible(panelVisible);
   }
 
-  acceptInlinePrediction(): void {
-    acceptInlinePrediction();
+  acceptInlinePrediction({ prediction }: { prediction: string }): void {
+    acceptInlinePrediction(prediction);
   }
 }

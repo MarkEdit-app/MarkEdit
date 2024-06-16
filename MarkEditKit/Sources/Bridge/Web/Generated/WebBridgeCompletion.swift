@@ -42,7 +42,15 @@ public final class WebBridgeCompletion {
     webView?.invoke(path: "webModules.completion.setState", message: message, completion: completion)
   }
 
-  public func acceptInlinePrediction(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    webView?.invoke(path: "webModules.completion.acceptInlinePrediction", completion: completion)
+  public func acceptInlinePrediction(prediction: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let prediction: String
+    }
+
+    let message = Message(
+      prediction: prediction
+    )
+
+    webView?.invoke(path: "webModules.completion.acceptInlinePrediction", message: message, completion: completion)
   }
 }
