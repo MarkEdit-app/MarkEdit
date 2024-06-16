@@ -42,19 +42,11 @@ final class RuntimeTests: XCTestCase {
   }
 
   func testExistenceOfAutomaticInlinePredictionBeingPresented() {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
     let checker = NSSpellChecker.self
     testExistenceOfSelector(object: checker, selector: "isAutomaticInlinePredictionBeingPresented")
   }
 
   func testExistenceOfShowCompletionForCandidate() {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
     let checker = NSSpellChecker()
     testExistenceOfSelector(object: checker, selector: "showCompletionForCandidate:selectedRange:offset:inString:rect:view:completionHandler:")
   }

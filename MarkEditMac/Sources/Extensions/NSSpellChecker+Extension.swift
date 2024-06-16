@@ -51,10 +51,6 @@ extension NSSpellChecker {
   }()
 
   @MainActor static let swizzleShowCompletionForCandidateOnce: () = {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
     NSSpellChecker.exchangeInstanceMethods(
       originalSelector: InlineCompletion.showCompletionSelector,
       swizzledSelector: #selector(swizzled_showCompletion(for:selectedRange:offset:inString:rect: view:completionHandler:))
@@ -80,10 +76,6 @@ extension NSSpellChecker {
 
   @MainActor
   func acceptWebKitInlinePrediction(view: WKWebView, bridge: WebBridgeCompletion) {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
     guard NSSpellChecker.inlineCompletionBeingPresented else {
       return
     }
@@ -123,10 +115,6 @@ private extension NSSpellChecker {
   }
 
   static var inlineCompletionBeingPresented: Bool {
-    guard #available(macOS 14.0, *) else {
-      return false
-    }
-
     guard responds(to: InlineCompletion.beingPresentedSelector) else {
       Logger.assertFail("The isAutomaticInlinePredictionBeingPresented selector was changed")
       return false
