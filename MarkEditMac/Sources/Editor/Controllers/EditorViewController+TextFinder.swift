@@ -9,7 +9,11 @@ import AppKit
 import MarkEditKit
 
 extension EditorViewController {
-  func updateTextFinderMode(_ mode: EditorFindMode, searchTerm: String? = nil) {
+  func updateTextFinderMode(
+    _ mode: EditorFindMode,
+    searchTerm: String? = nil,
+    explicitly: Bool = false
+  ) {
     guard !hasUnfinishedAnimations else {
       return
     }
@@ -20,15 +24,20 @@ extension EditorViewController {
     findPanel.searchField.isHidden = isRevisionMode
 
     if mode != .hidden {
-      let textField = mode == .replace ? replacePanel.textField : findPanel.searchField
-      textField.focusRingType = .none
-      textField.startEditing(in: view.window)
+      // When the user explicitly changes the mode to replace (from the find panel menu),
+      // the focus should still be the find field.
+      let textField = (mode == .replace && !explicitly) ? replacePanel.textField : findPanel.searchField
       textField.selectAll()
 
-      // Delay showing the focus ring to make the animation more natural
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-        textField.focusRingType = .default
-        textField.startEditing(in: self.view.window, alwaysRefocus: true)
+      if !textField.isFirstResponder(in: view.window) {
+        textField.focusRingType = .none
+        textField.startEditing(in: view.window)
+
+        // Delay showing the focus ring to make the animation more natural
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+          textField.focusRingType = .default
+          textField.startEditing(in: self.view.window, alwaysRefocus: true)
+        }
       }
     }
 
@@ -39,8 +48,17 @@ extension EditorViewController {
       }
     }
 
-    // If the target mode is find and the current mode is not hidden, we will also skip
-    guard findPanel.mode != mode, mode != .find || findPanel.mode == .hidden else {
+    let needsUpdate = {
+      // From the find panel menu, the user explicitly wants to change the mode
+      if explicitly {
+        return findPanel.mode != mode
+      }
+
+      // If the target mode is find and the current mode is not hidden, we will also skip
+      return findPanel.mode != mode && (mode != .find || findPanel.mode == .hidden)
+    }()
+
+    guard needsUpdate else {
       return
     }
 
@@ -86,9 +104,14 @@ extension EditorViewController {
     }
   }
 
-  func updateTextFinderModeIfNeeded(_ event: NSEvent) {
+  /**
+   Move the focus between two text fields in search panel.
+
+   Returns true to stop event propagation.
+   */
+  func updateTextFinderModeIfNeeded(_ event: NSEvent) -> Bool {
     guard findPanel.isFirstResponder || replacePanel.isFirstResponder else {
-      return
+      return false
     }
 
     // Handle keyboard events when focus is not in the editor
@@ -100,6 +123,8 @@ extension EditorViewController {
     default:
       break
     }
+
+    return true
   }
 
   func updateTextFinderQuery(refocus: Bool = true) {

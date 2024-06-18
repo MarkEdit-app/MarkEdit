@@ -31,11 +31,6 @@ extension EditorViewController {
         }
       }
 
-      // Press F to potentially change the find mode or switch focus between two fields
-      if event.keyCode == .kVK_ANSI_F, let self {
-        self.updateTextFinderModeIfNeeded(event)
-      }
-
       // Press tab key
       if event.keyCode == .kVK_Tab, let self {
         // It looks like contenteditable works differently compared to NSTextView,
@@ -53,6 +48,11 @@ extension EditorViewController {
          event.deviceIndependentFlags == [.option, .command],
          let self, self.view.window != nil {
         self.webView.showInspector()
+      }
+
+      // Press F to potentially change the find mode or switch focus between two fields
+      if event.keyCode == .kVK_ANSI_F, let self, self.updateTextFinderModeIfNeeded(event) {
+        return nil
       }
 
       return event
