@@ -236,7 +236,7 @@ extension EditorViewController: EditorModulePreviewDelegate {
 
 extension EditorViewController: EditorFindPanelDelegate {
   func editorFindPanel(_ sender: EditorFindPanel, modeDidChange mode: EditorFindMode) {
-    updateTextFinderMode(mode)
+    updateTextFinderMode(mode, explicitly: true)
   }
 
   func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String) {
