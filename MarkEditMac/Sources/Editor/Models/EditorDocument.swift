@@ -95,6 +95,23 @@ extension EditorDocument {
     true
   }
 
+  override var fileURL: URL? {
+    get {
+      super.fileURL
+    }
+    set {
+      let wasDraft = super.fileURL == nil && newValue != nil
+      super.fileURL = newValue
+
+      // Newly created files should have a clean state
+      if wasDraft {
+        Task { @MainActor in
+          hostViewController?.handleFileURLChange()
+        }
+      }
+    }
+  }
+
   override var displayName: String? {
     get {
       suggestedFilename ?? super.displayName
