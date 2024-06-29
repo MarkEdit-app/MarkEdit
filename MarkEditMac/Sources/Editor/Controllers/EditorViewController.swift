@@ -276,4 +276,12 @@ extension EditorViewController {
     findPanel.searchField.isHidden = isRevisionMode
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
+
+  func handleFileURLChange() {
+    guard hasBeenEdited else {
+      return
+    }
+
+    bridge.history.markContentClean()
+  }
 }
