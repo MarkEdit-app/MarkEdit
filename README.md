@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/badge/Platform-macOS_13.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit/releases/latest) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
 
-MarkEdit is a free and **open-source** Markdown editor, for macOS. It’s just like _TextEdit_ on Mac but dedicated to `Markdown`.
+MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
 
 ## Installation
 
@@ -14,9 +14,9 @@ Get `MarkEdit.dmg` from the <a href="https://github.com/MarkEdit-app/MarkEdit/re
 
 MarkEdit checks for updates automatically. You can also check manually via the main `MarkEdit` menu, or browse version history [here](https://github.com/MarkEdit-app/MarkEdit/releases).
 
-If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install markedit` in your terminal and you’re all set.
+If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install markedit` in your terminal and you're all set.
 
-> We used to publish MarkEdit to the Mac App Store, [but no longer](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy#be-a-good-macos-citizen). Don’t worry about the security warning; releases are signed with a certificate from an identified developer and [notarized](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution).
+> We used to publish MarkEdit to the Mac App Store, [but no longer](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy#be-a-good-macos-citizen). Don't worry about the security warning; releases are signed with a certificate from an identified developer and [notarized](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution).
 
 ## Platform Compatibility
 
@@ -34,7 +34,7 @@ Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdi
 
 ## What makes MarkEdit different
 
-- Privacy-focused: doesn’t collect any user data
+- Privacy-focused: doesn't collect any user data
 - Native: clean and intuitive, feels right at home on Mac
 - Fast: edits 10 MB files easily
 - Lightweight: installer size is about 3 MB
