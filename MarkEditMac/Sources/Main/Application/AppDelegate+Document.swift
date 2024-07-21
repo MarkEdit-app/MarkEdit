@@ -9,12 +9,17 @@ import AppKit
 
 @MainActor
 extension AppDelegate {
+  enum States {
+    @MainActor static var untitledFileOpenedDate: TimeInterval = 0
+  }
+
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
     switch AppPreferences.General.newWindowBehavior {
     case .openDocument:
       sender.showOpenPanel()
       return false
     case .newDocument:
+      States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate
       return true
     }
   }
@@ -36,5 +41,15 @@ extension AppDelegate {
     }
 
     return menu
+  }
+
+  func createUntitledFileIfNeeded() {
+    // Activating the app also creates a new file if new window behavior is `newDocument`,
+    // prevent duplicate creation from Shortcuts like `CreateNewDocumentIntent`.
+    guard Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.1 else {
+      return
+    }
+
+    NSDocumentController.shared.newDocument(nil)
   }
 }
