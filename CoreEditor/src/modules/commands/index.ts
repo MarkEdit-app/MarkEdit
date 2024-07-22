@@ -64,7 +64,7 @@ export function toggleTodo() {
 
       // Change "- [ ] Item" to "- [x] Item"
       return line.replace(/(- +\[) (\].*)/, '$1x$2');
-    }
+    },
   );
 }
 

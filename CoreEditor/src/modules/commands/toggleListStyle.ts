@@ -12,7 +12,7 @@ import * as selection from '../selection';
 export default function toggleListStyle(
   matches: (index: number) => RegExp,
   createMark: (index: number, suggested?: string) => string,
-  toggleMark?: (line: string) => string | undefined
+  toggleMark?: (line: string) => string | undefined,
 ) {
   const editor = window.editor;
   const selectedRanges = selection.reversedRanges();
