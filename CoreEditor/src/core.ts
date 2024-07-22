@@ -40,7 +40,7 @@ export function resetEditor(
 
   const lineBreak = lineEndings.getLineBreak(
     doc,
-    window.config.defaultLineBreak
+    window.config.defaultLineBreak,
   );
 
   // Returns either the original doc,
