@@ -21,7 +21,7 @@ struct CreateNewDocumentIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult {
-    NSDocumentController.shared.newDocument(nil)
+    NSApp.appDelegate?.createUntitledFileIfNeeded()
     NSApp.activate(ignoringOtherApps: true)
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
