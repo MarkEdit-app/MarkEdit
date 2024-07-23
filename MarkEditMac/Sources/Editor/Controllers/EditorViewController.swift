@@ -10,7 +10,6 @@ import WebKit
 import MarkEditCore
 import MarkEditKit
 import TextCompletion
-import Statistics
 
 final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
@@ -21,13 +20,12 @@ final class EditorViewController: NSViewController {
   var safeAreaObservation: NSKeyValueObservation?
 
   weak var presentedMenu: NSMenu?
-  weak var previewPopover: NSPopover? { // L2DO: This value is unreliable; it becomes `nil` almost immediately after setting it.
+  weak var previewPopover: NSPopover? {
     willSet {
       // Close the existing popover to ensure that only one is presented
       previewPopover?.close()
     }
   }
-  var presentedStatistics: StatisticsController? // L2DO: Making this `weak` doesn’t work either; it’s as unreliable as the above.
 
   var editorText: String? {
     get async {

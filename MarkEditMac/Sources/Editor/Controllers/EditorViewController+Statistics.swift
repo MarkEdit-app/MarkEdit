@@ -22,13 +22,6 @@ extension EditorViewController {
       }
     }
 
-    // L2DO: This might seem to work, but if you dismiss the popover by clicking somewhere other than the Statistics button or menu command, we’re still retaining `presentedStatistics`, so the next time you activate either, we hit this early exit, and nothing happens.
-    if presentedStatistics != nil {
-      dismiss(presentedStatistics)
-      self.presentedStatistics = nil
-      return
-    }
-
     guard let sourceView else {
       Logger.assertFail("Missing sourceView to proceed")
       return
@@ -61,7 +54,6 @@ extension EditorViewController {
           fileSize: Localized.Statistics.fileSize
         )
       )
-      presentedStatistics = statisticsController
       present(statisticsController, asPopoverRelativeTo: sourceView.bounds, of: sourceView, preferredEdge: .maxY, behavior: .transient)
     }
   }

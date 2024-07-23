@@ -223,7 +223,6 @@ private extension EditorViewController {
 
   var statisticsItem: NSToolbarItem {
     .with(identifier: .statistics) { [weak self] in
-//      print("toolbar:", self?.presentedViewControllers ?? "NIL") // L2DO: By the time this code runs, AppKit has already dismissed the previous Statistics popover … unless you click twice quickly to show and immediately hide it. Not helpful.
       self?.toggleStatisticsPopover(sourceView: self?.statisticsSourceView)
     }
   }
