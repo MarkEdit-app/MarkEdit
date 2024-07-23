@@ -23,7 +23,7 @@ final class EditorViewController: NSViewController {
   weak var previewPopover: NSPopover? { // L2DO: This value is unreliable; it becomes `nil` almost immediately after setting it.
     willSet {
       // Close the existing popover to ensure that only one is presented
-      presentedPopover?.close()
+      previewPopover?.close()
     }
   }
 
@@ -224,7 +224,7 @@ final class EditorViewController: NSViewController {
     }
 
     NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
-    presentedPopover?.close()
+    previewPopover?.close()
   }
 
   override var representedObject: Any? {
