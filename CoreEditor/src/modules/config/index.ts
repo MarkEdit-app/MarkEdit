@@ -18,13 +18,15 @@ export function setTheme(name: string) {
 }
 
 export function setFontFace(fontFace: WebFontFace) {
-  window.config.fontFace = fontFace;
   styling.setFontFace(fontFace);
+  window.config.fontFace = fontFace;
+  window.editor.requestMeasure();
 }
 
 export function setFontSize(fontSize: number) {
-  window.config.fontSize = fontSize;
   styling.setFontSize(fontSize);
+  window.config.fontSize = fontSize;
+  window.editor.requestMeasure();
 }
 
 export function setShowLineNumbers(enabled: boolean) {
