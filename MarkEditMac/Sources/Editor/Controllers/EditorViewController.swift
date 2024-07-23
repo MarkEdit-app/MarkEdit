@@ -27,7 +27,7 @@ final class EditorViewController: NSViewController {
       previewPopover?.close()
     }
   }
-  var presentedStatistics: StatisticsController?
+  var presentedStatistics: StatisticsController? // L2DO: Making this `weak` doesn’t work either; it’s as unreliable as the above.
 
   var editorText: String? {
     get async {
