@@ -62,10 +62,10 @@ function getTextIndent(text: string) {
   }
 
   const width = (() => {
-    if (measurableFonts().includes(window.config.fontFace.family)) {
-      return measureTextPreferred(text, font);
+    if (useCanvas(text, window.config.fontFace.family)) {
+      return measureTextCanvas(text, font);
     } else {
-      return measureTextFallback(text, font);
+      return measureTextDOM(text, font);
     }
   })();
 
@@ -73,8 +73,8 @@ function getTextIndent(text: string) {
   return width;
 }
 
-function measureTextPreferred(text: string, font: string) {
-  // Preferred approach, works for built-in fonts
+function measureTextCanvas(text: string, font: string) {
+  // Preferred approach, works for most cases
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
   context.font = font;
 
@@ -82,14 +82,15 @@ function measureTextPreferred(text: string, font: string) {
   return `${width}px`;
 }
 
-function measureTextFallback(text: string, font: string) {
-  // It's similar to context.measureText, with an actual element created to fit more fonts
-  const element = document.createElement('div');
+function measureTextDOM(text: string, font: string) {
+  // It's similar to context.measureText, with an actual element created to fit more scenarios
+  const element = document.createElement('pre'); // Use <pre> to preserve spaces and tabs
+  element.style.tabSize = `${window.editor.state.tabSize}`;
   element.style.position = 'absolute';
   element.style.visibility = 'hidden';
   element.style.left = '-9999px';
   element.style.font = font;
-  element.innerText = text.replace(/ /g, '\u00a0'); // &nbsp;
+  element.innerText = text;
 
   document.body.appendChild(element);
   const width = getComputedStyle(element).width; // This value is rounded
@@ -98,8 +99,8 @@ function measureTextFallback(text: string, font: string) {
   return width;
 }
 
-function measurableFonts() {
-  // measureText doesn't work well with some fonts, e.g., Iosevka
+function useCanvas(text: string, font: string) {
+  // context.measureText doesn't work well with some fonts (like Iosevka), or when the content has tabs
   return [
     'SF Mono',
     'monospace',
@@ -107,7 +108,7 @@ function measurableFonts() {
     'ui-monospace',
     'ui-rounded',
     'ui-serif',
-  ];
+  ].includes(font) && !text.includes('\t');
 }
 
 const storage: {
