@@ -10,6 +10,7 @@ import WebKit
 import MarkEditCore
 import MarkEditKit
 import TextCompletion
+import Statistics
 
 final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
@@ -26,6 +27,7 @@ final class EditorViewController: NSViewController {
       previewPopover?.close()
     }
   }
+  var presentedStatistics: StatisticsController?
 
   var editorText: String? {
     get async {

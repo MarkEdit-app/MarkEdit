@@ -22,6 +22,12 @@ extension EditorViewController {
       }
     }
 
+    if presentedStatistics != nil {
+      dismiss(presentedStatistics) // L2DO: This doesn’t work either, because by the time this code runs, AppKit has already closed the popover.
+      self.presentedStatistics = nil
+      return
+    }
+
     guard let sourceView else {
       Logger.assertFail("Missing sourceView to proceed")
       return
@@ -54,7 +60,17 @@ extension EditorViewController {
           fileSize: Localized.Statistics.fileSize
         )
       )
+      NotificationCenter.default.removeObserver(self, name: NSPopover.didCloseNotification, object: nil)
+      NotificationCenter.default.addObserver(self, selector: #selector(popoverDidClose), name: NSPopover.didCloseNotification, object: nil)
+      presentedStatistics = statisticsController
       present(statisticsController, asPopoverRelativeTo: sourceView.bounds, of: sourceView, preferredEdge: .maxY, behavior: .transient)
+    }
+  }
+
+  @objc private func popoverDidClose(_ notification: Notification) {
+//    print("closed:", notification.object ?? "NO OBJECT")
+    if let popover = notification.object as? NSPopover, popover.contentViewController is StatisticsController {
+      presentedStatistics = nil
     }
   }
 }
