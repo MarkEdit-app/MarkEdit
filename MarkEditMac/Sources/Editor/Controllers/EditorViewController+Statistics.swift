@@ -11,9 +11,15 @@ import Statistics
 
 extension EditorViewController {
   func toggleStatisticsPopover(sourceView: NSView?) {
-    if presentedPopover?.contentViewController is StatisticsController {
-      presentedPopover?.close()
-      return
+    if let presentedViewControllers {
+      var didHide = false
+      for presented in presentedViewControllers where presented is StatisticsController {
+        dismiss(presented)
+        didHide = true
+      }
+      if didHide {
+        return
+      }
     }
 
     guard let sourceView else {
@@ -35,9 +41,7 @@ extension EditorViewController {
         )
       }()
 
-      let popover = NSPopover()
-      popover.behavior = .transient
-      popover.contentViewController = StatisticsController(
+      let statisticsController = StatisticsController(
         sourceText: sourceText,
         fileURL: fileURL,
         localizable: StatisticsLocalizable(
@@ -50,9 +54,7 @@ extension EditorViewController {
           fileSize: Localized.Statistics.fileSize
         )
       )
-
-      presentedPopover = popover
-      popover.show(relativeTo: sourceView.bounds, of: sourceView, preferredEdge: .maxY)
+      present(statisticsController, asPopoverRelativeTo: sourceView.bounds, of: sourceView, preferredEdge: .maxY, behavior: .transient)
     }
   }
 }
