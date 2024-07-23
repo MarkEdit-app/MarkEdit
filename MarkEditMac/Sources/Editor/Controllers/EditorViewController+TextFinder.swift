@@ -118,13 +118,13 @@ extension EditorViewController {
     switch event.deviceIndependentFlags {
     case .command:
       updateTextFinderMode(.find)
+      return true
     case [.option, .command]:
       updateTextFinderMode(.replace)
+      return true
     default:
-      break
+      return false
     }
-
-    return true
   }
 
   func updateTextFinderQuery(refocus: Bool = true) {
