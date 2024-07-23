@@ -20,7 +20,7 @@ final class EditorViewController: NSViewController {
   var safeAreaObservation: NSKeyValueObservation?
 
   weak var presentedMenu: NSMenu?
-  weak var presentedPopover: NSPopover? {
+  weak var previewPopover: NSPopover? { // L2DO: This value is unreliable; it becomes `nil` almost immediately after setting it.
     willSet {
       // Close the existing popover to ensure that only one is presented
       presentedPopover?.close()
