@@ -54,7 +54,14 @@ extension EditorViewController {
           fileSize: Localized.Statistics.fileSize
         )
       )
-      present(statisticsController, asPopoverRelativeTo: sourceView.bounds, of: sourceView, preferredEdge: .maxY, behavior: .semitransient)
+
+      present(
+        statisticsController,
+        asPopoverRelativeTo: sourceView.bounds,
+        of: sourceView,
+        preferredEdge: .maxY,
+        behavior: .semitransient
+      )
     }
   }
 }
