@@ -11,15 +11,9 @@ import Statistics
 
 extension EditorViewController {
   func toggleStatisticsPopover(sourceView: NSView?) {
-    if let presentedViewControllers {
-      var didHide = false
-      for presented in presentedViewControllers where presented is StatisticsController {
-        dismiss(presented)
-        didHide = true
-      }
-      if didHide {
-        return
-      }
+    if let presentedStatistics = presentedViewControllers?.filter({ $0 is StatisticsController }), !presentedStatistics.isEmpty {
+      presentedStatistics.forEach { dismiss($0) }
+      return
     }
 
     guard let sourceView else {
