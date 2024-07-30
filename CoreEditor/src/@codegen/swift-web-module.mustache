@@ -41,8 +41,10 @@ public final class {{moduleName}} {
     {{/parameters.length}}
     {{#returnType}}
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}"{{#parameters.length}}, message: message{{/parameters.length}}) {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}"{{#parameters.length}}, message: message{{/parameters.length}}) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
     {{/returnType}}

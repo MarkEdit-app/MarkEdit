@@ -20,8 +20,10 @@ public final class WebBridgeLineEndings {
 
   public func getLineEndings() async throws -> LineEndings {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.lineEndings.getLineEndings") {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.lineEndings.getLineEndings") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }

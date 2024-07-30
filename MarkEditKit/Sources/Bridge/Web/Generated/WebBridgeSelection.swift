@@ -20,8 +20,10 @@ public final class WebBridgeSelection {
 
   public func getText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.selection.getText") {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.selection.getText") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }
@@ -36,8 +38,10 @@ public final class WebBridgeSelection {
     )
 
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.selection.getRect", message: message) {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.selection.getRect", message: message) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }

@@ -20,8 +20,10 @@ public final class WebBridgeTableOfContents {
 
   public func getTableOfContents() async throws -> [HeadingInfo] {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.toc.getTableOfContents") {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.toc.getTableOfContents") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }
