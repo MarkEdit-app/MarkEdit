@@ -126,6 +126,15 @@ final class EditorViewController: NSViewController {
     let config: WKWebViewConfiguration = .newConfig()
     config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
 
+    // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready
+    if #available(macOS 15.1, *) {
+      if config.responds(to: sel_getUid("setWritingToolsBehavior:")) {
+        config.setValue(1, forKey: "writingToolsBehavior")
+      } else {
+        Logger.assertFail("Missing setWritingToolsBehavior: method in WKWebViewConfiguration")
+      }
+    }
+
     config.processPool = EditorReusePool.shared.processPool
     config.userContentController = controller
 
@@ -283,5 +292,9 @@ extension EditorViewController {
     }
 
     bridge.history.markContentClean()
+  }
+
+  func setHistoryIgnoreBeforeInput(value: Bool) {
+    bridge.history.setIgnoreBeforeInput(value: value)
   }
 }
