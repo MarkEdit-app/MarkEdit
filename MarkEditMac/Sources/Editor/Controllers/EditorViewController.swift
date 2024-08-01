@@ -20,6 +20,7 @@ final class EditorViewController: NSViewController {
   var bottomPanelHeight: Double = 0
   var webBackgroundColor: NSColor?
   var localEventMonitor: Any?
+  var writingToolsObservation: NSKeyValueObservation?
   var safeAreaObservation: NSKeyValueObservation?
   var userDefinedMenuItems = [EditorMenuItem]()
 
@@ -182,6 +183,17 @@ final class EditorViewController: NSViewController {
       DispatchQueue.main.async {
         // Non-nil baseURL is required by scenarios like opening local files
         webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
+      }
+    }
+
+    // [macOS 15] Detect WritingTools visibility to work around issues
+    if #available(macOS 15.1, *) {
+      writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
+        guard let self else {
+          return
+        }
+
+        self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
       }
     }
 

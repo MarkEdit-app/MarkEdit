@@ -26,11 +26,6 @@ public extension NSWindow {
     }
   }
 
-  var isWritingToolsWindow: Bool {
-    // WTWritingToolsViewController
-    contentViewController?.className.contains("WritingTools") == true
-  }
-
   /// Change the frame size, treat the top-left corner as the anchor point.
   func setFrameSize(_ target: CGSize, display flag: Bool = false, animated: Bool = false) {
     let size = frameRect(forContentRect: CGRect(origin: .zero, size: target)).size
