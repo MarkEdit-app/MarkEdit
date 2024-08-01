@@ -44,6 +44,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
+  private var isWritingToolsActive = false
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     NSApp.appearance = AppPreferences.General.appearance.resolved()
@@ -63,6 +64,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       name: NSWindow.didResignKeyNotification,
       object: nil
     )
+
+    // [macOS 15] Detect WritingTools visibility (fragile), with Xcode 16 we use KVO instead
+    if #available(macOS 15.1, *) {
+      NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(windowDidUpdate(_:)),
+        name: NSWindow.didUpdateNotification,
+        object: nil
+      )
+    }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       EditorReusePool.shared.warmUp()
@@ -96,6 +107,28 @@ private extension AppDelegate {
         NSApp.closeOpenPanels()
       }
     }
+  }
+
+  @objc func windowDidUpdate(_ notification: Notification) {
+    guard let editor = NSApp.mainWindow?.contentViewController as? EditorViewController else {
+      return
+    }
+
+    guard let window = notification.object as? NSWindow, window.isWritingToolsWindow else {
+      return
+    }
+
+    guard isWritingToolsActive != window.isVisible else {
+      return
+    }
+
+    isWritingToolsActive = window.isVisible
+    editor.setHistoryIgnoreBeforeInput(value: isWritingToolsActive)
+
+    // Invisible rendering doesn't work well with WritingTools, temporarily disable it for now
+    editor.setInvisiblesBehavior(
+      behavior: isWritingToolsActive ? .never : AppPreferences.Editor.invisiblesBehavior
+    )
   }
 
   @IBAction func checkForUpdates(_ sender: Any?) {

@@ -45,4 +45,16 @@ public final class WebBridgeHistory {
   public func markContentClean(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.history.markContentClean", completion: completion)
   }
+
+  public func setIgnoreBeforeInput(value: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let value: Bool
+    }
+
+    let message = Message(
+      value: value
+    )
+
+    webView?.invoke(path: "webModules.history.setIgnoreBeforeInput", message: message, completion: completion)
+  }
 }

@@ -11,17 +11,19 @@ import {
 
 import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
-import { history, defaultKeymap, historyKeymap } from '@codemirror/commands';
+import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
+import { history, historyKeymap } from './@vendor/commands/history';
 
 import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { gutterExtensions } from './styling/nodes/gutter';
 
+import { getIgnoreBeforeInput } from './modules/history';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
@@ -83,7 +85,7 @@ function fullExtensions(options: { lineBreak?: string }) {
 
     // Basic
     highlightSpecialChars(),
-    history(),
+    history({ ignoreBeforeInput: () => getIgnoreBeforeInput() }),
     drawSelection({ cursorBlinkRate: 1000 }),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
