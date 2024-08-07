@@ -47,6 +47,7 @@ export interface Config {
   focusMode: boolean;
   lineWrapping: boolean;
   lineHeight: number;
+  indentParagraphs: boolean;
   suggestWhileTyping: boolean;
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
@@ -66,6 +67,7 @@ export interface Dynamics {
   selectedLines?: Compartment;
   lineWrapping?: Compartment;
   lineEndings?: Compartment;
+  indentParagraphs?: Compartment;
   indentUnit?: Compartment;
   selectionHighlight?: Compartment;
 }

@@ -3,7 +3,7 @@ import { classHighlighter, tagHighlighter, styleTags } from '@lezer/highlight';
 import { MarkdownConfig } from '@lezer/markdown';
 import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdownMathParser';
 import { tags } from './builder';
-import { contentIndentStyle } from './nodes/indent';
+import { listIndentStyle } from './nodes/indent';
 import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './nodes/code';
 import { linkStyle } from './nodes/link';
 import { previewTable, tableStyle } from './nodes/table';
@@ -60,7 +60,7 @@ export const renderExtensions = [
   inlineCodeStyle,
   codeBlockStyle,
   linkStyle,
-  contentIndentStyle,
+  listIndentStyle,
   tableStyle,
   frontMatterStyle,
 ];

@@ -6,6 +6,7 @@ import { refreshEditFocus } from '../modules/selection';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
 import { lineIndicatorLayer } from './nodes/line';
+import { paragraphIndentStyle } from './nodes/indent';
 import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
@@ -183,6 +184,15 @@ export function setLineHeight(lineHeight: number) {
   }
 
   updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight * 100}%`);
+}
+
+export function setIndentParagraphs(enabled: boolean) {
+  const editor = window.editor as EditorView | null;
+  if (typeof editor?.dispatch === 'function') {
+    editor.dispatch({
+      effects: window.dynamics.indentParagraphs?.reconfigure(enabled ? paragraphIndentStyle : []),
+    });
+  }
 }
 
 export function setGutterHovered(hovered: boolean) {

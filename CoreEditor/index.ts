@@ -39,6 +39,7 @@ const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
   focusMode: false,
   lineWrapping: true,
   lineHeight: 1.5,
+  indentParagraphs: true,
   suggestWhileTyping: false,
   localizable: {
     previewButtonTitle: 'preview',

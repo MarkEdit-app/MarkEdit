@@ -259,6 +259,7 @@ extension AppPreferences {
       focusMode: Editor.focusMode,
       lineWrapping: Editor.lineWrapping,
       lineHeight: Editor.lineHeight.multiplier,
+      indentParagraphs: false,
       suggestWhileTyping: Assistant.suggestWhileTyping,
       defaultLineBreak: General.defaultLineEndings.characters,
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,

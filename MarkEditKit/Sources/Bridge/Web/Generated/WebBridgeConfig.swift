@@ -150,6 +150,18 @@ public final class WebBridgeConfig {
     webView?.invoke(path: "webModules.config.setLineHeight", message: message, completion: completion)
   }
 
+  public func setIndentParagraphs(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let enabled: Bool
+    }
+
+    let message = Message(
+      enabled: enabled
+    )
+
+    webView?.invoke(path: "webModules.config.setIndentParagraphs", message: message, completion: completion)
+  }
+
   public func setDefaultLineBreak(lineBreak: String?, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let lineBreak: String?
