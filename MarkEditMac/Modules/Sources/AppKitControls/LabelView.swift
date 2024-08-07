@@ -7,8 +7,8 @@
 import AppKit
 
 public final class LabelView: NSTextField {
-  init() {
-    super.init(frame: .zero)
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     backgroundColor = .clear
     isBordered = false
     isEditable = false

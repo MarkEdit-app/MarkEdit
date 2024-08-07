@@ -7,10 +7,10 @@
 import AppKit
 
 public final class TitleOnlyButton: NonBezelButton {
-  public let labelView = LabelView()
+  public let labelView = LabelView(frame: .zero)
 
   public init(title: String? = nil, fontSize: Double? = nil) {
-    super.init()
+    super.init(frame: .zero)
 
     labelView.stringValue = title ?? ""
     labelView.translatesAutoresizingMaskIntoConstraints = false

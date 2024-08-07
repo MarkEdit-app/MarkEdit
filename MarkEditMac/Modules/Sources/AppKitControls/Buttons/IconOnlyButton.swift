@@ -13,7 +13,7 @@ public final class IconOnlyButton: NonBezelButton {
     iconHeight: Double? = nil,
     accessibilityLabel: String? = nil
   ) {
-    super.init()
+    super.init(frame: .zero)
     toolTip = accessibilityLabel
 
     if let iconImage = NSImage(systemSymbolName: symbolName, accessibilityDescription: accessibilityLabel) {

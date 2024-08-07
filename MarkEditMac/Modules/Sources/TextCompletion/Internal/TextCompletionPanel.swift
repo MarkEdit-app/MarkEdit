@@ -26,7 +26,7 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
       commitCompletion: commitCompletion
     ))
 
-    let contentView = ContentView()
+    let contentView = ContentView(frame: .zero)
     contentView.addSubview(mainView)
 
     self.mainView = mainView
@@ -79,8 +79,8 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
 // MARK: - Private
 
 private final class ContentView: NSView {
-  init() {
-    super.init(frame: .zero)
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     wantsLayer = true
     layer?.cornerCurve = .continuous
     layer?.cornerRadius = 5

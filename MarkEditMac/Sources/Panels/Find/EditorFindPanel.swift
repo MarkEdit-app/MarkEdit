@@ -33,7 +33,7 @@ final class EditorFindPanel: EditorPanelView {
   weak var delegate: EditorFindPanelDelegate?
   var mode: EditorFindMode = .hidden
   var numberOfItems: Int = 0
-  let searchField = LabeledSearchField()
+  let searchField = LabeledSearchField(frame: .zero)
 
   private(set) lazy var findButtons = EditorFindButtons(
     leftAction: { [weak self] in
