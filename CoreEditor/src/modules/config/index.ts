@@ -88,6 +88,11 @@ export function setLineHeight(lineHeight: number) {
   styling.setLineHeight(lineHeight);
 }
 
+export function setIndentParagraphs(enabled: boolean) {
+  window.config.indentParagraphs = enabled;
+  styling.setIndentParagraphs(enabled);
+}
+
 export function setDefaultLineBreak(lineBreak?: string) {
   window.config.defaultLineBreak = lineBreak;
 }

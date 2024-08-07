@@ -22,6 +22,7 @@ public struct EditorConfig: Encodable {
   let focusMode: Bool
   let lineWrapping: Bool
   let lineHeight: Double
+  let indentParagraphs: Bool
   let suggestWhileTyping: Bool
   let defaultLineBreak: String?
   let tabKeyBehavior: Int?
@@ -41,6 +42,7 @@ public struct EditorConfig: Encodable {
     focusMode: Bool,
     lineWrapping: Bool,
     lineHeight: Double,
+    indentParagraphs: Bool,
     suggestWhileTyping: Bool,
     defaultLineBreak: String?,
     tabKeyBehavior: Int?,
@@ -59,6 +61,7 @@ public struct EditorConfig: Encodable {
     self.focusMode = focusMode
     self.lineWrapping = lineWrapping
     self.lineHeight = lineHeight
+    self.indentParagraphs = indentParagraphs
     self.suggestWhileTyping = suggestWhileTyping
     self.defaultLineBreak = defaultLineBreak
     self.tabKeyBehavior = tabKeyBehavior

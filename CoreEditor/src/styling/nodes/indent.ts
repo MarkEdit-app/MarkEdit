@@ -1,4 +1,5 @@
 import { Decoration } from '@codemirror/view';
+import { Line } from '@codemirror/state';
 import { createDecoPlugin } from '../helper';
 import { createDecos } from '../matchers/lezer';
 
@@ -8,24 +9,50 @@ const className = 'cm-md-contentIndent';
 /**
  * Content indentation for lists and blockquotes, content is always aligned to marks for soft breaks.
  */
-export const contentIndentStyle = createDecoPlugin(() => {
+export const listIndentStyle = createDecoPlugin(() => {
   return createDecos(['ListMark', 'QuoteMark'], markNode => {
-    // Fail fast if line wrapping is disabled
-    if (!window.config.lineWrapping) {
-      return null;
-    }
-
     const editor = window.editor;
     const line = editor.state.doc.lineAt(markNode.from);
-    const text = line.text;
 
     // For example: " 1.  Hello",
     // we need to find the position of the last whitespace before "H".
     //
     // As a result, we will use " 1.  " to calculate the indent.
-    let index = markNode.to - line.from;
-    while (text.charAt(index) === ' ' && index < text.length) {
-      ++index;
+    return createLineIndentDeco(line, markNode.to - line.from);
+  });
+});
+
+/**
+ * Content indentation for paragraphs and code blocks (with 4 spaces), content is aligned to the first non-white character.
+ */
+export const paragraphIndentStyle = createDecoPlugin(() => {
+  return createDecos(['Paragraph', 'CodeBlock'], node => {
+    const editor = window.editor;
+    const line = editor.state.doc.lineAt(node.from);
+
+    // For example: "    Hello",
+    // we need to find the position of the first non-white character.
+    //
+    // As a result, we will use "    " to calculate the indent.
+    return createLineIndentDeco(line, 0);
+  });
+});
+
+function createLineIndentDeco(line: Line, from: number) {
+  // Fail fast if line wrapping is disabled
+  if (!window.config.lineWrapping) {
+    return null;
+  }
+
+  const text = line.text;
+  for (let index = from; index < text.length; ++index) {
+    const ch = text.charAt(index);
+    if (ch === ' ' || ch === '\t') {
+      continue;
+    }
+
+    if (index === from) {
+      return null;
     }
 
     const indent = getTextIndent(text.substring(0, index));
@@ -50,8 +77,10 @@ export const contentIndentStyle = createDecoPlugin(() => {
     // Instead, use line ranges to create line decorations for the current line,
     // because items are separated by line breaks.
     return deco.range(line.from, line.from);
-  });
-});
+  }
+
+  return null;
+}
 
 function getTextIndent(text: string) {
   const font = `${window.config.fontSize}px ${window.config.fontFace.family}`;

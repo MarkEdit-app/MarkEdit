@@ -14,6 +14,7 @@ import {
   setFocusMode,
   setLineWrapping,
   setLineHeight,
+  setIndentParagraphs,
   setDefaultLineBreak,
   setTabKeyBehavior,
   setIndentUnit,
@@ -37,6 +38,7 @@ export interface WebModuleConfig extends WebModule {
   setFocusMode({ enabled }: { enabled: boolean }): void;
   setLineWrapping({ enabled }: { enabled: boolean }): void;
   setLineHeight({ lineHeight }: { lineHeight: number }): void;
+  setIndentParagraphs({ enabled }: { enabled: boolean }): void;
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void;
   setTabKeyBehavior({ behavior }: { behavior: TabKeyBehavior }): void;
   setIndentUnit({ unit }: { unit: string }): void;
@@ -86,6 +88,10 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setLineHeight({ lineHeight }: { lineHeight: number }): void {
     setLineHeight(lineHeight);
+  }
+
+  setIndentParagraphs({ enabled }: { enabled: boolean }): void {
+    setIndentParagraphs(enabled);
   }
 
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void {
