@@ -11,14 +11,14 @@ public final class LabeledSearchField: NSSearchField {
   private let bezelView = BezelView()
 
   private let labelView = {
-    let label = LabelView()
+    let label = LabelView(frame: .zero)
     label.font = .systemFont(ofSize: 10)
     label.textColor = .secondaryLabelColor
     return label
   }()
 
-  public init() {
-    super.init(frame: .zero)
+  override public init(frame: CGRect) {
+    super.init(frame: frame)
     usesSingleLineMode = false
     addSubview(bezelView)
     addSubview(labelView)
