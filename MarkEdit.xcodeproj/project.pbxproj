@@ -56,6 +56,7 @@
 		8767BBB5295AD62700BFACAE /* EditorReplaceButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */; };
 		8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8772E384294AC60D00111E83 /* EditorReusePool.swift */; };
 		8775A77B29867012005867BF /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 8775A77A29867012005867BF /* FontPicker */; };
+		877B965D2C63815000186414 /* AppHotKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B965C2C63815000186414 /* AppHotKeys.swift */; };
 		8780AC182982554800065EF4 /* SettingTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC172982554800065EF4 /* SettingTabs.swift */; };
 		8780AC1C29829EDD00065EF4 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */; };
 		8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */; };
@@ -173,6 +174,7 @@
 		8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Delegate.swift"; sourceTree = "<group>"; };
 		8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceButtons.swift; sourceTree = "<group>"; };
 		8772E384294AC60D00111E83 /* EditorReusePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReusePool.swift; sourceTree = "<group>"; };
+		877B965C2C63815000186414 /* AppHotKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHotKeys.swift; sourceTree = "<group>"; };
 		8780AC172982554800065EF4 /* SettingTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTabs.swift; sourceTree = "<group>"; };
 		8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSettingsView.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 			children = (
 				871C99592973F1C2003FF3A7 /* Application */,
 				87DCB61F2B284AAD00A3056F /* AppHacks.swift */,
+				877B965C2C63815000186414 /* AppHotKeys.swift */,
 				873D6401295FCC3E0095DEF7 /* AppResources.swift */,
 				87DE081A294DDA49004AD33A /* AppTheme.swift */,
 				87AAEE0129585ADC00C8E61C /* AppPreferences.swift */,
@@ -706,6 +709,7 @@
 				8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */,
 				873126E4297BAC9C001521A0 /* EditorViewController+Pandoc.swift in Sources */,
 				87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */,
+				877B965D2C63815000186414 /* AppHotKeys.swift in Sources */,
 				87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */,
 				87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */,
 				8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */,
