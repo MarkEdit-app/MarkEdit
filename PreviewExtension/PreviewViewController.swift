@@ -87,6 +87,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       lineHeight: 1.4,
       indentParagraphs: false,
       suggestWhileTyping: false,
+      autoCharacterPairs: false,
       defaultLineBreak: nil,
       tabKeyBehavior: nil,
       indentUnit: nil,

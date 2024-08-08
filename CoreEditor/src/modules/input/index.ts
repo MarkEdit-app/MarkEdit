@@ -36,7 +36,7 @@ export function interceptInputs() {
 
   return EditorView.inputHandler.of((editor, _from, _to, insert) => {
     // E.g., wrap "selection" as "*selection*"
-    if (marksToWrap.includes(insert)) {
+    if (window.config.autoCharacterPairs && marksToWrap.includes(insert)) {
       return wrapBlock(insert, editor);
     }
 
