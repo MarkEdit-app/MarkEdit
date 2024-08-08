@@ -41,6 +41,7 @@ const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
   lineHeight: 1.5,
   indentParagraphs: true,
   suggestWhileTyping: false,
+  autoCharacterPairs: true,
   localizable: {
     previewButtonTitle: 'preview',
     cmdClickToOpenLink: '⌘-click to open link',

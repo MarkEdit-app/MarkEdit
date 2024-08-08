@@ -13,7 +13,7 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
-import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { closeBrackets as closeBracketsExtension, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
@@ -47,6 +47,7 @@ const lineEndings = new Compartment;
 const indentParagraphs = new Compartment;
 const indentUnit = new Compartment;
 const selectionHighlight = new Compartment;
+const closeBrackets = new Compartment;
 
 window.dynamics = {
   theme,
@@ -95,7 +96,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
     indentOnInput(),
     bracketMatching(),
-    closeBrackets(),
+    closeBrackets.of(window.config.autoCharacterPairs ? closeBracketsExtension() : []),
     rectangularSelection(),
     crosshairCursor(),
     activeLine.of(window.config.showActiveLineIndicator ? lineIndicatorLayer : []),

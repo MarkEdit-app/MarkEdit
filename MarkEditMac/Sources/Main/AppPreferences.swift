@@ -261,6 +261,7 @@ extension AppPreferences {
       lineHeight: Editor.lineHeight.multiplier,
       indentParagraphs: false,
       suggestWhileTyping: Assistant.suggestWhileTyping,
+      autoCharacterPairs: true,
       defaultLineBreak: General.defaultLineEndings.characters,
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,

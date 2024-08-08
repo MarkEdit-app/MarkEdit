@@ -49,6 +49,7 @@ export interface Config {
   lineHeight: number;
   indentParagraphs: boolean;
   suggestWhileTyping: boolean;
+  autoCharacterPairs: boolean;
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;
@@ -70,6 +71,7 @@ export interface Dynamics {
   indentParagraphs?: Compartment;
   indentUnit?: Compartment;
   selectionHighlight?: Compartment;
+  closeBrackets?: Compartment;
 }
 
 export type { WebFontFace };
