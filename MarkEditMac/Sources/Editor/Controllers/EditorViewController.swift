@@ -152,8 +152,8 @@ final class EditorViewController: NSViewController {
     DispatchQueue.global(qos: .userInitiated).async {
       let html = [
         AppPreferences.editorConfig(theme: theme).toHtml,
-        EditorCustomization.style.contents,
-        EditorCustomization.script.contents,
+        AppCustomization.style.contents,
+        AppCustomization.script.contents,
       ].joined(separator: "\n\n")
 
       DispatchQueue.main.async {

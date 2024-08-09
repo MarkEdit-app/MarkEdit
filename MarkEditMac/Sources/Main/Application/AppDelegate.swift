@@ -56,7 +56,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     startAccessingGrantedFolder()
     UserDefaults.overwriteTextCheckerOnce()
-    EditorCustomization.createFiles()
+    AppCustomization.createFiles()
 
     NotificationCenter.default.addObserver(
       self,
@@ -73,6 +73,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         name: NSWindow.didUpdateNotification,
         object: nil
       )
+    }
+
+    // Register global hot key to activate the document window, if provided
+    if let hotKey = AppRuntimeConfig.mainWindowHotKey {
+      AppHotKeys.register(keyEquivalent: hotKey.key, modifiers: hotKey.modifiers) {
+        self.toggleDocumentWindowVisibility()
+      }
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {

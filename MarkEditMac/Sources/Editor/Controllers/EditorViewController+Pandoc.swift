@@ -16,7 +16,7 @@ extension EditorViewController {
       return
     }
 
-    let configPath = EditorCustomization.pandoc.fileURL.escapedFilePath
+    let configPath = AppCustomization.pandoc.fileURL.escapedFilePath
     let outputPath = inputURL.replacingPathExtension(format).escapedFilePath
 
     let command = [
