@@ -9,19 +9,8 @@ import AppKit
 
 @MainActor
 extension AppDelegate {
-  enum States {
-    @MainActor static var untitledFileOpenedDate: TimeInterval = 0
-  }
-
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
-    switch AppPreferences.General.newWindowBehavior {
-    case .openDocument:
-      sender.showOpenPanel()
-      return false
-    case .newDocument:
-      States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate
-      return true
-    }
+    openOrCreateDocument(sender: sender)
   }
 
   func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
@@ -51,5 +40,54 @@ extension AppDelegate {
     }
 
     NSDocumentController.shared.newDocument(nil)
+  }
+
+  func toggleDocumentWindowVisibility() {
+    // Order out immaterial windows like settings, about...
+    for window in NSApp.windows where !(window is EditorWindow) {
+      window.orderOut(nil)
+    }
+
+    let windows = NSApp.windows.filter {
+      $0 is EditorWindow
+    }
+
+    if windows.isEmpty {
+      // Open a new window if we don't have any editor windows
+      openOrCreateDocument()
+    } else if windows.contains(where: { $0.isKeyWindow }) {
+      // Hide the app if there was already a key editor window
+      NSApp.hide(nil)
+    } else {
+      // Ensure one editor window is key and ordered front, if exists, called after NSApp.activate
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+        let windows = NSApp.windows.filter { $0 is EditorWindow }
+        if windows.allSatisfy({ !$0.isKeyWindow }) {
+          windows.first?.makeKeyAndOrderFront(nil)
+        }
+      }
+    }
+
+    NSApp.activate(ignoringOtherApps: true)
+  }
+}
+
+// MARK: - Private
+
+private extension AppDelegate {
+  enum States {
+    @MainActor static var untitledFileOpenedDate: TimeInterval = 0
+  }
+
+  @discardableResult
+  func openOrCreateDocument(sender: NSApplication = NSApp) -> Bool {
+    switch AppPreferences.General.newWindowBehavior {
+    case .openDocument:
+      sender.showOpenPanel()
+      return false
+    case .newDocument:
+      States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate
+      return true
+    }
   }
 }

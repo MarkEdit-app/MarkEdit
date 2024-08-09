@@ -22,7 +22,7 @@ enum AppHotKeys {
       self.rawValue = rawValue
     }
 
-    init(stringValues: [String]) {
+    fileprivate init(stringValues: [String]) {
       let mapping = [
         "Shift": shiftKey,
         "Control": controlKey,
@@ -35,6 +35,8 @@ enum AppHotKeys {
         stringValues.forEach {
           if let rawValue = mapping[$0] {
             modifiers.insert(Self(rawValue: rawValue))
+          } else {
+            Logger.log(.error, "Invalid modifier was found: \($0)")
           }
         }
 
@@ -43,12 +45,12 @@ enum AppHotKeys {
     }
   }
 
-  static func register(keyEquivalent: String, modifiers: Modifiers, handler: @escaping () -> Void) {
+  static func register(keyEquivalent: String, modifiers: [String], handler: @escaping () -> Void) {
     guard let keyCode = virtualKeyCodes[keyEquivalent] else {
       return Logger.log(.error, "Failed to find keyCode for: \(keyEquivalent)")
     }
 
-    register(keyCode: keyCode, modifiers: modifiers, handler: handler)
+    register(keyCode: keyCode, modifiers: .init(stringValues: modifiers), handler: handler)
   }
 
   static func register(keyCode: UInt32, modifiers: Modifiers, handler: @escaping () -> Void) {
