@@ -17,6 +17,30 @@ enum AppHotKeys {
     static let control = Self(rawValue: controlKey)
     static let option = Self(rawValue: optionKey)
     static let command = Self(rawValue: cmdKey)
+
+    init(rawValue: Int) {
+      self.rawValue = rawValue
+    }
+
+    init(stringValues: [String]) {
+      let mapping = [
+        "Shift": shiftKey,
+        "Control": controlKey,
+        "Option": optionKey,
+        "Command": cmdKey,
+      ]
+
+      self.rawValue = ({
+        var modifiers: Self = []
+        stringValues.forEach {
+          if let rawValue = mapping[$0] {
+            modifiers.insert(Self(rawValue: rawValue))
+          }
+        }
+
+        return modifiers.rawValue
+      })()
+    }
   }
 
   static func register(keyEquivalent: String, modifiers: Modifiers, handler: @escaping () -> Void) {
