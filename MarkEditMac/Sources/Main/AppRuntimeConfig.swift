@@ -22,6 +22,7 @@ enum AppRuntimeConfig {
 
     let autoCharacterPairs: Bool?
     let indentParagraphs: Bool?
+    let writingToolsBehavior: String?
     let mainWindowHotKey: HotKey?
 
     // swiftlint:enable discouraged_optional_boolean
@@ -29,6 +30,7 @@ enum AppRuntimeConfig {
     enum CodingKeys: String, CodingKey {
       case autoCharacterPairs = "editor.autoCharacterPairs"
       case indentParagraphs = "editor.indentParagraphs"
+      case writingToolsBehavior = "editor.writingToolsBehavior"
       case mainWindowHotKey = "general.mainWindowHotKey"
     }
   }
@@ -43,6 +45,17 @@ enum AppRuntimeConfig {
     currentDefinition?.indentParagraphs ?? false
   }
 
+  // [macOS 15] Move to public API when it's ready
+  static var writingToolsBehavior: Int? {
+    /// https://developer.apple.com/documentation/webkit/wkwebviewconfiguration/4459101-writingtoolsbehavior
+    switch currentDefinition?.writingToolsBehavior {
+    case "none": return -1
+    case "complete": return 1
+    case "limited": return 2
+    default: return nil
+    }
+  }
+
   static var mainWindowHotKey: Definition.HotKey? {
     currentDefinition?.mainWindowHotKey
   }
@@ -51,6 +64,7 @@ enum AppRuntimeConfig {
     let definition = Definition(
       autoCharacterPairs: true,
       indentParagraphs: false,
+      writingToolsBehavior: "complete",
       mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
     )
 

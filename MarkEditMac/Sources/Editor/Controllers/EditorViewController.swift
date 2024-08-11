@@ -127,9 +127,9 @@ final class EditorViewController: NSViewController {
     config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
 
     // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready
-    if #available(macOS 15.1, *) {
+    if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
       if config.responds(to: sel_getUid("setWritingToolsBehavior:")) {
-        config.setValue(1, forKey: "writingToolsBehavior")
+        config.setValue(writingToolsBehavior, forKey: "writingToolsBehavior")
       } else {
         Logger.assertFail("Missing setWritingToolsBehavior: method in WKWebViewConfiguration")
       }
