@@ -259,13 +259,14 @@ extension AppPreferences {
       focusMode: Editor.focusMode,
       lineWrapping: Editor.lineWrapping,
       lineHeight: Editor.lineHeight.multiplier,
-      indentParagraphs: AppRuntimeConfig.indentParagraphs,
       suggestWhileTyping: Assistant.suggestWhileTyping,
-      autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
       defaultLineBreak: General.defaultLineEndings.characters,
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,
-      localizable: EditorLocalizable.main
+      localizable: EditorLocalizable.main,
+      // Runtime config from settings.json, not dynamically changeable
+      autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
+      indentParagraphs: AppRuntimeConfig.indentParagraphs
     )
   }
 }

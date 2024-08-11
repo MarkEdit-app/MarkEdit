@@ -1,7 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { indentUnit } from '@codemirror/language';
-import { closeBrackets } from '@codemirror/autocomplete';
 import { WebFontFace, InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
 import { refreshEditFocus, scrollToSelection } from '../selection';
@@ -89,11 +88,6 @@ export function setLineHeight(lineHeight: number) {
   styling.setLineHeight(lineHeight);
 }
 
-export function setIndentParagraphs(enabled: boolean) {
-  window.config.indentParagraphs = enabled;
-  styling.setIndentParagraphs(enabled);
-}
-
 export function setDefaultLineBreak(lineBreak?: string) {
   window.config.defaultLineBreak = lineBreak;
 }
@@ -116,15 +110,4 @@ export function setTabKeyBehavior(behavior: TabKeyBehavior) {
 export function setSuggestWhileTyping(enabled: boolean) {
   window.config.suggestWhileTyping = enabled;
   completion.invalidateCache();
-}
-
-export function setAutoCharacterPairs(enabled: boolean) {
-  window.config.autoCharacterPairs = enabled;
-
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.closeBrackets?.reconfigure(enabled ? closeBrackets() : []),
-    });
-  }
 }

@@ -14,12 +14,10 @@ import {
   setFocusMode,
   setLineWrapping,
   setLineHeight,
-  setIndentParagraphs,
   setDefaultLineBreak,
   setTabKeyBehavior,
   setIndentUnit,
   setSuggestWhileTyping,
-  setAutoCharacterPairs,
 } from '../../modules/config';
 
 /**
@@ -39,12 +37,10 @@ export interface WebModuleConfig extends WebModule {
   setFocusMode({ enabled }: { enabled: boolean }): void;
   setLineWrapping({ enabled }: { enabled: boolean }): void;
   setLineHeight({ lineHeight }: { lineHeight: number }): void;
-  setIndentParagraphs({ enabled }: { enabled: boolean }): void;
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void;
   setTabKeyBehavior({ behavior }: { behavior: TabKeyBehavior }): void;
   setIndentUnit({ unit }: { unit: string }): void;
   setSuggestWhileTyping({ enabled }: { enabled: boolean }): void;
-  setAutoCharacterPairs({ enabled }: { enabled: boolean }): void;
 }
 
 export class WebModuleConfigImpl implements WebModuleConfig {
@@ -92,10 +88,6 @@ export class WebModuleConfigImpl implements WebModuleConfig {
     setLineHeight(lineHeight);
   }
 
-  setIndentParagraphs({ enabled }: { enabled: boolean }): void {
-    setIndentParagraphs(enabled);
-  }
-
   setDefaultLineBreak({ lineBreak }: { lineBreak?: string }): void {
     setDefaultLineBreak(lineBreak);
   }
@@ -110,9 +102,5 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setSuggestWhileTyping({ enabled }: { enabled: boolean }): void {
     setSuggestWhileTyping(enabled);
-  }
-
-  setAutoCharacterPairs({ enabled }: { enabled: boolean }): void {
-    setAutoCharacterPairs(enabled);
   }
 }

@@ -13,7 +13,7 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
-import { closeBrackets as closeBracketsExtension, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
@@ -44,10 +44,8 @@ const activeLine = new Compartment;
 const selectedLines = new Compartment;
 const lineWrapping = new Compartment;
 const lineEndings = new Compartment;
-const indentParagraphs = new Compartment;
 const indentUnit = new Compartment;
 const selectionHighlight = new Compartment;
-const closeBrackets = new Compartment;
 
 window.dynamics = {
   theme,
@@ -58,7 +56,6 @@ window.dynamics = {
   selectedLines,
   lineWrapping,
   lineEndings,
-  indentParagraphs,
   indentUnit,
   selectionHighlight,
 };
@@ -96,7 +93,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     indentUnit.of(window.config.indentUnit !== undefined ? indentUnitFacet.of(window.config.indentUnit) : []),
     indentOnInput(),
     bracketMatching(),
-    closeBrackets.of(window.config.autoCharacterPairs ? closeBracketsExtension() : []),
+    window.config.autoCharacterPairs ? closeBrackets() : [],
     rectangularSelection(),
     crosshairCursor(),
     activeLine.of(window.config.showActiveLineIndicator ? lineIndicatorLayer : []),
@@ -108,7 +105,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
     gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
     lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
-    indentParagraphs.of(window.config.indentParagraphs ? paragraphIndentStyle : []),
+    window.config.indentParagraphs ? paragraphIndentStyle : [],
 
     // Search
     search({
