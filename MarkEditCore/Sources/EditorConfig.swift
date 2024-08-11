@@ -22,13 +22,13 @@ public struct EditorConfig: Encodable {
   let focusMode: Bool
   let lineWrapping: Bool
   let lineHeight: Double
-  let indentParagraphs: Bool
   let suggestWhileTyping: Bool
-  let autoCharacterPairs: Bool
   let defaultLineBreak: String?
   let tabKeyBehavior: Int?
   let indentUnit: String?
   let localizable: EditorLocalizable?
+  let autoCharacterPairs: Bool
+  let indentParagraphs: Bool
 
   public init(
     text: String,
@@ -43,13 +43,13 @@ public struct EditorConfig: Encodable {
     focusMode: Bool,
     lineWrapping: Bool,
     lineHeight: Double,
-    indentParagraphs: Bool,
     suggestWhileTyping: Bool,
-    autoCharacterPairs: Bool,
     defaultLineBreak: String?,
     tabKeyBehavior: Int?,
     indentUnit: String?,
-    localizable: EditorLocalizable?
+    localizable: EditorLocalizable?,
+    autoCharacterPairs: Bool,
+    indentParagraphs: Bool
   ) {
     self.text = text
     self.theme = theme
@@ -63,12 +63,12 @@ public struct EditorConfig: Encodable {
     self.focusMode = focusMode
     self.lineWrapping = lineWrapping
     self.lineHeight = lineHeight
-    self.indentParagraphs = indentParagraphs
     self.suggestWhileTyping = suggestWhileTyping
-    self.autoCharacterPairs = autoCharacterPairs
     self.defaultLineBreak = defaultLineBreak
     self.tabKeyBehavior = tabKeyBehavior
     self.indentUnit = indentUnit
     self.localizable = localizable
+    self.autoCharacterPairs = autoCharacterPairs
+    self.indentParagraphs = indentParagraphs
   }
 }

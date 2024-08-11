@@ -47,13 +47,14 @@ export interface Config {
   focusMode: boolean;
   lineWrapping: boolean;
   lineHeight: number;
-  indentParagraphs: boolean;
   suggestWhileTyping: boolean;
-  autoCharacterPairs: boolean;
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;
   localizable?: Localizable;
+  // Runtime config from settings.json, not dynamically changeable
+  autoCharacterPairs: boolean;
+  indentParagraphs: boolean;
 }
 
 /**
@@ -68,10 +69,8 @@ export interface Dynamics {
   selectedLines?: Compartment;
   lineWrapping?: Compartment;
   lineEndings?: Compartment;
-  indentParagraphs?: Compartment;
   indentUnit?: Compartment;
   selectionHighlight?: Compartment;
-  closeBrackets?: Compartment;
 }
 
 export type { WebFontFace };

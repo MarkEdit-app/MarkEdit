@@ -85,13 +85,14 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       focusMode: false,
       lineWrapping: true,
       lineHeight: 1.4,
-      indentParagraphs: false,
       suggestWhileTyping: false,
-      autoCharacterPairs: false,
       defaultLineBreak: nil,
       tabKeyBehavior: nil,
       indentUnit: nil,
-      localizable: nil
+      localizable: nil,
+      // Runtime config from settings.json, not dynamically changeable
+      autoCharacterPairs: false,
+      indentParagraphs: false
     )
 
     webView.loadHTMLString(config.toHtml, baseURL: nil)
