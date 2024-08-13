@@ -116,6 +116,7 @@ private extension AppDelegate {
     }
   }
 
+  @available(macOS 15.1, *)
   @objc func windowDidUpdate(_ notification: Notification) {
     guard let editor = NSApp.mainWindow?.contentViewController as? EditorViewController else {
       return
@@ -130,12 +131,7 @@ private extension AppDelegate {
     }
 
     isWritingToolsActive = window.isVisible
-    editor.setHistoryIgnoreBeforeInput(value: isWritingToolsActive)
-
-    // Invisible rendering doesn't work well with WritingTools, temporarily disable it for now
-    editor.setInvisiblesBehavior(
-      behavior: isWritingToolsActive ? .never : AppPreferences.Editor.invisiblesBehavior
-    )
+    editor.updateWritingTools(isActive: isWritingToolsActive)
   }
 
   @IBAction func checkForUpdates(_ sender: Any?) {
