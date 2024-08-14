@@ -9,7 +9,7 @@ import {
   keymap,
 } from '@codemirror/view';
 
-import { Compartment, EditorState } from '@codemirror/state';
+import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
@@ -77,6 +77,10 @@ function fullExtensions(options: { lineBreak?: string }) {
     // Read-only
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
+      if (getIgnoreBeforeInput() && transaction.isUserEvent('input.type')) {
+        setTimeout(forceWritingToolsUpdate, 100);
+      }
+
       if (window.config.readOnlyMode && transaction.docChanged) {
         return [];
       } else {
@@ -181,4 +185,21 @@ function revisionExtensions() {
     frontMatterStyle,
     highlightDiffs,
   ];
+}
+
+// [macOS 15] WritingTools cannot stop correctly and duplicate trailing content will be generated
+function forceWritingToolsUpdate() {
+  const state = window.editor.state;
+  const { from, to } = state.selection.main;
+  const insert = state.sliceDoc(from, to);
+
+  window.editor.dispatch({
+    changes: {
+      from,
+      to: state.doc.lineAt(from).to,
+      insert,
+    },
+    selection: EditorSelection.range(from, from + insert.length),
+    userEvent: 'forceWritingToolsUpdate',
+  });
 }
