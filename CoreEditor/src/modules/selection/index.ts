@@ -80,6 +80,16 @@ export function getRect(pos: number) {
   return getClientRect(rect);
 }
 
+export function getSelectionRect() {
+  const selection = window.getSelection();
+  if (selection === null) {
+    return undefined;
+  }
+
+  const range = selection.getRangeAt(0);
+  return getClientRect(range.getBoundingClientRect());
+}
+
 export function gotoLine(lineNumber: number) {
   const editor = window.editor;
   const state = editor.state;
