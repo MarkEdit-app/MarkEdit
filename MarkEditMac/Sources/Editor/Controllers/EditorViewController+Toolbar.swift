@@ -80,6 +80,7 @@ extension EditorViewController: NSToolbarDelegate {
       case .statistics: return statisticsItem
       case .shareDocument: return shareDocumentItem
       case .copyPandocCommand: return copyPandocCommandItem
+      case .writingTools: return writingToolsItem
       default: return nil
       }
     }()
@@ -237,6 +238,14 @@ private extension EditorViewController {
 
   var copyPandocCommandItem: NSToolbarItem {
     .with(identifier: .copyPandocCommand, menu: NSApp.appDelegate?.copyPandocCommandMenu?.copiedMenu)
+  }
+
+  var writingToolsItem: NSToolbarItem? {
+    if #available(macOS 15.1, *), MarkEditWritingTools.isAvailable {
+      return .with(identifier: .writingTools, menu: customWritingToolsMenu)
+    } else {
+      return nil
+    }
   }
 
   func updateTableOfContentsMenu(_ menu: NSMenu) {

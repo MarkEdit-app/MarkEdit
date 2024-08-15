@@ -43,6 +43,47 @@ extension EditorViewController {
     item.submenu = menu
     return item
   }
+
+  @available(macOS 15.1, *)
+  var customWritingToolsMenu: NSMenu {
+    let menu = NSMenu()
+    let addItem: (WritingTool, String) -> Void = { tool, title in
+      menu.addItem(withTitle: title) { [weak self] in
+        guard let self else {
+          return
+        }
+
+        Task { @MainActor in
+          let rect = try? await self.bridge.selection.getSelectionRect()?.cgRect
+          MarkEditWritingTools.show(
+            tool,
+            rect: rect ?? .zero,
+            view: self.webView,
+            delegate: self.webView
+          )
+        }
+      }
+    }
+
+    addItem(.panel, Localized.WritingTools.panel)
+    menu.addItem(.separator())
+
+    addItem(.proofread, Localized.WritingTools.proofread)
+    addItem(.rewrite, Localized.WritingTools.rewrite)
+    menu.addItem(.separator())
+
+    addItem(.makeFriendly, Localized.WritingTools.makeFriendly)
+    addItem(.makeProfessional, Localized.WritingTools.makeProfessional)
+    addItem(.makeConcise, Localized.WritingTools.makeConcise)
+    menu.addItem(.separator())
+
+    addItem(.summarize, Localized.WritingTools.summarize)
+    addItem(.createKeyPoints, Localized.WritingTools.createKeyPoints)
+    addItem(.makeList, Localized.WritingTools.makeList)
+    addItem(.makeTable, Localized.WritingTools.makeTable)
+
+    return menu
+  }
 }
 
 // MARK: - NSMenuDelegate

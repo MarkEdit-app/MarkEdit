@@ -73,6 +73,7 @@ extension NSToolbarItem.Identifier {
   static let statistics = newItem("statistics")
   static let shareDocument = newItem("shareDocument")
   static let copyPandocCommand = newItem("copyPandocCommand")
+  static let writingTools = newItem("writingTools")
 
   static var defaultItems: [NSToolbarItem.Identifier] {
     [
@@ -102,6 +103,15 @@ extension NSToolbarItem.Identifier {
       .statistics,
       .shareDocument,
       .copyPandocCommand,
+    ]
+    + {
+      if #available(macOS 15.1, *), MarkEditWritingTools.isAvailable {
+        return [.writingTools]
+      }
+
+      return []
+    }()
+    + [
       .space,
       .flexibleSpace,
     ]
@@ -133,6 +143,7 @@ private extension NSToolbarItem.Identifier {
     case .statistics: return Localized.Toolbar.statistics
     case .shareDocument: return Localized.Toolbar.shareDocument
     case .copyPandocCommand: return Localized.Toolbar.copyPandocCommand
+    case .writingTools: return Localized.WritingTools.title
     default: fatalError("Unexpected toolbar item identifier: \(self)")
     }
   }
@@ -155,6 +166,7 @@ private extension NSToolbarItem.Identifier {
     case .statistics: return Icons.chartPie
     case .shareDocument: return Icons.squareAndArrowUp
     case .copyPandocCommand: return Icons.terminal
+    case .writingTools: return Icons.wandAndStars
     default: fatalError("Unexpected toolbar item identifier: \(self)")
     }
   }
