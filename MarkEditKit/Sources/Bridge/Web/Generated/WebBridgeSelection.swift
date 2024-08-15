@@ -42,6 +42,14 @@ public final class WebBridgeSelection {
     }
   }
 
+  public func getSelectionRect() async throws -> WebRect? {
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.selection.getSelectionRect") {
+        continuation.resume(with: $0)
+      }
+    }
+  }
+
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.scrollToSelection", completion: completion)
   }
