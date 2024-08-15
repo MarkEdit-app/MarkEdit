@@ -36,7 +36,11 @@ extension AppDelegate: NSMenuDelegate {
 
 private extension AppDelegate {
   var activeDocument: EditorDocument? {
-    (NSApp.mainWindow?.contentViewController as? EditorViewController)?.document
+    activeEditorController?.document
+  }
+
+  var activeEditorController: EditorViewController? {
+    NSApp.mainWindow?.contentViewController as? EditorViewController
   }
 
   func reconfigureMainEditMenu(document: EditorDocument?) {
@@ -47,6 +51,16 @@ private extension AppDelegate {
 
       editUndoItem?.isEnabled = await document.canUndo
       editRedoItem?.isEnabled = await document.canRedo
+    }
+
+    // [macOS 15] The system one doesn't work for WKWebView
+    if #available(macOS 15.1, *), let item = mainEditMenu?.items.first(where: {
+      $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
+    }) {
+      let isEnabled = activeEditorController?.webView.isFirstResponder == true
+      item.submenu = activeEditorController?.customWritingToolsMenu
+      item.submenu?.autoenablesItems = false
+      item.submenu?.items.forEach { $0.isEnabled = isEnabled }
     }
   }
 
