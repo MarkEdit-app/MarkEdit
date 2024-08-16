@@ -81,6 +81,17 @@ export function getRect(pos: number) {
 }
 
 export function getSelectionRect() {
+  const { empty, anchor } = window.editor.state.selection.main;
+  if (empty) {
+    // When the main selection is empty, window.getSelection returns null
+    const rect = getRect(anchor);
+    if (rect !== undefined) {
+      // Zero-width rect is considered invalid in client
+      rect.width = Math.max(1, rect.width);
+      return rect;
+    }
+  }
+
   const selection = window.getSelection();
   if (selection === null) {
     return undefined;

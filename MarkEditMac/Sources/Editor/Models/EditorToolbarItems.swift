@@ -14,6 +14,11 @@ extension NSToolbarItem {
     item.label = identifier.itemLabel
     item.image = NSImage(systemSymbolName: identifier.itemIcon, accessibilityDescription: item.label)
 
+    // Special icon for Writing Tools
+    if #available(macOS 15.1, *), identifier == .writingTools {
+      item.image = MarkEditWritingTools.affordanceIcon ?? item.image
+    }
+
     if let menu {
       item.menu = menu
     } else {
