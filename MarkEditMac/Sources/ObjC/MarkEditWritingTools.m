@@ -19,6 +19,29 @@
   return returnValue;
 }
 
++ (NSImage *)affordanceIcon {
+  NSImageSymbolConfiguration *configuration = [NSImageSymbolConfiguration configurationWithPointSize:12.5 weight:NSFontWeightMedium];
+  NSImage *symbolImage = [NSImage imageWithSystemSymbolName:@"_gm" accessibilityDescription:nil];
+  if (symbolImage) {
+    return [symbolImage imageWithSymbolConfiguration:configuration];
+  }
+
+  Class affordanceClass = NSClassFromString(@"WTAffordanceView");
+  NSAssert(affordanceClass != nil, @"Missing WTAffordanceView class");
+
+  NSView *affordanceView = [[affordanceClass alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+  NSAssert(affordanceView != nil, @"Missing WTAffordanceView instance");
+
+  for (NSImageView *imageView in affordanceView.subviews) {
+    if ([imageView isKindOfClass:[NSImageView class]]) {
+      return [imageView.image imageWithSymbolConfiguration:configuration];
+    }
+  }
+
+  NSAssert(NO, @"Failed to retrieve affordance icon");
+  return nil;
+}
+
 + (void)showTool:(WritingTool)tool
             rect:(CGRect)rect
             view:(NSView *)view
