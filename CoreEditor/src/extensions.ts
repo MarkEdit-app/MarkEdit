@@ -9,7 +9,7 @@ import {
   keymap,
 } from '@codemirror/view';
 
-import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
+import { Compartment, EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
@@ -78,6 +78,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
       if (getIgnoreBeforeInput() && transaction.isUserEvent('input.type')) {
+        storage.selectedRange = window.editor.state.selection.main;
         setTimeout(forceWritingToolsUpdate, 100);
       }
 
@@ -190,16 +191,30 @@ function revisionExtensions() {
 // [macOS 15] WritingTools cannot stop correctly and duplicate trailing content will be generated
 function forceWritingToolsUpdate() {
   const state = window.editor.state;
-  const { from, to } = state.selection.main;
-  const insert = state.sliceDoc(from, to);
+  const selection = state.selection.main;
+  const line = state.doc.lineAt(selection.from);
+  const from = storage.selectedRange?.from ?? line.from;
+  const to = line.to;
 
+  // The selection is cancelled, select affected lines
+  if (selection.empty) {
+    return window.editor.dispatch({
+      selection: EditorSelection.range(from, to),
+      userEvent: 'forceWritingToolsSelect',
+    });
+  }
+
+  // Otherwise, force insert the updated content to keep the behavior correct
+  const text = state.sliceDoc(selection.from, selection.to);
   window.editor.dispatch({
-    changes: {
-      from,
-      to: state.doc.lineAt(from).to,
-      insert,
-    },
-    selection: EditorSelection.range(from, from + insert.length),
-    userEvent: 'forceWritingToolsUpdate',
+    changes: { from, to, insert: text },
+    selection: EditorSelection.range(from, from + text.length),
+    userEvent: 'forceWritingToolsInsert',
   });
 }
+
+const storage: {
+  selectedRange: SelectionRange | undefined;
+} = {
+  selectedRange: undefined,
+};
