@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { undo, redo, canUndo, canRedo, markContentClean, setIgnoreBeforeInput } from '../../modules/history';
+import { undo, redo, canUndo, canRedo, markContentClean } from '../../modules/history';
 
 /**
  * @shouldExport true
@@ -12,7 +12,6 @@ export interface WebModuleHistory extends WebModule {
   canUndo(): boolean;
   canRedo(): boolean;
   markContentClean(): void;
-  setIgnoreBeforeInput({ value }: { value: boolean }): void;
 }
 
 export class WebModuleHistoryImpl implements WebModuleHistory {
@@ -34,9 +33,5 @@ export class WebModuleHistoryImpl implements WebModuleHistory {
 
   markContentClean(): void {
     markContentClean();
-  }
-
-  setIgnoreBeforeInput({ value }: { value: boolean }): void {
-    setIgnoreBeforeInput(value);
   }
 }
