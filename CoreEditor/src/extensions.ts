@@ -9,7 +9,7 @@ import {
   keymap,
 } from '@codemirror/view';
 
-import { Compartment, EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
+import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
@@ -18,7 +18,7 @@ import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
 
-import { isWritingToolsActive } from './core';
+import { isWritingToolsActive, getWritingToolsSelection } from './core';
 import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
@@ -78,7 +78,6 @@ function fullExtensions(options: { lineBreak?: string }) {
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
       if (isWritingToolsActive() && transaction.isUserEvent('input.type')) {
-        storage.writingToolsRange = window.editor.state.selection.main;
         setTimeout(forceWritingToolsUpdate, 100);
       }
 
@@ -194,7 +193,7 @@ function forceWritingToolsUpdate() {
   const selection = state.selection.main;
 
   // The start position of the initial range and the end position of the last line
-  const from = state.doc.lineAt(storage.writingToolsRange.from).from;
+  const from = state.doc.lineAt(getWritingToolsSelection().from).from;
   const to = state.doc.lineAt(selection.to).to;
 
   // The selection is cancelled, select affected lines
@@ -213,9 +212,3 @@ function forceWritingToolsUpdate() {
     userEvent: 'forceWritingToolsInsert',
   });
 }
-
-const storage: {
-  writingToolsRange: SelectionRange;
-} = {
-  writingToolsRange: EditorSelection.range(0, 0),
-};
