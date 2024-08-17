@@ -173,6 +173,27 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
   }
 }
 
+export function setWritingToolsActive(isActive: boolean) {
+  storage.isWritingToolsActive = isActive;
+
+  if (isActive) {
+    const editor = window.editor;
+    const selection = editor.state.selection.main;
+
+    // When the main selection is empty, the system uses the entire document, which doesn't work very well
+    if (selection.empty) {
+      const line = editor.state.doc.lineAt(selection.from);
+      editor.dispatch({
+        selection: EditorSelection.range(line.from, line.to),
+      });
+    }
+  }
+}
+
+export function isWritingToolsActive() {
+  return storage.isWritingToolsActive;
+}
+
 export function handleFocusLost() {
   events.resetKeyStates();
 }
@@ -237,7 +258,9 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
 const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
   viewportScale: number;
+  isWritingToolsActive: boolean;
 } = {
   scrollTimer: undefined,
   viewportScale: 1.0,
+  isWritingToolsActive: false,
 };

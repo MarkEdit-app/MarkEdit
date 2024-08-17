@@ -18,13 +18,13 @@ import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
 
+import { isWritingToolsActive } from './core';
 import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { paragraphIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
 
-import { getIgnoreBeforeInput } from './modules/history';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
@@ -77,7 +77,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     // Read-only
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
-      if (getIgnoreBeforeInput() && transaction.isUserEvent('input.type')) {
+      if (isWritingToolsActive() && transaction.isUserEvent('input.type')) {
         storage.selectedRange = window.editor.state.selection.main;
         setTimeout(forceWritingToolsUpdate, 100);
       }
@@ -91,7 +91,7 @@ function fullExtensions(options: { lineBreak?: string }) {
 
     // Basic
     highlightSpecialChars(),
-    history({ ignoreBeforeInput: () => getIgnoreBeforeInput() }),
+    history({ ignoreBeforeInput: () => isWritingToolsActive() }),
     drawSelection({ cursorBlinkRate: 1000 }),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),

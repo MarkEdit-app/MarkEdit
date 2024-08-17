@@ -48,20 +48,10 @@ export function setHistoryExplictlyMoved(update: ViewUpdate) {
   });
 }
 
-export function getIgnoreBeforeInput() {
-  return storage.ignoreBeforeInput;
-}
-
-export function setIgnoreBeforeInput(value: boolean) {
-  storage.ignoreBeforeInput = value;
-}
-
 const storage: {
   savedUndoDepth: number;
   explictlyMoved: boolean;
-  ignoreBeforeInput: boolean;
 } = {
   savedUndoDepth: 0,
   explictlyMoved: true, // Treat the initial state as "explicitly saved"
-  ignoreBeforeInput: false,
 };

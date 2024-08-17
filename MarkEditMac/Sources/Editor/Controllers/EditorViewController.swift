@@ -293,8 +293,4 @@ extension EditorViewController {
 
     bridge.history.markContentClean()
   }
-
-  func setHistoryIgnoreBeforeInput(value: Bool) {
-    bridge.history.setIgnoreBeforeInput(value: value)
-  }
 }
