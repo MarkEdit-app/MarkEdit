@@ -179,14 +179,14 @@ export function setWritingToolsActive(isActive: boolean) {
   if (isActive) {
     const editor = window.editor;
     const selection = editor.state.selection.main;
+    const doc =  editor.state.doc;
 
-    // When the main selection is empty, the system uses the entire document, which doesn't work very well
-    if (selection.empty) {
-      const line = editor.state.doc.lineAt(selection.from);
-      editor.dispatch({
-        selection: EditorSelection.range(line.from, line.to),
-      });
-    }
+    // Extend the selection to make sure all affected lines are fully selected
+    const { from } = doc.lineAt(selection.from);
+    const { to } = doc.lineAt(selection.to);
+    editor.dispatch({
+      selection: EditorSelection.range(from, to),
+    });
   }
 }
 
