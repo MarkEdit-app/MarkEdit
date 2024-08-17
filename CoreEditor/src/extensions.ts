@@ -78,7 +78,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
       if (isWritingToolsActive() && transaction.isUserEvent('input.type')) {
-        storage.selectedRange = window.editor.state.selection.main;
+        storage.writingToolsRange = window.editor.state.selection.main;
         setTimeout(forceWritingToolsUpdate, 100);
       }
 
@@ -192,9 +192,10 @@ function revisionExtensions() {
 function forceWritingToolsUpdate() {
   const state = window.editor.state;
   const selection = state.selection.main;
-  const line = state.doc.lineAt(selection.from);
-  const from = storage.selectedRange?.from ?? line.from;
-  const to = line.to;
+
+  // The start position of the initial range and the end position of the last line
+  const from = state.doc.lineAt(storage.writingToolsRange.from).from;
+  const to = state.doc.lineAt(selection.to).to;
 
   // The selection is cancelled, select affected lines
   if (selection.empty) {
@@ -214,7 +215,7 @@ function forceWritingToolsUpdate() {
 }
 
 const storage: {
-  selectedRange: SelectionRange | undefined;
+  writingToolsRange: SelectionRange;
 } = {
-  selectedRange: undefined,
+  writingToolsRange: EditorSelection.range(0, 0),
 };
