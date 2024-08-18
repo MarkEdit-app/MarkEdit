@@ -76,18 +76,6 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.replaceText", message: message, completion: completion)
   }
 
-  public func setWritingToolsActive(isActive: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let isActive: Bool
-    }
-
-    let message = Message(
-      isActive: isActive
-    )
-
-    webView?.invoke(path: "webModules.core.setWritingToolsActive", message: message, completion: completion)
-  }
-
   public func handleFocusLost(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.core.handleFocusLost", completion: completion)
   }

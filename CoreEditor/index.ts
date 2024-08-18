@@ -11,6 +11,7 @@ import { WebModuleSelectionImpl } from './src/bridge/web/selection';
 import { WebModuleFormatImpl } from './src/bridge/web/format';
 import { WebModuleSearchImpl } from './src/bridge/web/search';
 import { WebModuleTableOfContentsImpl } from './src/bridge/web/toc';
+import { WebModuleWritingToolsImpl } from './src/bridge/web/writingTools';
 
 import { pseudoDocument } from './src/@test/mock';
 import { createNativeModule } from './src/bridge/nativeModule';
@@ -59,6 +60,7 @@ window.webModules = {
   format: new WebModuleFormatImpl(),
   search: new WebModuleSearchImpl(),
   toc: new WebModuleTableOfContentsImpl(),
+  writingTools: new WebModuleWritingToolsImpl(),
 };
 
 window.nativeModules = {

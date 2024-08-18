@@ -6,7 +6,6 @@ import {
   getEditorText,
   insertText,
   replaceText,
-  setWritingToolsActive,
   handleFocusLost,
   handleMouseEntered,
   handleMouseExited,
@@ -23,7 +22,6 @@ export interface WebModuleCore extends WebModule {
   getEditorText(): string;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
-  setWritingToolsActive({ isActive }: { isActive: boolean }): void;
   handleFocusLost(): void;
   handleMouseEntered({ clientX, clientY }: { clientX: number; clientY: number }): void;
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void;
@@ -48,10 +46,6 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void {
     replaceText(text, granularity);
-  }
-
-  setWritingToolsActive({ isActive }: { isActive: boolean }): void {
-    setWritingToolsActive(isActive);
   }
 
   handleFocusLost(): void {
