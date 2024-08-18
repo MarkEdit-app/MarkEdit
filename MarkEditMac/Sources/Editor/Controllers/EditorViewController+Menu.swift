@@ -54,7 +54,7 @@ extension EditorViewController {
         }
 
         Task { @MainActor in
-          let rect = try? await self.bridge.selection.getSelectionRect()?.cgRect
+          let rect = try? await self.bridge.writingTools.getSelectionRect()?.cgRect
           MarkEditWritingTools.show(
             tool,
             rect: rect ?? .zero,

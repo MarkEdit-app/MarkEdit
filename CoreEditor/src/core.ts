@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { EditorSelection, SelectionRange } from '@codemirror/state';
+import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
 import { getViewportScale, notifyBackgroundColor } from './common/utils';
@@ -173,30 +173,6 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
   }
 }
 
-export function setWritingToolsActive(isActive: boolean) {
-  storage.isWritingToolsActive = isActive;
-
-  if (isActive) {
-    const editor = window.editor;
-    const selection = editor.state.selection.main;
-    const doc =  editor.state.doc;
-
-    // Extend the selection to make sure all affected lines are fully selected
-    const { from } = doc.lineAt(selection.from);
-    const { to } = doc.lineAt(selection.to);
-    storage.writingToolsSelection = EditorSelection.range(from, to);
-    editor.dispatch({ selection: storage.writingToolsSelection });
-  }
-}
-
-export function isWritingToolsActive() {
-  return storage.isWritingToolsActive;
-}
-
-export function getWritingToolsSelection() {
-  return storage.writingToolsSelection;
-}
-
 export function handleFocusLost() {
   events.resetKeyStates();
 }
@@ -261,11 +237,7 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
 const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
   viewportScale: number;
-  isWritingToolsActive: boolean;
-  writingToolsSelection: SelectionRange;
 } = {
   scrollTimer: undefined,
   viewportScale: 1.0,
-  isWritingToolsActive: false,
-  writingToolsSelection: EditorSelection.range(0, 0),
 };

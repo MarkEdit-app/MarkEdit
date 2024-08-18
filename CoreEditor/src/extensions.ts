@@ -9,7 +9,7 @@ import {
   keymap,
 } from '@codemirror/view';
 
-import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
+import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
@@ -18,17 +18,18 @@ import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
 
-import { isWritingToolsActive, getWritingToolsSelection } from './core';
 import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { paragraphIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
 
+import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
+import { scheduleWritingToolsUpdate } from './modules/writingTools';
 
 // Revision mode
 import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
@@ -77,9 +78,8 @@ function fullExtensions(options: { lineBreak?: string }) {
     // Read-only
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
-      if (isWritingToolsActive() && transaction.isUserEvent('input.type')) {
-        setTimeout(forceWritingToolsUpdate, 100);
-      }
+      // Inline WritingTools issues
+      scheduleWritingToolsUpdate(transaction);
 
       if (window.config.readOnlyMode && transaction.docChanged) {
         return [];
@@ -185,30 +185,4 @@ function revisionExtensions() {
     frontMatterStyle,
     highlightDiffs,
   ];
-}
-
-// [macOS 15] WritingTools cannot stop correctly and duplicate trailing content will be generated
-function forceWritingToolsUpdate() {
-  const state = window.editor.state;
-  const selection = state.selection.main;
-
-  // The start position of the initial range and the end position of the last line
-  const from = state.doc.lineAt(getWritingToolsSelection().from).from;
-  const to = state.doc.lineAt(selection.to).to;
-
-  // The selection is cancelled, select affected lines
-  if (selection.empty) {
-    return window.editor.dispatch({
-      selection: EditorSelection.range(from, to),
-      userEvent: 'forceWritingToolsSelect',
-    });
-  }
-
-  // Otherwise, force insert the updated content to keep the behavior correct
-  const text = state.sliceDoc(selection.from, selection.to);
-  window.editor.dispatch({
-    changes: { from, to, insert: text },
-    selection: EditorSelection.range(from, from + text.length),
-    userEvent: 'forceWritingToolsInsert',
-  });
 }

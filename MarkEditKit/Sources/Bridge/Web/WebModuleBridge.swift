@@ -21,6 +21,7 @@ public struct WebModuleBridge {
   public let format: WebBridgeFormat
   public let search: WebBridgeSearch
   public let toc: WebBridgeTableOfContents
+  public let writingTools: WebBridgeWritingTools
 
   public init(webView: WKWebView) {
     self.config = WebBridgeConfig(webView: webView)
@@ -33,5 +34,6 @@ public struct WebModuleBridge {
     self.format = WebBridgeFormat(webView: webView)
     self.search = WebBridgeSearch(webView: webView)
     self.toc = WebBridgeTableOfContents(webView: webView)
+    self.writingTools = WebBridgeWritingTools(webView: webView)
   }
 }
