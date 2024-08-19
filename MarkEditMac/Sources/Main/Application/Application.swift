@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MarkEditKit
 
 @main
 final class Application: NSApplication {
@@ -27,6 +28,31 @@ final class Application: NSApplication {
       NSPasteboard.general.sanitize()
     }
 
+    // Ensure lines are fully selected for a better WritingTools experience
+    if action == sel_getUid("showWritingTools:") {
+      Logger.assert(sender is NSMenuItem, "Invalid sender was found")
+      Logger.assert((target as? AnyObject)?.className == "WKMenuTarget", "Invalid target was found")
+      ensureWritingToolsSelectionRect()
+
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        super.sendAction(action, to: target, from: sender)
+      }
+
+      return true
+    }
+
     return super.sendAction(action, to: target, from: sender)
+  }
+}
+
+// MARK: - Private
+
+private extension Application {
+  func ensureWritingToolsSelectionRect() {
+    guard let editor = NSApp.mainWindow?.contentViewController as? EditorViewController else {
+      return Logger.assertFail("Invalid mainWindow was found")
+    }
+
+    editor.ensureWritingToolsSelectionRect()
   }
 }

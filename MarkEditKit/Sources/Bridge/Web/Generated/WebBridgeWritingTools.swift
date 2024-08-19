@@ -39,4 +39,8 @@ public final class WebBridgeWritingTools {
       }
     }
   }
+
+  public func ensureSelectionRect(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.writingTools.ensureSelectionRect", completion: completion)
+  }
 }

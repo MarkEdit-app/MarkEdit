@@ -293,4 +293,8 @@ extension EditorViewController {
 
     bridge.history.markContentClean()
   }
+
+  func ensureWritingToolsSelectionRect() {
+    bridge.writingTools.ensureSelectionRect()
+  }
 }

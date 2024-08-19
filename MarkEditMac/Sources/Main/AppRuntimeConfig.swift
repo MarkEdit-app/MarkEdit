@@ -64,7 +64,7 @@ enum AppRuntimeConfig {
     let definition = Definition(
       autoCharacterPairs: true,
       indentParagraphs: false,
-      writingToolsBehavior: "complete",
+      writingToolsBehavior: "limited", // [macOS 15] Complete mode still has lots of bugs
       mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
     )
 
