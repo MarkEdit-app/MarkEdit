@@ -1,6 +1,6 @@
 import { WebModule } from '../webModule';
 import { WebRect } from '../../@types/WebRect';
-import { setActive, getSelectionRect } from '../../modules/writingTools';
+import { setActive, getSelectionRect, ensureSelectionRect } from '../../modules/writingTools';
 
 /**
  * @shouldExport true
@@ -10,6 +10,7 @@ import { setActive, getSelectionRect } from '../../modules/writingTools';
 export interface WebModuleWritingTools extends WebModule {
   setActive({ isActive, requestedTool }: { isActive: boolean; requestedTool: CodeGen_Int }): void;
   getSelectionRect(): WebRect | undefined;
+  ensureSelectionRect(): void;
 }
 
 export class WebModuleWritingToolsImpl implements WebModuleWritingTools {
@@ -19,5 +20,9 @@ export class WebModuleWritingToolsImpl implements WebModuleWritingTools {
 
   getSelectionRect(): WebRect | undefined {
     return getSelectionRect();
+  }
+
+  ensureSelectionRect(): void {
+    ensureSelectionRect();
   }
 }

@@ -27,6 +27,17 @@ export function getSelectionRect() {
   return getClientRect(range.getBoundingClientRect());
 }
 
+export function ensureSelectionRect() {
+  const editor = window.editor;
+  const selection = editor.state.selection.main;
+  const doc =  editor.state.doc;
+
+  // Extend the selection to make sure all affected lines are fully selected
+  const { from } = doc.lineAt(selection.from);
+  const { to } = doc.lineAt(selection.to);
+  editor.dispatch({ selection: EditorSelection.range(from, to) });
+}
+
 export function scheduleWritingToolsUpdate(transaction: Transaction) {
   if (storage.isActive && transaction.isUserEvent('input.type')) {
     setTimeout(forceWritingToolsUpdate, 100);
@@ -52,17 +63,6 @@ function forceWritingToolsUpdate() {
       userEvent: 'forceWritingToolsInsert',
     });
   }
-}
-
-function ensureSelectionRect() {
-  const editor = window.editor;
-  const selection = editor.state.selection.main;
-  const doc =  editor.state.doc;
-
-  // Extend the selection to make sure all affected lines are fully selected
-  const { from } = doc.lineAt(selection.from);
-  const { to } = doc.lineAt(selection.to);
-  editor.dispatch({ selection: EditorSelection.range(from, to) });
 }
 
 function affectedSelectionRange() {
