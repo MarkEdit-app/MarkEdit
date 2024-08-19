@@ -61,28 +61,39 @@ enum AppRuntimeConfig {
   }
 
   static var defaultContents: String {
-    let definition = Definition(
-      autoCharacterPairs: true,
-      indentParagraphs: false,
-      writingToolsBehavior: "limited", // [macOS 15] Complete mode still has lots of bugs
-      mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
-    )
+    encode(definition: defaultDefinition)?.toString() ?? ""
+  }
 
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-
-    guard let jsonData = try? encoder.encode(definition) else {
-      Logger.assertFail("Failed to encode object: \(definition)")
-      return ""
+  static func migratedData() -> Data? {
+    guard let currentDefinition else {
+      Logger.assertFail("Trying to migrate without current data")
+      return nil
     }
 
-    return jsonData.toString() ?? ""
+    // Leave writingToolsBehavior unspecified for now, migrate to "complete" when we are ready
+    if currentDefinition.writingToolsBehavior == nil, let writingToolsBehavior = defaultDefinition.writingToolsBehavior {
+      return encode(definition: Definition(
+        autoCharacterPairs: currentDefinition.autoCharacterPairs,
+        indentParagraphs: currentDefinition.indentParagraphs,
+        writingToolsBehavior: writingToolsBehavior,
+        mainWindowHotKey: currentDefinition.mainWindowHotKey
+      ))
+    }
+
+    return nil
   }
 }
 
 // MARK: - Private
 
 private extension AppRuntimeConfig {
+  static let defaultDefinition = Definition(
+    autoCharacterPairs: true,
+    indentParagraphs: false,
+    writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
+    mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
+  )
+
   static let currentDefinition: Definition? = {
     guard let fileData = AppCustomization.settings.fileData else {
       Logger.assertFail("Missing settings.json to proceed")
@@ -96,4 +107,14 @@ private extension AppRuntimeConfig {
 
     return definition
   }()
+
+  static func encode(definition: Definition) -> Data? {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+    let jsonData = try? encoder.encode(definition)
+    Logger.assert(jsonData != nil, "Failed to encode object: \(definition)")
+
+    return jsonData
+  }
 }
