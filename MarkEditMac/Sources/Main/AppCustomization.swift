@@ -47,7 +47,10 @@ struct AppCustomization {
     style.createFile()
     script.createFile()
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
-    settings.createFile(AppRuntimeConfig.defaultContents)
+
+    if !settings.createFile(AppRuntimeConfig.defaultContents), let migratedData = AppRuntimeConfig.migratedData() {
+      try? migratedData.write(to: settings.fileURL)
+    }
   }
 
   var fileURL: URL {
@@ -78,11 +81,13 @@ struct AppCustomization {
     self.fileType = fileType
   }
 
-  private func createFile(_ contents: String = "") {
+  @discardableResult
+  private func createFile(_ contents: String = "") -> Bool {
     guard !FileManager.default.fileExists(atPath: fileURL.path) else {
-      return
+      return false
     }
 
     try? contents.toData()?.write(to: fileURL)
+    return true
   }
 }
