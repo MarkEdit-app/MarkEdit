@@ -32,10 +32,16 @@ export function ensureSelectionRect() {
   const selection = editor.state.selection.main;
   const doc =  editor.state.doc;
 
-  // Extend the selection to make sure all affected lines are fully selected
   const { from } = doc.lineAt(selection.from);
   const { to } = doc.lineAt(selection.to);
-  editor.dispatch({ selection: EditorSelection.range(from, to) });
+
+  if (from === to) {
+    // Extend the selection to select the entire document
+    editor.dispatch({ selection: EditorSelection.range(0, editor.state.doc.length) });
+  } else {
+    // Extend the selection to make sure all affected lines are fully selected
+    editor.dispatch({ selection: EditorSelection.range(from, to) });
+  }
 }
 
 export function scheduleWritingToolsUpdate(transaction: Transaction) {
