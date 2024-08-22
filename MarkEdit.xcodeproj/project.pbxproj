@@ -58,6 +58,7 @@
 		8769BABE2C65F9D400EDA0A6 /* AppRuntimeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */; };
 		8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8772E384294AC60D00111E83 /* EditorReusePool.swift */; };
 		8775A77B29867012005867BF /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 8775A77A29867012005867BF /* FontPicker */; };
+		877A6D802C77248A001EC516 /* NSPopover+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */; };
 		877B965D2C63815000186414 /* AppHotKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B965C2C63815000186414 /* AppHotKeys.swift */; };
 		8780AC182982554800065EF4 /* SettingTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC172982554800065EF4 /* SettingTabs.swift */; };
 		8780AC1C29829EDD00065EF4 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */; };
@@ -180,6 +181,7 @@
 		8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceButtons.swift; sourceTree = "<group>"; };
 		8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRuntimeConfig.swift; sourceTree = "<group>"; };
 		8772E384294AC60D00111E83 /* EditorReusePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReusePool.swift; sourceTree = "<group>"; };
+		877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPopover+Extension.swift"; sourceTree = "<group>"; };
 		877B965C2C63815000186414 /* AppHotKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHotKeys.swift; sourceTree = "<group>"; };
 		8780AC172982554800065EF4 /* SettingTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTabs.swift; sourceTree = "<group>"; };
 		8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 			children = (
 				87850C8529482A8600D1A952 /* NSApplication+Extension.swift */,
 				87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */,
+				877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -711,6 +714,7 @@
 				87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */,
 				8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */,
 				8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */,
+				877A6D802C77248A001EC516 /* NSPopover+Extension.swift in Sources */,
 				874BE70229BB5889002F83BA /* GetFileContentIntent.swift in Sources */,
 				8769BABE2C65F9D400EDA0A6 /* AppRuntimeConfig.swift in Sources */,
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,

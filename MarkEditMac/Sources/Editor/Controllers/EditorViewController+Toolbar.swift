@@ -33,7 +33,7 @@ extension EditorViewController {
 
   func showTableOfContentsMenu() {
     bridge.core.handleFocusLost()
-    previewPopover?.close()
+    presentedPopover?.close()
 
     // Pop up the menu relative to the toolbar item
     if let tableOfContentsMenuButton {

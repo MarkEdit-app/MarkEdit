@@ -20,10 +20,10 @@ final class EditorViewController: NSViewController {
   var safeAreaObservation: NSKeyValueObservation?
 
   weak var presentedMenu: NSMenu?
-  weak var previewPopover: NSPopover? {
+  weak var presentedPopover: NSPopover? {
     willSet {
       // Close the existing popover to ensure that only one is presented
-      previewPopover?.close()
+      presentedPopover?.close()
     }
   }
 
@@ -233,7 +233,7 @@ final class EditorViewController: NSViewController {
     }
 
     NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
-    previewPopover?.close()
+    presentedPopover?.close()
   }
 
   override var representedObject: Any? {

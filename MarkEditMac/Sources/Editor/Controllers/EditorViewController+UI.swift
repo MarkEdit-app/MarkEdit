@@ -38,6 +38,14 @@ extension EditorViewController {
       }
     }
 
+    // Track popovers that use editor as the positioning container
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(popoverDidShow(_:)),
+      name: NSPopover.didShowNotification,
+      object: nil
+    )
+
     addLocalMonitorForEvents()
   }
 
@@ -210,5 +218,17 @@ private extension EditorViewController {
 
   var findPanelHeight: Double {
     findPanel.isHidden ? 0 : findPanel.frame.height
+  }
+
+  @objc func popoverDidShow(_ notification: Notification) {
+    guard let popover = notification.object as? NSPopover else {
+      return
+    }
+
+    guard popover.sourceView?.belongs(to: view) == true else {
+      return
+    }
+
+    presentedPopover = popover
   }
 }
