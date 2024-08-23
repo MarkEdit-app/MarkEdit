@@ -95,6 +95,7 @@ final class RuntimeTests: XCTestCase {
 
     wait(for: [expectation])
     XCTAssertNotNil(popover.contentViewController?.view.window?.value(forKey: "_popover"))
+    XCTAssertNotNil(popover.value(forKey: "positioningView"))
   }
 
   func testRetrievingToolbarEffectView() {
