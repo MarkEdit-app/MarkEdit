@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import Statistics
 
 extension EditorViewController {
   func setUp() {
@@ -206,6 +207,29 @@ extension EditorViewController {
   func refreshEditFocus() {
     startWebViewEditing()
     bridge.selection.refreshEditFocus()
+  }
+
+  func removeFloatingUIElements() {
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    }
+
+    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
+    presentedPopover?.close()
+  }
+
+  @discardableResult
+  func removePresentedStatistics() -> Bool {
+    guard let statistics = presentedViewControllers?.filter({ $0 is StatisticsController }) else {
+      return false
+    }
+
+    guard !statistics.isEmpty else {
+      return false
+    }
+
+    statistics.forEach { dismiss($0) }
+    return true
   }
 }
 

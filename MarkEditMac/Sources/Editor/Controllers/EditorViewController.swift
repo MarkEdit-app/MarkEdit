@@ -235,6 +235,8 @@ final class EditorViewController: NSViewController {
     if webView.isFirstResponder {
       removeFloatingUIElements()
     }
+
+    removePresentedStatistics()
   }
 
   override var representedObject: Any? {
@@ -293,15 +295,6 @@ extension EditorViewController {
     }
 
     bridge.history.markContentClean()
-  }
-
-  func removeFloatingUIElements() {
-    if completionContext.isPanelVisible {
-      cancelCompletion()
-    }
-
-    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
-    presentedPopover?.close()
   }
 
   func ensureWritingToolsSelectionRect() {
