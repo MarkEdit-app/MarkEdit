@@ -24,6 +24,8 @@ extension EditorViewController {
     findPanel.searchField.isHidden = isRevisionMode
 
     if mode != .hidden {
+      removeFloatingUIElements()
+
       // When the user explicitly changes the mode to replace (from the find panel menu),
       // the focus should still be the find field.
       let textField = (mode == .replace && !explicitly) ? replacePanel.textField : findPanel.searchField

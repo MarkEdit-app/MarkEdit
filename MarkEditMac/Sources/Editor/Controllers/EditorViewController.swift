@@ -228,12 +228,13 @@ final class EditorViewController: NSViewController {
   }
 
   override func cancelOperation(_ sender: Any?) {
-    if completionContext.isPanelVisible {
-      cancelCompletion()
+    if findPanel.isFirstResponder || replacePanel.isFirstResponder {
+      updateTextFinderMode(.hidden)
     }
 
-    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
-    presentedPopover?.close()
+    if webView.isFirstResponder {
+      removeFloatingUIElements()
+    }
   }
 
   override var representedObject: Any? {
@@ -292,6 +293,15 @@ extension EditorViewController {
     }
 
     bridge.history.markContentClean()
+  }
+
+  func removeFloatingUIElements() {
+    if completionContext.isPanelVisible {
+      cancelCompletion()
+    }
+
+    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
+    presentedPopover?.close()
   }
 
   func ensureWritingToolsSelectionRect() {
