@@ -31,7 +31,14 @@ final class GotoLineView: NSView {
 
   private let handler: (Int) -> Void
 
-  init(frame: CGRect, placeholder: String, accessibilityHelp: String, iconName: String, handler: @escaping (Int) -> Void) {
+  init(
+    frame: CGRect,
+    placeholder: String,
+    accessibilityHelp: String,
+    iconName: String,
+    defaultLineNumber: Int? = nil,
+    handler: @escaping (Int) -> Void
+  ) {
     self.handler = handler
     super.init(frame: frame)
 
@@ -67,6 +74,11 @@ final class GotoLineView: NSView {
       textField.centerYAnchor.constraint(equalTo: centerYAnchor),
       textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
     ])
+
+    if let defaultLineNumber {
+      textField.stringValue = String(defaultLineNumber)
+      textField.selectAll()
+    }
   }
 
   @available(*, unavailable)

@@ -18,6 +18,7 @@ public final class GotoLineWindow: NSWindow {
     placeholder: String,
     accessibilityHelp: String,
     iconName: String,
+    defaultLineNumber: Int? = nil,
     handler: @escaping (Int) -> Void
   ) {
     let rect = CGRect(
@@ -39,6 +40,7 @@ public final class GotoLineWindow: NSWindow {
       placeholder: placeholder,
       accessibilityHelp: accessibilityHelp,
       iconName: iconName,
+      defaultLineNumber: defaultLineNumber,
       handler: handler
     )
 

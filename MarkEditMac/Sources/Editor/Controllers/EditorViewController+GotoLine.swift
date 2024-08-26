@@ -24,13 +24,23 @@ extension EditorViewController {
       relativeTo: parentRect,
       placeholder: Localized.Document.gotoLineLabel,
       accessibilityHelp: Localized.Document.gotoLineHelp,
-      iconName: Icons.arrowUturnBackwardCircle
+      iconName: Icons.arrowUturnBackwardCircle,
+      defaultLineNumber: States.selectedLineNumber
     ) { [weak self] lineNumber in
+      States.selectedLineNumber = lineNumber
       self?.startWebViewEditing()
       self?.bridge.selection.gotoLine(lineNumber: lineNumber)
     }
 
     window.appearance = view.effectiveAppearance
     window.makeKeyAndOrderFront(sender)
+  }
+}
+
+// MARK: - Private
+
+private extension EditorViewController {
+  enum States {
+    @MainActor static var selectedLineNumber: Int?
   }
 }
