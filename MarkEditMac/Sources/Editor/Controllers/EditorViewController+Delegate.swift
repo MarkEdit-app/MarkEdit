@@ -103,8 +103,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
   }
 
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore) {
-    // Viewport scale changed, perform cancel where we dismiss panels and popovers
-    cancelOperation(sender)
+    // Remove all floating UI elements since view coordinates are changed
+    removeFloatingUIElements()
   }
 
   func editorCoreViewDidUpdate(
@@ -147,7 +147,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
   }
 
   func editorCoreContentOffsetDidChange(_ sender: EditorModuleCore) {
-    cancelOperation(sender)
+    // Remove all floating UI elements since view coordinates are changed
+    removeFloatingUIElements()
   }
 
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo) {
