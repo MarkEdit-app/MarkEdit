@@ -47,10 +47,7 @@ struct AppCustomization {
     style.createFile()
     script.createFile()
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
-
-    if !settings.createFile(AppRuntimeConfig.defaultContents), let migratedData = AppRuntimeConfig.migratedData() {
-      try? migratedData.write(to: settings.fileURL)
-    }
+    settings.createFile(AppRuntimeConfig.defaultContents)
   }
 
   var fileURL: URL {

@@ -63,25 +63,6 @@ enum AppRuntimeConfig {
   static var defaultContents: String {
     encode(definition: defaultDefinition)?.toString() ?? ""
   }
-
-  static func migratedData() -> Data? {
-    guard let currentDefinition else {
-      Logger.assertFail("Trying to migrate without current data")
-      return nil
-    }
-
-    // Leave writingToolsBehavior unspecified for now, migrate to "complete" when we are ready
-    if currentDefinition.writingToolsBehavior == nil, let writingToolsBehavior = defaultDefinition.writingToolsBehavior {
-      return encode(definition: Definition(
-        autoCharacterPairs: currentDefinition.autoCharacterPairs,
-        indentParagraphs: currentDefinition.indentParagraphs,
-        writingToolsBehavior: writingToolsBehavior,
-        mainWindowHotKey: currentDefinition.mainWindowHotKey
-      ))
-    }
-
-    return nil
-  }
 }
 
 // MARK: - Private

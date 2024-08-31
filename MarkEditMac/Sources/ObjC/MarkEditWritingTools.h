@@ -26,7 +26,6 @@ API_AVAILABLE(macos(15.1))
 @interface MarkEditWritingTools : NSObject
 
 @property (class, readonly, nonatomic) BOOL isAvailable;
-@property (class, readonly, nonatomic) WritingTool requestedTool;
 @property (class, readonly, nonatomic, nullable) NSImage *affordanceIcon;
 
 + (void)showTool:(WritingTool)tool

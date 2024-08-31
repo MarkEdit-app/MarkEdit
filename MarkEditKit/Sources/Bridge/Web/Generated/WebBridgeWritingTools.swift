@@ -18,15 +18,13 @@ public final class WebBridgeWritingTools {
     self.webView = webView
   }
 
-  public func setActive(isActive: Bool, requestedTool: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func setActive(isActive: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let isActive: Bool
-      let requestedTool: Int
     }
 
     let message = Message(
-      isActive: isActive,
-      requestedTool: requestedTool
+      isActive: isActive
     )
 
     webView?.invoke(path: "webModules.writingTools.setActive", message: message, completion: completion)
