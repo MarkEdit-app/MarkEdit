@@ -331,7 +331,8 @@ class HistoryState {
          // For compose (but not compose.start) events, always join with previous event
          userEvent == "input.type.compose")) {
       done = updateBranch(done, done.length - 1, config.minDepth,
-                          new HistEvent(event.changes.compose(lastEvent.changes), conc(event.effects, lastEvent.effects),
+                          new HistEvent(event.changes.compose(lastEvent.changes),
+                                        conc(StateEffect.mapEffects(event.effects, lastEvent.changes), lastEvent.effects),
                                         lastEvent.mapped, lastEvent.startSelection, none))
     } else {
       done = updateBranch(done, done.length, config.minDepth, event)
