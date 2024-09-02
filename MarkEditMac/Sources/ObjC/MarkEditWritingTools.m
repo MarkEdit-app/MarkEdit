@@ -19,22 +19,6 @@
   return returnValue;
 }
 
-+ (WritingTool)requestedTool {
-  for (NSWindow *window in [NSApp windows]) {
-    NSViewController *controller = window.contentViewController;
-    if ([controller.className isEqualToString:@"WTWritingToolsViewController"]) {
-      NSInvocation *invocation = [self invocationWithTarget:controller
-                                             selectorString:@"requestedTool"];
-      [invocation invoke];
-      WritingTool returnValue = 0;
-      [invocation getReturnValue:&returnValue];
-      return returnValue;
-    }
-  }
-
-  return WritingToolPanel;
-}
-
 + (NSImage *)affordanceIcon {
   NSImageSymbolConfiguration *configuration = [NSImageSymbolConfiguration configurationWithPointSize:12.5 weight:NSFontWeightMedium];
   NSImage *symbolImage = [NSImage imageWithSystemSymbolName:@"_gm" accessibilityDescription:nil];
