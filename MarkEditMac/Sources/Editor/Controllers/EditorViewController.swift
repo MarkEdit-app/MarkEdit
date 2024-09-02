@@ -124,6 +124,7 @@ final class EditorViewController: NSViewController {
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
     let config: WKWebViewConfiguration = .newConfig()
+    config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
     config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
 
     // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready

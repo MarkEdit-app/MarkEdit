@@ -1,6 +1,6 @@
 import { EditorSelection, Line } from '@codemirror/state';
+import { linesWithRange, reversedRanges } from '../selection';
 import removeListMarkers from './removeListMarkers';
-import * as selection from '../selection';
 
 /**
  * Toggle list style by providing pattern and customizable callbacks.
@@ -15,7 +15,7 @@ export default function toggleListStyle(
   toggleMark?: (line: string) => string | undefined,
 ) {
   const editor = window.editor;
-  const selectedRanges = selection.reversedRanges();
+  const selectedRanges = reversedRanges();
 
   // Iterate multiple lines reversely
   //
@@ -25,7 +25,7 @@ export default function toggleListStyle(
   //
   // The downside of this approach is that updates are also reversed.
   for (const { from, to } of selectedRanges) {
-    const lines = selection.linesWithRange(from, to);
+    const lines = linesWithRange(from, to);
     const literate = (callback: (match: RegExpMatchArray | null, empty: boolean, line: Line, index: number) => void) => {
       let skipped = 0;
       let index = 0;

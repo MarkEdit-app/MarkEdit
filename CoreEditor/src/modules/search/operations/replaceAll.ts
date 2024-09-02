@@ -1,5 +1,5 @@
-import * as search from '@codemirror/search';
+import { replaceAll as replaceAllCommand } from '@codemirror/search';
 
 export default function replaceAll() {
-  search.replaceAll(window.editor);
+  replaceAllCommand(window.editor);
 }

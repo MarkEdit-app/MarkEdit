@@ -8,7 +8,9 @@ import Foundation
 
 public extension EditorConfig {
   var toHtml: String {
-    indexHtml?.replacingOccurrences(of: "\"{{EDITOR_CONFIG}}\"", with: jsonEncoded) ?? ""
+    indexHtml?
+      .replacingOccurrences(of: "/chunk-loader/", with: "chunk-loader://")
+      .replacingOccurrences(of: "\"{{EDITOR_CONFIG}}\"", with: jsonEncoded) ?? ""
   }
 }
 

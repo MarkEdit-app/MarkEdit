@@ -1,5 +1,5 @@
-import * as search from '@codemirror/search';
+import { selectMatches as selectMatchesCommand } from '@codemirror/search';
 
 export default function selectAll() {
-  search.selectMatches(window.editor);
+  selectMatchesCommand(window.editor);
 }

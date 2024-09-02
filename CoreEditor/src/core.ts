@@ -5,13 +5,13 @@ import { editingState } from './common/store';
 import { getViewportScale, notifyBackgroundColor } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
-import * as events from './events';
-import * as styling from './styling/config';
-import * as themes from './styling/themes';
-import * as lineEndings from './modules/lineEndings';
-import * as diff from './modules/diff';
-import * as selection from './modules/selection';
-import * as history from './modules/history';
+import { resetKeyStates } from './events';
+import { setUp, setGutterHovered } from './styling/config';
+import { loadTheme } from './styling/themes';
+import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
+import { generateDiffs } from './modules/diff';
+import { scrollCaretToVisible, scrollIntoView } from './modules/selection';
+import { markContentClean } from './modules/history';
 
 export enum ReplaceGranularity {
   wholeDocument = 'wholeDocument',
@@ -38,7 +38,7 @@ export function resetEditor(
     window.editor.destroy();
   }
 
-  const lineBreak = lineEndings.getLineBreak(
+  const lineBreak = getLineBreak(
     doc,
     window.config.defaultLineBreak,
   );
@@ -50,11 +50,11 @@ export function resetEditor(
       return doc;
     }
 
-    return diff.generateDiffs(revision, doc);
+    return generateDiffs(revision, doc);
   })();
 
   const editor = new EditorView({
-    doc: lineEndings.normalizeLineBreaks(initialContent, lineBreak),
+    doc: normalizeLineBreaks(initialContent, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
     extensions: extensions({ revisionMode, lineBreak }),
   });
@@ -64,7 +64,7 @@ export function resetEditor(
 
   const ensureLineHeight = () => {
     // coordsAtPos ensures the line number height
-    selection.scrollCaretToVisible();
+    scrollCaretToVisible();
   };
 
   // Ensure twice, the first one is for initial launch,
@@ -73,7 +73,7 @@ export function resetEditor(
   setTimeout(ensureLineHeight, 600);
 
   // Makes sure the content doesn't have unwanted inset
-  selection.scrollIntoView(0);
+  scrollIntoView(0);
 
   const contentDOM = editor.contentDOM;
   contentDOM.addEventListener('blur', handleFocusLost);
@@ -94,7 +94,7 @@ export function resetEditor(
   });
 
   // Recofigure, window.config might have changed
-  styling.setUp(window.config, themes.loadTheme(window.config.theme).colors);
+  setUp(window.config, loadTheme(window.config.theme).colors);
   setTimeout(notifyBackgroundColor, 100);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
@@ -122,7 +122,7 @@ export function resetEditor(
   });
 
   // The content should be initially clean
-  history.markContentClean();
+  markContentClean();
 }
 
 /**
@@ -174,7 +174,7 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
 }
 
 export function handleFocusLost() {
-  events.resetKeyStates();
+  resetKeyStates();
 }
 
 export function handleMouseEntered(clientX: number, _clientY: number) {
@@ -190,12 +190,12 @@ export function handleMouseEntered(clientX: number, _clientY: number) {
   //
   // To keep it simple, this doesn't take magnification into account.
   if (clientX > 0 && clientX < gutterRect.width || rightToLeft && clientX > gutterRect.left && clientX < gutterRect.right) {
-    styling.setGutterHovered(true);
+    setGutterHovered(true);
   }
 }
 
 export function handleMouseExited(_clientX: number, _clientY: number) {
-  styling.setGutterHovered(false);
+  setGutterHovered(false);
 }
 
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
