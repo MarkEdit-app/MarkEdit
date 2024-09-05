@@ -3,13 +3,12 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
 
 import { Config } from '../config';
+import { setUp, setTheme } from '../styling/config';
 import { classHighlighters, markdownExtensions, renderExtensions } from '../styling/markdown';
 import { scrollIntoView } from '../modules/selection';
 
 import GitHubLight from '../styling/themes/github-light';
 import GitHubDark from '../styling/themes/github-dark';
-
-import * as styling from '../styling/config';
 
 // "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,7 +42,7 @@ const doc = config.text;
 const parent = document.querySelector('#editor') ?? document.body;
 
 window.editor = new EditorView({ doc, parent, extensions });
-styling.setUp(config, loadTheme(config.theme).colors);
+setUp(config, loadTheme(config.theme).colors);
 
 // Makes sure the content doesn't have unwanted inset
 scrollIntoView(0);
@@ -55,7 +54,7 @@ const bridge = (window as any);
 const storage: { scrollbarOffset?: number } = {};
 
 bridge.setTheme = (name: string) => {
-  styling.setTheme(loadTheme(name));
+  setTheme(loadTheme(name));
 };
 
 bridge.startDragging = (location: number) => {

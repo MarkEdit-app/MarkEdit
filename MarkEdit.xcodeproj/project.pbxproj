@@ -39,6 +39,7 @@
 		873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873ACD4629644E2F00431498 /* EditorViewController+Encoding.swift */; };
 		873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873D6401295FCC3E0095DEF7 /* AppResources.swift */; };
 		874065792BB505F500B5CE5A /* EditorViewController+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874065782BB505F500B5CE5A /* EditorViewController+Events.swift */; };
+		874788622C85E11D00ECF05B /* EditorChunkLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874788612C85E11D00ECF05B /* EditorChunkLoader.swift */; };
 		874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */ = {isa = PBXBuildFile; productRef = 874823CD29B0BD980067EC49 /* TextCompletion */; };
 		874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874AAE2D2959F197000E0E84 /* EditorReplacePanel.swift */; };
 		874BE6F429BB37FA002F83BA /* IntentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874BE6F329BB37FA002F83BA /* IntentProvider.swift */; };
@@ -75,6 +76,7 @@
 		87AAEDF7295825D800C8E61C /* EditorFindPanel+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEDF6295825D800C8E61C /* EditorFindPanel+Delegate.swift */; };
 		87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */; };
 		87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEE0129585ADC00C8E61C /* AppPreferences.swift */; };
+		87ACA65C2C858AF4008E24BA /* chunks in Resources */ = {isa = PBXBuildFile; fileRef = 87ACA65B2C858AF4008E24BA /* chunks */; };
 		87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACB6932BD8CA8400CE6F9E /* Application.swift */; };
 		87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BD071129699A290053EF5F /* EditorViewController+Preview.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
@@ -162,6 +164,7 @@
 		873D6401295FCC3E0095DEF7 /* AppResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResources.swift; sourceTree = "<group>"; };
 		874065782BB505F500B5CE5A /* EditorViewController+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Events.swift"; sourceTree = "<group>"; };
 		8743B26229593B2000F83DAE /* Build.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Build.xcconfig; sourceTree = "<group>"; };
+		874788612C85E11D00ECF05B /* EditorChunkLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorChunkLoader.swift; sourceTree = "<group>"; };
 		874AAE2D2959F197000E0E84 /* EditorReplacePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplacePanel.swift; sourceTree = "<group>"; };
 		874BE6F329BB37FA002F83BA /* IntentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentProvider.swift; sourceTree = "<group>"; };
 		874BE6F629BB57AC002F83BA /* IntentError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentError.swift; sourceTree = "<group>"; };
@@ -197,6 +200,7 @@
 		87AAEDF6295825D800C8E61C /* EditorFindPanel+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorFindPanel+Delegate.swift"; sourceTree = "<group>"; };
 		87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorFindPanel+Menu.swift"; sourceTree = "<group>"; };
 		87AAEE0129585ADC00C8E61C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		87ACA65B2C858AF4008E24BA /* chunks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chunks; path = CoreEditor/dist/chunks; sourceTree = SOURCE_ROOT; };
 		87ACB6932BD8CA8400CE6F9E /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		87BD071129699A290053EF5F /* EditorViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Preview.swift"; sourceTree = "<group>"; };
 		87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+GotoLine.swift"; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 		870A51C229470D5C0095C7EB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				87ACA65B2C858AF4008E24BA /* chunks */,
 				870A51C8294752530095C7EB /* index.html */,
 				870A51A9294700E00095C7EB /* Assets.xcassets */,
 				8757F7FB2AAC815F001957DD /* Localizable.xcstrings */,
@@ -327,6 +332,7 @@
 				87A73AAB294C3788006A710E /* Models */,
 				87A73AB1294C4B0A006A710E /* Views */,
 				8767BBAC295A893200BFACAE /* Controllers */,
+				874788612C85E11D00ECF05B /* EditorChunkLoader.swift */,
 				8790B6EB297036B2000DFC1A /* EditorWindow.swift */,
 				870A51B5294702AF0095C7EB /* EditorWindowController.swift */,
 			);
@@ -668,6 +674,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87ACA65C2C858AF4008E24BA /* chunks in Resources */,
 				870A51C9294752530095C7EB /* index.html in Resources */,
 				87F85D5929BC95AE00F3FD37 /* AppShortcuts.strings in Resources */,
 				870A51AA294700E00095C7EB /* Assets.xcassets in Resources */,
@@ -740,6 +747,7 @@
 				87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */,
 				870F17682985285B00003DA7 /* EditorViewController+Config.swift in Sources */,
 				8780AC1C29829EDD00065EF4 /* GeneralSettingsView.swift in Sources */,
+				874788622C85E11D00ECF05B /* EditorChunkLoader.swift in Sources */,
 				871C995D2973F20E003FF3A7 /* AppDelegate+Menu.swift in Sources */,
 				87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */,
 				87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */,

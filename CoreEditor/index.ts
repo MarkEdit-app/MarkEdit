@@ -20,14 +20,13 @@ import { NativeModuleCompletion } from './src/bridge/native/completion';
 import { NativeModulePreview } from './src/bridge/native/preview';
 import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 
-import * as core from './src/core';
-import * as styling from './src/styling/config';
-import * as themes from './src/styling/themes';
-import * as events from './src/events';
+import { resetEditor } from './src/core';
+import { setUp } from './src/styling/config';
+import { loadTheme } from './src/styling/themes';
+import { startObserving } from './src/events';
 
-// "{{EDITOR_CONFIG}}" will be replaced with a JSON literal in production
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
+// In release mode, window.config = "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
+const config = isReleaseMode ? window.config : {
   text: pseudoDocument,
   theme: 'github-light',
   fontFace: { family: 'ui-monospace' },
@@ -47,7 +46,7 @@ const config: Config = isReleaseMode ? ('{{EDITOR_CONFIG}}' as any) : {
     previewButtonTitle: 'preview',
     cmdClickToOpenLink: '⌘-click to open link',
   },
-};
+} as Config;
 
 window.webModules = {
   config: new WebModuleConfigImpl(),
@@ -71,14 +70,14 @@ window.nativeModules = {
 };
 
 window.onload = () => {
-  window.config = config;
   window.nativeModules.core.notifyWindowDidLoad();
 
   // On Prod, text is reset by the native code
   if (!isReleaseMode) {
-    core.resetEditor(config.text);
+    window.config = config;
+    resetEditor(config.text);
   }
 };
 
-styling.setUp(config, themes.loadTheme(config.theme).colors);
-events.startObserving();
+setUp(config, loadTheme(config.theme).colors);
+startObserving();

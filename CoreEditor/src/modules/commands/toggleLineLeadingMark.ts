@@ -1,5 +1,5 @@
 import { EditorSelection } from '@codemirror/state';
-import * as selection from '../selection';
+import { reversedLines } from '../selection';
 
 /**
  * Toggle the level of given leading mark, e.g., headings with "#".
@@ -9,7 +9,7 @@ import * as selection from '../selection';
  */
 export default function toggleLineLeadingMark(mark: string, level: number) {
   const editor = window.editor;
-  const lines = selection.reversedLines();
+  const lines = reversedLines();
   const regex = new RegExp(`^( *)(${mark}+)( +)`);
 
   // Remove all marks only if all lines have exactly the destination level

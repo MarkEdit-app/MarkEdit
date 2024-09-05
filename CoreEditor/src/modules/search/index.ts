@@ -1,3 +1,10 @@
+// Imagine this entire file as a front-end to the @codemirror/search module
+import {
+  findNext as findNextCommand,
+  findPrevious as findPreviousCommand,
+  replaceNext as replaceNextCommand,
+} from '@codemirror/search';
+
 import { EditorSelection } from '@codemirror/state';
 import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSearchQuery } from '@codemirror/search';
 import { isElementVisible, isPositionVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
@@ -9,9 +16,6 @@ import searchOccurrences from './searchOccurrences';
 import hasSelection from '../selection/hasSelection';
 import searchMatchElement from '../selection/searchMatchElement';
 import selectWithRanges from '../selection/selectWithRanges';
-
-// Imagine this entire file as a front-end to the @codemirror/search module
-import * as search from '@codemirror/search';
 
 // Search operations
 import {
@@ -80,7 +84,7 @@ export function updateHasSelection() {
 
 export function findNext(term: string) {
   prepareNavigation(term);
-  const result = search.findNext(window.editor);
+  const result = findNextCommand(window.editor);
 
   scrollSearchMatchToVisible();
   return result;
@@ -88,14 +92,14 @@ export function findNext(term: string) {
 
 export function findPrevious(term: string) {
   prepareNavigation(term);
-  const result = search.findPrevious(window.editor);
+  const result = findPreviousCommand(window.editor);
 
   scrollSearchMatchToVisible();
   return result;
 }
 
 export function replaceNext() {
-  search.replaceNext(window.editor);
+  replaceNextCommand(window.editor);
   scrollSearchMatchToVisible();
 }
 

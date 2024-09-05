@@ -1,12 +1,22 @@
+import {
+  copyLineDown,
+  copyLineUp,
+  indentLess,
+  indentMore,
+  moveLineDown,
+  moveLineUp,
+  selectLine,
+  toggleBlockComment,
+  toggleComment,
+} from '@codemirror/commands';
+
+import { EditCommand } from './types';
 import formatContent from './formatContent';
 import toggleBlockWithMarks from './toggleBlockWithMarks';
 import toggleLineLeadingMark from './toggleLineLeadingMark';
 import toggleListStyle from './toggleListStyle';
 import replaceSelections from './replaceSelections';
 import insertBlockWithMarks from './insertBlockWithMarks';
-
-import { EditCommand } from './types';
-import * as commands from '@codemirror/commands';
 
 export function toggleBold() {
   toggleBlockWithMarks('**', '**', 'StrongEmphasis', 'EmphasisMark');
@@ -88,15 +98,15 @@ export function insertMathBlock() {
 export function performEditCommand(command: EditCommand) {
   const editor = window.editor;
   switch (command) {
-    case EditCommand.indentLess: commands.indentLess(editor); break;
-    case EditCommand.indentMore: commands.indentMore(editor); break;
-    case EditCommand.selectLine: commands.selectLine(editor); break;
-    case EditCommand.moveLineUp: commands.moveLineUp(editor); break;
-    case EditCommand.moveLineDown: commands.moveLineDown(editor); break;
-    case EditCommand.copyLineUp: commands.copyLineUp(editor); break;
-    case EditCommand.copyLineDown: commands.copyLineDown(editor); break;
-    case EditCommand.toggleLineComment: commands.toggleComment(editor); break; // Don't call toggleLineComment here, it won't work
-    case EditCommand.toggleBlockComment: commands.toggleBlockComment(editor); break;
+    case EditCommand.indentLess: indentLess(editor); break;
+    case EditCommand.indentMore: indentMore(editor); break;
+    case EditCommand.selectLine: selectLine(editor); break;
+    case EditCommand.moveLineUp: moveLineUp(editor); break;
+    case EditCommand.moveLineDown: moveLineDown(editor); break;
+    case EditCommand.copyLineUp: copyLineUp(editor); break;
+    case EditCommand.copyLineDown: copyLineDown(editor); break;
+    case EditCommand.toggleLineComment: toggleComment(editor); break; // Don't call toggleLineComment here, it won't work
+    case EditCommand.toggleBlockComment: toggleBlockComment(editor); break;
     default: break;
   }
 }
