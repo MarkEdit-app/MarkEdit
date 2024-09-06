@@ -110,6 +110,10 @@ struct AppCustomization {
     )) ?? []
 
     let contents: [String] = files.compactMap {
+      guard ["css", "js"].contains($0.pathExtension.lowercased()) else {
+        return nil
+      }
+
       guard let contents = readFile(url: $0.resolvingSymbolicLink) else {
         return nil
       }
