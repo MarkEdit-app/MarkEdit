@@ -76,7 +76,7 @@ private extension AppRuntimeConfig {
   )
 
   static let currentDefinition: Definition? = {
-    guard let fileData = AppCustomization.settings.fileData else {
+    guard let fileData = try? Data(contentsOf: AppCustomization.settings.fileURL) else {
       Logger.assertFail("Missing settings.json to proceed")
       return nil
     }
