@@ -15,59 +15,65 @@ import MarkEditKit
  */
 struct AppCustomization {
   enum FileType {
-    case style
-    case script
+    case editorStyle
+    case stylesDirectory
+    case editorScript
+    case scriptsDirectory
     case pandoc
     case settings
 
     var tagName: String? {
       switch self {
-      case .style: return "style"
-      case .script: return "script"
+      case .editorStyle, .stylesDirectory: return "style"
+      case .editorScript, .scriptsDirectory: return "script"
       case .pandoc, .settings: return nil
       }
     }
 
     var fileName: String {
       switch self {
-      case .style: return "editor.css"
-      case .script: return "editor.js"
+      case .editorStyle: return "editor.css"
+      case .stylesDirectory: return "styles"
+      case .editorScript: return "editor.js"
+      case .scriptsDirectory: return "scripts"
       case .pandoc: return "pandoc.yaml"
       case .settings: return "settings.json"
       }
     }
+
+    var isDirectory: Bool {
+      switch self {
+      case .stylesDirectory, .scriptsDirectory: return true
+      default: return false
+      }
+    }
   }
 
-  static let style = Self(fileType: .style)
-  static let script = Self(fileType: .script)
+  static let editorStyle = Self(fileType: .editorStyle)
+  static let stylesDirectory = Self(fileType: .stylesDirectory)
+  static let editorScript = Self(fileType: .editorScript)
+  static let scriptsDirectory = Self(fileType: .scriptsDirectory)
   static let pandoc = Self(fileType: .pandoc)
   static let settings = Self(fileType: .settings)
 
   static func createFiles() {
-    style.createFile()
-    script.createFile()
+    editorStyle.createFile()
+    stylesDirectory.createFile()
+    editorScript.createFile()
+    scriptsDirectory.createFile()
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
     settings.createFile(AppRuntimeConfig.defaultContents)
   }
 
   var fileURL: URL {
-    URL.documentsDirectory.appending(path: fileType.fileName, directoryHint: .notDirectory)
-  }
-
-  var fileData: Data? {
-    try? Data(contentsOf: fileURL.resolvingSymbolicLink)
+    URL.documentsDirectory.appending(
+      path: fileType.fileName,
+      directoryHint: fileType.isDirectory ? .isDirectory : .notDirectory
+    ).resolvingSymbolicLink
   }
 
   var contents: String {
-    guard let contents = fileData?.toString() else {
-      return ""
-    }
-
-    if let tagName = fileType.tagName {
-      return "<\(tagName)>\n\(contents)\n</\(tagName)>"
-    } else {
-      return contents
-    }
+    fileType.isDirectory ? directoryContents() : fileContents()
   }
 
   // MARK: - Private
@@ -84,7 +90,45 @@ struct AppCustomization {
       return false
     }
 
-    try? contents.toData()?.write(to: fileURL)
+    if fileType.isDirectory {
+      try? FileManager.default.createDirectory(at: fileURL, withIntermediateDirectories: false)
+    } else {
+      try? contents.toData()?.write(to: fileURL)
+    }
+
     return true
+  }
+
+  private func fileContents() -> String {
+    createContents(readFile(url: fileURL) ?? "")
+  }
+
+  private func directoryContents() -> String {
+    let files = (try? FileManager.default.contentsOfDirectory(
+      at: fileURL,
+      includingPropertiesForKeys: nil
+    )) ?? []
+
+    let contents: [String] = files.compactMap {
+      guard let contents = readFile(url: $0.resolvingSymbolicLink) else {
+        return nil
+      }
+
+      return createContents(contents)
+    }
+
+    return contents.joined(separator: "\n")
+  }
+
+  private func readFile(url: URL) -> String? {
+    (try? Data(contentsOf: fileURL))?.toString()
+  }
+
+  private func createContents(_ contents: String) -> String {
+    if let tagName = fileType.tagName, !contents.isEmpty {
+      return "<\(tagName)>\n\(contents)\n</\(tagName)>"
+    } else {
+      return contents
+    }
   }
 }
