@@ -121,7 +121,7 @@ struct AppCustomization {
   }
 
   private func readFile(url: URL) -> String? {
-    (try? Data(contentsOf: fileURL))?.toString()
+    (try? Data(contentsOf: url))?.toString()
   }
 
   private func createContents(_ contents: String) -> String {
