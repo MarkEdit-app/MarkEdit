@@ -1,6 +1,6 @@
 import { ViewUpdate } from '@codemirror/view';
 import { Transaction } from '@codemirror/state';
-import { undo as undoCommand, redo as redoCommand, undoDepth, redoDepth } from '@codemirror/commands';
+import { undo as undoCommand, redo as redoCommand, undoDepth, redoDepth } from '../../@vendor/commands/history';
 
 /**
  * In the client codebase, we need to bind the native undo to this function.
