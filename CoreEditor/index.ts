@@ -21,9 +21,13 @@ import { NativeModulePreview } from './src/bridge/native/preview';
 import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 
 import { resetEditor } from './src/core';
+import { initMarkEditModules } from './src/api/modules';
 import { setUp } from './src/styling/config';
 import { loadTheme } from './src/styling/themes';
 import { startObserving } from './src/events';
+
+// Initialize and inject modules to the global MarkEdit object
+initMarkEditModules();
 
 // In release mode, window.config = "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
 const config = isReleaseMode ? window.config : {

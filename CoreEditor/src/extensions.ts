@@ -29,6 +29,7 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
+import { userExtensions, userMarkdownConfigs } from './api/methods';
 
 // Revision mode
 import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
@@ -46,6 +47,8 @@ const lineWrapping = new Compartment;
 const lineEndings = new Compartment;
 const indentUnit = new Compartment;
 const selectionHighlight = new Compartment;
+const extensionConfigurator = new Compartment;
+const markdownConfigurator = new Compartment;
 
 window.dynamics = {
   theme,
@@ -58,6 +61,8 @@ window.dynamics = {
   lineEndings,
   indentUnit,
   selectionHighlight,
+  extensionConfigurator,
+  markdownConfigurator,
 };
 
 // Make this a function because some resources (e.g., phrases) require lazy loading
@@ -72,8 +77,22 @@ export function extensions(options: {
   }
 }
 
+export function markdownExtensionBundle() {
+  return markdown({
+    base: markdownLanguage,
+    codeLanguages: languages,
+    extensions: [
+      ...markdownExtensions,
+      ...userMarkdownConfigs(),
+    ],
+  });
+}
+
 function fullExtensions(options: { lineBreak?: string }) {
   return [
+    // Extensions created by user scripts
+    extensionConfigurator.of(userExtensions()),
+
     // Read-only
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
     EditorState.transactionFilter.of(transaction => {
@@ -129,11 +148,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     ]),
 
     // Markdown
-    markdown({
-      base: markdownLanguage,
-      codeLanguages: languages,
-      extensions: markdownExtensions,
-    }),
+    markdownConfigurator.of(markdownExtensionBundle()),
 
     // Styling
     classHighlighters,
