@@ -123,6 +123,19 @@ final class EditorViewController: NSViewController {
     let controller = WKUserContentController()
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
+    let scripts = [
+      AppCustomization.editorScript.contents,
+      AppCustomization.scriptsDirectory.contents,
+    ]
+
+    scripts.forEach {
+      controller.addUserScript(WKUserScript(
+        source: $0,
+        injectionTime: .atDocumentEnd,
+        forMainFrameOnly: false
+      ))
+    }
+
     let config: WKWebViewConfiguration = .newConfig()
     config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
     config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
@@ -155,8 +168,6 @@ final class EditorViewController: NSViewController {
         AppPreferences.editorConfig(theme: theme).toHtml,
         AppCustomization.editorStyle.contents,
         AppCustomization.stylesDirectory.contents,
-        AppCustomization.editorScript.contents,
-        AppCustomization.scriptsDirectory.contents,
       ].joined(separator: "\n\n")
 
       DispatchQueue.main.async {

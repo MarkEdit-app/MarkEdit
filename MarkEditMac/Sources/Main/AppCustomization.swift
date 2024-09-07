@@ -25,8 +25,7 @@ struct AppCustomization {
     var tagName: String? {
       switch self {
       case .editorStyle, .stylesDirectory: return "style"
-      case .editorScript, .scriptsDirectory: return "script"
-      case .pandoc, .settings: return nil
+      case .editorScript, .scriptsDirectory, .pandoc, .settings: return nil
       }
     }
 
