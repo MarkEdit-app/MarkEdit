@@ -12,19 +12,18 @@ export class PreviewWidget extends WidgetView {
 
   toDOM() {
     const span = document.createElement('span');
-    span.style.paddingLeft = '4px';
+    span.className = 'cm-md-previewWrapper';
 
-    // Only include paddingRight for katext because it can be inline
-    if (this.type == PreviewType.katex) {
-      span.style.paddingRight = '4px';
-    }
+    const color = `${window.colors?.text ?? '#666666'}20`;
+    span.addEventListener('mouseenter', () => span.style.background = color);
+    span.addEventListener('mouseleave', () => span.style.background = '');
 
     const button = span.appendChild(document.createElement('span'));
     button.setAttribute('data-code', this.code);
     button.setAttribute('data-type', this.type);
     button.setAttribute('data-pos', `${this.pos}`);
 
-    button.innerText = `[${window.config.localizable?.previewButtonTitle}]`;
+    button.title = window.config.localizable?.previewButtonTitle ?? '';
     button.className = 'cm-md-previewButton';
 
     return span;
