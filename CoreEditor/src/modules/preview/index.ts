@@ -33,6 +33,13 @@ export function showPreview(event: MouseEvent) {
   const type = target.getAttribute('data-type') as PreviewType;
   window.nativeModules.preview.show({ code, type, rect: getClientRect(rect) });
 
-  event.preventDefault();
-  event.stopPropagation();
+  cancelDefaultEvent(event);
+}
+
+export function cancelDefaultEvent(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (target.className.includes('cm-md-previewButton')) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }

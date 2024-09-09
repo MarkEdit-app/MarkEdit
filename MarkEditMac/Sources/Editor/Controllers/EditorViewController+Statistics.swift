@@ -11,7 +11,7 @@ import Statistics
 
 extension EditorViewController {
   func toggleStatisticsPopover(sourceView: NSView?) {
-    if removePresentedStatistics() {
+    if removePresentedPopovers(contentClass: StatisticsController.self) {
       return
     }
 
