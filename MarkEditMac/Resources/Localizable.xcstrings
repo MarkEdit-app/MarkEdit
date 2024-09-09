@@ -1759,7 +1759,7 @@
         }
       }
     },
-    "preview" : {
+    "Preview" : {
       "comment" : "Button title for code preview",
       "localizations" : {
         "zh-Hans" : {

@@ -43,7 +43,7 @@ const config = isReleaseMode ? window.config : {
   suggestWhileTyping: false,
   autoCharacterPairs: true,
   localizable: {
-    previewButtonTitle: 'preview',
+    previewButtonTitle: 'Preview',
     cmdClickToOpenLink: '⌘-click to open link',
   },
 } as Config;

@@ -1,4 +1,14 @@
+.cm-md-previewWrapper {
+  margin: 0 2px;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease-in-out;
+}
+
 .cm-md-previewButton {
   cursor: pointer;
-  text-decoration: underline;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 18px;
+  padding-inline-end: 18px;
 }

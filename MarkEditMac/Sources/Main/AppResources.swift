@@ -36,7 +36,7 @@ enum Localized {
     static let foldLine = String(localized: "Fold Line", comment: "Phrase used in CodeMirror fold a line")
     static let unfoldLine = String(localized: "Unfold Line", comment: "Phrase used in CodeMirror to unfold a line")
     static let defaultLinkTitle = String(localized: "title", comment: "Default title used for link insertion")
-    static let previewButtonTitle = String(localized: "preview", comment: "Button title for code preview")
+    static let previewButtonTitle = String(localized: "Preview", comment: "Button title for code preview")
     static let cmdClickToOpenLink = String(localized: "⌘-click to open link", comment: "Tooltip for links")
     static let tableColumnName = String(localized: "Column", comment: "Column name for table creation")
     static let tableItemName = String(localized: "Item", comment: "Item name for table creation")
