@@ -1,7 +1,7 @@
 import { createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../../views';
-import { PreviewType, showPreview } from '../../modules/preview';
+import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
 /**
  * Always use monospace font for InlineCode.
@@ -50,7 +50,10 @@ export const previewMermaid = createDecoPlugin(() => {
     // Here we finally confirmed that the code block is for mermaid
     return new PreviewWidget(code, PreviewType.mermaid, node.to);
   });
-}, { mouseup: showPreview });
+}, {
+  click: showPreview,
+  mousedown: cancelDefaultEvent,
+});
 
 /**
  * Enable [preview] button for https://katex.org/.
@@ -65,4 +68,7 @@ export const previewMath = createDecoPlugin(() => {
 
     return new PreviewWidget(code, PreviewType.katex, node.from + 2);
   });
-}, { mouseup: showPreview });
+}, {
+  click: showPreview,
+  mousedown: cancelDefaultEvent,
+});

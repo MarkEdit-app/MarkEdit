@@ -11,17 +11,19 @@ import MarkEditKit
 
 extension EditorViewController {
   func showPreview(code: String, type: PreviewType, rect: CGRect) {
-    let popover = NSPopover()
-    popover.behavior = .transient
-    popover.contentViewController = Previewer(code: code, type: type)
-    presentPopover(popover, rect: rect)
+    if removePresentedPopovers(contentClass: Previewer.self) {
+      return
+    }
+
+    let previewer = Previewer(code: code, type: type)
+    presentAsPopover(contentViewController: previewer, rect: rect)
   }
 }
 
 // MARK: - Private
 
 private extension EditorViewController {
-  func presentPopover(_ popover: NSPopover, rect: CGRect) {
+  func presentAsPopover(contentViewController: Previewer, rect: CGRect) {
     if focusTrackingView.superview == nil {
       webView.addSubview(focusTrackingView)
     }
@@ -34,6 +36,12 @@ private extension EditorViewController {
       height: max(1, rect.height)
     )
 
-    popover.show(relativeTo: rect, of: focusTrackingView, preferredEdge: .maxX)
+    present(
+      contentViewController,
+      asPopoverRelativeTo: rect,
+      of: focusTrackingView,
+      preferredEdge: .maxX,
+      behavior: .transient
+    )
   }
 }

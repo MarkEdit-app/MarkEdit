@@ -216,16 +216,16 @@ extension EditorViewController {
   }
 
   @discardableResult
-  func removePresentedStatistics() -> Bool {
-    guard let statistics = presentedViewControllers?.filter({ $0 is StatisticsController }) else {
+  func removePresentedPopovers(contentClass: AnyClass) -> Bool {
+    guard let presented = presentedViewControllers?.filter({ $0.isKind(of: contentClass) }) else {
       return false
     }
 
-    guard !statistics.isEmpty else {
+    guard !presented.isEmpty else {
       return false
     }
 
-    statistics.forEach { dismiss($0) }
+    presented.forEach { dismiss($0) }
     return true
   }
 }

@@ -9,6 +9,7 @@ import AppKitControls
 import WebKit
 import MarkEditCore
 import MarkEditKit
+import Statistics
 import TextCompletion
 
 final class EditorViewController: NSViewController {
@@ -250,7 +251,7 @@ final class EditorViewController: NSViewController {
       removeFloatingUIElements()
     }
 
-    removePresentedStatistics()
+    removePresentedPopovers(contentClass: StatisticsController.self)
   }
 
   override var representedObject: Any? {

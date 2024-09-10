@@ -48,12 +48,12 @@
   </style>
 </head>
 <body>
-  <div id="container" style="text-align: center; visibility: hidden;"></div>
+  <div id="container" style="text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script src="https://cdn.jsdelivr.net/npm/marked@14.1.0/marked.min.js"></script>
   <script>
     const container = document.querySelector("#container");
     container.innerHTML = marked.parse("{{DATA}}".code);
-    requestAnimationFrame(() => container.style.visibility = 'visible');
+    requestAnimationFrame(() => container.style.opacity = "1");
   </script>
 </body>
 </html>

@@ -17,7 +17,7 @@
   </style>
 </head>
 <body>
-  <div id="container" style="text-align: center; visibility: hidden;"></div>
+  <div id="container" style="text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.0.2/dist/mermaid.esm.min.mjs";
 
@@ -28,7 +28,7 @@
     const container = document.querySelector("#container");
     mermaid.render("graph", "{{DATA}}".code).then(result => {
       container.innerHTML = result.svg;
-      requestAnimationFrame(() => container.style.visibility = 'visible');
+      requestAnimationFrame(() => container.style.opacity = "1");
     });
   </script>
 </body>

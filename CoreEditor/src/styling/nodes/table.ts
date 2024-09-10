@@ -1,7 +1,7 @@
 import { createLineDeco, createWidgetDeco } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../../views';
-import { PreviewType, showPreview } from '../../modules/preview';
+import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
 /**
  * Always use monospace font for Table.
@@ -24,4 +24,7 @@ export const previewTable = createDecoPlugin(() => {
     const code = state.sliceDoc(node.from, node.to);
     return new PreviewWidget(code, PreviewType.table, header.to);
   });
-}, { mouseup: showPreview });
+}, {
+  click: showPreview,
+  mousedown: cancelDefaultEvent,
+});
