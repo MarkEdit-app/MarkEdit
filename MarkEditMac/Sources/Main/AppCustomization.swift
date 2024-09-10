@@ -99,7 +99,7 @@ struct AppCustomization {
   }
 
   private func fileContents() -> String {
-    createContents(readFile(url: fileURL) ?? "")
+    createContents(url: fileURL) ?? ""
   }
 
   private func directoryContents() -> String {
@@ -113,25 +113,27 @@ struct AppCustomization {
         return nil
       }
 
-      guard let contents = readFile(url: $0.resolvingSymbolicLink) else {
-        return nil
-      }
-
-      return createContents(contents)
+      return createContents(url: $0.resolvingSymbolicLink)
     }
 
     return contents.joined(separator: "\n")
   }
 
-  private func readFile(url: URL) -> String? {
-    (try? Data(contentsOf: url))?.toString()
-  }
-
-  private func createContents(_ contents: String) -> String {
-    if let tagName = fileType.tagName, !contents.isEmpty {
-      return "<\(tagName)>\n\(contents)\n</\(tagName)>"
-    } else {
-      return contents
+  private func createContents(url: URL) -> String? {
+    guard let contents = (try? Data(contentsOf: url))?.toString(), !contents.isEmpty else {
+      return nil
     }
+
+    // JavaScript, create a closure to avoid declaration conflict
+    if fileType == .editorScript || fileType == .scriptsDirectory {
+      return "(() => {\n  module = { exports: {} }; exports = module.exports;\n  \(contents)\n})();"
+    }
+
+    // Stylesheet, create a <style></style> element
+    if let tagName = fileType.tagName {
+      return "<\(tagName)>\n\(contents)\n</\(tagName)>"
+    }
+
+    return contents
   }
 }
