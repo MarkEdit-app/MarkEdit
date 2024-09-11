@@ -124,14 +124,17 @@ struct AppCustomization {
       return nil
     }
 
+    // Create a label to better identify loaded contents
+    let comment = " /* \(url.lastPathComponent) */"
+
     // JavaScript, create a closure to avoid declaration conflict
     if fileType == .editorScript || fileType == .scriptsDirectory {
-      return "(() => {\n  module = { exports: {} }; exports = module.exports;\n  \(contents)\n})();"
+      return "(() => {\(comment)\n  module = { exports: {} }; exports = module.exports;\n  \(contents)\n})();"
     }
 
     // Stylesheet, create a <style></style> element
     if let tagName = fileType.tagName {
-      return "<\(tagName)>\n\(contents)\n</\(tagName)>"
+      return "<\(tagName)>\(comment)\n\(contents)\n</\(tagName)>"
     }
 
     return contents
