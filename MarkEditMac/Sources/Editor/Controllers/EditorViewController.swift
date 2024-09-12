@@ -125,9 +125,8 @@ final class EditorViewController: NSViewController {
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
     let scripts = [
-      AppCustomization.editorScript.contents,
-      AppCustomization.scriptsDirectory.contents,
-    ]
+      AppCustomization.editorScript.fileContents,
+    ] + AppCustomization.scriptsDirectory.directoryContents
 
     scripts.forEach {
       controller.addUserScript(WKUserScript(
@@ -167,8 +166,8 @@ final class EditorViewController: NSViewController {
     DispatchQueue.global(qos: .userInitiated).async {
       let html = [
         AppPreferences.editorConfig(theme: theme).toHtml,
-        AppCustomization.editorStyle.contents,
-        AppCustomization.stylesDirectory.contents,
+        AppCustomization.editorStyle.fileContents,
+        AppCustomization.stylesDirectory.directoryContents.joined(separator: "\n"),
       ].joined(separator: "\n\n")
 
       DispatchQueue.main.async {
