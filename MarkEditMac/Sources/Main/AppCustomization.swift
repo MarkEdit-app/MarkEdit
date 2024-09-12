@@ -71,8 +71,23 @@ struct AppCustomization {
     ).resolvingSymbolicLink
   }
 
-  var contents: String {
-    fileType.isDirectory ? directoryContents() : fileContents()
+  var fileContents: String {
+    createContents(url: fileURL) ?? ""
+  }
+
+  var directoryContents: [String] {
+    let files = (try? FileManager.default.contentsOfDirectory(
+      at: fileURL,
+      includingPropertiesForKeys: nil
+    )) ?? []
+
+    return files.compactMap {
+      guard ["css", "js"].contains($0.pathExtension.lowercased()) else {
+        return nil
+      }
+
+      return createContents(url: $0.resolvingSymbolicLink)
+    }
   }
 
   // MARK: - Private
@@ -96,27 +111,6 @@ struct AppCustomization {
     }
 
     return true
-  }
-
-  private func fileContents() -> String {
-    createContents(url: fileURL) ?? ""
-  }
-
-  private func directoryContents() -> String {
-    let files = (try? FileManager.default.contentsOfDirectory(
-      at: fileURL,
-      includingPropertiesForKeys: nil
-    )) ?? []
-
-    let contents: [String] = files.compactMap {
-      guard ["css", "js"].contains($0.pathExtension.lowercased()) else {
-        return nil
-      }
-
-      return createContents(url: $0.resolvingSymbolicLink)
-    }
-
-    return contents.joined(separator: "\n")
   }
 
   private func createContents(url: URL) -> String? {
