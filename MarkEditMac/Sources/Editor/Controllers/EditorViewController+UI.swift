@@ -189,8 +189,6 @@ extension EditorViewController {
 
       if mouseExitedWindow {
         bridge.core.handleMouseExited(clientX: clientX, clientY: clientY)
-      } else {
-        bridge.core.handleMouseEntered(clientX: clientX, clientY: clientY)
       }
 
       self.mouseExitedWindow = mouseExitedWindow
