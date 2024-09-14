@@ -177,23 +177,6 @@ export function handleFocusLost() {
   resetKeyStates();
 }
 
-export function handleMouseEntered(clientX: number, _clientY: number) {
-  const gutterDOM = document.querySelector('.cm-gutters') as HTMLElement | null;
-  if (gutterDOM === null) {
-    return;
-  }
-
-  const gutterRect = gutterDOM.getBoundingClientRect();
-  const rightToLeft = gutterRect.left > 20;
-
-  // Check if the point is inside the gutters, RTL is guessed with a margin.
-  //
-  // To keep it simple, this doesn't take magnification into account.
-  if (clientX > 0 && clientX < gutterRect.width || rightToLeft && clientX > gutterRect.left && clientX < gutterRect.right) {
-    setGutterHovered(true);
-  }
-}
-
 export function handleMouseExited(_clientX: number, _clientY: number) {
   setGutterHovered(false);
 }

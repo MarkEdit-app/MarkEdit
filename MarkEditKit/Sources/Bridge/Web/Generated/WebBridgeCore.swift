@@ -80,20 +80,6 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.handleFocusLost", completion: completion)
   }
 
-  public func handleMouseEntered(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let clientX: Double
-      let clientY: Double
-    }
-
-    let message = Message(
-      clientX: clientX,
-      clientY: clientY
-    )
-
-    webView?.invoke(path: "webModules.core.handleMouseEntered", message: message, completion: completion)
-  }
-
   public func handleMouseExited(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let clientX: Double
