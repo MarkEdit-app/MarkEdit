@@ -61,4 +61,8 @@ public final class WebBridgeSelection {
   public func refreshEditFocus(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.refreshEditFocus", completion: completion)
   }
+
+  public func scrollToBottomSmoothly(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.selection.scrollToBottomSmoothly", completion: completion)
+  }
 }
