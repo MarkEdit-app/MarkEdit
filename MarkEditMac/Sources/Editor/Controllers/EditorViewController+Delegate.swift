@@ -146,6 +146,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
+  func editorCoreContentHeightDidChange(_ sender: EditorModuleCore, bottomPanelHeight: Double) {
+    self.bottomPanelHeight = bottomPanelHeight
+    self.layoutStatusView()
+  }
+
   func editorCoreContentOffsetDidChange(_ sender: EditorModuleCore) {
     // Remove all floating UI elements since view coordinates are changed
     removeFloatingUIElements()

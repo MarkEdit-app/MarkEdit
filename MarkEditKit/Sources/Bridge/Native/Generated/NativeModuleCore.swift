@@ -16,6 +16,7 @@ public protocol NativeModuleCore: NativeModule {
   func notifyBackgroundColorDidChange(color: Int)
   func notifyViewportScaleDidChange()
   func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
+  func notifyContentHeightDidChange(bottomPanelHeight: Double)
   func notifyContentOffsetDidChange()
   func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
   func notifyLinkClicked(link: String)
@@ -40,6 +41,9 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyViewDidUpdate": { [weak self] in
       self?.notifyViewDidUpdate(parameters: $0)
+    },
+    "notifyContentHeightDidChange": { [weak self] in
+      self?.notifyContentHeightDidChange(parameters: $0)
     },
     "notifyContentOffsetDidChange": { [weak self] in
       self?.notifyContentOffsetDidChange(parameters: $0)
@@ -103,6 +107,23 @@ final class NativeBridgeCore: NativeBridge {
     }
 
     module.notifyViewDidUpdate(contentEdited: message.contentEdited, compositionEnded: message.compositionEnded, isDirty: message.isDirty, selectedLineColumn: message.selectedLineColumn)
+    return .success(nil)
+  }
+
+  private func notifyContentHeightDidChange(parameters: Data) -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var bottomPanelHeight: Double
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyContentHeightDidChange(bottomPanelHeight: message.bottomPanelHeight)
     return .success(nil)
   }
 

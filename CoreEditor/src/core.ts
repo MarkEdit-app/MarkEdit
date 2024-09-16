@@ -12,6 +12,7 @@ import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { generateDiffs } from './modules/diff';
 import { scrollCaretToVisible, scrollIntoView } from './modules/selection';
 import { markContentClean } from './modules/history';
+import { editorReadyListeners } from './api/methods';
 
 export enum ReplaceGranularity {
   wholeDocument = 'wholeDocument',
@@ -62,6 +63,9 @@ export function resetEditor(
   editor.focus();
   window.editor = editor;
 
+  MarkEdit.editorView = editor;
+  MarkEdit.editorAPI.setView(editor);
+
   const ensureLineHeight = () => {
     // coordsAtPos ensures the line number height
     scrollCaretToVisible();
@@ -80,6 +84,8 @@ export function resetEditor(
 
   const scrollDOM = editor.scrollDOM;
   scrollDOM.scrollTo({ top: 0 }); // scrollIntoView doesn't work when the app is idle
+
+  observeContentHeightChanges(scrollDOM);
   fixWebKitWheelIssues(scrollDOM);
 
   scrollDOM.addEventListener('scroll', () => {
@@ -123,6 +129,9 @@ export function resetEditor(
 
   // The content should be initially clean
   markContentClean();
+
+  // For user scripts, notify the editor is ready
+  editorReadyListeners().forEach(listener => listener(editor));
 }
 
 /**
@@ -181,6 +190,26 @@ export function handleMouseExited(_clientX: number, _clientY: number) {
   setGutterHovered(false);
 }
 
+function observeContentHeightChanges(scrollDOM: HTMLElement) {
+  const notifyIfChanged = () => {
+    const panel = window.editor.dom.querySelector('.cm-panels-bottom');
+    const height = panel === null ? 0 : panel.getBoundingClientRect().height;
+    if (Math.abs(storage.bottomPanelHeight - height) < 0.001) {
+      return;
+    }
+
+    storage.bottomPanelHeight = height;
+    window.nativeModules.core.notifyContentHeightDidChange({
+      bottomPanelHeight: height,
+    });
+  };
+
+  // eslint-disable-next-line compat/compat
+  const observer = new ResizeObserver(notifyIfChanged);
+  observer.observe(scrollDOM);
+  notifyIfChanged();
+}
+
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   // Fix the vertical scrollbar initially visible for short documents
   scrollDOM.style.overflow = 'hidden';
@@ -220,7 +249,9 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
 const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
   viewportScale: number;
+  bottomPanelHeight: number;
 } = {
   scrollTimer: undefined,
   viewportScale: 1.0,
+  bottomPanelHeight: 0.0,
 };

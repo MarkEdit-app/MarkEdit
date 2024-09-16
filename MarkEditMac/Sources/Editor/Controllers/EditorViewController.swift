@@ -17,6 +17,7 @@ final class EditorViewController: NSViewController {
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
   var mouseExitedWindow = false
+  var bottomPanelHeight: Double = 0
   var webBackgroundColor: NSColor?
   var safeAreaObservation: NSKeyValueObservation?
 

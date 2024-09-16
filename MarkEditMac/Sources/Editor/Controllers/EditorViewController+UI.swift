@@ -153,7 +153,7 @@ extension EditorViewController {
   func layoutStatusView() {
     statusView.frame = CGRect(
       x: view.bounds.width - statusView.frame.width - 6,
-      y: 8, // Vertical margins are intentionally larger to visually look the same
+      y: bottomPanelHeight + 8, // Vertical margins are intentionally larger to visually look the same
       width: statusView.frame.width,
       height: statusView.frame.height
     )

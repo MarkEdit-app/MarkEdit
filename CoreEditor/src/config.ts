@@ -71,6 +71,8 @@ export interface Dynamics {
   lineEndings?: Compartment;
   indentUnit?: Compartment;
   selectionHighlight?: Compartment;
+  extensionConfigurator?: Compartment;
+  markdownConfigurator?: Compartment;
 }
 
 export type { WebFontFace };
