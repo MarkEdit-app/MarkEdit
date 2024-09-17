@@ -29,7 +29,7 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
-import { userExtensions, userMarkdownConfigs } from './api/methods';
+import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
 // Revision mode
 import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
@@ -77,10 +77,13 @@ export function extensions(options: {
   }
 }
 
-export function markdownExtensionBundle() {
+export function markdownConfigurations() {
   return markdown({
     base: markdownLanguage,
-    codeLanguages: languages,
+    codeLanguages: [
+      ...languages,
+      ...userCodeLanguages(),
+    ],
     extensions: [
       ...markdownExtensions,
       ...userMarkdownConfigs(),
@@ -148,7 +151,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     ]),
 
     // Markdown
-    markdownConfigurator.of(markdownExtensionBundle()),
+    markdownConfigurator.of(markdownConfigurations()),
 
     // Styling
     classHighlighters,

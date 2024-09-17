@@ -12,7 +12,7 @@ import * as lezerLr from '@lezer/lr';
 import * as customHistory from '../@vendor/commands/history';
 
 import { TextEditor } from './editor';
-import { onEditorReady, addExtension, addMarkdownConfig } from './methods';
+import { onEditorReady, addExtension, addMarkdownConfig, addCodeLanguage } from './methods';
 
 export function initMarkEditModules() {
   const codemirror = {
@@ -40,6 +40,7 @@ export function initMarkEditModules() {
   MarkEdit.onEditorReady = onEditorReady;
   MarkEdit.addExtension = addExtension;
   MarkEdit.addMarkdownConfig = addMarkdownConfig;
+  MarkEdit.addCodeLanguage = addCodeLanguage;
 
   const modules = {
     'markedit-api': { MarkEdit },
