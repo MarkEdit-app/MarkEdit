@@ -14,7 +14,7 @@ import * as completion from '../completion';
 export function setTheme(name: string) {
   window.config.theme = name;
   styling.setTheme(loadTheme(name));
-  setTimeout(notifyBackgroundColor, 100);
+  setTimeout(notifyBackgroundColor, 50);
 }
 
 export function setFontFace(fontFace: WebFontFace) {

@@ -103,7 +103,7 @@ export function resetEditor(
 
   // Recofigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
-  setTimeout(notifyBackgroundColor, 100);
+  setTimeout(notifyBackgroundColor, 50);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifyViewDidUpdate({
