@@ -6,10 +6,8 @@ import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModuleCompletion } from '../bridge/native/completion';
 import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
-import { TextEditor } from '../api/editor';
 
-import type { Extension } from '@codemirror/state';
-import type { MarkdownConfig } from '@lezer/markdown';
+import type { MarkEdit } from 'markedit-api';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,15 +26,7 @@ interface WebKit {
 
 declare global {
   // https://github.com/MarkEdit-app/MarkEdit-api
-  const MarkEdit: {
-    editorView: EditorView;
-    editorAPI: TextEditor;
-    codemirror: { view: Module; state: Module; language: Module; commands: Module; search: Module };
-    lezer: { common: Module; highlight: Module; markdown: Module; lr: Module };
-    onEditorReady: (listener: (editorView: EditorView) => void) => void;
-    addExtension: (extension: Extension) => void;
-    addMarkdownConfig: (config: MarkdownConfig) => void;
-  };
+  const MarkEdit: MarkEdit;
 
   interface Window {
     webkit?: WebKit;

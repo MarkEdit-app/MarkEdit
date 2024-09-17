@@ -12,6 +12,8 @@ import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { generateDiffs } from './modules/diff';
 import { scrollCaretToVisible, scrollIntoView } from './modules/selection';
 import { markContentClean } from './modules/history';
+
+import { TextEditor } from './api/editor';
 import { editorReadyListeners } from './api/methods';
 
 export enum ReplaceGranularity {
@@ -64,7 +66,7 @@ export function resetEditor(
   window.editor = editor;
 
   MarkEdit.editorView = editor;
-  MarkEdit.editorAPI.setView(editor);
+  (MarkEdit.editorAPI as TextEditor).setView(editor);
 
   const ensureLineHeight = () => {
     // coordsAtPos ensures the line number height
