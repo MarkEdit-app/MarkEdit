@@ -3183,9 +3183,9 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-"markedit-api@https://github.com/MarkEdit-app/MarkEdit-api#v0.4.0":
-  version "0.4.0"
-  resolved "https://github.com/MarkEdit-app/MarkEdit-api#e39ff4dc72142aca197bf18a1d75bc7a5b477f62"
+"markedit-api@https://github.com/MarkEdit-app/MarkEdit-api#v0.5.0":
+  version "0.5.0"
+  resolved "https://github.com/MarkEdit-app/MarkEdit-api#f88852c64cf475c8f3ceb68fd30c8034c4941bb1"
 
 merge-stream@^2.0.0:
   version "2.0.0"
