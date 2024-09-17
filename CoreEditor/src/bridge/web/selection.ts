@@ -1,6 +1,7 @@
 import { WebModule } from '../webModule';
 import { WebRect } from '../../@types/WebRect';
 import { selectedMainText, scrollToSelection, getRect, gotoLine, refreshEditFocus, scrollToBottomSmoothly } from '../../modules/selection';
+import { navigateGoBack } from '../../modules/selection/navigate';
 
 /**
  * @shouldExport true
@@ -14,6 +15,7 @@ export interface WebModuleSelection extends WebModule {
   gotoLine({ lineNumber }: { lineNumber: CodeGen_Int }): void;
   refreshEditFocus(): void;
   scrollToBottomSmoothly(): void;
+  navigateGoBack(): void;
 }
 
 export class WebModuleSelectionImpl implements WebModuleSelection {
@@ -39,5 +41,9 @@ export class WebModuleSelectionImpl implements WebModuleSelection {
 
   scrollToBottomSmoothly(): void {
     scrollToBottomSmoothly();
+  }
+
+  navigateGoBack(): void {
+    navigateGoBack();
   }
 }

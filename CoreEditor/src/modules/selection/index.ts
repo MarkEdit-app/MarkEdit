@@ -5,6 +5,7 @@ import { getClientRect } from '../../common/utils';
 import { InvisiblesBehavior } from '../../config';
 import { setInvisiblesBehavior } from '../config';
 import { setShowActiveLineIndicator } from '../../styling/config';
+import { saveGoBackSelection } from './navigate';
 
 import selectedRanges from './selectedRanges';
 import selectWholeLineAt from './selectWholeLineAt';
@@ -85,6 +86,7 @@ export function gotoLine(lineNumber: number) {
   const state = editor.state;
   const pos = state.doc.line(lineNumber).from;
 
+  saveGoBackSelection();
   editor.dispatch({ selection: EditorSelection.cursor(pos) });
   scrollToSelection();
 }

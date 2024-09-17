@@ -1513,6 +1513,30 @@
         }
       }
     },
+    "gHK-tW-hmK.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Go Back\"; ObjectID = \"gHK-tW-hmK\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Go Back"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "后退"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "後退"
+          }
+        }
+      }
+    },
     "gVA-U4-sdL.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Paste\"; ObjectID = \"gVA-U4-sdL\";",
       "extractionState" : "extracted_with_value",
@@ -3717,6 +3741,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "語音"
+          }
+        }
+      }
+    },
+    "XUq-5x-gZk.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Go Forward\"; ObjectID = \"XUq-5x-gZk\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Go Forward"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前进"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前進"
           }
         }
       }

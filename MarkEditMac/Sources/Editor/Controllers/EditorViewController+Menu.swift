@@ -415,6 +415,10 @@ private extension EditorViewController {
     bridge.toc.selectNextSection()
   }
 
+  @IBAction func navigateGoBack(_ sender: Any?) {
+    bridge.selection.navigateGoBack()
+  }
+
   @IBAction func resetFontSize(_ sender: Any?) {
     AppPreferences.Editor.fontSize = FontPicker.defaultFontSize
     notifyFontSizeChanged()
