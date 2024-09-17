@@ -40,6 +40,17 @@ final class EditorWebView: WKWebView {
     actionDelegate?.editorWebView(self, mouseDownWith: event)
   }
 
+  override func performKeyEquivalent(with event: NSEvent) -> Bool {
+    // Silence the incorrect "beep" in WebKit
+    if event.modifierFlags.contains([.control, .command]),
+       event.keyCode == .kVK_LeftArrow || event.keyCode == .kVK_RightArrow {
+      // Event will be handled in CoreEditor instead
+      return false
+    }
+
+    return super.performKeyEquivalent(with: event)
+  }
+
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
     menu.items = menu.items.filter { item in
       // Disable "Reload", which is useful for revision mode

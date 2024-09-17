@@ -4,6 +4,7 @@ import { ensureSyntaxTree, syntaxTree } from '@codemirror/language';
 import { HeadingInfo } from './types';
 import { frontMatterRange } from '../frontMatter';
 import { scrollToSelection } from '../selection';
+import { saveGoBackSelection } from '../selection/navigate';
 import selectWithRanges from '../selection/selectWithRanges';
 
 // Override the system default behavior, it was not necessary until macOS 13.3
@@ -106,6 +107,7 @@ export function selectNextSection() {
 }
 
 export function gotoHeader(headingInfo: HeadingInfo) {
+  saveGoBackSelection();
   selectWithRanges([EditorSelection.cursor(headingInfo.from)]);
   scrollToSelection(window.config.typewriterMode ? 'center' : 'start');
 }

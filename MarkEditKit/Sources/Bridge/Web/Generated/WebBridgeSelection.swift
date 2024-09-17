@@ -65,4 +65,8 @@ public final class WebBridgeSelection {
   public func scrollToBottomSmoothly(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     webView?.invoke(path: "webModules.selection.scrollToBottomSmoothly", completion: completion)
   }
+
+  public func navigateGoBack(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.selection.navigateGoBack", completion: completion)
+  }
 }
