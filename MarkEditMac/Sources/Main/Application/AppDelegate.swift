@@ -66,7 +66,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     )
 
     // [macOS 15] Detect WritingTools visibility (fragile), with Xcode 16 we use KVO instead
-    if #available(macOS 15.1, *) {
+    if #available(macOS 15.1, *), AppRuntimeConfig.writingToolsBehavior == 1 /* complete */ {
       NotificationCenter.default.addObserver(
         self,
         selector: #selector(windowDidUpdate(_:)),
