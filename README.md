@@ -40,7 +40,7 @@ If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install mar
 
 ## Platform Compatibility
 
-To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sonoma](https://www.apple.com/newsroom/2023/09/macos-sonoma-is-available-today/) and [macOS Sequoia](https://www.apple.com/macos/macos-sequoia-preview/).
+To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sonoma](https://www.apple.com/newsroom/2023/09/macos-sonoma-is-available-today/) and [macOS Sequoia](https://www.apple.com/macos/macos-sequoia/).
 
 Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12), [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13).
 
