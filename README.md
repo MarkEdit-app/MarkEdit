@@ -42,7 +42,7 @@ If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install mar
 
 To be focused, we only support the latest two major macOS releases. For now, they are [macOS Ventura](https://www.apple.com/newsroom/2022/10/macos-ventura-is-now-available/) and [macOS Sonoma](https://www.apple.com/newsroom/2023/09/macos-sonoma-is-available-today/).
 
-Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12).
+Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/v1.12.0-rc3).
 
 ## Why MarkEdit is free
 
