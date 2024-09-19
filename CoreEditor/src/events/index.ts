@@ -8,7 +8,7 @@ import * as invisible from '../styling/nodes/invisible';
 import * as link from '../styling/nodes/link';
 
 export function startObserving() {
-  document.addEventListener('click', event => {
+  document.addEventListener('mousedown', event => {
     selection.selectWholeLineIfNeeded(event);
   });
 
