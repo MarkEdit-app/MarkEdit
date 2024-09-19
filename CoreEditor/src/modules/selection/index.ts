@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
+import { isReleaseMode } from '../../common/env';
 import { getClientRect } from '../../common/utils';
 
 import { InvisiblesBehavior } from '../../config';
@@ -67,8 +68,28 @@ export function selectedMainText(): string {
  */
 export function selectWholeLineIfNeeded(event: MouseEvent) {
   const target = event.target;
-  if (target instanceof HTMLDivElement && target.classList.contains('cm-gutterElement')) {
-    selectWholeLineAt(parseInt(target.innerText));
+  if (!(target instanceof HTMLDivElement) || !target.classList.contains('cm-gutters')) {
+    return;
+  }
+
+  const gutterElements = [...target.querySelectorAll('.cm-gutterElement')];
+  if (!isReleaseMode) {
+    console.log(`Found ${gutterElements.length} gutter elements`);
+  }
+
+  // For a better experience of selecting multiple lines, ".cm-gutterElement" ignores user interactions,
+  // we need to find the actual clicked gutter element manually.
+  const actualElement = gutterElements.find(element => {
+    const rect = element.getBoundingClientRect();
+    if (rect.top < event.clientY && rect.bottom > event.clientY) {
+      return element;
+    }
+
+    return undefined;
+  }) as HTMLElement | undefined;
+
+  if (actualElement !== undefined) {
+    selectWholeLineAt(parseInt(actualElement.innerText));
   }
 }
 

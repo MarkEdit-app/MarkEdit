@@ -29,6 +29,11 @@ html, body {
   margin: 1px;
 }
 
+.cm-gutter, .cm-gutterElement {
+  /* Disable this to have better experience of "swipe to select multiple lines" */
+  pointer-events: none;
+}
+
 /* Markdown */
 
 .cm-md-header:not(.cm-md-frontMatter *) {
