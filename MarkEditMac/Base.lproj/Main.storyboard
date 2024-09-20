@@ -49,6 +49,7 @@
                                                             <action selector="inspectElement:" target="Ady-hI-5gd" id="4pe-hk-w1S"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="eWs-Yl-9uf"/>
                                                     <menuItem title="Open Documents Folder" id="WAg-qh-q9G">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
