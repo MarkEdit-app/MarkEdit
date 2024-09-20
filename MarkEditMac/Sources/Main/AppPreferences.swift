@@ -225,6 +225,9 @@ enum AppPreferences {
   enum Updater {
     @Storage(key: "updater.skipped-versions", defaultValue: Set())
     static var skippedVersions: Set<String>
+
+    @Storage(key: "updater.completely-disabled", defaultValue: false)
+    static var completelyDisabled: Bool
   }
 }
 

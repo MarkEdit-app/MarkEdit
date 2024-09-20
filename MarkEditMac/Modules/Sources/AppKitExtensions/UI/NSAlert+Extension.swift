@@ -36,14 +36,18 @@ private extension NSAlert {
   }
 
   private enum Constants {
-    static let fontSize: Double = 11
+    static let fontSize: Double = 12
     static let contentWidth: Double = 220
     static let contentPadding: Double = 10
   }
 
   func updateAccessoryView(with markdown: String) {
+    let textFont = NSFont.systemFont(ofSize: Constants.fontSize)
+    let textColor = NSColor.labelColor
+
     let textView = NSTextView()
-    textView.font = .systemFont(ofSize: Constants.fontSize)
+    textView.font = textFont
+    textView.textColor = textColor
     textView.drawsBackground = false
     textView.isEditable = false
 
@@ -53,11 +57,10 @@ private extension NSAlert {
       textView.string = markdown
     }
 
-    textView.textStorage?.addAttribute(
-      .foregroundColor,
-      value: NSColor.labelColor,
-      range: NSRange(location: 0, length: textView.attributedString().length)
-    )
+    textView.textStorage?.addAttributes([
+      .font: textFont,
+      .foregroundColor: textColor,
+    ], range: NSRange(location: 0, length: textView.attributedString().length))
 
     let contentSize = CGSize(width: Constants.contentWidth, height: 0)
     textView.frame = CGRect(origin: CGPoint(x: Constants.contentPadding, y: 0), size: contentSize)

@@ -542,6 +542,23 @@
         }
       }
     },
+    "Disable Update Checks" : {
+      "comment" : "Title for the \"Disable Update Checks\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "禁止更新检查"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "禁止更新檢查"
+          }
+        }
+      }
+    },
     "Disallowed" : {
       "comment" : "Disallowed window tabbing mode",
       "localizations" : {
@@ -2536,6 +2553,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字格式"
+          }
+        }
+      }
+    },
+    "This release requires macOS %@ or later and cannot be installed without upgrading your operating system." : {
+      "comment" : "Message for minimum required OS version",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此更新需要 macOS %@ 或更高版本，在升级您的系统版本之前无法安装。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此更新需要 macOS %@ 或更高版本，在升級您的系統版本之前無法安裝。"
           }
         }
       }

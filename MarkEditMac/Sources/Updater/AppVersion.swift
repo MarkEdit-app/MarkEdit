@@ -11,9 +11,15 @@ import Foundation
  [GitHub Releases API](https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest)
  */
 struct AppVersion: Decodable {
+  struct Asset: Decodable {
+    let name: String
+    let browserDownloadUrl: String
+  }
+
   let name: String
   let body: String
   let htmlUrl: String
+  let assets: [Asset]?
 
   /**
    Returns true when this version was released to MAS.
@@ -25,4 +31,13 @@ struct AppVersion: Decodable {
   var releasedToMAS: Bool {
     name.isEmpty
   }
+}
+
+/**
+ ReleaseInfo.json added to GitHub release assets.
+
+ It typically contains extra information for better updating experience.
+ */
+struct ReleaseInfo: Decodable {
+  let minOSVer: String
 }

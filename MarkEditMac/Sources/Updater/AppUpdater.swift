@@ -11,6 +11,7 @@ import MarkEditKit
 
 enum AppUpdater {
   private enum Constants {
+    static let defaultOSVer = "1.0.0"
     static let endpoint = "https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest"
     static let decoder = {
       let decoder = JSONDecoder()
@@ -20,6 +21,10 @@ enum AppUpdater {
   }
 
   static func checkForUpdates(explicitly: Bool) async {
+    guard explicitly || !AppPreferences.Updater.completelyDisabled else {
+      return Logger.log(.info, "App update checks have been skipped")
+    }
+
     guard let url = URL(string: Constants.endpoint) else {
       return Logger.assertFail("Failed to create the URL: \(Constants.endpoint)")
     }
@@ -42,13 +47,66 @@ enum AppUpdater {
       return Logger.log(.error, "Failed to decode the data")
     }
 
+    // Check if the new version was skipped for implicit updates
+    guard explicitly || !AppPreferences.Updater.skippedVersions.contains(version.name) else {
+      return
+    }
+
+    // Check if the version is different and wasn't released to MAS
+    let currentVersion = Bundle.main.shortVersionString ?? "0.0.0"
+    Logger.assert(currentVersion != "0.0.0", "Invalid current version string")
+
+    guard version.name != currentVersion && !version.releasedToMAS else {
+      return {
+        guard explicitly else {
+          return
+        }
+
+        DispatchQueue.main.async {
+          let alert = NSAlert()
+          alert.messageText = Localized.Updater.upToDateTitle
+          alert.informativeText = String(format: Localized.Updater.upToDateMessage, currentVersion)
+          alert.runModal()
+        }
+      }()
+    }
+
+    let releaseInfo = await extractReleaseInfo(from: version)
+    Logger.log(.info, "v\(version.name) needs macOS \(releaseInfo?.minOSVer ?? Constants.defaultOSVer)")
+
     DispatchQueue.main.async {
-      presentUpdate(newVersion: version, explicitly: explicitly)
+      presentUpdate(newVersion: version, releaseInfo: releaseInfo, explicitly: explicitly)
     }
   }
 }
 
 // MARK: - Private
+
+private extension AppUpdater {
+  static func extractReleaseInfo(from version: AppVersion) async -> ReleaseInfo? {
+    guard let info = version.assets?.first(where: { $0.name == "ReleaseInfo.json" }) else {
+      Logger.log(.error, "Missing ReleaseInfo.json")
+      return nil
+    }
+
+    guard let url = URL(string: info.browserDownloadUrl) else {
+      Logger.log(.error, "Invalid asset url: \(info.browserDownloadUrl)")
+      return nil
+    }
+
+    guard let (data, _) = try? await URLSession.shared.data(from: url) else {
+      Logger.log(.error, "Failed to reach out to the server")
+      return nil
+    }
+
+    guard let info = try? Constants.decoder.decode(ReleaseInfo.self, from: data) else {
+      Logger.log(.error, "Failed to decode the data")
+      return nil
+    }
+
+    return info
+  }
+}
 
 @MainActor
 private extension AppUpdater {
@@ -64,35 +122,57 @@ private extension AppUpdater {
     }
   }
 
-  static func presentUpdate(newVersion: AppVersion, explicitly: Bool) {
-    guard let currentVersion = Bundle.main.shortVersionString else {
-      return Logger.assertFail("Invalid current version string")
-    }
-
-    // Check if the new version was skipped for implicit updates
-    guard explicitly || !AppPreferences.Updater.skippedVersions.contains(newVersion.name) else {
-      return
-    }
-
-    // Check if the version is different and wasn't released to MAS
-    guard newVersion.name != currentVersion && !newVersion.releasedToMAS else {
-      return {
-        guard explicitly else {
-          return
-        }
-
-        let alert = NSAlert()
-        alert.messageText = Localized.Updater.upToDateTitle
-        alert.informativeText = String(format: Localized.Updater.upToDateMessage, currentVersion)
-        alert.runModal()
-      }()
-    }
+  static func presentUpdate(newVersion: AppVersion, releaseInfo: ReleaseInfo?, explicitly: Bool) {
+    // E.g., currentOSVer = 14.7, minOSVer = 15.0, minOSVer is later than currentOSVer
+    let currentOSVer = ProcessInfo.processInfo.semanticOSVer
+    let minOSVer = releaseInfo?.minOSVer ?? Constants.defaultOSVer
+    let needsOSUpdate = minOSVer.compare(currentOSVer, options: .numeric) == .orderedDescending
 
     let alert = NSAlert()
     alert.messageText = String(format: Localized.Updater.newVersionAvailable, newVersion.name)
-    alert.markdownBody = newVersion.body
     alert.addButton(withTitle: Localized.Updater.learnMore)
 
+    if needsOSUpdate {
+      presentOSUpdateAlert(alert, newVersion: newVersion, minOSVer: minOSVer, explicitly: explicitly)
+    } else {
+      presentAppUpdateAlert(alert, newVersion: newVersion, explicitly: explicitly)
+    }
+  }
+
+  static func presentOSUpdateAlert(
+    _ alert: NSAlert,
+    newVersion: AppVersion,
+    minOSVer: String,
+    explicitly: Bool
+  ) {
+    alert.markdownBody = String(format: Localized.Updater.needsOSUpdateMessage, minOSVer)
+    if explicitly {
+      alert.addButton(withTitle: Localized.Updater.notNow)
+    } else {
+      alert.addButton(withTitle: Localized.Updater.skipThisVersion)
+      alert.addButton(withTitle: Localized.Updater.disableUpdateChecks)
+    }
+
+    switch alert.runModal() {
+    case .alertFirstButtonReturn: // Learn More
+      NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
+    case .alertSecondButtonReturn:
+      if explicitly {
+        // no-op for "Not Now"
+      } else {
+        // Skip This Version
+        AppPreferences.Updater.skippedVersions.insert(newVersion.name)
+      }
+    case .alertThirdButtonReturn: // Disable Update Checks
+      AppPreferences.Updater.completelyDisabled = true
+    default:
+      break
+    }
+  }
+
+  @MainActor
+  static func presentAppUpdateAlert(_ alert: NSAlert, newVersion: AppVersion, explicitly: Bool) {
+    alert.markdownBody = newVersion.body
     if explicitly {
       alert.addButton(withTitle: Localized.Updater.notNow)
     } else {
@@ -108,5 +188,12 @@ private extension AppUpdater {
     default:
       break
     }
+  }
+}
+
+private extension ProcessInfo {
+  var semanticOSVer: String {
+    let version = operatingSystemVersion
+    return "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
   }
 }
