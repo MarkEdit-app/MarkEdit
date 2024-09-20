@@ -156,11 +156,16 @@ extension EditorViewController {
   }
 
   func findSelectionInTextFinder() {
+    let reselectTerm = webView.isFirstResponder
     updateTextFinderMode(.find)
 
     Task {
       guard let text = try? await bridge.selection.getText() else {
         return
+      }
+
+      if text.isEmpty && !reselectTerm {
+        NSSound.beep()
       }
 
       findPanel.searchField.stringValue = text
@@ -171,20 +176,14 @@ extension EditorViewController {
   }
 
   func findNextInTextFinder() {
-    prepareFinderNavigation()
-
     Task {
-      let hadSelectedMatch = (try? await bridge.search.findNext(search: searchTerm)) ?? false
-      finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
+      await navigateFindResults(backwards: false)
     }
   }
 
   func findPreviousInTextFinder() {
-    prepareFinderNavigation()
-
     Task {
-      let hadSelectedMatch = (try? await bridge.search.findPrevious(search: searchTerm)) ?? false
-      finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
+      await navigateFindResults(backwards: true)
     }
   }
 
@@ -216,12 +215,26 @@ private extension EditorViewController {
     findPanel.searchField.stringValue
   }
 
-  func prepareFinderNavigation() {
-    guard findPanel.mode == .hidden else {
-      return
+  func navigateFindResults(backwards: Bool) async {
+    let reselectTerm = webView.isFirstResponder
+    let wasPanelHidden = findPanel.mode == .hidden
+
+    if reselectTerm, let text = try? await bridge.selection.getText() {
+      findPanel.searchField.stringValue = text
+      updateTextFinderQuery()
     }
 
-    updateTextFinderMode(.find)
+    if wasPanelHidden {
+      updateTextFinderMode(.find)
+    }
+
+    findPanel.searchField.startEditing(in: view.window)
+    let navigate = backwards ? bridge.search.findPrevious : bridge.search.findNext
+    let hadSelectedMatch = (try? await navigate(searchTerm)) ?? false
+
+    if !reselectTerm {
+      finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
+    }
   }
 
   func finishFinderNavigation(hadSelectedMatch: Bool) {

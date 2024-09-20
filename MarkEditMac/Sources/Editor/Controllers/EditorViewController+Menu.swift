@@ -150,7 +150,6 @@ extension EditorViewController: NSMenuItemValidation {
       let disabledMenus = [
         NSApp.appDelegate?.textFormatMenu,
         NSApp.appDelegate?.editCommandsMenu,
-        NSApp.appDelegate?.editFindMenu,
       ]
 
       if disabledMenus.contains(where: { menuItem.menu?.isDescendantOf(menu: $0) == true }) {
