@@ -67,7 +67,15 @@ export function selectedMainText(): string {
  * @param event
  */
 export function selectWholeLineIfNeeded(event: MouseEvent) {
-  const target = event.target;
+  const target = (() => {
+    const element = event.target;
+    if (element instanceof HTMLElement && element.classList.contains('cm-foldGutter')) {
+      return element.parentElement;
+    }
+
+    return element;
+  })();
+
   if (!(target instanceof HTMLDivElement) || !target.classList.contains('cm-gutters')) {
     return;
   }
