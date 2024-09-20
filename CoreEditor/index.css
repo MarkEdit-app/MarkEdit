@@ -29,7 +29,7 @@ html, body {
   margin: 1px;
 }
 
-.cm-gutter, .cm-gutterElement {
+.cm-lineNumbers {
   /* Disable this to have better experience of "swipe to select multiple lines" */
   pointer-events: none;
 }
