@@ -72,6 +72,14 @@ final class EditorViewController: NSViewController {
     representedObject as? EditorDocument
   }
 
+  var isFindPanelFirstResponder: Bool {
+    guard findPanel.mode != .hidden else {
+      return false
+    }
+
+    return findPanel.isFirstResponder || replacePanel.isFirstResponder
+  }
+
   private(set) lazy var findPanel = {
     let panel = EditorFindPanel()
     panel.delegate = self
@@ -243,7 +251,7 @@ final class EditorViewController: NSViewController {
   }
 
   override func cancelOperation(_ sender: Any?) {
-    if findPanel.isFirstResponder || replacePanel.isFirstResponder {
+    if isFindPanelFirstResponder {
       updateTextFinderMode(.hidden)
     }
 

@@ -195,13 +195,21 @@ extension EditorViewController {
     }
   }
 
-  func startWebViewEditing() {
+  func startTextEditing() {
     view.window?.makeFirstResponder(webView)
   }
 
   func refreshEditFocus() {
-    startWebViewEditing()
+    startTextEditing()
     bridge.selection.refreshEditFocus()
+  }
+
+  func resignFindPanelFocus() {
+    guard isFindPanelFirstResponder else {
+      return
+    }
+
+    startTextEditing()
   }
 
   func removeFloatingUIElements() {
