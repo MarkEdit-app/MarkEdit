@@ -1131,6 +1131,23 @@
         }
       }
     },
+    "Insert Line Break" : {
+      "comment" : "Insert a line break into the current editor",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "插入换行符"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "插入換行符"
+          }
+        }
+      }
+    },
     "Insert Link" : {
       "comment" : "Toolbar item to insert link",
       "localizations" : {
@@ -1144,6 +1161,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "插入連結"
+          }
+        }
+      }
+    },
+    "Insert Tab" : {
+      "comment" : "Insert a tab into the current editor",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "插入制表符"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "插入製表符"
           }
         }
       }

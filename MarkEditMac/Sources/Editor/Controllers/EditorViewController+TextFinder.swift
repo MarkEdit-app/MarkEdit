@@ -24,6 +24,7 @@ extension EditorViewController {
     findPanel.searchField.isHidden = isRevisionMode
 
     if mode != .hidden {
+      configureFieldEditor()
       removeFloatingUIElements()
 
       // When the user explicitly changes the mode to replace (from the find panel menu),
@@ -211,8 +212,36 @@ extension EditorViewController {
 // MARK: - Private
 
 private extension EditorViewController {
+  enum States {
+    @MainActor static var configuredFieldEditor = false
+  }
+
+  var fieldEditor: NSText? {
+    view.window?.fieldEditor(true, for: nil)
+  }
+
   var searchTerm: String {
     findPanel.searchField.stringValue
+  }
+
+  func configureFieldEditor() {
+    guard !States.configuredFieldEditor else {
+      return
+    }
+
+    let menu = fieldEditor?.menu
+    menu?.addItem(.separator())
+
+    menu?.addItem(withTitle: Localized.General.insertTab) { [weak self] in
+      self?.fieldEditor?.insertText("\t")
+    }
+
+    menu?.addItem(withTitle: Localized.General.insertLineBreak) { [weak self] in
+      self?.fieldEditor?.insertText("\n")
+    }
+
+    menu?.addItem(.separator())
+    States.configuredFieldEditor = true
   }
 
   func navigateFindResults(backwards: Bool) async {
