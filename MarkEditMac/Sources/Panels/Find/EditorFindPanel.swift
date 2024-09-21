@@ -71,5 +71,6 @@ extension EditorFindPanel {
     self.numberOfItems = numberOfItems
     searchField.updateLabel(text: emptyInput ? "" : "\(numberOfItems)")
     findButtons.isEnabled = numberOfItems > 0
+    resetMenu()
   }
 }
