@@ -25,6 +25,8 @@ enum Localized {
     static let all = String(localized: "All", comment: "Button title, perform actions to all items")
     static let selected = String(localized: "Selected", comment: "General title that indicates something is selected")
     static let grantAccess = String(localized: "Grant Access", comment: "Open panel prompt, used for granting access for the selected folder")
+    static let insertTab = String(localized: "Insert Tab", comment: "Insert a tab into the current editor")
+    static let insertLineBreak = String(localized: "Insert Line Break", comment: "Insert a line break into the current editor")
   }
 
   enum Editor {
