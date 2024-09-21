@@ -71,7 +71,7 @@ extension EditorViewController {
 
     // Move the focus back to editor
     if mode == .hidden {
-      startWebViewEditing()
+      startTextEditing()
       bridge.search.setState(enabled: false)
     }
 
@@ -113,7 +113,7 @@ extension EditorViewController {
    Returns true to stop event propagation.
    */
   func updateTextFinderModeIfNeeded(_ event: NSEvent) -> Bool {
-    guard findPanel.isFirstResponder || replacePanel.isFirstResponder else {
+    guard isFindPanelFirstResponder else {
       return false
     }
 
@@ -204,7 +204,7 @@ extension EditorViewController {
     bridge.search.performOperation(operation: operation)
 
     if operation == .selectAll || operation == .selectAllInSelection {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { self.startWebViewEditing() }
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { self.startTextEditing() }
     }
   }
 }

@@ -42,6 +42,12 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
       editorViewController?.refreshEditFocus()
       needsUpdateFocus = false
     }
+
+    // The shared "field editor" tends to hold focus,
+    // manually resign the focus to ensure cmd-f responds correctly.
+    for editor in EditorReusePool.shared.viewControllers() where editor !== editorViewController {
+      editor.resignFindPanelFocus()
+    }
   }
 
   func windowDidResignKey(_ notification: Notification) {

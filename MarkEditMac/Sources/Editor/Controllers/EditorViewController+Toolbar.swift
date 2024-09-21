@@ -291,7 +291,7 @@ private extension EditorViewController {
       return
     }
 
-    startWebViewEditing()
+    startTextEditing()
     bridge.toc.gotoHeader(headingInfo: headingInfo)
   }
 }

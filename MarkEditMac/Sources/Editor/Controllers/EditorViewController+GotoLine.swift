@@ -28,7 +28,7 @@ extension EditorViewController {
       defaultLineNumber: States.selectedLineNumber
     ) { [weak self] lineNumber in
       States.selectedLineNumber = lineNumber
-      self?.startWebViewEditing()
+      self?.startTextEditing()
       self?.bridge.selection.gotoLine(lineNumber: lineNumber)
     }
 

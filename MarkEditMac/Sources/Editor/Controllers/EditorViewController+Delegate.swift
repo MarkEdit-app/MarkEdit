@@ -259,7 +259,7 @@ extension EditorViewController: EditorFindPanelDelegate {
 
   func editorFindPanelDidPressTabKey(_ sender: EditorFindPanel, isBacktab: Bool) {
     if isBacktab {
-      startWebViewEditing()
+      startTextEditing()
     } else {
       replacePanel.textField.startEditing(in: view.window)
     }
@@ -285,7 +285,7 @@ extension EditorViewController: EditorReplacePanelDelegate {
     if isBacktab {
       findPanel.searchField.startEditing(in: view.window)
     } else {
-      startWebViewEditing()
+      startTextEditing()
     }
   }
 

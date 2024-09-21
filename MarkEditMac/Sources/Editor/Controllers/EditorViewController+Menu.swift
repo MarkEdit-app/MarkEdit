@@ -405,12 +405,12 @@ private extension EditorViewController {
   }
 
   @IBAction func selectPreviousSection(_ sender: Any?) {
-    startWebViewEditing()
+    startTextEditing()
     bridge.toc.selectPreviousSection()
   }
 
   @IBAction func selectNextSection(_ sender: Any?) {
-    startWebViewEditing()
+    startTextEditing()
     bridge.toc.selectNextSection()
   }
 
