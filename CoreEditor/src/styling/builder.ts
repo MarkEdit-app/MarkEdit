@@ -61,7 +61,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   },
   '.cm-foldGutter, .cm-foldPlaceholder': {
     /* We don't use ui-monospace here because ▶︎ and ••• look very big */
-    fontFamily: 'monospace',
+    fontFamily: 'monospace !important',
   },
   '.cm-foldPlaceholder': {
     margin: '0 4px',
