@@ -31,4 +31,9 @@ public final class BezelView: NSView {
     super.draw(dirtyRect)
     layer?.borderColor = borderColor.cgColor
   }
+
+  override public func hitTest(_ point: NSPoint) -> NSView? {
+    // Only visually draw a bezel, not clickable
+    nil
+  }
 }
