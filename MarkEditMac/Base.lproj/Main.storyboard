@@ -634,12 +634,6 @@ Gw
                                                 <action selector="toggleStatistics:" target="Ady-hI-5gd" id="aCq-vt-CmH"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Grammarly" keyEquivalent="g" id="4Hc-LC-ge9">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="getGrammarly:" target="Ady-hI-5gd" id="PYK-hL-hhi"/>
-                                            </connections>
-                                        </menuItem>
                                     </items>
                                     <connections>
                                         <outlet property="delegate" destination="Voe-Tx-rLC" id="dRR-k9-3HN"/>

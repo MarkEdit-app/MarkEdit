@@ -459,10 +459,6 @@ private extension EditorViewController {
       self.toggleStatisticsPopover(sourceView: self.statisticsSourceView)
     }
   }
-
-  @IBAction func getGrammarly(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#grammarly")
-  }
 }
 
 // MARK: - View
