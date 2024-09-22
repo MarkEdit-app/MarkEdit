@@ -10,7 +10,7 @@ import MarkEditKit
 
 extension EditorViewController {
   func addLocalMonitorForEvents() {
-    NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [weak self] event in
+    localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [weak self] event in
       // Press backspace or option to cancel the correction indicator,
       // it ensures a smoother word completion experience.
       if event.keyCode == .kVK_Delete || event.keyCode == .kVK_Option, let self {

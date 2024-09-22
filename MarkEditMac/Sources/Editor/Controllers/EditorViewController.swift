@@ -19,6 +19,7 @@ final class EditorViewController: NSViewController {
   var mouseExitedWindow = false
   var bottomPanelHeight: Double = 0
   var webBackgroundColor: NSColor?
+  var localEventMonitor: Any?
   var safeAreaObservation: NSKeyValueObservation?
 
   weak var presentedMenu: NSMenu?
@@ -205,6 +206,13 @@ final class EditorViewController: NSViewController {
       }
     }
   }()
+
+  deinit {
+    if let monitor = localEventMonitor {
+      NSEvent.removeMonitor(monitor)
+      localEventMonitor = nil
+    }
+  }
 
   init() {
     super.init(nibName: nil, bundle: nil)
