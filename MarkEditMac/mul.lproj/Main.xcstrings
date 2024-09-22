@@ -217,30 +217,6 @@
         }
       }
     },
-    "4Hc-LC-ge9.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Grammarly\"; ObjectID = \"4Hc-LC-ge9\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Grammarly"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grammarly"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grammarly"
-          }
-        }
-      }
-    },
     "4J7-dP-txa.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Enter Full Screen\"; ObjectID = \"4J7-dP-txa\";",
       "extractionState" : "extracted_with_value",
