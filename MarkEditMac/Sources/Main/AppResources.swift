@@ -121,6 +121,7 @@ enum Localized {
     static let systemMono = String(localized: "System Mono", comment: "System mono font name")
     static let systemRounded = String(localized: "System Rounded", comment: "System rounded font name")
     static let systemSerif = String(localized: "System Serif", comment: "System serif font name")
+    static let moreFonts = String(localized: "More Fonts", comment: "Menu item to browse all fonts")
     static let openFontPanel = String(localized: "Open Font Panel...", comment: "Menu item for selecting custom fonts")
     static let lightTheme = String(localized: "Light Theme:", comment: "Light theme for the editor")
     static let darkTheme = String(localized: "Dark Theme:", comment: "Dark theme for the editor")

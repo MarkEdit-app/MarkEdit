@@ -167,6 +167,7 @@ private extension EditorSettingsView {
       selectedFontStyle: AppPreferences.Editor.fontStyle,
       selectedFontSize: AppPreferences.Editor.fontSize,
       selectButtonTitle: Localized.Settings.selectFont,
+      moreFontsItemTitle: Localized.Settings.moreFonts,
       openPanelButtonTitle: Localized.Settings.openFontPanel,
       defaultFontName: Localized.Settings.systemDefault,
       monoFontName: Localized.Settings.systemMono,

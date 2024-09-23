@@ -1555,6 +1555,23 @@
         }
       }
     },
+    "More Fonts" : {
+      "comment" : "Menu item to browse all fonts",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多字体"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多字型"
+          }
+        }
+      }
+    },
     "Never" : {
       "comment" : "Never show invisibles",
       "localizations" : {
