@@ -1,12 +1,12 @@
 //
-//  NSNotification+Extension.swift
+//  Notification+Extension.swift
 //
 //  Created by cyan on 1/30/23.
 //
 
 import Foundation
 
-public extension NSNotification.Name {
+public extension Notification.Name {
   static let fontSizeChanged = Self("fontSizeChanged")
 }
 

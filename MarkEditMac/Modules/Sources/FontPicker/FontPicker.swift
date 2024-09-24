@@ -17,6 +17,7 @@ public struct FontPicker: View {
 
   @State private var selectedFontStyle: FontStyle
   @State private var selectedFontSize: Double
+  @State private var availableFontFamilies = [String]()
 
   public init(configuration: FontPickerConfiguration, handlers: FontPickerHandlers) {
     self.configuration = configuration
@@ -83,6 +84,18 @@ public struct FontPicker: View {
 
         Divider()
 
+        Menu {
+          ForEach(availableFontFamilies, id: \.self) { fontFamily in
+            Button {
+              changeFontStyle(.customFont(name: fontFamily))
+            } label: {
+              Text(fontFamily).font(.custom(fontFamily, size: NSFont.systemFontSize))
+            }
+          }
+        } label: {
+          Text(configuration.moreFontsItemTitle)
+        }
+
         Button(configuration.openPanelButtonTitle) {
           FontManagerDelegate.shared.fontDidChange = { font in
             changeFontStyle(.customFont(name: font.fontName))
@@ -98,6 +111,15 @@ public struct FontPicker: View {
       }
     }
     .padding(.vertical, 20)
+    .onAppear {
+      guard availableFontFamilies.isEmpty else {
+        return
+      }
+
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        availableFontFamilies = NSFontManager.shared.availableFontFamilies
+      }
+    }
     .onReceive(NotificationCenter.default.fontSizePublisher) {
       // Generally speaking, font size can also be changed by pressing ⌘ + ⌘ -, and ⌘ 0
       if let fontSize = $0.object as? Double {
