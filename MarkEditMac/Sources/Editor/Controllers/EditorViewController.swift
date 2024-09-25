@@ -233,9 +233,11 @@ final class EditorViewController: NSViewController {
   private var resetContinuations = [PreloadContinuation]()
 
   deinit {
-    if let monitor = localEventMonitor {
-      NSEvent.removeMonitor(monitor)
-      localEventMonitor = nil
+    MainActor.assumeIsolated {
+      if let monitor = localEventMonitor {
+        NSEvent.removeMonitor(monitor)
+        localEventMonitor = nil
+      }
     }
 
     loadingContinuations.forEach { $0.resume() }

@@ -103,10 +103,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       self.presentUpdateItem?.title = Localized.Updater.viewReleasePage
       self.postponeUpdateItem?.title = Localized.Updater.remindMeLater
       self.ignoreUpdateItem?.title = Localized.Updater.skipThisVersion
-
-      Task {
-        await AppUpdater.checkForUpdates(explicitly: false)
-      }
+      self.checkForUpdates(explicitly: false)
 
       Task {
         await ExtensionUpdater.checkForUpdates()
@@ -122,8 +119,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // Periodic maintenance: runs weekly for users who keep the app running
     Timer.scheduledTimer(withTimeInterval: 7 * 24 * 60 * 60, repeats: true) { _ in
-      Task {
-        await AppUpdater.checkForUpdates(explicitly: false)
+      Task { @MainActor in
+        self.checkForUpdates(explicitly: false)
       }
 
       Task {
