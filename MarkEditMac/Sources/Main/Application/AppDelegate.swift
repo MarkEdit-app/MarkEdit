@@ -82,15 +82,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-      Task {
-        await AppUpdater.checkForUpdates(explicitly: false)
-      }
+      self.checkForUpdates(explicitly: false)
     }
 
     // Check for updates on a weekly basis, for users who never quit apps
     Timer.scheduledTimer(withTimeInterval: 7 * 24 * 60 * 60, repeats: true) { _ in
-      Task {
-        await AppUpdater.checkForUpdates(explicitly: false)
+      Task { @MainActor in
+        self.checkForUpdates(explicitly: false)
       }
     }
   }
@@ -111,10 +109,21 @@ private extension AppDelegate {
     }
   }
 
-  @IBAction func checkForUpdates(_ sender: Any?) {
-    Task {
-      await AppUpdater.checkForUpdates(explicitly: true)
+  func checkForUpdates(explicitly: Bool) {
+    guard explicitly || !AppPreferences.Updater.completelyDisabled else {
+      return
     }
+
+    Task {
+      await AppUpdater.checkForUpdates(
+        explicitly: explicitly,
+        skippedVersions: AppPreferences.Updater.skippedVersions
+      )
+    }
+  }
+
+  @IBAction func checkForUpdates(_ sender: Any?) {
+    checkForUpdates(explicitly: true)
   }
 
   @IBAction func openDocumentsFolder(_ sender: Any?) {

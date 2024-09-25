@@ -20,11 +20,7 @@ enum AppUpdater {
     }()
   }
 
-  static func checkForUpdates(explicitly: Bool) async {
-    guard explicitly || !AppPreferences.Updater.completelyDisabled else {
-      return Logger.log(.info, "App update checks have been skipped")
-    }
-
+  static func checkForUpdates(explicitly: Bool, skippedVersions: Set<String>) async {
     guard let url = URL(string: Constants.endpoint) else {
       return Logger.assertFail("Failed to create the URL: \(Constants.endpoint)")
     }
@@ -48,7 +44,7 @@ enum AppUpdater {
     }
 
     // Check if the new version was skipped for implicit updates
-    guard explicitly || !AppPreferences.Updater.skippedVersions.contains(version.name) else {
+    guard explicitly || !skippedVersions.contains(version.name) else {
       return
     }
 
