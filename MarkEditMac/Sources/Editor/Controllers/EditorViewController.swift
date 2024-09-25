@@ -225,9 +225,11 @@ final class EditorViewController: NSViewController {
   private var loadingContinuations = [CheckedContinuation<Void, Never>]()
 
   deinit {
-    if let monitor = localEventMonitor {
-      NSEvent.removeMonitor(monitor)
-      localEventMonitor = nil
+    MainActor.assumeIsolated {
+      if let monitor = localEventMonitor {
+        NSEvent.removeMonitor(monitor)
+        localEventMonitor = nil
+      }
     }
   }
 
