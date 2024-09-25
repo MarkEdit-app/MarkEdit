@@ -149,7 +149,10 @@ private extension AppDelegate {
 private extension AppDelegate {
   @IBAction func checkForUpdates(_ sender: Any?) {
     Task {
-      await AppUpdater.checkForUpdates(explicitly: true)
+      await AppUpdater.checkForUpdates(
+        explicitly: true,
+        skippedVersions: AppPreferences.Updater.skippedVersions
+      )
     }
   }
 
