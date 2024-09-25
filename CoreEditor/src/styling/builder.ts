@@ -98,6 +98,10 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-md-monospace, .cm-md-monospace *, .cm-md-codeBlock *, .cm-md-table *': {
     fontFamily: 'ui-monospace, monospace',
   },
+  '.cm-md-frontMatter *': {
+    fontSize: 'unset !important',
+    fontWeight: 'unset !important',
+  },
 };
 
 // Here we define color independent highlight styles

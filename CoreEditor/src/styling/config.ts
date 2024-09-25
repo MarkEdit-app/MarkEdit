@@ -95,18 +95,28 @@ export function setFontFace(fontFace: WebFontFace) {
 
 export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
+    const h = (level: number): string => {
+      return `.cm-md-heading${level}`;
+    };
+
+    const h1 = h(1);
+    const h2 = h(2);
+    const h3 = h(3);
+    const mh = '.cm-matchingBracket:has';
+    const nh = '.cm-nonmatchingBracket:has';
+
     styleSheets.fontSize = createStyleSheet(`
-      .cm-editor:not(.cm-md-frontMatter *) {}
-      .cm-md-heading1:not(.cm-md-frontMatter *) {}
-      .cm-md-heading2:not(.cm-md-frontMatter *) {}
-      .cm-md-heading3:not(.cm-md-frontMatter *) {}
+      .cm-editor {}
+      ${h1}, ${mh}(${h1}), ${nh}(${h1}) {}
+      ${h2}, ${mh}(${h2}), ${nh}(${h2}) {}
+      ${h3}, ${mh}(${h3}), ${nh}(${h3}) {}
     `);
   }
 
   updateStyleSheet(styleSheets.fontSize, (style, rule) => {
     // E.g., .cm-md-heading1 -> 1, .cm-editor -> 0
-    const selector = rule.selectorText.split(':')[0];
-    const headingLevel = parseInt(selector.slice(-1)) || 0;
+    const match = rule.selectorText.match(/\d+/);
+    const headingLevel = parseInt(match === null ? '0' : match[0]);
     style.fontSize = `${calculateFontSize(fontSize, headingLevel)}px`;
   });
 }
