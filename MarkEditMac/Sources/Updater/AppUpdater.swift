@@ -21,7 +21,7 @@ enum AppUpdater {
     }()
   }
 
-  static func checkForUpdates(explicitly: Bool) async {
+  static func checkForUpdates(explicitly: Bool, skippedVersions: Set<String>) async {
     guard explicitly || automatically else {
       return Logger.log(.info, "App update checks have been skipped")
     }
@@ -49,7 +49,7 @@ enum AppUpdater {
     }
 
     // Check if the new version was skipped for implicit updates
-    guard explicitly || !AppPreferences.Updater.skippedVersions.contains(version.name) else {
+    guard explicitly || !skippedVersions.contains(version.name) else {
       return
     }
 
