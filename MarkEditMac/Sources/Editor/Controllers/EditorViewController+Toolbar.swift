@@ -39,7 +39,9 @@ extension EditorViewController {
     // Pop up the menu relative to the toolbar item
     if let tableOfContentsMenuButton {
       return RunLoop.main.perform(inModes: [.default, .eventTracking]) {
-        tableOfContentsMenuButton.performClick(nil)
+        MainActor.assumeIsolated {
+          tableOfContentsMenuButton.performClick(nil)
+        }
       }
     }
 
