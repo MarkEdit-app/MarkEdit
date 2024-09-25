@@ -115,7 +115,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
       Task {
         await AppUpdater.discardStagedUpdate()
-        await AppUpdater.checkForUpdates(explicitly: false)
+        await AppUpdater.checkForUpdates(
+          explicitly: false,
+          skippedVersions: AppPreferences.Updater.skippedVersions
+        )
       }
 
       Task {
@@ -132,8 +135,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // Periodic maintenance: runs weekly for users who keep the app running
     Timer.scheduledTimer(withTimeInterval: 7 * 24 * 60 * 60, repeats: true) { _ in
-      Task {
-        await AppUpdater.checkForUpdates(explicitly: false)
+      Task { @MainActor in
+        self.checkForUpdates(explicitly: false)
       }
 
       Task {
