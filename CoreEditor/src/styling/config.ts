@@ -102,14 +102,13 @@ export function setFontSize(fontSize: number) {
     const h1 = h(1);
     const h2 = h(2);
     const h3 = h(3);
-    const mh = '.cm-matchingBracket:has';
-    const nh = '.cm-nonmatchingBracket:has';
+    const ah = '*:has';
 
     styleSheets.fontSize = createStyleSheet(`
       .cm-editor {}
-      ${h1}, ${mh}(${h1}), ${nh}(${h1}) {}
-      ${h2}, ${mh}(${h2}), ${nh}(${h2}) {}
-      ${h3}, ${mh}(${h3}), ${nh}(${h3}) {}
+      ${h1}, ${ah}(> ${h1}) {}
+      ${h2}, ${ah}(> ${h2}) {}
+      ${h3}, ${ah}(> ${h3}) {}
     `);
   }
 
