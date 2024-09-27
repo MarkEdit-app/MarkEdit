@@ -245,8 +245,8 @@ private extension EditorViewController {
   }
 
   func navigateFindResults(backwards: Bool) async {
-    let reselectTerm = webView.isFirstResponder
     let wasPanelHidden = findPanel.mode == .hidden
+    let reselectTerm = webView.isFirstResponder && (wasPanelHidden || searchTerm.isEmpty)
 
     if reselectTerm, let text = try? await bridge.selection.getText() {
       findPanel.searchField.stringValue = text
