@@ -98,7 +98,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-md-monospace, .cm-md-monospace *, .cm-md-codeBlock *, .cm-md-table *': {
     fontFamily: 'ui-monospace, monospace',
   },
-  '.cm-md-frontMatter *': {
+  '.cm-md-frontMatter, .cm-md-frontMatter *': {
     fontSize: 'unset !important',
     fontWeight: 'unset !important',
   },
@@ -182,7 +182,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-md-inlineCode': {
       backgroundColor: colors.lighterBackground,
     },
-    '.cm-md-frontMatter *': {
+    '.cm-md-frontMatter, .cm-md-frontMatter *': {
       color: colors.comment,
     },
     '.cm-md-previewButton': {
