@@ -12,7 +12,8 @@ extension EditorViewController {
   func updateTextFinderMode(
     _ mode: EditorFindMode,
     searchTerm: String? = nil,
-    explicitly: Bool = false
+    explicitly: Bool = false,
+    startsEditing: Bool = true
   ) {
     guard !hasUnfinishedAnimations else {
       return
@@ -32,7 +33,7 @@ extension EditorViewController {
       let textField = (mode == .replace && !explicitly) ? replacePanel.textField : findPanel.searchField
       textField.selectAll()
 
-      if !textField.isFirstResponder(in: view.window) {
+      if startsEditing && !textField.isFirstResponder(in: view.window) {
         textField.focusRingType = .none
         textField.startEditing(in: view.window)
 
@@ -158,7 +159,7 @@ extension EditorViewController {
 
   func findSelectionInTextFinder() {
     let reselectTerm = webView.isFirstResponder
-    updateTextFinderMode(.find)
+    updateTextFinderMode(.find, startsEditing: false)
 
     Task {
       guard let text = try? await bridge.selection.getText() else {
@@ -254,10 +255,9 @@ private extension EditorViewController {
     }
 
     if wasPanelHidden {
-      updateTextFinderMode(.find)
+      updateTextFinderMode(.find, startsEditing: false)
     }
 
-    findPanel.searchField.startEditing(in: view.window)
     let navigate = backwards ? bridge.search.findPrevious : bridge.search.findNext
     let hadSelectedMatch = (try? await navigate(searchTerm)) ?? false
 
