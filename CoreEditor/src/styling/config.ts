@@ -10,6 +10,7 @@ import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
 import { isMouseDown } from '../events';
+import { afterDomUpdate } from '../common/utils';
 
 /**
  * Style sheets that can be changed dynamically.
@@ -170,7 +171,7 @@ export function setFocusMode(enabled: boolean) {
 
     // The state is not initially correct without a focus refresh
     if (enabled) {
-      setTimeout(refreshEditFocus, 5);
+      afterDomUpdate(refreshEditFocus);
     }
   }
 

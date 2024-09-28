@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
-import { getViewportScale, notifyBackgroundColor } from './common/utils';
+import { afterDomUpdate, getViewportScale, notifyBackgroundColor } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './events';
@@ -103,7 +103,7 @@ export function resetEditor(
 
   // Recofigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
-  setTimeout(notifyBackgroundColor, 50);
+  afterDomUpdate(notifyBackgroundColor);
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifyViewDidUpdate({

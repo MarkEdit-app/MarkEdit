@@ -22,6 +22,7 @@ extension EditorViewController {
 
   private enum Constants {
     static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
+    static let tableOfContentsMinimumWidth: Double = 160
     static let normalizedButtonSize: Double = 15 // "bold" icon looks bigger than expected, fix it
   }
 
@@ -134,6 +135,7 @@ private extension EditorViewController {
     let menu = NSMenu()
     menu.delegate = self
     menu.identifier = Constants.tableOfContentsMenuIdentifier
+    menu.minimumWidth = Constants.tableOfContentsMinimumWidth
 
     let label = NSMenuItem(title: Localized.Toolbar.tableOfContents, action: nil, keyEquivalent: "")
     label.isEnabled = false
@@ -253,6 +255,28 @@ private extension EditorViewController {
     // Remove existing items, the first two are placeholders that we want to keep
     for (index, item) in menu.items.enumerated() where index > 1 {
       menu.removeItem(item)
+    }
+
+    // Make the first item less "disabled" since we use it as a label
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+      // NSPopupMenuWindow
+      guard let window = (NSApp.windows.last { $0.className.contains("PopupMenu") }) else {
+        return Logger.assertFail("Missing popup menu window")
+      }
+
+      guard let row = (window.contentView?.firstDescendant { (row: NSTableRowView) in
+        row.frame.minY < 10
+      }) else {
+        return Logger.assertFail("Missing table row view")
+      }
+
+      guard let label = (row.firstDescendant { (view: NSTextField) in
+        view.stringValue == Localized.Toolbar.tableOfContents
+      }) else {
+        return Logger.assertFail("Missing table of contents label")
+      }
+
+      label.textColor = .secondaryLabelColor
     }
 
     Task {
