@@ -126,7 +126,7 @@ extension EditorViewController: NSMenuItemValidation {
       if isReadOnlyMode {
         // Table of Contents, Font, Find
         let menus = [delegate.editTableOfContentsMenu, delegate.editFontMenu, delegate.editFindMenu]
-        if menus.contains(where: { menu.isDescendantOf(menu: $0) }) {
+        if (menus.contains { menu.isDescendantOf(menu: $0) }) {
           return true
         }
 
@@ -152,7 +152,7 @@ extension EditorViewController: NSMenuItemValidation {
         NSApp.appDelegate?.editCommandsMenu,
       ]
 
-      if disabledMenus.contains(where: { menuItem.menu?.isDescendantOf(menu: $0) == true }) {
+      if (disabledMenus.contains { menuItem.menu?.isDescendantOf(menu: $0) == true }) {
         return false
       }
     }

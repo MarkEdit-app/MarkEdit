@@ -21,7 +21,7 @@ public extension NSApplication {
 
   @MainActor
   func showOpenPanel() {
-    if let openPanel = windows.first(where: { $0 is NSOpenPanel }) {
+    if let openPanel = (windows.first { $0 is NSOpenPanel }) {
       openPanel.makeKeyAndOrderFront(self)
     } else {
       NSDocumentController.shared.openDocument(self)
