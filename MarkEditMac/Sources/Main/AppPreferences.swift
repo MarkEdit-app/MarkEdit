@@ -269,7 +269,8 @@ extension AppPreferences {
       localizable: EditorLocalizable.main,
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
-      indentParagraphs: AppRuntimeConfig.indentParagraphs
+      indentParagraphs: AppRuntimeConfig.indentParagraphs,
+      headerFontSizeDiffs: AppRuntimeConfig.headerFontSizeDiffs
     )
   }
 }

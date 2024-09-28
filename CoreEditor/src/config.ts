@@ -55,6 +55,7 @@ export interface Config {
   // Runtime config from settings.json, not dynamically changeable
   autoCharacterPairs: boolean;
   indentParagraphs: boolean;
+  headerFontSizeDiffs?: number[];
 }
 
 /**
