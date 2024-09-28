@@ -24,6 +24,7 @@ const tags = {
 const sharedStyles: { [selector: string]: StyleSpec } = {
   // Default
   '.cm-content': {
+    paddingTop: '2px',
     paddingRight: '12px',
     paddingBottom: '50vh',
 
