@@ -96,20 +96,14 @@ export function setFontFace(fontFace: WebFontFace) {
 
 export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
-    const h = (level: number): string => {
-      return `.cm-md-heading${level}`;
+    const s = (level: number): string => {
+      const selector = `.cm-md-heading${level}`;
+      return `${selector}, *:has(> ${selector}) {}`;
     };
-
-    const h1 = h(1);
-    const h2 = h(2);
-    const h3 = h(3);
-    const ah = '*:has';
 
     styleSheets.fontSize = createStyleSheet(`
       .cm-editor {}
-      ${h1}, ${ah}(> ${h1}) {}
-      ${h2}, ${ah}(> ${h2}) {}
-      ${h3}, ${ah}(> ${h3}) {}
+      ${[s(1), s(2), s(3), s(4), s(5), s(6)].join('\n')}
     `);
   }
 

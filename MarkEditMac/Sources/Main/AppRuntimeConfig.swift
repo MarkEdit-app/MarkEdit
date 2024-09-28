@@ -23,6 +23,7 @@ enum AppRuntimeConfig {
     let autoCharacterPairs: Bool?
     let indentParagraphs: Bool?
     let writingToolsBehavior: String?
+    let headerFontSizeDiffs: [Double]?
     let mainWindowHotKey: HotKey?
 
     // swiftlint:enable discouraged_optional_boolean
@@ -31,6 +32,7 @@ enum AppRuntimeConfig {
       case autoCharacterPairs = "editor.autoCharacterPairs"
       case indentParagraphs = "editor.indentParagraphs"
       case writingToolsBehavior = "editor.writingToolsBehavior"
+      case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
       case mainWindowHotKey = "general.mainWindowHotKey"
     }
   }
@@ -56,6 +58,10 @@ enum AppRuntimeConfig {
     }
   }
 
+  static var headerFontSizeDiffs: [Double]? {
+    currentDefinition?.headerFontSizeDiffs
+  }
+
   static var mainWindowHotKey: Definition.HotKey? {
     currentDefinition?.mainWindowHotKey
   }
@@ -72,6 +78,7 @@ private extension AppRuntimeConfig {
     autoCharacterPairs: true,
     indentParagraphs: false,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
+    headerFontSizeDiffs: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
   )
 
