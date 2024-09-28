@@ -1,5 +1,13 @@
 import { Rect } from '@codemirror/view';
 
+export function almostEqual(a: number, b: number) {
+  return Math.abs(a - b) < 0.001;
+};
+
+export function afterDomUpdate(callback: () => void) {
+  setTimeout(callback, 50);
+}
+
 export function sleep(milliseconds: number) {
   // eslint-disable-next-line compat/compat
   return new Promise(resolve => setTimeout(resolve, milliseconds));

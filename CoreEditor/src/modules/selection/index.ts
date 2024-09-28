@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
 import { isReleaseMode } from '../../common/env';
-import { getClientRect } from '../../common/utils';
+import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
 import { InvisiblesBehavior } from '../../config';
 import { setInvisiblesBehavior } from '../config';
@@ -160,8 +160,23 @@ export function scrollToSelection(strategy: ScrollStrategy = 'center', margin = 
 }
 
 export function scrollIntoView(anchor: number | SelectionRange, strategy: ScrollStrategy = 'nearest', margin = 5) {
-  window.editor.dispatch({
-    effects: EditorView.scrollIntoView(anchor, { y: strategy, yMargin: margin }),
+  const editor = window.editor;
+  const currentOffset = editor.scrollDOM.scrollTop;
+
+  const tryToScroll = (strategy: ScrollStrategy) => {
+    editor.dispatch({
+      effects: EditorView.scrollIntoView(anchor, { y: strategy, yMargin: margin }),
+    });
+  };
+
+  // Try with the suggested strategy
+  tryToScroll(strategy);
+
+  // Try centering if the suggested strategy failed
+  afterDomUpdate(() => {
+    if (almostEqual(editor.scrollDOM.scrollTop, currentOffset)) {
+      tryToScroll('center');
+    }
   });
 }
 

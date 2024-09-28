@@ -1,7 +1,7 @@
 import { BlockInfo, layer, RectangleMarker } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { buildInnerBorder } from '../builder';
-import { getViewportScale } from '../../common/utils';
+import { almostEqual, getViewportScale } from '../../common/utils';
 
 const borderWidth = 2.5;
 const rectPadding = 2.0;
@@ -97,15 +97,11 @@ class Layer extends RectangleMarker {
   }
 
   eq(other: Layer): boolean {
-    const almostEq = (a: number, b: number): boolean => {
-      return Math.abs(a - b) < 0.001;
-    };
-
     return this.theme === other.theme &&
-    almostEq(this.rect.x, other.rect.x) &&
-    almostEq(this.rect.y, other.rect.y) &&
-    almostEq(this.rect.width, other.rect.width) &&
-    almostEq(this.rect.height, other.rect.height);
+    almostEqual(this.rect.x, other.rect.x) &&
+    almostEqual(this.rect.y, other.rect.y) &&
+    almostEqual(this.rect.width, other.rect.width) &&
+    almostEqual(this.rect.height, other.rect.height);
   }
 
   private updateColors(element: HTMLElement) {

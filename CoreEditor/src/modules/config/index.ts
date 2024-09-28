@@ -5,7 +5,7 @@ import { WebFontFace, InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
 import { refreshEditFocus, scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
-import { notifyBackgroundColor } from '../../common/utils';
+import { afterDomUpdate, notifyBackgroundColor } from '../../common/utils';
 import { loadTheme } from '../../styling/themes';
 
 import * as styling from '../../styling/config';
@@ -14,7 +14,7 @@ import * as completion from '../completion';
 export function setTheme(name: string) {
   window.config.theme = name;
   styling.setTheme(loadTheme(name));
-  setTimeout(notifyBackgroundColor, 50);
+  afterDomUpdate(notifyBackgroundColor);
 }
 
 export function setFontFace(fontFace: WebFontFace) {
