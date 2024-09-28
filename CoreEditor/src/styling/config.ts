@@ -98,7 +98,14 @@ export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
     const s = (level: number): string => {
       const selector = `.cm-md-heading${level}`;
-      return `${selector}, *:has(> ${selector}) {}`;
+      return [
+        selector,
+        `.cm-matchingBracket:has(${selector})`,
+        `.cm-nonmatchingBracket:has(${selector})`,
+        `.cm-selectionMatch:has(${selector})`,
+        `.cm-searchMatch:has(${selector})`,
+        `.cm-searchMatch-selected:has(${selector})`,
+      ].join(', ') + ' {}';
     };
 
     styleSheets.fontSize = createStyleSheet(`
