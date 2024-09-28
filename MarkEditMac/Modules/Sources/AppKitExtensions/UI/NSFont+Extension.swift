@@ -14,7 +14,7 @@ public extension NSFont {
   var cssFontWeight: String? {
     guard let traits = fontDescriptor.object(forKey: .traits) as? [NSFontDescriptor.TraitKey: Any],
           let weight = traits[.weight] as? Double, weight != NSFont.Weight.regular.rawValue,
-          let index = Self.sortedWeights.firstIndex(where: { $0.rawValue > weight }) else {
+          let index = (Self.sortedWeights.firstIndex { $0.rawValue > weight }) else {
       return nil
     }
 

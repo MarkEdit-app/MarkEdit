@@ -84,7 +84,7 @@ enum AppUpdater {
 
 private extension AppUpdater {
   static func extractReleaseInfo(from version: AppVersion) async -> ReleaseInfo? {
-    guard let info = version.assets?.first(where: { $0.name == "ReleaseInfo.json" }) else {
+    guard let info = (version.assets?.first { $0.name == "ReleaseInfo.json" }) else {
       Logger.log(.error, "Missing ReleaseInfo.json")
       return nil
     }

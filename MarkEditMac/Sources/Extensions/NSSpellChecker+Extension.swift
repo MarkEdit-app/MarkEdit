@@ -196,7 +196,7 @@ private extension NSSpellChecker {
     }
 
     // We also want to avoid the overlap of the two panels
-    guard !NSApp.windows.contains(where: { $0.isVisible && $0 is TextCompletionPanelProtocol }) else {
+    guard !(NSApp.windows.contains { $0.isVisible && $0 is TextCompletionPanelProtocol }) else {
       return dummyAction()
     }
 

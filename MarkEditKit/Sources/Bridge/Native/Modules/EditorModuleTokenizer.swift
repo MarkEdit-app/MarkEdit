@@ -23,7 +23,7 @@ public final class EditorModuleTokenizer: NativeModuleTokenizer {
   }
 
   public func moveWordBackward(anchor: TextTokenizeAnchor) -> Int {
-    if let location = locations(in: anchor.text).last(where: { $0 < anchor.pos }) {
+    if let location = (locations(in: anchor.text).last { $0 < anchor.pos }) {
       return location + anchor.offset
     }
 
@@ -32,7 +32,7 @@ public final class EditorModuleTokenizer: NativeModuleTokenizer {
   }
 
   public func moveWordForward(anchor: TextTokenizeAnchor) -> Int {
-    if let location = locations(in: anchor.text).first(where: { $0 > anchor.pos }) {
+    if let location = (locations(in: anchor.text).first { $0 > anchor.pos }) {
       return location + anchor.offset
     }
 

@@ -55,7 +55,7 @@ extension AppDelegate {
     if windows.isEmpty {
       // Open a new window if we don't have any editor windows
       openOrCreateDocument(sender: NSApp)
-    } else if windows.contains(where: { $0.isKeyWindow }) {
+    } else if (windows.contains { $0.isKeyWindow }) {
       // Hide the app if there was already a key editor window
       NSApp.hide(nil)
     } else {

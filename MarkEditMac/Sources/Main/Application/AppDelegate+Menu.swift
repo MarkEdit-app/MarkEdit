@@ -54,7 +54,7 @@ private extension AppDelegate {
     }
 
     // [macOS 15] The system one doesn't work for WKWebView
-    if #available(macOS 15.1, *), let item = mainEditMenu?.items.first(where: {
+    if #available(macOS 15.1, *), let item = (mainEditMenu?.items.first {
       $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
     }) {
       let isEnabled = activeEditorController?.webView.isFirstResponder == true
