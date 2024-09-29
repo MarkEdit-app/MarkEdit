@@ -96,14 +96,14 @@ export function setFontFace(fontFace: WebFontFace) {
 
 export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
-    const s = (level: number): string => {
-      const selector = `.cm-md-heading${level}`;
-      return `${selector}, *:has(> ${selector}) {}`;
+    const h = (level: number): string => {
+      const cls = `.cm-md-heading${level}`;
+      return `${cls}, *:has(> ${cls}) {}`;
     };
 
     styleSheets.fontSize = createStyleSheet(`
       .cm-editor {}
-      ${[s(1), s(2), s(3), s(4), s(5), s(6)].join('\n')}
+      ${[h(1), h(2), h(3), h(4), h(5), h(6)].join('\n')}
     `);
   }
 
@@ -186,7 +186,8 @@ export function setLineHeight(lineHeight: number) {
     styleSheets.lineHeight = createStyleSheet('.cm-line {}');
   }
 
-  updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight * 100}%`);
+  // Prefer numbers (like 1.5) over percentages (like 150%), see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#number
+  updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight}`);
 }
 
 export function setGutterHovered(hovered: boolean) {
