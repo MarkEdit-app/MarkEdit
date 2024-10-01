@@ -17,15 +17,19 @@ extension EditorFindPanel {
     menu.addItem(.separator())
 
     let caseItem = menu.addItem(withTitle: Localized.Search.caseSensitive, action: #selector(toggleCaseSensitive(_:)))
+    caseItem.tag = Option.caseSensitive.rawValue
     caseItem.setOn(AppPreferences.Search.caseSensitive)
 
     let wholeWordItem = menu.addItem(withTitle: Localized.Search.wholeWord, action: #selector(toggleWholeWord(_:)))
+    wholeWordItem.tag = Option.wholeWord.rawValue
     wholeWordItem.setOn(AppPreferences.Search.wholeWord)
 
     let literalItem = menu.addItem(withTitle: Localized.Search.literalSearch, action: #selector(toggleLiteralSearch(_:)))
+    literalItem.tag = Option.literalSearch.rawValue
     literalItem.setOn(AppPreferences.Search.literalSearch)
 
     let regexItem = menu.addItem(withTitle: Localized.Search.regularExpression, action: #selector(toggleRegularExpression(_:)))
+    regexItem.tag = Option.regularExpression.rawValue
     regexItem.setOn(AppPreferences.Search.regularExpression)
     menu.addItem(.separator())
 
@@ -48,12 +52,20 @@ extension EditorFindPanel {
     searchField.recentsAutosaveName = "search.recents-autosaved"
     searchField.maximumRecents = 5
     searchField.searchMenuTemplate = menu
+    updateIconTintColor()
   }
 }
 
 // MARK: - Private
 
 private extension EditorFindPanel {
+  enum Option: Int, CaseIterable {
+    case caseSensitive = 20001
+    case wholeWord = 20002
+    case literalSearch = 20003
+    case regularExpression = 20004
+  }
+
   @objc func enableFindMode(_ sender: NSMenuItem) {
     delegate?.editorFindPanel(self, modeDidChange: .find)
   }
@@ -64,26 +76,36 @@ private extension EditorFindPanel {
 
   @objc func toggleCaseSensitive(_ sender: NSMenuItem) {
     AppPreferences.Search.caseSensitive.toggle()
-    toggleMenuItem(sender)
+    updateOptions(sender)
   }
 
   @objc func toggleWholeWord(_ sender: NSMenuItem) {
     AppPreferences.Search.wholeWord.toggle()
-    toggleMenuItem(sender)
+    updateOptions(sender)
   }
 
   @objc func toggleLiteralSearch(_ sender: NSMenuItem) {
     AppPreferences.Search.literalSearch.toggle()
-    toggleMenuItem(sender)
+    updateOptions(sender)
   }
 
   @objc func toggleRegularExpression(_ sender: NSMenuItem) {
     AppPreferences.Search.regularExpression.toggle()
-    toggleMenuItem(sender)
+    updateOptions(sender)
   }
 
-  func toggleMenuItem(_ item: NSMenuItem) {
+  func updateOptions(_ item: NSMenuItem) {
     item.toggle()
+    updateIconTintColor()
     delegate?.editorFindPanelDidChangeOptions(self)
+  }
+
+  func updateIconTintColor() {
+    let shouldTint = (searchField.searchMenuTemplate?.items.filter {
+      Option.allCases.map { $0.rawValue }.contains($0.tag)
+    })?.contains { $0.state == .on } ?? false
+
+    let tintColor: NSColor? = shouldTint ? .controlAccentColor : nil
+    searchField.setIconTintColor(tintColor)
   }
 }
