@@ -65,6 +65,10 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: checker, selector: "cancelCorrectionIndicatorForView:")
   }
 
+  func testExistenceOfImageTintColor() {
+    testExistenceOfSelector(object: NSImage(), selector: "_setTintColor:")
+  }
+
   func testRetrievingPopover() {
     class ContentViewController: NSViewController {
       override func loadView() {
