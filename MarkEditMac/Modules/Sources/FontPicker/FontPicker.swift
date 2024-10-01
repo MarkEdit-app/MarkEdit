@@ -17,7 +17,6 @@ public struct FontPicker: View {
 
   @State private var selectedFontStyle: FontStyle
   @State private var selectedFontSize: Double
-  @State private var availableFontFamilies = [String]()
 
   public init(configuration: FontPickerConfiguration, handlers: FontPickerHandlers) {
     self.configuration = configuration
@@ -84,16 +83,8 @@ public struct FontPicker: View {
 
         Divider()
 
-        Menu {
-          ForEach(availableFontFamilies, id: \.self) { fontFamily in
-            Button {
-              changeFontStyle(.customFont(name: fontFamily))
-            } label: {
-              Text(fontFamily).font(.custom(fontFamily, size: NSFont.systemFontSize))
-            }
-          }
-        } label: {
-          Text(configuration.moreFontsItemTitle)
+        Button(configuration.moreFontsItemTitle) {
+          presentFontMenu()
         }
 
         Button(configuration.openPanelButtonTitle) {
@@ -111,15 +102,6 @@ public struct FontPicker: View {
       }
     }
     .padding(.vertical, 20)
-    .onAppear {
-      guard availableFontFamilies.isEmpty else {
-        return
-      }
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-        availableFontFamilies = NSFontManager.shared.availableFontFamilies
-      }
-    }
     .onReceive(NotificationCenter.default.fontSizePublisher) {
       // Generally speaking, font size can also be changed by pressing ⌘ + ⌘ -, and ⌘ 0
       if let fontSize = $0.object as? Double {
@@ -156,5 +138,39 @@ private extension FontPicker {
 
     selectedFontSize = fontSize
     handlers.fontSizeDidChange(fontSize)
+  }
+
+  @MainActor
+  func presentFontMenu() {
+    guard let contentView = NSApp.keyWindow?.contentView else {
+      return
+    }
+
+    guard let sourceView = (contentView.firstDescendant { (view: NSTextField) in
+      view.stringValue == configuration.selectButtonTitle
+    }) else {
+      return
+    }
+
+    let menu = NSMenu()
+    let fontSize = NSFont.systemFontSize
+    let textColor = NSColor.labelColor
+
+    for fontFamily in NSFontManager.shared.availableFontFamilies {
+      let attributes: [NSAttributedString.Key: Any] = [
+        .font: NSFont(name: fontFamily, size: fontSize) ?? .systemFont(ofSize: fontSize),
+        .foregroundColor: textColor,
+      ]
+
+      menu.addItem(withTitle: fontFamily) {
+        changeFontStyle(.customFont(name: fontFamily))
+      }.attributedTitle = NSAttributedString(
+        string: fontFamily,
+        attributes: attributes
+      )
+    }
+
+    let location = CGPoint(x: -6, y: sourceView.frame.height + 13)
+    menu.popUp(positioning: nil, at: location, in: sourceView)
   }
 }
