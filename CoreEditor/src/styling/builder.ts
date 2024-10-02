@@ -99,6 +99,9 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-md-monospace, .cm-md-monospace *, .cm-md-codeBlock *, .cm-md-table *': {
     fontFamily: 'ui-monospace, monospace',
   },
+  '.cm-md-inlineCode': {
+    borderRadius: '3px',
+  },
   '.cm-md-frontMatter, .cm-md-frontMatter *': {
     fontSize: 'unset !important',
     fontWeight: 'unset !important',
