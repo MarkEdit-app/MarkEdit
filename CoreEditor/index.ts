@@ -45,7 +45,7 @@ const config = isReleaseMode ? window.config : {
   lineHeight: 1.5,
   suggestWhileTyping: false,
   autoCharacterPairs: true,
-  indentParagraphs: true,
+  indentBehavior: 'paragraph',
   localizable: {
     previewButtonTitle: 'Preview',
     cmdClickToOpenLink: '⌘-click to open link',

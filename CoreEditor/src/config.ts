@@ -32,6 +32,16 @@ export enum InvisiblesBehavior {
 
 /**
  * @shouldExport true
+ * @overrideModuleName EditorIndentBehavior
+ */
+export enum IndentBehavior {
+  never = 'never',
+  paragraph = 'paragraph',
+  line = 'line',
+}
+
+/**
+ * @shouldExport true
  * @overrideModuleName EditorConfig
  */
 export interface Config {
@@ -54,7 +64,7 @@ export interface Config {
   localizable?: Localizable;
   // Runtime config from settings.json, not dynamically changeable
   autoCharacterPairs: boolean;
-  indentParagraphs: boolean;
+  indentBehavior: IndentBehavior;
   headerFontSizeDiffs?: number[];
 }
 

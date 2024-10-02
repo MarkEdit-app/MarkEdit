@@ -28,7 +28,7 @@ public struct EditorConfig: Encodable {
   let indentUnit: String?
   let localizable: EditorLocalizable?
   let autoCharacterPairs: Bool
-  let indentParagraphs: Bool
+  let indentBehavior: EditorIndentBehavior
   let headerFontSizeDiffs: [Double]?
 
   public init(
@@ -50,7 +50,7 @@ public struct EditorConfig: Encodable {
     indentUnit: String?,
     localizable: EditorLocalizable?,
     autoCharacterPairs: Bool,
-    indentParagraphs: Bool,
+    indentBehavior: EditorIndentBehavior,
     headerFontSizeDiffs: [Double]?
   ) {
     self.text = text
@@ -71,7 +71,7 @@ public struct EditorConfig: Encodable {
     self.indentUnit = indentUnit
     self.localizable = localizable
     self.autoCharacterPairs = autoCharacterPairs
-    self.indentParagraphs = indentParagraphs
+    self.indentBehavior = indentBehavior
     self.headerFontSizeDiffs = headerFontSizeDiffs
   }
 }

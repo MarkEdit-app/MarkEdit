@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MarkEditCore
 import MarkEditKit
 
 /// Preferences for pro users, not directly visible in the Settings panel.
@@ -21,7 +22,7 @@ enum AppRuntimeConfig {
     // swiftlint:disable discouraged_optional_boolean
 
     let autoCharacterPairs: Bool?
-    let indentParagraphs: Bool?
+    let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
     let headerFontSizeDiffs: [Double]?
     let mainWindowHotKey: HotKey?
@@ -30,7 +31,7 @@ enum AppRuntimeConfig {
 
     enum CodingKeys: String, CodingKey {
       case autoCharacterPairs = "editor.autoCharacterPairs"
-      case indentParagraphs = "editor.indentParagraphs"
+      case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
       case mainWindowHotKey = "general.mainWindowHotKey"
@@ -42,9 +43,9 @@ enum AppRuntimeConfig {
     currentDefinition?.autoCharacterPairs ?? true
   }
 
-  static var indentParagraphs: Bool {
+  static var indentBehavior: EditorIndentBehavior {
     // Disable it by default
-    currentDefinition?.indentParagraphs ?? false
+    currentDefinition?.indentBehavior ?? .never
   }
 
   // [macOS 15] Move to public API when it's ready
@@ -76,7 +77,7 @@ enum AppRuntimeConfig {
 private extension AppRuntimeConfig {
   static let defaultDefinition = Definition(
     autoCharacterPairs: true,
-    indentParagraphs: false,
+    indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
     headerFontSizeDiffs: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])

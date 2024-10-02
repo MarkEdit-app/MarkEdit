@@ -21,7 +21,7 @@ import { history, historyKeymap } from './@vendor/commands/history';
 import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
-import { paragraphIndentStyle } from './styling/nodes/indent';
+import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
 
 import { isActive as isWritingToolsActive } from './modules/writingTools';
@@ -127,7 +127,7 @@ function fullExtensions(options: { lineBreak?: string }) {
     lineEndings.of(options.lineBreak !== undefined ? EditorState.lineSeparator.of(options.lineBreak) : []),
     gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
     lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
-    window.config.indentParagraphs ? paragraphIndentStyle : [],
+    indentBehaviorExtension(),
 
     // Search
     search({
@@ -199,4 +199,12 @@ function revisionExtensions() {
     frontMatterStyle,
     highlightDiffs,
   ];
+}
+
+function indentBehaviorExtension() {
+  switch (window.config.indentBehavior) {
+    case 'paragraph': return paragraphIndentStyle;
+    case 'line': return lineIndentStyle;
+    default: return [];
+  }
 }

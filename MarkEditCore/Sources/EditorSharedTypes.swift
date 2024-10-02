@@ -29,6 +29,12 @@ public enum EditorInvisiblesBehavior: String, Codable {
   case always = "always"
 }
 
+public enum EditorIndentBehavior: String, Codable {
+  case never = "never"
+  case paragraph = "paragraph"
+  case line = "line"
+}
+
 /// "CGRect-fashion" rect.
 public struct WebRect: Codable {
   public var x: Double
