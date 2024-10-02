@@ -191,6 +191,14 @@ extension EditorDocument {
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
+    // When "Ask to keep changes when closing documents" is enabled,
+    // changes are asked to save explicitly.
+    //
+    // The value can from either system settings or app level overwritten.
+    guard !UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges) else {
+      return
+    }
+
     await saveAsynchronously(userInitiated: false) {
       // The default autosave doesn't work when the app is about to terminate,
       // it is because we have to do it in an asynchronous way.
