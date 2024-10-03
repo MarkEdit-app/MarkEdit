@@ -7,6 +7,7 @@
 import AppKit
 import AppKitExtensions
 import SettingsUI
+import MarkEditKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -64,6 +65,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       name: NSWindow.didResignKeyNotification,
       object: nil
     )
+
+    // App level setting for "Ask to keep changes when closing documents"
+    if let closeAlwaysConfirmsChanges = AppRuntimeConfig.closeAlwaysConfirmsChanges {
+      UserDefaults.standard.set(closeAlwaysConfirmsChanges, forKey: NSCloseAlwaysConfirmsChanges)
+    } else {
+      UserDefaults.standard.removeObject(forKey: NSCloseAlwaysConfirmsChanges)
+    }
 
     // [macOS 15] Detect WritingTools visibility (fragile), with Xcode 16 we use KVO instead
     if #available(macOS 15.1, *), AppRuntimeConfig.writingToolsBehavior == 1 /* complete */ {

@@ -22,6 +22,7 @@ enum AppRuntimeConfig {
     // swiftlint:disable discouraged_optional_boolean
 
     let autoCharacterPairs: Bool?
+    let closeAlwaysConfirmsChanges: Bool?
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
     let headerFontSizeDiffs: [Double]?
@@ -31,6 +32,7 @@ enum AppRuntimeConfig {
 
     enum CodingKeys: String, CodingKey {
       case autoCharacterPairs = "editor.autoCharacterPairs"
+      case closeAlwaysConfirmsChanges = "editor.closeAlwaysConfirmsChanges"
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
@@ -41,6 +43,12 @@ enum AppRuntimeConfig {
   static var autoCharacterPairs: Bool {
     // Enable it by default
     currentDefinition?.autoCharacterPairs ?? true
+  }
+
+  // swiftlint:disable:next discouraged_optional_boolean
+  static var closeAlwaysConfirmsChanges: Bool? {
+    // Disable it by default
+    currentDefinition?.closeAlwaysConfirmsChanges
   }
 
   static var indentBehavior: EditorIndentBehavior {
@@ -77,6 +85,7 @@ enum AppRuntimeConfig {
 private extension AppRuntimeConfig {
   static let defaultDefinition = Definition(
     autoCharacterPairs: true,
+    closeAlwaysConfirmsChanges: nil,
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
     headerFontSizeDiffs: nil,

@@ -6,6 +6,9 @@
 
 import Foundation
 
+public let NSCloseAlwaysConfirmsChanges = "NSCloseAlwaysConfirmsChanges"
+public let NSQuitAlwaysKeepsWindows = "NSQuitAlwaysKeepsWindows"
+
 public extension UserDefaults {
   static func overwriteTextCheckerOnce() {
     let enabledFlag = "editor.overwrite-text-checker"
