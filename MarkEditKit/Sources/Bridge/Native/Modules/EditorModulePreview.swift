@@ -9,7 +9,7 @@ import MarkEditCore
 
 @MainActor
 public protocol EditorModulePreviewDelegate: AnyObject {
-  func editorPreview(_ sender: NativeModulePreview, show code: String, type: PreviewType, rect: CGRect)
+  func editorPreview(_ sender: EditorModulePreview, show code: String, type: PreviewType, rect: CGRect)
 }
 
 public final class EditorModulePreview: NativeModulePreview {
