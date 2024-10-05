@@ -130,7 +130,7 @@ private extension AppUpdater {
 
     let alert = NSAlert()
     alert.messageText = String(format: Localized.Updater.newVersionAvailable, newVersion.name)
-    alert.addButton(withTitle: Localized.Updater.learnMore)
+    alert.addButton(withTitle: Localized.Updater.viewReleasePage)
 
     if needsOSUpdate {
       presentOSUpdateAlert(alert, newVersion: newVersion, minOSVer: minOSVer, explicitly: explicitly)
@@ -154,7 +154,7 @@ private extension AppUpdater {
     }
 
     switch alert.runModal() {
-    case .alertFirstButtonReturn: // Learn More
+    case .alertFirstButtonReturn: // View Release Page
       NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
     case .alertSecondButtonReturn:
       if explicitly {
@@ -181,7 +181,7 @@ private extension AppUpdater {
     }
 
     switch alert.runModal() {
-    case .alertFirstButtonReturn: // Learn More
+    case .alertFirstButtonReturn: // View Release Page
       NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
     case .alertThirdButtonReturn: // Skip This Version
       AppPreferences.Updater.skippedVersions.insert(newVersion.name)

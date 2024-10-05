@@ -206,7 +206,7 @@ enum Localized {
     static let updateFailedTitle = String(localized: "Failed to get the update.", comment: "Title for failed to get the update")
     static let updateFailedMessage = String(localized: "Please check your network connection or get the latest release from the version history.", comment: "Message for failed to get the update")
     static let needsOSUpdateMessage = String(localized: "This release requires macOS %@ or later and cannot be installed without upgrading your operating system.", comment: "Message for minimum required OS version")
-    static let learnMore = String(localized: "Learn More", comment: "Title for the \"Learn More\" button")
+    static let viewReleasePage = String(localized: "View Release Page", comment: "Title for the \"View Release Page\" button")
     static let notNow = String(localized: "Not Now", comment: "Title for the \"Not Now\" button")
     static let remindMeLater = String(localized: "Remind Me Later", comment: "Title for the \"Remind Me Later\" button")
     static let skipThisVersion = String(localized: "Skip This Version", comment: "Title for the \"Skip This Version\" button")

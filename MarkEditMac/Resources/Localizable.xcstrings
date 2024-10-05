@@ -262,13 +262,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "查看版本记录"
+            "value" : "检查版本记录"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "檢視版本記錄"
+            "value" : "檢查版本記錄"
           }
         }
       }
@@ -1280,23 +1280,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "保持游標居中"
-          }
-        }
-      }
-    },
-    "Learn More" : {
-      "comment" : "Title for the \"Learn More\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "了解更多"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "瞭解更多"
           }
         }
       }
@@ -2823,6 +2806,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 ${content} 更新文件"
+          }
+        }
+      }
+    },
+    "View Release Page" : {
+      "comment" : "Title for the \"View Release Page\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看发布页面"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檢視釋出頁面"
           }
         }
       }
