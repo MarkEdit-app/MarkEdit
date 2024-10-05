@@ -6,13 +6,16 @@ import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModuleCompletion } from '../bridge/native/completion';
 import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
+import { NativeModuleUI } from '../bridge/native/ui';
 
 import type { MarkEdit } from 'markedit-api';
 
 declare global {
+  type CodeGen_Int = number & { _brand: never };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type CodeGen_Self = any & { _brand: never };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type CodeGen_Dict = any & { _brand: never };
-  type CodeGen_Int = number & { _brand: never };
 }
 
 interface WebKit {
@@ -25,6 +28,8 @@ interface WebKit {
 }
 
 declare global {
+  // Identifier used for each loaded module
+  const MARKEDIT_MODULE_ID: string;
   // https://github.com/MarkEdit-app/MarkEdit-api
   const MarkEdit: MarkEdit;
 
@@ -40,6 +45,7 @@ declare global {
       completion: NativeModuleCompletion;
       preview: NativeModulePreview;
       tokenizer: NativeModuleTokenizer;
+      ui: NativeModuleUI;
     };
   }
 

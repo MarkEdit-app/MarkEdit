@@ -66,6 +66,7 @@
 		8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */; };
 		8780AC202982A2DD00065EF4 /* WindowSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1F2982A2DD00065EF4 /* WindowSettingsView.swift */; };
 		87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87850C8529482A8600D1A952 /* NSApplication+Extension.swift */; };
+		878AABE92CB111410081C5E1 /* EditorMainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878AABE82CB111410081C5E1 /* EditorMainMenu.swift */; };
 		8790ABD42A98F5F40083825C /* EditorViewController+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */; };
 		8790ABDB2A98FF610083825C /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 8790ABDA2A98FF610083825C /* Statistics */; };
 		8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790B6EB297036B2000DFC1A /* EditorWindow.swift */; };
@@ -191,6 +192,7 @@
 		8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSettingsView.swift; sourceTree = "<group>"; };
 		8780AC1F2982A2DD00065EF4 /* WindowSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowSettingsView.swift; sourceTree = "<group>"; };
 		87850C8529482A8600D1A952 /* NSApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApplication+Extension.swift"; sourceTree = "<group>"; };
+		878AABE82CB111410081C5E1 /* EditorMainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMainMenu.swift; sourceTree = "<group>"; };
 		8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Statistics.swift"; sourceTree = "<group>"; };
 		8790B6EB297036B2000DFC1A /* EditorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindow.swift; sourceTree = "<group>"; };
 		87A73AB2294C4B27006A710E /* EditorWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWebView.swift; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 				870A51B8294702AF0095C7EB /* EditorDocument.swift */,
 				8772E384294AC60D00111E83 /* EditorReusePool.swift */,
 				8725E07F2977EEB3006A4961 /* EditorToolbarItems.swift */,
+				878AABE82CB111410081C5E1 /* EditorMainMenu.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -757,6 +760,7 @@
 				874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */,
 				87A73AB3294C4B27006A710E /* EditorWebView.swift in Sources */,
 				8767BBAF295A8BA500BFACAE /* EditorViewController+UI.swift in Sources */,
+				878AABE92CB111410081C5E1 /* EditorMainMenu.swift in Sources */,
 				87AAEDF52958258C00C8E61C /* EditorFindPanel+UI.swift in Sources */,
 				87A73AB5294C4B48006A710E /* EditorFindPanel.swift in Sources */,
 				8765FD292AF291D300C645A8 /* AppVersion.swift in Sources */,

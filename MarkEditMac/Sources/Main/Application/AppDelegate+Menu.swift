@@ -29,6 +29,11 @@ extension AppDelegate: NSMenuDelegate {
     default:
       break
     }
+
+    // Enable user defined menus only when we have an active editor
+    if menu.identifier?.rawValue.hasPrefix(EditorMainMenu.uniquePrefix) == true {
+      menu.superMenuItem?.isEnabled = activeEditorController != nil
+    }
   }
 }
 

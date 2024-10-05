@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CryptoKit
 import MarkEditKit
 
 /**
@@ -123,7 +124,11 @@ struct AppCustomization {
 
     // JavaScript, create a closure to avoid declaration conflict
     if fileType == .editorScript || fileType == .scriptsDirectory {
-      return "(() => {\(comment)\n  module = { exports: {} }; exports = module.exports;\n  \(contents)\n})();"
+      let pathDigest = SHA256.hash(data: Data(url.absoluteString.utf8))
+      let moduleID = pathDigest.map { String(format: "%02x", $0) }.joined()
+
+      // Inject "MARKEDIT_MODULE_ID" as a unique identifier for loaded modules
+      return "(() => {\(comment)\n  MARKEDIT_MODULE_ID = '\(moduleID)';\n  module = { exports: {} };\n  exports = module.exports;\n  \(contents)\n})();"
     }
 
     // Stylesheet, create a <style></style> element

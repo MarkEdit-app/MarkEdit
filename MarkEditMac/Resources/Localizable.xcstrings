@@ -222,6 +222,23 @@
         }
       }
     },
+    "Cancel" : {
+      "comment" : "General \"Cancel\" title in alerts",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
     "Case Sensitive" : {
       "comment" : "Toggle case sensitive search",
       "localizations" : {
@@ -1687,6 +1704,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等下再說"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "comment" : "General \"OK\" title in alerts",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認"
           }
         }
       }

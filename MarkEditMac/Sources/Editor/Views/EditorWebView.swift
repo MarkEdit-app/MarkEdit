@@ -33,6 +33,7 @@ protocol EditorWebViewActionDelegate: AnyObject {
  */
 final class EditorWebView: WKWebView {
   static let baseURL = URL(string: "http://localhost/")
+  static let userDefinedMenuID = NSUserInterfaceItemIdentifier("editorWebViewUserDefinedMenu")
   weak var actionDelegate: EditorWebViewActionDelegate?
 
   override func mouseDown(with event: NSEvent) {
@@ -52,6 +53,10 @@ final class EditorWebView: WKWebView {
   }
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
+    guard menu.identifier != Self.userDefinedMenuID else {
+      return super.willOpenMenu(menu, with: event)
+    }
+
     menu.items = menu.items.filter { item in
       // Disable "Reload", which is useful for revision mode
       if item.tag == WKContextMenuItemTag.reload.rawValue {

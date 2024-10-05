@@ -238,6 +238,32 @@ extension EditorViewController: EditorModulePreviewDelegate {
   }
 }
 
+// MARK: - EditorModuleUIDelegate
+
+extension EditorViewController: EditorModuleUIDelegate {
+  func editorUI(_ sender: EditorModuleUI, addMainMenu menuID: String, title: String, items: [WebMenuItem]) {
+    addMainMenu(menuID: menuID, title: title, items: items)
+  }
+
+  func editorUI(_ sender: EditorModuleUI, showContextMenu items: [WebMenuItem], location: WebPoint) {
+    showContextMenu(items: items, location: location.cgPoint)
+  }
+
+  func editorUI(
+    _ sender: EditorModuleUI,
+    alertWith title: String?,
+    message: String?,
+    buttons: [String]?
+  ) -> Int {
+    let response = showAlert(title: title, message: message, buttons: buttons)
+    return response.rawValue - NSApplication.ModalResponse.alertFirstButtonReturn.rawValue
+  }
+
+  func editorUI(_ sender: EditorModuleUI, showTextBox title: String?, placeholder: String?, defaultValue: String?) -> String? {
+    showTextBox(title: title, placeholder: placeholder, defaultValue: defaultValue)
+  }
+}
+
 // MARK: - EditorFindPanelDelegate
 
 extension EditorViewController: EditorFindPanelDelegate {

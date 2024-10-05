@@ -13,6 +13,26 @@ public extension NSEvent {
   }
 }
 
+public extension NSEvent.ModifierFlags {
+  static let mapping: [String: NSEvent.ModifierFlags] = [
+    "Shift": .shift,
+    "Control": .control,
+    "Option": .option,
+    "Command": .command,
+  ]
+
+  init(stringValues: [String]) {
+    var modifiers: NSEvent.ModifierFlags = []
+    stringValues.forEach {
+      if let modifier = Self.mapping[$0] {
+        modifiers.insert(modifier)
+      }
+    }
+
+    self = modifiers
+  }
+}
+
 public extension UInt16 {
   static let kVK_ANSI_F: Self = 0x03
   static let kVK_ANSI_I: Self = 0x22
