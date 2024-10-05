@@ -223,7 +223,7 @@
       }
     },
     "Cancel" : {
-      "comment" : "General \"Cancel\" title in alerts",
+      "comment" : "Button title, cancel an action",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1704,23 +1704,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等下再說"
-          }
-        }
-      }
-    },
-    "OK" : {
-      "comment" : "General \"OK\" title in alerts",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "确认"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "確認"
           }
         }
       }

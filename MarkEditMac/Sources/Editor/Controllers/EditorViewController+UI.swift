@@ -305,7 +305,7 @@ extension EditorViewController {
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
     let alert = NSAlert()
     alert.messageText = title ?? ""
-    alert.addButton(withTitle: Localized.General.okay)
+    alert.addButton(withTitle: Localized.General.done)
     alert.addButton(withTitle: Localized.General.cancel)
 
     let textField = NSTextField(frame: CGRect(x: 0, y: 0, width: 256, height: 22))
