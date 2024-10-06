@@ -18,36 +18,38 @@ public final class EditorMessageHandler: NSObject, Sendable, WKScriptMessageHand
 
   public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage, replyHandler: @Sendable @escaping (Any?, String?) -> Void) {
     MainActor.assumeIsolated {
-      let assertFail: (String) -> Void = { message in
+      let reportError: (String) -> Void = { message in
         Logger.assertFail(message)
         replyHandler(nil, message)
       }
 
       guard message.name == "bridge", let body = message.body as? [String: Any] else {
-        return assertFail("Invalid message payload")
+        return reportError("Invalid message payload: \(message.name), \(message.body)")
       }
 
       guard let moduleName = body["moduleName"] as? String else {
-        return assertFail("Invalid module name")
+        return reportError("Invalid module name from payload: \(message.body)")
       }
 
       guard let methodName = body["methodName"] as? String else {
-        return assertFail("Invalid method name")
+        return reportError("Invalid method name from payload: \(message.body)")
       }
 
+      let moduleMethodPath = "\(moduleName).\(methodName)"
+      Logger.log(.debug, "Invoking native method: \(moduleMethodPath)")
+
       guard let invokeNative = modules[moduleName]?[methodName] else {
-        return assertFail("Invalid native method")
+        return reportError("Invalid native method path: \(moduleMethodPath)")
       }
 
       guard let parameters = (body["parameters"] as? String)?.toData() else {
-        return assertFail("Invalid parameters")
+        return reportError("Invalid parameters from native method: \(moduleMethodPath)")
       }
 
       guard let result = invokeNative(parameters) else {
-        return assertFail("Missing result from native method: \(methodName)")
+        return reportError("Missing result from native method: \(moduleMethodPath)")
       }
 
-      Logger.log(.debug, "Invoked native: \(moduleName).\(methodName)")
       switch result {
       case .success(let value):
         replyHandler(value, nil)
