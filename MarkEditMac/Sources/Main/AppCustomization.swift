@@ -123,7 +123,7 @@ struct AppCustomization {
 
     // JavaScript, create a closure to avoid declaration conflict
     if fileType == .editorScript || fileType == .scriptsDirectory {
-      return "(() => {\(comment)\n  module = typeof module === 'object' ? module : { exports: {} };\n  exports = module.exports;\n  \(contents)\n})();"
+      return "(() => {\(comment)\nmodule = typeof module === 'object' ? module : { exports: {} };\nexports = module.exports;\n\n\(contents)\n})();"
     }
 
     // Stylesheet, create a <style></style> element
