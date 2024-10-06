@@ -28,8 +28,6 @@ interface WebKit {
 }
 
 declare global {
-  // Identifier used for each loaded module
-  const MARKEDIT_MODULE_ID: string;
   // https://github.com/MarkEdit-app/MarkEdit-api
   const MarkEdit: MarkEdit;
 

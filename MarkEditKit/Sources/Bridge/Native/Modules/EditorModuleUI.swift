@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 @MainActor
 public protocol EditorModuleUIDelegate: AnyObject {
@@ -31,8 +32,17 @@ public final class EditorModuleUI: NativeModuleUI {
     self.delegate = delegate
   }
 
-  public func addMainMenu(id: String, title: String, items: [WebMenuItem]) {
-    delegate?.editorUI(self, addMainMenu: id, title: title, items: items)
+  public func addMainMenu(title: String, items: [WebMenuItem]) {
+    let identifiers = ([title] + items.map { $0.uniqueID }).joined(separator: " | ")
+    let hash = SHA256.hash(data: Data(identifiers.utf8))
+    let menuID = hash.map { String(format: "%02x", $0) }.joined()
+
+    delegate?.editorUI(
+      self,
+      addMainMenu: menuID,
+      title: title,
+      items: items
+    )
   }
 
   public func showContextMenu(items: [WebMenuItem], location: WebPoint) {
@@ -45,5 +55,19 @@ public final class EditorModuleUI: NativeModuleUI {
 
   public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
     delegate?.editorUI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
+  }
+}
+
+// MARK: - Private
+
+private extension WebMenuItem {
+  var uniqueID: String {
+    [
+      "\(separator)",
+      title ?? "",
+      key ?? "",
+      "\(modifiers ?? [])",
+      "[\((children ?? []).map { $0.uniqueID }.joined(separator: ", "))]",
+    ].joined(separator: ", ")
   }
 }

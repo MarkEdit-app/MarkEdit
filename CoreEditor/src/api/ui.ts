@@ -3,13 +3,10 @@ import { MenuItem, Alert, TextBox } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
-
-import { getModuleID } from '../common/env';
 import { getRect } from '../modules/selection';
 
 export function addMainMenu(title: string, items: MenuItem[]): void {
   window.nativeModules.ui.addMainMenu({
-    id: `${getModuleID()}.${title}`,
     title,
     items: items.map(item => createMenuItem(item, mainActions)),
   });
