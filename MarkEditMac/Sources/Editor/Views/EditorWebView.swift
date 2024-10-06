@@ -33,7 +33,7 @@ protocol EditorWebViewActionDelegate: AnyObject {
  */
 final class EditorWebView: WKWebView {
   static let baseURL = URL(string: "http://localhost/")
-  static let userDefinedMenuID = NSUserInterfaceItemIdentifier("editorWebViewUserDefinedMenu")
+  static let userDefinedContextMenuID = NSUserInterfaceItemIdentifier("userDefinedContextMenu")
   weak var actionDelegate: EditorWebViewActionDelegate?
 
   override func mouseDown(with event: NSEvent) {
@@ -53,7 +53,7 @@ final class EditorWebView: WKWebView {
   }
 
   override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
-    guard menu.identifier != Self.userDefinedMenuID else {
+    guard menu.identifier != Self.userDefinedContextMenuID else {
       return super.willOpenMenu(menu, with: event)
     }
 

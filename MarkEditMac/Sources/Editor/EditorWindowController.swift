@@ -50,7 +50,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     }
 
     // The main menu is a singleton, we need to update the menu items for the active editor
-    editorViewController?.resetUserDefinedMenus()
+    editorViewController?.resetUserDefinedMainMenus()
   }
 
   func windowDidResignKey(_ notification: Notification) {

@@ -124,8 +124,8 @@ struct AppCustomization {
 
     // JavaScript, create a closure to avoid declaration conflict
     if fileType == .editorScript || fileType == .scriptsDirectory {
-      let pathDigest = SHA256.hash(data: Data(url.absoluteString.utf8))
-      let moduleID = pathDigest.map { String(format: "%02x", $0) }.joined()
+      let pathHash = SHA256.hash(data: Data(url.absoluteString.utf8))
+      let moduleID = pathHash.map { String(format: "%02x", $0) }.joined()
 
       // Inject "MARKEDIT_MODULE_ID" as a unique identifier for loaded modules
       return "(() => {\(comment)\n  MARKEDIT_MODULE_ID = '\(moduleID)';\n  module = { exports: {} };\n  exports = module.exports;\n  \(contents)\n})();"

@@ -14,7 +14,7 @@ public extension NSEvent {
 }
 
 public extension NSEvent.ModifierFlags {
-  static let mapping: [String: NSEvent.ModifierFlags] = [
+  private static let mapping: [String: NSEvent.ModifierFlags] = [
     "Shift": .shift,
     "Control": .control,
     "Option": .option,

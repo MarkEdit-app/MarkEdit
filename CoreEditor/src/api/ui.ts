@@ -9,7 +9,7 @@ import { getRect } from '../modules/selection';
 
 export function addMainMenu(title: string, items: MenuItem[]): void {
   window.nativeModules.ui.addMainMenu({
-    id: `${title}#${getModuleID()}`,
+    id: `${getModuleID()}.${title}`,
     title,
     items: items.map(item => createMenuItem(item, mainActions)),
   });

@@ -12,7 +12,7 @@ import MarkEditKit
  User defined menu that will be added to the main menu bar.
  */
 struct EditorMainMenu: Equatable {
-  static let uniquePrefix = "[USER_DEFINED]"
+  static let uniquePrefix = "userDefinedMainMenu"
 
   let menuID: String
   let title: String

@@ -237,7 +237,7 @@ extension EditorViewController {
     return true
   }
 
-  func resetUserDefinedMenus() {
+  func resetUserDefinedMainMenus() {
     guard let mainMenu = NSApp.mainMenu else {
       return Logger.assertFail("Missing mainMenu")
     }
@@ -249,9 +249,9 @@ extension EditorViewController {
       mainMenu.removeItem($0)
     }
 
-    for spec in userDefinedMenus {
+    for spec in userDefinedMainMenus {
       let menu = createMenu(items: spec.items, handler: bridge.ui.handleMainMenuAction)
-      menu.identifier = NSUserInterfaceItemIdentifier("\(EditorMainMenu.uniquePrefix)#\(spec.menuID)")
+      menu.identifier = NSUserInterfaceItemIdentifier("\(EditorMainMenu.uniquePrefix).\(spec.menuID)")
       menu.delegate = NSApp.appDelegate
 
       let item = NSMenuItem(title: spec.title)
@@ -269,22 +269,22 @@ extension EditorViewController {
   // MARK: - Exposed to user scripts
 
   func addMainMenu(menuID: String, title: String, items: [WebMenuItem]) {
-    userDefinedMenus.removeAll {
+    userDefinedMainMenus.removeAll {
       $0.menuID == menuID
     }
 
-    userDefinedMenus.append(EditorMainMenu(
+    userDefinedMainMenus.append(EditorMainMenu(
       menuID: menuID,
       title: title,
       items: items
     ))
 
-    resetUserDefinedMenus()
+    resetUserDefinedMainMenus()
   }
 
   func showContextMenu(items: [WebMenuItem], location: CGPoint) {
     let menu = createMenu(items: items, handler: bridge.ui.handleContextMenuAction)
-    menu.identifier = EditorWebView.userDefinedMenuID
+    menu.identifier = EditorWebView.userDefinedContextMenuID
 
     NSCursor.arrow.push()
     menu.popUp(positioning: nil, at: location, in: webView)
