@@ -3195,7 +3195,7 @@ makeerror@1.0.12:
 
 "markedit-api@https://github.com/MarkEdit-app/MarkEdit-api#v0.6.0":
   version "0.6.0"
-  resolved "https://github.com/MarkEdit-app/MarkEdit-api#55084d7e3cdd19434ea669c00aa87ba1edbcafba"
+  resolved "https://github.com/MarkEdit-app/MarkEdit-api#2e63d68c32292f124eba49d3545c509df65fdce1"
 
 merge-stream@^2.0.0:
   version "2.0.0"
