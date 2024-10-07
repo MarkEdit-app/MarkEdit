@@ -241,8 +241,8 @@ extension EditorViewController: EditorModulePreviewDelegate {
 // MARK: - EditorModuleUIDelegate
 
 extension EditorViewController: EditorModuleUIDelegate {
-  func editorUI(_ sender: EditorModuleUI, addMainMenu menuID: String, title: String, items: [WebMenuItem]) {
-    addMainMenu(menuID: menuID, title: title, items: items)
+  func editorUI(_ sender: EditorModuleUI, addMainMenuItems items: [(String, WebMenuItem)]) {
+    addMainMenuItems(items: items)
   }
 
   func editorUI(_ sender: EditorModuleUI, showContextMenu items: [WebMenuItem], location: WebPoint) {

@@ -8,7 +8,7 @@ import { WebPoint } from '../../@types/WebPoint';
  * @bridgeName NativeBridgeUI
  */
 export interface NativeModuleUI extends NativeModule {
-  addMainMenu(args: { title: string; items: WebMenuItem[] }): void;
+  addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
   showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
   showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;

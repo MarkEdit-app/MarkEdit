@@ -847,6 +847,29 @@ Gw
                                     </connections>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Extensions" id="mGH-Xd-vai">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Extensions" autoenablesItems="NO" id="nkD-z6-yjV">
+                                    <items>
+                                        <menuItem isSeparatorItem="YES" identifier="extensionsMenuDivider" id="Jat-X6-g2Q"/>
+                                        <menuItem title="Open Documents Folder" id="fyH-S9-f9N">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cGC-yM-BaF"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Customization Guide" id="jNi-CL-4bf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openCustomizationGuide:" target="Voe-Tx-rLC" id="dXE-Va-wF2"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                    <connections>
+                                        <outlet property="delegate" destination="Voe-Tx-rLC" id="bdE-rU-LpO"/>
+                                    </connections>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Help" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
@@ -902,6 +925,7 @@ Gw
                         <outlet property="lineEndingsLFItem" destination="qOk-v8-kKx" id="4t7-oc-c7R"/>
                         <outlet property="lineEndingsMenu" destination="7eH-ja-yIc" id="CYf-hv-ZvG"/>
                         <outlet property="mainEditMenu" destination="W48-6f-4Dl" id="xUc-Fy-SjE"/>
+                        <outlet property="mainExtensionsMenu" destination="nkD-z6-yjV" id="40H-WY-xHu"/>
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>

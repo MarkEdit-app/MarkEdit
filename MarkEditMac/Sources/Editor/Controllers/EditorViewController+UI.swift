@@ -237,49 +237,43 @@ extension EditorViewController {
     return true
   }
 
-  func resetUserDefinedMainMenus() {
-    guard let mainMenu = NSApp.mainMenu else {
-      return Logger.assertFail("Missing mainMenu")
+  func resetUserDefinedMenuItems() {
+    guard let menu = NSApp.appDelegate?.mainExtensionsMenu else {
+      return Logger.assertFail("Missing main extensions menu")
     }
 
-    // Remove existing ones, always recreate the menu
-    (mainMenu.items.filter {
-      $0.submenu?.identifier?.rawValue.hasPrefix(EditorMainMenu.uniquePrefix) == true
+    // Remove existing ones, always recreate a new item
+    (menu.items.filter {
+      $0.identifier?.rawValue.hasPrefix(EditorMenuItem.uniquePrefix) == true
     }).forEach {
-      mainMenu.removeItem($0)
+      menu.removeItem($0)
     }
 
-    for spec in userDefinedMainMenus {
-      let menu = createMenu(items: spec.items, handler: bridge.ui.handleMainMenuAction)
-      menu.identifier = NSUserInterfaceItemIdentifier("\(EditorMainMenu.uniquePrefix).\(spec.menuID)")
-      menu.delegate = NSApp.appDelegate
+    for spec in userDefinedMenuItems {
+      let item = createMenuItem(spec: spec.item, handler: bridge.ui.handleMainMenuAction)
+      item.identifier = NSUserInterfaceItemIdentifier("\(EditorMenuItem.uniquePrefix).\(spec.id)")
 
-      let item = NSMenuItem(title: spec.title)
-      item.submenu = menu
-
-      // Preferably, make it the last one before the "Help" menu
-      if let index = (mainMenu.items.firstIndex { $0.submenu == NSApp.helpMenu }) {
-        mainMenu.insertItem(item, at: index)
+      // Preferably, make it the last one before the special divider
+      if let index = (menu.items.firstIndex { $0.identifier?.rawValue == EditorMenuItem.specialDivider }) {
+        menu.insertItem(item, at: index)
       } else {
-        mainMenu.addItem(item)
+        menu.addItem(item)
       }
     }
   }
 
   // MARK: - Exposed to user scripts
 
-  func addMainMenu(menuID: String, title: String, items: [WebMenuItem]) {
-    userDefinedMainMenus.removeAll {
-      $0.menuID == menuID
+  func addMainMenuItems(items: [(id: String, item: WebMenuItem)]) {
+    userDefinedMenuItems.removeAll { old in
+      items.contains { new in old.id == new.id }
     }
 
-    userDefinedMainMenus.append(EditorMainMenu(
-      menuID: menuID,
-      title: title,
-      items: items
-    ))
+    userDefinedMenuItems.append(contentsOf: items.map {
+      EditorMenuItem(id: $0.id, item: $0.item)
+    })
 
-    resetUserDefinedMainMenus()
+    resetUserDefinedMenuItems()
   }
 
   func showContextMenu(items: [WebMenuItem], location: CGPoint) {
@@ -340,26 +334,35 @@ private extension EditorViewController {
     presentedPopover = popover
   }
 
+  func createMenuItem(
+    spec: WebMenuItem,
+    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
+  ) -> NSMenuItem {
+    if spec.separator {
+      return .separator()
+    } else if let children = spec.children {
+      let item = NSMenuItem(title: spec.title ?? "")
+      item.submenu = createMenu(items: children, handler: handler)
+      return item
+    } else if let title = spec.title {
+      let item = NSMenuItem(title: title)
+      item.addAction { handler(spec.id, nil) }
+      item.keyEquivalent = spec.key ?? ""
+      item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
+      return item
+    } else {
+      Logger.assertFail("Invalid spec of menu item: \(spec)")
+      return NSMenuItem()
+    }
+  }
+
   func createMenu(
     items: [WebMenuItem],
     handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
   ) -> NSMenu {
     let menu = NSMenu()
-
-    for spec in items {
-      if spec.separator {
-        menu.addItem(.separator())
-      } else if let children = spec.children {
-        let item = NSMenuItem(title: spec.title ?? "")
-        item.submenu = createMenu(items: children, handler: handler)
-        menu.addItem(item)
-      } else if let title = spec.title {
-        let item = menu.addItem(withTitle: title) { handler(spec.id, nil) }
-        item.keyEquivalent = spec.key ?? ""
-        item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
-      } else {
-        Logger.assertFail("Invalid spec of menu item: \(spec)")
-      }
+    items.map { createMenuItem(spec: $0, handler: handler) }.forEach {
+      menu.addItem($0)
     }
 
     return menu

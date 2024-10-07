@@ -17,7 +17,7 @@ import {
   addExtension,
   addMarkdownConfig,
   addCodeLanguage,
-  addMainMenu,
+  addMainMenuItem,
   showContextMenu,
   showAlert,
   showTextBox,
@@ -50,7 +50,7 @@ export function initMarkEditModules() {
   MarkEdit.addExtension = addExtension;
   MarkEdit.addMarkdownConfig = addMarkdownConfig;
   MarkEdit.addCodeLanguage = addCodeLanguage;
-  MarkEdit.addMainMenu = addMainMenu;
+  MarkEdit.addMainMenuItem = addMainMenuItem;
   MarkEdit.showContextMenu = showContextMenu;
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;

@@ -5,9 +5,9 @@ import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
 import { getRect } from '../modules/selection';
 
-export function addMainMenu(title: string, items: MenuItem[]): void {
-  window.nativeModules.ui.addMainMenu({
-    title,
+export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
+  const items = Array.isArray(spec) ? spec : [spec];
+  window.nativeModules.ui.addMainMenuItems({
     items: items.map(item => createMenuItem(item, mainActions)),
   });
 }

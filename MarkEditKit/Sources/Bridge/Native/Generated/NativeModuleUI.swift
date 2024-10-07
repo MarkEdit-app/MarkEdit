@@ -12,7 +12,7 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleUI: NativeModule {
-  func addMainMenu(title: String, items: [WebMenuItem])
+  func addMainMenuItems(items: [WebMenuItem])
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String?
@@ -26,8 +26,8 @@ public extension NativeModuleUI {
 final class NativeBridgeUI: NativeBridge {
   static let name = "ui"
   lazy var methods: [String: NativeMethod] = [
-    "addMainMenu": { [weak self] in
-      self?.addMainMenu(parameters: $0)
+    "addMainMenuItems": { [weak self] in
+      self?.addMainMenuItems(parameters: $0)
     },
     "showContextMenu": { [weak self] in
       self?.showContextMenu(parameters: $0)
@@ -47,9 +47,8 @@ final class NativeBridgeUI: NativeBridge {
     self.module = module
   }
 
-  private func addMainMenu(parameters: Data) -> Result<Any?, Error>? {
+  private func addMainMenuItems(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var title: String
       var items: [WebMenuItem]
     }
 
@@ -61,7 +60,7 @@ final class NativeBridgeUI: NativeBridge {
       return .failure(error)
     }
 
-    module.addMainMenu(title: message.title, items: message.items)
+    module.addMainMenuItems(items: message.items)
     return .success(nil)
   }
 

@@ -14,6 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var mainFileMenu: NSMenu?
   @IBOutlet weak var mainEditMenu: NSMenu?
   @IBOutlet weak var mainWindowMenu: NSMenu?
+  @IBOutlet weak var mainExtensionsMenu: NSMenu?
 
   @IBOutlet weak var copyPandocCommandMenu: NSMenu?
   @IBOutlet weak var openFileInMenu: NSMenu?
@@ -158,6 +159,10 @@ private extension AppDelegate {
 
   @IBAction func openDevelopmentGuide(_ sender: Any?) {
     NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Development")
+  }
+
+  @IBAction func openCustomizationGuide(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Customization")
   }
 
   @IBAction func showPreferences(_ sender: Any?) {

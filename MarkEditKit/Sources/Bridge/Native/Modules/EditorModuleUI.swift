@@ -9,7 +9,7 @@ import CryptoKit
 
 @MainActor
 public protocol EditorModuleUIDelegate: AnyObject {
-  func editorUI(_ sender: EditorModuleUI, addMainMenu menuID: String, title: String, items: [WebMenuItem])
+  func editorUI(_ sender: EditorModuleUI, addMainMenuItems items: [(String, WebMenuItem)])
   func editorUI(_ sender: EditorModuleUI, showContextMenu items: [WebMenuItem], location: WebPoint)
   func editorUI(
     _ sender: EditorModuleUI,
@@ -32,17 +32,12 @@ public final class EditorModuleUI: NativeModuleUI {
     self.delegate = delegate
   }
 
-  public func addMainMenu(title: String, items: [WebMenuItem]) {
-    let identifiers = ([title] + items.map { $0.uniqueID }).joined(separator: " | ")
-    let hash = SHA256.hash(data: Data(identifiers.utf8))
-    let menuID = hash.map { String(format: "%02x", $0) }.joined()
-
-    delegate?.editorUI(
-      self,
-      addMainMenu: menuID,
-      title: title,
-      items: items
-    )
+  public func addMainMenuItems(items: [WebMenuItem]) {
+    delegate?.editorUI(self, addMainMenuItems: items.map { item in
+      let hash = SHA256.hash(data: Data(item.uniqueID.utf8))
+      let id = hash.map { String(format: "%02x", $0) }.joined()
+      return (id, item)
+    })
   }
 
   public func showContextMenu(items: [WebMenuItem], location: WebPoint) {

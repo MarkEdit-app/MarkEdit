@@ -81,7 +81,11 @@ struct AppCustomization {
       includingPropertiesForKeys: nil
     )) ?? []
 
-    return files.compactMap {
+    let sorted = files.sorted {
+      $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
+    }
+
+    return sorted.compactMap {
       guard ["css", "js"].contains($0.pathExtension.lowercased()) else {
         return nil
       }
