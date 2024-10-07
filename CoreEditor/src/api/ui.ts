@@ -58,13 +58,19 @@ export function handleContextMenuAction(id: string) {
 }
 
 function createMenuItem(item: MenuItem, actions: Map<string, () => void>): WebMenuItem {
-  const id = UUID();
-  if (item.action !== undefined) {
-    actions.set(id, item.action);
-  }
+  // Generate identifiers for actions so that native functions can retrieve and invoke them later
+  const actionID = (() => {
+    if (item.action === undefined) {
+      return undefined;
+    }
+
+    const identifier = UUID();
+    actions.set(identifier, item.action);
+    return identifier;
+  })();
 
   return {
-    id,
+    actionID,
     separator: item.separator ?? false,
     title: item.title,
     key: item.key,

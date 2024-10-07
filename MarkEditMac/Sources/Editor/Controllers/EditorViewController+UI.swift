@@ -346,7 +346,10 @@ private extension EditorViewController {
       return item
     } else if let title = spec.title {
       let item = NSMenuItem(title: title)
-      item.addAction { handler(spec.id, nil) }
+      if let actionID = spec.actionID {
+        item.addAction { handler(actionID, nil) }
+      }
+
       item.keyEquivalent = spec.key ?? ""
       item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
       return item
