@@ -21,6 +21,7 @@ final class EditorViewController: NSViewController {
   var webBackgroundColor: NSColor?
   var localEventMonitor: Any?
   var safeAreaObservation: NSKeyValueObservation?
+  var userDefinedMenuItems = [EditorMenuItem]()
 
   weak var presentedMenu: NSMenu?
   weak var presentedPopover: NSPopover? {
@@ -128,6 +129,7 @@ final class EditorViewController: NSViewController {
       EditorModuleCompletion(delegate: self),
       EditorModulePreview(delegate: self),
       EditorModuleTokenizer(),
+      EditorModuleUI(delegate: self),
     ])
 
     let handler = EditorMessageHandler(modules: modules)

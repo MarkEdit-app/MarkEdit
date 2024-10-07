@@ -1431,6 +1431,11 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.5.tgz#cb6e2a691b70cb177c6e3ae9c1d2e8b2ea8cd304"
   integrity sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==
 
+"@types/uuid@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-10.0.0.tgz#e9c07fe50da0f53dc24970cca94d619ff03f6f6d"
+  integrity sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==
+
 "@types/yargs-parser@*":
   version "21.0.3"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-21.0.3.tgz#815e30b786d2e8f0dcd85fd5bcf5e1a04d008f15"
@@ -3188,9 +3193,9 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-"markedit-api@https://github.com/MarkEdit-app/MarkEdit-api#v0.5.0":
-  version "0.5.0"
-  resolved "https://github.com/MarkEdit-app/MarkEdit-api#f88852c64cf475c8f3ceb68fd30c8034c4941bb1"
+"markedit-api@https://github.com/MarkEdit-app/MarkEdit-api#v0.6.0":
+  version "0.6.0"
+  resolved "https://github.com/MarkEdit-app/MarkEdit-api#8525fcdf7c39b2bb561b1902f47fa42304111dfb"
 
 merge-stream@^2.0.0:
   version "2.0.0"
@@ -3870,6 +3875,11 @@ url-parse@^1.5.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
+
+uuid@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294"
+  integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
 
 v8-to-istanbul@^9.0.1:
   version "9.3.0"

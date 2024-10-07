@@ -11,6 +11,7 @@ import { WebModuleSelectionImpl } from './src/bridge/web/selection';
 import { WebModuleFormatImpl } from './src/bridge/web/format';
 import { WebModuleSearchImpl } from './src/bridge/web/search';
 import { WebModuleTableOfContentsImpl } from './src/bridge/web/toc';
+import { WebModuleUIImpl } from './src/bridge/web/ui';
 import { WebModuleWritingToolsImpl } from './src/bridge/web/writingTools';
 
 import { pseudoDocument } from './src/@test/mock';
@@ -19,6 +20,7 @@ import { NativeModuleCore } from './src/bridge/native/core';
 import { NativeModuleCompletion } from './src/bridge/native/completion';
 import { NativeModulePreview } from './src/bridge/native/preview';
 import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
+import { NativeModuleUI } from './src/bridge/native/ui';
 
 import { resetEditor } from './src/core';
 import { initMarkEditModules } from './src/api/modules';
@@ -63,6 +65,7 @@ window.webModules = {
   format: new WebModuleFormatImpl(),
   search: new WebModuleSearchImpl(),
   toc: new WebModuleTableOfContentsImpl(),
+  ui: new WebModuleUIImpl(),
   writingTools: new WebModuleWritingToolsImpl(),
 };
 
@@ -71,6 +74,7 @@ window.nativeModules = {
   completion: createNativeModule<NativeModuleCompletion>('completion'),
   preview: createNativeModule<NativeModulePreview>('preview'),
   tokenizer: createNativeModule<NativeModuleTokenizer>('tokenizer'),
+  ui: createNativeModule<NativeModuleUI>('ui'),
 };
 
 window.onload = () => {

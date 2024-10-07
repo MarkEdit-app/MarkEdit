@@ -20,6 +20,7 @@ import MarkEditCore
 enum Localized {
   enum General {
     static let done = String(localized: "Done", comment: "Button title, confirm an action")
+    static let cancel = String(localized: "Cancel", comment: "Button title, cancel an action")
     static let previous = String(localized: "Previous", comment: "Button title, move to the previous item")
     static let next = String(localized: "Next", comment: "Button title, move to the next item")
     static let all = String(localized: "All", comment: "Button title, perform actions to all items")

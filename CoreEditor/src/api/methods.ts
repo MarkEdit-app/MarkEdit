@@ -48,6 +48,8 @@ export function userCodeLanguages(): LanguageDescription[] {
   return storage.codeLanguages;
 }
 
+export { addMainMenuItem, showContextMenu, showAlert, showTextBox } from './ui';
+
 function reconfigureMarkdown() {
   if (isEditorReady()) {
     window.editor.dispatch({

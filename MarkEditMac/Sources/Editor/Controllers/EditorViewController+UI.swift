@@ -6,6 +6,8 @@
 //
 
 import AppKit
+import WebKit
+import MarkEditKit
 import Statistics
 
 extension EditorViewController {
@@ -234,6 +236,79 @@ extension EditorViewController {
     presented.forEach { dismiss($0) }
     return true
   }
+
+  func resetUserDefinedMenuItems() {
+    guard let menu = NSApp.appDelegate?.mainExtensionsMenu else {
+      return Logger.assertFail("Missing main extensions menu")
+    }
+
+    // Remove existing ones, always recreate a new item
+    (menu.items.filter {
+      $0.identifier?.rawValue.hasPrefix(EditorMenuItem.uniquePrefix) == true
+    }).forEach {
+      menu.removeItem($0)
+    }
+
+    for spec in userDefinedMenuItems {
+      let item = createMenuItem(spec: spec.item, handler: bridge.ui.handleMainMenuAction)
+      item.identifier = NSUserInterfaceItemIdentifier("\(EditorMenuItem.uniquePrefix).\(spec.id)")
+
+      // Preferably, make it the last one before the special divider
+      if let index = (menu.items.firstIndex { $0.identifier?.rawValue == EditorMenuItem.specialDivider }) {
+        menu.insertItem(item, at: index)
+      } else {
+        menu.addItem(item)
+      }
+    }
+  }
+
+  // MARK: - Exposed to user scripts
+
+  func addMainMenuItems(items: [(id: String, item: WebMenuItem)]) {
+    userDefinedMenuItems.removeAll { old in
+      items.contains { new in old.id == new.id }
+    }
+
+    userDefinedMenuItems.append(contentsOf: items.map {
+      EditorMenuItem(id: $0.id, item: $0.item)
+    })
+
+    resetUserDefinedMenuItems()
+  }
+
+  func showContextMenu(items: [WebMenuItem], location: CGPoint) {
+    let menu = createMenu(items: items, handler: bridge.ui.handleContextMenuAction)
+    menu.identifier = EditorWebView.userDefinedContextMenuID
+
+    NSCursor.arrow.push()
+    menu.popUp(positioning: nil, at: location, in: webView)
+  }
+
+  func showAlert(title: String?, message: String?, buttons: [String]?) -> NSApplication.ModalResponse {
+    let alert = NSAlert()
+    alert.messageText = title ?? ""
+    alert.informativeText = message ?? ""
+
+    buttons?.forEach {
+      alert.addButton(withTitle: $0)
+    }
+
+    return alert.runModal()
+  }
+
+  func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
+    let alert = NSAlert()
+    alert.messageText = title ?? ""
+    alert.addButton(withTitle: Localized.General.done)
+    alert.addButton(withTitle: Localized.General.cancel)
+
+    let textField = NSTextField(frame: CGRect(x: 0, y: 0, width: 256, height: 22))
+    textField.placeholderString = placeholder
+    textField.stringValue = defaultValue ?? ""
+    alert.accessoryView = textField
+
+    return alert.runModal() == .alertFirstButtonReturn ? textField.stringValue : nil
+  }
 }
 
 // MARK: - Private
@@ -257,5 +332,42 @@ private extension EditorViewController {
     }
 
     presentedPopover = popover
+  }
+
+  func createMenuItem(
+    spec: WebMenuItem,
+    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
+  ) -> NSMenuItem {
+    if spec.separator {
+      return .separator()
+    } else if let children = spec.children {
+      let item = NSMenuItem(title: spec.title ?? "")
+      item.submenu = createMenu(items: children, handler: handler)
+      return item
+    } else if let title = spec.title {
+      let item = NSMenuItem(title: title)
+      if let actionID = spec.actionID {
+        item.addAction { handler(actionID, nil) }
+      }
+
+      item.keyEquivalent = spec.key ?? ""
+      item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
+      return item
+    } else {
+      Logger.assertFail("Invalid spec of menu item: \(spec)")
+      return NSMenuItem()
+    }
+  }
+
+  func createMenu(
+    items: [WebMenuItem],
+    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
+  ) -> NSMenu {
+    let menu = NSMenu()
+    items.map { createMenuItem(spec: $0, handler: handler) }.forEach {
+      menu.addItem($0)
+    }
+
+    return menu
   }
 }

@@ -22,6 +22,23 @@ public extension NSMenuItem {
   func toggle() {
     state.toggle()
   }
+
+  /**
+   Enable or disable an item, recursively if it contains a submenu.
+
+   This is useful for disabling a menu while still allowing its items to be viewed.
+   */
+  func setEnabledRecursively(isEnabled: Bool) {
+    if let submenu {
+      submenu.autoenablesItems = false
+      submenu.items.forEach {
+        $0.isEnabled = isEnabled
+        $0.setEnabledRecursively(isEnabled: isEnabled)
+      }
+    } else {
+      self.isEnabled = isEnabled
+    }
+  }
 }
 
 extension NSControl.StateValue {

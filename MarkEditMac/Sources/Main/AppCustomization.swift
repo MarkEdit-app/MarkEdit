@@ -81,7 +81,11 @@ struct AppCustomization {
       includingPropertiesForKeys: nil
     )) ?? []
 
-    return files.compactMap {
+    let sorted = files.sorted {
+      $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
+    }
+
+    return sorted.compactMap {
       guard ["css", "js"].contains($0.pathExtension.lowercased()) else {
         return nil
       }
@@ -123,7 +127,7 @@ struct AppCustomization {
 
     // JavaScript, create a closure to avoid declaration conflict
     if fileType == .editorScript || fileType == .scriptsDirectory {
-      return "(() => {\(comment)\n  module = { exports: {} }; exports = module.exports;\n  \(contents)\n})();"
+      return "(() => {\(comment)\nmodule = typeof module === 'object' ? module : { exports: {} };\nexports = module.exports;\n\n\(contents)\n})();"
     }
 
     // Stylesheet, create a <style></style> element

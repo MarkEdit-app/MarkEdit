@@ -48,6 +48,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     for editor in EditorReusePool.shared.viewControllers() where editor !== editorViewController {
       editor.resignFindPanelFocus()
     }
+
+    // The main menu is a singleton, we need to update the menu items for the active editor
+    editorViewController?.resetUserDefinedMenuItems()
   }
 
   func windowDidResignKey(_ notification: Notification) {

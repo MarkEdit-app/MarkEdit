@@ -1393,6 +1393,30 @@
         }
       }
     },
+    "fyH-S9-f9N.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Open Documents Folder\"; ObjectID = \"fyH-S9-f9N\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Documents Folder"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开文档目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開啟文件目錄"
+          }
+        }
+      }
+    },
     "Gbu-oy-t2b.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Select Previous Section\"; ObjectID = \"Gbu-oy-t2b\";",
       "extractionState" : "extracted_with_value",
@@ -1897,6 +1921,30 @@
         }
       }
     },
+    "jNi-CL-4bf.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Customization Guide\"; ObjectID = \"jNi-CL-4bf\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Customization Guide"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义指南"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定義指南"
+          }
+        }
+      }
+    },
     "jv9-dC-jQp.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Copy Path\"; ObjectID = \"jv9-dC-jQp\";",
       "extractionState" : "extracted_with_value",
@@ -2137,6 +2185,30 @@
         }
       }
     },
+    "mGH-Xd-vai.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Extensions\"; ObjectID = \"mGH-Xd-vai\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Extensions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩展功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴充功能"
+          }
+        }
+      }
+    },
     "mK6-2p-4JG.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Check Grammar With Spelling\"; ObjectID = \"mK6-2p-4JG\";",
       "extractionState" : "extracted_with_value",
@@ -2205,6 +2277,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "插入圖片"
+          }
+        }
+      }
+    },
+    "nkD-z6-yjV.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Extensions\"; ObjectID = \"nkD-z6-yjV\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Extensions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩展功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴充功能"
           }
         }
       }
@@ -3494,13 +3590,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开应用目录"
+            "value" : "打开文档目录"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開啟應用目錄"
+            "value" : "開啟文件目錄"
           }
         }
       }

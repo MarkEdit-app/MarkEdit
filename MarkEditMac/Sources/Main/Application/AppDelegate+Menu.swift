@@ -20,6 +20,8 @@ extension AppDelegate: NSMenuDelegate {
       reconfigureMainEditMenu(document: activeDocument)
     case mainWindowMenu:
       reconfigureMainWindowMenu(document: activeDocument)
+    case mainExtensionsMenu:
+      reconfigureMainExtensionsMenu(document: activeDocument)
     case openFileInMenu:
       reconfigureOpenFileInMenu(document: activeDocument)
     case reopenFileMenu:
@@ -67,6 +69,13 @@ private extension AppDelegate {
   func reconfigureMainWindowMenu(document: EditorDocument?) {
     windowFloatingItem?.isEnabled = NSApp.keyWindow is EditorWindow
     windowFloatingItem?.setOn(NSApp.keyWindow?.level == .floating)
+  }
+
+  func reconfigureMainExtensionsMenu(document: EditorDocument?) {
+    mainExtensionsMenu?.items.forEach {
+      let isEnabled = $0.target === NSApp.appDelegate || document != nil
+      $0.setEnabledRecursively(isEnabled: isEnabled)
+    }
   }
 
   @MainActor

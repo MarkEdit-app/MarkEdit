@@ -222,6 +222,23 @@
         }
       }
     },
+    "Cancel" : {
+      "comment" : "Button title, cancel an action",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
     "Case Sensitive" : {
       "comment" : "Toggle case sensitive search",
       "localizations" : {
