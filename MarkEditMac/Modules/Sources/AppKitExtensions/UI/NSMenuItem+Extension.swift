@@ -32,11 +32,10 @@ public extension NSMenuItem {
     if let submenu {
       submenu.autoenablesItems = false
       submenu.items.forEach {
-        $0.isEnabled = isEnabled
         $0.setEnabledRecursively(isEnabled: isEnabled)
       }
     } else {
-      self.isEnabled = isEnabled
+      self.isEnabled = isEnabled && target != nil && action != nil
     }
   }
 }
