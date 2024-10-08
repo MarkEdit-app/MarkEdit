@@ -780,6 +780,29 @@ Gw
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Extensions" id="mGH-Xd-vai">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Extensions" autoenablesItems="NO" id="nkD-z6-yjV">
+                                    <items>
+                                        <menuItem isSeparatorItem="YES" identifier="extensionsMenuDivider" id="Jat-X6-g2Q"/>
+                                        <menuItem title="Open Documents Folder" id="fyH-S9-f9N">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cGC-yM-BaF"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Customization Guide" id="jNi-CL-4bf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openCustomizationGuide:" target="Voe-Tx-rLC" id="dXE-Va-wF2"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                    <connections>
+                                        <outlet property="delegate" destination="Voe-Tx-rLC" id="bdE-rU-LpO"/>
+                                    </connections>
+                                </menu>
+                            </menuItem>
                             <menuItem title="View" id="H8h-7b-M4v">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="View" id="HyV-fh-RgO">
@@ -850,29 +873,6 @@ Gw
                                     </items>
                                     <connections>
                                         <outlet property="delegate" destination="Voe-Tx-rLC" id="CiF-Qc-ark"/>
-                                    </connections>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Extensions" id="mGH-Xd-vai">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Extensions" autoenablesItems="NO" id="nkD-z6-yjV">
-                                    <items>
-                                        <menuItem isSeparatorItem="YES" identifier="extensionsMenuDivider" id="Jat-X6-g2Q"/>
-                                        <menuItem title="Open Documents Folder" id="fyH-S9-f9N">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cGC-yM-BaF"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Customization Guide" id="jNi-CL-4bf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="openCustomizationGuide:" target="Voe-Tx-rLC" id="dXE-Va-wF2"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                    <connections>
-                                        <outlet property="delegate" destination="Voe-Tx-rLC" id="bdE-rU-LpO"/>
                                     </connections>
                                 </menu>
                             </menuItem>

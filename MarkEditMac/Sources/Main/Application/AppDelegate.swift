@@ -13,8 +13,8 @@ import MarkEditKit
 final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var mainFileMenu: NSMenu?
   @IBOutlet weak var mainEditMenu: NSMenu?
-  @IBOutlet weak var mainWindowMenu: NSMenu?
   @IBOutlet weak var mainExtensionsMenu: NSMenu?
+  @IBOutlet weak var mainWindowMenu: NSMenu?
 
   @IBOutlet weak var copyPandocCommandMenu: NSMenu?
   @IBOutlet weak var openFileInMenu: NSMenu?
