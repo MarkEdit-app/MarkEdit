@@ -44,16 +44,22 @@ export function markdown(config: {
   /// By default, the extension installs an autocompletion source that
   /// completes HTML tags when a `<` is typed. Set this to false to
   /// disable this.
-  completeHTMLTags?: boolean
+  completeHTMLTags?: boolean,
+  /// By default, HTML tags in the document are handled by the [HTML
+  /// language](https://github.com/codemirror/lang-html) package with
+  /// tag matching turned off. You can pass in an alternative language
+  /// configuration here if you want.
+  htmlTagLanguage?: LanguageSupport
 } = {}) {
   let {codeLanguages,
        defaultCodeLanguage,
        addKeymap = true,
        base: {parser} = commonmarkLanguage,
-       completeHTMLTags = true} = config
+       completeHTMLTags = true,
+       htmlTagLanguage = htmlNoMatch} = config
   if (!(parser instanceof MarkdownParser)) throw new RangeError("Base parser provided to `markdown` should be a Markdown parser")
   let extensions = config.extensions ? [config.extensions] : []
-  let support = [htmlNoMatch.support], defaultCode
+  let support = [htmlTagLanguage.support], defaultCode
   if (defaultCodeLanguage instanceof LanguageSupport) {
     support.push(defaultCodeLanguage.support)
     defaultCode = defaultCodeLanguage.language
@@ -61,7 +67,7 @@ export function markdown(config: {
     defaultCode = defaultCodeLanguage
   }
   let codeParser = codeLanguages || defaultCode ? getCodeParser(codeLanguages, defaultCode) : undefined
-  extensions.push(parseCode({codeParser, htmlParser: htmlNoMatch.language.parser}))
+  extensions.push(parseCode({codeParser, htmlParser: htmlTagLanguage.language.parser}))
   if (addKeymap) support.push(Prec.high(keymap.of(markdownKeymap)))
   let lang = mkLang(parser.configure(extensions))
   if (completeHTMLTags) support.push(lang.data.of({autocomplete: htmlTagCompletion}))
