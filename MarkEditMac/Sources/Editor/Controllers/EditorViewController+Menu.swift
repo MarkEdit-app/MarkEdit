@@ -316,16 +316,16 @@ extension EditorViewController {
     findSelectionInTextFinder()
   }
 
-  @IBAction func selectAllOccurrences(_ sender: Any?) {
-    selectAllOccurrences()
-  }
-
   @IBAction func findNextMatch(_ sender: Any?) {
     findNextInTextFinder()
   }
 
   @IBAction func findPreviousMatch(_ sender: Any?) {
     findPreviousInTextFinder()
+  }
+
+  @IBAction func selectAllOccurrences(_ sender: Any?) {
+    selectAllOccurrences()
   }
 
   @IBAction func scrollToSelection(_ sender: Any?) {
