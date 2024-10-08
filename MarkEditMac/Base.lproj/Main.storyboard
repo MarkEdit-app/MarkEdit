@@ -491,6 +491,12 @@ Gw
                                                             <action selector="findSelection:" target="Ady-hI-5gd" id="b4Q-Ps-NYk"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Select All Occurrences" keyEquivalent="e" id="zsS-up-p9L">
+                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                                        <connections>
+                                                            <action selector="selectAllOccurrences:" target="Ady-hI-5gd" id="83F-Vk-zez"/>
+                                                        </connections>
+                                                    </menuItem>
                                                     <menuItem title="Jump to Selection" keyEquivalent="j" id="S0p-oC-mLd">
                                                         <connections>
                                                             <action selector="scrollToSelection:" target="Ady-hI-5gd" id="2gs-Ni-NAC"/>
