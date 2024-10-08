@@ -26,6 +26,7 @@ enum AppRuntimeConfig {
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
     let headerFontSizeDiffs: [Double]?
+    let disableCorsRestrictions: Bool?
     let mainWindowHotKey: HotKey?
 
     // swiftlint:enable discouraged_optional_boolean
@@ -36,23 +37,24 @@ enum AppRuntimeConfig {
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
+      case disableCorsRestrictions = "general.disableCorsRestrictions"
       case mainWindowHotKey = "general.mainWindowHotKey"
     }
   }
 
   static var autoCharacterPairs: Bool {
-    // Enable it by default
+    // Enable auto character pairs by default
     currentDefinition?.autoCharacterPairs ?? true
   }
 
   // swiftlint:disable:next discouraged_optional_boolean
   static var closeAlwaysConfirmsChanges: Bool? {
-    // Disable it by default
+    // Changes are saved automatically by default
     currentDefinition?.closeAlwaysConfirmsChanges
   }
 
   static var indentBehavior: EditorIndentBehavior {
-    // Disable it by default
+    // No paragraph or line level indentation by default
     currentDefinition?.indentBehavior ?? .never
   }
 
@@ -68,10 +70,17 @@ enum AppRuntimeConfig {
   }
 
   static var headerFontSizeDiffs: [Double]? {
+    // Rely on CoreEditor definitions by default
     currentDefinition?.headerFontSizeDiffs
   }
 
+  static var disableCorsRestrictions: Bool {
+    // Enforce CORS restrictions by default
+    currentDefinition?.disableCorsRestrictions ?? false
+  }
+
   static var mainWindowHotKey: Definition.HotKey? {
+    // Shift-Command-Option-M by default
     currentDefinition?.mainWindowHotKey
   }
 
@@ -89,6 +98,7 @@ private extension AppRuntimeConfig {
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
     headerFontSizeDiffs: nil,
+    disableCorsRestrictions: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
   )
 

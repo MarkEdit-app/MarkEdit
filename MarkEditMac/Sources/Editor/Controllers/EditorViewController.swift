@@ -148,7 +148,7 @@ final class EditorViewController: NSViewController {
       ))
     }
 
-    let config: WKWebViewConfiguration = .newConfig()
+    let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
     config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
     config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
 
