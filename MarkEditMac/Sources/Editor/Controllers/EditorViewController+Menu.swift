@@ -316,6 +316,10 @@ extension EditorViewController {
     findSelectionInTextFinder()
   }
 
+  @IBAction func selectAllOccurrences(_ sender: Any?) {
+    selectAllOccurrences()
+  }
+
   @IBAction func findNextMatch(_ sender: Any?) {
     findNextInTextFinder()
   }

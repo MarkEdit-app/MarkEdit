@@ -4057,6 +4057,30 @@
         }
       }
     },
+    "zsS-up-p9L.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Select All Occurrences\"; ObjectID = \"zsS-up-p9L\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select All Occurrences"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择所有相同项"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇所有相同項"
+          }
+        }
+      }
+    },
     "zVr-EF-hMY.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Folder Path\"; ObjectID = \"zVr-EF-hMY\";",
       "extractionState" : "extracted_with_value",
