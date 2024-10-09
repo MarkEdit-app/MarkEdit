@@ -35,7 +35,7 @@ initMarkEditModules();
 const config = isReleaseMode ? window.config : {
   text: pseudoDocument,
   theme: 'github-light',
-  fontFace: { family: 'ui-monospace' },
+  fontFace: { family: 'SF Mono, ui-monospace' },
   fontSize: 17,
   showLineNumbers: true,
   showActiveLineIndicator: true,
