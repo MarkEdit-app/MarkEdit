@@ -4,6 +4,7 @@ import { isReleaseMode } from '../../common/env';
 import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
 import { InvisiblesBehavior } from '../../config';
+import { linesWithRange } from '../lines';
 import { setInvisiblesBehavior } from '../config';
 import { setShowActiveLineIndicator } from '../../styling/config';
 import { saveGoBackSelection } from './navigate';
@@ -33,21 +34,6 @@ export function reversedLines() {
   }
 
   return lines.reverse();
-}
-
-export function linesWithRange(from: number, to: number) {
-  const editor = window.editor;
-  const doc = editor.state.doc;
-
-  const lines: Line[] = [];
-  const start = doc.lineAt(from).number;
-  const end = doc.lineAt(to).number;
-
-  for (let ln = start; ln <= end; ++ln) {
-    lines.push(doc.line(ln));
-  }
-
-  return lines;
 }
 
 /**

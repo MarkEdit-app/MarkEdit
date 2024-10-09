@@ -13,6 +13,12 @@ export function sleep(milliseconds: number) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
+export function getFontSizeValue(fontSize: string) {
+  // "10px" -> 10
+  const match = fontSize.match(/^[0-9.]+/);
+  return match ? parseFloat(match[0]) : 0;
+}
+
 export function getClientRect(rect: Rect) {
   // If the scale is not 1.0, it means that the viewport is not the actual size (e.g., pinch to zoom),
   // we need to take this into account when getting the rect.

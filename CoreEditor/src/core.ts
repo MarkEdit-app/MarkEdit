@@ -2,12 +2,13 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { editingState } from './common/store';
-import { afterDomUpdate, getViewportScale, notifyBackgroundColor } from './common/utils';
+import { almostEqual, afterDomUpdate, getViewportScale, notifyBackgroundColor } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './events';
 import { setUp, setGutterHovered } from './styling/config';
 import { loadTheme } from './styling/themes';
+import { adjustGutterPositions } from './modules/lines';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { generateDiffs } from './modules/diff';
 import { scrollCaretToVisible, scrollIntoView } from './modules/selection';
@@ -105,6 +106,9 @@ export function resetEditor(
   setUp(window.config, loadTheme(window.config.theme).colors);
   afterDomUpdate(notifyBackgroundColor);
 
+  // eslint-disable-next-line compat/compat
+  requestAnimationFrame(adjustGutterPositions);
+
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifyViewDidUpdate({
     contentEdited: false,
@@ -123,7 +127,7 @@ export function resetEditor(
   // Observe viewport scale changes, i.e., pinch to zoom
   window.visualViewport?.addEventListener('resize', () => {
     const viewportScale = getViewportScale();
-    if (Math.abs(viewportScale - storage.viewportScale) > 0.001) {
+    if (!almostEqual(viewportScale, storage.viewportScale)) {
       window.nativeModules.core.notifyViewportScaleDidChange();
       storage.viewportScale = viewportScale;
     }
@@ -196,7 +200,7 @@ function observeContentHeightChanges(scrollDOM: HTMLElement) {
   const notifyIfChanged = () => {
     const panel = window.editor.dom.querySelector('.cm-panels-bottom');
     const height = panel === null ? 0 : panel.getBoundingClientRect().height;
-    if (Math.abs(storage.bottomPanelHeight - height) < 0.001) {
+    if (almostEqual(storage.bottomPanelHeight, height)) {
       return;
     }
 

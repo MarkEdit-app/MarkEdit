@@ -1,5 +1,6 @@
 import { EditorSelection, Line } from '@codemirror/state';
-import { linesWithRange, reversedRanges } from '../selection';
+import { linesWithRange } from '../lines';
+import { reversedRanges } from '../selection';
 import removeListMarkers from './removeListMarkers';
 
 /**

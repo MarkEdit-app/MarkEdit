@@ -74,6 +74,9 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     borderRight: 'none',
     fontFamily: 'SF Mono, ui-monospace, monospace',
   },
+  // '.cm-gutterElement': {
+  //   boxShadow: 'inset 0px 0px 0px 1px #f00',
+  // },
   '.cm-activeLineGutter': {
     backgroundColor: 'inherit',
   },

@@ -70,7 +70,7 @@ class Layer extends RectangleMarker {
 
       const scale = getViewportScale();
       const top = rects.reduce((acc, cur) => Math.min(acc, cur.top), 1e9);
-      const height = rects.reduce((acc, cur) => acc + cur.height, 0);
+      const height = rects.reduce((acc, cur) => Math.max(acc, cur.top + cur.height), -1e9) - top;
 
       // The rect that is slightly taller than the caret, centered vertically
       return new DOMRect(

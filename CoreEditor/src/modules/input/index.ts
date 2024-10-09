@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { editingState } from '../../common/store';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
+import { adjustGutterPositions } from '../lines';
 import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
 
@@ -103,5 +104,19 @@ export function observeChanges() {
         selectedLineColumn: selectedLineColumn(),
       });
     }
+
+    // Perfect gutter elements alignment
+    if (update.docChanged || update.viewportChanged) {
+      if (storage.gutterUpdater !== undefined) {
+        clearTimeout(storage.gutterUpdater);
+      }
+      storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
+    }
   });
 }
+
+const storage: {
+  gutterUpdater: ReturnType<typeof setTimeout> | undefined;
+} = {
+  gutterUpdater: undefined,
+};
