@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import WebKit
 import MarkEditKit
 import TextCompletion
 
@@ -78,7 +79,7 @@ extension NSSpellChecker {
   }
 
   @MainActor
-  func acceptWebKitInlinePrediction(view: NSView, bridge: WebBridgeCompletion) {
+  func acceptWebKitInlinePrediction(view: WKWebView, bridge: WebBridgeCompletion) {
     guard #available(macOS 14.0, *) else {
       return
     }
@@ -87,13 +88,13 @@ extension NSSpellChecker {
       return
     }
 
-    guard let prediction = NSSpellChecker.webKitInlinePrediction, !prediction.isEmpty else {
+    guard let prediction = view.webKitInlinePrediction, !prediction.isEmpty else {
       return
     }
 
     declineCorrectionIndicator(for: view)
     bridge.acceptInlinePrediction(prediction: prediction)
-    NSSpellChecker.webKitInlinePrediction = nil
+    view.webKitInlinePrediction = nil
   }
 
   func declineCorrectionIndicator(for view: NSView) {
@@ -112,10 +113,6 @@ extension NSSpellChecker {
 
 @MainActor
 private extension NSSpellChecker {
-  enum AssociatedObjects {
-    @MainActor static var webKitInlinePrediction: UInt8 = 0
-  }
-
   static var supportsInlineCompletion: Bool {
     guard #available(macOS 14.0, *) else {
       return false
@@ -140,20 +137,6 @@ private extension NSSpellChecker {
     }
 
     return (value(forKey: "\(InlineCompletion.beingPresentedSelector)") as? Bool) == true
-  }
-
-  static var webKitInlinePrediction: String? {
-    get {
-      objc_getAssociatedObject(self, &AssociatedObjects.webKitInlinePrediction) as? String
-    }
-    set {
-      objc_setAssociatedObject(
-        self,
-        &AssociatedObjects.webKitInlinePrediction,
-        newValue,
-        objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
-      )
-    }
   }
 
   @objc static var swizzled_isAutomaticInlineCompletionEnabled: Bool {
@@ -222,7 +205,7 @@ private extension NSSpellChecker {
   ) {
     // Prefer a trailing white space trimmed prediction
     if view is EditorWebView {
-      NSSpellChecker.webKitInlinePrediction = candidate.replacementString?.replacingOccurrences(
+      (view as? WKWebView)?.webKitInlinePrediction = candidate.replacementString?.replacingOccurrences(
         of: "\\s+$",
         with: "",
         options: .regularExpression
@@ -238,5 +221,25 @@ private extension NSSpellChecker {
       view: view,
       completionHandler: completionBlock
     )
+  }
+}
+
+private extension WKWebView {
+  enum AssociatedObjects {
+    @MainActor static var webKitInlinePrediction: UInt8 = 0
+  }
+
+  var webKitInlinePrediction: String? {
+    get {
+      objc_getAssociatedObject(self, &AssociatedObjects.webKitInlinePrediction) as? String
+    }
+    set {
+      objc_setAssociatedObject(
+        self,
+        &AssociatedObjects.webKitInlinePrediction,
+        newValue,
+        objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
+      )
+    }
   }
 }
