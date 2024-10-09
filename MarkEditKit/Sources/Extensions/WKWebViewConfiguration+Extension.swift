@@ -7,7 +7,7 @@
 import WebKit
 
 public extension WKWebViewConfiguration {
-  static func newConfig() -> WKWebViewConfiguration {
+  static func newConfig(disableCors: Bool = false) -> WKWebViewConfiguration {
     class Configuration: WKWebViewConfiguration {
       // To mimic settable isOpaque on iOS,
       // which is required for the background color and initial white flash in dark mode
@@ -19,6 +19,17 @@ public extension WKWebViewConfiguration {
       config.preferences.setValue(true, forKey: "developerExtrasEnabled")
     } else {
       Logger.assertFail("Failed to overwrite developerExtrasEnabled in WKPreferences")
+    }
+
+    // Disable CORS checks entirely, allowing fetch() in user scripts to do lots of things.
+    //
+    // This shouldn't raise security issues, as we're not a browser that can load arbitrary URLs.
+    if disableCors {
+      if config.preferences.responds(to: sel_getUid("_webSecurityEnabled")) {
+        config.preferences.setValue(false, forKey: "webSecurityEnabled")
+      } else {
+        Logger.assertFail("Failed to overwrite webSecurityEnabled in WKPreferences")
+      }
     }
 
     return config

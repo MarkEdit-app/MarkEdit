@@ -21,10 +21,13 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
   }
 
-  func testExistenceOfDeveloperTools() {
+  func testExistenceOfDeveloperPreferences() {
     let preferences = WKWebViewConfiguration().preferences
     preferences.setValue(true, forKey: "developerExtrasEnabled")
     testExistenceOfSelector(object: preferences, selector: "_developerExtrasEnabled")
+
+    preferences.setValue(false, forKey: "webSecurityEnabled")
+    testExistenceOfSelector(object: preferences, selector: "_webSecurityEnabled")
 
     let webView = WKWebView()
     testExistenceOfSelector(object: webView, selector: "_inspector")
