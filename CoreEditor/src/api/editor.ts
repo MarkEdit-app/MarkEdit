@@ -27,6 +27,12 @@ export class TextEditor implements TextEditable {
     this.view.dispatch({
       changes: { from, to, insert: text },
     });
+
+    if (from === to) {
+      this.view.dispatch({
+        selection: EditorSelection.cursor(from + text.length),
+      });
+    }
   }
 
   getSelections(): TextRange[] {
