@@ -3,6 +3,7 @@ import { EditorState } from '@codemirror/state';
 import { indentUnit } from '@codemirror/language';
 import { WebFontFace, InvisiblesBehavior } from '../../config';
 import { TabKeyBehavior } from '../indentation';
+import { adjustGutterPositions } from '../lines';
 import { refreshEditFocus, scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
 import { afterDomUpdate, notifyBackgroundColor } from '../../common/utils';
@@ -21,6 +22,8 @@ export function setFontFace(fontFace: WebFontFace) {
   styling.setFontFace(fontFace);
   window.config.fontFace = fontFace;
   window.editor.requestMeasure();
+
+  adjustGutterPositions();
 }
 
 export function setFontSize(fontSize: number) {
@@ -33,11 +36,20 @@ export function setFontSize(fontSize: number) {
   if (wasBigChange) {
     setTimeout(refreshEditFocus, 300);
   }
+
+  adjustGutterPositions();
 }
 
 export function setShowLineNumbers(enabled: boolean) {
   window.config.showLineNumbers = enabled;
   styling.setShowLineNumbers(enabled);
+
+  // Redraw active line indicator to fill the editor width
+  if (!enabled && window.config.showActiveLineIndicator) {
+    refreshEditFocus();
+  }
+
+  adjustGutterPositions();
 }
 
 export function setShowActiveLineIndicator(enabled: boolean) {
@@ -92,6 +104,11 @@ export function setLineWrapping(enabled: boolean) {
 export function setLineHeight(lineHeight: number) {
   window.config.lineHeight = lineHeight;
   styling.setLineHeight(lineHeight);
+
+  // Redraw active line indicator to fill the line height
+  if (window.config.showActiveLineIndicator) {
+    refreshEditFocus();
+  }
 }
 
 export function setDefaultLineBreak(lineBreak?: string) {

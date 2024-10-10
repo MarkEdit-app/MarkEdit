@@ -183,7 +183,7 @@ export function setLineWrapping(enabled: boolean) {
 
 export function setLineHeight(lineHeight: number) {
   if (styleSheets.lineHeight === undefined) {
-    styleSheets.lineHeight = createStyleSheet('.cm-line {}');
+    styleSheets.lineHeight = createStyleSheet('.cm-line, .cm-gutterElement {}');
   }
 
   // Prefer numbers (like 1.5) over percentages (like 150%), see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#number

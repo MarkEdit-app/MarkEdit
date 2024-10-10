@@ -1,8 +1,8 @@
 import { Decoration } from '@codemirror/view';
-import { Line, Range } from '@codemirror/state';
+import { Line } from '@codemirror/state';
 import { createDecoPlugin } from '../helper';
 import { createDecos } from '../matchers/lezer';
-import { linesWithRange } from '../../modules/selection';
+import { getVisibleLines } from '../../modules/lines';
 
 const canvas = document.createElement('canvas');
 const className = 'cm-md-contentIndent';
@@ -43,17 +43,11 @@ export const paragraphIndentStyle = createDecoPlugin(() => {
  * Content indentation for all lines, content is aligned to the first non-white character.
  */
 export const lineIndentStyle = createDecoPlugin(() => {
-  const ranges: Range<Decoration>[] = [];
-  for (const { from, to } of window.editor.visibleRanges) {
-    linesWithRange(from, to).forEach(line => {
-      const deco = createLineIndentDeco(line, 0);
-      if (deco !== null) {
-        ranges.push(deco);
-      }
-    });
-  }
+  const decos = getVisibleLines()
+    .map(line => createLineIndentDeco(line, 0))
+    .filter(deco => deco !== null);
 
-  return Decoration.set(ranges);
+  return Decoration.set(decos);
 });
 
 function createLineIndentDeco(line: Line, from: number) {
