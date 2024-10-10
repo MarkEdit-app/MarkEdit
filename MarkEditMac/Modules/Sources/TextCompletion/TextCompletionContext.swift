@@ -72,8 +72,11 @@ public final class TextCompletionContext {
       origin.x = parentWindow.frame.size.width - panelPadding - panelSize.width
     }
 
+    let screenY = parentWindow.convertPoint(toScreen: origin).y
+    let dockHeight = (parentWindow.screen ?? NSScreen.main)?.dockHeight ?? 0
+
     // Too close to the bottom, or was already upside down during one typing session
-    if (origin.y - panelPadding < 0) || wasFlipped {
+    if (screenY - dockHeight - panelPadding < 0) || wasFlipped {
       origin.y = parentWindow.frame.height - caretRect.minY - safeArea + caretPadding
       wasFlipped = true
     }
@@ -113,4 +116,12 @@ public final class TextCompletionContext {
 
   private let localizable: TextCompletionLocalizable
   private let commitCompletion: @Sendable () -> Void
+}
+
+// MARK: - Private
+
+private extension NSScreen {
+  var dockHeight: Double {
+    frame.height - visibleFrame.height
+  }
 }
