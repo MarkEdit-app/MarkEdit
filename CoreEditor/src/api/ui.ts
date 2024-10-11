@@ -3,7 +3,8 @@ import { MenuItem, Alert, TextBox } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
-import { getRect } from '../modules/selection';
+import { afterDomUpdate } from '../common/utils';
+import { getRect, scrollToSelection, isPositionVisible } from '../modules/selection';
 
 export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
   const items = Array.isArray(spec) ? spec : [spec];
@@ -13,19 +14,29 @@ export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
 }
 
 export function showContextMenu(items: MenuItem[], location?: WebPoint) {
-  window.nativeModules.ui.showContextMenu({
-    items: items.map(item => createMenuItem(item, contextActions)),
-    location: location ?? (() => {
-      const rect = getRect(window.editor.state.selection.main.head);
-      if (rect === undefined) {
-        // Basically invalid, it should not happen
-        return { x: 0, y: 0 };
-      }
+  const caretPos = window.editor.state.selection.main.head;
+  const invokeNative = () => {
+    window.nativeModules.ui.showContextMenu({
+      items: items.map(item => createMenuItem(item, contextActions)),
+      location: location ?? (() => {
+        const rect = getRect(caretPos);
+        if (rect === undefined) {
+          // Basically invalid, it should not happen
+          return { x: 0, y: 0 };
+        }
 
-      // Default value set to the caret position
-      return { x: rect.x, y: rect.y + rect.height + 10 };
-    })(),
-  });
+        // Default value set to the caret position
+        return { x: rect.x, y: rect.y + rect.height + 10 };
+      })(),
+    });
+  };
+
+  if (location === undefined && !isPositionVisible(caretPos)) {
+    scrollToSelection('nearest');
+    afterDomUpdate(invokeNative);
+  } else {
+    invokeNative();
+  }
 }
 
 export function showAlert(spec: Alert): Promise<number> {
