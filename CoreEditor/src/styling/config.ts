@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorColors, EditorTheme } from './types';
 import { Config, WebFontFace, InvisiblesBehavior } from '../config';
 import { editingState, styleSheets } from '../common/store';
+import { adjustGutterPositions } from '../modules/lines';
 import { refreshEditFocus } from '../modules/selection';
 import { gutterExtensions } from './nodes/gutter';
 import { invisiblesExtension } from './nodes/invisible';
@@ -199,6 +200,9 @@ export function setGutterHovered(hovered: boolean) {
   } else {
     gutterDOM?.classList.remove(className);
   }
+
+  window.gutterHovered = hovered;
+  adjustGutterPositions('gutterHover');
 }
 
 function enableGutterHoverEffects() {

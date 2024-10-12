@@ -110,7 +110,12 @@ export function observeChanges() {
       if (storage.gutterUpdater !== undefined) {
         clearTimeout(storage.gutterUpdater);
       }
+
       storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
+    }
+
+    if (window.gutterHovered ?? false) {
+      adjustGutterPositions('gutterHover');
     }
   });
 }

@@ -35,7 +35,6 @@ declare global {
     webkit?: WebKit;
     editor: EditorView;
     config: Config;
-    colors?: EditorColors;
     dynamics: Dynamics;
     webModules: Record<string, WebModule>;
     nativeModules: {
@@ -45,6 +44,9 @@ declare global {
       tokenizer: NativeModuleTokenizer;
       ui: NativeModuleUI;
     };
+    // States
+    colors?: EditorColors;
+    gutterHovered?: boolean;
   }
 
   interface ImportMetaEnv {
