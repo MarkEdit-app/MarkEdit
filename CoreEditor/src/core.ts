@@ -107,7 +107,7 @@ export function resetEditor(
   afterDomUpdate(notifyBackgroundColor);
 
   // eslint-disable-next-line compat/compat
-  requestAnimationFrame(adjustGutterPositions);
+  requestAnimationFrame(() => adjustGutterPositions());
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifyViewDidUpdate({

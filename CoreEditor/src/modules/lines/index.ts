@@ -22,15 +22,17 @@ export function getVisibleLines() {
   return lines;
 }
 
-export function adjustGutterPositions() {
+export function adjustGutterPositions(className: 'lineNumbers' | 'gutterHover' = 'lineNumbers') {
   if (!window.config.showLineNumbers) {
     return;
   }
 
-  const lineElements = document.querySelectorAll('.cm-line:has(.cm-md-header)');
-  const lineNumberElements = queryGutters('.cm-lineNumbers .cm-gutterElement');
-  const foldGutterElements = queryGutters('.cm-foldGutter .cm-gutterElement');
+  const gutterElements = queryGutters(`.cm-${className} .cm-gutterElement`);
+  if (gutterElements.length === 0) {
+    return;
+  }
 
+  const lineElements = document.querySelectorAll('.cm-line:has(.cm-md-header)');
   lineElements.forEach(lineEl => {
     const { fontSize } = getComputedStyle(lineEl);
     if (almostEqual(getFontSizeValue(fontSize), window.config.fontSize)) {
@@ -38,8 +40,7 @@ export function adjustGutterPositions() {
     }
 
     const lineRect = lineEl.getBoundingClientRect();
-    adjustGutter(findGutter(lineNumberElements, lineRect), fontSize);
-    adjustGutter(findGutter(foldGutterElements, lineRect), fontSize);
+    adjustGutter(findGutter(gutterElements, lineRect), fontSize);
   });
 }
 
@@ -74,11 +75,26 @@ function getHeightDiff(text: string, targetFontSize: string, baseFontSize: strin
 }
 
 function measureHeight(text: string, font: string) {
+  const key = text + font;
+  const cachedValue = storage.cachedHeights[key];
+  if (cachedValue) {
+    return cachedValue;
+  }
+
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
   context.font = font;
 
   const metrics = context.measureText(text);
-  return metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+  const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+  storage.cachedHeights[key] = height;
+  return height;
 }
 
 const canvas = document.createElement('canvas');
+
+const storage: {
+  cachedHeights: { [key: string]: number };
+} = {
+  cachedHeights: {},
+};
