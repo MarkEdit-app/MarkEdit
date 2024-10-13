@@ -69,7 +69,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-foldPlaceholder': {
     margin: '0 4px',
     padding: '0 4px',
-    borderRadius: '4px',
+    borderRadius: '3px',
     border: 'none',
   },
   '.cm-gutters': {
