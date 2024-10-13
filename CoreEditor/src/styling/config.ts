@@ -104,11 +104,18 @@ export function setFontSize(fontSize: number) {
 
     styleSheets.fontSize = createStyleSheet(`
       .cm-editor {}
+      .cm-foldPlaceholder {}
       ${[h(1), h(2), h(3), h(4), h(5), h(6)].join('\n')}
     `);
   }
 
   updateStyleSheet(styleSheets.fontSize, (style, rule) => {
+    // Smaller font size for fold placeholder (...)
+    if (rule.selectorText === '.cm-foldPlaceholder') {
+      style.fontSize = `${fontSize - 4}px`;
+      return;
+    }
+
     // E.g., .cm-md-heading1 -> 1, .cm-editor -> 0
     const match = rule.selectorText.match(/\d+/);
     const headingLevel = parseInt(match === null ? '0' : match[0]);
