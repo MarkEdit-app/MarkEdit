@@ -149,6 +149,7 @@ final class EditorViewController: NSViewController {
     }
 
     let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
+    config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
     config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
     config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
 

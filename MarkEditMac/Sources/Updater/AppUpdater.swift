@@ -190,10 +190,3 @@ private extension AppUpdater {
     }
   }
 }
-
-private extension ProcessInfo {
-  var semanticOSVer: String {
-    let version = operatingSystemVersion
-    return "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
-  }
-}
