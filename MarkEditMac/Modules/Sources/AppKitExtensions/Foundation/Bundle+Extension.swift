@@ -10,4 +10,8 @@ public extension Bundle {
   var shortVersionString: String? {
     infoDictionary?["CFBundleShortVersionString"] as? String
   }
+
+  var userAgent: String {
+    "MarkEdit/\(shortVersionString ?? "0.0.0")"
+  }
 }
