@@ -51,6 +51,18 @@ export const markdownExtensions: MarkdownConfig[] = [
   mathExtension,
 ];
 
+// https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
+export const markdownExtendedData = {
+  closeBrackets: {
+    brackets: [
+      // Default
+      '(', '[', '{', '\'', '"',
+      // Custom
+      '`', '*', '_',
+    ],
+  },
+};
+
 /**
  * Extensions used in all scenarios.
  *

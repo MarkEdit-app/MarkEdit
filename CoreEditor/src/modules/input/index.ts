@@ -8,6 +8,7 @@ import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActi
 
 import hasSelection from '../selection/hasSelection';
 import wrapBlock from './wrapBlock';
+import insertCodeBlock from './insertCodeBlock';
 
 /**
  * Tokenize words at the click position, especially useful for languages like Chinese and Japanese.
@@ -33,12 +34,17 @@ export function wordTokenizer() {
  * @returns True to ignore the default behavior
  */
 export function interceptInputs() {
-  const marksToWrap = ['`', '*', '_', '~', '$'];
+  const marksToWrap = ['~', '$'];
 
   return EditorView.inputHandler.of((editor, _from, _to, insert) => {
     // E.g., wrap "selection" as "*selection*"
     if (window.config.autoCharacterPairs && marksToWrap.includes(insert)) {
       return wrapBlock(insert, editor);
+    }
+
+    // Insert triple backticks to create a code block
+    if (window.config.autoCharacterPairs && insert === '`') {
+      return insertCodeBlock(editor);
     }
 
     if ((window.config.suggestWhileTyping || isPanelVisible()) && insert.trim().length > 0) {

@@ -19,7 +19,7 @@ import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
 
 import { loadTheme } from './styling/themes';
-import { classHighlighters, markdownExtensions, renderExtensions, actionExtensions } from './styling/markdown';
+import { classHighlighters, markdownExtensions, markdownExtendedData, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
@@ -152,6 +152,7 @@ function fullExtensions(options: { lineBreak?: string }) {
 
     // Markdown
     markdownConfigurator.of(markdownConfigurations()),
+    markdownLanguage.data.of(markdownExtendedData),
 
     // Styling
     classHighlighters,
