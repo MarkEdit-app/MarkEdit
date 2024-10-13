@@ -112,7 +112,7 @@ export function observeChanges() {
     }
 
     // Perfect gutter elements alignment
-    if (update.docChanged || update.viewportChanged) {
+    if (update.geometryChanged || update.viewportChanged) {
       if (storage.gutterUpdater !== undefined) {
         clearTimeout(storage.gutterUpdater);
       }
