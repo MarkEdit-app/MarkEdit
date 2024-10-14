@@ -19,11 +19,6 @@ extension EditorViewController {
       return
     }
 
-    // In viewing mode, always set the mode to hidden and hide the search field,
-    // this is to break a mystery retain cycle caused by NSDocument version browsing.
-    let mode = isRevisionMode ? .hidden : mode
-    findPanel.searchField.isHidden = isRevisionMode
-
     if mode != .hidden {
       configureFieldEditor()
       removeFloatingUIElements()

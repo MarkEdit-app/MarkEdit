@@ -16,7 +16,6 @@ import TextBundle
 final class EditorDocument: NSDocument {
   var fileData: Data?
   var stringValue = ""
-  var latestRevision: String?
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -191,7 +190,6 @@ extension EditorDocument {
       DispatchQueue.main.async {
         self.fileData = data
         self.stringValue = newValue
-        self.latestRevision = self.isInViewingMode ? Revisions.latest : nil
         self.hostViewController?.representedObject = self
       }
     }
@@ -267,13 +265,12 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func browseVersions(_ sender: Any?) {
-    // We don't have a way to retrieve the latest revision,
-    // save a copy before opening the version browser.
-    //
-    // This works when only one version browser can be open at a time,
-    // which seems to be the case so far.
-    Revisions.latest = stringValue
-    super.browseVersions(sender)
+    guard let fileURL else {
+      return
+    }
+
+    let versions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
+    Swift.print(versions)
   }
 }
 
@@ -363,11 +360,6 @@ private extension EditorDocument {
   }
 
   func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
-    // In viewing mode (aka version browsing), saveAction is directly skipped
-    guard !isInViewingMode else {
-      return
-    }
-
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
@@ -426,8 +418,4 @@ private extension EditorDocument {
       document.saveContent(nil, completion: performClose)
     }
   }
-}
-
-private enum Revisions {
-  static var latest: String?
 }

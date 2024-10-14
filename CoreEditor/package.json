@@ -21,12 +21,10 @@
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
     "@lezer/common": "^1.0.0",
-    "diff": "^5.1.0",
     "js-yaml": "^4.1.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/diff": "^5.0.3",
     "@types/eslint": "^8.56.10",
     "@types/jest": "^29.5.4",
     "@types/js-yaml": "^4.0.5",

@@ -21,8 +21,6 @@ const colors: EditorColors = {
   selectionHighlight: '#0050a480',
   visibleSpace: '#ffffff52',
   lighterBackground: '#ffffff1a',
-  diffAdded: '#34504d',
-  diffRemoved: '#4d3341',
   lineBorder: '#234e6d',
   bracketBorder: '#8b8145',
 };

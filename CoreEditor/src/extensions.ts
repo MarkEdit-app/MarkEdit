@@ -31,9 +31,6 @@ import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } fro
 import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
-// Revision mode
-import { highlightDiffs } from './styling/nodes/diff';
-
 const theme = new Compartment;
 const readOnly = new Compartment;
 const gutters = new Compartment;
@@ -62,33 +59,7 @@ window.dynamics = {
   markdownConfigurator,
 };
 
-// Make this a function because some resources (e.g., phrases) require lazy loading
-export function extensions(options: {
-  revisionMode: boolean;
-  lineBreak?: string;
-}) {
-  if (options.revisionMode) {
-    return revisionExtensions();
-  } else {
-    return fullExtensions(options);
-  }
-}
-
-export function markdownConfigurations() {
-  return markdown({
-    base: markdownLanguage,
-    codeLanguages: [
-      ...languages,
-      ...userCodeLanguages(),
-    ],
-    extensions: [
-      ...markdownExtensions,
-      ...userMarkdownConfigs(),
-    ],
-  });
-}
-
-function fullExtensions(options: { lineBreak?: string }) {
+export function extensions(options: { lineBreak?: string }) {
   return [
     // Extensions created by user scripts
     extensionConfigurator.of(userExtensions()),
@@ -163,17 +134,18 @@ function fullExtensions(options: { lineBreak?: string }) {
   ];
 }
 
-/**
- * The minimum set of extensions used in revision mode.
- */
-function revisionExtensions() {
-  return [
-    EditorView.editable.of(false),
-    EditorState.readOnly.of(true),
-    EditorView.lineWrapping,
-    theme.of(loadTheme(window.config.theme)),
-    highlightDiffs,
-  ];
+export function markdownConfigurations() {
+  return markdown({
+    base: markdownLanguage,
+    codeLanguages: [
+      ...languages,
+      ...userCodeLanguages(),
+    ],
+    extensions: [
+      ...markdownExtensions,
+      ...userMarkdownConfigs(),
+    ],
+  });
 }
 
 function indentBehaviorExtension() {

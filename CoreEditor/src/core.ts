@@ -10,7 +10,6 @@ import { setUp, setGutterHovered } from './styling/config';
 import { loadTheme } from './styling/themes';
 import { adjustGutterPositions } from './modules/lines';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
-import { generateDiffs } from './modules/diff';
 import { scrollCaretToVisible, scrollIntoView } from './modules/selection';
 import { markContentClean } from './modules/history';
 
@@ -24,16 +23,8 @@ export enum ReplaceGranularity {
 
 /**
  * Reset the editor to the initial state.
- *
- * @param doc Initial content
- * @param revision Optionally, provide a revision to show diff
- * @param revisionMode Whether to set the editor to revision mode
  */
-export function resetEditor(
-  doc: string,
-  revision: string | undefined = undefined,
-  revisionMode = false,
-) {
+export function resetEditor(initialContent: string) {
   // Idle state change should always go first
   editingState.isIdle = false;
 
@@ -43,24 +34,14 @@ export function resetEditor(
   }
 
   const lineBreak = getLineBreak(
-    doc,
+    initialContent,
     window.config.defaultLineBreak,
   );
-
-  // Returns either the original doc,
-  // or content that contains the diff with labels.
-  const initialContent = (() => {
-    if (revision === undefined) {
-      return doc;
-    }
-
-    return generateDiffs(revision, doc);
-  })();
 
   const editor = new EditorView({
     doc: normalizeLineBreaks(initialContent, lineBreak),
     parent: document.querySelector('#editor') ?? document.body,
-    extensions: extensions({ revisionMode, lineBreak }),
+    extensions: extensions({ lineBreak }),
   });
 
   editor.focus();
