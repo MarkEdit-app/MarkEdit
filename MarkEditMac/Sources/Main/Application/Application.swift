@@ -24,8 +24,14 @@ final class Application: NSApplication {
   }
 
   override func sendAction(_ action: Selector, to target: Any?, from sender: Any?) -> Bool {
+    if action == #selector(NSText.copy(_:)) && EditorReusePool.shared.isBrowsingVersions {
+      DispatchQueue.main.asyncAfter(deadline: .now()) {
+        NSPasteboard.general.sanitizeDiffs()
+      }
+    }
+
     if action == #selector(NSText.paste(_:)) {
-      NSPasteboard.general.sanitize()
+      NSPasteboard.general.sanitizeURLs()
     }
 
     // Ensure lines are fully selected for a better WritingTools experience

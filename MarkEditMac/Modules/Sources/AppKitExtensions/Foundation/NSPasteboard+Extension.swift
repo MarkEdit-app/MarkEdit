@@ -27,7 +27,7 @@ public extension NSPasteboard {
     }
   }
 
-  func sanitize() {
+  func sanitizeURLs() {
     // Handle the case where a link is only copied to "public.url",
     // for example, copying the link generated for iCloud Collaborate.
     if string?.isEmpty ?? true, let url = string(forType: .URL), !url.isEmpty {

@@ -1,7 +1,7 @@
 import { Decoration, MatchDecorator } from '@codemirror/view';
 import { createDecoPlugin } from '../helper';
 
-const regexp = /{{md-diff-(added|removed)-(\d+)}}/g;
+const regexp = /\u200B{{md-diff-(added|removed)-(\d+)}}\u200B/g;
 const classPrefix = 'cm-md-diff';
 
 /**

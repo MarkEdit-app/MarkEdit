@@ -16,6 +16,16 @@ final class EditorReusePool {
   static let shared = EditorReusePool()
   let processPool = WKProcessPool()
 
+  var isBrowsingVersions: Bool {
+    guard controllerPool.count > 1 else {
+      return false
+    }
+
+    return controllerPool.contains {
+      $0.document?.isBrowsingVersions == true
+    }
+  }
+
   func warmUp() {
     if controllerPool.isEmpty {
       controllerPool.append(EditorViewController())

@@ -14,9 +14,9 @@ export function generateDiffs(oldValue: string, newValue: string) {
     const count = part.count;
     const value = part.value;
     if (part.added === true) {
-      return `{{md-diff-added-${count}}}${value}`;
+      return `\u200B{{md-diff-added-${count}}}\u200B${value}`;
     } else if (part.removed === true) {
-      return `{{md-diff-removed-${count}}}${value}`;
+      return `\u200B{{md-diff-removed-${count}}}\u200B${value}`;
     } else {
       return value;
     }
