@@ -941,6 +941,7 @@ Gw
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+                <customObject id="fks-T3-9k0" userLabel="Document Controller" customClass="AppDocumentController" customModule="MarkEdit" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="80" y="-400"/>

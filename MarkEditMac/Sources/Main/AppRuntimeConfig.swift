@@ -26,6 +26,8 @@ enum AppRuntimeConfig {
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
     let headerFontSizeDiffs: [Double]?
+    let defaultOpenDirectory: String?
+    let defaultSaveDirectory: String?
     let disableCorsRestrictions: Bool?
     let mainWindowHotKey: HotKey?
 
@@ -37,6 +39,8 @@ enum AppRuntimeConfig {
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
+      case defaultOpenDirectory = "general.defaultOpenDirectory"
+      case defaultSaveDirectory = "general.defaultSaveDirectory"
       case disableCorsRestrictions = "general.disableCorsRestrictions"
       case mainWindowHotKey = "general.mainWindowHotKey"
     }
@@ -74,6 +78,16 @@ enum AppRuntimeConfig {
     currentDefinition?.headerFontSizeDiffs
   }
 
+  static var defaultOpenDirectory: String? {
+    // Unspecified by default
+    currentDefinition?.defaultOpenDirectory
+  }
+
+  static var defaultSaveDirectory: String? {
+    // Unspecified by default
+    currentDefinition?.defaultSaveDirectory
+  }
+
   static var disableCorsRestrictions: Bool {
     // Enforce CORS restrictions by default
     currentDefinition?.disableCorsRestrictions ?? false
@@ -98,6 +112,8 @@ private extension AppRuntimeConfig {
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
     headerFontSizeDiffs: nil,
+    defaultOpenDirectory: nil,
+    defaultSaveDirectory: nil,
     disableCorsRestrictions: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
   )

@@ -79,6 +79,8 @@
 		87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEE0129585ADC00C8E61C /* AppPreferences.swift */; };
 		87ACA65C2C858AF4008E24BA /* chunks in Resources */ = {isa = PBXBuildFile; fileRef = 87ACA65B2C858AF4008E24BA /* chunks */; };
 		87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACB6932BD8CA8400CE6F9E /* Application.swift */; };
+		87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */; };
+		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */; };
 		87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BD071129699A290053EF5F /* EditorViewController+Preview.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
@@ -204,6 +206,8 @@
 		87AAEE0129585ADC00C8E61C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		87ACA65B2C858AF4008E24BA /* chunks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chunks; path = CoreEditor/dist/chunks; sourceTree = SOURCE_ROOT; };
 		87ACB6932BD8CA8400CE6F9E /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
+		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extension.swift"; sourceTree = "<group>"; };
 		87BD071129699A290053EF5F /* EditorViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Preview.swift"; sourceTree = "<group>"; };
 		87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+GotoLine.swift"; sourceTree = "<group>"; };
 		87BEF30029A88F6800596E17 /* AppCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCustomization.swift; sourceTree = "<group>"; };
@@ -411,6 +415,7 @@
 				871C99592973F1C2003FF3A7 /* Application */,
 				87DCB61F2B284AAD00A3056F /* AppHacks.swift */,
 				877B965C2C63815000186414 /* AppHotKeys.swift */,
+				87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */,
 				873D6401295FCC3E0095DEF7 /* AppResources.swift */,
 				87DE081A294DDA49004AD33A /* AppTheme.swift */,
 				87AAEE0129585ADC00C8E61C /* AppPreferences.swift */,
@@ -519,6 +524,7 @@
 				87850C8529482A8600D1A952 /* NSApplication+Extension.swift */,
 				87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */,
 				877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */,
+				87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -711,6 +717,7 @@
 			files = (
 				8725E0822977EF46006A4961 /* EditorViewController+Toolbar.swift in Sources */,
 				874BE6F429BB37FA002F83BA /* IntentProvider.swift in Sources */,
+				87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extension.swift in Sources */,
 				874BE70E29BB73CA002F83BA /* UpdateFileContentIntent.swift in Sources */,
 				8780AC202982A2DD00065EF4 /* WindowSettingsView.swift in Sources */,
 				87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */,
@@ -767,6 +774,7 @@
 				874BE70829BB62BA002F83BA /* CreateNewDocumentIntent.swift in Sources */,
 				870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */,
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,
+				87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */,
 				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
 				87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */,
 				873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */,
