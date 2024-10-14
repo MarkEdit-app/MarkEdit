@@ -155,6 +155,15 @@ extension EditorDocument {
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
     typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
   }
+
+  override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
+    if let defaultDirectory = AppRuntimeConfig.defaultSaveDirectory {
+      // Overriding savePanel.directoryURL does not work as intended
+      NSDocumentController.shared.setOpenPanelDirectory(defaultDirectory)
+    }
+
+    return super.prepareSavePanel(savePanel)
+  }
 }
 
 // MARK: - Reading and Writing
