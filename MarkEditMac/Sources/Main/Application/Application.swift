@@ -15,11 +15,15 @@ final class Application: NSApplication {
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
     NSSpellChecker.swizzleShowCompletionForCandidateOnce
     NSSpellChecker.swizzleCorrectionIndicatorOnce
+    UserDefaults.overwriteTextCheckerOnce()
+    AppCustomization.createFiles()
 
-    let app = Self.shared
+    let application = Self.shared
     let delegate = AppDelegate()
 
-    app.delegate = delegate
+    application.delegate = delegate
+    delegate.startAccessingGrantedFolder()
+
     _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
   }
 

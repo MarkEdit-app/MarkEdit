@@ -56,10 +56,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
 
-    startAccessingGrantedFolder()
-    UserDefaults.overwriteTextCheckerOnce()
-    AppCustomization.createFiles()
-
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(windowDidResignKey(_:)),
