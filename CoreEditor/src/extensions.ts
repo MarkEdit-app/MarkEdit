@@ -32,9 +32,6 @@ import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
 // Revision mode
-import { inlineCodeStyle, codeBlockStyle } from './styling/nodes/code';
-import { tableStyle } from './styling/nodes/table';
-import { frontMatterStyle } from './styling/nodes/frontMatter';
 import { highlightDiffs } from './styling/nodes/diff';
 
 const theme = new Compartment;
@@ -171,34 +168,13 @@ function fullExtensions(options: { lineBreak?: string }) {
 
 /**
  * The minimum set of extensions used in revision mode.
- *
- * Don't share the code with @light builds, which increase the bundle size.
  */
 function revisionExtensions() {
   return [
-    // Basic
-    highlightSpecialChars(),
     EditorView.editable.of(false),
     EditorState.readOnly.of(true),
-    EditorState.transactionFilter.of(tr => tr.docChanged ? [] : tr),
-
-    // Line behaviors
-    gutters.of(window.config.showLineNumbers ? gutterExtensions : []),
-    lineWrapping.of(window.config.lineWrapping ? EditorView.lineWrapping : []),
-
-    // Markdown
-    markdown({
-      base: markdownLanguage,
-      extensions: markdownExtensions,
-    }),
-
-    // Styling
-    classHighlighters,
+    EditorView.lineWrapping,
     theme.of(loadTheme(window.config.theme)),
-    inlineCodeStyle,
-    codeBlockStyle,
-    tableStyle,
-    frontMatterStyle,
     highlightDiffs,
   ];
 }
