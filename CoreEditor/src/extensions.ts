@@ -193,6 +193,7 @@ function revisionExtensions() {
     }),
 
     // Styling
+    classHighlighters,
     theme.of(loadTheme(window.config.theme)),
     inlineCodeStyle,
     codeBlockStyle,
