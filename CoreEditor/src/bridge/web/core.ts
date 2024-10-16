@@ -8,6 +8,7 @@ import {
   replaceText,
   handleFocusLost,
   handleMouseExited,
+  setHasModalSheet,
 } from '../../core';
 
 /**
@@ -23,6 +24,7 @@ export interface WebModuleCore extends WebModule {
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
   handleFocusLost(): void;
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void;
+  setHasModalSheet({ value }: { value: boolean }): void;
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
@@ -52,5 +54,9 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void {
     handleMouseExited(clientX, clientY);
+  }
+
+  setHasModalSheet({ value }: { value: boolean }): void {
+    setHasModalSheet(value);
   }
 }

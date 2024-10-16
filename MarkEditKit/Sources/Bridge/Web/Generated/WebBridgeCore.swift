@@ -91,6 +91,18 @@ public final class WebBridgeCore {
 
     webView?.invoke(path: "webModules.core.handleMouseExited", message: message, completion: completion)
   }
+
+  public func setHasModalSheet(value: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let value: Bool
+    }
+
+    let message = Message(
+      value: value
+    )
+
+    webView?.invoke(path: "webModules.core.setHasModalSheet", message: message, completion: completion)
+  }
 }
 
 public enum ReplaceGranularity: String, Codable {

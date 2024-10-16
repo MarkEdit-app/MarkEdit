@@ -5,10 +5,12 @@ export const globalState: {
   colors?: EditorColors;
   contextMenuOpenTime: number;
   gutterHovered: boolean;
+  hasModalSheet: boolean;
 } = {
   colors: undefined,
   contextMenuOpenTime: 0,
   gutterHovered: false,
+  hasModalSheet: false,
 };
 
 export const editingState = {

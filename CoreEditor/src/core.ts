@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
-import { editingState } from './common/store';
+import { globalState, editingState } from './common/store';
 import { almostEqual, afterDomUpdate, getViewportScale, notifyBackgroundColor } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
@@ -175,6 +175,10 @@ export function handleFocusLost() {
 
 export function handleMouseExited(_clientX: number, _clientY: number) {
   setGutterHovered(false);
+}
+
+export function setHasModalSheet(value: boolean) {
+  globalState.hasModalSheet = value;
 }
 
 function observeContentHeightChanges(scrollDOM: HTMLElement) {

@@ -46,6 +46,11 @@ open class RoundedButtonGroup: NSView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  public func setBackgroundColor(_ color: NSColor) {
+    leftButton.layerBackgroundColor = color
+    rightButton.layerBackgroundColor = color
+  }
+
   override public func layout() {
     super.layout()
     leftButton.frame = CGRect(

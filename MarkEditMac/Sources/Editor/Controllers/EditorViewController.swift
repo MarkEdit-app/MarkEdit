@@ -316,6 +316,10 @@ extension EditorViewController {
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
   }
 
+  func setHasModalSheet(value: Bool) {
+    bridge.core.setHasModalSheet(value: value)
+  }
+
   func handleFileURLChange() {
     guard hasBeenEdited else {
       return
