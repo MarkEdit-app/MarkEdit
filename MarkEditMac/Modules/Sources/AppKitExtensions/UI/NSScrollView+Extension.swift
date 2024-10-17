@@ -24,6 +24,6 @@ public extension NSScrollView {
   }
 
   func setAttributedText(_ text: NSAttributedString) {
-    textView?.textContentStorage?.attributedString = text
+    textView?.textStorage?.setAttributedString(text)
   }
 }

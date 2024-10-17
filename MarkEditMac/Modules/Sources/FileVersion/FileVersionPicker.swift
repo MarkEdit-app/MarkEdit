@@ -67,6 +67,7 @@ public final class FileVersionPicker: NSViewController {
     let textView = scrollView.textView
     textView?.drawsBackground = false
     textView?.isEditable = false
+    textView?.isSelectable = true
     textView?.textContainerInset = CGSize(width: Constants.layoutPadding, height: Constants.layoutPadding)
     textView?.textContainer?.lineFragmentPadding = 0
 
