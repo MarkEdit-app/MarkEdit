@@ -6,6 +6,7 @@
 
 import AppKit
 import MarkEditKit
+import FileVersion
 import TextBundle
 
 /**
@@ -270,14 +271,22 @@ extension EditorDocument: FileVersionPickerDelegate {
     }
 
     let versions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
+    Logger.log(.debug, "Found \(versions.count) local versions")
+
     let picker = FileVersionPicker(
       fileURL: fileURL,
       current: stringValue,
       versions: versions.newestToOldest,
+      localizable: FileVersionLocalizable(
+        previous: Localized.General.previous,
+        next: Localized.General.next,
+        cancel: Localized.General.cancel,
+        pickThisVersion: Localized.FileVersion.pickThisVersion,
+        modeTitles: Localized.FileVersion.modeTitles
+      ),
       delegate: self
     )
 
-    hostViewController?.setHasModalSheet(value: true)
     hostViewController?.presentAsSheet(picker)
   }
 
@@ -291,8 +300,8 @@ extension EditorDocument: FileVersionPickerDelegate {
     save(nil)
   }
 
-  func fileVersionPickerDidClose(_ picker: FileVersionPicker) {
-    hostViewController?.setHasModalSheet(value: false)
+  func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool) {
+    hostViewController?.setHasModalSheet(value: didBecomeSheet)
   }
 }
 

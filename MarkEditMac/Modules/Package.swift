@@ -22,6 +22,10 @@ let package = Package(
       targets: ["DiffKit"]
     ),
     .library(
+      name: "FileVersion",
+      targets: ["FileVersion"]
+    ),
+    .library(
       name: "FontPicker",
       targets: ["FontPicker"]
     ),
@@ -78,6 +82,17 @@ let package = Package(
       resources: [
         .process("Resources"),
       ],
+      swiftSettings: [
+        .enableExperimentalFeature("StrictConcurrency")
+      ],
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
+    .target(
+      name: "FileVersion",
+      dependencies: ["AppKitControls"],
+      path: "Sources/FileVersion",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
       ],

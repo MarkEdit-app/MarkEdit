@@ -559,6 +559,57 @@
         }
       }
     },
+    "Diff Chars" : {
+      "comment" : "Diff by characters",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按字符对比"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按字元對比"
+          }
+        }
+      }
+    },
+    "Diff Lines" : {
+      "comment" : "Diff by lines",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按行对比"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按行對比"
+          }
+        }
+      }
+    },
+    "Diff Words" : {
+      "comment" : "Diff by words",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按单词对比"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按單詞對比"
+          }
+        }
+      }
+    },
     "Dim inactive lines" : {
       "comment" : "Explanation for focus mode",
       "localizations" : {
@@ -1772,6 +1823,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "段落數量"
+          }
+        }
+      }
+    },
+    "Pick This Version" : {
+      "comment" : "Title for button to pick a file version",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择此版本"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇此版本"
           }
         }
       }
