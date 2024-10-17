@@ -263,14 +263,14 @@ extension EditorDocument {
 
 // MARK: Version Browsing
 
-extension EditorDocument: EditorVersionPickerDelegate {
+extension EditorDocument: FileVersionPickerDelegate {
   override func browseVersions(_ sender: Any?) {
     guard let fileURL else {
       return Logger.assertFail("Missing fileURL for document: \(self)")
     }
 
     let versions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
-    let picker = EditorVersionPicker(
+    let picker = FileVersionPicker(
       fileURL: fileURL,
       current: stringValue,
       versions: versions.newestToOldest,
@@ -281,7 +281,7 @@ extension EditorDocument: EditorVersionPickerDelegate {
     hostViewController?.presentAsSheet(picker)
   }
 
-  func editorVersionPicker(_ picker: EditorVersionPicker, didPickVersion version: NSFileVersion) {
+  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion) {
     guard let contents = try? Data(contentsOf: version.url).toString() else {
       return Logger.assertFail("Failed to get file contents of version: \(version)")
     }
@@ -291,7 +291,7 @@ extension EditorDocument: EditorVersionPickerDelegate {
     save(nil)
   }
 
-  func editorVersionPickerDidDisappear(_ picker: EditorVersionPicker) {
+  func fileVersionPickerDidClose(_ picker: FileVersionPicker) {
     hostViewController?.setHasModalSheet(value: false)
   }
 }

@@ -1,5 +1,5 @@
 //
-//  EditorVersionPicker.swift
+//  FileVersionPicker.swift
 //  MarkEditMac
 //
 //  Created by cyan on 2024/10/14.
@@ -9,15 +9,15 @@ import AppKit
 import AppKitControls
 import DiffKit
 
-protocol EditorVersionPickerDelegate: AnyObject {
-  func editorVersionPicker(_ picker: EditorVersionPicker, didPickVersion version: NSFileVersion)
-  func editorVersionPickerDidDisappear(_ picker: EditorVersionPicker)
+protocol FileVersionPickerDelegate: AnyObject {
+  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion)
+  func fileVersionPickerDidClose(_ picker: FileVersionPicker)
 }
 
 /**
  Homemade version picker to replace the time machine, which has extremely bad performance.
  */
-final class EditorVersionPicker: NSViewController {
+final class FileVersionPicker: NSViewController {
   private let fileURL: URL
   private let current: String
   private var versions: [NSFileVersion]
@@ -75,7 +75,7 @@ final class EditorVersionPicker: NSViewController {
 
   private var isDownloading = false
   private var localEventMonitor: Any?
-  private weak var delegate: EditorVersionPickerDelegate?
+  private weak var delegate: FileVersionPickerDelegate?
 
   deinit {
     if let monitor = localEventMonitor {
@@ -84,7 +84,7 @@ final class EditorVersionPicker: NSViewController {
     }
   }
 
-  init(fileURL: URL, current: String, versions: [NSFileVersion], delegate: EditorVersionPickerDelegate) {
+  init(fileURL: URL, current: String, versions: [NSFileVersion], delegate: FileVersionPickerDelegate) {
     self.fileURL = fileURL
     self.current = current
     self.versions = versions
@@ -262,7 +262,7 @@ final class EditorVersionPicker: NSViewController {
   }
 
   override func viewDidDisappear() {
-    delegate?.editorVersionPickerDidDisappear(self)
+    delegate?.fileVersionPickerDidDisappear(self)
     super.viewDidDisappear()
   }
 
@@ -282,7 +282,7 @@ final class EditorVersionPicker: NSViewController {
 
 // MARK: - Private
 
-private extension EditorVersionPicker {
+private extension FileVersionPicker {
   enum Constants {
     static let dateFormatter: DateFormatter = {
       let formatter = DateFormatter()
@@ -310,7 +310,7 @@ private extension EditorVersionPicker {
   }
 
   @objc func didPickVersion() {
-    delegate?.editorVersionPicker(self, didPickVersion: versions[versionPopUp.indexOfSelectedItem])
+    delegate?.fileVersionPicker(self, didPickVersion: versions[versionPopUp.indexOfSelectedItem])
     dismiss(self)
   }
 
