@@ -225,8 +225,6 @@ enum Icons {
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"
   static let chartPie = "chart.pie"
-  static let chevronLeft = "chevron.left"
-  static let chevronRight = "chevron.right"
   static let curlybracesSquare = "curlybraces.square"
   static let gearshape = "gearshape"
   static let italic = "italic"

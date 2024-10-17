@@ -35,7 +35,7 @@ final class EditorFindPanel: EditorPanelView {
   var numberOfItems: Int = 0
   let searchField = LabeledSearchField(frame: .zero)
 
-  private(set) lazy var findButtons = EditorFindButtons(
+  private(set) lazy var findButtons = RoundedNavigateButtons(
     leftAction: { [weak self] in
       guard let self else { return }
       self.delegate?.editorFindPanelDidClickPrevious(self)
@@ -43,7 +43,9 @@ final class EditorFindPanel: EditorPanelView {
     rightAction: { [weak self] in
       guard let self else { return }
       self.delegate?.editorFindPanelDidClickNext(self)
-    }
+    },
+    leftAccessibilityLabel: Localized.General.previous,
+    rightAccessibilityLabel: Localized.General.next
   )
 
   private(set) lazy var doneButton = {
