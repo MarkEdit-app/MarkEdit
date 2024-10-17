@@ -202,7 +202,7 @@ enum Localized {
   }
 
   enum FileVersion {
-    static let pickThisVersion = String(localized: "Pick This Version", comment: "Title for button to pick a file version")
+    static let selectThis = String(localized: "Revert to This", comment: "Title for button to select a file version")
     static let modeTitles = [
       String(localized: "Diff Lines", comment: "Diff by lines"),
       String(localized: "Diff Words", comment: "Diff by words"),

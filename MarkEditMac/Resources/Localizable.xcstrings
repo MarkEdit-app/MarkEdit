@@ -1827,23 +1827,6 @@
         }
       }
     },
-    "Pick This Version" : {
-      "comment" : "Title for button to pick a file version",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择此版本"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇此版本"
-          }
-        }
-      }
-    },
     "Please check your network connection or get the latest release from the version history." : {
       "comment" : "Message for failed to get the update",
       "localizations" : {
@@ -2180,6 +2163,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在所選範圍中全部取代"
+          }
+        }
+      }
+    },
+    "Revert to This" : {
+      "comment" : "Title for button to select a file version",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复原成此版本"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回復成此版本"
           }
         }
       }
