@@ -12,6 +12,17 @@
 			<array>
 				<string>net.daringfireball.markdown</string>
 				<string>org.textbundle.package</string>
+				<string>net.ia.markdown</string>
+				<string>app.markedit.md</string>
+				<string>app.markedit.markdown</string>
+				<string>public.markdown</string>
+				<string>org.quarto.qmarkdown</string>
+				<string>com.unknown.md</string>
+				<string>com.rstudio.rmarkdown</string>
+				<string>com.nutstore.down</string>
+				<string>dyn.ah62d4rv4ge81e5pe</string>
+				<string>dyn.ah62d4rv4ge8043a</string>
+				<string>dyn.ah62d4rv4ge81c5pe</string>
 			</array>
 			<key>QLSupportsSearchableItems</key>
 			<false/>

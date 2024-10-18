@@ -8,7 +8,7 @@ assignees: ''
 
 <!--
 
-Please search the wiki and existing tickets first. For example, the QuickLook extension may not work in certain cases.
+Please search the wiki https://github.com/MarkEdit-app/MarkEdit/wiki and closed issues https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue+is%3Aclosed first.
 
 Please ensure you're using the latest build from https://github.com/MarkEdit-app/MarkEdit/releases and share your macOS version.
 
