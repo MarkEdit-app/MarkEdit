@@ -9,10 +9,6 @@
 			<string>Markdown</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
-			<key>CFBundleTypeIconFile</key>
-			<string></string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -22,13 +18,27 @@
 				<string>md</string>
 				<string>markdown</string>
 				<string>mdown</string>
+				<string>mdwn</string>
 				<string>mkdn</string>
 				<string>mkd</string>
-				<string>mdwn</string>
+				<string>mdoc</string>
+				<string>mdtext</string>
+				<string>mdtxt</string>
 			</array>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>net.daringfireball.markdown</string>
+				<string>net.ia.markdown</string>
+				<string>app.markedit.md</string>
+				<string>app.markedit.markdown</string>
+				<string>public.markdown</string>
+				<string>org.quarto.qmarkdown</string>
+				<string>com.unknown.md</string>
+				<string>com.rstudio.rmarkdown</string>
+				<string>com.nutstore.down</string>
+				<string>dyn.ah62d4rv4ge81e5pe</string>
+				<string>dyn.ah62d4rv4ge8043a</string>
+				<string>dyn.ah62d4rv4ge81c5pe</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
@@ -59,18 +69,19 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Text</string>
+			<string>Plain Text</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
-			<key>CFBundleTypeIconFile</key>
-			<string></string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
-			<string>Alternate</string>
+			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.plain-text</string>
+				<string>public.utf8-plain-text</string>
+				<string>public.utf16-plain-text</string>
+				<string>public.text</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
@@ -111,9 +122,12 @@
 					<string>md</string>
 					<string>markdown</string>
 					<string>mdown</string>
+					<string>mdwn</string>
 					<string>mkdn</string>
 					<string>mkd</string>
-					<string>mdwn</string>
+					<string>mdoc</string>
+					<string>mdtext</string>
+					<string>mdtxt</string>
 				</array>
 			</dict>
 		</dict>
@@ -183,7 +197,7 @@
 				<string>public.text</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Text</string>
+			<string>Plain Text</string>
 			<key>UTTypeIdentifier</key>
 			<string>public.plain-text</string>
 			<key>UTTypeTagSpecification</key>
