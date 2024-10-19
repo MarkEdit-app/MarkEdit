@@ -1,4 +1,5 @@
 import { EditorView } from '@codemirror/view';
+import { foldState } from '@codemirror/language';
 import { editingState } from '../../common/store';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
@@ -111,7 +112,7 @@ export function observeChanges() {
       });
     }
 
-    // Perfect gutter elements alignment
+    // Gutter update triggered by geometry or viewport changes (delayed)
     if (update.geometryChanged || update.viewportChanged) {
       if (storage.gutterUpdater !== undefined) {
         clearTimeout(storage.gutterUpdater);
@@ -120,8 +121,13 @@ export function observeChanges() {
       storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
     }
 
-    if (window.gutterHovered ?? false) {
-      adjustGutterPositions('gutterHover');
+    // Gutter update triggered by fold or unfold actions (immediately)
+    if (update.state.field(foldState) !== update.startState.field(foldState)) {
+      adjustGutterPositions();
+
+      if (window.gutterHovered ?? false) {
+        adjustGutterPositions('gutterHover');
+      }
     }
   });
 }
