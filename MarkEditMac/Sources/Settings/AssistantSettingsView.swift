@@ -19,7 +19,6 @@ struct AssistantSettingsView: View {
   @State private var guessedWords = AppPreferences.Assistant.guessedWords
   @State private var inlinePredictions = AppPreferences.Assistant.inlinePredictions
   @State private var suggestWhileTyping = AppPreferences.Assistant.suggestWhileTyping
-  private let supportsInlinePredictions = WKWebViewConfiguration().supportsInlinePredictions
 
   var body: some View {
     SettingsForm {
@@ -29,14 +28,14 @@ struct AssistantSettingsView: View {
             Text(Localized.Settings.insertFinalNewline)
           }
           .onChange(of: insertFinalNewline) {
-            AppPreferences.Assistant.insertFinalNewline = $0
+            AppPreferences.Assistant.insertFinalNewline = insertFinalNewline
           }
 
           Toggle(isOn: $trimTrailingWhitespace) {
             Text(Localized.Settings.trimTrailingWhitespace)
           }
           .onChange(of: trimTrailingWhitespace) {
-            AppPreferences.Assistant.trimTrailingWhitespace = $0
+            AppPreferences.Assistant.trimTrailingWhitespace = trimTrailingWhitespace
           }
 
           Text(Localized.Settings.fileFormattingHint)
@@ -51,21 +50,21 @@ struct AssistantSettingsView: View {
             Text(Localized.Settings.wordsInDocument)
           }
           .onChange(of: wordsInDocument) {
-            AppPreferences.Assistant.wordsInDocument = $0
+            AppPreferences.Assistant.wordsInDocument = wordsInDocument
           }
 
           Toggle(isOn: $standardWords) {
             Text(Localized.Settings.standardWords)
           }
           .onChange(of: standardWords) {
-            AppPreferences.Assistant.standardWords = $0
+            AppPreferences.Assistant.standardWords = standardWords
           }
 
           Toggle(isOn: $guessedWords) {
             Text(Localized.Settings.guessedWords)
           }
           .onChange(of: guessedWords) {
-            AppPreferences.Assistant.guessedWords = $0
+            AppPreferences.Assistant.guessedWords = guessedWords
           }
 
           Text(Localized.Settings.completionHint)
@@ -76,20 +75,18 @@ struct AssistantSettingsView: View {
 
       Section {
         VStack(alignment: .leading) {
-          if supportsInlinePredictions {
-            Toggle(isOn: $inlinePredictions) {
-              Text(Localized.Settings.inlinePredictions)
-            }
-            .onChange(of: inlinePredictions) {
-              AppPreferences.Assistant.inlinePredictions = $0
-            }
+          Toggle(isOn: $inlinePredictions) {
+            Text(Localized.Settings.inlinePredictions)
+          }
+          .onChange(of: inlinePredictions) {
+            AppPreferences.Assistant.inlinePredictions = inlinePredictions
           }
 
           Toggle(isOn: $suggestWhileTyping) {
             Text(Localized.Settings.suggestWhileTyping)
           }
           .onChange(of: suggestWhileTyping) {
-            AppPreferences.Assistant.suggestWhileTyping = $0
+            AppPreferences.Assistant.suggestWhileTyping = suggestWhileTyping
           }
         }
         .formLabel(alignment: .top, Localized.Settings.autocomplete)

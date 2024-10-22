@@ -42,7 +42,7 @@ struct EditorSettingsView: View {
             }
           }
           .onChange(of: lightTheme) {
-            AppPreferences.Editor.lightTheme = $0
+            AppPreferences.Editor.lightTheme = lightTheme
           }
           .formMenuPicker()
 
@@ -52,7 +52,7 @@ struct EditorSettingsView: View {
             }
           }
           .onChange(of: darkTheme) {
-            AppPreferences.Editor.darkTheme = $0
+            AppPreferences.Editor.darkTheme = darkTheme
           }
           .formMenuPicker()
         }
@@ -63,21 +63,21 @@ struct EditorSettingsView: View {
               Text(Localized.Settings.lineNumbers)
             }
             .onChange(of: showLineNumbers) {
-              AppPreferences.Editor.showLineNumbers = $0
+              AppPreferences.Editor.showLineNumbers = showLineNumbers
             }
 
             Toggle(isOn: $showActiveLineIndicator) {
               Text(Localized.Settings.activeLineIndicator)
             }
             .onChange(of: showActiveLineIndicator) {
-              AppPreferences.Editor.showActiveLineIndicator = $0
+              AppPreferences.Editor.showActiveLineIndicator = showActiveLineIndicator
             }
 
             Toggle(isOn: $showSelectionStatus) {
               Text(Localized.Settings.selectionStatus)
             }
             .onChange(of: showSelectionStatus) {
-              AppPreferences.Editor.showSelectionStatus = $0
+              AppPreferences.Editor.showSelectionStatus = showSelectionStatus
             }
           }
           .formLabel(alignment: .top, Localized.Settings.displayOptions)
@@ -89,7 +89,7 @@ struct EditorSettingsView: View {
             Text(Localized.Settings.always).tag(EditorInvisiblesBehavior.always)
           }
           .onChange(of: invisiblesBehavior) {
-            AppPreferences.Editor.invisiblesBehavior = $0
+            AppPreferences.Editor.invisiblesBehavior = invisiblesBehavior
           }
           .formMenuPicker()
         }
@@ -100,14 +100,14 @@ struct EditorSettingsView: View {
               Text(Localized.Settings.typewriterModeTitle)
             }
             .onChange(of: typewriterMode) {
-              AppPreferences.Editor.typewriterMode = $0
+              AppPreferences.Editor.typewriterMode = typewriterMode
             }
 
             Toggle(isOn: $focusMode) {
               Text(Localized.Settings.focusModeTitle)
             }
             .onChange(of: focusMode) {
-              AppPreferences.Editor.focusMode = $0
+              AppPreferences.Editor.focusMode = focusMode
             }
           }
           .formLabel(alignment: .top, Localized.Settings.editBehavior)
@@ -116,7 +116,7 @@ struct EditorSettingsView: View {
             Text(Localized.Settings.lineWrappingDescription)
           }
           .onChange(of: lineWrapping) {
-            AppPreferences.Editor.lineWrapping = $0
+            AppPreferences.Editor.lineWrapping = lineWrapping
           }
           .formLabel(Localized.Settings.lineWrappingLabel)
 
@@ -126,7 +126,7 @@ struct EditorSettingsView: View {
             Text(Localized.Settings.relaxedHeight).tag(LineHeight.relaxed)
           }
           .onChange(of: lineHeight) {
-            AppPreferences.Editor.lineHeight = $0
+            AppPreferences.Editor.lineHeight = lineHeight
           }
           .formHorizontalRadio()
         }
@@ -139,7 +139,7 @@ struct EditorSettingsView: View {
             Text(Localized.Settings.indentsMore).tag(TabKeyBehavior.indentMore)
           }
           .onChange(of: tabKeyBehavior) {
-            AppPreferences.Editor.tabKeyBehavior = $0
+            AppPreferences.Editor.tabKeyBehavior = tabKeyBehavior
           }
           .formMenuPicker()
 
@@ -150,7 +150,7 @@ struct EditorSettingsView: View {
             Text(Localized.Settings.twoTabs).tag(IndentUnit.twoTabs)
           }
           .onChange(of: indentUnit) {
-            AppPreferences.Editor.indentUnit = $0
+            AppPreferences.Editor.indentUnit = indentUnit
           }
           .formMenuPicker()
         }

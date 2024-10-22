@@ -1675,7 +1675,7 @@
       }
     },
     "Normal" : {
-      "comment" : "Normal line spacing",
+      "comment" : "Normal line spacing\nNormal mode for window toolbar",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

@@ -20,6 +20,7 @@ final class EditorViewController: NSViewController {
   var bottomPanelHeight: Double = 0
   var webBackgroundColor: NSColor?
   var localEventMonitor: Any?
+  var writingToolsObservation: NSKeyValueObservation?
   var safeAreaObservation: NSKeyValueObservation?
   var userDefinedMenuItems = [EditorMenuItem]()
 
@@ -151,7 +152,7 @@ final class EditorViewController: NSViewController {
     let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
     config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
     config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
-    config.setAllowsInlinePredictions(NSSpellChecker.InlineCompletion.webKitEnabled)
+    config.allowsInlinePredictions = NSSpellChecker.InlineCompletion.webKitEnabled
 
     // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready
     if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
@@ -166,15 +167,11 @@ final class EditorViewController: NSViewController {
     config.userContentController = controller
 
     let webView = EditorWebView(frame: .zero, configuration: config)
+    webView.isInspectable = true
     webView.allowsMagnification = true
     webView.uiDelegate = self
     webView.actionDelegate = self
 
-    if #available(macOS 13.3, *) {
-      webView.isInspectable = true
-    }
-
-    // Getting the current theme has to be on main thread
     let theme = AppTheme.current.editorTheme
     DispatchQueue.global(qos: .userInitiated).async {
       let html = [
@@ -186,6 +183,17 @@ final class EditorViewController: NSViewController {
       DispatchQueue.main.async {
         // Non-nil baseURL is required by scenarios like opening local files
         webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
+      }
+    }
+
+    // [macOS 15] Detect WritingTools visibility to work around issues
+    if #available(macOS 15.1, *) {
+      writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
+        guard let self else {
+          return
+        }
+
+        self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
       }
     }
 

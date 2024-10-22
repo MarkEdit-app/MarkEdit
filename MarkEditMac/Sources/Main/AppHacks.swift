@@ -32,10 +32,6 @@ extension NSObject {
    Loading this bundle is extremely slow, move it to background thread with method swizzling.
    */
   static let swizzleAccessibilityBundlesOnce: () = {
-    guard #available(macOS 14.0, *) else {
-      return
-    }
-
     guard let axbbmClass else {
       return Logger.assertFail("Failed to get the class to swizzle")
     }

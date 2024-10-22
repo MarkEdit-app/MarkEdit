@@ -40,8 +40,10 @@ public final class WebBridgeCore {
 
   public func getEditorText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.core.getEditorText") {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.core.getEditorText") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }

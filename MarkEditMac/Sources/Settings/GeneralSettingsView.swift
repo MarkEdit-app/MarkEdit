@@ -28,8 +28,8 @@ struct GeneralSettingsView: View {
           Text(Localized.Settings.dark).tag(Appearance.dark)
         }
         .onChange(of: appearance) {
-          NSApp.appearance = $0.resolved()
-          AppPreferences.General.appearance = $0
+          NSApp.appearance = appearance.resolved()
+          AppPreferences.General.appearance = appearance
         }
         .formMenuPicker()
 
@@ -38,13 +38,13 @@ struct GeneralSettingsView: View {
           Text(Localized.Document.newDocument).tag(NewWindowBehavior.newDocument)
         }
         .onChange(of: newWindowBehavior) {
-          AppPreferences.General.newWindowBehavior = $0
+          AppPreferences.General.newWindowBehavior = newWindowBehavior
         }
         .formMenuPicker()
 
         Toggle(Localized.Settings.quitAlwaysKeepsWindows, isOn: $quitAlwaysKeepsWindows)
           .onChange(of: quitAlwaysKeepsWindows) {
-            AppPreferences.General.quitAlwaysKeepsWindows = $0
+            AppPreferences.General.quitAlwaysKeepsWindows = quitAlwaysKeepsWindows
           }
           .formLabel(Localized.Settings.windowRestoration)
       }
@@ -55,7 +55,7 @@ struct GeneralSettingsView: View {
           Text(NewFilenameExtension.markdown.rawValue).tag(NewFilenameExtension.markdown)
           Text(NewFilenameExtension.txt.rawValue).tag(NewFilenameExtension.txt)
         }
-        .onChange(of: newFilenameExtension) { newFilenameExtension in
+        .onChange(of: newFilenameExtension) {
           AppPreferences.General.newFilenameExtension = newFilenameExtension
         }
         .formMenuPicker()
@@ -70,7 +70,7 @@ struct GeneralSettingsView: View {
           }
         }
         .onChange(of: defaultTextEncoding) {
-          AppPreferences.General.defaultTextEncoding = $0
+          AppPreferences.General.defaultTextEncoding = defaultTextEncoding
         }
         .formMenuPicker()
 
@@ -79,8 +79,8 @@ struct GeneralSettingsView: View {
           Text(Localized.Settings.windowsLineEndings).tag(LineEndings.crlf)
           Text(Localized.Settings.classicMacLineEndings).tag(LineEndings.cr)
         }
-        .onChange(of: defaultLineEndings) { lineEndings in
-          AppPreferences.General.defaultLineEndings = lineEndings
+        .onChange(of: defaultLineEndings) {
+          AppPreferences.General.defaultLineEndings = defaultLineEndings
         }
         .formMenuPicker()
       }

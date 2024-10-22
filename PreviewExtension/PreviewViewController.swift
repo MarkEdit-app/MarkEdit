@@ -44,11 +44,9 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
     view.wantsLayer = true
     view.addSubview(webView)
 
-    if #available(macOS 14.0, *) {
-      // [macOS 14] It's not clipped by default
-      view.layer?.masksToBounds = true
-      view.layer?.cornerRadius = 6
-    }
+    // [macOS 14] It's not clipped by default
+    view.layer?.masksToBounds = true
+    view.layer?.cornerRadius = 6
 
     addEventMonitorsForDragging()
     updateBackgroundColor()

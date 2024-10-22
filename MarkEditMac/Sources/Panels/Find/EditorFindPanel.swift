@@ -9,7 +9,7 @@ import AppKit
 import AppKitControls
 import MarkEditKit
 
-@frozen enum EditorFindMode {
+enum EditorFindMode {
   /// Find panel is not visible.
   case hidden
   /// Find panel is visible, shows only find.

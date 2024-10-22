@@ -46,7 +46,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
-  private var isWritingToolsActive = false
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     NSApp.appearance = AppPreferences.General.appearance.resolved()
@@ -68,16 +67,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       UserDefaults.standard.set(closeAlwaysConfirmsChanges, forKey: NSCloseAlwaysConfirmsChanges)
     } else {
       UserDefaults.standard.removeObject(forKey: NSCloseAlwaysConfirmsChanges)
-    }
-
-    // [macOS 15] Detect WritingTools visibility (fragile), with Xcode 16 we use KVO instead
-    if #available(macOS 15.1, *), AppRuntimeConfig.writingToolsBehavior == 1 /* complete */ {
-      NotificationCenter.default.addObserver(
-        self,
-        selector: #selector(windowDidUpdate(_:)),
-        name: NSWindow.didUpdateNotification,
-        object: nil
-      )
     }
 
     // Register global hot key to activate the document window, if provided
@@ -119,24 +108,6 @@ private extension AppDelegate {
         NSApp.closeOpenPanels()
       }
     }
-  }
-
-  @available(macOS 15.1, *)
-  @objc func windowDidUpdate(_ notification: Notification) {
-    guard let editor = NSApp.mainWindow?.contentViewController as? EditorViewController else {
-      return
-    }
-
-    guard let window = notification.object as? NSWindow, window.isWritingToolsWindow else {
-      return
-    }
-
-    guard isWritingToolsActive != window.isVisible else {
-      return
-    }
-
-    isWritingToolsActive = window.isVisible
-    editor.updateWritingTools(isActive: isWritingToolsActive)
   }
 
   @IBAction func checkForUpdates(_ sender: Any?) {

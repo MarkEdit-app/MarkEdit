@@ -34,22 +34,4 @@ public extension WKWebViewConfiguration {
 
     return config
   }
-
-  var supportsInlinePredictions: Bool {
-    guard #available(macOS 14.0, *) else {
-      return false
-    }
-
-    return true
-  }
-
-  func setAllowsInlinePredictions(_ newValue: Bool) {
-    guard supportsInlinePredictions else {
-      return
-    }
-
-    if #available(macOS 14.0, *) {
-      allowsInlinePredictions = newValue
-    }
-  }
 }

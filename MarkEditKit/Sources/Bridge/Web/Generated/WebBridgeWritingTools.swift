@@ -32,8 +32,10 @@ public final class WebBridgeWritingTools {
 
   public func getSelectionRect() async throws -> WebRect? {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.writingTools.getSelectionRect") {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.writingTools.getSelectionRect") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }

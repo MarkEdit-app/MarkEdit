@@ -6,4 +6,4 @@
 
 import WebKit
 
-extension WKScriptMessage: @unchecked Sendable {}
+extension WKScriptMessage: @unchecked @retroactive Sendable {}

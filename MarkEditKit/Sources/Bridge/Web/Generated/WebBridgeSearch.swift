@@ -40,8 +40,10 @@ public final class WebBridgeSearch {
     )
 
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.updateQuery", message: message) {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.search.updateQuery", message: message) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }
@@ -72,8 +74,10 @@ public final class WebBridgeSearch {
     )
 
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.findNext", message: message) {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.search.findNext", message: message) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }
@@ -88,8 +92,10 @@ public final class WebBridgeSearch {
     )
 
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.findPrevious", message: message) {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.search.findPrevious", message: message) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }
@@ -108,8 +114,10 @@ public final class WebBridgeSearch {
 
   public func numberOfMatches() async throws -> Int {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.numberOfMatches") {
-        continuation.resume(with: $0)
+      webView?.invoke(path: "webModules.search.numberOfMatches") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
       }
     }
   }
