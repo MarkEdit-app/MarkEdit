@@ -12,7 +12,7 @@ import MarkEditKit
 import Statistics
 import TextCompletion
 
-final class EditorViewController: NSViewController {
+final class EditorViewController: NSViewController, @unchecked Sendable {
   var hasFinishedLoading = false {
     didSet {
       loadingContinuations.forEach { $0.resume() }
@@ -198,7 +198,9 @@ final class EditorViewController: NSViewController {
           return
         }
 
-        self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
+        Task { @MainActor in
+          self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
+        }
       }
     }
 

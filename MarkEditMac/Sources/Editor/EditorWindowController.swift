@@ -7,7 +7,7 @@
 
 import AppKit
 
-final class EditorWindowController: NSWindowController, NSWindowDelegate {
+final class EditorWindowController: NSWindowController, NSWindowDelegate, @unchecked Sendable {
   var autosavedFrame: CGRect?
   var needsUpdateFocus = false
 
