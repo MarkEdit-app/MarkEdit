@@ -175,6 +175,8 @@ private extension FileVersionPicker {
 
     static let counterFont = NSFont.systemFont(ofSize: 12)
     static let menuItemFont = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .regular)
+
+    static let cloudIcon: NSImage = .with(symbolName: "icloud.and.arrow.down", pointSize: 12)
   }
 
   // MARK: - Set Up
@@ -283,6 +285,13 @@ private extension FileVersionPicker {
     NSLayoutConstraint.activate(constraints)
   }
 
+  func formattedDate(for version: NSFileVersion) -> NSAttributedString {
+    NSAttributedString(
+      string: Constants.dateFormatter.string(from: version.modificationDate ?? .distantPast),
+      attributes: [.font: Constants.menuItemFont]
+    )
+  }
+
   // MARK: - Action Handlers
 
   @objc func didChangeVersion(_ sender: NSButton) {
@@ -338,12 +347,19 @@ private extension FileVersionPicker {
 
     for version in allVersions {
       let item = NSMenuItem()
-      item.representedObject = version
-      item.attributedTitle = NSAttributedString(
-        string: Constants.dateFormatter.string(from: version.modificationDate ?? .distantPast),
-        attributes: [.font: Constants.menuItemFont]
-      )
+      let attributedTitle = NSMutableAttributedString(attributedString: formattedDate(for: version))
 
+      if version.needsDownloading {
+        let attachment = NSTextAttachment()
+        let image = Constants.cloudIcon
+        attachment.image = image
+        attachment.bounds = CGRect(x: 0, y: -4, width: image.size.width, height: image.size.height)
+        attributedTitle.append(NSAttributedString(string: "  "))
+        attributedTitle.append(NSAttributedString(attachment: attachment))
+      }
+
+      item.attributedTitle = attributedTitle
+      item.representedObject = version
       versionMenuButton.menu?.addItem(item)
     }
 
@@ -368,6 +384,7 @@ private extension FileVersionPicker {
         }
 
         self.isDownloading = false
+        self.versionMenuButton.selectedItem?.attributedTitle = self.formattedDate(for: version)
       }
     )
   }
