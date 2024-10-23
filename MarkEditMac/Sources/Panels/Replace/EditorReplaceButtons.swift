@@ -8,7 +8,7 @@
 import AppKit
 import AppKitControls
 
-final class EditorReplaceButtons: RoundedButtonGroup {
+final class EditorReplaceButtons: RoundedButtonGroup, @unchecked Sendable {
   private enum Constants {
     static let fontSize: Double = 12
   }
