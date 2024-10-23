@@ -8,7 +8,7 @@
 import AppKit
 import AppKitControls
 
-class EditorPanelView: NSView, BackgroundTheming {
+class EditorPanelView: NSView, BackgroundTheming, @unchecked Sendable {
   init() {
     super.init(frame: .zero)
   }
