@@ -8,7 +8,7 @@
 import AppKit
 import SharedUI
 
-final class EditorReplaceButtons: RoundedButtonGroup {
+final class EditorReplaceButtons: RoundedButtonGroup, @unchecked Sendable {
   private enum Constants {
     static let font: NSFont = .systemFont(ofSize: 12)
   }
