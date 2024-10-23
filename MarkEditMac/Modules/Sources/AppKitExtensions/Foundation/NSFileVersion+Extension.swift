@@ -7,12 +7,16 @@
 import AppKit
 
 public extension NSFileVersion {
+  var needsDownloading: Bool {
+    !hasLocalContents && !FileManager.default.fileExists(atPath: url.path())
+  }
+
   @MainActor
   func fetchLocalContents(
     startedDownloading: @Sendable @MainActor @escaping () -> Void,
     contentsFetched: @Sendable @MainActor @escaping () -> Void
   ) {
-    guard !hasLocalContents else {
+    guard needsDownloading else {
       return contentsFetched()
     }
 
