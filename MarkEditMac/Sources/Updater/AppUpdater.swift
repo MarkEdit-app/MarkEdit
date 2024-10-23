@@ -21,6 +21,7 @@ enum AppUpdater {
     }()
   }
 
+  @MainActor
   static func checkForUpdates(explicitly: Bool, skippedVersions: Set<String>) async {
     guard explicitly || automatically else {
       return Logger.log(.info, "App update checks have been skipped")
@@ -113,7 +114,7 @@ enum AppUpdater {
 // MARK: - Private
 
 private extension AppUpdater {
-  static var automatically: Bool {
+  @MainActor static var automatically: Bool {
     AppRuntimeConfig.updateBehavior != .never && !AppPreferences.Updater.completelyDisabled
   }
 

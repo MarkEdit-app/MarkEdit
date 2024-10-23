@@ -37,7 +37,7 @@ extension NSObject {
 
 // MARK: - Private
 
-extension NSObject: @unchecked Sendable {
+extension NSObject: @unchecked @retroactive Sendable {
   @objc func swizzled_loadAXBundles() -> Bool {
     guard !NSWorkspace.shared.isVoiceOverEnabled else {
       return self.swizzled_loadAXBundles()
