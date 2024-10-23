@@ -29,6 +29,7 @@ extension Diff.Result {
   }
 }
 
+@MainActor
 extension [Diff.Result] {
   var attributedText: NSAttributedString {
     let text = NSMutableAttributedString(string: "")
@@ -84,6 +85,7 @@ extension [Diff.Result] {
 // MARK: - Private
 
 private extension [Diff.Result] {
+  @MainActor
   enum Constants {
     static let font = NSFont.monospacedSystemFont(ofSize: 12)
   }

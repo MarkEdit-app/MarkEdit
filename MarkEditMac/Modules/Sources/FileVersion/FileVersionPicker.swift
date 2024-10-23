@@ -161,6 +161,7 @@ public final class FileVersionPicker: NSViewController {
 // MARK: - Private
 
 private extension FileVersionPicker {
+  @MainActor
   enum Constants {
     static let dateFormatter: DateFormatter = {
       let formatter = DateFormatter()

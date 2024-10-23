@@ -34,4 +34,4 @@ public extension [NSFileVersion] {
   }
 }
 
-extension NSFileVersion: @unchecked Sendable {}
+extension NSFileVersion: @unchecked @retroactive Sendable {}
