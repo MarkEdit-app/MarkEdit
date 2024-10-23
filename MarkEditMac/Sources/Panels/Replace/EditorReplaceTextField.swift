@@ -8,7 +8,7 @@
 import AppKit
 import AppKitControls
 
-final class EditorReplaceTextField: NSTextField {
+final class EditorReplaceTextField: NSTextField, @unchecked Sendable {
   private let bezelView = BezelView()
 
   init() {
