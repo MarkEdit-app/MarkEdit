@@ -19,7 +19,7 @@ public protocol FileVersionPickerDelegate: AnyObject {
  */
 public final class FileVersionPicker: NSViewController {
   private let fileURL: URL
-  private let currentVersion: String
+  private let currentText: String
   private let localizable: FileVersionLocalizable
 
   private let topGuide = NSLayoutGuide()
@@ -105,13 +105,13 @@ public final class FileVersionPicker: NSViewController {
 
   public init(
     fileURL: URL,
-    currentVersion: String,
+    currentText: String,
     localVersions: [NSFileVersion],
     localizable: FileVersionLocalizable,
     delegate: FileVersionPickerDelegate
   ) {
     self.fileURL = fileURL
-    self.currentVersion = currentVersion
+    self.currentText = currentText
     self.allVersions = localVersions
     self.localizable = localizable
     self.delegate = delegate
@@ -391,7 +391,7 @@ private extension FileVersionPicker {
 
   func renderDifferences(newVersion: String, scrollToTop: Bool) {
     let diffs = Diff.compute(
-      oldValue: currentVersion,
+      oldValue: currentText,
       newValue: newVersion,
       mode: Diff.Mode.allCases[modeMenuButton.indexOfSelectedItem]
     )

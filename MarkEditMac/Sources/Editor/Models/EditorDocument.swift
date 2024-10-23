@@ -270,13 +270,25 @@ extension EditorDocument: FileVersionPickerDelegate {
       return Logger.assertFail("Missing fileURL for document: \(self)")
     }
 
-    let localVersions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
-    Logger.log(.debug, "Found \(localVersions.count) local versions")
+    let localVersions = {
+      let otherVersions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
+      Logger.log(.debug, "Found \(otherVersions.count) local versions")
+
+      if otherVersions.isEmpty, let currentVersion = NSFileVersion.currentVersionOfItem(at: fileURL) {
+        return [currentVersion]
+      }
+
+      return otherVersions.newestToOldest
+    }()
+
+    guard !localVersions.isEmpty else {
+      return Logger.assertFail("File \(fileURL) has no local versions")
+    }
 
     let picker = FileVersionPicker(
       fileURL: fileURL,
-      currentVersion: stringValue,
-      localVersions: localVersions.newestToOldest,
+      currentText: stringValue,
+      localVersions: localVersions,
       localizable: FileVersionLocalizable(
         previous: Localized.General.previous,
         next: Localized.General.next,

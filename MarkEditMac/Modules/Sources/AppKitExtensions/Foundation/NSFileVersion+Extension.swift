@@ -8,7 +8,7 @@ import AppKit
 
 public extension NSFileVersion {
   var needsDownloading: Bool {
-    !hasLocalContents && !FileManager.default.fileExists(atPath: url.path())
+    !hasLocalContents && !FileManager.default.fileExists(atPath: url.path)
   }
 
   @MainActor
