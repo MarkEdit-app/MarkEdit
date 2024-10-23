@@ -7,14 +7,14 @@
 
 import AppKit
 import SharedUI
-import MarkEditCore
 import MarkEditKit
+@preconcurrency import MarkEditCore
 
 /// Preferences for pro users, not directly visible in the Settings panel.
 ///
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
-  struct Definition: Codable {
+  struct Definition: Codable, Sendable {
     enum ToolbarTranslucency: Codable {
       case readable
       case `default`

@@ -9,8 +9,8 @@ import WebKit
 import AppIntents
 
 extension WKProcessPool: @unchecked Sendable {}
-extension IntentDescription: @unchecked Sendable {}
-extension TypeDisplayRepresentation: @unchecked Sendable {}
+extension IntentDescription: @unchecked @retroactive Sendable {}
+extension TypeDisplayRepresentation: @unchecked @retroactive Sendable {}
 
 extension MainActor {
   @_unavailableFromAsync

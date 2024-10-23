@@ -11,7 +11,7 @@ import MarkEditKit
 /// URL scheme handler to load bundle chunks.
 ///
 /// E.g., chunk-loader://chunks/index-DN_-g6jS.js
-final class EditorChunkLoader: NSObject, WKURLSchemeHandler {
+final class EditorChunkLoader: NSObject, WKURLSchemeHandler, @unchecked Sendable {
   static let scheme = "chunk-loader"
 
   func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
