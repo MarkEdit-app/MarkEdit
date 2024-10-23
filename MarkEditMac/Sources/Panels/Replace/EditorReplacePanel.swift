@@ -15,7 +15,7 @@ protocol EditorReplacePanelDelegate: AnyObject {
   func editorReplacePanelDidClickReplaceAll(_ sender: EditorReplacePanel)
 }
 
-final class EditorReplacePanel: EditorPanelView {
+final class EditorReplacePanel: EditorPanelView, @unchecked Sendable {
   weak var delegate: EditorReplacePanelDelegate?
 
   var layoutInfo: (textFieldFrame: CGRect, buttonHeight: CGFloat) = (.zero, 0) {

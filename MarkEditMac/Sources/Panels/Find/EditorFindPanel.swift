@@ -29,7 +29,7 @@ protocol EditorFindPanelDelegate: AnyObject {
   func editorFindPanelDidClickPrevious(_ sender: EditorFindPanel)
 }
 
-final class EditorFindPanel: EditorPanelView {
+final class EditorFindPanel: EditorPanelView, @unchecked Sendable {
   weak var delegate: EditorFindPanelDelegate?
   var mode: EditorFindMode = .hidden
   var numberOfItems: Int = 0

@@ -10,7 +10,7 @@ import SettingsUI
 import MarkEditKit
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, @unchecked Sendable {
   @IBOutlet weak var mainFileMenu: NSMenu?
   @IBOutlet weak var mainEditMenu: NSMenu?
   @IBOutlet weak var mainExtensionsMenu: NSMenu?
@@ -125,6 +125,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     return .terminateNow
+  }
+
+  func checkForUpdates(explicitly: Bool) {
+    Task {
+      await AppUpdater.checkForUpdates(
+        explicitly: explicitly,
+        skippedVersions: AppPreferences.Updater.skippedVersions
+      )
+    }
   }
 
   func shouldOpenOrCreateDocument() -> Bool {
