@@ -55,7 +55,7 @@ protocol EditorWebViewActionDelegate: AnyObject {
 /**
  Lightweight wrapper for WKWebView used in editors.
  */
-final class EditorWebView: WKWebView {
+final class EditorWebView: WKWebView, @unchecked Sendable {
   static let baseURL = URL(string: "http://localhost/")
   static let userDefinedContextMenuID = NSUserInterfaceItemIdentifier("userDefinedContextMenu")
   weak var actionDelegate: EditorWebViewActionDelegate?
