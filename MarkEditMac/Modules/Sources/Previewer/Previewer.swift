@@ -122,7 +122,7 @@ public final class Previewer: NSViewController {
 private extension Previewer {
   // Break the retain cycle inside message handler,
   // to keep it simple, we are not using a delegate here.
-  class MessageHandler: NSObject, WKScriptMessageHandler, @unchecked Sendable {
+  class MessageHandler: NSObject, WKScriptMessageHandler {
     private weak var host: Previewer?
 
     init(host: Previewer? = nil) {
