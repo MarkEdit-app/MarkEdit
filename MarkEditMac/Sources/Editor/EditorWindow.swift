@@ -8,7 +8,7 @@
 import AppKit
 import MarkEditKit
 
-final class EditorWindow: NSWindow {
+final class EditorWindow: NSWindow, @unchecked Sendable {
   /// Forces `.preferred` tabbing for an on-demand window (e.g. "New Tab"),
   /// without mutating the persisted `AppPreferences.Window.tabbingMode`.
   @MainActor static var forcedTabbing = false
@@ -49,10 +49,13 @@ final class EditorWindow: NSWindow {
 
   override func awakeFromNib() {
     super.awakeFromNib()
-    toolbar = NSToolbar() // Required for multi-tab layout
-    toolbarMode = AppPreferences.Window.toolbarMode
-    tabbingMode = Self.forcedTabbing ? .preferred : AppPreferences.Window.tabbingMode
-    reduceTransparency = AppDesign.reduceTransparency
+
+    MainActor.assumeIsolated {
+      toolbar = NSToolbar() // Required for multi-tab layout
+      toolbarMode = AppPreferences.Window.toolbarMode
+      tabbingMode = Self.forcedTabbing ? .preferred : AppPreferences.Window.tabbingMode
+      reduceTransparency = AppDesign.reduceTransparency
+    }
   }
 
   override func layoutIfNeeded() {

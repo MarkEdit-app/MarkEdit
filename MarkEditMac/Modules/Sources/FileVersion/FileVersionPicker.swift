@@ -9,6 +9,7 @@ import AppKitControls
 import DiffKit
 import MarkEditKit
 
+@MainActor
 public protocol FileVersionPickerDelegate: AnyObject {
   func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion)
   func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool)

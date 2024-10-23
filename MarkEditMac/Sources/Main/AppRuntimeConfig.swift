@@ -7,14 +7,14 @@
 
 import AppKit
 import AppKitControls
-import MarkEditCore
 import MarkEditKit
+@preconcurrency import MarkEditCore
 
 /// Preferences for pro users, not directly visible in the Settings panel.
 ///
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
-  struct Definition: Codable {
+  struct Definition: Codable, Sendable {
     enum ToolbarTranslucency: String, Codable {
       case light = "light"
       case regular = "regular"
