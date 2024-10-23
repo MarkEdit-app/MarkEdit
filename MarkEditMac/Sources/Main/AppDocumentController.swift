@@ -12,7 +12,7 @@ import AppKit
 
  NSDocumentController.shared will be an instance of `AppDocumentController` at runtime.
  */
-final class AppDocumentController: NSDocumentController {
+final class AppDocumentController: NSDocumentController, @unchecked Sendable {
   override func beginOpenPanel() async -> [URL]? {
     if let defaultDirectory = AppRuntimeConfig.defaultOpenDirectory {
       setOpenPanelDirectory(defaultDirectory)

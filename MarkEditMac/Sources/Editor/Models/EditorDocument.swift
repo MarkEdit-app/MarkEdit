@@ -14,7 +14,7 @@ import TextBundle
 
  https://developer.apple.com/documentation/appkit/nsdocument
  */
-final class EditorDocument: NSDocument {
+final class EditorDocument: NSDocument, @unchecked Sendable {
   var fileData: Data?
   var stringValue = ""
   var isReadOnlyMode = false

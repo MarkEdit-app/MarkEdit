@@ -12,7 +12,7 @@ import MarkEditKit
 import Statistics
 import TextCompletion
 
-final class EditorViewController: NSViewController {
+final class EditorViewController: NSViewController, @unchecked Sendable {
   var hasFinishedLoading = false
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
@@ -96,7 +96,7 @@ final class EditorViewController: NSViewController {
   }()
 
   private(set) lazy var loadingIndicator: NSView = {
-    class View: NSImageView {
+    class View: NSImageView, @unchecked Sendable {
       override func hitTest(_ point: NSPoint) -> NSView? { nil }
     }
 
@@ -185,7 +185,9 @@ final class EditorViewController: NSViewController {
           return
         }
 
-        self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
+        Task { @MainActor in
+          self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
+        }
       }
     }
 

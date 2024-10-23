@@ -9,7 +9,7 @@ import AppKit
 import MarkEditKit
 
 @main
-final class Application: NSApplication {
+final class Application: NSApplication, @unchecked Sendable {
   static func main() {
     NSObject.swizzleAccessibilityBundlesOnce
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
