@@ -12,7 +12,7 @@ import MarkEditKit
 /**
  To indicate the current line, column and length of selection.
  */
-final class EditorStatusView: NSView, BackgroundTheming {
+final class EditorStatusView: NSView, BackgroundTheming, @unchecked Sendable {
   private let button = TitleOnlyButton(fontSize: 11)
 
   init(handler: @escaping () -> Void) {
