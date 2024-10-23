@@ -12,7 +12,7 @@ import MarkEditCore
 import MarkEditKit
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, @unchecked Sendable {
   @IBOutlet weak var mainAppMenuItem: NSMenuItem?
 
   @IBOutlet weak var mainFileMenu: NSMenu?
@@ -177,6 +177,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     AppRelauncher.commit()
     AppUpdater.commitStagedUpdate()
     EditorSelectionHistory.purgeStaleEntries()
+  }
+
+  func checkForUpdates(explicitly: Bool) {
+    Task {
+      await AppUpdater.checkForUpdates(
+        explicitly: explicitly,
+        skippedVersions: AppPreferences.Updater.skippedVersions
+      )
+    }
   }
 
   func shouldOpenOrCreateDocument() -> Bool {

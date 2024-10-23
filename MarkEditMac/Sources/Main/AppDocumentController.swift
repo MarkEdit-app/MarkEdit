@@ -15,7 +15,7 @@ import MarkEditKit
 
  NSDocumentController.shared will be an instance of `AppDocumentController` at runtime.
  */
-final class AppDocumentController: NSDocumentController {
+final class AppDocumentController: NSDocumentController, @unchecked Sendable {
   static var suggestedTextEncoding: EditorTextEncoding?
   static var suggestedFilename: String?
 
