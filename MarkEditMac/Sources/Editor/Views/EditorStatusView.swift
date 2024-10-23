@@ -20,7 +20,7 @@ extension TitleOnlyButton: ButtonLabeling {}
 /**
  To indicate the current line, column and length of selection.
  */
-final class EditorStatusView: NSView, BackgroundTheming {
+final class EditorStatusView: NSView, BackgroundTheming, @unchecked Sendable {
   private let button: NSButton & ButtonLabeling = {
     if AppDesign.modernStyle {
       return GlassButton()
