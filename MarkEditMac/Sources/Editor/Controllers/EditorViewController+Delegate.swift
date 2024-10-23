@@ -14,20 +14,20 @@ import MarkEditKit
 
 extension EditorViewController: WKUIDelegate {
   nonisolated func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-    guard let url = navigationAction.request.url else {
-      return nil
-    }
+    MainActor.assumeIsolated {
+      guard let url = navigationAction.request.url else {
+        return nil
+      }
 
-    Task { @MainActor in
       // Instead of creating a new WebView, opening the link using the system default behavior.
       //
       // It's a local file when it starts with baseURL, replace it with folder path.
       if let url = URL(string: url.absoluteString.replacingOccurrences(of: EditorWebView.baseURL?.absoluteString ?? "", with: document?.baseURL?.absoluteString ?? "")) {
         NSWorkspace.shared.openOrReveal(url: url)
       }
-    }
 
-    return nil
+      return nil
+    }
   }
 }
 
