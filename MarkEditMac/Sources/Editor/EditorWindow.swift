@@ -7,7 +7,7 @@
 
 import AppKit
 
-final class EditorWindow: NSWindow {
+final class EditorWindow: NSWindow, @unchecked Sendable {
   var toolbarMode: ToolbarMode? {
     didSet {
       toolbarStyle = toolbarMode == .compact ? .unifiedCompact : .unified
@@ -42,10 +42,13 @@ final class EditorWindow: NSWindow {
 
   override func awakeFromNib() {
     super.awakeFromNib()
-    toolbar = NSToolbar() // Required for multi-tab layout
-    toolbarMode = AppPreferences.Window.toolbarMode
-    tabbingMode = AppPreferences.Window.tabbingMode
-    reduceTransparency = AppPreferences.Window.reduceTransparency
+
+    MainActor.assumeIsolated {
+      toolbar = NSToolbar() // Required for multi-tab layout
+      toolbarMode = AppPreferences.Window.toolbarMode
+      tabbingMode = AppPreferences.Window.tabbingMode
+      reduceTransparency = AppPreferences.Window.reduceTransparency
+    }
   }
 
   override func layoutIfNeeded() {
