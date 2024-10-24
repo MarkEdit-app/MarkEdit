@@ -2,6 +2,7 @@ import { BlockInfo, layer, RectangleMarker } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { buildInnerBorder } from '../builder';
 import { almostEqual, getViewportScale } from '../../common/utils';
+import { globalState } from '../../common/store';
 
 const borderWidth = 2.5;
 const rectPadding = 2.0;
@@ -105,7 +106,7 @@ class Layer extends RectangleMarker {
   }
 
   private updateColors(element: HTMLElement) {
-    const colors = window.colors;
+    const colors = globalState.colors;
     element.style.backgroundColor = colors?.activeLine ?? '';
     element.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
   }
