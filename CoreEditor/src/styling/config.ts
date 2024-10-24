@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorColors, EditorTheme } from './types';
 import { Config, WebFontFace, InvisiblesBehavior } from '../config';
-import { editingState, styleSheets } from '../common/store';
+import { globalState, editingState, styleSheets } from '../common/store';
 import { adjustGutterPositions } from '../modules/lines';
 import { refreshEditFocus } from '../modules/selection';
 import { gutterExtensions } from './nodes/gutter';
@@ -63,7 +63,7 @@ export function setEditorColors(colors: EditorColors) {
     Object.keys(cssColor).forEach(key => style.setProperty(key, cssColor[key] as string));
   });
 
-  window.colors = colors;
+  globalState.colors = colors;
 }
 
 export function setFontFace(fontFace: WebFontFace) {
@@ -208,7 +208,7 @@ export function setGutterHovered(hovered: boolean) {
     gutterDOM?.classList.remove(className);
   }
 
-  window.gutterHovered = hovered;
+  globalState.gutterHovered = hovered;
   adjustGutterPositions('gutterHover');
 }
 

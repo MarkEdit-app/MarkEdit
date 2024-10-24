@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { foldState } from '@codemirror/language';
-import { editingState } from '../../common/store';
+import { globalState, editingState } from '../../common/store';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
 import { adjustGutterPositions } from '../lines';
@@ -125,7 +125,7 @@ export function observeChanges() {
     if (update.state.field(foldState) !== update.startState.field(foldState)) {
       adjustGutterPositions();
 
-      if (window.gutterHovered ?? false) {
+      if (globalState.gutterHovered) {
         adjustGutterPositions('gutterHover');
       }
     }
