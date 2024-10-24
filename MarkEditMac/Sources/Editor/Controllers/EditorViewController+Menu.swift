@@ -54,7 +54,8 @@ extension EditorViewController {
         }
 
         Task { @MainActor in
-          let rect = try? await self.bridge.writingTools.getSelectionRect()?.cgRect
+          let reselect = MarkEditWritingTools.shouldReselect(with: tool)
+          let rect = try? await self.bridge.writingTools.getSelectionRect(reselect: reselect)?.cgRect
           MarkEditWritingTools.show(
             tool,
             rect: rect ?? .zero,
@@ -81,7 +82,9 @@ extension EditorViewController {
     addItem(.createKeyPoints, Localized.WritingTools.createKeyPoints)
     addItem(.makeList, Localized.WritingTools.makeList)
     addItem(.makeTable, Localized.WritingTools.makeTable)
+    menu.addItem(.separator())
 
+    addItem(.compose, Localized.WritingTools.compose)
     return menu
   }
 }

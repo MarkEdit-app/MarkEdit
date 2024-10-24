@@ -8,18 +8,18 @@ import { setActive, getSelectionRect, ensureSelectionRect } from '../../modules/
  * @overrideModuleName WebBridgeWritingTools
  */
 export interface WebModuleWritingTools extends WebModule {
-  setActive({ isActive }: { isActive: boolean }): void;
-  getSelectionRect(): WebRect | undefined;
+  setActive({ isActive, reselect }: { isActive: boolean; reselect: boolean }): void;
+  getSelectionRect({ reselect }: { reselect: boolean }): WebRect | undefined;
   ensureSelectionRect(): void;
 }
 
 export class WebModuleWritingToolsImpl implements WebModuleWritingTools {
-  setActive({ isActive }: { isActive: boolean }): void {
-    setActive(isActive);
+  setActive({ isActive, reselect }: { isActive: boolean; reselect: boolean }): void {
+    setActive(isActive, reselect);
   }
 
-  getSelectionRect(): WebRect | undefined {
-    return getSelectionRect();
+  getSelectionRect({ reselect }: { reselect: boolean }): WebRect | undefined {
+    return getSelectionRect(reselect);
   }
 
   ensureSelectionRect(): void {

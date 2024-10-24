@@ -18,21 +18,31 @@ public final class WebBridgeWritingTools {
     self.webView = webView
   }
 
-  public func setActive(isActive: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func setActive(isActive: Bool, reselect: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let isActive: Bool
+      let reselect: Bool
     }
 
     let message = Message(
-      isActive: isActive
+      isActive: isActive,
+      reselect: reselect
     )
 
     webView?.invoke(path: "webModules.writingTools.setActive", message: message, completion: completion)
   }
 
-  public func getSelectionRect() async throws -> WebRect? {
+  public func getSelectionRect(reselect: Bool) async throws -> WebRect? {
+    struct Message: Encodable {
+      let reselect: Bool
+    }
+
+    let message = Message(
+      reselect: reselect
+    )
+
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.writingTools.getSelectionRect") { result in
+      webView?.invoke(path: "webModules.writingTools.getSelectionRect", message: message) { result in
         Task { @MainActor in
           continuation.resume(with: result)
         }

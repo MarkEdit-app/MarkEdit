@@ -111,6 +111,7 @@ enum Localized {
     static let createKeyPoints = String(localized: "Create Key Points", comment: "[WritingTools] Create Key Points")
     static let makeList = String(localized: "Make List", comment: "[WritingTools] Make List")
     static let makeTable = String(localized: "Make Table", comment: "[WritingTools] Make Table")
+    static let compose = String(localized: "Compose", comment: "[WritingTools] Compose")
   }
 
   enum Settings {

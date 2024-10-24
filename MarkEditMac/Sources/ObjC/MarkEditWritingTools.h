@@ -20,18 +20,24 @@ typedef NS_ENUM(long long, WritingTool) {
   WritingToolCreateKeyPoints = 22,
   WritingToolMakeList = 23,
   WritingToolMakeTable = 24,
+  WritingToolCompose = 201,
 } API_AVAILABLE(macos(15.1));
 
 API_AVAILABLE(macos(15.1))
 @interface MarkEditWritingTools : NSObject
 
 @property (class, readonly, nonatomic) BOOL isAvailable;
+@property (class, readonly, nonatomic) WritingTool requestedTool;
 @property (class, readonly, nonatomic, nullable) NSImage *affordanceIcon;
 
 + (void)showTool:(WritingTool)tool
             rect:(CGRect)rect
             view:(NSView *)view
         delegate:(id)delegate;
+
++ (BOOL)shouldReselectWithItem:(nullable id)item;
+
++ (BOOL)shouldReselectWithTool:(WritingTool)tool;
 
 @end
 
