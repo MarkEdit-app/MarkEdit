@@ -3,9 +3,11 @@ import StyleSheets from '../styling/config';
 
 export const globalState: {
   colors?: EditorColors;
+  contextMenuOpenTime: number;
   gutterHovered: boolean;
 } = {
   colors: undefined,
+  contextMenuOpenTime: 0,
   gutterHovered: false,
 };
 
