@@ -1,4 +1,5 @@
 import { EditorView } from '@codemirror/view';
+import { EditorSelection, Transaction } from '@codemirror/state';
 import { foldState } from '@codemirror/language';
 import { globalState, editingState } from '../../common/store';
 import { startCompletion, isPanelVisible } from '../completion';
@@ -10,6 +11,28 @@ import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActi
 import hasSelection from '../selection/hasSelection';
 import wrapBlock from './wrapBlock';
 import insertCodeBlock from './insertCodeBlock';
+
+export function filterTransaction(transaction: Transaction) {
+  // Return nothing for read-only mode
+  if (window.config.readOnlyMode && transaction.docChanged) {
+    return [];
+  }
+
+  // Prevent the browser from selecting line breaks at the end of lines
+  if (!transaction.docChanged && transaction.newSelection.ranges.length === 1 && (Date.now() - globalState.contextMenuOpenTime < 500)) {
+    const { state } = window.editor;
+    const { from, to } = transaction.newSelection.main;
+    if (state.sliceDoc(from, to) === state.lineBreak) {
+      return state.update({
+        changes: transaction.changes,
+        effects: transaction.effects,
+        selection: EditorSelection.cursor(from),
+      });
+    }
+  }
+
+  return transaction;
+}
 
 /**
  * Tokenize words at the click position, especially useful for languages like Chinese and Japanese.

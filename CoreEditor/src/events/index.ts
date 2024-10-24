@@ -1,5 +1,5 @@
 import isMetaKey from './isMetaKey';
-import { editingState } from '../common/store';
+import { globalState, editingState } from '../common/store';
 
 import * as completion from '../modules/completion';
 import * as selection from '../modules/selection';
@@ -73,6 +73,11 @@ export function startObserving() {
   document.addEventListener('scroll', () => {
     clearTimeout(storage.scrollTimer);
     storage.scrollTimer = setTimeout(() => window.nativeModules.core.notifyContentOffsetDidChange(), 100);
+  });
+
+  // Captures the time a context menu is opened, primarily to prevent automatic line break selection
+  document.addEventListener('contextmenu', () => {
+    globalState.contextMenuOpenTime = Date.now();
   });
 
   observeEventsForTokenization();

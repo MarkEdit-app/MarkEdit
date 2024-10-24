@@ -27,7 +27,7 @@ import { gutterExtensions } from './styling/nodes/gutter';
 import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
-import { wordTokenizer, observeChanges, interceptInputs } from './modules/input';
+import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
@@ -95,13 +95,7 @@ function fullExtensions(options: { lineBreak?: string }) {
 
     // Read-only
     readOnly.of(window.config.readOnlyMode ? [EditorView.editable.of(false), EditorState.readOnly.of(true)] : []),
-    EditorState.transactionFilter.of(transaction => {
-      if (window.config.readOnlyMode && transaction.docChanged) {
-        return [];
-      } else {
-        return transaction;
-      }
-    }),
+    EditorState.transactionFilter.of(tr => filterTransaction(tr)),
 
     // Basic
     highlightSpecialChars(),
