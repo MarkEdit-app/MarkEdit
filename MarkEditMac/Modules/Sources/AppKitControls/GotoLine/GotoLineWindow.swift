@@ -23,7 +23,7 @@ public final class GotoLineWindow: NSWindow {
   ) {
     let rect = CGRect(
       x: parentRect.minX + (parentRect.width - Constants.width) * 0.5,
-      y: parentRect.minY + parentRect.height - Constants.height - 100,
+      y: parentRect.minY + parentRect.height - Constants.height - 150,
       width: Constants.width,
       height: Constants.height
     )
