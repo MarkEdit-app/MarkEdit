@@ -28,12 +28,12 @@ private extension EditorViewController {
       webView.addSubview(focusTrackingView)
     }
 
-    // The origin has to be inside the viewport, and the size cannot be zero
+    // The origin has to be inside the viewport
     focusTrackingView.frame = CGRect(
       x: max(0, rect.minX),
       y: max(0, rect.minY),
-      width: max(1, rect.width),
-      height: max(1, rect.height)
+      width: rect.width,
+      height: rect.height
     )
 
     present(

@@ -375,6 +375,23 @@
         }
       }
     },
+    "Compose" : {
+      "comment" : "[WritingTools] Compose",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撰写"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撰寫"
+          }
+        }
+      }
+    },
     "Content" : {
       "localizations" : {
         "zh-Hans" : {

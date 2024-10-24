@@ -85,7 +85,10 @@ extension EditorViewController {
   func updateWritingTools(isActive: Bool) {
     let performUpdate = {
       // Ignore beforeInput handling to work around undo stack issues
-      self.bridge.writingTools.setActive(isActive: isActive)
+      self.bridge.writingTools.setActive(
+        isActive: isActive,
+        reselect: MarkEditWritingTools.shouldReselect(with: MarkEditWritingTools.requestedTool)
+      )
 
       // Invisible rendering doesn't work well with WritingTools, temporarily disable it for now
       self.setInvisiblesBehavior(behavior: isActive ? .never : AppPreferences.Editor.invisiblesBehavior)

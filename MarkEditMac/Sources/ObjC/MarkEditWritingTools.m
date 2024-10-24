@@ -19,6 +19,22 @@
   return returnValue;
 }
 
++ (WritingTool)requestedTool {
+  for (NSWindow *window in [NSApp windows]) {
+    NSViewController *controller = window.contentViewController;
+    if ([controller.className isEqualToString:@"WTWritingToolsViewController"]) {
+      NSInvocation *invocation = [self invocationWithTarget:controller
+                                             selectorString:@"requestedTool"];
+      [invocation invoke];
+      WritingTool returnValue = 0;
+      [invocation getReturnValue:&returnValue];
+      return returnValue;
+    }
+  }
+
+  return WritingToolPanel;
+}
+
 + (NSImage *)affordanceIcon {
   NSImageSymbolConfiguration *configuration = [NSImageSymbolConfiguration configurationWithPointSize:12.5 weight:NSFontWeightMedium];
   NSImage *symbolImage = [NSImage imageWithSystemSymbolName:@"_gm" accessibilityDescription:nil];
@@ -56,6 +72,21 @@
   [invocation setArgument:&delegate atIndex:5];
   [invocation invoke];
 }
+
++ (BOOL)shouldReselectWithItem:(id)item {
+  if (![item isKindOfClass:[NSMenuItem class]]) {
+    return NO;
+  }
+
+  return [self shouldReselectWithTool:[(NSMenuItem *)item tag]];
+}
+
++ (BOOL)shouldReselectWithTool:(WritingTool)tool {
+  // Compose mode can start without text selections
+  return tool != WritingToolCompose;
+}
+
+// MARK: - Private
 
 + (id)writingToolsInstance {
   NSInvocation *invocation = [self invocationWithTarget:NSClassFromString(@"WTWritingTools")

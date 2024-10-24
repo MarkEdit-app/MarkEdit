@@ -27,8 +27,9 @@ export function getClientRect(rect: Rect) {
   return {
     x: rect.left * scale,
     y: rect.top * scale,
-    width: (rect.right - rect.left) * scale,
-    height: (rect.bottom - rect.top) * scale,
+    // Client rects with zero width or height are not accepted
+    width: Math.max(1, (rect.right - rect.left) * scale),
+    height: Math.max(1, (rect.bottom - rect.top) * scale),
   };
 }
 
