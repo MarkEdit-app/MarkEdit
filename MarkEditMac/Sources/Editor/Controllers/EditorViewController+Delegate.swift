@@ -40,6 +40,10 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isRevisionMode
   }
 
+  func editorWebViewHasTextSelection(_ webView: EditorWebView) -> Bool {
+    hasTextSelection
+  }
+
   func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem? {
     searchOperationsMenuItem
   }
@@ -137,6 +141,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     // The content is edited once contentEdited is true, it cannot go back
     hasBeenEdited = hasBeenEdited || contentEdited
+    hasTextSelection = !selectedLineColumn.selectionText.isEmpty
 
     // Only update the dirty state when it's edited,
     // the app can launch with an unsaved state (e.g., force quit), it should remain dirty.

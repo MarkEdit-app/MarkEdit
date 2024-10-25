@@ -17,6 +17,7 @@ enum EditorWebViewMenuAction {
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
   func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool
+  func editorWebViewHasTextSelection(_ webView: EditorWebView) -> Bool
   func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem?
   func editorWebViewResignFirstResponder(_ webView: EditorWebView)
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
@@ -71,16 +72,6 @@ final class EditorWebView: WKWebView {
       return true
     }
 
-    // Just a hint for the keyboard shortcut, not actually functional
-    //
-    // WKWebView.showInspector() in WKWebView+Extension.swift does the heavy lifting
-    menu.items.forEach {
-      if $0.identifier?.rawValue == "WKMenuItemIdentifierInspectElement" {
-        $0.keyEquivalent = "i"
-        $0.keyEquivalentModifierMask = [.option, .command]
-      }
-    }
-
     // Keep items minimal for revision mode
     if actionDelegate?.editorWebViewIsRevisionMode(self) == true {
       return super.willOpenMenu(menu, with: event)
@@ -105,7 +96,13 @@ final class EditorWebView: WKWebView {
     }
 
     menu.addItem(.separator())
+    updateMenuItems(menu: menu)
     super.willOpenMenu(menu, with: event)
+
+    // Text selection might have changed after showing the menu
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+      self.updateMenuItems(menu: menu)
+    }
   }
 
   override func resignFirstResponder() -> Bool {
@@ -123,6 +120,34 @@ private extension EditorWebView {
 
   @objc func selectAllOccurrences(_ sender: NSMenuItem) {
     actionDelegate?.editorWebView(self, didSelect: .selectAllOccurrences)
+  }
+
+  func updateMenuItems(menu: NSMenu) {
+    let hasTextSelection = actionDelegate?.editorWebViewHasTextSelection(self) ?? false
+    for item in menu.items {
+      // Just a hint for the keyboard shortcut, not actually functional
+      //
+      // WKWebView.showInspector() in WKWebView+Extension.swift does the heavy lifting
+      if item.identifier == NSUserInterfaceItemIdentifier.inspectElement {
+        item.keyEquivalent = "i"
+        item.keyEquivalentModifierMask = [.option, .command]
+      }
+
+      // Disable native items that require text selection
+      if let identifier = item.identifier, [
+        NSUserInterfaceItemIdentifier.lookUp,
+        NSUserInterfaceItemIdentifier.searchWeb,
+        NSUserInterfaceItemIdentifier.translate,
+        NSUserInterfaceItemIdentifier.shareMenu,
+      ].contains(identifier) {
+        item.isHidden = !hasTextSelection
+      }
+
+      // Disable search items that require text selection
+      if [Localized.Search.findSelection, Localized.Search.selectAllOccurrences].contains(item.title) {
+        item.isHidden = !hasTextSelection
+      }
+    }
   }
 }
 
@@ -142,4 +167,12 @@ private enum WKContextMenuItemTag: Int {
   case showFonts = 41
   case defaultDirection = 52
   case textDirectionDefault = 59
+}
+
+private extension NSUserInterfaceItemIdentifier {
+  static let lookUp = Self("WKMenuItemIdentifierLookUp")
+  static let searchWeb = Self("WKMenuItemIdentifierSearchWeb")
+  static let translate = Self("WKMenuItemIdentifierTranslate")
+  static let shareMenu = Self("WKMenuItemIdentifierShareMenu")
+  static let inspectElement = Self("WKMenuItemIdentifierInspectElement")
 }
