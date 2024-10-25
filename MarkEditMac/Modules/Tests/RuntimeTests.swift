@@ -1,18 +1,20 @@
 //
 //  RuntimeTests.swift
-//  MarkEditMacTests
 //
 //  Created by cyan on 6/28/23.
 //
 
-@testable import MarkEdit
 import XCTest
 import WebKit
 import AppKitExtensions
 
 final class RuntimeTests: XCTestCase {
   func testExistenceOfAppIcon() {
-    XCTAssertNotNil(NSImage(named: "AppIcon"), "Missing AppIcon from the main bundle")
+    guard let bundle = (Bundle.allBundles.first { $0.bundleURL.lastPathComponent == "MarkEdit.app" }) else {
+      return XCTFail("Missing MarkEdit.app bundle to continue")
+    }
+
+    XCTAssertNotNil(bundle.image(forResource: "AppIcon"), "Missing AppIcon from the main bundle")
   }
 
   func testExistenceOfDrawsBackground() {
