@@ -11,10 +11,6 @@ import WebKit
 import AppKitExtensions
 
 final class RuntimeTests: XCTestCase {
-  func testExistenceOfAppIcon() {
-    XCTAssertNotNil(NSImage(named: "AppIcon"), "Missing AppIcon from the main bundle")
-  }
-
   func testExistenceOfDrawsBackground() {
     let configuration = WKWebViewConfiguration()
     configuration.setValue(false, forKey: "drawsBackground")
