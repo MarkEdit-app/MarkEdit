@@ -42,7 +42,7 @@ private extension AppDelegate {
   }
 
   var activeEditorController: EditorViewController? {
-    NSApp.mainWindow?.contentViewController as? EditorViewController
+    NSApp.keyWindow?.contentViewController as? EditorViewController
   }
 
   func reconfigureMainEditMenu(document: EditorDocument?) {
