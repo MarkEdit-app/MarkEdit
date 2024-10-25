@@ -56,8 +56,8 @@ final class Application: NSApplication {
 
 private extension Application {
   func ensureWritingToolsSelectionRect() {
-    guard let editor = NSApp.mainWindow?.contentViewController as? EditorViewController else {
-      return Logger.assertFail("Invalid mainWindow was found")
+    guard let editor = NSApp.keyWindow?.contentViewController as? EditorViewController else {
+      return Logger.assertFail("Invalid keyWindow was found")
     }
 
     editor.ensureWritingToolsSelectionRect()

@@ -149,7 +149,7 @@ extension EditorViewController: NSMenuItemValidation {
     }
 
     // When webView is not the firstResponder, disable some menus entirely
-    if view.window?.firstResponder != webView {
+    if NSApp.keyWindow?.firstResponder != webView {
       let disabledMenus = [
         NSApp.appDelegate?.textFormatMenu,
         NSApp.appDelegate?.editCommandsMenu,
