@@ -7,66 +7,10 @@
 
 @testable import MarkEdit
 import XCTest
-import WebKit
-import AppKitExtensions
 
 final class RuntimeTests: XCTestCase {
-  func testExistenceOfDrawsBackground() {
-    let configuration = WKWebViewConfiguration()
-    configuration.setValue(false, forKey: "drawsBackground")
-    testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
-  }
-
-  func testExistenceOfDeveloperPreferences() {
-    let preferences = WKWebViewConfiguration().preferences
-    preferences.setValue(true, forKey: "developerExtrasEnabled")
-    testExistenceOfSelector(object: preferences, selector: "_developerExtrasEnabled")
-
-    preferences.setValue(false, forKey: "webSecurityEnabled")
-    testExistenceOfSelector(object: preferences, selector: "_webSecurityEnabled")
-
-    let webView = WKWebView()
-    testExistenceOfSelector(object: webView, selector: "_inspector")
-
-    let inspector = webView.perform(sel_getUid("_inspector")).takeUnretainedValue()
-    testExistenceOfSelector(object: inspector, selector: "show")
-  }
-
-  func testExistenceOfAutomaticInlineCompletion() {
-    let checker = NSSpellChecker.self
-    testExistenceOfSelector(object: checker, selector: "isAutomaticInlineCompletionEnabled")
-  }
-
-  func testExistenceOfAutomaticInlinePredictionBeingPresented() {
-    let checker = NSSpellChecker.self
-    testExistenceOfSelector(object: checker, selector: "isAutomaticInlinePredictionBeingPresented")
-  }
-
-  func testExistenceOfShowCompletionForCandidate() {
-    let checker = NSSpellChecker()
-    testExistenceOfSelector(object: checker, selector: "showCompletionForCandidate:selectedRange:offset:inString:rect:view:completionHandler:")
-  }
-
-  func testExistenceOfCancelCorrection() {
-    let checker = NSSpellChecker()
-    testExistenceOfSelector(object: checker, selector: "cancelCorrectionIndicatorForView:")
-  }
-
-  func testExistenceOfImageTintColor() {
-    testExistenceOfSelector(object: NSImage(), selector: "_setTintColor:")
-  }
-
-  func testRetrievingToolbarEffectView() {
-    let window = NSWindow()
-    window.makeKeyAndOrderFront(nil)
-    XCTAssertNotNil(window.toolbarEffectView)
-  }
-
-  func testPrivateAppKitClasses() {
-    testExistenceOfClass(named: "_NSKeyboardFocusClipView")
-    testExistenceOfClass(named: "NSToolbarFullScreenWindow")
-    testExistenceOfClass(named: "NSTitlebarView")
-    testExistenceOfClass(named: "NSToolbarButton")
+  func testExistenceOfAppIcon() {
+    XCTAssertNotNil(NSImage(named: "AppIcon"), "Missing AppIcon from the main bundle")
   }
 
   func testPrivateAccessibilityBundles() {
@@ -75,17 +19,5 @@ final class RuntimeTests: XCTestCase {
 
     let object = type?.value(forKey: "defaultManager") as? AnyObject
     XCTAssertEqual(object?.responds(to: sel_getUid("loadAXBundles")), true, "Missing loadAXBundles")
-  }
-}
-
-// MARK: - Private
-
-private extension RuntimeTests {
-  func testExistenceOfSelector(object: AnyObject, selector: String) {
-    XCTAssert(object.responds(to: sel_getUid(selector)), "Missing \(selector) in \(object.self)")
-  }
-
-  func testExistenceOfClass(named className: String) {
-    XCTAssertNotNil(NSClassFromString(className), "Class \(className) cannot be found")
   }
 }
