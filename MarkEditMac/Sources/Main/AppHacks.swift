@@ -10,24 +10,6 @@ import MarkEditKit
 
 // [macOS 14] Performance regression, there's a good chance to hang at launch
 extension NSObject {
-  static var axbbmClass: AnyClass? {
-    // Joined as: /System/Library/PrivateFrameworks/AccessibilityBundles.framework
-    let path = [
-      "",
-      "System",
-      "Library",
-      "PrivateFrameworks",
-      "AccessibilityBundles.framework",
-    ].joined(separator: "/")
-
-    guard let bundle = Bundle(path: path), bundle.load() else {
-      Logger.assertFail("Failed to get the bundle")
-      return nil
-    }
-
-    return NSClassFromString("AXBBundleManager")
-  }
-
   /**
    Loading this bundle is extremely slow, move it to background thread with method swizzling.
    */

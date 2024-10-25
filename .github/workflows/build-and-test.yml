@@ -43,10 +43,6 @@ jobs:
         run: |
           xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditCoreTests -destination 'platform=macOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
 
-      - name: Test MarkEditMacTests
-        run: |
-          xcodebuild test -project ../MarkEdit.xcodeproj -scheme MarkEditMacTests -destination 'platform=macOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
-
       - name: Test ModulesTests
         run: |
           xcodebuild test -project ../MarkEdit.xcodeproj -scheme ModulesTests -destination 'platform=macOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO

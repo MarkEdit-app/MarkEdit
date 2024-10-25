@@ -26,7 +26,6 @@
 		870F17922985775B00003DA7 /* Previewer in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17912985775B00003DA7 /* Previewer */; };
 		870F17962985775B00003DA7 /* SettingsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17952985775B00003DA7 /* SettingsUI */; };
 		87132AA32C188FE900FD262B /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87132AA22C188FE900FD262B /* AppShortcuts.xcstrings */; };
-		871A2F4D2A4BD22F0080E3F5 /* RuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871A2F4C2A4BD22F0080E3F5 /* RuntimeTests.swift */; };
 		871C995B2973F1E6003FF3A7 /* AppDelegate+Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */; };
 		871C995D2973F20E003FF3A7 /* AppDelegate+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */; };
 		8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8723B46829C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift */; };
@@ -98,13 +97,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		870FF83B298BD7DC00E4AE99 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 870A519A294700DE0095C7EB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 870A51A1294700DE0095C7EB;
-			remoteInfo = MarkEditMac;
-		};
 		8729240E2951525C007156B1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 870A519A294700DE0095C7EB /* Project object */;
@@ -149,9 +141,7 @@
 		870F17672985285B00003DA7 /* EditorViewController+Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Config.swift"; sourceTree = "<group>"; };
 		870F17752985546500003DA7 /* MarkEditCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditCore; sourceTree = "<group>"; };
 		870F178C2985774D00003DA7 /* Modules */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Modules; sourceTree = "<group>"; };
-		870FF837298BD7DC00E4AE99 /* MarkEditMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkEditMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87132AA22C188FE900FD262B /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
-		871A2F4C2A4BD22F0080E3F5 /* RuntimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeTests.swift; sourceTree = "<group>"; };
 		871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Document.swift"; sourceTree = "<group>"; };
 		871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		8723B46829C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluateJavaScriptIntent.swift; sourceTree = "<group>"; };
@@ -241,13 +231,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		870FF834298BD7DC00E4AE99 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		872923FD2951525C007156B1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -276,7 +259,6 @@
 				87C3CBFA29545944002A3436 /* MarkEditKit */,
 				87BFF238298AAC75006C31E4 /* MarkEditTools */,
 				870A51A4294700DE0095C7EB /* MarkEditMac */,
-				870FF838298BD7DC00E4AE99 /* MarkEditMacTests */,
 				872924042951525C007156B1 /* PreviewExtension */,
 				870A51A3294700DE0095C7EB /* Products */,
 				874823CC29B0BD980067EC49 /* Frameworks */,
@@ -293,7 +275,6 @@
 			children = (
 				870A51A2294700DE0095C7EB /* MarkEdit.app */,
 				872924002951525C007156B1 /* PreviewExtension.appex */,
-				870FF837298BD7DC00E4AE99 /* MarkEditMacTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -366,14 +347,6 @@
 				87AAEDF12958244D00C8E61C /* Replace */,
 			);
 			path = Panels;
-			sourceTree = "<group>";
-		};
-		870FF838298BD7DC00E4AE99 /* MarkEditMacTests */ = {
-			isa = PBXGroup;
-			children = (
-				871A2F4C2A4BD22F0080E3F5 /* RuntimeTests.swift */,
-			);
-			path = MarkEditMacTests;
 			sourceTree = "<group>";
 		};
 		871C99592973F1C2003FF3A7 /* Application */ = {
@@ -594,24 +567,6 @@
 			productReference = 870A51A2294700DE0095C7EB /* MarkEdit.app */;
 			productType = "com.apple.product-type.application";
 		};
-		870FF836298BD7DC00E4AE99 /* MarkEditMacTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 870FF83F298BD7DC00E4AE99 /* Build configuration list for PBXNativeTarget "MarkEditMacTests" */;
-			buildPhases = (
-				870FF833298BD7DC00E4AE99 /* Sources */,
-				870FF834298BD7DC00E4AE99 /* Frameworks */,
-				870FF835298BD7DC00E4AE99 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				870FF83C298BD7DC00E4AE99 /* PBXTargetDependency */,
-			);
-			name = MarkEditMacTests;
-			productName = MarkEditMacTests;
-			productReference = 870FF837298BD7DC00E4AE99 /* MarkEditMacTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		872923FF2951525C007156B1 /* PreviewExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 872924142951525C007156B1 /* Build configuration list for PBXNativeTarget "PreviewExtension" */;
@@ -646,10 +601,6 @@
 						CreatedOnToolsVersion = 14.1;
 						LastSwiftMigration = 1410;
 					};
-					870FF836298BD7DC00E4AE99 = {
-						CreatedOnToolsVersion = 14.2;
-						TestTargetID = 870A51A1294700DE0095C7EB;
-					};
 					872923FF2951525C007156B1 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -671,7 +622,6 @@
 			projectRoot = "";
 			targets = (
 				870A51A1294700DE0095C7EB /* MarkEditMac */,
-				870FF836298BD7DC00E4AE99 /* MarkEditMacTests */,
 				872923FF2951525C007156B1 /* PreviewExtension */,
 			);
 		};
@@ -688,13 +638,6 @@
 				870A51AA294700E00095C7EB /* Assets.xcassets in Resources */,
 				8757F7FC2AAC815F001957DD /* Localizable.xcstrings in Resources */,
 				870A51AD294700E00095C7EB /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		870FF835298BD7DC00E4AE99 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,14 +727,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		870FF833298BD7DC00E4AE99 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				871A2F4D2A4BD22F0080E3F5 /* RuntimeTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		872923FC2951525C007156B1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -803,11 +738,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		870FF83C298BD7DC00E4AE99 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 870A51A1294700DE0095C7EB /* MarkEditMac */;
-			targetProxy = 870FF83B298BD7DC00E4AE99 /* PBXContainerItemProxy */;
-		};
 		8729240F2951525C007156B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 872923FF2951525C007156B1 /* PreviewExtension */;
@@ -1045,42 +975,6 @@
 			};
 			name = Release;
 		};
-		870FF83D298BD7DC00E4AE99 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "$(inherited)";
-				DEVELOPMENT_TEAM = "$(inherited)";
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "app.cyan.markedit-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarkEdit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MarkEdit";
-			};
-			name = Debug;
-		};
-		870FF83E298BD7DC00E4AE99 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "$(inherited)";
-				DEVELOPMENT_TEAM = "$(inherited)";
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "app.cyan.markedit-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarkEdit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MarkEdit";
-			};
-			name = Release;
-		};
 		872924122951525C007156B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
@@ -1158,15 +1052,6 @@
 			buildConfigurations = (
 				870A51B2294700E00095C7EB /* Debug */,
 				870A51B3294700E00095C7EB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		870FF83F298BD7DC00E4AE99 /* Build configuration list for PBXNativeTarget "MarkEditMacTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				870FF83D298BD7DC00E4AE99 /* Debug */,
-				870FF83E298BD7DC00E4AE99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
