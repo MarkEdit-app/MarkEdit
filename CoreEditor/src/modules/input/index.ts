@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Transaction } from '@codemirror/state';
-import { foldState } from '@codemirror/language';
+import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { globalState, editingState } from '../../common/store';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
@@ -135,21 +135,23 @@ export function observeChanges() {
       });
     }
 
-    // Gutter update triggered by geometry or viewport changes (delayed)
-    if (update.geometryChanged || update.viewportChanged) {
-      if (storage.gutterUpdater !== undefined) {
-        clearTimeout(storage.gutterUpdater);
+    if (window.config.showLineNumbers) {
+      // Gutter update triggered by geometry or viewport changes (delayed)
+      if (update.geometryChanged || update.viewportChanged) {
+        if (storage.gutterUpdater !== undefined) {
+          clearTimeout(storage.gutterUpdater);
+        }
+
+        storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
       }
 
-      storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
-    }
+      // Gutter update triggered by fold or unfold actions (immediately)
+      if (update.transactions.some(tr => tr.effects.some(e => e.is(foldEffect) || e.is(unfoldEffect)))) {
+        adjustGutterPositions();
 
-    // Gutter update triggered by fold or unfold actions (immediately)
-    if (update.state.field(foldState) !== update.startState.field(foldState)) {
-      adjustGutterPositions();
-
-      if (globalState.gutterHovered) {
-        adjustGutterPositions('gutterHover');
+        if (globalState.gutterHovered) {
+          adjustGutterPositions('gutterHover');
+        }
       }
     }
   });
