@@ -189,7 +189,7 @@ extension EditorViewController: NSMenuItemValidation {
 
 extension EditorViewController {
   @IBAction func terminate(_ sender: Any?) {
-    document?.isDying = true
+    document?.isTerminating = true
     NSApplication.shared.terminate(sender)
   }
 }
@@ -340,7 +340,6 @@ extension EditorViewController {
 
 private extension EditorViewController {
   @IBAction func performClose(_ sender: Any?) {
-    document?.isDying = true
     view.window?.performClose(sender)
   }
 
