@@ -403,8 +403,8 @@ private extension EditorDocument {
       return // Cancelled
     }
 
-    if document.hasBeenReverted {
-      // Reverted
+    if document.hasBeenReverted || !document.isDocumentEdited {
+      // Reverted or no unsaved changes
       document.close()
     } else {
       // Saved
