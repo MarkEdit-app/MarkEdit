@@ -18,7 +18,7 @@ final class EditorDocument: NSDocument {
   var stringValue = ""
   var latestRevision: String?
   var isReadOnlyMode = false
-  var isDying = false
+  var isTerminating = false
 
   var canUndo: Bool {
     get async {
@@ -55,6 +55,7 @@ final class EditorDocument: NSDocument {
   }
 
   private var textBundle: TextBundleWrapper?
+  private var revertedDate: Date = .distantPast
   private var suggestedFilename: String?
   private weak var hostViewController: EditorViewController?
 
@@ -75,7 +76,7 @@ final class EditorDocument: NSDocument {
       windowController.window?.setFrame(autosavedFrame, display: false)
     }
 
-    isDying = false
+    isTerminating = false
     hostViewController = contentVC
     hostViewController?.representedObject = self
 
@@ -126,10 +127,18 @@ extension EditorDocument {
   }
 
   override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
+    let shouldClose: Selector? = {
+      if !isTerminating && closeAlwaysConfirmsChanges {
+        return #selector(confirmsChanges(_:shouldClose:))
+      }
+
+      return shouldCloseSelector
+    }()
+
     let canClose = {
       super.canClose(
         withDelegate: delegate,
-        shouldClose: #selector(self.shouldClose(_:closeDoc:)),
+        shouldClose: shouldClose,
         contextInfo: contextInfo
       )
     }
@@ -143,7 +152,7 @@ extension EditorDocument {
     //
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
     Task {
-      await saveAsynchronously(userInitiated: true, saveAction: canClose)
+      await updateContent(userInitiated: true, saveAction: canClose)
     }
   }
 
@@ -188,34 +197,26 @@ extension EditorDocument {
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
-    Task {
-      await saveAsynchronously(userInitiated: true) {
-        super.save(sender)
-      }
-
-      if sender != nil {
-        hostViewController?.cancelCompletion()
-      }
-    }
+    saveContent(sender)
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
-    // When "Ask to keep changes when closing documents" is enabled,
-    // changes are asked to save explicitly, see also "shouldClose(_:closeDoc:)".
-    //
-    // The value can from either system settings or app level overwritten.
-    guard !closeAlwaysConfirmsChanges else {
-      return
-    }
-
-    await saveAsynchronously(userInitiated: false) {
+    await updateContent(userInitiated: false) {
       // The default autosave doesn't work when the app is about to terminate,
       // it is because we have to do it in an asynchronous way.
       //
       // To work around this, check a flag to save the document manually.
-      if isDying && hasUnautosavedChanges, let fileURL, let fileType {
+      if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
         try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
         fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
+      }
+
+      // When "Ask to keep changes when closing documents" is enabled,
+      // changes are asked to save explicitly, see also "confirmsChanges(_:shouldClose:)".
+      //
+      // The value can from either system settings or app level overwritten.
+      guard !closeAlwaysConfirmsChanges else {
+        return
       }
 
       Task {
@@ -250,6 +251,11 @@ extension EditorDocument {
         Logger.log(.error, error.localizedDescription)
       }
     }
+  }
+
+  override func revert(toContentsOf url: URL, ofType typeName: String) throws {
+    revertedDate = .now
+    try super.revert(toContentsOf: url, ofType: typeName)
   }
 }
 
@@ -335,7 +341,24 @@ private extension EditorDocument {
     UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges)
   }
 
-  func saveAsynchronously(userInitiated: Bool, saveAction: () -> Void) async {
+  var hasBeenReverted: Bool {
+    Date.now.timeIntervalSince(revertedDate) < 1
+  }
+
+  func saveContent(_ sender: Any?, completion: (() -> Void)? = nil) {
+    Task {
+      await updateContent(userInitiated: true) {
+        super.save(sender)
+        completion?()
+      }
+
+      if sender != nil {
+        hostViewController?.cancelCompletion()
+      }
+    }
+  }
+
+  func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
     // In viewing mode (aka version browsing), saveAction is directly skipped
     guard !isInViewingMode else {
       return
@@ -375,24 +398,19 @@ private extension EditorDocument {
     }
   }
 
-  @objc func shouldClose(_ document: NSDocument, closeDoc: Bool) {
-    let performClose = {
-      if closeDoc {
-        document.close()
-      }
+  @objc func confirmsChanges(_ document: EditorDocument, shouldClose: Bool) {
+    guard shouldClose else {
+      return // Cancelled
     }
 
-    // Saved
-    if closeDoc && isDocumentEdited && closeAlwaysConfirmsChanges {
-      Task {
-        await saveAsynchronously(userInitiated: true) {
-          super.save(nil)
-          performClose()
-        }
-      }
+    if document.hasBeenReverted {
+      // Reverted
+      document.close()
     } else {
-      // Reverted or cancelled
-      performClose()
+      // Saved
+      document.saveContent(nil) {
+        document.close()
+      }
     }
   }
 }
