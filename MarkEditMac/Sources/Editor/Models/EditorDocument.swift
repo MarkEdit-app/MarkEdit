@@ -129,7 +129,7 @@ extension EditorDocument {
     let canClose = {
       super.canClose(
         withDelegate: delegate,
-        shouldClose: shouldCloseSelector,
+        shouldClose: #selector(self.shouldClose(_:closeDoc:)),
         contextInfo: contextInfo
       )
     }
@@ -201,10 +201,10 @@ extension EditorDocument {
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
     // When "Ask to keep changes when closing documents" is enabled,
-    // changes are asked to save explicitly.
+    // changes are asked to save explicitly, see also "shouldClose(_:closeDoc:)".
     //
     // The value can from either system settings or app level overwritten.
-    guard !UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges) else {
+    guard !closeAlwaysConfirmsChanges else {
       return
     }
 
@@ -331,6 +331,10 @@ private extension EditorDocument {
     hostViewController?.bridge
   }
 
+  var closeAlwaysConfirmsChanges: Bool {
+    UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges)
+  }
+
   func saveAsynchronously(userInitiated: Bool, saveAction: () -> Void) async {
     // In viewing mode (aka version browsing), saveAction is directly skipped
     guard !isInViewingMode else {
@@ -368,6 +372,27 @@ private extension EditorDocument {
 
     if userInitiated {
       bridge?.history.markContentClean()
+    }
+  }
+
+  @objc func shouldClose(_ document: NSDocument, closeDoc: Bool) {
+    let performClose = {
+      if closeDoc {
+        document.close()
+      }
+    }
+
+    // Saved
+    if closeDoc && isDocumentEdited && closeAlwaysConfirmsChanges {
+      Task {
+        await saveAsynchronously(userInitiated: true) {
+          super.save(nil)
+          performClose()
+        }
+      }
+    } else {
+      // Reverted or cancelled
+      performClose()
     }
   }
 }
