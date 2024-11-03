@@ -51,7 +51,7 @@ extension EditorViewController {
       // Press Option-Command-I to show the inspector
       if event.keyCode == .kVK_ANSI_I,
          event.deviceIndependentFlags == [.option, .command],
-         let self, self.view.window != nil {
+         let self, self.isWindowVisible {
         self.webView.showInspector()
       }
 
