@@ -99,7 +99,10 @@ function fullExtensions(options: { lineBreak?: string }) {
 
     // Basic
     highlightSpecialChars(),
-    history({ ignoreBeforeInput: () => isWritingToolsActive() }),
+    history({
+      newGroupDelay: 300,
+      ignoreBeforeInput: () => isWritingToolsActive(),
+    }),
     drawSelection({ cursorBlinkRate: 1000 }),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
