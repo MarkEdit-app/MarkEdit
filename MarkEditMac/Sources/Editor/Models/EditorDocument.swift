@@ -127,8 +127,9 @@ extension EditorDocument {
   }
 
   override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
+    let isNewFile = fileURL == nil
     let shouldClose: Selector? = {
-      if !isTerminating && closeAlwaysConfirmsChanges {
+      if !isNewFile && !isTerminating && closeAlwaysConfirmsChanges {
         return #selector(confirmsChanges(_:shouldClose:))
       }
 
@@ -143,7 +144,7 @@ extension EditorDocument {
       )
     }
 
-    guard fileURL == nil else {
+    guard isNewFile else {
       // Closing an existing document
       return canClose()
     }
