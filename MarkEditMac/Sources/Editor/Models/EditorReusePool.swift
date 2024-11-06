@@ -23,7 +23,7 @@ final class EditorReusePool {
   }
 
   func dequeueViewController() -> EditorViewController {
-    if let reusable = (controllerPool.first { !$0.isWindowVisible }) {
+    if let reusable = (controllerPool.first { $0.view.window == nil }) {
       return reusable
     }
 

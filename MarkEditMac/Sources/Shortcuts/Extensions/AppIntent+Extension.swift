@@ -16,6 +16,6 @@ extension AppIntent {
       return lhs < rhs
     }
 
-    return orderedControllers.first { $0.isWindowVisible }
+    return orderedControllers.first { $0.view.window != nil }
   }
 }
