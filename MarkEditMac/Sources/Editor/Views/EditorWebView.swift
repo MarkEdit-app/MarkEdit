@@ -133,7 +133,17 @@ private extension EditorWebView {
         item.keyEquivalentModifierMask = [.option, .command]
       }
 
-      // Disable native items that require text selection
+      // Disable copy, cut for empty selection
+      if item.tag == WKContextMenuItemTag.copy.rawValue || item.tag == WKContextMenuItemTag.cut.rawValue {
+        item.isEnabled = hasTextSelection
+      }
+
+      // Disable paste for empty pasteboard
+      if item.tag == WKContextMenuItemTag.paste.rawValue {
+        item.isEnabled = NSPasteboard.general.canPaste
+      }
+
+      // Hide native items that require text selection
       if let identifier = item.identifier, [
         NSUserInterfaceItemIdentifier.lookUp,
         NSUserInterfaceItemIdentifier.searchWeb,
@@ -143,7 +153,7 @@ private extension EditorWebView {
         item.isHidden = !hasTextSelection
       }
 
-      // Disable search items that require text selection
+      // Hide search items that require text selection
       if [Localized.Search.findSelection, Localized.Search.selectAllOccurrences].contains(item.title) {
         item.isHidden = !hasTextSelection
       }
@@ -163,7 +173,10 @@ private extension NSMenuItem {
  https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
  */
 private enum WKContextMenuItemTag: Int {
+  case copy = 8
   case reload = 12
+  case cut = 13
+  case paste = 14
   case showFonts = 41
   case defaultDirection = 52
   case textDirectionDefault = 59
