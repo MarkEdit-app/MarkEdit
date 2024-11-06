@@ -137,11 +137,14 @@ extension EditorDocument {
     }()
 
     let canClose = {
-      super.canClose(
-        withDelegate: delegate,
-        shouldClose: shouldClose,
-        contextInfo: contextInfo
-      )
+      // After a small delay to work around a rare hang issue
+      return DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+        super.canClose(
+          withDelegate: delegate,
+          shouldClose: shouldClose,
+          contextInfo: contextInfo
+        )
+      }
     }
 
     guard isNewFile else {
