@@ -5,7 +5,7 @@ import {
   replaceNext as replaceNextCommand,
 } from '@codemirror/search';
 
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, SelectionRange } from '@codemirror/state';
 import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSearchQuery } from '@codemirror/search';
 import { isElementVisible, isPositionVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
 
@@ -46,7 +46,15 @@ export function updateQuery(options: SearchOptions): number {
 
   const editor = window.editor;
   const query = new SearchQuery(options);
-  editor.dispatch({ effects: setSearchQuery.of(query) });
+  editor.dispatch({
+    effects: setSearchQuery.of(query),
+  });
+
+  const reselect = (selection: SelectionRange) => {
+    if (!storage.hasSelection) {
+      editor.dispatch({ selection });
+    }
+  };
 
   // Get ranges and refocus if needed
   const ranges = rangesFromQuery(query);
@@ -54,12 +62,7 @@ export function updateQuery(options: SearchOptions): number {
     // Try ranges in viewport
     for (const range of ranges) {
       if (isPositionVisible(range.from)) {
-        if (!storage.hasSelection) {
-          editor.dispatch({
-            selection: EditorSelection.range(range.from, range.to),
-          });
-        }
-
+        reselect(EditorSelection.range(range.from, range.to));
         return ranges.length;
       }
     }
@@ -71,7 +74,12 @@ export function updateQuery(options: SearchOptions): number {
         scrollIntoView(anchor, 'center');
       }
     } else {
-      (() => findNext(options.search) || findPrevious(options.search))();
+      const nextFound = findNext(options.search) || findPrevious(options.search);
+      if (!nextFound && ranges.length === 0) {
+        // Cancel selection when nothing was found
+        const cursor = editor.state.selection.main.to;
+        reselect(EditorSelection.cursor(cursor));
+      }
     }
   }
 
