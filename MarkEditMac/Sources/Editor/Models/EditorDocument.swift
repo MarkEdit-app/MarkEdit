@@ -138,7 +138,7 @@ extension EditorDocument {
 
     let canClose = {
       // After a small delay to work around a rare hang issue
-      return DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
         super.canClose(
           withDelegate: delegate,
           shouldClose: shouldClose,
