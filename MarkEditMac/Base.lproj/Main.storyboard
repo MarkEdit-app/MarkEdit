@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23094"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -913,6 +912,7 @@ Gw
                         <outlet property="editFindMenu" destination="1b7-l0-nxx" id="qe6-lW-EOG"/>
                         <outlet property="editFontMenu" destination="VwK-Nx-wgD" id="gtE-IA-gOo"/>
                         <outlet property="editGotoLineItem" destination="wBj-kZ-XmW" id="eZ2-n8-zKI"/>
+                        <outlet property="editPasteItem" destination="gVA-U4-sdL" id="8b3-le-UtC"/>
                         <outlet property="editReadOnlyItem" destination="ex0-rS-Zlm" id="GjQ-VO-cGs"/>
                         <outlet property="editRedoItem" destination="6dh-zS-Vam" id="fN4-hA-Oqr"/>
                         <outlet property="editStatisticsItem" destination="Bvk-zs-CQB" id="oU7-Tq-e9K"/>

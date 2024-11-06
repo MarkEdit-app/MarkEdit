@@ -53,6 +53,7 @@ private extension AppDelegate {
 
       editUndoItem?.isEnabled = await document.canUndo
       editRedoItem?.isEnabled = await document.canRedo
+      editPasteItem?.isEnabled = NSPasteboard.general.canPaste
     }
 
     // [macOS 15] The system one doesn't work for WKWebView
