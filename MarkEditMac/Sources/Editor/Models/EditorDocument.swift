@@ -407,14 +407,23 @@ private extension EditorDocument {
       return // Cancelled
     }
 
+    let performClose = {
+      // isReleasedWhenClosed is not initially set to true to prevent crashes when deleting drafts.
+      // However, we need to release the window in the confirmsChanges function;
+      // otherwise, it will cause a memory leak.
+      document.windowControllers.forEach {
+        $0.window?.isReleasedWhenClosed = true
+      }
+
+      document.close()
+    }
+
     if document.hasBeenReverted || !document.isDocumentEdited {
       // Reverted or no unsaved changes
-      document.close()
+      performClose()
     } else {
       // Saved
-      document.saveContent(nil) {
-        document.close()
-      }
+      document.saveContent(nil, completion: performClose)
     }
   }
 }
