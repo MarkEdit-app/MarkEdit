@@ -76,6 +76,7 @@ extension AppDelegate {
 
 private extension AppDelegate {
   enum States {
+    @MainActor static var openPanelShownDate: TimeInterval = 0
     @MainActor static var untitledFileOpenedDate: TimeInterval = 0
   }
 
@@ -83,7 +84,13 @@ private extension AppDelegate {
   func openOrCreateDocument(sender: NSApplication) -> Bool {
     switch AppPreferences.General.newWindowBehavior {
     case .openDocument:
-      sender.showOpenPanel()
+      // The system occasionally runs this twice in a row, prevent duplicate panels
+      let currentDate = Date.timeIntervalSinceReferenceDate
+      if currentDate - States.openPanelShownDate > 0.1 {
+        States.openPanelShownDate = currentDate
+        sender.showOpenPanel()
+      }
+
       return false
     case .newDocument:
       States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate
