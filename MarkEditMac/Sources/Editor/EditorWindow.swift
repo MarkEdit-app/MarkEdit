@@ -42,8 +42,6 @@ final class EditorWindow: NSWindow {
 
   override func awakeFromNib() {
     super.awakeFromNib()
-    isReleasedWhenClosed = true
-
     toolbar = NSToolbar() // Required for multi-tab layout
     toolbarMode = AppPreferences.Window.toolbarMode
     tabbingMode = AppPreferences.Window.tabbingMode
