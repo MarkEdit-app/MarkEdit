@@ -293,7 +293,7 @@ extension EditorDocument: FileVersionPickerDelegate {
         previous: Localized.General.previous,
         next: Localized.General.next,
         cancel: Localized.General.cancel,
-        selectThis: Localized.FileVersion.selectThis,
+        revertToThis: Localized.FileVersion.revertToThis,
         modeTitles: Localized.FileVersion.modeTitles
       ),
       delegate: self
@@ -309,7 +309,7 @@ extension EditorDocument: FileVersionPickerDelegate {
 
     stringValue = contents
     hostViewController?.resetEditor()
-    save(nil)
+    saveContent(nil)
   }
 
   func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool) {

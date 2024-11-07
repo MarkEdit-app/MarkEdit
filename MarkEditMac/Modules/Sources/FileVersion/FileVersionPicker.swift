@@ -214,7 +214,7 @@ private extension FileVersionPicker {
     loadingView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(loadingView)
 
-    selectButton.setTitle(localizable.selectThis)
+    selectButton.setTitle(localizable.revertToThis)
     selectButton.target = self
     selectButton.action = #selector(didPickVersion)
     selectButton.translatesAutoresizingMaskIntoConstraints = false

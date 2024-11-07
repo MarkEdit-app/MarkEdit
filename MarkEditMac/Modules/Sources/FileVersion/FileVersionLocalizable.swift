@@ -10,20 +10,20 @@ public struct FileVersionLocalizable: Sendable {
   let previous: String
   let next: String
   let cancel: String
-  let selectThis: String
+  let revertToThis: String
   let modeTitles: [String]
 
   public init(
     previous: String,
     next: String,
     cancel: String,
-    selectThis: String,
+    revertToThis: String,
     modeTitles: [String]
   ) {
     self.previous = previous
     self.next = next
     self.cancel = cancel
-    self.selectThis = selectThis
+    self.revertToThis = revertToThis
     self.modeTitles = modeTitles
   }
 }
