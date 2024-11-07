@@ -64,6 +64,9 @@ public final class FileVersionPicker: NSViewController {
 
   private let scrollView: NSScrollView = {
     let scrollView = NSTextView.scrollableTextView()
+    scrollView.allowsMagnification = true
+    scrollView.minMagnification = 1.0
+
     let textView = scrollView.textView
     textView?.drawsBackground = false
     textView?.isEditable = false
@@ -271,6 +274,7 @@ private extension FileVersionPicker {
       cancelButton.centerYAnchor.constraint(equalTo: bottomGuide.centerYAnchor),
 
       counterView.leadingAnchor.constraint(equalTo: bottomGuide.leadingAnchor, constant: Constants.layoutPadding),
+      counterView.trailingAnchor.constraint(lessThanOrEqualTo: cancelButton.leadingAnchor, constant: -Constants.layoutPadding),
       counterView.centerYAnchor.constraint(equalTo: bottomGuide.centerYAnchor),
 
       scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

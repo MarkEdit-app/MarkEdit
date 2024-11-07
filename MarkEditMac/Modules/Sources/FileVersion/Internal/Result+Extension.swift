@@ -43,6 +43,11 @@ extension [Diff.Result] {
         attributes[.backgroundColor] = backgroundColor
       }
 
+      if result.removed {
+        attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+        attributes[.strikethroughColor] = NSColor.removedText
+      }
+
       text.append(NSAttributedString(string: result.value, attributes: attributes))
     }
 
