@@ -33,7 +33,7 @@ class Context {
 
 function getContext(node: SyntaxNode, doc: Text) {
   let nodes = []
-  for (let cur: SyntaxNode | null = node; cur && cur.name != "Document"; cur = cur.parent) {
+  for (let cur: SyntaxNode | null = node; cur; cur = cur.parent) {
     if (cur.name == "ListItem" || cur.name == "Blockquote" || cur.name == "FencedCode")
       nodes.push(cur)
   }
@@ -107,7 +107,7 @@ function normalizeIndent(content: string, state: EditorState) {
 export const insertNewlineContinueMarkup: StateCommand = ({state, dispatch}) => {
   let tree = syntaxTree(state), {doc} = state
   let dont = null, changes = state.changeByRange(range => {
-    if (!range.empty || !markdownLanguage.isActiveAt(state, range.from)) return dont = {range}
+    if (!range.empty || !markdownLanguage.isActiveAt(state, range.from, 0)) return dont = {range}
     let pos = range.from, line = doc.lineAt(pos)
     let context = getContext(tree.resolveInner(pos, -1), doc)
     while (context.length && context[context.length - 1].from > pos - line.from) context.pop()
