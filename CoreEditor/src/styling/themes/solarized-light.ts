@@ -1,6 +1,5 @@
 import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
-import { lightBase as base } from './colors';
 
 const palette = {
   gray: '#eee8d5',
@@ -21,8 +20,6 @@ const colors: EditorColors = {
   selectionHighlight: '#f4c09d80',
   visibleSpace: '#586e7580',
   lighterBackground: '#586e751a',
-  diffAdded: base.diffAdded,
-  diffRemoved: base.diffRemoved,
   bracketBorder: '#b9b9b9',
 };
 

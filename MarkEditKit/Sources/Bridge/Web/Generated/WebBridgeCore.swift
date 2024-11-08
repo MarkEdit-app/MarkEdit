@@ -18,17 +18,13 @@ public final class WebBridgeCore {
     self.webView = webView
   }
 
-  public func resetEditor(text: String, revision: String?, revisionMode: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func resetEditor(text: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
-      let revision: String?
-      let revisionMode: Bool
     }
 
     let message = Message(
-      text: text,
-      revision: revision,
-      revisionMode: revisionMode
+      text: text
     )
 
     webView?.invoke(path: "webModules.core.resetEditor", message: message, completion: completion)
@@ -94,6 +90,18 @@ public final class WebBridgeCore {
     )
 
     webView?.invoke(path: "webModules.core.handleMouseExited", message: message, completion: completion)
+  }
+
+  public func setHasModalSheet(value: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let value: Bool
+    }
+
+    let message = Message(
+      value: value
+    )
+
+    webView?.invoke(path: "webModules.core.setHasModalSheet", message: message, completion: completion)
   }
 }
 

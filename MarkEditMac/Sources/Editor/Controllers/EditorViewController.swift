@@ -63,11 +63,6 @@ final class EditorViewController: NSViewController {
     }
   }
 
-  /// Whether the revisions of the document are being reviewed, i.e., version browsing mode.
-  var isRevisionMode: Bool {
-    document?.isInViewingMode ?? false
-  }
-
   lazy var bridge = WebModuleBridge(
     webView: webView
   )
@@ -309,7 +304,7 @@ extension EditorViewController {
       return
     }
 
-    bridge.core.resetEditor(text: document?.stringValue ?? "", revision: document?.latestRevision, revisionMode: isRevisionMode) { _ in
+    bridge.core.resetEditor(text: document?.stringValue ?? "") { _ in
       self.webView.magnification = 1.0
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
@@ -317,14 +312,12 @@ extension EditorViewController {
       ))
     }
 
-    // Disable unnecessary UI elements for revision mode
-    if let identifier = view.window?.toolbar?.identifier, !identifier.isEmpty {
-      view.window?.toolbar?.allowsUserCustomization = !isRevisionMode
-    }
-
     hasBeenEdited = false
-    findPanel.searchField.isHidden = isRevisionMode
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
+  }
+
+  func setHasModalSheet(value: Bool) {
+    bridge.core.setHasModalSheet(value: value)
   }
 
   func handleFileURLChange() {

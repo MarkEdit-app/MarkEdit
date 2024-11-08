@@ -7,8 +7,6 @@ const lightBase = {
   gray4: '#d1d1d6',
   gray5: '#e5e5ea',
   gray6: '#f2f2f7',
-  diffAdded: '#e2fde2',
-  diffRemoved: '#ffe5e5',
 };
 
 const darkBase = {
@@ -20,8 +18,6 @@ const darkBase = {
   gray4: '#3a3a3c',
   gray5: '#2c2c2e',
   gray6: '#1c1c1e',
-  diffAdded: '#405c40',
-  diffRemoved: '#633e3e',
 };
 
 export { lightBase, darkBase };

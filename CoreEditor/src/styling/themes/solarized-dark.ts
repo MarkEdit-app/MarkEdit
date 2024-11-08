@@ -1,6 +1,5 @@
 import { EditorColors, EditorTheme } from '../types';
 import { buildTheme } from '../builder';
-import { darkBase as base } from './colors';
 import { highlight } from './solarized-light';
 
 const palette = {
@@ -22,8 +21,6 @@ const colors: EditorColors = {
   selectionHighlight: '#005a6faa',
   visibleSpace: '#93a1a180',
   lighterBackground: '#93a1a11a',
-  diffAdded: base.diffAdded,
-  diffRemoved: base.diffRemoved,
   bracketBorder: '#888888',
 };
 

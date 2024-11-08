@@ -36,10 +36,6 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isReadOnlyMode
   }
 
-  func editorWebViewIsRevisionMode(_ webView: EditorWebView) -> Bool {
-    isRevisionMode
-  }
-
   func editorWebViewHasTextSelection(_ webView: EditorWebView) -> Bool {
     hasTextSelection
   }

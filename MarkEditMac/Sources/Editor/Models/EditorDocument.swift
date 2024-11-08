@@ -6,6 +6,7 @@
 
 import AppKit
 import MarkEditKit
+import FileVersion
 import TextBundle
 
 /**
@@ -16,7 +17,6 @@ import TextBundle
 final class EditorDocument: NSDocument {
   var fileData: Data?
   var stringValue = ""
-  var latestRevision: String?
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -191,7 +191,6 @@ extension EditorDocument {
       DispatchQueue.main.async {
         self.fileData = data
         self.stringValue = newValue
-        self.latestRevision = self.isInViewingMode ? Revisions.latest : nil
         self.hostViewController?.representedObject = self
       }
     }
@@ -265,15 +264,62 @@ extension EditorDocument {
 
 // MARK: Version Browsing
 
-extension EditorDocument {
+extension EditorDocument: FileVersionPickerDelegate {
   override func browseVersions(_ sender: Any?) {
-    // We don't have a way to retrieve the latest revision,
-    // save a copy before opening the version browser.
-    //
-    // This works when only one version browser can be open at a time,
-    // which seems to be the case so far.
-    Revisions.latest = stringValue
-    super.browseVersions(sender)
+    guard let fileURL else {
+      return Logger.assertFail("Missing fileURL for document: \(self)")
+    }
+
+    let localVersions = {
+      let otherVersions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
+      Logger.log(.debug, "Found \(otherVersions.count) local versions")
+
+      if otherVersions.isEmpty, let currentVersion = NSFileVersion.currentVersionOfItem(at: fileURL) {
+        return [currentVersion]
+      }
+
+      let sortedVersions = otherVersions.newestToOldest
+      let differentIndex = sortedVersions.firstIndex {
+        // Find the first version that differs from the current one
+        (try? Data(contentsOf: $0.url))?.toString() != stringValue
+      }
+
+      return Array(sortedVersions.suffix(from: differentIndex ?? 0))
+    }()
+
+    guard !localVersions.isEmpty else {
+      return Logger.assertFail("File \(fileURL) has no local versions")
+    }
+
+    let picker = FileVersionPicker(
+      fileURL: fileURL,
+      currentText: stringValue,
+      localVersions: localVersions,
+      localizable: FileVersionLocalizable(
+        previous: Localized.General.previous,
+        next: Localized.General.next,
+        cancel: Localized.General.cancel,
+        revertToThis: Localized.FileVersion.revertToThis,
+        modeTitles: Localized.FileVersion.modeTitles
+      ),
+      delegate: self
+    )
+
+    hostViewController?.presentAsSheet(picker)
+  }
+
+  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion) {
+    guard let contents = try? Data(contentsOf: version.url).toString() else {
+      return Logger.assertFail("Failed to get file contents of version: \(version)")
+    }
+
+    stringValue = contents
+    hostViewController?.resetEditor()
+    saveContent(nil)
+  }
+
+  func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool) {
+    hostViewController?.setHasModalSheet(value: didBecomeSheet)
   }
 }
 
@@ -363,11 +409,6 @@ private extension EditorDocument {
   }
 
   func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
-    // In viewing mode (aka version browsing), saveAction is directly skipped
-    guard !isInViewingMode else {
-      return
-    }
-
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
@@ -426,8 +467,4 @@ private extension EditorDocument {
       document.saveContent(nil, completion: performClose)
     }
   }
-}
-
-private enum Revisions {
-  static var latest: String?
 }

@@ -202,7 +202,7 @@ export function setGutterHovered(hovered: boolean) {
   const className = 'cm-gutterHover';
   const gutterDOM = document.querySelector('.cm-foldGutter') as HTMLElement | null;
 
-  if (hovered) {
+  if (hovered && !globalState.hasModalSheet) {
     gutterDOM?.classList.add(className);
   } else {
     gutterDOM?.classList.remove(className);

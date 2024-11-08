@@ -201,6 +201,15 @@ enum Localized {
     static let reduceTransparencyDescription = String(localized: "Remove the toolbar blur", comment: "Explanation for the option to reduce window transparency")
   }
 
+  enum FileVersion {
+    static let revertToThis = String(localized: "Revert to This", comment: "Title for button to select a file version")
+    static let modeTitles = [
+      String(localized: "Diff Lines", comment: "Diff by lines"),
+      String(localized: "Diff Words", comment: "Diff by words"),
+      String(localized: "Diff Chars", comment: "Diff by characters"),
+    ]
+  }
+
   enum Updater {
     static let upToDateTitle = String(localized: "You're up-to-date!", comment: "Title for the up-to-date info")
     static let upToDateMessage = String(localized: "MarkEdit %@ is currently the latest version.", comment: "Message for the up-to-date info")
@@ -225,8 +234,6 @@ enum Icons {
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"
   static let chartPie = "chart.pie"
-  static let chevronLeft = "chevron.left"
-  static let chevronRight = "chevron.right"
   static let curlybracesSquare = "curlybraces.square"
   static let gearshape = "gearshape"
   static let italic = "italic"

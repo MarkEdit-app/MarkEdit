@@ -20,8 +20,6 @@ const colors: EditorColors = {
   selectionHighlight: '#6e6a8666',
   visibleSpace: palette.lightGray,
   lighterBackground: `${palette.lightGray}66`,
-  diffAdded: '#9ccfd826',
-  diffRemoved: '#eb6f9226',
   bracketBorder: palette.darkGray,
 };
 

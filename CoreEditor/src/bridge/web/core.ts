@@ -8,6 +8,7 @@ import {
   replaceText,
   handleFocusLost,
   handleMouseExited,
+  setHasModalSheet,
 } from '../../core';
 
 /**
@@ -16,18 +17,19 @@ import {
  * @overrideModuleName WebBridgeCore
  */
 export interface WebModuleCore extends WebModule {
-  resetEditor({ text, revision, revisionMode }: { text: string; revision?: string; revisionMode: boolean }): void;
+  resetEditor({ text }: { text: string }): void;
   clearEditor(): void;
   getEditorText(): string;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
   handleFocusLost(): void;
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void;
+  setHasModalSheet({ value }: { value: boolean }): void;
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
-  resetEditor({ text, revision, revisionMode }: { text: string; revision?: string; revisionMode: boolean }): void {
-    resetEditor(text, revision, revisionMode);
+  resetEditor({ text }: { text: string }): void {
+    resetEditor(text);
   }
 
   clearEditor(): void {
@@ -52,5 +54,9 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void {
     handleMouseExited(clientX, clientY);
+  }
+
+  setHasModalSheet({ value }: { value: boolean }): void {
+    setHasModalSheet(value);
   }
 }
