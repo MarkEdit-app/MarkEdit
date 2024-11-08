@@ -10,7 +10,7 @@ import { lineIndicatorLayer } from './nodes/line';
 import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
-import { isMouseDown } from '../events';
+import { isMouseDown } from '../modules/events';
 import { afterDomUpdate } from '../common/utils';
 
 /**

@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import * as editor from '../src/@test/editor';
+import * as editor from './utils/editor';
 
 describe('Lezer parser', () => {
   test('test StrongEmphasis', () => {

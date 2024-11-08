@@ -1,7 +1,7 @@
 import { Decoration, MatchDecorator } from '@codemirror/view';
 import { createDecoPlugin } from '../helper';
-import { isReleaseMode } from '../../common/env';
-import { isMetaKeyDown } from '../../events';
+import { isReleaseMode } from '../../common/utils';
+import { isMetaKeyDown } from '../../modules/events';
 
 // Fragile approach, but we only use it for link clicking, it should be fine
 const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|(\[.*?\]\()(.+?)\)/g;

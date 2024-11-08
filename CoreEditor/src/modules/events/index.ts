@@ -1,11 +1,11 @@
-import isMetaKey from './isMetaKey';
-import { globalState, editingState } from '../common/store';
+import { isMetaKey } from '../../common/utils';
+import { globalState, editingState } from '../../common/store';
 
-import * as completion from '../modules/completion';
-import * as selection from '../modules/selection';
-import * as tokenizer from '../modules/tokenizer';
-import * as invisible from '../styling/nodes/invisible';
-import * as link from '../styling/nodes/link';
+import * as completion from '../../modules/completion';
+import * as selection from '../../modules/selection';
+import * as tokenizer from '../../modules/tokenizer';
+import * as invisible from '../../styling/nodes/invisible';
+import * as link from '../../styling/nodes/link';
 
 export function startObserving() {
   document.addEventListener('mousedown', event => {

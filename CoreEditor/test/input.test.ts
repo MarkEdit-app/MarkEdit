@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import wrapBlock from '../src/modules/input/wrapBlock';
-import * as editor from '../src/@test/editor';
+import * as editor from './utils/editor';
 
 describe('Input module', () => {
   test('test wrapBlock', () => {

@@ -2,7 +2,7 @@ import { Decoration } from '@codemirror/view';
 import { Range } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
-import { WidgetView } from '../../views/types';
+import { WidgetView } from '../views/types';
 import { lineDecoRanges } from '../helper';
 
 /**

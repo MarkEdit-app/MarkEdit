@@ -6,7 +6,8 @@ import { TabKeyBehavior } from '../indentation';
 import { adjustGutterPositions } from '../lines';
 import { refreshEditFocus, scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
-import { afterDomUpdate, notifyBackgroundColor } from '../../common/utils';
+import { afterDomUpdate } from '../../common/utils';
+import { notifyBackgroundColor } from '../../styling/helper';
 import { loadTheme } from '../../styling/themes';
 
 import * as styling from '../../styling/config';

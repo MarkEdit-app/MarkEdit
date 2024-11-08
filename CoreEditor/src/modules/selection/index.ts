@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
-import { isReleaseMode } from '../../common/env';
+import { isReleaseMode } from '../../common/utils';
 import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
 import { InvisiblesBehavior } from '../../config';

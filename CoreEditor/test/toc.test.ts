@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import { sleep } from '../src/@test/helpers';
-import * as editor from '../src/@test/editor';
+import { sleep } from './utils/helpers';
+import * as editor from './utils/editor';
 import * as toc from '../src/modules/toc';
 
 describe('Table of contents module', () => {

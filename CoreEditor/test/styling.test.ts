@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
-import { sleep } from '../src/@test/helpers';
-import * as editor from '../src/@test/editor';
+import { sleep } from './utils/helpers';
+import * as editor from './utils/editor';
 
 describe('Styling module', () => {
   test('test CodeMirror class names', async () => {

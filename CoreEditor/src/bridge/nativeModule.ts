@@ -1,4 +1,4 @@
-import { isReleaseMode } from '../common/env';
+import { isReleaseMode } from '../common/utils';
 
 /**
  * Module used to send message to native.
