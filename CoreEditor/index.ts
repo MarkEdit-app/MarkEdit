@@ -1,5 +1,5 @@
 import { Config, InvisiblesBehavior } from './src/config';
-import { isReleaseMode } from './src/common/env';
+import { isReleaseMode } from './src/common/utils';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
 import { WebModuleCoreImpl } from './src/bridge/web/core';
@@ -14,7 +14,7 @@ import { WebModuleTableOfContentsImpl } from './src/bridge/web/toc';
 import { WebModuleUIImpl } from './src/bridge/web/ui';
 import { WebModuleWritingToolsImpl } from './src/bridge/web/writingTools';
 
-import { pseudoDocument } from './src/@test/mock';
+import { pseudoDocument } from './test/utils/mock';
 import { createNativeModule } from './src/bridge/nativeModule';
 import { NativeModuleCore } from './src/bridge/native/core';
 import { NativeModuleCompletion } from './src/bridge/native/completion';
@@ -26,13 +26,13 @@ import { resetEditor } from './src/core';
 import { initMarkEditModules } from './src/api/modules';
 import { setUp } from './src/styling/config';
 import { loadTheme } from './src/styling/themes';
-import { startObserving } from './src/events';
+import { startObserving } from './src/modules/events';
 
 // Initialize and inject modules to the global MarkEdit object
 initMarkEditModules();
 
 // In release mode, window.config = "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
-const config = isReleaseMode ? window.config : {
+const config = import.meta.env.PROD ? window.config : {
   text: pseudoDocument,
   theme: 'github-light',
   fontFace: { family: 'SF Mono, ui-monospace' },

@@ -1,6 +1,6 @@
 import { WidgetView } from './types';
-import { PreviewType } from '../modules/preview';
-import { globalState } from '../common/store';
+import { PreviewType } from '../../modules/preview';
+import { globalState } from '../../common/store';
 
 /**
  * Widget used to show a [preview] button after some contents, such as mermaid diagrams.

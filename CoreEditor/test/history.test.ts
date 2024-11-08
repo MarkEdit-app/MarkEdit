@@ -3,7 +3,7 @@ import { Transaction } from '@codemirror/state';
 import { history, undo, redo } from '../src/@vendor/commands/history';
 import { describe, expect, test } from '@jest/globals';
 import { canUndo, canRedo, markContentClean, isContentDirty } from '../src/modules/history';
-import * as editor from '../src/@test/editor';
+import * as editor from './utils/editor';
 
 describe('History module', () => {
   test('test canUndo and canRedo', () => {

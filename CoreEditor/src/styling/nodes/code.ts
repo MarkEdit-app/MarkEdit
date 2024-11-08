@@ -1,6 +1,6 @@
 import { createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
-import { PreviewWidget } from '../../views';
+import { PreviewWidget } from '../views';
 import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
 /**

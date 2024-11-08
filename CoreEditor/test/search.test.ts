@@ -6,7 +6,7 @@ import matchFromQuery from '../src/modules/search/matchFromQuery';
 import rangesFromQuery from '../src/modules/search/rangesFromQuery';
 import searchOccurrences from '../src/modules/search/searchOccurrences';
 
-import * as editor from '../src/@test/editor';
+import * as editor from './utils/editor';
 import * as search from '../src/modules/search';
 
 describe('Search module', () => {

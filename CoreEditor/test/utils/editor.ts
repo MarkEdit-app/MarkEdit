@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { Extension, EditorSelection } from '@codemirror/state';
-import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
+import { markdown, markdownLanguage } from '../../src/@vendor/lang-markdown';
 
 export function setUp(doc: string, extensions: Extension = []) {
   const editor = new EditorView({

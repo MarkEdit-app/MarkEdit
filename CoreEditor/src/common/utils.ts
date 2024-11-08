@@ -1,5 +1,8 @@
 import { Rect } from '@codemirror/view';
 
+export const isChrome = /Chrome/.test(navigator.userAgent);
+export const isReleaseMode = typeof window.webkit?.messageHandlers === 'object';
+
 export function almostEqual(a: number, b: number) {
   return Math.abs(a - b) < 0.001;
 };
@@ -37,18 +40,6 @@ export function getViewportScale() {
   return window.visualViewport?.scale ?? document.documentElement.clientWidth / window.innerWidth;
 }
 
-export function notifyBackgroundColor() {
-  const element = window.editor.dom;
-  const color = getComputedStyle(element).backgroundColor;
-  const match = color.match(/rgb\( *(\d+), *(\d+), *(\d+) *\)/);
-  if (match === null) {
-    return console.error(`Invalid background color: ${color}`);
-  }
-
-  const toHex = (value: string) => parseInt(value).toString(16).padStart(2, '0');
-  const red = toHex(match[1]), green = toHex(match[2]), blue = toHex(match[3]);
-
-  // Change it back to number because we only have parsers to handle numbers in native
-  const code = parseInt(`${red}${green}${blue}`, 16) as CodeGen_Int;
-  window.nativeModules.core.notifyBackgroundColorDidChange({ color: code });
+export function isMetaKey(event: KeyboardEvent) {
+  return event.key === 'Meta';
 }

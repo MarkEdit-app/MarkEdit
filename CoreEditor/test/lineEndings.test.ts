@@ -1,7 +1,7 @@
 import { EditorState } from '@codemirror/state';
 import { describe, expect, test } from '@jest/globals';
 import { LineEndings } from '../src/modules/lineEndings/types';
-import * as editor from '../src/@test/editor';
+import * as editor from './utils/editor';
 import * as lineEndings from '../src/modules/lineEndings';
 
 describe('LineEndings module', () => {

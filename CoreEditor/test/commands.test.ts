@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 
-import * as editor from '../src/@test/editor';
+import * as editor from './utils/editor';
 import * as commands from '../src/modules/commands';
 
 describe('Commands module', () => {

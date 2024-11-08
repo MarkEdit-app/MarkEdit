@@ -4,7 +4,7 @@ import { Tag, tags as defaultTags } from '@lezer/highlight';
 import { StyleSpec } from 'style-mod';
 import { ColorScheme, EditorColors } from './types';
 import { shadowableTextColor } from './helper';
-import { isChrome } from '../common/env';
+import { isChrome } from '../common/utils';
 
 // Extend tags by adding Markdown-specific ones
 const tags = {

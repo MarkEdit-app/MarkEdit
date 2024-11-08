@@ -2,11 +2,12 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
-import { almostEqual, afterDomUpdate, getViewportScale, notifyBackgroundColor } from './common/utils';
+import { almostEqual, afterDomUpdate, getViewportScale } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
-import { resetKeyStates } from './events';
+import { resetKeyStates } from './modules/events';
 import { setUp, setGutterHovered } from './styling/config';
+import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
 import { adjustGutterPositions } from './modules/lines';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
