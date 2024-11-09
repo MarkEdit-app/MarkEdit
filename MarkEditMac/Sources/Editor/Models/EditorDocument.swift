@@ -299,7 +299,7 @@ extension EditorDocument: FileVersionPickerDelegate {
         previous: Localized.General.previous,
         next: Localized.General.next,
         cancel: Localized.General.cancel,
-        revertToThis: Localized.FileVersion.revertToThis,
+        revertTitle: Localized.FileVersion.revertTitle,
         modeTitles: Localized.FileVersion.modeTitles
       ),
       delegate: self

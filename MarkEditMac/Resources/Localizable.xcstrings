@@ -2167,13 +2167,13 @@
         }
       }
     },
-    "Revert to This" : {
+    "Revert to This Version" : {
       "comment" : "Title for button to select a file version",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复原成此版本"
+            "value" : "复原到此版本"
           }
         },
         "zh-Hant" : {

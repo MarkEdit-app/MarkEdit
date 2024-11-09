@@ -35,7 +35,7 @@ extension AppDelegate {
   func createUntitledFileIfNeeded() {
     // Activating the app also creates a new file if new window behavior is `newDocument`,
     // prevent duplicate creation from Shortcuts like `CreateNewDocumentIntent`.
-    guard Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.1 else {
+    guard Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.2 else {
       return
     }
 
@@ -86,7 +86,7 @@ private extension AppDelegate {
     case .openDocument:
       // The system occasionally runs this twice in a row, prevent duplicate panels
       let currentDate = Date.timeIntervalSinceReferenceDate
-      if currentDate - States.openPanelShownDate > 0.1 {
+      if currentDate - States.openPanelShownDate > 0.2 {
         States.openPanelShownDate = currentDate
         sender.showOpenPanel()
       }

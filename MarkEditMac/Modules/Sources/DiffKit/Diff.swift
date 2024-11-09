@@ -24,6 +24,12 @@ public enum Diff {
     public let value: String
     public let added: Bool
     public let removed: Bool
+
+    public init(value: String, added: Bool, removed: Bool) {
+      self.value = value
+      self.added = added
+      self.removed = removed
+    }
   }
 
   public static func compute(oldValue: String, newValue: String, mode: Mode) -> [Result] {

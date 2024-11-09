@@ -71,8 +71,12 @@ public final class FileVersionPicker: NSViewController {
     textView?.drawsBackground = false
     textView?.isEditable = false
     textView?.isSelectable = true
+
     textView?.textContainerInset = CGSize(width: Constants.layoutPadding, height: Constants.layoutPadding)
     textView?.textContainer?.lineFragmentPadding = 0
+
+    // Background color fills the full width to visualize empty lines
+    textView?.layoutManager?.showsControlCharacters = true
 
     return scrollView
   }()
@@ -217,7 +221,7 @@ private extension FileVersionPicker {
     loadingView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(loadingView)
 
-    selectButton.setTitle(localizable.revertToThis)
+    selectButton.setTitle(localizable.revertTitle)
     selectButton.target = self
     selectButton.action = #selector(didPickVersion)
     selectButton.translatesAutoresizingMaskIntoConstraints = false
@@ -316,20 +320,19 @@ private extension FileVersionPicker {
   }
 
   func goBack() {
-    guard versionMenuButton.indexOfSelectedItem > 0 else {
-      return NSSound.beep()
-    }
-
-    versionMenuButton.selectItem(at: versionMenuButton.indexOfSelectedItem - 1)
-    loadChosenVersion()
+    gotoVersion(at: max(0, versionMenuButton.indexOfSelectedItem - 1))
   }
 
   func goForward() {
-    guard versionMenuButton.indexOfSelectedItem < allVersions.count - 1 else {
+    gotoVersion(at: min(allVersions.count - 1, versionMenuButton.indexOfSelectedItem + 1))
+  }
+
+  func gotoVersion(at index: Int) {
+    guard versionMenuButton.indexOfSelectedItem != index else {
       return NSSound.beep()
     }
 
-    versionMenuButton.selectItem(at: versionMenuButton.indexOfSelectedItem + 1)
+    versionMenuButton.selectItem(at: index)
     loadChosenVersion()
   }
 
@@ -394,17 +397,18 @@ private extension FileVersionPicker {
   }
 
   func renderDifferences(newVersion: String, scrollToTop: Bool) {
+    let mode = modeMenuButton.indexOfSelectedItem // lines, words, chars
     let diffs = Diff.compute(
       oldValue: currentText,
       newValue: newVersion,
-      mode: Diff.Mode.allCases[modeMenuButton.indexOfSelectedItem]
+      mode: Diff.Mode.allCases[mode]
     )
 
     if scrollToTop {
       scrollView.setContentOffset(.zero)
     }
 
-    scrollView.setAttributedText(diffs.attributedText)
+    scrollView.setAttributedText(diffs.attributedText(styledNewlines: mode == 0))
     counterView.attributedStringValue = diffs.counterText
   }
 
@@ -445,6 +449,9 @@ private extension FileVersionPicker {
         return nil
       case .kVK_UpArrow:
         self?.scrollView.scrollTextViewUp()
+        return nil
+      case .kVK_Space:
+        self?.gotoVersion(at: NSApp.shiftKeyIsPressed ? ((self?.allVersions.count ?? 1) - 1) : 0)
         return nil
       default:
         return event

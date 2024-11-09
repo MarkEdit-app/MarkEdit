@@ -31,29 +31,6 @@ extension Diff.Result {
 
 @MainActor
 extension [Diff.Result] {
-  var attributedText: NSAttributedString {
-    let text = NSMutableAttributedString(string: "")
-    for result in self {
-      var attributes: [NSAttributedString.Key: Any] = [
-        .foregroundColor: result.textColor,
-        .font: Constants.font,
-      ]
-
-      if let backgroundColor = result.backgroundColor {
-        attributes[.backgroundColor] = backgroundColor
-      }
-
-      if result.removed {
-        attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
-        attributes[.strikethroughColor] = NSColor.removedText
-      }
-
-      text.append(NSAttributedString(string: result.value, attributes: attributes))
-    }
-
-    return text
-  }
-
   var counterText: NSAttributedString {
     let text = NSMutableAttributedString(string: "")
     let addedCount = filter { $0.added }.count
@@ -85,13 +62,65 @@ extension [Diff.Result] {
 
     return text
   }
+
+  func attributedText(styledNewlines: Bool) -> NSAttributedString {
+    let text = NSMutableAttributedString(string: "")
+    if styledNewlines {
+      for result in self {
+        text.append(result.attributedText)
+      }
+
+      return text
+    }
+
+    // If styledNewlines is false (typically for words diff or chars diff),
+    // lines are added separately followed by a line break without styles.
+    //
+    // We use showsControlCharacters to allow the background to fill the width of each line,
+    // this option cannot be changed dynamically.
+    for result in self {
+      let lines = result.value.components(separatedBy: .newlines)
+      for (index, line) in lines.enumerated() {
+        text.append(Diff.Result(
+          value: line,
+          added: result.added,
+          removed: result.removed
+        ).attributedText)
+
+        if index < lines.count - 1 {
+          text.append(NSAttributedString(string: "\n", attributes: [.font: Constants.font]))
+        }
+      }
+    }
+
+    return text
+  }
 }
 
 // MARK: - Private
 
-private extension [Diff.Result] {
-  @MainActor
-  enum Constants {
-    static let font = NSFont.monospacedSystemFont(ofSize: 12)
+@MainActor
+private extension Diff.Result {
+  var attributedText: NSAttributedString {
+    var attributes: [NSAttributedString.Key: Any] = [
+      .foregroundColor: textColor,
+      .font: Constants.font,
+    ]
+
+    if let backgroundColor = backgroundColor {
+      attributes[.backgroundColor] = backgroundColor
+    }
+
+    if removed {
+      attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+      attributes[.strikethroughColor] = NSColor.removedText
+    }
+
+    return NSAttributedString(string: value, attributes: attributes)
   }
+}
+
+@MainActor
+enum Constants {
+  static let font = NSFont.monospacedSystemFont(ofSize: 12)
 }
