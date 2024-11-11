@@ -116,6 +116,8 @@ extension EditorViewController: NSMenuItemValidation {
     #selector(copyFolderPath(_:)),
     #selector(copyPandocCommand(_:)),
     #selector(revealInFinder(_:)),
+    #selector(deleteVersionsByDate(_:)),
+    #selector(deleteVersionsByCapacity(_:)),
   ]
 
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
@@ -379,6 +381,24 @@ private extension EditorViewController {
 
   @IBAction func learnPandoc(_ sender: Any?) {
     NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#pandoc")
+  }
+
+  @IBAction func deleteVersionsByDate(_ sender: Any?) {
+    guard let document, let days = (sender as? NSMenuItem)?.tag else {
+      Logger.log(.error, "Failed to delete versions by: \(String(describing: sender))")
+      return
+    }
+
+    deleteFileVersions(document.otherVersions(olderThanDays: days))
+  }
+
+  @IBAction func deleteVersionsByCapacity(_ sender: Any?) {
+    guard let document, let maxLength = (sender as? NSMenuItem)?.tag else {
+      Logger.log(.error, "Failed to delete versions by: \(String(describing: sender))")
+      return
+    }
+
+    deleteFileVersions(document.otherVersions(olderThanMaxLength: maxLength))
   }
 }
 

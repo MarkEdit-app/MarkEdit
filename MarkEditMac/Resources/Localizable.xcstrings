@@ -559,6 +559,23 @@
         }
       }
     },
+    "Delete" : {
+      "comment" : "Button title, confirm the deletion",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刪除"
+          }
+        }
+      }
+    },
     "Diff Chars" : {
       "comment" : "Diff by characters",
       "localizations" : {
@@ -944,6 +961,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存時進行格式化。"
+          }
+        }
+      }
+    },
+    "Found %lld versions, would you like to delete them?" : {
+      "comment" : "Alert title (format) for number of versions found",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Found %lld version, would you like to delete it?"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "Found %lld versions, would you like to delete them?"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "找到 %lld 个版本，要删除吗？"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hant" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "找到 %lld 個版本，要刪除嗎？"
+                }
+              }
+            }
           }
         }
       }
@@ -1738,6 +1802,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "下一個"
+          }
+        }
+      }
+    },
+    "No versions match the specified condition." : {
+      "comment" : "Alert title for no versions found",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有符合条件的版本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有符合條件的版本。"
           }
         }
       }
@@ -2689,6 +2770,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字格式"
+          }
+        }
+      }
+    },
+    "This action cannot be undone." : {
+      "comment" : "Alert message for cannot undo",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此操作无法被撤销。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此操作無法被撤銷。"
           }
         }
       }

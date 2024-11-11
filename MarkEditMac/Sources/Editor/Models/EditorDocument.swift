@@ -278,7 +278,7 @@ extension EditorDocument: FileVersionPickerDelegate {
         return [currentVersion]
       }
 
-      let sortedVersions = otherVersions.newestToOldest
+      let sortedVersions = otherVersions.newestToOldest()
       let differentIndex = sortedVersions.firstIndex {
         // Find the first version that differs from the current one
         (try? Data(contentsOf: $0.url))?.toString() != stringValue
