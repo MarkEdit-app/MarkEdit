@@ -342,7 +342,7 @@ private extension FileVersionPicker {
     Task {
       let nonlocal = try await NSFileVersion.nonlocalVersionsOfItem(at: self.fileURL)
       DispatchQueue.main.async {
-        self.allVersions = (self.allVersions + nonlocal).newestToOldest
+        self.allVersions = (self.allVersions + nonlocal).newestToOldest()
         self.resetVersionMenu()
       }
     }

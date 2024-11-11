@@ -278,6 +278,64 @@
                                                 </connections>
                                             </menu>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="McZ-Mt-f0I"/>
+                                        <menuItem title="Purge History Versions" id="yfL-ea-k7X">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Purge History Versions" id="Rjg-ZG-COT">
+                                                <items>
+                                                    <menuItem title="Last Edited 2 Weeks Ago" tag="14" id="B2E-9g-fPK">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByDate:" target="Ady-hI-5gd" id="INm-RM-YZV"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Last Edited 1 Month Ago" tag="30" id="yOb-Z8-aCk">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByDate:" target="Ady-hI-5gd" id="rsw-td-GBi"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Last Edited 3 Months Ago" tag="90" id="2CK-gf-sE8">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByDate:" target="Ady-hI-5gd" id="T7q-AK-ZAw"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Last Edited 6 Months Ago" tag="182" id="hLx-6U-DoY">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByDate:" target="Ady-hI-5gd" id="rb1-Kb-pSj"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Last Edited 1 Year Ago" tag="365" id="PNm-e0-aoZ">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByDate:" target="Ady-hI-5gd" id="Btf-v1-nyq"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="Q5e-Bs-xWP"/>
+                                                    <menuItem title="Keep Up to 50 Versions" tag="50" id="vbS-fI-FfG">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByCapacity:" target="Ady-hI-5gd" id="l8h-Zb-nAN"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Keep Up to 100 Versions" tag="100" id="BlA-2z-1dH">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByCapacity:" target="Ady-hI-5gd" id="d69-4S-wWE"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="jyj-QW-N33"/>
+                                                    <menuItem title="All Local Versions" id="EoI-17-lrY">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="deleteVersionsByDate:" target="Ady-hI-5gd" id="ydj-dc-fsp"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                     </items>
                                     <connections>
                                         <outlet property="delegate" destination="Voe-Tx-rLC" id="aIC-zN-BNE"/>

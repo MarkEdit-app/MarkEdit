@@ -21,6 +21,7 @@ enum Localized {
   enum General {
     static let done = String(localized: "Done", comment: "Button title, confirm an action")
     static let cancel = String(localized: "Cancel", comment: "Button title, cancel an action")
+    static let delete = String(localized: "Delete", comment: "Button title, confirm the deletion")
     static let previous = String(localized: "Previous", comment: "Button title, move to the previous item")
     static let next = String(localized: "Next", comment: "Button title, move to the next item")
     static let all = String(localized: "All", comment: "Button title, perform actions to all items")
@@ -208,6 +209,9 @@ enum Localized {
       String(localized: "Diff Words", comment: "Diff by words"),
       String(localized: "Diff Chars", comment: "Diff by characters"),
     ]
+    static let noVersionsTitle = String(localized: "No versions match the specified condition.", comment: "Alert title for no versions found")
+    static let foundVersionsFormat = String(localized: "Found %lld versions, would you like to delete them?", comment: "Alert title (format) for number of versions found")
+    static let cannotBeUndone = String(localized: "This action cannot be undone.", comment: "Alert message for cannot undo")
   }
 
   enum Updater {

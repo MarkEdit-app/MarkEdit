@@ -31,16 +31,22 @@ public extension NSFileVersion {
 }
 
 public extension [NSFileVersion] {
-  var newestToOldest: [Self.Element] {
+  func newestToOldest(throttle: Bool = true) -> [Self.Element] {
+    let comparator: (Self.Element, Self.Element) -> Bool = { lhs, rhs in
+      (lhs.modificationDate ?? .distantPast) > (rhs.modificationDate ?? .distantPast)
+    }
+
+    guard throttle else {
+      return sorted(by: comparator)
+    }
+
     var seen = Set<Int>()
     return filter {
       // If multiple versions are created within one second, only keep the first one
       let id = Int(($0.modificationDate ?? .distantPast).timeIntervalSinceReferenceDate)
       return seen.insert(id).inserted
     }
-    .sorted { lhs, rhs in
-      (lhs.modificationDate ?? .distantPast) > (rhs.modificationDate ?? .distantPast)
-    }
+    .sorted(by: comparator)
   }
 }
 
