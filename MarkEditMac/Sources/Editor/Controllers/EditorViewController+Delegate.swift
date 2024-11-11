@@ -163,24 +163,29 @@ extension EditorViewController: EditorModuleCoreDelegate {
   }
 
   func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String) {
-    guard let baseURL = document?.baseURL else {
-      return Logger.assertFail("The document should always have a baseURL")
-    }
-
-    let url = {
+    let url: URL? = {
       // Try url with schemes first, e.g., https://github.com
       if let url = URL(string: link), url.scheme?.isEmpty == false {
         return url
       }
 
       // Fallback to local files, e.g., file:///Users/cyan/...
-      return baseURL.appending(path: link.removingPercentEncoding ?? link)
+      return document?.baseURL?.appending(path: link.removingPercentEncoding ?? link)
     }()
 
-    // Open or reveal, fallback to opening the document folder if failed
-    if !NSWorkspace.shared.openOrReveal(url: url) {
-      NSWorkspace.shared.activateFileViewerSelecting([baseURL])
+    // Open or reveal the url
+    if let url, NSWorkspace.shared.openOrReveal(url: url) {
+      return
     }
+
+    // Failed, fallback to opening the document folder
+    if let baseURL = document?.baseURL {
+      NSWorkspace.shared.activateFileViewerSelecting([baseURL])
+      return
+    }
+
+    // Failed eventually
+    Logger.assertFail("Failed to open link: \(link)")
   }
 }
 
