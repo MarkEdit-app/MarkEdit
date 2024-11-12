@@ -8,6 +8,7 @@ import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './
 import { linkStyle } from './nodes/link';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
+import { taskMarkerStyle } from './nodes/task';
 
 export const classHighlighters = [
   syntaxHighlighting(classHighlighter),
@@ -84,4 +85,5 @@ export const actionExtensions = [
   previewMermaid,
   previewMath,
   previewTable,
+  taskMarkerStyle,
 ];

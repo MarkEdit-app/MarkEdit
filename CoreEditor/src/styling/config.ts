@@ -24,6 +24,7 @@ export default interface StyleSheets {
   fontSize?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
+  taskMarker?: HTMLStyleElement;
 }
 
 export function setUp(config: Config, colors: EditorColors) {
@@ -196,6 +197,14 @@ export function setLineHeight(lineHeight: number) {
 
   // Prefer numbers (like 1.5) over percentages (like 150%), see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#number
   updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight}`);
+}
+
+export function setTaskMarkerStyle(enabled: boolean) {
+  if (styleSheets.taskMarker === undefined) {
+    styleSheets.taskMarker = createStyleSheet('.cm-md-taskMarker { cursor: pointer }');
+  }
+
+  styleSheets.taskMarker.disabled = !enabled;
 }
 
 export function setGutterHovered(hovered: boolean) {
