@@ -24,6 +24,21 @@ public extension String {
   func hasPrefixIgnoreCase(_ prefix: String) -> Bool {
     range(of: prefix, options: [.anchored, .caseInsensitive]) != nil
   }
+
+  func getLineBreak(defaultValue: String) -> String? {
+    let CRLFs = components(separatedBy: "\r\n").count - 1
+    let CRs = components(separatedBy: "\r").count - CRLFs - 1
+    let LFs = components(separatedBy: "\n").count - CRLFs - 1
+    let usedMost = Swift.max(CRLFs, CRs, LFs)
+
+    switch usedMost {
+    case 0: return defaultValue
+    case CRLFs: return "\r\n"
+    case CRs: return "\r"
+    case LFs: return "\n"
+    default: return nil
+    }
+  }
 }
 
 extension String.Encoding {
