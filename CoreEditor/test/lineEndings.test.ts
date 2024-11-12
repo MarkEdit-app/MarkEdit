@@ -29,6 +29,9 @@ describe('LineEndings module', () => {
     expect(lineEndings.getLineBreak('Hello\n\r\nWorld', '\n')).toBe('\r\n');
     expect(lineEndings.getLineBreak('Hello\n\n\r\nWorld', '\n')).toBe(undefined);
     expect(lineEndings.getLineBreak('Hello\n\r\rWorld', '\n')).toBe('\r');
+    expect(lineEndings.getLineBreak('Hello', '\n')).toBe(undefined);
+    expect(lineEndings.getLineBreak('Hello', '\r')).toBe('\r');
+    expect(lineEndings.getLineBreak('Hello', '\r\n')).toBe('\r\n');
     expect(lineEndings.getLineBreak('', '\n')).toBe(undefined);
     expect(lineEndings.getLineBreak('', '\r')).toBe('\r');
     expect(lineEndings.getLineBreak('', '\r\n')).toBe('\r\n');

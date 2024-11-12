@@ -29,7 +29,7 @@ final class Application: NSApplication {
 
   override func sendAction(_ action: Selector, to target: Any?, from sender: Any?) -> Bool {
     if action == #selector(NSText.paste(_:)) {
-      NSPasteboard.general.sanitize()
+      sanitizePasteboard()
     }
 
     // Ensure lines are fully selected for a better WritingTools experience
@@ -55,11 +55,21 @@ final class Application: NSApplication {
 // MARK: - Private
 
 private extension Application {
+  var currentEditor: EditorViewController? {
+    keyWindow?.contentViewController as? EditorViewController
+  }
+
+  func sanitizePasteboard() {
+    let textContent = currentEditor?.document?.stringValue
+    let lineEndings = AppPreferences.General.defaultLineEndings.characters
+    NSPasteboard.general.sanitize(lineBreak: textContent?.getLineBreak(defaultValue: lineEndings))
+  }
+
   func ensureWritingToolsSelectionRect() {
-    guard let editor = NSApp.keyWindow?.contentViewController as? EditorViewController else {
+    guard let currentEditor else {
       return Logger.assertFail("Invalid keyWindow was found")
     }
 
-    editor.ensureWritingToolsSelectionRect()
+    currentEditor.ensureWritingToolsSelectionRect()
   }
 }
