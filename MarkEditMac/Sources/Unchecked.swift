@@ -7,8 +7,10 @@
 
 import WebKit
 import AppIntents
+import MarkEditCore
 
 extension WKProcessPool: @unchecked Sendable {}
+extension EditorIndentBehavior: @unchecked @retroactive Sendable {}
 extension IntentDescription: @unchecked @retroactive Sendable {}
 extension TypeDisplayRepresentation: @unchecked @retroactive Sendable {}
 
