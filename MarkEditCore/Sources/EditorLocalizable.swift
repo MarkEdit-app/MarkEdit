@@ -19,6 +19,7 @@ public struct EditorLocalizable: Encodable {
   let unfoldLine: String
   let previewButtonTitle: String
   let cmdClickToOpenLink: String
+  let cmdClickToToggleTodo: String
 
   public init(
     controlCharacter: String,
@@ -29,7 +30,8 @@ public struct EditorLocalizable: Encodable {
     foldLine: String,
     unfoldLine: String,
     previewButtonTitle: String,
-    cmdClickToOpenLink: String
+    cmdClickToOpenLink: String,
+    cmdClickToToggleTodo: String
   ) {
     self.controlCharacter = controlCharacter
     self.foldedLines = foldedLines
@@ -40,5 +42,6 @@ public struct EditorLocalizable: Encodable {
     self.unfoldLine = unfoldLine
     self.previewButtonTitle = previewButtonTitle
     self.cmdClickToOpenLink = cmdClickToOpenLink
+    self.cmdClickToToggleTodo = cmdClickToToggleTodo
   }
 }

@@ -51,6 +51,7 @@ const config = import.meta.env.PROD ? window.config : {
   localizable: {
     previewButtonTitle: 'Preview',
     cmdClickToOpenLink: '⌘-click to open link',
+    cmdClickToToggleTodo: '⌘-click to toggle todo',
   },
 } as Config;
 

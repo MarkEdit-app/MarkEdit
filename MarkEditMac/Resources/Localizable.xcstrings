@@ -18,6 +18,23 @@
         }
       }
     },
+    "⌘-click to toggle todo" : {
+      "comment" : "Tooltip for tasks",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⌘ 点击切换完成状态"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⌘ 點選切換完成狀態"
+          }
+        }
+      }
+    },
     "1 tab" : {
       "comment" : "Use 1 tab as the indent unit",
       "localizations" : {

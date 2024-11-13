@@ -17,6 +17,7 @@ export interface Localizable {
   // Others
   previewButtonTitle: string;
   cmdClickToOpenLink: string;
+  cmdClickToToggleTodo: string;
 }
 
 /**

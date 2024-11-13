@@ -6,6 +6,7 @@ import * as selection from '../../modules/selection';
 import * as tokenizer from '../../modules/tokenizer';
 import * as invisible from '../../styling/nodes/invisible';
 import * as link from '../../styling/nodes/link';
+import * as task from '../../styling/nodes/task';
 
 export function startObserving() {
   document.addEventListener('mousedown', event => {
@@ -20,6 +21,7 @@ export function startObserving() {
     if (isMetaKey(event)) {
       storage.isMetaKeyDown = true;
       link.startClickable();
+      task.startClickable();
     }
   });
 
@@ -27,12 +29,17 @@ export function startObserving() {
     if (isMetaKey(event)) {
       storage.isMetaKeyDown = false;
       link.stopClickable();
+      task.stopClickable();
     }
   });
 
   document.addEventListener('mousedown', event => {
     storage.isMouseDown = true;
     link.handleMouseDown(event);
+
+    if (isMetaKeyDown()) {
+      task.handleMouseDown(event);
+    }
   }, true);
 
   document.addEventListener('mouseup', event => {
@@ -95,6 +102,9 @@ export function isMetaKeyDown() {
 export function resetKeyStates() {
   storage.isMouseDown = false;
   storage.isMetaKeyDown = false;
+
+  link.stopClickable();
+  task.stopClickable();
 }
 
 function observeEventsForTokenization() {
