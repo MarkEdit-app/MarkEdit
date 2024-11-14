@@ -10,7 +10,7 @@ on:
 jobs:
   markedit-mac:
     name: MarkEditMac
-    runs-on: macos-14
+    runs-on: macos-15
     if: github.event.pull_request.draft == false
     env:
       node-version: '20.x'
