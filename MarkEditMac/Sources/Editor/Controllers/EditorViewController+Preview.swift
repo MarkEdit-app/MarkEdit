@@ -38,7 +38,7 @@ private extension EditorViewController {
 
     present(
       contentViewController,
-      asPopoverRelativeTo: rect,
+      asPopoverRelativeTo: focusTrackingView.bounds,
       of: focusTrackingView,
       preferredEdge: .maxX,
       behavior: .transient
