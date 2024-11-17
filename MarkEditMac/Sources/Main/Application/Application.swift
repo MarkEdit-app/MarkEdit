@@ -2,7 +2,7 @@
 //  Application.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/4/24.
+//  Created by cyan on 4/24/24.
 //
 
 import AppKit

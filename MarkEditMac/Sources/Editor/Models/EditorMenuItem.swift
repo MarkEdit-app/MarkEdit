@@ -2,7 +2,7 @@
 //  EditorMenuItem.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/10/5.
+//  Created by cyan on 10/5/24.
 //
 
 import Foundation

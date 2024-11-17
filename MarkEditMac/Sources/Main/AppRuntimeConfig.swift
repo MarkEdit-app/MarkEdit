@@ -2,7 +2,7 @@
 //  AppRuntimeConfig.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/8/9.
+//  Created by cyan on 8/9/24.
 //
 
 import Foundation

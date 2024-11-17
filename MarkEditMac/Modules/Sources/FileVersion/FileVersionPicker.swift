@@ -1,7 +1,7 @@
 //
 //  FileVersionPicker.swift
 //
-//  Created by cyan on 2024/10/14.
+//  Created by cyan on 10/14/24.
 //
 
 import AppKit

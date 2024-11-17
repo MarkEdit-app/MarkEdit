@@ -1,7 +1,7 @@
 //
 //  Diff.swift
 //
-//  Created by cyan on 2024/10/15.
+//  Created by cyan on 10/15/24.
 //
 
 import Foundation

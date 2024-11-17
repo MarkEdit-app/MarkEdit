@@ -1,7 +1,7 @@
 //
 //  EditorModuleUI.swift
 //
-//  Created by cyan on 2024/10/4.
+//  Created by cyan on 10/4/24.
 //
 
 import Foundation

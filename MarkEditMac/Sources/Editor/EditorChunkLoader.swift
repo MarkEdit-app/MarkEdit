@@ -2,7 +2,7 @@
 //  EditorChunkLoader.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/9/2.
+//  Created by cyan on 9/2/24.
 //
 
 import WebKit

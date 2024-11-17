@@ -2,7 +2,7 @@
 //  AppHotKeys.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/8/7.
+//  Created by cyan on 8/7/24.
 //
 
 import Foundation

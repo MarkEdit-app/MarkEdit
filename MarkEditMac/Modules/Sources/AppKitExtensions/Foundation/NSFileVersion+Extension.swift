@@ -1,7 +1,7 @@
 //
 //  NSFileVersion+Extension.swift
 //
-//  Created by cyan on 2024/10/16.
+//  Created by cyan on 10/16/24.
 //
 
 import AppKit
