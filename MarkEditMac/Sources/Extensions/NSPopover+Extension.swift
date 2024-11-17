@@ -2,7 +2,7 @@
 //  NSPopover+Extension.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/8/22.
+//  Created by cyan on 8/22/24.
 //
 
 import AppKit

@@ -1,7 +1,7 @@
 //
 //  ProcessInfo+Extension.swift
 //
-//  Created by cyan on 2024/10/13.
+//  Created by cyan on 10/13/24.
 //
 
 import AppKit

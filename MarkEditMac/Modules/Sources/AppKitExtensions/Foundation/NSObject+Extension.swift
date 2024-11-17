@@ -1,7 +1,7 @@
 //
 //  NSObject+Extension.swift
 //
-//  Created by cyan on 2024/10/25.
+//  Created by cyan on 10/25/24.
 //
 
 import Foundation

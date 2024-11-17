@@ -2,7 +2,7 @@
 //  AppDelegate+FileSystem.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/4/30.
+//  Created by cyan on 4/30/24.
 //
 
 import AppKit

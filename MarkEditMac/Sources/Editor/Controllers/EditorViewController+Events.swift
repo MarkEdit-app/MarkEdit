@@ -2,7 +2,7 @@
 //  EditorViewController+Events.swift
 //  MarkEditMac
 //
-//  Created by cyan on 2024/3/28.
+//  Created by cyan on 3/28/24.
 //
 
 import AppKit
