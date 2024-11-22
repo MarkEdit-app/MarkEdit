@@ -138,6 +138,8 @@ public final class WebBridgeFormat {
 public enum EditCommand: String, Codable {
   case indentLess = "indentLess"
   case indentMore = "indentMore"
+  case expandSelection = "expandSelection"
+  case shrinkSelection = "shrinkSelection"
   case selectLine = "selectLine"
   case moveLineUp = "moveLineUp"
   case moveLineDown = "moveLineDown"

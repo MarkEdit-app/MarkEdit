@@ -3025,6 +3025,30 @@
         }
       }
     },
+    "R9C-UY-Nnm.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Expand Selection\"; ObjectID = \"R9C-UY-Nnm\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Expand Selection"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩大选择区域"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴大選擇區域"
+          }
+        }
+      }
+    },
     "rbD-Rh-wIN.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Check Spelling While Typing\"; ObjectID = \"rbD-Rh-wIN\";",
       "extractionState" : "extracted_with_value",
@@ -3357,6 +3381,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "操作指令"
+          }
+        }
+      }
+    },
+    "tRc-n8-cdB.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Shrink Selection\"; ObjectID = \"tRc-n8-cdB\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Selection"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缩小选择区域"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "縮小選擇區域"
           }
         }
       }

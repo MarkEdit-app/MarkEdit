@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection, Transaction } from '@codemirror/state';
 import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { globalState, editingState } from '../../common/store';
+import { clearSyntaxSelections } from '../commands';
 import { startCompletion, isPanelVisible } from '../completion';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
 import { adjustGutterPositions } from '../lines';
@@ -133,6 +134,9 @@ export function observeChanges() {
         isDirty: isContentDirty(),
         selectedLineColumn: selectedLineColumn(),
       });
+
+      // Fragile but simple method to clear the syntax-aware selection stack
+      clearSyntaxSelections();
     }
 
     if (window.config.showLineNumbers) {
