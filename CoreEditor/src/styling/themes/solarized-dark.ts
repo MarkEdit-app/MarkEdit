@@ -9,10 +9,10 @@ const palette = {
 
 const colors: EditorColors = {
   accent: '#268bd2',
-  text: '#bbbbbb',
+  text: '#93a1a1',
   comment: '#657b83',
-  background: '#012b36',
-  caret: '#839497',
+  background: '#002b36',
+  caret: '#93a1a1',
   selection: palette.gray,
   activeLine: palette.gray,
   matchingBracket: '#083d3d',
