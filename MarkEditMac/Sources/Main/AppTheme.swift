@@ -195,7 +195,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "solarized-dark",
-      windowBackground: NSColor(hexCode: 0x012b36),
+      windowBackground: NSColor(hexCode: 0x002b36),
       prefersTintedToolbar: true
     )
   }
