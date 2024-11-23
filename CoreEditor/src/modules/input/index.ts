@@ -62,13 +62,17 @@ export function interceptInputs() {
   const marksToWrap = ['~', '$'];
 
   return EditorView.inputHandler.of((editor, _from, _to, insert) => {
+    // Enable auto character pairs only after composition ends,
+    // some characters act as marked text in certain languages, e.g., typing '`' followed by 'a' to input 'à'.
+    const autoCharacterPairs = window.config.autoCharacterPairs && editingState.compositionEnded;
+
     // E.g., wrap "selection" as "*selection*"
-    if (window.config.autoCharacterPairs && marksToWrap.includes(insert)) {
+    if (autoCharacterPairs && marksToWrap.includes(insert)) {
       return wrapBlock(insert, editor);
     }
 
     // Insert triple backticks to create a code block
-    if (window.config.autoCharacterPairs && insert === '`') {
+    if (autoCharacterPairs && insert === '`') {
       return insertCodeBlock(editor);
     }
 
