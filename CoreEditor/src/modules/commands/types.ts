@@ -1,6 +1,8 @@
 export enum EditCommand {
   indentLess = 'indentLess',
   indentMore = 'indentMore',
+  expandSelection = 'expandSelection',
+  shrinkSelection = 'shrinkSelection',
   selectLine = 'selectLine',
   moveLineUp = 'moveLineUp',
   moveLineDown = 'moveLineDown',

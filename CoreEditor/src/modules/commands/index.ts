@@ -1,3 +1,5 @@
+import { EditorView } from '@codemirror/view';
+import { EditorSelection } from '@codemirror/state';
 import {
   copyLineDown,
   copyLineUp,
@@ -6,6 +8,7 @@ import {
   moveLineDown,
   moveLineUp,
   selectLine,
+  selectParentSyntax,
   toggleBlockComment,
   toggleComment,
 } from '@codemirror/commands';
@@ -91,6 +94,15 @@ export function insertMathBlock() {
   insertBlockWithMarks('$$');
 }
 
+export function clearSyntaxSelections() {
+  // We can't reliably distinguish user selections from syntax-aware selection changes
+  if (Date.now() - storage.historyChangedTime < 150) {
+    return;
+  }
+
+  storage.selectionHistory = [];
+}
+
 /**
  * Wrapper to a series of commands in CodeMirror,
  * we need this because we want to show them in the application.
@@ -100,6 +112,8 @@ export function performEditCommand(command: EditCommand) {
   switch (command) {
     case EditCommand.indentLess: indentLess(editor); break;
     case EditCommand.indentMore: indentMore(editor); break;
+    case EditCommand.expandSelection: expandSelection(editor); break;
+    case EditCommand.shrinkSelection: shrinkSelection(editor); break;
     case EditCommand.selectLine: selectLine(editor); break;
     case EditCommand.moveLineUp: moveLineUp(editor); break;
     case EditCommand.moveLineDown: moveLineDown(editor); break;
@@ -113,3 +127,27 @@ export function performEditCommand(command: EditCommand) {
 
 export { formatContent };
 export type { EditCommand };
+
+function expandSelection(editor: EditorView) {
+  storage.historyChangedTime = Date.now();
+  const selection = editor.state.selection;
+  if (selectParentSyntax(editor)) {
+    storage.selectionHistory.push(selection);
+  }
+}
+
+function shrinkSelection(editor: EditorView) {
+  storage.historyChangedTime = Date.now();
+  const selection = storage.selectionHistory.pop();
+  if (selection !== undefined) {
+    editor.dispatch({ selection });
+  }
+}
+
+const storage: {
+  selectionHistory: EditorSelection[];
+  historyChangedTime: number;
+} = {
+  selectionHistory: [],
+  historyChangedTime: 0,
+};

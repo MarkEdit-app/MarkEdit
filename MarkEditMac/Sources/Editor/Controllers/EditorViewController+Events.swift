@@ -53,6 +53,7 @@ extension EditorViewController {
          event.deviceIndependentFlags == [.option, .command],
          let self, self.view.window != nil {
         self.webView.showInspector()
+        return nil
       }
 
       // Press F to potentially change the find mode or switch focus between two fields
