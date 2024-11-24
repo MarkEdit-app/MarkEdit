@@ -13,17 +13,16 @@
       margin: 0px !important;
     }
     div {
-      padding: 8px !important;
+      padding: 10px !important;
     }
   </style>
 </head>
 <body>
-  <div id="container" style="text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
+  <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script type="module" type="text/javascript">
     import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.mjs";
     const container = document.querySelector("#container");
     container.innerHTML = katex.renderToString("{{DATA}}".code, { throwOnError: false, displayMode: true });
-    requestAnimationFrame(() => container.style.opacity = "1");
   </script>
 </body>
 </html>
