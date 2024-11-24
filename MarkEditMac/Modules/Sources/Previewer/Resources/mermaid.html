@@ -12,12 +12,12 @@
       margin: 0px !important;
     }
     div {
-      padding: 8px !important;
+      padding: 10px !important;
     }
   </style>
 </head>
 <body>
-  <div id="container" style="text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
+  <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.esm.min.mjs";
 
@@ -28,7 +28,6 @@
     const container = document.querySelector("#container");
     mermaid.render("graph", "{{DATA}}".code).then(result => {
       container.innerHTML = result.svg;
-      requestAnimationFrame(() => container.style.opacity = "1");
     });
   </script>
 </body>

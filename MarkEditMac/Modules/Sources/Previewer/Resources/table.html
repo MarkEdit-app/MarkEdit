@@ -15,7 +15,7 @@
     }
 
     div {
-      padding: 8px !important;
+      padding: 10px !important;
     }
 
     table {
@@ -48,12 +48,11 @@
   </style>
 </head>
 <body>
-  <div id="container" style="text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
+  <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.2/marked.min.js"></script>
   <script>
     const container = document.querySelector("#container");
     container.innerHTML = marked.parse("{{DATA}}".code);
-    requestAnimationFrame(() => container.style.opacity = "1");
   </script>
 </body>
 </html>

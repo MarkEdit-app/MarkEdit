@@ -16,6 +16,7 @@ public final class Previewer: NSViewController {
   private enum Constants {
     static let popoverSize: Double = 390
     static let minimumHeight: Double = 160
+    static let maximumWidth: Double = 1280
   }
 
   private let code: String
@@ -102,6 +103,15 @@ public final class Previewer: NSViewController {
       });
     });
     observer.observe(document.body);
+    setTimeout(() => {
+      const container = document.querySelector("#container");
+      const bounds = document.querySelector("\(type.selector)").getBoundingClientRect();
+      const width = bounds.width + 20;
+      const height = bounds.height + 20;
+      window.webkit.messageHandlers.bridge.postMessage({ width, height });
+      container.style.width = `${Math.max(width, \(Constants.popoverSize))}px`;
+      container.style.opacity = "1";
+    }, 200);
     """
     return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
   }
@@ -128,7 +138,10 @@ private extension Previewer {
 
   func didReceive(message: WKScriptMessage) {
     if let body = message.body as? [String: Double], let height = body["height"], height > 0 {
-      popover?.contentSize = CGSize(width: view.frame.width, height: max(height, Constants.minimumHeight))
+      popover?.contentSize = CGSize(
+        width: max(min(body["width"] ?? view.frame.width, Constants.maximumWidth), Constants.popoverSize),
+        height: max(height, Constants.minimumHeight)
+      )
     }
   }
 }
@@ -153,5 +166,17 @@ private final class PreviewWebView: WKWebView {
     }
 
     super.willOpenMenu(menu, with: event)
+  }
+}
+
+// MARK: - Private
+
+private extension PreviewType {
+  var selector: String {
+    switch self {
+    case .mermaid: return "svg"
+    case .table: return "table"
+    case .katex: return ".katex-display"
+    }
   }
 }
