@@ -21,7 +21,7 @@ export default function insertCodeBlock(editor: EditorView) {
 
     // Insert an empty code block and move the cursor to the empty line
     return {
-      range: EditorSelection.cursor(from + prefix.length),
+      range: EditorSelection.cursor(from + mark.length + 1), // Don't use prefix.length, it doesn't work for CRLF
       changes: {
         from, to, insert: prefix + `${state.lineBreak}${mark}${mark}${mark}`,
       },
