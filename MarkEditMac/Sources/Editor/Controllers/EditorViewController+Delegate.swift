@@ -163,14 +163,14 @@ extension EditorViewController: EditorModuleCoreDelegate {
   }
 
   func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String) {
-    let url: URL? = {
+    let (url, isFile): (URL?, Bool) = {
       // Try url with schemes first, e.g., https://github.com
       if let url = URL(string: link), url.scheme?.isEmpty == false {
-        return url
+        return (url, false)
       }
 
       // Fallback to local files, e.g., file:///Users/cyan/...
-      return document?.baseURL?.appending(path: link.removingPercentEncoding ?? link)
+      return (document?.baseURL?.appending(path: link.removingPercentEncoding ?? link), true)
     }()
 
     // Open or reveal the url
@@ -179,13 +179,13 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
 
     // Failed, fallback to opening the document folder
-    if let baseURL = document?.baseURL {
+    if isFile, let baseURL = document?.baseURL {
       NSWorkspace.shared.activateFileViewerSelecting([baseURL])
       return
     }
 
     // Failed eventually
-    Logger.assertFail("Failed to open link: \(link)")
+    Logger.log(.info, "Failed to open link: \(link)")
   }
 }
 
