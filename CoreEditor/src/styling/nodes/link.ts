@@ -4,7 +4,7 @@ import { isReleaseMode } from '../../common/utils';
 import { isMetaKeyDown } from '../../modules/events';
 
 // Fragile approach, but we only use it for link clicking, it should be fine
-const regexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|(\[.*?\]\()(.+?)[\s)]/g;
+const regexp = /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}(\.)?[a-z]{2,16}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)|(\[.*?\]\()(.+?)[\s)]/g;
 const className = 'cm-md-link';
 
 declare global {
@@ -31,9 +31,9 @@ export const linkStyle = createDecoPlugin(() => {
         },
       });
 
-      if (match[3]) {
+      if (match[4]) {
         // Markdown links, only decorate the part inside parentheses
-        add(from + match[3].length, to - 1, deco);
+        add(from + match[4].length, to - 1, deco);
       } else {
         // Normal links, decorate the full match
         add(from, to, deco);
