@@ -37,7 +37,7 @@
 
 + (NSImage *)affordanceIcon {
   NSImageSymbolConfiguration *configuration = [NSImageSymbolConfiguration configurationWithPointSize:12.5 weight:NSFontWeightMedium];
-  NSImage *symbolImage = [NSImage imageWithSystemSymbolName:@"_gm" accessibilityDescription:nil];
+  NSImage *symbolImage = [NSImage imageWithSystemSymbolName:@"apple.writing.tools" accessibilityDescription:nil] ?: [NSImage imageWithSystemSymbolName:@"_gm" accessibilityDescription:nil];
   if (symbolImage) {
     return [symbolImage imageWithSymbolConfiguration:configuration];
   }
