@@ -365,14 +365,26 @@ extension EditorDocument {
       return
     }
 
+    // Ideally we should be able to print WKWebView,
+    // but it doesn't work well because of the lazily rendering strategy used in CodeMirror.
+    //
+    // For now let's just print plain text,
+    // we don't expect printing to be used a lot.
+
     Task {
-      // Ideally we should be able to print WKWebView,
-      // but it doesn't work well because of the lazily rendering strategy used in CodeMirror.
-      //
-      // For now let's just print plain text,
-      // we don't expect printing to be used a lot.
-      let textView = NSTextView(frame: CGRect(origin: .zero, size: printInfo.paperSize))
+      // Alignment
+      printInfo.isHorizontallyCentered = true
+      printInfo.isVerticallyCentered = false
+
+      // Sizing
+      let width = printInfo.paperSize.width - printInfo.leftMargin - printInfo.rightMargin
+      let height = printInfo.paperSize.height - printInfo.topMargin - printInfo.bottomMargin
+      let frame = CGRect(x: 0, y: 0, width: width, height: height)
+
+      // Rendering
+      let textView = NSTextView(frame: frame)
       textView.string = await hostViewController?.editorText ?? stringValue
+      textView.sizeToFit()
 
       let operation = NSPrintOperation(view: textView)
       operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
