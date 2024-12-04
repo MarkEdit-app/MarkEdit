@@ -150,6 +150,11 @@ export function observeChanges() {
           clearTimeout(storage.gutterUpdater);
         }
 
+        // To handle a case where line number rects are not correctly updated
+        if (update.docChanged) {
+          window.editor.requestMeasure();
+        }
+
         storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
       }
 
