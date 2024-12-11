@@ -6,6 +6,9 @@
 
 MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
 
+> [!TIP]
+> Discover our other free and open-source apps at [libremac.github.io](https://libremac.github.io/).
+
 ## Screenshots
 
 ![Screenshots 01](/Screenshots/01.png)
