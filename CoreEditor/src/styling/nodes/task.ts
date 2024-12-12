@@ -52,6 +52,7 @@ export function handleMouseDown(event: MouseEvent) {
       insert: toggled,
     },
     selection, // Preserve selections
+    userEvent: '@none', // Ignore automatic scrolling
   });
 
   event.preventDefault();
