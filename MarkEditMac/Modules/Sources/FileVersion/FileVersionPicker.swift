@@ -71,9 +71,20 @@ public final class FileVersionPicker: NSViewController {
     textView?.drawsBackground = false
     textView?.isEditable = false
     textView?.isSelectable = true
-
-    textView?.textContainerInset = CGSize(width: Constants.layoutPadding, height: Constants.layoutPadding)
     textView?.textContainer?.lineFragmentPadding = 0
+
+    // We avoid using width in textContainerInset as it disrupts the cursor style
+    textView?.textContainerInset = CGSize(
+      width: 0,
+      height: Constants.layoutPadding
+    )
+
+    // Instead, we use a tail indent and adjust the leading position to achieve the same effect
+    textView?.defaultParagraphStyle = {
+      let style = NSMutableParagraphStyle()
+      style.tailIndent = -Constants.layoutPadding
+      return style
+    }()
 
     // Background color fills the full width to visualize empty lines
     textView?.layoutManager?.showsControlCharacters = true
@@ -281,7 +292,7 @@ private extension FileVersionPicker {
       counterView.trailingAnchor.constraint(lessThanOrEqualTo: cancelButton.leadingAnchor, constant: -Constants.layoutPadding),
       counterView.centerYAnchor.constraint(equalTo: bottomGuide.centerYAnchor),
 
-      scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.layoutPadding),
       scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       scrollView.topAnchor.constraint(equalTo: topGuide.bottomAnchor),
       scrollView.bottomAnchor.constraint(equalTo: bottomGuide.topAnchor),
