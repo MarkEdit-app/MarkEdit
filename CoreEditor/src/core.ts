@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
-import { almostEqual, afterDomUpdate, getViewportScale } from './common/utils';
+import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode } from './common/utils';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './modules/events';
@@ -11,7 +11,7 @@ import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
 import { adjustGutterPositions } from './modules/lines';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
-import { scrollCaretToVisible, scrollIntoView } from './modules/selection';
+import { scrollIntoView } from './modules/selection';
 import { markContentClean } from './modules/history';
 
 import { TextEditor } from './api/editor';
@@ -53,7 +53,11 @@ export function resetEditor(initialContent: string) {
 
   const ensureLineHeight = () => {
     // coordsAtPos ensures the line number height
-    scrollCaretToVisible();
+    const caretPos = editor.state.selection.main.to;
+    const coords = editor.coordsAtPos(caretPos);
+    if (!isReleaseMode) {
+      console.log('Ensuring line height', coords);
+    }
   };
 
   // Ensure twice, the first one is for initial launch,
