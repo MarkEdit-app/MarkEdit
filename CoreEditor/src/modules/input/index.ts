@@ -103,13 +103,15 @@ export function observeChanges() {
       // This should be called before updating the native view
       setHistoryExplictlyMoved(update);
 
-      // We need this because we have different line height for headings,
-      // CodeMirror doesn't by default fix the offset issue.
-      scrollCaretToVisible();
+      if (!update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
+        // We need this because we have different line height for headings,
+        // CodeMirror doesn't by default fix the offset issue.
+        scrollCaretToVisible();
 
-      // Make sure the main selection is always centered for typewriter mode
-      if (window.config.typewriterMode) {
-        scrollToSelection('center');
+        // Make sure the main selection is always centered for typewriter mode
+        if (window.config.typewriterMode) {
+          scrollToSelection('center');
+        }
       }
     }
 
