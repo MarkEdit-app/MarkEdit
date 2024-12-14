@@ -23,6 +23,16 @@
   for (NSWindow *window in [NSApp windows]) {
     NSViewController *controller = window.contentViewController;
     if ([controller.className isEqualToString:@"WTWritingToolsViewController"]) {
+      controller = ^{
+        // WTWritingToolsConfiguration
+        NSInvocation *invocation = [self invocationWithTarget:controller
+                                               selectorString:@"writingToolsConfiguration"];
+        [invocation invoke];
+        __unsafe_unretained id returnValue = nil;
+        [invocation getReturnValue:&returnValue];
+        return returnValue ?: controller;
+      }();
+
       NSInvocation *invocation = [self invocationWithTarget:controller
                                              selectorString:@"requestedTool"];
       [invocation invoke];
@@ -103,6 +113,11 @@
 + (NSInvocation *)invocationWithTarget:(id)target
                         selectorString:(NSString *)selectorString {
   SEL selector = NSSelectorFromString(selectorString);
+  if (![target respondsToSelector:selector]) {
+    NSLog(@"Missing method selector for: %@, %@", target, selectorString);
+    return nil;
+  }
+
   NSMethodSignature *signature = [target methodSignatureForSelector:selector];
   if (signature == nil) {
     NSAssert(NO, @"Missing method signature for: %@, %@", target, selectorString);
