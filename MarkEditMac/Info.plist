@@ -31,6 +31,7 @@
 				<string>net.ia.markdown</string>
 				<string>app.markedit.md</string>
 				<string>app.markedit.markdown</string>
+				<string>app.markedit.txt</string>
 				<string>public.markdown</string>
 				<string>org.quarto.qmarkdown</string>
 				<string>com.unknown.md</string>
@@ -188,6 +189,25 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>markdown</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Markdown</string>
+			<key>UTTypeIdentifier</key>
+			<string>app.markedit.txt</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://daringfireball.net/projects/markdown/</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>txt</string>
 				</array>
 			</dict>
 		</dict>

@@ -51,9 +51,9 @@ struct GeneralSettingsView: View {
 
       Section {
         Picker(Localized.Settings.newFilenameExtension, selection: $newFilenameExtension) {
-          Text(NewFilenameExtension.md.rawValue).tag(NewFilenameExtension.md)
-          Text(NewFilenameExtension.markdown.rawValue).tag(NewFilenameExtension.markdown)
-          Text(NewFilenameExtension.txt.rawValue).tag(NewFilenameExtension.txt)
+          ForEach(NewFilenameExtension.allCases, id: \.self) {
+            Text($0.rawValue).tag($0)
+          }
         }
         .onChange(of: newFilenameExtension) {
           AppPreferences.General.newFilenameExtension = newFilenameExtension

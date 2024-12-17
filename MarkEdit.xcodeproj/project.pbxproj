@@ -72,6 +72,7 @@
 		8790ABD42A98F5F40083825C /* EditorViewController+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */; };
 		8790ABDB2A98FF610083825C /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 8790ABDA2A98FF610083825C /* Statistics */; };
 		8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790B6EB297036B2000DFC1A /* EditorWindow.swift */; };
+		879715C92D11548C0069964D /* EditorSaveOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879715C82D11547F0069964D /* EditorSaveOptionsView.swift */; };
 		87A73AB3294C4B27006A710E /* EditorWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A73AB2294C4B27006A710E /* EditorWebView.swift */; };
 		87A73AB5294C4B48006A710E /* EditorFindPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A73AB4294C4B48006A710E /* EditorFindPanel.swift */; };
 		87AA1224296560AE00BE4719 /* EditorViewController+HyperLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AA1223296560AE00BE4719 /* EditorViewController+HyperLink.swift */; };
@@ -191,6 +192,7 @@
 		878B7B992CE0DA7D00220F39 /* EditorViewController+FileVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+FileVersion.swift"; sourceTree = "<group>"; };
 		8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Statistics.swift"; sourceTree = "<group>"; };
 		8790B6EB297036B2000DFC1A /* EditorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindow.swift; sourceTree = "<group>"; };
+		879715C82D11547F0069964D /* EditorSaveOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSaveOptionsView.swift; sourceTree = "<group>"; };
 		87A73AB2294C4B27006A710E /* EditorWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWebView.swift; sourceTree = "<group>"; };
 		87A73AB4294C4B48006A710E /* EditorFindPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindPanel.swift; sourceTree = "<group>"; };
 		87AA1223296560AE00BE4719 /* EditorViewController+HyperLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+HyperLink.swift"; sourceTree = "<group>"; };
@@ -522,6 +524,7 @@
 				87091B992A963C6B00F5EF0D /* EditorTextInput.swift */,
 				8752CEB5295B2F8800BA9D5B /* EditorPanelView.swift */,
 				87A73AB2294C4B27006A710E /* EditorWebView.swift */,
+				879715C82D11547F0069964D /* EditorSaveOptionsView.swift */,
 				87067E2629755D5C0052E795 /* EditorStatusView.swift */,
 			);
 			path = Views;
@@ -725,6 +728,7 @@
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,
 				87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */,
 				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
+				879715C92D11548C0069964D /* EditorSaveOptionsView.swift in Sources */,
 				87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */,
 				873ACD4729644E2F00431498 /* EditorViewController+Encoding.swift in Sources */,
 				874065792BB505F500B5CE5A /* EditorViewController+Events.swift in Sources */,

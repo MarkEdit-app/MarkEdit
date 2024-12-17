@@ -175,6 +175,8 @@ extension EditorDocument {
       NSDocumentController.shared.setOpenPanelDirectory(defaultDirectory)
     }
 
+    savePanel.allowsOtherFileTypes = true
+    savePanel.accessoryView = textBundle == nil ? EditorSaveOptionsView(panel: savePanel) : nil
     return super.prepareSavePanel(savePanel)
   }
 }

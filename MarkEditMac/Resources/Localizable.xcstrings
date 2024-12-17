@@ -846,6 +846,23 @@
         }
       }
     },
+    "Filename Extension:" : {
+      "comment" : "Label for save panel accessory view",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件扩展名："
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件副檔名："
+          }
+        }
+      }
+    },
     "Find" : {
       "comment" : "Find mode in search menu",
       "localizations" : {
