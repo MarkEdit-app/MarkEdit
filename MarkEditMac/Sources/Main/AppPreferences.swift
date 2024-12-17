@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import UniformTypeIdentifiers
 import MarkEditCore
 import MarkEditKit
 import FontPicker
@@ -336,7 +337,7 @@ enum NewWindowBehavior: Codable {
   case newDocument
 }
 
-enum NewFilenameExtension: String, Codable {
+enum NewFilenameExtension: String, Codable, CaseIterable {
   case md
   case markdown
   case txt
@@ -345,14 +346,11 @@ enum NewFilenameExtension: String, Codable {
   ///
   /// Markdown types are customized, like `app.markedit.*`, to avoid unpredictable association by the system.
   var exportedType: String {
-    switch self {
-    case .md:
-      return "app.markedit.md"
-    case .markdown:
-      return "app.markedit.markdown"
-    case .txt:
-      return "public.plain-text"
-    }
+    "app.markedit.\(rawValue)"
+  }
+
+  var uniformType: UTType {
+    UTType(exportedType) ?? .plainText // public.plain-text
   }
 }
 
