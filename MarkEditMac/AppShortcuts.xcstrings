@@ -82,7 +82,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "在 ${applicationName} 中獲取文件內容"
+              "在 ${applicationName} 中獲取檔案內容"
             ]
           }
         }
@@ -111,7 +111,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "在 ${applicationName} 中更新文件內容"
+              "在 ${applicationName} 中更新檔案內容"
             ]
           }
         }

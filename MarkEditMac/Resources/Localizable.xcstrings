@@ -841,7 +841,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "文件大小"
+            "value" : "檔案大小"
           }
         }
       }
@@ -858,7 +858,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "文件副檔名："
+            "value" : "檔案副檔名："
           }
         }
       }
@@ -977,7 +977,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "格式化文件："
+            "value" : "格式化檔案："
           }
         }
       }
@@ -1074,7 +1074,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "獲取文件內容"
+            "value" : "獲取檔案內容"
           }
         }
       }
@@ -1090,7 +1090,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "獲取當前活躍文件的內容，沒有開啟的編輯器時將丟擲異常。"
+            "value" : "獲取當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }
@@ -1801,7 +1801,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新文件副檔名："
+            "value" : "新檔案副檔名："
           }
         }
       }
@@ -3006,7 +3006,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新文件內容"
+            "value" : "更新檔案內容"
           }
         }
       }
@@ -3022,7 +3022,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新當前活躍文件的內容，沒有開啟的編輯器時將丟擲異常。"
+            "value" : "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }
@@ -3039,7 +3039,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 ${content} 更新文件"
+            "value" : "使用 ${content} 更新檔案"
           }
         }
       }
