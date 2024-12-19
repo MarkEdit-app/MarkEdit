@@ -385,19 +385,14 @@ __metadata:
   linkType: hard
 
 "@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.3.2, @codemirror/autocomplete@npm:^6.7.1":
-  version: 6.18.3
-  resolution: "@codemirror/autocomplete@npm:6.18.3"
+  version: 6.18.4
+  resolution: "@codemirror/autocomplete@npm:6.18.4"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.17.0"
     "@lezer/common": "npm:^1.0.0"
-  peerDependencies:
-    "@codemirror/language": ^6.0.0
-    "@codemirror/state": ^6.0.0
-    "@codemirror/view": ^6.0.0
-    "@lezer/common": ^1.0.0
-  checksum: 10c0/6d953d50ca264d2892f3d341efe2fa6a5220e9ef66d725fa315aa194813df5a0a133dc75f1eb5115c741aa22d5ba399dcc90356bb26ccfcad5b368d7e330eed8
+  checksum: 10c0/602ea9395b3ebbb258669d7a946f650cc734742d1f67fd277c804ae152411f198546a1dc0c64ff2fda12a46eb83d766540ab609d1e3afa817bfe8131d10dfbdb
   languageName: node
   linkType: hard
 
@@ -708,8 +703,8 @@ __metadata:
   linkType: hard
 
 "@codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0, @codemirror/language@npm:^6.8.0":
-  version: 6.10.6
-  resolution: "@codemirror/language@npm:6.10.6"
+  version: 6.10.7
+  resolution: "@codemirror/language@npm:6.10.7"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.23.0"
@@ -717,7 +712,7 @@ __metadata:
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
     style-mod: "npm:^4.0.0"
-  checksum: 10c0/8d6812165970303696d7b8e20236278ff2df0407c76e784a4d5be42b2219a5ca868d15ccbe59f43445dc62968e4ab784ed9e738db02e3a7b1be11a8eba59756d
+  checksum: 10c0/4896ea5839999479ada3dd54d09e1f6994ddc54fae0f6dfab9e5e611b7e266a15add170734183e48b4104cb6762ae3499da62dc81c04a145e40c9b75dc0b22f7
   languageName: node
   linkType: hard
 
@@ -762,13 +757,13 @@ __metadata:
   linkType: hard
 
 "@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0":
-  version: 6.35.3
-  resolution: "@codemirror/view@npm:6.35.3"
+  version: 6.36.0
+  resolution: "@codemirror/view@npm:6.36.0"
   dependencies:
     "@codemirror/state": "npm:^6.5.0"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/aa12c86756360f0ab2cf4b09fca16e5bfb3d32cc99a94a18a12aec84dd3a20f15277fb36d42fc78f803caaa7b93f3fa7382ba47e1d3495fad7166317c60090d8
+  checksum: 10c0/9e38b024ed6262112e98e018b865cfabafb3d52066f71aa407f10c47c0b67f92d7dbd62af61af00425259aa3e77cc547f5a2acbc40bb0c83ff1b036192c23895
   languageName: node
   linkType: hard
 
@@ -1548,9 +1543,9 @@ __metadata:
   linkType: hard
 
 "@mdn/browser-compat-data@npm:^5.5.35, @mdn/browser-compat-data@npm:^5.6.19":
-  version: 5.6.23
-  resolution: "@mdn/browser-compat-data@npm:5.6.23"
-  checksum: 10c0/9d35f0604003697f2ef04a5ae3b451770a8f8e2ca5052661d4bb0082d04f2f3d133df9bfc32e98736f5c7facd1c65c5c4c5622cd2f542ee623c26482e9562ffb
+  version: 5.6.25
+  resolution: "@mdn/browser-compat-data@npm:5.6.25"
+  checksum: 10c0/4bd8dc64416d6152b55006594f07bbd91eff9315a3790e82160b5958a5f4b19fffd910af977488c98cbdd8c280dd66476bbf4979d5090026f50be8ba4d4f2220
   languageName: node
   linkType: hard
 
@@ -2362,16 +2357,16 @@ __metadata:
   linkType: hard
 
 "browserslist@npm:^4.23.1, browserslist@npm:^4.24.0":
-  version: 4.24.2
-  resolution: "browserslist@npm:4.24.2"
+  version: 4.24.3
+  resolution: "browserslist@npm:4.24.3"
   dependencies:
-    caniuse-lite: "npm:^1.0.30001669"
-    electron-to-chromium: "npm:^1.5.41"
-    node-releases: "npm:^2.0.18"
+    caniuse-lite: "npm:^1.0.30001688"
+    electron-to-chromium: "npm:^1.5.73"
+    node-releases: "npm:^2.0.19"
     update-browserslist-db: "npm:^1.1.1"
   bin:
     browserslist: cli.js
-  checksum: 10c0/d747c9fb65ed7b4f1abcae4959405707ed9a7b835639f8a9ba0da2911995a6ab9b0648fd05baf2a4d4e3cf7f9fdbad56d3753f91881e365992c1d49c8d88ff7a
+  checksum: 10c0/bab261ef7b6e1656a719a9fa31240ae7ce4d5ba68e479f6b11e348d819346ab4c0ff6f4821f43adcc9c193a734b186775a83b37979e70a69d182965909fe569a
   languageName: node
   linkType: hard
 
@@ -2441,10 +2436,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001639, caniuse-lite@npm:^1.0.30001669":
-  version: 1.0.30001687
-  resolution: "caniuse-lite@npm:1.0.30001687"
-  checksum: 10c0/9ca0f6d33dccaf4692339d0fda50e03e4dd7eb7f25faabd1cb33e2099d9a76b0bc30c37be3315e91c1d990da1b5cc864eee2077494f4d0ba94d68b48fe2ea7f1
+"caniuse-lite@npm:^1.0.30001639, caniuse-lite@npm:^1.0.30001688":
+  version: 1.0.30001689
+  resolution: "caniuse-lite@npm:1.0.30001689"
+  checksum: 10c0/51cf99751dddfba24e13556ae0e0f38c062f76d49f2e24cce3d28e71a0325ca6fe04fe51b4a0e8467d601d94e72fea84f160bf577e7cbb5677f14ac673b6da20
   languageName: node
   linkType: hard
 
@@ -2732,10 +2727,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.5.41":
-  version: 1.5.73
-  resolution: "electron-to-chromium@npm:1.5.73"
-  checksum: 10c0/b97118d469f2b3b7a816932004cd36d82879829904ca4a8daf70eaefbe686a23afa6e39e0ad0cdc39d00a9ebab97160d072b786fdeb6964f13fb15aa688958f1
+"electron-to-chromium@npm:^1.5.73":
+  version: 1.5.74
+  resolution: "electron-to-chromium@npm:1.5.74"
+  checksum: 10c0/1a93119adbdeb0bba4c29e3bad5a48e6a4626ae50fbff2bc5c207f32e67ed64a5d8db6500befb44080359be3b18be7bf830fb920d5199d935be95bb9f97deb10
   languageName: node
   linkType: hard
 
@@ -3386,9 +3381,9 @@ __metadata:
   linkType: hard
 
 "globals@npm:^15.7.0":
-  version: 15.13.0
-  resolution: "globals@npm:15.13.0"
-  checksum: 10c0/640365115ca5f81d91e6a7667f4935021705e61a1a5a76a6ec5c3a5cdf6e53f165af7f9db59b7deb65cf2e1f83d03ac8d6660d0b14c569c831a9b6483eeef585
+  version: 15.14.0
+  resolution: "globals@npm:15.14.0"
+  checksum: 10c0/039deb8648bd373b7940c15df9f96ab7508fe92b31bbd39cbd1c1a740bd26db12457aa3e5d211553b234f30e9b1db2fee3683012f543a01a6942c9062857facb
   languageName: node
   linkType: hard
 
@@ -3586,12 +3581,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.13.0":
-  version: 2.15.1
-  resolution: "is-core-module@npm:2.15.1"
+"is-core-module@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "is-core-module@npm:2.16.0"
   dependencies:
     hasown: "npm:^2.0.2"
-  checksum: 10c0/53432f10c69c40bfd2fa8914133a68709ff9498c86c3bf5fca3cdf3145a56fd2168cbf4a43b29843a6202a120a5f9c5ffba0a4322e1e3441739bc0b641682612
+  checksum: 10c0/57e3b4bf3503a5ace3e61ef030a2eefa03d27827647b22968456e3e4befffed7c7aa849eea2e029f4f74a119a2d53cc391d5bad59c9352ecc9b79be3fd2acf79
   languageName: node
   linkType: hard
 
@@ -4748,7 +4743,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-releases@npm:^2.0.18":
+"node-releases@npm:^2.0.19":
   version: 2.0.19
   resolution: "node-releases@npm:2.0.19"
   checksum: 10c0/52a0dbd25ccf545892670d1551690fe0facb6a471e15f2cfa1b20142a5b255b3aa254af5f59d6ecb69c2bec7390bc643c43aa63b13bf5e64b6075952e716b1aa
@@ -5128,28 +5123,28 @@ __metadata:
   linkType: hard
 
 "resolve@npm:^1.20.0":
-  version: 1.22.8
-  resolution: "resolve@npm:1.22.8"
+  version: 1.22.9
+  resolution: "resolve@npm:1.22.9"
   dependencies:
-    is-core-module: "npm:^2.13.0"
+    is-core-module: "npm:^2.16.0"
     path-parse: "npm:^1.0.7"
     supports-preserve-symlinks-flag: "npm:^1.0.0"
   bin:
     resolve: bin/resolve
-  checksum: 10c0/07e179f4375e1fd072cfb72ad66d78547f86e6196c4014b31cb0b8bb1db5f7ca871f922d08da0fbc05b94e9fd42206f819648fa3b5b873ebbc8e1dc68fec433a
+  checksum: 10c0/314cea2c47f956743f106256854203bd43a60a3ec6fb85ee6894e75cf4b16004952e4280319bfeb4c6fb1246e3ecd27f2699abb2e2b316b7c5727ec6491505c9
   languageName: node
   linkType: hard
 
 "resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>":
-  version: 1.22.8
-  resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
+  version: 1.22.9
+  resolution: "resolve@patch:resolve@npm%3A1.22.9#optional!builtin<compat/resolve>::version=1.22.9&hash=c3c19d"
   dependencies:
-    is-core-module: "npm:^2.13.0"
+    is-core-module: "npm:^2.16.0"
     path-parse: "npm:^1.0.7"
     supports-preserve-symlinks-flag: "npm:^1.0.0"
   bin:
     resolve: bin/resolve
-  checksum: 10c0/0446f024439cd2e50c6c8fa8ba77eaa8370b4180f401a96abf3d1ebc770ac51c1955e12764cde449fde3fff480a61f84388e3505ecdbab778f4bef5f8212c729
+  checksum: 10c0/dadd8c85040784fdc18d6edc0cc27f7f35776c5d904b030ea67485ab9a5607568187afcfaf157e6fa9db9274481d155356bc42ca578c5578be25965b880d1e80
   languageName: node
   linkType: hard
 
