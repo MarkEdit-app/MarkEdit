@@ -32,18 +32,15 @@ class Context {
 }
 
 function getContext(node: SyntaxNode, doc: Text) {
-  let nodes = []
+  let nodes: SyntaxNode[] = [], context: Context[] = []
   for (let cur: SyntaxNode | null = node; cur; cur = cur.parent) {
-    if (cur.name == "ListItem" || cur.name == "Blockquote" || cur.name == "FencedCode")
-      nodes.push(cur)
+    if (cur.name == "FencedCode") return context
+    if (cur.name == "ListItem" || cur.name == "Blockquote") nodes.push(cur)
   }
-  let context = []
   for (let i = nodes.length - 1; i >= 0; i--) {
     let node = nodes[i], match
     let line = doc.lineAt(node.from), startPos = node.from - line.from
-    if (node.name == "FencedCode") {
-      context.push(new Context(node, startPos, startPos, "", "", "", null))
-    } else if (node.name == "Blockquote" && (match = /^ *>( ?)/.exec(line.text.slice(startPos)))) {
+    if (node.name == "Blockquote" && (match = /^ *>( ?)/.exec(line.text.slice(startPos)))) {
       context.push(new Context(node, startPos, startPos + match[0].length, "", match[1], ">", null))
     } else if (node.name == "ListItem" && node.parent!.name == "OrderedList" &&
                (match = /^( *)\d+([.)])( *)/.exec(line.text.slice(startPos)))) {
