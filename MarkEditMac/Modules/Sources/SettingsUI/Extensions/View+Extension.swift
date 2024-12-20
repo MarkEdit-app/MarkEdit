@@ -23,16 +23,16 @@ public extension View {
     .alignmentGuide(.leading) { $0[.controlAlignment] }
   }
 
-  func formMenuPicker() -> some View {
-    pickerStyle(.menu).frame(minWidth: 280)
+  func formMenuPicker(minWidth: Double = 280) -> some View {
+    pickerStyle(.menu).frame(minWidth: minWidth)
   }
 
   func formHorizontalRadio() -> some View {
     pickerStyle(.radioGroup).horizontalRadioGroupLayout()
   }
 
-  func formDescription() -> some View {
-    font(.system(size: 12)).foregroundStyle(.secondary)
+  func formDescription(fontSize: Double = 12) -> some View {
+    font(.system(size: fontSize)).foregroundStyle(.secondary)
   }
 }
 

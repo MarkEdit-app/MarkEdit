@@ -21,9 +21,11 @@ public struct SettingsForm: View {
     }
   }
 
+  private let padding: Double
   private let builder: () -> [TypedView]
 
-  public init(@Builder builder: @escaping () -> [TypedView]) {
+  public init(padding: Double = 20, @Builder builder: @escaping () -> [TypedView]) {
+    self.padding = padding
     self.builder = builder
   }
 
@@ -36,6 +38,6 @@ public struct SettingsForm: View {
       }
     }
     .fixedSize()
-    .padding(20)
+    .padding(padding)
   }
 }

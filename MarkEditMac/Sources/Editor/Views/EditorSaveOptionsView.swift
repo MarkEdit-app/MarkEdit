@@ -6,66 +6,64 @@
 //
 
 import AppKit
+import SwiftUI
+import SettingsUI
+import MarkEditKit
 
 /**
  Accessory view used in NSSavePanel to provide additional options.
  */
-final class EditorSaveOptionsView: NSView {
-  private weak var panel: NSSavePanel?
+struct EditorSaveOptionsView: View {
+  @State private var filenameExtension = AppPreferences.General.newFilenameExtension
+  @State private var textEncoding = AppPreferences.General.defaultTextEncoding
 
-  init(panel: NSSavePanel) {
-    self.panel = panel
-    super.init(frame: .zero)
+  private let extensionChanged: ((NewFilenameExtension) -> Void)
+  private let encodingChanged: ((EditorTextEncoding) -> Void)
 
-    let label = NSTextField(labelWithString: Localized.Document.filenameExtension)
-    label.sizeToFit()
-    addSubview(label)
+  static func wrapper(for panel: NSSavePanel, encodingChanged: @escaping (EditorTextEncoding) -> Void) -> NSView {
+    NSHostingView(rootView: Self(
+      extensionChanged: {
+        let allowsOtherFileTypes = panel.allowsOtherFileTypes == true
+        panel.allowsOtherFileTypes = false
+        panel.allowedContentTypes = [$0.uniformType]
 
-    let picker = NSPopUpButton()
-    picker.target = self
-    picker.action = #selector(selectionDidChange(_:))
-
-    NewFilenameExtension.allCases.forEach {
-      picker.addItem(withTitle: $0.rawValue)
-    }
-
-    if let index = NewFilenameExtension.allCases.firstIndex(of: AppPreferences.General.newFilenameExtension) {
-      picker.selectItem(at: index)
-    }
-
-    picker.sizeToFit()
-    addSubview(picker)
-
-    frame = CGRect(
-      origin: .zero,
-      size: CGSize(
-        width: label.frame.width + picker.frame.width + 2,
-        height: picker.frame.height + 10
-      )
-    )
-
-    label.setFrameOrigin(CGPoint(x: 0, y: (frame.height - label.frame.height) * 0.5))
-    picker.setFrameOrigin(CGPoint(x: label.frame.maxX + 2, y: (frame.height - picker.frame.height) * 0.5 - 1.5))
+        // Must turn this off temporarily to enforce the file type
+        DispatchQueue.main.async {
+          panel.allowsOtherFileTypes = allowsOtherFileTypes
+        }
+      },
+      encodingChanged: encodingChanged
+    ))
   }
 
-  @available(*, unavailable)
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-}
+  var body: some View {
+    SettingsForm(padding: 8) {
+      Section {
+        Picker(Localized.Document.filenameExtension, selection: $filenameExtension) {
+          ForEach(NewFilenameExtension.allCases, id: \.self) {
+            Text($0.rawValue).tag($0)
+          }
+        }
+        .onChange(of: filenameExtension) {
+          extensionChanged(filenameExtension)
+        }
+        .formMenuPicker(minWidth: 120)
 
-// MARK: - Private
+        Picker(Localized.Document.textEncoding, selection: $textEncoding) {
+          ForEach(EditorTextEncoding.allCases, id: \.self) {
+            Text($0.description)
 
-private extension EditorSaveOptionsView {
-  @objc func selectionDidChange(_ sender: NSPopUpButton) {
-    let filenameExtension = NewFilenameExtension.allCases[sender.indexOfSelectedItem]
-    let allowsOtherFileTypes = panel?.allowsOtherFileTypes == true
-
-    panel?.allowsOtherFileTypes = false // Must turn this off temporarily to enforce the file type
-    panel?.allowedContentTypes = [filenameExtension.uniformType]
-
-    DispatchQueue.main.async {
-      self.panel?.allowsOtherFileTypes = allowsOtherFileTypes
+            if EditorTextEncoding.groupingCases.contains($0) {
+              Divider()
+            }
+          }
+        }
+        .onChange(of: textEncoding) {
+          encodingChanged(textEncoding)
+        }
+        .formMenuPicker(minWidth: 120)
+      }
     }
+    .frame(maxWidth: .infinity)
   }
 }
