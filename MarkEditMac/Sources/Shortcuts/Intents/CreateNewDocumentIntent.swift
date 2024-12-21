@@ -21,15 +21,7 @@ struct CreateNewDocumentIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult {
-    NSApp.appDelegate?.createUntitledFileIfNeeded()
-    NSApp.activate(ignoringOtherApps: true)
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-      if let initialContent {
-        currentEditor?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
-      }
-    }
-
+    NSApp.appDelegate?.createUntitledFile(initialContent: initialContent, isIntent: true)
     return .result()
   }
 }

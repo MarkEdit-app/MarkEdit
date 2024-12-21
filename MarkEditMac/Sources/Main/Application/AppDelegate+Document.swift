@@ -40,22 +40,21 @@ extension AppDelegate {
     return menu
   }
 
-  func createUntitledFileIfNeeded() {
+  func createUntitledFile(initialContent: String?, isIntent: Bool = false) {
     // Activating the app also creates a new file if new window behavior is `newDocument`,
     // prevent duplicate creation from Shortcuts like `CreateNewDocumentIntent`.
-    guard Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.2 else {
-      return
+    if !isIntent || (Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.2) {
+      NSDocumentController.shared.newDocument(nil)
     }
 
-    NSDocumentController.shared.newDocument(nil)
-  }
+    if isIntent {
+      NSApp.activate(ignoringOtherApps: true)
+    }
 
-  func createUntitledFile(initialContent: String?) {
-    NSDocumentController.shared.newDocument(nil)
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-      let bridge = self.currentEditor?.bridge.core
-      bridge?.insertText(text: initialContent ?? "", from: 0, to: 0)
+    if let initialContent {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        self.currentEditor?.prepareInitialContent(initialContent)
+      }
     }
   }
 
