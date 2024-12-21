@@ -10,6 +10,10 @@ import MarkEditKit
 
 @main
 final class Application: NSApplication {
+  var currentEditor: EditorViewController? {
+    keyWindow?.contentViewController as? EditorViewController
+  }
+
   static func main() {
     NSObject.swizzleAccessibilityBundlesOnce
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
@@ -55,10 +59,6 @@ final class Application: NSApplication {
 // MARK: - Private
 
 private extension Application {
-  var currentEditor: EditorViewController? {
-    keyWindow?.contentViewController as? EditorViewController
-  }
-
   func sanitizePasteboard() {
     let textContent = currentEditor?.document?.stringValue
     let lineEndings = AppPreferences.General.defaultLineEndings.characters

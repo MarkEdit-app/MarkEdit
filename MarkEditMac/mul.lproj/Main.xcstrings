@@ -49,6 +49,30 @@
         }
       }
     },
+    "0NS-5A-glR.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"New File from Clipboard\"; ObjectID = \"0NS-5A-glR\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "New File from Clipboard"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从剪贴板新建"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從剪貼簿新建"
+          }
+        }
+      }
+    },
     "1b7-l0-nxx.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"Find\"; ObjectID = \"1b7-l0-nxx\";",
       "extractionState" : "extracted_with_value",

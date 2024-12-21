@@ -30,6 +30,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var lineEndingsLFItem: NSMenuItem?
   @IBOutlet weak var lineEndingsCRLFItem: NSMenuItem?
   @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
+  @IBOutlet weak var fileFromClipboardItem: NSMenuItem?
   @IBOutlet weak var editUndoItem: NSMenuItem?
   @IBOutlet weak var editRedoItem: NSMenuItem?
   @IBOutlet weak var editPasteItem: NSMenuItem?
@@ -111,28 +112,6 @@ private extension AppDelegate {
     }
   }
 
-  @IBAction func checkForUpdates(_ sender: Any?) {
-    Task {
-      await AppUpdater.checkForUpdates(explicitly: true)
-    }
-  }
-
-  @IBAction func openDocumentsFolder(_ sender: Any?) {
-    NSWorkspace.shared.open(URL.documentsDirectory)
-  }
-
-  @IBAction func grantFolderAccess(_ sender: Any?) {
-    saveGrantedFolderAsBookmark()
-  }
-
-  @IBAction func openDevelopmentGuide(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Development")
-  }
-
-  @IBAction func openCustomizationGuide(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Customization")
-  }
-
   @IBAction func showPreferences(_ sender: Any?) {
     if settingsWindowController == nil {
       settingsWindowController = SettingsRootViewController.withTabs([
@@ -149,17 +128,5 @@ private extension AppDelegate {
     } else {
       settingsWindowController?.showWindow(self)
     }
-  }
-
-  @IBAction func showHelp(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki")
-  }
-
-  @IBAction func openIssueTracker(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/issues")
-  }
-
-  @IBAction func openVersionHistory(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/releases")
   }
 }

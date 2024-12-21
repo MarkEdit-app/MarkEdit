@@ -19,14 +19,14 @@ struct EvaluateJavaScriptIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some ReturnsValue<String> {
-    guard let activeController else {
+    guard let currentEditor else {
       throw IntentError.missingDocument
     }
 
     // We do not directly use the async version of evaluateJavaScript,
     // mainly because that it **sometimes** emits Optional(nil) unwrapping error.
     return try await withCheckedThrowingContinuation { continuation in
-      activeController.webView.evaluateJavaScript(content) { value, error in
+      currentEditor.webView.evaluateJavaScript(content) { value, error in
         // Here we have to deal with this typing hell
         continuation.resume(with: .success(.result(value: String(describing: value ?? error ?? "undefined"))))
       }

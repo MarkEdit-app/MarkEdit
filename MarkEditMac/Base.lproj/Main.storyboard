@@ -108,6 +108,12 @@
                                                 <action selector="newDocument:" target="Ady-hI-5gd" id="4Si-XN-c54"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="New File from Clipboard" keyEquivalent="n" id="0NS-5A-glR">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="newFileFromClipboard:" target="Voe-Tx-rLC" id="pJC-h1-fZk"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="New Tab" keyEquivalent="t" id="dHZ-CH-KLC">
                                             <connections>
                                                 <action selector="createNewTab:" target="Ady-hI-5gd" id="ybh-8g-tSk"/>
@@ -990,6 +996,7 @@ Gw
                         <outlet property="editStatisticsItem" destination="Bvk-zs-CQB" id="oU7-Tq-e9K"/>
                         <outlet property="editTableOfContentsMenu" destination="BxI-nv-Xa5" id="lTp-Xn-8tg"/>
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
+                        <outlet property="fileFromClipboardItem" destination="0NS-5A-glR" id="hxk-Eb-8YJ"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>
                         <outlet property="formatCodeBlockItem" destination="QOM-rI-Bxj" id="4Dy-YC-z6y"/>
                         <outlet property="formatCodeItem" destination="Ibb-aP-jnQ" id="4kt-Sh-zOv"/>
