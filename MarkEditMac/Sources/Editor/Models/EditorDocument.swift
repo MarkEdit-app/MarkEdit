@@ -57,6 +57,7 @@ final class EditorDocument: NSDocument {
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
   private var suggestedFilename: String?
+  private var suggestedTextEncoding: EditorTextEncoding?
   private weak var hostViewController: EditorViewController?
 
   override func makeWindowControllers() {
@@ -175,8 +176,16 @@ extension EditorDocument {
       NSDocumentController.shared.setOpenPanelDirectory(defaultDirectory)
     }
 
+    if textBundle == nil {
+      savePanel.accessoryView = EditorSaveOptionsView.wrapper(for: savePanel) { [weak self] in
+        self?.suggestedTextEncoding = $0
+      }
+    } else {
+      savePanel.accessoryView = nil
+    }
+
+    suggestedTextEncoding = nil
     savePanel.allowsOtherFileTypes = true
-    savePanel.accessoryView = textBundle == nil ? EditorSaveOptionsView(panel: savePanel) : nil
     return super.prepareSavePanel(savePanel)
   }
 }
@@ -231,7 +240,7 @@ extension EditorDocument {
   }
 
   override func data(ofType typeName: String) throws -> Data {
-    let encoding = AppPreferences.General.defaultTextEncoding
+    let encoding = suggestedTextEncoding ?? AppPreferences.General.defaultTextEncoding
     return encoding.encode(string: stringValue) ?? stringValue.toData() ?? Data()
   }
 
