@@ -52,16 +52,16 @@ struct UpdateFileContentIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult {
-    guard let activeController else {
+    guard let currentEditor else {
       throw IntentError.missingDocument
     }
 
-    activeController.bridge.core.replaceText(
+    currentEditor.bridge.core.replaceText(
       text: content,
       granularity: granularity.replaceGranularity
     ) { _ in
       if saveChanges {
-        activeController.document?.save(nil)
+        currentEditor.document?.save(nil)
       }
     }
 

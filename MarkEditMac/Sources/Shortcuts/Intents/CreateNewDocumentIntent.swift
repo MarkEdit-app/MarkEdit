@@ -26,7 +26,7 @@ struct CreateNewDocumentIntent: AppIntent {
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
       if let initialContent {
-        activeController?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
+        currentEditor?.bridge.core.insertText(text: initialContent, from: 0, to: 0)
       }
     }
 

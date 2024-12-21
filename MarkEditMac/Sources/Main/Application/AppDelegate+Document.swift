@@ -9,6 +9,14 @@ import AppKit
 
 @MainActor
 extension AppDelegate {
+  var currentDocument: EditorDocument? {
+    currentEditor?.document
+  }
+
+  var currentEditor: EditorViewController? {
+    (NSApp as? Application)?.currentEditor
+  }
+
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
     openOrCreateDocument(sender: sender)
   }
@@ -40,6 +48,15 @@ extension AppDelegate {
     }
 
     NSDocumentController.shared.newDocument(nil)
+  }
+
+  func createUntitledFile(initialContent: String?) {
+    NSDocumentController.shared.newDocument(nil)
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+      let bridge = self.currentEditor?.bridge.core
+      bridge?.insertText(text: initialContent ?? "", from: 0, to: 0)
+    }
   }
 
   func toggleDocumentWindowVisibility() {

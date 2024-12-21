@@ -13,7 +13,7 @@ struct GetFileContentIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some ReturnsValue<IntentFile> {
-    guard let fileURL = activeController?.document?.textFileURL else {
+    guard let fileURL = currentEditor?.document?.textFileURL else {
       throw IntentError.missingDocument
     }
 

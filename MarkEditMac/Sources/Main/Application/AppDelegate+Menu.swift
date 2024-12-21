@@ -12,22 +12,19 @@ extension AppDelegate: NSMenuDelegate {
   func menuNeedsUpdate(_ menu: NSMenu) {
     switch menu {
     case mainFileMenu:
-      let noDoc = activeDocument?.fileURL == nil
-      openFileInMenu?.superMenuItem?.isHidden = noDoc
-      reopenFileMenu?.superMenuItem?.isHidden = noDoc
-      lineEndingsMenu?.superMenuItem?.isHidden = noDoc
+      reconfigureMainFileMenu(document: currentDocument)
     case mainEditMenu:
-      reconfigureMainEditMenu(document: activeDocument)
+      reconfigureMainEditMenu(document: currentDocument)
     case mainExtensionsMenu:
-      reconfigureMainExtensionsMenu(document: activeDocument)
+      reconfigureMainExtensionsMenu(document: currentDocument)
     case mainWindowMenu:
-      reconfigureMainWindowMenu(document: activeDocument)
+      reconfigureMainWindowMenu(document: currentDocument)
     case openFileInMenu:
-      reconfigureOpenFileInMenu(document: activeDocument)
+      reconfigureOpenFileInMenu(document: currentDocument)
     case reopenFileMenu:
-      reconfigureReopenFileMenu(document: activeDocument)
+      reconfigureReopenFileMenu(document: currentDocument)
     case lineEndingsMenu:
-      reconfigureLineEndingsMenu(document: activeDocument)
+      reconfigureLineEndingsMenu(document: currentDocument)
     default:
       break
     }
@@ -37,12 +34,12 @@ extension AppDelegate: NSMenuDelegate {
 // MARK: - Private
 
 private extension AppDelegate {
-  var activeDocument: EditorDocument? {
-    activeEditorController?.document
-  }
+  func reconfigureMainFileMenu(document: EditorDocument?) {
+    [openFileInMenu, reopenFileMenu, lineEndingsMenu].forEach {
+      $0?.superMenuItem?.isHidden = document?.fileURL == nil
+    }
 
-  var activeEditorController: EditorViewController? {
-    NSApp.keyWindow?.contentViewController as? EditorViewController
+    fileFromClipboardItem?.isHidden = !NSPasteboard.general.canPaste
   }
 
   func reconfigureMainEditMenu(document: EditorDocument?) {
@@ -60,8 +57,8 @@ private extension AppDelegate {
     if #available(macOS 15.1, *), let item = (mainEditMenu?.items.first {
       $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
     }) {
-      let isEnabled = activeEditorController?.webView.isFirstResponder == true
-      item.submenu = activeEditorController?.customWritingToolsMenu
+      let isEnabled = currentEditor?.webView.isFirstResponder == true
+      item.submenu = currentEditor?.customWritingToolsMenu
       item.submenu?.autoenablesItems = false
       item.submenu?.items.forEach { $0.isEnabled = isEnabled }
     }
@@ -137,5 +134,47 @@ private extension AppDelegate {
       lineEndingsCRItem?.setOn(lineEndings == .cr)
       lineEndingsMenu?.reloadItems()
     }
+  }
+}
+
+// MARK: - Private
+
+private extension AppDelegate {
+  @IBAction func checkForUpdates(_ sender: Any?) {
+    Task {
+      await AppUpdater.checkForUpdates(explicitly: true)
+    }
+  }
+
+  @IBAction func openDocumentsFolder(_ sender: Any?) {
+    NSWorkspace.shared.open(URL.documentsDirectory)
+  }
+
+  @IBAction func grantFolderAccess(_ sender: Any?) {
+    saveGrantedFolderAsBookmark()
+  }
+
+  @IBAction func newFileFromClipboard(_ sender: Any?) {
+    createUntitledFile(initialContent: NSPasteboard.general.string)
+  }
+
+  @IBAction func openDevelopmentGuide(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Development")
+  }
+
+  @IBAction func openCustomizationGuide(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Customization")
+  }
+
+  @IBAction func showHelp(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki")
+  }
+
+  @IBAction func openIssueTracker(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/issues")
+  }
+
+  @IBAction func openVersionHistory(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/releases")
   }
 }
