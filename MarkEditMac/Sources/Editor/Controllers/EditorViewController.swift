@@ -19,6 +19,7 @@ final class EditorViewController: NSViewController {
   var hasTextSelection = false
   var mouseExitedWindow = false
   var bottomPanelHeight: Double = 0
+  var initialContent: String?
   var webBackgroundColor: NSColor?
   var localEventMonitor: Any?
   var writingToolsObservation: NSKeyValueObservation?
@@ -287,6 +288,18 @@ final class EditorViewController: NSViewController {
 // MARK: - Exposed Methods
 
 extension EditorViewController {
+  func prepareInitialContent(_ text: String) {
+    if hasFinishedLoading {
+      prependTextContent(text)
+    } else {
+      initialContent = text
+    }
+  }
+
+  func prependTextContent(_ text: String) {
+    bridge.core.insertText(text: text, from: 0, to: 0)
+  }
+
   func clearEditor() {
     updateTextFinderMode(.hidden, searchTerm: "")
 
@@ -310,6 +323,12 @@ extension EditorViewController {
         spellcheck: true,
         autocorrect: true
       ))
+
+      // Initial content from scenarios like "CreateNewDocumentIntent" or "New File from Clipboard"
+      if let text = self.initialContent {
+        self.prependTextContent(text)
+        self.initialContent = nil
+      }
     }
 
     hasBeenEdited = false
