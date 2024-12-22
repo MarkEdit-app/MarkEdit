@@ -11,14 +11,14 @@ import MarkEditKit
 extension EditorViewController {
   @objc func reopenWithEncoding(_ sender: NSMenuItem) {
     guard let encoding = sender.representedObject as? EditorTextEncoding else {
-      return
+      return Logger.assertFail("Invalid encoding: \(String(describing: sender.representedObject))")
     }
 
-    guard let data = document?.fileData, let string = encoding.decode(data: data) else {
-      return
+    guard let data = document?.fileData else {
+      return Logger.assertFail("Missing fileData from: \(String(describing: document))")
     }
 
-    document?.stringValue = string
+    document?.stringValue = encoding.decode(data: data)
     resetEditor()
   }
 }
