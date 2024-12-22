@@ -67,23 +67,35 @@ public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable {
     }
   }
 
-  public func decode(data: Data) -> String? {
-    switch self {
-    case .ascii: return String(data: data, encoding: .ascii)
-    case .nonLossyASCII: return String(data: data, encoding: .nonLossyASCII)
-    case .utf8: return String(data: data, encoding: .utf8)
-    case .utf16: return String(data: data, encoding: .utf16)
-    case .utf16BigEndian: return String(data: data, encoding: .utf16BigEndian)
-    case .utf16LittleEndian: return String(data: data, encoding: .utf16LittleEndian)
-    case .macOSRoman: return String(data: data, encoding: .macOSRoman)
-    case .isoLatin1: return String(data: data, encoding: .isoLatin1)
-    case .windowsLatin1: return String(data: data, encoding: .windowsCP1252)
-    case .gb18030: return String(data: data, encoding: .GB_18030_2000)
-    case .big5: return String(data: data, encoding: .big5)
-    case .japaneseEUC: return String(data: data, encoding: .japaneseEUC)
-    case .shiftJIS: return String(data: data, encoding: String.Encoding.shiftJIS)
-    case .koreanEUC: return String(data: data, encoding: .EUC_KR)
+  public func decode(data: Data, guessEncoding: Bool = false) -> String {
+    let defaultResult = {
+      switch self {
+      case .ascii: return String(data: data, encoding: .ascii)
+      case .nonLossyASCII: return String(data: data, encoding: .nonLossyASCII)
+      case .utf8: return String(data: data, encoding: .utf8)
+      case .utf16: return String(data: data, encoding: .utf16)
+      case .utf16BigEndian: return String(data: data, encoding: .utf16BigEndian)
+      case .utf16LittleEndian: return String(data: data, encoding: .utf16LittleEndian)
+      case .macOSRoman: return String(data: data, encoding: .macOSRoman)
+      case .isoLatin1: return String(data: data, encoding: .isoLatin1)
+      case .windowsLatin1: return String(data: data, encoding: .windowsCP1252)
+      case .gb18030: return String(data: data, encoding: .GB_18030_2000)
+      case .big5: return String(data: data, encoding: .big5)
+      case .japaneseEUC: return String(data: data, encoding: .japaneseEUC)
+      case .shiftJIS: return String(data: data, encoding: String.Encoding.shiftJIS)
+      case .koreanEUC: return String(data: data, encoding: .EUC_KR)
+      }
+    }()
+
+    if let defaultResult {
+      return defaultResult
     }
+
+    if guessEncoding, let guessedResult = data.toString() {
+      return guessedResult
+    }
+
+    return data.asciiText()
   }
 }
 
@@ -91,5 +103,19 @@ public extension EditorTextEncoding {
   /// In menus, grouping cases with a separator.
   static var groupingCases: Set<Self> {
     Set([.nonLossyASCII, .utf16LittleEndian, .windowsLatin1, .big5, .shiftJIS])
+  }
+}
+
+// MARK: - Private
+
+private extension Data {
+  func asciiText(unsupported: Character = ".") -> String {
+    reduce(into: "") { result, byte in
+      if (byte >= 32 && byte < 127) || (byte >= 160 && byte < 255) || byte == 0x0A || byte == 0x09 {
+        result.append(Character(UnicodeScalar(byte)))
+      } else {
+        result.append(unsupported)
+      }
+    }
   }
 }

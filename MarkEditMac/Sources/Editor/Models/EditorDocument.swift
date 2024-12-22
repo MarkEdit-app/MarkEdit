@@ -177,8 +177,13 @@ extension EditorDocument {
     }
 
     if textBundle == nil {
-      savePanel.accessoryView = EditorSaveOptionsView.wrapper(for: savePanel) { [weak self] in
-        self?.suggestedTextEncoding = $0
+      savePanel.accessoryView = EditorSaveOptionsView.wrapper(for: .all) { [weak self, weak savePanel] result in
+        switch result {
+        case .fileExtension(let value):
+          savePanel?.enforceUniformType(value.uniformType)
+        case .textEncoding(let value):
+          self?.suggestedTextEncoding = value
+        }
       }
     } else {
       savePanel.accessoryView = nil
@@ -195,9 +200,14 @@ extension EditorDocument {
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
     DispatchQueue.global(qos: .userInitiated).async {
-      let encoding = AppPreferences.General.defaultTextEncoding
-      let newValue = encoding.decode(data: data) ?? data.toString() ?? ""
-      guard self.stringValue != newValue else { return }
+      let newValue = {
+        if let encoding = AppDocumentController.suggestedTextEncoding {
+          return encoding.decode(data: data)
+        }
+
+        let encoding = AppPreferences.General.defaultTextEncoding
+        return encoding.decode(data: data, guessEncoding: true)
+      }()
 
       DispatchQueue.main.async {
         self.fileData = data
