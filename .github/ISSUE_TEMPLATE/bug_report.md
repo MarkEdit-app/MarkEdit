@@ -8,6 +8,8 @@ assignees: ''
 
 <!--
 
+Please open issues in English to ensure more people can understand and contribute.
+
 Please search the wiki https://github.com/MarkEdit-app/MarkEdit/wiki and closed issues https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue+is%3Aclosed first.
 
 Please ensure you're using the latest build from https://github.com/MarkEdit-app/MarkEdit/releases and share your macOS version.
