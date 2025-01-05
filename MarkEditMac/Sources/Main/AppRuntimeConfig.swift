@@ -26,6 +26,7 @@ enum AppRuntimeConfig {
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
     let headerFontSizeDiffs: [Double]?
+    let checksForUpdates: Bool?
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
     let disableCorsRestrictions: Bool?
@@ -39,6 +40,7 @@ enum AppRuntimeConfig {
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
+      case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
       case disableCorsRestrictions = "general.disableCorsRestrictions"
@@ -78,6 +80,11 @@ enum AppRuntimeConfig {
     currentDefinition?.headerFontSizeDiffs
   }
 
+  static var checksForUpdates: Bool {
+    // Enable automatic updates by default
+    currentDefinition?.checksForUpdates ?? true
+  }
+
   static var defaultOpenDirectory: String? {
     // Unspecified by default
     currentDefinition?.defaultOpenDirectory
@@ -112,6 +119,7 @@ private extension AppRuntimeConfig {
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
     headerFontSizeDiffs: nil,
+    checksForUpdates: true,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
     disableCorsRestrictions: nil,

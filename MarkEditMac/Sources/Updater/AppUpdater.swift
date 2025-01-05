@@ -21,7 +21,7 @@ enum AppUpdater {
   }
 
   static func checkForUpdates(explicitly: Bool) async {
-    guard explicitly || !AppPreferences.Updater.completelyDisabled else {
+    guard explicitly || automatically else {
       return Logger.log(.info, "App update checks have been skipped")
     }
 
@@ -83,6 +83,11 @@ enum AppUpdater {
 // MARK: - Private
 
 private extension AppUpdater {
+  static var automatically: Bool {
+    // Can be disabled through either settings.json or an incompatible update
+    AppRuntimeConfig.checksForUpdates && !AppPreferences.Updater.completelyDisabled
+  }
+
   static func extractReleaseInfo(from version: AppVersion) async -> ReleaseInfo? {
     guard let info = (version.assets?.first { $0.name == "ReleaseInfo.json" }) else {
       Logger.log(.error, "Missing ReleaseInfo.json")
