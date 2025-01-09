@@ -95,7 +95,7 @@ export function interceptInputs() {
 export function observeChanges() {
   return EditorView.updateListener.of(update => {
     // Ignore all events when the editor is idle
-    if (editingState.isIdle && window.editor.state.doc.length === 0) {
+    if (editingState.isIdle && update.state.doc.length === 0) {
       return;
     }
 
@@ -154,10 +154,19 @@ export function observeChanges() {
 
         // To handle a case where line number rects are not correctly updated
         if (update.docChanged) {
-          window.editor.requestMeasure();
+          update.view.requestMeasure();
         }
 
-        storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
+        const caretOffsetY = storage.caretOffsetY;
+        storage.caretOffsetY = update.view.coordsAtPos(update.state.selection.main.to)?.bottom;
+
+        if (caretOffsetY !== undefined && caretOffsetY !== storage.caretOffsetY) {
+          // Re-layout immediately when the y-axis of the caret position changes
+          adjustGutterPositions();
+        } else {
+          // Otherwise, the update is throttled with a small delay
+          storage.gutterUpdater = setTimeout(adjustGutterPositions, 15);
+        }
       }
 
       // Gutter update triggered by fold or unfold actions (immediately)
@@ -173,7 +182,9 @@ export function observeChanges() {
 }
 
 const storage: {
+  caretOffsetY: number | undefined;
   gutterUpdater: ReturnType<typeof setTimeout> | undefined;
 } = {
+  caretOffsetY: undefined,
   gutterUpdater: undefined,
 };
