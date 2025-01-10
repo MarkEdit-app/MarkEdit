@@ -132,9 +132,9 @@ extension EditorViewController {
 
     webView.update(animated).frame = CGRect(
       x: 0,
-      y: offset,
+      y: offset + findPanelHeight,
       width: view.bounds.width,
-      height: height
+      height: height - findPanelHeight
     )
   }
 
@@ -322,7 +322,11 @@ private extension EditorViewController {
   }
 
   var findPanelHeight: Double {
-    findPanel.isHidden ? 0 : findPanel.frame.height
+    switch findPanel.mode {
+    case .hidden: return 0
+    case .find: return findPanel.frame.height
+    case .replace: return findPanel.frame.height + replacePanel.frame.height
+    }
   }
 
   @objc func popoverDidShow(_ notification: Notification) {
