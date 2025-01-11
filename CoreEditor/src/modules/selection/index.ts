@@ -129,7 +129,7 @@ export function scrollCaretToVisible(strategy: ScrollStrategy = 'end') {
  */
 export function scrollSearchMatchToVisible(strategy: ScrollStrategy = 'center') {
   const element = searchMatchElement();
-  if (element === null || isElementVisible(element)) {
+  if (element === null) {
     return;
   }
 

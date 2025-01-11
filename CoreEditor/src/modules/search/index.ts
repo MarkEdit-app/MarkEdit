@@ -5,6 +5,7 @@ import {
   replaceNext as replaceNextCommand,
 } from '@codemirror/search';
 
+import { Command } from '@codemirror/view';
 import { EditorSelection, SelectionRange } from '@codemirror/state';
 import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSearchQuery } from '@codemirror/search';
 import { isElementVisible, isPositionVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
@@ -91,19 +92,11 @@ export function updateHasSelection() {
 }
 
 export function findNext(term: string) {
-  prepareNavigation(term);
-  const result = findNextCommand(window.editor);
-
-  scrollSearchMatchToVisible();
-  return result;
+  return performFindCommand(findNextCommand, term, 'forward');
 }
 
 export function findPrevious(term: string) {
-  prepareNavigation(term);
-  const result = findPreviousCommand(window.editor);
-
-  scrollSearchMatchToVisible();
-  return result;
+  return performFindCommand(findPreviousCommand, term, 'backward');
 }
 
 export function replaceNext() {
@@ -175,6 +168,21 @@ function prepareNavigation(search: string) {
 
   const query = new SearchQuery(storage.options);
   window.editor.dispatch({ effects: setSearchQuery.of(query) });
+}
+
+function performFindCommand(command: Command, term: string, direction: 'forward' | 'backward') {
+  prepareNavigation(term);
+  const matches = [...document.querySelectorAll('.cm-searchMatch')].filter(node => isElementVisible(node));
+  const index = matches.findIndex(node => node.classList.contains('cm-searchMatch-selected'));
+  const boundary = direction === 'backward' ? 0 : (matches.length - 1);
+  const result = command(window.editor);
+
+  // We need to scroll when we don't have a visible match, or the next/previous one is not visible
+  if (matches.length === 0 || (index === boundary && numberOfMatches() > 1)) {
+    scrollSearchMatchToVisible();
+  }
+
+  return result;
 }
 
 const storage: {
