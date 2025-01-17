@@ -62,6 +62,8 @@ private extension AppDelegate {
       item.submenu?.autoenablesItems = false
       item.submenu?.items.forEach { $0.isEnabled = isEnabled }
     }
+
+    editTypewriterItem?.setOn(AppPreferences.Editor.typewriterMode)
   }
 
   func reconfigureMainExtensionsMenu(document: EditorDocument?) {

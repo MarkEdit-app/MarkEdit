@@ -485,6 +485,11 @@ private extension EditorViewController {
       self.toggleStatisticsPopover(sourceView: self.statisticsSourceView)
     }
   }
+
+  @IBAction func toggleTypewriterMode(_ sender: Any?) {
+    AppPreferences.Editor.typewriterMode.toggle()
+    setTypewriterMode(enabled: AppPreferences.Editor.typewriterMode)
+  }
 }
 
 // MARK: - View
