@@ -1105,6 +1105,30 @@
         }
       }
     },
+    "Cvo-jv-iDg.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Typewriter Mode\"; ObjectID = \"Cvo-jv-iDg\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Typewriter Mode"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打字机模式"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打字機模式"
+          }
+        }
+      }
+    },
     "cwL-P1-jid.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Smart Links\"; ObjectID = \"cwL-P1-jid\";",
       "extractionState" : "extracted_with_value",

@@ -717,6 +717,11 @@ Gw
                                                 <action selector="toggleStatistics:" target="Ady-hI-5gd" id="aCq-vt-CmH"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Typewriter Mode" keyEquivalent="d" id="Cvo-jv-iDg">
+                                            <connections>
+                                                <action selector="toggleTypewriterMode:" target="Ady-hI-5gd" id="ucN-oH-iJs"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                     <connections>
                                         <outlet property="delegate" destination="Voe-Tx-rLC" id="dRR-k9-3HN"/>
@@ -995,6 +1000,7 @@ Gw
                         <outlet property="editRedoItem" destination="6dh-zS-Vam" id="fN4-hA-Oqr"/>
                         <outlet property="editStatisticsItem" destination="Bvk-zs-CQB" id="oU7-Tq-e9K"/>
                         <outlet property="editTableOfContentsMenu" destination="BxI-nv-Xa5" id="lTp-Xn-8tg"/>
+                        <outlet property="editTypewriterItem" destination="Cvo-jv-iDg" id="1vS-bx-fNh"/>
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
                         <outlet property="fileFromClipboardItem" destination="0NS-5A-glR" id="hxk-Eb-8YJ"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>
