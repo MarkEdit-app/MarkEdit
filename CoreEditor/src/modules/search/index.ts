@@ -119,7 +119,18 @@ export function selectAllOccurrences() {
 }
 
 export function selectNextOccurrence() {
-  selectNextOccurrenceCommand(window.editor);
+  const editor = window.editor;
+  const oldRanges = editor.state.selection.ranges;
+  const foundNext = selectNextOccurrenceCommand(editor);
+
+  const newRanges = editor.state.selection.ranges;
+  newRanges.forEach(range => {
+    if (!oldRanges.includes(range)) {
+      scrollIntoView(range, 'center');
+    }
+  });
+
+  return foundNext;
 }
 
 export function numberOfMatches(): CodeGen_Int {

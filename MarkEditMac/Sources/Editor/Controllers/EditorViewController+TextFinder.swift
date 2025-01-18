@@ -197,7 +197,11 @@ extension EditorViewController {
   }
 
   func selectNextOccurrence() {
-    bridge.search.selectNextOccurrence()
+    Task {
+      if let foundNext = try? await bridge.search.selectNextOccurrence(), !foundNext {
+        NSSound.beep()
+      }
+    }
   }
 
   func performSearchOperation(_ operation: SearchOperation) {
