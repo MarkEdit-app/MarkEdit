@@ -112,6 +112,10 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.selectAllOccurrences", completion: completion)
   }
 
+  public func selectNextOccurrence(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.search.selectNextOccurrence", completion: completion)
+  }
+
   public func numberOfMatches() async throws -> Int {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.search.numberOfMatches") { result in

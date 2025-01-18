@@ -6,6 +6,7 @@ import {
   updateQuery,
   updateHasSelection,
   selectAllOccurrences,
+  selectNextOccurrence,
   findNext,
   findPrevious,
   replaceNext,
@@ -30,6 +31,7 @@ export interface WebModuleSearch extends WebModule {
   replaceNext(): void;
   replaceAll(): void;
   selectAllOccurrences(): void;
+  selectNextOccurrence(): void;
   numberOfMatches(): CodeGen_Int;
 }
 
@@ -74,6 +76,10 @@ export class WebModuleSearchImpl implements WebModuleSearch {
 
   selectAllOccurrences(): void {
     selectAllOccurrences();
+  }
+
+  selectNextOccurrence(): void {
+    selectNextOccurrence();
   }
 
   numberOfMatches(): CodeGen_Int {

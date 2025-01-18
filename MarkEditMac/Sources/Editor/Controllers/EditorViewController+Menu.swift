@@ -333,6 +333,10 @@ extension EditorViewController {
     selectAllOccurrences()
   }
 
+  @IBAction func selectNextOccurrence(_ sender: Any?) {
+    selectNextOccurrence()
+  }
+
   @IBAction func scrollToSelection(_ sender: Any?) {
     bridge.selection.scrollToSelection()
   }

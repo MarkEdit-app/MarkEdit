@@ -574,6 +574,11 @@ Gw
                                                             <action selector="selectAllOccurrences:" target="Ady-hI-5gd" id="83F-Vk-zez"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Select Next Occurrence" keyEquivalent="d" id="VIj-UD-bGA">
+                                                        <connections>
+                                                            <action selector="selectNextOccurrence:" target="Ady-hI-5gd" id="d1k-Qg-XA4"/>
+                                                        </connections>
+                                                    </menuItem>
                                                     <menuItem title="Jump to Selection" keyEquivalent="j" id="S0p-oC-mLd">
                                                         <connections>
                                                             <action selector="scrollToSelection:" target="Ady-hI-5gd" id="2gs-Ni-NAC"/>

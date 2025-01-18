@@ -3745,6 +3745,30 @@
         }
       }
     },
+    "VIj-UD-bGA.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Select Next Occurrence\"; ObjectID = \"VIj-UD-bGA\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select Next Occurrence"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择下个相同项"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇下個相同項"
+          }
+        }
+      }
+    },
     "vmV-6d-7jI.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Make Upper Case\"; ObjectID = \"vmV-6d-7jI\";",
       "extractionState" : "extracted_with_value",
