@@ -717,7 +717,7 @@ Gw
                                                 <action selector="toggleStatistics:" target="Ady-hI-5gd" id="aCq-vt-CmH"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Typewriter Mode" keyEquivalent="d" id="Cvo-jv-iDg">
+                                        <menuItem title="Typewriter Mode" keyEquivalent="D" id="Cvo-jv-iDg">
                                             <connections>
                                                 <action selector="toggleTypewriterMode:" target="Ady-hI-5gd" id="ucN-oH-iJs"/>
                                             </connections>
