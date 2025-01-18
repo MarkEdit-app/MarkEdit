@@ -31,7 +31,7 @@ export interface WebModuleSearch extends WebModule {
   replaceNext(): void;
   replaceAll(): void;
   selectAllOccurrences(): void;
-  selectNextOccurrence(): void;
+  selectNextOccurrence(): boolean;
   numberOfMatches(): CodeGen_Int;
 }
 
@@ -78,8 +78,8 @@ export class WebModuleSearchImpl implements WebModuleSearch {
     selectAllOccurrences();
   }
 
-  selectNextOccurrence(): void {
-    selectNextOccurrence();
+  selectNextOccurrence(): boolean {
+    return selectNextOccurrence();
   }
 
   numberOfMatches(): CodeGen_Int {
