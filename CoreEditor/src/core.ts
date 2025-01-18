@@ -66,7 +66,7 @@ export function resetEditor(initialContent: string) {
   setTimeout(ensureLineHeight, 600);
 
   // Makes sure the content doesn't have unwanted inset
-  scrollIntoView(0);
+  scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
 
   const contentDOM = editor.contentDOM;
   contentDOM.addEventListener('blur', handleFocusLost);

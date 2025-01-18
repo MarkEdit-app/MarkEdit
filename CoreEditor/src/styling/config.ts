@@ -22,6 +22,7 @@ export default interface StyleSheets {
   accentColor?: HTMLStyleElement;
   fontFace?: HTMLStyleElement;
   fontSize?: HTMLStyleElement;
+  typewriterMode?: HTMLStyleElement;
   focusMode?: HTMLStyleElement;
   lineHeight?: HTMLStyleElement;
   taskMarker?: HTMLStyleElement;
@@ -32,6 +33,7 @@ export function setUp(config: Config, colors: EditorColors) {
   setFontFace(config.fontFace);
   setFontSize(config.fontSize);
   setInvisiblesBehavior(config.invisiblesBehavior);
+  setTypewriterMode(config.typewriterMode);
   setFocusMode(config.focusMode);
   setLineHeight(config.lineHeight);
 
@@ -155,6 +157,18 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
       effects: window.dynamics.invisibles?.reconfigure(invisiblesExtension(behavior, hasSelection)),
     });
   }
+}
+
+export function setTypewriterMode(enabled: boolean) {
+  if (styleSheets.typewriterMode === undefined) {
+    styleSheets.typewriterMode = createStyleSheet(`
+      .cm-content {
+        padding-top: 50vh !important;
+      }
+    `, false);
+  }
+
+  styleSheets.typewriterMode.disabled = !enabled;
 }
 
 export function setFocusMode(enabled: boolean) {

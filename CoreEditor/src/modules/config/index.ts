@@ -86,10 +86,9 @@ export function setReadOnlyMode(enabled: boolean) {
 
 export function setTypewriterMode(enabled: boolean) {
   window.config.typewriterMode = enabled;
+  styling.setTypewriterMode(enabled);
 
-  if (enabled) {
-    scrollToSelection('center');
-  }
+  scrollToSelection(enabled ? 'center' : 'nearest');
 }
 
 export function setFocusMode(enabled: boolean) {
