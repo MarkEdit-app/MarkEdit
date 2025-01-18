@@ -69,6 +69,16 @@ extension EditorViewController {
         return nil
       }
 
+      // (Alternatives) F3 to find next, Shift-F3 to find previous
+      if event.keyCode == .kVK_F3, let self {
+        if event.deviceIndependentFlags == .shift {
+          self.findPreviousInTextFinder()
+        } else {
+          self.findNextInTextFinder()
+        }
+        return nil
+      }
+
       return event
     }
   }

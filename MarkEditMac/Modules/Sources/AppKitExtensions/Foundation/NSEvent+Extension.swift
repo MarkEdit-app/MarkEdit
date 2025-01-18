@@ -43,6 +43,7 @@ public extension UInt16 {
   static let kVK_Delete: Self = 0x33
   static let kVK_Option: Self = 0x3A
   static let kVK_RightOption: Self = 0x3D
+  static let kVK_F3: Self = 0x63
   static let kVK_LeftArrow: Self = 0x7B
   static let kVK_RightArrow: Self = 0x7C
   static let kVK_DownArrow: Self = 0x7D
