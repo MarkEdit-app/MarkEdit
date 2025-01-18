@@ -10,6 +10,7 @@ import { tokenizePosition } from '../tokenizer';
 import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
 
 import hasSelection from '../selection/hasSelection';
+import redrawSelectionLayer from '../selection/redrawSelectionLayer';
 import wrapBlock from './wrapBlock';
 import insertCodeBlock from './insertCodeBlock';
 
@@ -127,6 +128,11 @@ export function observeChanges() {
       // Instead, we will make an extra update after composition ended.
       if (editingState.compositionEnded && selectionStateChanged) {
         updateActiveLine(newHasSelection);
+      }
+
+      // Work around a WebKit bug where selection layer is not updated
+      if (!newHasSelection && selectionStateChanged) {
+        redrawSelectionLayer();
       }
 
       // Handle native updates.

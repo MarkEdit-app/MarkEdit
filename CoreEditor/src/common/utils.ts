@@ -11,6 +11,12 @@ export function afterDomUpdate(callback: () => void) {
   setTimeout(callback, 50);
 }
 
+export function forceRedrawElement(element: HTMLElement) {
+  const visibility = element.style.visibility;
+  element.style.visibility = 'hidden';
+  afterDomUpdate(() => element.style.visibility = visibility);
+}
+
 export function sleep(milliseconds: number) {
   // eslint-disable-next-line compat/compat
   return new Promise(resolve => setTimeout(resolve, milliseconds));
