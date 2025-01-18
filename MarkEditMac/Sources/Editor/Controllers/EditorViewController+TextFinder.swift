@@ -196,6 +196,10 @@ extension EditorViewController {
     bridge.search.selectAllOccurrences()
   }
 
+  func selectNextOccurrence() {
+    bridge.search.selectNextOccurrence()
+  }
+
   func performSearchOperation(_ operation: SearchOperation) {
     bridge.search.performOperation(operation: operation)
 

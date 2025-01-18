@@ -3,6 +3,7 @@ import {
   findNext as findNextCommand,
   findPrevious as findPreviousCommand,
   replaceNext as replaceNextCommand,
+  selectNextOccurrence as selectNextOccurrenceCommand,
 } from '@codemirror/search';
 
 import { Command } from '@codemirror/view';
@@ -115,6 +116,10 @@ export function selectAllOccurrences() {
   if (query.length > 0) {
     selectWithRanges(searchOccurrences(doc, query));
   }
+}
+
+export function selectNextOccurrence() {
+  selectNextOccurrenceCommand(window.editor);
 }
 
 export function numberOfMatches(): CodeGen_Int {
