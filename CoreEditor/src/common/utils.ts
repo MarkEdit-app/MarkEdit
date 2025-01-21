@@ -14,7 +14,10 @@ export function afterDomUpdate(callback: () => void) {
 export function forceRedrawElement(element: HTMLElement) {
   const visibility = element.style.visibility;
   element.style.visibility = 'hidden';
-  afterDomUpdate(() => element.style.visibility = visibility);
+
+  afterDomUpdate(() => {
+    element.style.visibility = visibility === 'hidden' ? '' : visibility;
+  });
 }
 
 export function sleep(milliseconds: number) {
