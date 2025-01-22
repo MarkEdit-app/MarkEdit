@@ -7,6 +7,7 @@ import { LineColumnInfo } from '../../modules/selection/types';
  * @bridgeName NativeBridgeCore
  */
 export interface NativeModuleCore extends NativeModule {
+  getFileInfo(): Promise<string | undefined>;
   notifyWindowDidLoad(): void;
   notifyBackgroundColorDidChange({ color }: { color: CodeGen_Int }): void;
   notifyViewportScaleDidChange(): void;

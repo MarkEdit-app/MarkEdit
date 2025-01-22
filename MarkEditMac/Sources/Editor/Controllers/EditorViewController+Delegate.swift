@@ -83,6 +83,10 @@ extension EditorViewController: EditorWebViewActionDelegate {
 // MARK: - EditorModuleCoreDelegate
 
 extension EditorViewController: EditorModuleCoreDelegate {
+  func editorCoreGetFileURL(_ sender: EditorModuleCore) -> URL? {
+    document?.fileURL
+  }
+
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
