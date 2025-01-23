@@ -248,19 +248,19 @@ extension EditorViewController: EditorModulePreviewDelegate {
   }
 }
 
-// MARK: - EditorModuleUIDelegate
+// MARK: - EditorModuleAPIDelegate
 
-extension EditorViewController: EditorModuleUIDelegate {
-  func editorUI(_ sender: EditorModuleUI, addMainMenuItems items: [(String, WebMenuItem)]) {
+extension EditorViewController: EditorModuleAPIDelegate {
+  func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {
     addMainMenuItems(items: items)
   }
 
-  func editorUI(_ sender: EditorModuleUI, showContextMenu items: [WebMenuItem], location: WebPoint) {
+  func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint) {
     showContextMenu(items: items, location: location.cgPoint)
   }
 
-  func editorUI(
-    _ sender: EditorModuleUI,
+  func editorAPI(
+    _ sender: EditorModuleAPI,
     alertWith title: String?,
     message: String?,
     buttons: [String]?
@@ -269,7 +269,7 @@ extension EditorViewController: EditorModuleUIDelegate {
     return response.rawValue - NSApplication.ModalResponse.alertFirstButtonReturn.rawValue
   }
 
-  func editorUI(_ sender: EditorModuleUI, showTextBox title: String?, placeholder: String?, defaultValue: String?) -> String? {
+  func editorAPI(_ sender: EditorModuleAPI, showTextBox title: String?, placeholder: String?, defaultValue: String?) -> String? {
     showTextBox(title: title, placeholder: placeholder, defaultValue: defaultValue)
   }
 }

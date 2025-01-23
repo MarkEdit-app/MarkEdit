@@ -1,5 +1,5 @@
 //
-//  NativeModuleUI.swift
+//  NativeModuleAPI.swift
 //
 //  Generated using https://github.com/microsoft/ts-gyb
 //
@@ -11,20 +11,20 @@ import Foundation
 import MarkEditCore
 
 @MainActor
-public protocol NativeModuleUI: NativeModule {
+public protocol NativeModuleAPI: NativeModule {
   func addMainMenuItems(items: [WebMenuItem])
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String?
 }
 
-public extension NativeModuleUI {
-  var bridge: NativeBridge { NativeBridgeUI(self) }
+public extension NativeModuleAPI {
+  var bridge: NativeBridge { NativeBridgeAPI(self) }
 }
 
 @MainActor
-final class NativeBridgeUI: NativeBridge {
-  static let name = "ui"
+final class NativeBridgeAPI: NativeBridge {
+  static let name = "api"
   lazy var methods: [String: NativeMethod] = [
     "addMainMenuItems": { [weak self] in
       self?.addMainMenuItems(parameters: $0)
@@ -40,10 +40,10 @@ final class NativeBridgeUI: NativeBridge {
     },
   ]
 
-  private let module: NativeModuleUI
+  private let module: NativeModuleAPI
   private lazy var decoder = JSONDecoder()
 
-  init(_ module: NativeModuleUI) {
+  init(_ module: NativeModuleAPI) {
     self.module = module
   }
 

@@ -3,15 +3,15 @@ import { handleMainMenuAction, handleContextMenuAction } from '../../api/ui';
 
 /**
  * @shouldExport true
- * @invokePath ui
- * @overrideModuleName WebBridgeUI
+ * @invokePath api
+ * @overrideModuleName WebBridgeAPI
  */
-export interface WebModuleUI extends WebModule {
+export interface WebModuleAPI extends WebModule {
   handleMainMenuAction({ id }: { id: string }): void;
   handleContextMenuAction({ id }: { id: string }): void;
 }
 
-export class WebModuleUIImpl implements WebModuleUI {
+export class WebModuleAPIImpl implements WebModuleAPI {
   handleMainMenuAction({ id }: { id: string }): void {
     handleMainMenuAction(id);
   }

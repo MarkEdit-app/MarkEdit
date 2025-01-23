@@ -8,7 +8,7 @@ import { getRect, scrollToSelection, isPositionVisible } from '../modules/select
 
 export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
   const items = Array.isArray(spec) ? spec : [spec];
-  window.nativeModules.ui.addMainMenuItems({
+  window.nativeModules.api.addMainMenuItems({
     items: items.map(item => createMenuItem(item, mainActions)),
   });
 }
@@ -16,7 +16,7 @@ export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
 export function showContextMenu(items: MenuItem[], location?: WebPoint) {
   const caretPos = window.editor.state.selection.main.head;
   const invokeNative = () => {
-    window.nativeModules.ui.showContextMenu({
+    window.nativeModules.api.showContextMenu({
       items: items.map(item => createMenuItem(item, contextActions)),
       location: location ?? (() => {
         const rect = getRect(caretPos);
@@ -41,12 +41,12 @@ export function showContextMenu(items: MenuItem[], location?: WebPoint) {
 
 export function showAlert(spec: Alert): Promise<number> {
   const alert = typeof spec === 'string' ? { title: spec } : spec;
-  return window.nativeModules.ui.showAlert(alert);
+  return window.nativeModules.api.showAlert(alert);
 }
 
 export function showTextBox(spec?: TextBox): Promise<string | undefined> {
   const textBox = typeof spec === 'string' ? { title: spec } : spec;
-  return window.nativeModules.ui.showTextBox(textBox ?? {});
+  return window.nativeModules.api.showTextBox(textBox ?? {});
 }
 
 export function handleMainMenuAction(id: string) {

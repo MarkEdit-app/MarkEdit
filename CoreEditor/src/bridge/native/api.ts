@@ -4,10 +4,10 @@ import { WebPoint } from '../../@types/WebPoint';
 
 /**
  * @shouldExport true
- * @invokePath ui
- * @bridgeName NativeBridgeUI
+ * @invokePath api
+ * @bridgeName NativeBridgeAPI
  */
-export interface NativeModuleUI extends NativeModule {
+export interface NativeModuleAPI extends NativeModule {
   addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
   showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;

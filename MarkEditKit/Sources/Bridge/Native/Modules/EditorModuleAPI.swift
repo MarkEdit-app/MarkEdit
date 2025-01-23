@@ -1,5 +1,5 @@
 //
-//  EditorModuleUI.swift
+//  EditorModuleAPI.swift
 //
 //  Created by cyan on 10/4/24.
 //
@@ -8,32 +8,32 @@ import Foundation
 import CryptoKit
 
 @MainActor
-public protocol EditorModuleUIDelegate: AnyObject {
-  func editorUI(_ sender: EditorModuleUI, addMainMenuItems items: [(String, WebMenuItem)])
-  func editorUI(_ sender: EditorModuleUI, showContextMenu items: [WebMenuItem], location: WebPoint)
-  func editorUI(
-    _ sender: EditorModuleUI,
+public protocol EditorModuleAPIDelegate: AnyObject {
+  func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
+  func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint)
+  func editorAPI(
+    _ sender: EditorModuleAPI,
     alertWith title: String?,
     message: String?,
     buttons: [String]?
   ) -> Int
-  func editorUI(
-    _ sender: EditorModuleUI,
+  func editorAPI(
+    _ sender: EditorModuleAPI,
     showTextBox title: String?,
     placeholder: String?,
     defaultValue: String?
   ) -> String?
 }
 
-public final class EditorModuleUI: NativeModuleUI {
-  private weak var delegate: EditorModuleUIDelegate?
+public final class EditorModuleAPI: NativeModuleAPI {
+  private weak var delegate: EditorModuleAPIDelegate?
 
-  public init(delegate: EditorModuleUIDelegate) {
+  public init(delegate: EditorModuleAPIDelegate) {
     self.delegate = delegate
   }
 
   public func addMainMenuItems(items: [WebMenuItem]) {
-    delegate?.editorUI(self, addMainMenuItems: items.map { item in
+    delegate?.editorAPI(self, addMainMenuItems: items.map { item in
       let hash = SHA256.hash(data: Data(item.uniqueID.utf8))
       let id = hash.map { String(format: "%02x", $0) }.joined()
       return (id, item)
@@ -41,15 +41,15 @@ public final class EditorModuleUI: NativeModuleUI {
   }
 
   public func showContextMenu(items: [WebMenuItem], location: WebPoint) {
-    delegate?.editorUI(self, showContextMenu: items, location: location)
+    delegate?.editorAPI(self, showContextMenu: items, location: location)
   }
 
   public func showAlert(title: String?, message: String?, buttons: [String]?) -> Int {
-    delegate?.editorUI(self, alertWith: title, message: message, buttons: buttons) ?? 0
+    delegate?.editorAPI(self, alertWith: title, message: message, buttons: buttons) ?? 0
   }
 
   public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
-    delegate?.editorUI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
+    delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
   }
 }
 
