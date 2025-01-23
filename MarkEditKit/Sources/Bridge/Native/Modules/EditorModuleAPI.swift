@@ -7,6 +7,10 @@
 import Foundation
 import CryptoKit
 
+#if os(macOS)
+  import AppKit
+#endif
+
 @MainActor
 public protocol EditorModuleAPIDelegate: AnyObject {
   func editorAPIGetFileURL(_ sender: EditorModuleAPI) -> URL?
@@ -49,6 +53,41 @@ public final class EditorModuleAPI: NativeModuleAPI {
     ]
 
     return try? JSONSerialization.data(withJSONObject: json).toString()
+  }
+
+  public func getPasteboardItems() -> String? {
+  #if os(macOS)
+    let pasteboard = NSPasteboard.general
+    let types = pasteboard.types ?? []
+
+    let json: [[String: String]] = types.compactMap { type in
+      guard let data = pasteboard.data(forType: type) else {
+        return nil
+      }
+
+      var dict = [
+        "type": type.rawValue,
+        "data": data.base64EncodedString(),
+      ]
+
+      dict["string"] = data.toString()
+      return dict
+    }
+
+    return try? JSONSerialization.data(withJSONObject: json).toString()
+  #else
+    Logger.assertFail("Missing implementation, consider using web api directly")
+    return []
+  #endif
+  }
+
+  public func getPasteboardString() -> String? {
+  #if os(macOS)
+    return NSPasteboard.general.string(forType: .string)
+  #else
+    Logger.assertFail("Missing implementation, consider using web api directly")
+    return nil
+  #endif
   }
 
   public func addMainMenuItems(items: [WebMenuItem]) {

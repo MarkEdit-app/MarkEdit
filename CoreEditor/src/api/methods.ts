@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 import { LanguageDescription } from '@codemirror/language';
 import { MarkdownConfig } from '@lezer/markdown';
-import { FileInfo } from 'markedit-api';
+import { FileInfo, PasteboardItem } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
 
 export function onEditorReady(listener: (editorView: EditorView) => void) {
@@ -34,6 +34,15 @@ export async function getFileInfo(): Promise<FileInfo | undefined> {
       };
     })());
   });
+}
+
+export async function getPasteboardItems(): Promise<PasteboardItem[]> {
+  const items = await window.nativeModules.api.getPasteboardItems();
+  return items === undefined ? [] : JSON.parse(items);
+}
+
+export function getPasteboardString(): Promise<string | undefined> {
+  return window.nativeModules.api.getPasteboardString();
 }
 
 export function addExtension(extension: Extension) {
