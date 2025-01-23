@@ -5,7 +5,7 @@ import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModuleCompletion } from '../bridge/native/completion';
 import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
-import { NativeModuleUI } from '../bridge/native/ui';
+import { NativeModuleAPI } from '../bridge/native/api';
 
 import type { MarkEdit } from 'markedit-api';
 
@@ -41,7 +41,7 @@ declare global {
       completion: NativeModuleCompletion;
       preview: NativeModulePreview;
       tokenizer: NativeModuleTokenizer;
-      ui: NativeModuleUI;
+      api: NativeModuleAPI;
     };
   }
 

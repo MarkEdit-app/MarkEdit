@@ -1,5 +1,5 @@
 //
-//  WebBridgeUI.swift
+//  WebBridgeAPI.swift
 //
 //  Generated using https://github.com/microsoft/ts-gyb
 //
@@ -11,7 +11,7 @@ import WebKit
 import MarkEditCore
 
 @MainActor
-public final class WebBridgeUI {
+public final class WebBridgeAPI {
   private weak var webView: WKWebView?
 
   init(webView: WKWebView) {
@@ -27,7 +27,7 @@ public final class WebBridgeUI {
       id: id
     )
 
-    webView?.invoke(path: "webModules.ui.handleMainMenuAction", message: message, completion: completion)
+    webView?.invoke(path: "webModules.api.handleMainMenuAction", message: message, completion: completion)
   }
 
   public func handleContextMenuAction(id: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
@@ -39,6 +39,6 @@ public final class WebBridgeUI {
       id: id
     )
 
-    webView?.invoke(path: "webModules.ui.handleContextMenuAction", message: message, completion: completion)
+    webView?.invoke(path: "webModules.api.handleContextMenuAction", message: message, completion: completion)
   }
 }

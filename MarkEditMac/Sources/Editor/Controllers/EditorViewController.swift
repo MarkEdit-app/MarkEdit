@@ -127,7 +127,7 @@ final class EditorViewController: NSViewController {
       EditorModuleCompletion(delegate: self),
       EditorModulePreview(delegate: self),
       EditorModuleTokenizer(),
-      EditorModuleUI(delegate: self),
+      EditorModuleAPI(delegate: self),
     ])
 
     let handler = EditorMessageHandler(modules: modules)

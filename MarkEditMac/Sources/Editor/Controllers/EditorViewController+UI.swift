@@ -253,7 +253,7 @@ extension EditorViewController {
     }
 
     for spec in userDefinedMenuItems {
-      let item = createMenuItem(spec: spec.item, handler: bridge.ui.handleMainMenuAction)
+      let item = createMenuItem(spec: spec.item, handler: bridge.api.handleMainMenuAction)
       item.identifier = NSUserInterfaceItemIdentifier("\(EditorMenuItem.uniquePrefix).\(spec.id)")
 
       // Preferably, make it the last one before the special divider
@@ -280,7 +280,7 @@ extension EditorViewController {
   }
 
   func showContextMenu(items: [WebMenuItem], location: CGPoint) {
-    let menu = createMenu(items: items, handler: bridge.ui.handleContextMenuAction)
+    let menu = createMenu(items: items, handler: bridge.api.handleContextMenuAction)
     menu.identifier = EditorWebView.userDefinedContextMenuID
 
     NSCursor.arrow.push()
