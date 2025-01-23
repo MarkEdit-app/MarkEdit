@@ -9,6 +9,7 @@ import CryptoKit
 
 @MainActor
 public protocol EditorModuleAPIDelegate: AnyObject {
+  func editorAPIGetFileURL(_ sender: EditorModuleAPI) -> URL?
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
   func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint)
   func editorAPI(
@@ -30,6 +31,24 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public init(delegate: EditorModuleAPIDelegate) {
     self.delegate = delegate
+  }
+
+  public func getFileInfo() -> String? {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self) else {
+      return nil
+    }
+
+    let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path)
+    Logger.assert(attributes != nil, "Cannot get file attributes of: \(fileURL)")
+
+    let json: [String: Any] = [
+      "filePath": fileURL.path,
+      "fileSize": Double(attributes?[.size] as? Int64 ?? 0),
+      "creationDate": (attributes?[.creationDate] as? Date ?? .distantPast).timeIntervalSince1970,
+      "modificationDate": (attributes?[.modificationDate] as? Date ?? .distantPast).timeIntervalSince1970,
+    ]
+
+    return try? JSONSerialization.data(withJSONObject: json).toString()
   }
 
   public func addMainMenuItems(items: [WebMenuItem]) {

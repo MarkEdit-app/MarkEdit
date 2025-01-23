@@ -12,7 +12,6 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleCore: NativeModule {
-  func getFileInfo() -> String?
   func notifyWindowDidLoad()
   func notifyBackgroundColorDidChange(color: Int)
   func notifyViewportScaleDidChange()
@@ -31,9 +30,6 @@ public extension NativeModuleCore {
 final class NativeBridgeCore: NativeBridge {
   static let name = "core"
   lazy var methods: [String: NativeMethod] = [
-    "getFileInfo": { [weak self] in
-      self?.getFileInfo(parameters: $0)
-    },
     "notifyWindowDidLoad": { [weak self] in
       self?.notifyWindowDidLoad(parameters: $0)
     },
@@ -65,11 +61,6 @@ final class NativeBridgeCore: NativeBridge {
 
   init(_ module: NativeModuleCore) {
     self.module = module
-  }
-
-  private func getFileInfo(parameters: Data) -> Result<Any?, Error>? {
-    let result = module.getFileInfo()
-    return .success(result)
   }
 
   private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {

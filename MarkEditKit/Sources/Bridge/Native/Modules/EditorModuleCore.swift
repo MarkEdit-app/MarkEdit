@@ -8,7 +8,6 @@ import Foundation
 
 @MainActor
 public protocol EditorModuleCoreDelegate: AnyObject {
-  func editorCoreGetFileURL(_ sender: EditorModuleCore) -> URL?
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32)
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
@@ -30,24 +29,6 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public init(delegate: EditorModuleCoreDelegate) {
     self.delegate = delegate
-  }
-
-  public func getFileInfo() -> String? {
-    guard let fileURL = delegate?.editorCoreGetFileURL(self) else {
-      return nil
-    }
-
-    let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path)
-    Logger.assert(attributes != nil, "Cannot get file attributes of: \(fileURL)")
-
-    let json: [String: Any] = [
-      "filePath": fileURL.path,
-      "fileSize": Double(attributes?[.size] as? Int64 ?? 0),
-      "creationDate": (attributes?[.creationDate] as? Date ?? .distantPast).timeIntervalSince1970,
-      "modificationDate": (attributes?[.modificationDate] as? Date ?? .distantPast).timeIntervalSince1970,
-    ]
-
-    return try? JSONSerialization.data(withJSONObject: json).toString()
   }
 
   public func notifyWindowDidLoad() {

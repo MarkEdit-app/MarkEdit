@@ -14,7 +14,7 @@ export function onEditorReady(listener: (editorView: EditorView) => void) {
 }
 
 export async function getFileInfo(): Promise<FileInfo | undefined> {
-  const info = await window.nativeModules.core.getFileInfo();
+  const info = await window.nativeModules.api.getFileInfo();
 
   // eslint-disable-next-line compat/compat
   return new Promise(resolve => {

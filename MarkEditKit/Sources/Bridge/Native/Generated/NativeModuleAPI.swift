@@ -12,6 +12,7 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleAPI: NativeModule {
+  func getFileInfo() -> String?
   func addMainMenuItems(items: [WebMenuItem])
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) -> Int
@@ -26,6 +27,9 @@ public extension NativeModuleAPI {
 final class NativeBridgeAPI: NativeBridge {
   static let name = "api"
   lazy var methods: [String: NativeMethod] = [
+    "getFileInfo": { [weak self] in
+      self?.getFileInfo(parameters: $0)
+    },
     "addMainMenuItems": { [weak self] in
       self?.addMainMenuItems(parameters: $0)
     },
@@ -45,6 +49,11 @@ final class NativeBridgeAPI: NativeBridge {
 
   init(_ module: NativeModuleAPI) {
     self.module = module
+  }
+
+  private func getFileInfo(parameters: Data) -> Result<Any?, Error>? {
+    let result = module.getFileInfo()
+    return .success(result)
   }
 
   private func addMainMenuItems(parameters: Data) -> Result<Any?, Error>? {
