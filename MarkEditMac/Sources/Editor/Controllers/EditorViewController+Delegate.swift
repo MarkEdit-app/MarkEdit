@@ -83,10 +83,6 @@ extension EditorViewController: EditorWebViewActionDelegate {
 // MARK: - EditorModuleCoreDelegate
 
 extension EditorViewController: EditorModuleCoreDelegate {
-  func editorCoreGetFileURL(_ sender: EditorModuleCore) -> URL? {
-    document?.fileURL
-  }
-
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
@@ -251,6 +247,10 @@ extension EditorViewController: EditorModulePreviewDelegate {
 // MARK: - EditorModuleAPIDelegate
 
 extension EditorViewController: EditorModuleAPIDelegate {
+  func editorAPIGetFileURL(_ sender: EditorModuleAPI) -> URL? {
+    document?.fileURL
+  }
+
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {
     addMainMenuItems(items: items)
   }
