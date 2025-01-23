@@ -14,6 +14,7 @@ import * as customHistory from '../@vendor/commands/history';
 import { TextEditor } from './editor';
 import {
   onEditorReady,
+  getFileInfo,
   addExtension,
   addMarkdownConfig,
   addCodeLanguage,
@@ -47,6 +48,7 @@ export function initMarkEditModules() {
   MarkEdit.lezer = lezer;
 
   MarkEdit.onEditorReady = onEditorReady;
+  MarkEdit.getFileInfo = getFileInfo;
   MarkEdit.addExtension = addExtension;
   MarkEdit.addMarkdownConfig = addMarkdownConfig;
   MarkEdit.addCodeLanguage = addCodeLanguage;
