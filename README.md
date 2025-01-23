@@ -53,6 +53,8 @@ MarkEdit is completely free and open-source, with no advertising or promotions f
 
 Please consider starring or contributing to this project.
 
+> For everyone's convenience, MarkEdit is licensed under the MIT license. However, please don't upload the app to the Mac App Store unless you add meaningful new value (see [also](https://github.com/MarkEdit-app/MarkEdit/wiki#last-but-not-least)).
+
 ## Using MarkEdit
 
 Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki/Manual) for details.
