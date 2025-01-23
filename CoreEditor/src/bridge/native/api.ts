@@ -9,6 +9,8 @@ import { WebPoint } from '../../@types/WebPoint';
  */
 export interface NativeModuleAPI extends NativeModule {
   getFileInfo(): Promise<string | undefined>;
+  getPasteboardItems(): Promise<string | undefined>;
+  getPasteboardString(): Promise<string | undefined>;
   addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
   showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;

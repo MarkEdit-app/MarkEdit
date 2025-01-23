@@ -13,6 +13,8 @@ import MarkEditCore
 @MainActor
 public protocol NativeModuleAPI: NativeModule {
   func getFileInfo() -> String?
+  func getPasteboardItems() -> String?
+  func getPasteboardString() -> String?
   func addMainMenuItems(items: [WebMenuItem])
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) -> Int
@@ -29,6 +31,12 @@ final class NativeBridgeAPI: NativeBridge {
   lazy var methods: [String: NativeMethod] = [
     "getFileInfo": { [weak self] in
       self?.getFileInfo(parameters: $0)
+    },
+    "getPasteboardItems": { [weak self] in
+      self?.getPasteboardItems(parameters: $0)
+    },
+    "getPasteboardString": { [weak self] in
+      self?.getPasteboardString(parameters: $0)
     },
     "addMainMenuItems": { [weak self] in
       self?.addMainMenuItems(parameters: $0)
@@ -53,6 +61,16 @@ final class NativeBridgeAPI: NativeBridge {
 
   private func getFileInfo(parameters: Data) -> Result<Any?, Error>? {
     let result = module.getFileInfo()
+    return .success(result)
+  }
+
+  private func getPasteboardItems(parameters: Data) -> Result<Any?, Error>? {
+    let result = module.getPasteboardItems()
+    return .success(result)
+  }
+
+  private func getPasteboardString(parameters: Data) -> Result<Any?, Error>? {
+    let result = module.getPasteboardString()
     return .success(result)
   }
 

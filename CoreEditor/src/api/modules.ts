@@ -15,6 +15,8 @@ import { TextEditor } from './editor';
 import {
   onEditorReady,
   getFileInfo,
+  getPasteboardItems,
+  getPasteboardString,
   addExtension,
   addMarkdownConfig,
   addCodeLanguage,
@@ -49,6 +51,8 @@ export function initMarkEditModules() {
 
   MarkEdit.onEditorReady = onEditorReady;
   MarkEdit.getFileInfo = getFileInfo;
+  MarkEdit.getPasteboardItems = getPasteboardItems;
+  MarkEdit.getPasteboardString = getPasteboardString;
   MarkEdit.addExtension = addExtension;
   MarkEdit.addMarkdownConfig = addMarkdownConfig;
   MarkEdit.addCodeLanguage = addCodeLanguage;
