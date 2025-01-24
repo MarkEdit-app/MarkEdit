@@ -157,7 +157,7 @@ private extension AppDelegate {
   }
 
   @IBAction func newFileFromClipboard(_ sender: Any?) {
-    createUntitledFile(initialContent: NSPasteboard.general.string)
+    createNewFile(initialContent: NSPasteboard.general.string)
   }
 
   @IBAction func openDevelopmentGuide(_ sender: Any?) {

@@ -459,18 +459,18 @@
         }
       }
     },
-    "Create a new document, with an optional parameter to specify the initial content." : {
+    "Create a new document, with optional parameters to set the file name and the initial content." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新建一个文档，可通过一个可选参数来指定初始内容。"
+            "value" : "新建一个文档，可通过可选参数来设置文件名和初始内容。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "新建一個文件，可透過一個可選變數來指定初始內容。"
+            "value" : "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
           }
         }
       }
@@ -825,6 +825,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法获取更新。"
+          }
+        }
+      }
+    },
+    "File Name" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件名"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檔案名"
           }
         }
       }
@@ -1772,19 +1788,18 @@
         }
       }
     },
-    "New Document with ${initialContent}" : {
-      "extractionState" : "manual",
+    "New Document named ${fileName} with ${initialContent}" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 ${initialContent} 新建文档"
+            "value" : "以 ${initialContent} 新建名为 ${fileName} 的文档"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用 ${initialContent} 新增文件"
+            "value" : "以 ${initialContent} 新增名為 ${fileName} 的文件"
           }
         }
       }

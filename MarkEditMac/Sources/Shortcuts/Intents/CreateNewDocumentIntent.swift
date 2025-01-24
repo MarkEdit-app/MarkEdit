@@ -10,18 +10,21 @@ import AppIntents
 
 struct CreateNewDocumentIntent: AppIntent {
   static let title: LocalizedStringResource = "Create New Document"
-  static let description = IntentDescription("Create a new document, with an optional parameter to specify the initial content.")
+  static let description = IntentDescription("Create a new document, with optional parameters to set the file name and the initial content.")
   static let openAppWhenRun = true
   static var parameterSummary: some ParameterSummary {
-    Summary("New Document with \(\.$initialContent)")
+    Summary("New Document named \(\.$fileName) with \(\.$initialContent)")
   }
+
+  @Parameter(title: "File Name")
+  var fileName: String?
 
   @Parameter(title: "Initial Content")
   var initialContent: String?
 
   @MainActor
   func perform() async throws -> some IntentResult {
-    NSApp.appDelegate?.createUntitledFile(initialContent: initialContent, isIntent: true)
+    NSApp.appDelegate?.createNewFile(initialContent: initialContent, fileName: fileName, isIntent: true)
     return .result()
   }
 }
