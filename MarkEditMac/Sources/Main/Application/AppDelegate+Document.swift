@@ -33,14 +33,14 @@ extension AppDelegate {
       }
     case .newDocument:
       menu.addItem(withTitle: Localized.Document.openDocument) {
-        NSApplication.shared.showOpenPanel()
+        sender.showOpenPanel()
       }
     }
 
     return menu
   }
 
-  func createNewFile(initialContent: String?, fileName: String? = nil, isIntent: Bool = false) {
+  func createNewFile(fileName: String? = nil, initialContent: String? = nil, isIntent: Bool = false) {
     // In EditorDocument, this is used as an external filename
     AppDocumentController.suggestedFilename = fileName
 
@@ -59,6 +59,12 @@ extension AppDelegate {
         self.currentEditor?.prepareInitialContent(initialContent)
       }
     }
+  }
+
+  func createNewFile(queryDict: [String: String]?) {
+    let fileName = queryDict?["filename"]
+    let initialContent = queryDict?["initial-content"]
+    createNewFile(fileName: fileName, initialContent: initialContent)
   }
 
   func toggleDocumentWindowVisibility() {

@@ -24,7 +24,12 @@ struct CreateNewDocumentIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult {
-    NSApp.appDelegate?.createNewFile(initialContent: initialContent, fileName: fileName, isIntent: true)
+    NSApp.appDelegate?.createNewFile(
+      fileName: fileName,
+      initialContent: initialContent,
+      isIntent: true
+    )
+
     return .result()
   }
 }

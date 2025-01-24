@@ -98,6 +98,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 }
 
+// MARK: - URL Handling
+
+extension AppDelegate {
+  func application(_ application: NSApplication, open urls: [URL]) {
+    for url in urls {
+      // https://github.com/MarkEdit-app/MarkEdit/wiki/Text-Processing#using-url-schemes
+      let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+      switch components?.host {
+      case "new-file":
+        // markedit://new-file?filename=Untitled&initial-content=Hello
+        createNewFile(queryDict: components?.queryDict)
+      case "open":
+        // markedit://open
+        application.showOpenPanel()
+      default:
+        break
+      }
+    }
+  }
+}
+
 // MARK: - Private
 
 private extension AppDelegate {
