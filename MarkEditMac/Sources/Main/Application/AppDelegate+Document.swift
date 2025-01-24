@@ -40,7 +40,10 @@ extension AppDelegate {
     return menu
   }
 
-  func createUntitledFile(initialContent: String?, isIntent: Bool = false) {
+  func createNewFile(initialContent: String?, fileName: String? = nil, isIntent: Bool = false) {
+    // In EditorDocument, this is used as an external filename
+    AppDocumentController.suggestedFilename = fileName
+
     // Activating the app also creates a new file if new window behavior is `newDocument`,
     // prevent duplicate creation from Shortcuts like `CreateNewDocumentIntent`.
     if !isIntent || (Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.2) {

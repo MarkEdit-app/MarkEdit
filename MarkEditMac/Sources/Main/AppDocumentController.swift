@@ -15,6 +15,7 @@ import MarkEditKit
  */
 final class AppDocumentController: NSDocumentController {
   static var suggestedTextEncoding: EditorTextEncoding?
+  static var suggestedFilename: String?
 
   override func beginOpenPanel(_ openPanel: NSOpenPanel, forTypes inTypes: [String]?) async -> Int {
     if let defaultDirectory = AppRuntimeConfig.defaultOpenDirectory {

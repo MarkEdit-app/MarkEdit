@@ -56,9 +56,18 @@ final class EditorDocument: NSDocument {
 
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
-  private var suggestedFilename: String?
   private var suggestedTextEncoding: EditorTextEncoding?
   private weak var hostViewController: EditorViewController?
+
+  /**
+   File name from the table of contents.
+   */
+  private var suggestedFilename: String?
+
+  /**
+   File name from external apps, such as Shortcuts or URL schemes.
+   */
+  private var externalFilename: String?
 
   override func makeWindowControllers() {
     let storyboard = NSStoryboard(name: NSStoryboard.Name("Main"), bundle: nil)
@@ -80,6 +89,9 @@ final class EditorDocument: NSDocument {
     isTerminating = false
     hostViewController = contentVC
     hostViewController?.representedObject = self
+
+    externalFilename = AppDocumentController.suggestedFilename
+    AppDocumentController.suggestedFilename = nil
 
     NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)
@@ -116,7 +128,7 @@ extension EditorDocument {
 
   override var displayName: String? {
     get {
-      suggestedFilename ?? super.displayName
+      suggestedFilename ?? externalFilename ?? super.displayName
     }
     set {
       super.displayName = newValue
