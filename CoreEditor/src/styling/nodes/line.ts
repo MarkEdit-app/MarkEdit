@@ -60,9 +60,25 @@ class Layer extends RectangleMarker {
       const top = rects.reduce((acc, cur) => Math.min(acc, cur.top), 1e9);
       const height = rects.reduce((acc, cur) => Math.max(acc, cur.top + cur.height), -1e9) - top;
 
+      const left = (() => {
+        if (window.config.lineWrapping) {
+          return contentRect.left;
+        }
+
+        // The content can be horizontally scrolled
+        const gutter = document.querySelector('.cm-gutters');
+        if (gutter === null) {
+          return 0;
+        }
+
+        // Use the gutter width
+        const style = getComputedStyle(gutter);
+        return gutter.getBoundingClientRect().width + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+      })();
+
       // The rect that is slightly taller than the caret, centered vertically
       return new DOMRect(
-        contentRect.left,           // x
+        left,                       // x
         top - rectPadding,          // y
         contentRect.width * scale,  // width
         height + rectPadding * 2,   // height
