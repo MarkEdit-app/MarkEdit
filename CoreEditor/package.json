@@ -33,6 +33,7 @@
     "@types/js-yaml": "^4.0.5",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/parser": "^7.16.1",
+    "esbuild": "^0.25.0",
     "eslint": "^9.7.0",
     "eslint-plugin-compat": "^6.0.0",
     "eslint-plugin-promise": "^6.6.0",
