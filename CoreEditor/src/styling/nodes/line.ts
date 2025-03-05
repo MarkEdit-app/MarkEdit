@@ -1,10 +1,7 @@
 import { BlockInfo, layer, RectangleMarker } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
-import { buildInnerBorder } from '../builder';
 import { almostEqual, getViewportScale } from '../../common/utils';
-import { globalState } from '../../common/store';
 
-const borderWidth = 2.5;
 const rectPadding = 2.0;
 const layerClass = 'cm-md-activeIndicator';
 
@@ -36,19 +33,9 @@ export const lineIndicatorLayer = layer({
       }
     }
 
-    return lineBlocks.map(lineBock => new Layer(content, lineBock, storage.cachedTheme));
+    return lineBlocks.map(lineBock => new Layer(content, lineBock));
   },
   update: update => {
-    // Theme changed, the update object doesn't have sufficient info
-    if (window.config.theme !== storage.cachedTheme) {
-      // The layer doesn't redraw without this, we haven't figured out the reason...
-      const layers = document.querySelectorAll(`.${layerClass}`);
-      layers.forEach(layer => layer.remove());
-
-      storage.cachedTheme = window.config.theme;
-      return true;
-    }
-
     return update.selectionSet || update.docChanged || update.viewportChanged || update.geometryChanged;
   },
 });
@@ -57,7 +44,7 @@ class Layer extends RectangleMarker {
   // Used for object equality
   private readonly rect: DOMRect;
 
-  constructor(content: HTMLElement, lineBlock: BlockInfo, private readonly theme?: string) {
+  constructor(content: HTMLElement, lineBlock: BlockInfo) {
     const contentRect = content.getBoundingClientRect();
 
     // The rect is wider than lineRect, it fills the entire contentDOM
@@ -86,34 +73,10 @@ class Layer extends RectangleMarker {
     this.rect = rectToDraw;
   }
 
-  draw() {
-    const element = super.draw();
-    this.updateColors(element);
-    return element;
-  }
-
-  update(element: HTMLElement, prev: Layer): boolean {
-    this.updateColors(element);
-    return super.update(element, prev);
-  }
-
   eq(other: Layer): boolean {
-    return this.theme === other.theme &&
-    almostEqual(this.rect.x, other.rect.x) &&
+    return almostEqual(this.rect.x, other.rect.x) &&
     almostEqual(this.rect.y, other.rect.y) &&
     almostEqual(this.rect.width, other.rect.width) &&
     almostEqual(this.rect.height, other.rect.height);
   }
-
-  private updateColors(element: HTMLElement) {
-    const colors = globalState.colors;
-    element.style.backgroundColor = colors?.activeLine ?? '';
-    element.style.boxShadow = buildInnerBorder(borderWidth, colors?.lineBorder);
-  }
 }
-
-const storage: {
-  cachedTheme?: string;
-} = {
-  cachedTheme: undefined,
-};
