@@ -396,7 +396,7 @@ Gw
                                         </menuItem>
                                         <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
                                             <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="bET-4d-Oqr"/>
+                                                <action selector="selectWholeDocument:" target="Ady-hI-5gd" id="VLu-xb-TLI"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Ts4-WW-MvM"/>

@@ -1,5 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
+import { selectAll as selectAllCommand } from '@codemirror/commands';
 import { isReleaseMode } from '../../common/utils';
 import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
@@ -45,6 +46,10 @@ export function selectedMainText(): string {
   const state = window.editor.state;
   const { from, to } = state.selection.main;
   return state.sliceDoc(from, to);
+}
+
+export function selectWholeDocument() {
+  selectAllCommand(window.editor);
 }
 
 /**
