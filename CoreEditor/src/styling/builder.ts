@@ -188,6 +188,10 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-selectedVisible .cm-visibleSpace::before': {
       color: `${colors.text}99`,
     },
+    '.cm-md-activeIndicator': {
+      background: colors.activeLine,
+      boxShadow: buildInnerBorder(2.5, colors.lineBorder),
+    },
     '.cm-md-inlineCode': {
       backgroundColor: colors.lighterBackground,
     },
