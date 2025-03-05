@@ -1,6 +1,6 @@
 import { WebModule } from '../webModule';
 import { WebRect } from '../../@types/WebRect';
-import { selectedMainText, scrollToSelection, getRect, gotoLine, refreshEditFocus, scrollToBottomSmoothly } from '../../modules/selection';
+import { selectWholeDocument, selectedMainText, scrollToSelection, getRect, gotoLine, refreshEditFocus, scrollToBottomSmoothly } from '../../modules/selection';
 import { navigateGoBack } from '../../modules/selection/navigate';
 
 /**
@@ -9,6 +9,7 @@ import { navigateGoBack } from '../../modules/selection/navigate';
  * @overrideModuleName WebBridgeSelection
  */
 export interface WebModuleSelection extends WebModule {
+  selectWholeDocument(): void;
   getText(): string;
   getRect({ pos }: { pos: CodeGen_Int }): WebRect | undefined;
   scrollToSelection(): void;
@@ -19,6 +20,10 @@ export interface WebModuleSelection extends WebModule {
 }
 
 export class WebModuleSelectionImpl implements WebModuleSelection {
+  selectWholeDocument(): void {
+    selectWholeDocument();
+  }
+
   getText(): string {
     return selectedMainText();
   }

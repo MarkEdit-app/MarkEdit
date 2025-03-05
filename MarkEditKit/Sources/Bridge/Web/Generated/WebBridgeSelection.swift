@@ -18,6 +18,10 @@ public final class WebBridgeSelection {
     self.webView = webView
   }
 
+  public func selectWholeDocument(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.selection.selectWholeDocument", completion: completion)
+  }
+
   public func getText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.selection.getText") { result in

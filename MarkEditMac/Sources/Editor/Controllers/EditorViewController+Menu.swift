@@ -421,6 +421,11 @@ private extension EditorViewController {
     showGotoLineWindow(sender)
   }
 
+  @IBAction func selectWholeDocument(_ sender: Any?) {
+    // The default implementation "selectAll" only selects the viewport
+    bridge.selection.selectWholeDocument()
+  }
+
   @IBAction func openTableOfContents(_ sender: Any?) {
     if let presentedMenu {
       return presentedMenu.cancelTracking()
