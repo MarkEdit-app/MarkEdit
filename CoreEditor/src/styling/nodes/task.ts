@@ -36,12 +36,12 @@ export function handleMouseDown(event: MouseEvent) {
 
   const toggled = (() => {
     const text = line.text;
-    if (text.match(/^( *- +\[[ ]\] +)/) === null) {
+    if (text.match(/^([ \t]*[-*+] +\[[ ]\] +)/) === null) {
       // - [x] to - [ ]
-      return text.replace(/(- +\[)[xX](\].*)/, '$1 $2');
+      return text.replace(/([-*+] +\[)[xX](\].*)/, '$1 $2');
     } else {
       // - [ ] to - [x]
-      return text.replace(/(- +\[) (\].*)/, '$1x$2');
+      return text.replace(/([-*+] +\[) (\].*)/, '$1x$2');
     }
   })();
 

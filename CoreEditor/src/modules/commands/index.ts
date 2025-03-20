@@ -53,14 +53,14 @@ export function toggleBlockquote() {
  * Toggle list markers like "- Item", "* Item", or "+ Item".
  */
 export function toggleBullet() {
-  toggleListStyle(() => /^( *[-*+] )(?! *\[[ xX]\]) */, (_, suggested) => suggested ?? '-');
+  toggleListStyle(() => /^([ \t]*[-*+] )(?! *\[[ xX]\]) */, (_, suggested) => suggested ?? '-');
 }
 
 /**
  * Toggle list markers like "1. Item".
  */
 export function toggleNumbering() {
-  toggleListStyle(index => new RegExp(`^( *${index + 1}\\. )`), index => `${index + 1}.`);
+  toggleListStyle(index => new RegExp(`^([ \t]*${index + 1}\\. )`), index => `${index + 1}.`);
 }
 
 /**
@@ -68,15 +68,15 @@ export function toggleNumbering() {
  */
 export function toggleTodo() {
   toggleListStyle(
-    () => /^( *- +\[[ xX]\] +)/,
+    () => /^([ \t]*[-*+] +\[[ xX]\] +)/,
     () => '- [ ]',
     line => {
-      if (!/- +\[ \]/.test(line)) {
+      if (!/[-*+] +\[ \]/.test(line)) {
         return undefined;
       }
 
       // Change "- [ ] Item" to "- [x] Item"
-      return line.replace(/(- +\[) (\].*)/, '$1x$2');
+      return line.replace(/([-*+] +\[) (\].*)/, '$1x$2');
     },
   );
 }
