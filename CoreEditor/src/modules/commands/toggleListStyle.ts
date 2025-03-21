@@ -2,6 +2,7 @@ import { EditorSelection, Line } from '@codemirror/state';
 import { linesWithRange } from '../lines';
 import { reversedRanges } from '../selection';
 import removeListMarkers from './removeListMarkers';
+import invertRange from '../selection/reverseRange';
 
 /**
  * Toggle list style by providing pattern and customizable callbacks.
@@ -25,7 +26,7 @@ export default function toggleListStyle(
   // here we want to treat each line as an independent update.
   //
   // The downside of this approach is that updates are also reversed.
-  for (const { from, to } of selectedRanges) {
+  for (const { from, to, anchor: _anchor, head: _head } of selectedRanges) {
     const lines = linesWithRange(from, to);
     const literate = (callback: (match: RegExpMatchArray | null, empty: boolean, line: Line, index: number) => void) => {
       let skipped = 0;
@@ -106,19 +107,15 @@ export default function toggleListStyle(
     // we don't have a better way to handle the selection updates.
     if (lines.length > 1) {
       editor.dispatch({
-        selection: EditorSelection.range(startIndex, endIndex + movedTotal),
+        selection: invertRange(EditorSelection.range(startIndex, endIndex + movedTotal), _anchor > _head),
       });
     } else {
       // Shift selections to ensure that the selected text remains unchanged
-      const anchor = from + (movedBy.length > 0 ? movedBy[0] : 0);
-      const head = to + movedTotal;
-
-      // The shifted range can be invalid, e.g., negative positions
-      if (anchor >= 0 && head <= editor.state.doc.length) {
-        editor.dispatch({
-          selection: EditorSelection.range(anchor, head),
-        });
-      }
+      const anchor = Math.max(lines[0].from, from + (movedBy.length > 0 ? movedBy[0] : 0));
+      const head = Math.min(editor.state.doc.length, Math.max(0, to + movedTotal));
+      editor.dispatch({
+        selection: invertRange(EditorSelection.range(anchor, head), _anchor > _head),
+      });
     }
   }
 }
