@@ -19,8 +19,8 @@ const colors: EditorColors = {
   lineNumber: '#747478',
   searchMatch: '#545558',
   selectionHighlight: '#4d5465',
-  visibleSpace: '#424d5b',
-  lighterBackground: '#424d5b40',
+  visibleSpace: '#888888',
+  lighterBackground: '#88888840',
 };
 
 function theme() {
