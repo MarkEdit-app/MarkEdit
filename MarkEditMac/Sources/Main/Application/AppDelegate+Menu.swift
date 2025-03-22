@@ -160,6 +160,10 @@ private extension AppDelegate {
     createNewFile(initialContent: NSPasteboard.general.string)
   }
 
+  @IBAction func saveAllDocuments(_ sender: Any?) {
+    NSDocumentController.shared.saveAllDocuments(nil)
+  }
+
   @IBAction func openDevelopmentGuide(_ sender: Any?) {
     NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Development")
   }

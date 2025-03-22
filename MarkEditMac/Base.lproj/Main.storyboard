@@ -148,6 +148,12 @@
                                                 <action selector="saveDocument:" target="Ady-hI-5gd" id="teZ-XB-qJY"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Save All" keyEquivalent="s" id="5W0-LW-fUP">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="saveAllDocuments:" target="Voe-Tx-rLC" id="6Ov-7Z-60H"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
                                             <connections>
                                                 <action selector="saveDocumentAs:" target="Ady-hI-5gd" id="mDf-zr-I0C"/>
