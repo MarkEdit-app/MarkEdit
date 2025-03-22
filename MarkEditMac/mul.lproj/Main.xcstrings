@@ -385,6 +385,30 @@
         }
       }
     },
+    "5W0-LW-fUP.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Save All\"; ObjectID = \"5W0-LW-fUP\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Save All"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部存储"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部儲存"
+          }
+        }
+      }
+    },
     "5Zc-N5-YRN.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Headers\"; ObjectID = \"5Zc-N5-YRN\";",
       "extractionState" : "extracted_with_value",

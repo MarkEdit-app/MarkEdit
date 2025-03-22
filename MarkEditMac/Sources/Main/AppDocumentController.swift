@@ -31,4 +31,9 @@ final class AppDocumentController: NSDocumentController {
     Self.suggestedTextEncoding = nil
     return await super.beginOpenPanel(openPanel, forTypes: inTypes)
   }
+
+  override func saveAllDocuments(_ sender: Any?) {
+    // The default implementation doesn't work
+    documents.forEach { $0.save(sender) }
+  }
 }
