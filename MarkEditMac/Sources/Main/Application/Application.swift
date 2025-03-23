@@ -10,7 +10,7 @@ import MarkEditKit
 
 @main
 final class Application: NSApplication {
-  var currentEditor: EditorViewController? {
+  @objc var currentEditor: EditorViewController? {
     keyWindow?.contentViewController as? EditorViewController
   }
 

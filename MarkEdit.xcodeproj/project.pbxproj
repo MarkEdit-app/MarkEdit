@@ -97,6 +97,7 @@
 		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 		87FAFFD72BE0B6A300FA509D /* AppDelegate+FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */; };
+		B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,6 +217,7 @@
 		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 		87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+FileSystem.swift"; sourceTree = "<group>"; };
+		B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = MarkEdit.sdef; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +316,7 @@
 				870A51C8294752530095C7EB /* index.html */,
 				870A51A9294700E00095C7EB /* Assets.xcassets */,
 				8757F7FB2AAC815F001957DD /* Localizable.xcstrings */,
+				B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				870A51AA294700E00095C7EB /* Assets.xcassets in Resources */,
 				8757F7FC2AAC815F001957DD /* Localizable.xcstrings in Resources */,
 				870A51AD294700E00095C7EB /* Main.storyboard in Resources */,
+				B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,7 +939,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
+				INFOPLIST_KEY_NSPrincipalClass = MarkEdit.Application;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -971,7 +975,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
-				INFOPLIST_KEY_NSPrincipalClass = "$(PRODUCT_NAME).Application";
+				INFOPLIST_KEY_NSPrincipalClass = MarkEdit.Application;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
