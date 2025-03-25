@@ -8,23 +8,28 @@ import { createDecoPlugin } from '../helper';
 import { selectedVisiblesDecoration } from './selection';
 import { frontMatterRange } from '../../modules/frontMatter';
 import { refreshEditFocus } from '../../modules/selection';
+import { getVisibleLines } from '../../modules/lines';
+import { LineBreakWidget } from '../views';
 
 const typingInterval = 300;
 const focusUpdateInterval = 15;
 
-// The difference is that renderInvisiblesSelection doesn't match continuous spaces,
-// which doesn't work well with selectedVisiblesDecoration because nodes can be nested.
+// Extensions to render whitespaces
 const renderInvisiblesAlways = renderInvisibles(/\t| +/g, false);
-const renderInvisiblesSelection = renderInvisibles(/\t| /g, true);
+const renderInvisiblesSelection = renderInvisibles(/\t| /g, true); // Don't match continuous spaces, selectedVisiblesDecoration won't work
+
+// Extensions to render line breaks
+const renderLineBreaksAlways = renderLineBreaks(false);
+const renderLineBreaksSelection = renderLineBreaks(true);
 
 export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: boolean) {
   if (behavior === InvisiblesBehavior.always) {
-    return renderInvisiblesAlways;
+    return [renderInvisiblesAlways, renderLineBreaksAlways];
   }
 
   if (behavior === InvisiblesBehavior.selection) {
     // renderInvisiblesSelection must go before selectedVisiblesDecoration
-    return hasSelection ? [renderInvisiblesSelection, selectedVisiblesDecoration] : selectedVisiblesDecoration;
+    return hasSelection ? [renderInvisiblesSelection, renderLineBreaksSelection, selectedVisiblesDecoration] : selectedVisiblesDecoration;
   }
 
   if (behavior === InvisiblesBehavior.trailing) {
@@ -73,11 +78,8 @@ function renderInvisibles(regexp: RegExp, selectionOnly: boolean) {
   return createDecoPlugin(() => createMarkDeco(regexp, (match, pos) => {
     // If it's for selection only and the position is not in any selection,
     // we won't show the invisible.
-    if (selectionOnly) {
-      const ranges = window.editor.state.selection.ranges;
-      if (!ranges.some(range => range.from <= pos && range.to > pos)) {
-        return null;
-      }
+    if (shouldIgnorePosition(pos, selectionOnly)) {
+      return null;
     }
 
     // If we always show invisibles and just inserted a whitespace, we skip drawing in this render pass.
@@ -98,12 +100,38 @@ function renderInvisibles(regexp: RegExp, selectionOnly: boolean) {
   }));
 }
 
+function renderLineBreaks(selectionOnly: boolean) {
+  return createDecoPlugin(() => {
+    const decos = getVisibleLines()
+      .map(({ to: pos }) => {
+        if (shouldIgnorePosition(pos, selectionOnly)) {
+          return null;
+        }
+
+        const widget = new LineBreakWidget(pos);
+        return Decoration.widget({ widget, side: 1 }).range(pos);
+      })
+      .filter(deco => deco !== null);
+
+    return Decoration.set(decos);
+  });
+}
+
 function alwaysRenderInvisibles() {
   return window.config.invisiblesBehavior === InvisiblesBehavior.always;
 }
 
 function caretTextPosition() {
   return window.editor.state.selection.main.anchor;
+}
+
+function shouldIgnorePosition(pos: number, selectionOnly: boolean) {
+  if (selectionOnly) {
+    const ranges = window.editor.state.selection.ranges;
+    return !ranges.some(range => range.from <= pos && range.to > pos);
+  }
+
+  return false;
 }
 
 /**

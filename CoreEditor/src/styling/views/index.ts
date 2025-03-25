@@ -38,3 +38,24 @@ export class PreviewWidget extends WidgetView {
     return false;
   }
 }
+
+/**
+ * Widget used to render line breaks as visible characters.
+ */
+export class LineBreakWidget extends WidgetView {
+  constructor(pos: number) {
+    super();
+    this.pos = pos;
+  }
+
+  toDOM() {
+    const span = document.createElement('span');
+    span.className = 'cm-visibleLineBreak';
+    span.innerText = '¬';
+    return span;
+  }
+
+  eq(other: LineBreakWidget) {
+    return other.pos === this.pos;
+  }
+}

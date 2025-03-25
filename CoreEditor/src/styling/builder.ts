@@ -179,13 +179,13 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-visibleTab': {
       backgroundColor: colors.visibleSpace,
     },
-    '.cm-visibleSpace::before': {
+    '.cm-visibleSpace::before, .cm-visibleLineBreak': {
       color: colors.visibleSpace,
     },
     '.cm-selectedVisible .cm-visibleTab': {
       backgroundColor: `${colors.text}99`,
     },
-    '.cm-selectedVisible .cm-visibleSpace::before': {
+    '.cm-selectedVisible .cm-visibleSpace::before, .cm-selectedVisible .cm-visibleLineBreak': {
       color: `${colors.text}99`,
     },
     '.cm-md-activeIndicator': {
