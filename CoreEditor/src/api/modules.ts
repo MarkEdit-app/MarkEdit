@@ -85,5 +85,5 @@ export function initMarkEditModules() {
     return {};
   };
 
-  window.require = require as NodeRequire;
+  window.require = require as NodeJS.Require;
 }
