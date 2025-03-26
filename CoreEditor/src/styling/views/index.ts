@@ -51,7 +51,7 @@ export class LineBreakWidget extends WidgetView {
   toDOM() {
     const span = document.createElement('span');
     span.className = 'cm-visibleLineBreak';
-    span.innerText = '¬';
+    span.innerText = window.config.visibleLineBreakCharacter ?? '¬';
     return span;
   }
 

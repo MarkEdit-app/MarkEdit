@@ -30,6 +30,8 @@ public struct EditorConfig: Encodable {
   let autoCharacterPairs: Bool
   let indentBehavior: EditorIndentBehavior
   let headerFontSizeDiffs: [Double]?
+  let visibleWhitespaceCharacter: String?
+  let visibleLineBreakCharacter: String?
 
   public init(
     text: String,
@@ -51,7 +53,9 @@ public struct EditorConfig: Encodable {
     localizable: EditorLocalizable?,
     autoCharacterPairs: Bool,
     indentBehavior: EditorIndentBehavior,
-    headerFontSizeDiffs: [Double]?
+    headerFontSizeDiffs: [Double]?,
+    visibleWhitespaceCharacter: String?,
+    visibleLineBreakCharacter: String?
   ) {
     self.text = text
     self.theme = theme
@@ -73,5 +77,7 @@ public struct EditorConfig: Encodable {
     self.autoCharacterPairs = autoCharacterPairs
     self.indentBehavior = indentBehavior
     self.headerFontSizeDiffs = headerFontSizeDiffs
+    self.visibleWhitespaceCharacter = visibleWhitespaceCharacter
+    self.visibleLineBreakCharacter = visibleLineBreakCharacter
   }
 }

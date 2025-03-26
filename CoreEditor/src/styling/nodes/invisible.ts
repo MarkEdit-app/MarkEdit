@@ -170,7 +170,7 @@ function getOrCreateDeco(invisible: string, pos: number) {
     attributes: invisible === '\t' ? { 'class': 'cm-visibleTab' } : {
       'class': 'cm-visibleSpace',
       'style': fontStyle,
-      'content': '·‌'.repeat(invisible.length),
+      'content': (window.config.visibleWhitespaceCharacter ?? '·‌').repeat(invisible.length),
     },
   });
 

@@ -67,6 +67,8 @@ export interface Config {
   autoCharacterPairs: boolean;
   indentBehavior: IndentBehavior;
   headerFontSizeDiffs?: number[];
+  visibleWhitespaceCharacter?: string;
+  visibleLineBreakCharacter?: string;
 }
 
 /**
