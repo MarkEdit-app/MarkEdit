@@ -271,7 +271,9 @@ extension AppPreferences {
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
       indentBehavior: AppRuntimeConfig.indentBehavior,
-      headerFontSizeDiffs: AppRuntimeConfig.headerFontSizeDiffs
+      headerFontSizeDiffs: AppRuntimeConfig.headerFontSizeDiffs,
+      visibleWhitespaceCharacter: AppRuntimeConfig.visibleWhitespaceCharacter,
+      visibleLineBreakCharacter: AppRuntimeConfig.visibleLineBreakCharacter
     )
   }
 }

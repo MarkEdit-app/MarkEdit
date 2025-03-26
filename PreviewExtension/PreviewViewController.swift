@@ -91,7 +91,9 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: false,
       indentBehavior: .never,
-      headerFontSizeDiffs: nil
+      headerFontSizeDiffs: nil,
+      visibleWhitespaceCharacter: nil,
+      visibleLineBreakCharacter: nil
     )
 
     webView.loadHTMLString(config.toHtml, baseURL: nil)
