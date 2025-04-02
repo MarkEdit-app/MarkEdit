@@ -17,6 +17,7 @@ import TextBundle
 final class EditorDocument: NSDocument {
   var fileData: Data?
   var stringValue = ""
+  var isContentDirty = false // Different from "isDocumentEdited", used mostly for "autoSaveWhenIdle"
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -52,6 +53,11 @@ final class EditorDocument: NSDocument {
 
   var textFileURL: URL? {
     fileURL?.appending(path: textBundle?.textFileName ?? "", directoryHint: .notDirectory)
+  }
+
+  var shouldSaveWhenIdle: Bool {
+    // Saving documents without a fileURL would bring up the dialog
+    AppRuntimeConfig.autoSaveWhenIdle && fileURL != nil
   }
 
   private var textBundle: TextBundleWrapper?
@@ -135,6 +141,12 @@ extension EditorDocument {
     }
   }
 
+  override func updateChangeCount(_ change: NSDocument.ChangeType) {
+    // The "Edited" label is hidden when changes are saved periodically
+    super.updateChangeCount(shouldSaveWhenIdle ? .changeCleared : change)
+    isContentDirty = change != .changeCleared
+  }
+
   override func canAsynchronouslyWrite(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) -> Bool {
     true
   }
@@ -160,17 +172,23 @@ extension EditorDocument {
       }
     }
 
-    guard isNewFile else {
-      // Closing an existing document
-      return canClose()
-    }
-
     // Closing a new document, force sync to make sure the content is propagated.
     //
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
-    Task {
-      await updateContent(userInitiated: true, saveAction: canClose)
+    if isNewFile {
+      Task {
+        await updateContent(userInitiated: true, saveAction: canClose)
+      }
+      return
     }
+
+    // Extra save if changes are saved periodically
+    if shouldSaveWhenIdle && isContentDirty {
+      return saveContent(nil, completion: canClose)
+    }
+
+    // General cases
+    canClose()
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
@@ -233,7 +251,9 @@ extension EditorDocument {
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
-    saveContent(sender)
+    saveContent(sender) { [weak self] in
+      self?.isContentDirty = false
+    }
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {

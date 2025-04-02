@@ -114,6 +114,17 @@ export function observeChanges() {
           scrollToSelection('center');
         }
       }
+
+      // Changes are saved periodically
+      if (window.config.autoSaveWhenIdle) {
+        if (storage.contentUpdater !== undefined) {
+          clearTimeout(storage.contentUpdater);
+        }
+
+        storage.contentUpdater = setTimeout(() => {
+          window.nativeModules.core.notifyEditorDidBecomeIdle();
+        }, 2500);
+      }
     }
 
     // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
@@ -190,7 +201,9 @@ export function observeChanges() {
 const storage: {
   caretOffsetY: number | undefined;
   gutterUpdater: ReturnType<typeof setTimeout> | undefined;
+  contentUpdater: ReturnType<typeof setTimeout> | undefined;
 } = {
   caretOffsetY: undefined,
   gutterUpdater: undefined,
+  contentUpdater: undefined,
 };

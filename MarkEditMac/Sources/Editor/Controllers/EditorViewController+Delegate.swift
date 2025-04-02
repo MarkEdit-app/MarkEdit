@@ -97,6 +97,14 @@ extension EditorViewController: EditorModuleCoreDelegate {
     loadingIndicator.scaleTo(2.0)
   }
 
+  func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore) {
+    guard document?.shouldSaveWhenIdle == true else {
+      return
+    }
+
+    document?.save(nil)
+  }
+
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32) {
     webBackgroundColor = NSColor(hexCode: color)
     updateWindowColors(.current)
