@@ -96,7 +96,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     attributes[`${prefix}-repeat`] = 'no-repeat';
     return attributes;
   })(),
-  '.cm-visibleSpace::before': {
+  '.cm-visibleSpace::before, .cm-visibleLineBreak': {
     content: 'attr(content)',
     position: 'absolute',
     pointerEvents: 'none',
