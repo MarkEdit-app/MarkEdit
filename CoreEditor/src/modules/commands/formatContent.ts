@@ -1,3 +1,4 @@
+import { ChangeSpec } from '@codemirror/state';
 import { getEditorText } from '../../core';
 
 /**
@@ -10,15 +11,20 @@ export default function formatContent(insertFinalNewline: boolean, trimTrailingW
   const editor = window.editor;
   const state = editor.state;
 
+  const apply = (changes: ChangeSpec) => {
+    editor.dispatch({
+      changes,
+      userEvent: '@none', // Ignore automatic scrolling
+    });
+  };
+
   if (insertFinalNewline) {
     // We don't need to ensure final newline when it's empty
     const text = getEditorText();
     if (text.length > 0 && !text.endsWith(state.lineBreak)) {
-      editor.dispatch({
-        changes: {
-          insert: state.lineBreak,
-          from: state.doc.length,
-        },
+      apply({
+        insert: state.lineBreak,
+        from: state.doc.length,
       });
     }
   }
@@ -29,9 +35,10 @@ export default function formatContent(insertFinalNewline: boolean, trimTrailingW
       const line = state.doc.line(index);
       const match = /\s+$/g.exec(line.text);
       if (match !== null) {
-        const from = match.index + line.from;
-        editor.dispatch({
-          changes: { insert: '', from, to: line.to },
+        apply({
+          insert: '',
+          from: match.index + line.from,
+          to: line.to,
         });
       }
     }
