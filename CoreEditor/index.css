@@ -44,7 +44,7 @@ html, body {
   display: inline-block;
 }
 
-.cm-md-contentIndent .cm-visibleSpace::before {
+.cm-md-contentIndent .cm-visibleSpace::before, .cm-md-contentIndent .cm-visibleLineBreak {
   text-indent: 0px;
   margin-inline-start: 0px;
 }

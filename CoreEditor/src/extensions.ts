@@ -122,10 +122,10 @@ export function extensions(options: { lineBreak?: string }) {
     // Styling
     classHighlighters,
     theme.of(loadTheme(window.config.theme)),
-    invisibles.of([]),
-    selectedLines.of([]),
     renderExtensions,
     actionExtensions,
+    invisibles.of([]), // Lower priority to have line breaks at the end
+    selectedLines.of([]),
 
     // Input handling
     wordTokenizer(),
