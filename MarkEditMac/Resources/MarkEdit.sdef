@@ -40,7 +40,7 @@
     <class name="attachment" code="atts" inherits="rich text" description="Represents an inline text attachment.  This class is used mainly for make commands.">
       <cocoa class="NSAttachmentTextStorage"/>
       <property name="file name" code="atfn" type="text" description="The path to the file for the attachment">
-<!-- This property should be deprecated like all the other path-centric properties, and replaced with a type="file" property. -->
+        <!-- This property should be deprecated like all the other path-centric properties, and replaced with a type="file" property. -->
         <cocoa key="filename"/>
       </property>
     </class>
@@ -59,7 +59,6 @@
   </suite>
 
   <suite name="MarkEdit Suite" code="mked" description="MarkEdit specific classes.">
-
     <enumeration name="saveable file format" code="savf">
       <enumerator name="Markdown" code="md  " description="Markdown format">
         <cocoa string-value="net.daringfireball.markdown"/>
@@ -71,12 +70,21 @@
         <cocoa string-value="public.data"/>
       </enumerator>
     </enumeration>
+    
+    <command name="evaluate JavaScript" code="mkedexjs" description="Evaluate JavaScript on a document and get the result, throws an error if no such document exists.">
+        <cocoa class="MarkEdit.RunJSScriptCommand"/>
+        <direct-parameter type="text" description="The document to run JavaScript in."/>
+        <result>
+          <type type="any"/>
+        </result>
+    </command>
 
     <class name="document" code="docu" description="A MarkEdit document." plural="documents" inherits="document">
       <cocoa class="MarkEdit.EditorDocument"/>
       <property name="source" code="mdsc" type="text" access="rw" description="Source in the document.">
-        <cocoa key="stringValue"/>
+        <cocoa key="source"/>
       </property>
+      <responds-to command="evaluate JavaScript"/>
     </class>
     
   </suite>

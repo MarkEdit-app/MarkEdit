@@ -16,7 +16,7 @@ import TextBundle
  */
 final class EditorDocument: NSDocument {
   var fileData: Data?
-  @objc var stringValue = ""
+  var stringValue = ""
   var isReadOnlyMode = false
   var isTerminating = false
 
