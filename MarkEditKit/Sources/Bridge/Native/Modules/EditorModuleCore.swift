@@ -9,6 +9,7 @@ import Foundation
 @MainActor
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
+  func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore)
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32)
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
   func editorCoreViewDidUpdate(
@@ -33,6 +34,10 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyWindowDidLoad() {
     delegate?.editorCoreWindowDidLoad(self)
+  }
+
+  public func notifyEditorDidBecomeIdle() {
+    delegate?.editorCoreEditorDidBecomeIdle(self)
   }
 
   public func notifyBackgroundColorDidChange(color: Int) {

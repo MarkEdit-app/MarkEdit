@@ -90,6 +90,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       localizable: nil,
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: false,
+      autoSaveWhenIdle: false,
       indentBehavior: .never,
       headerFontSizeDiffs: nil,
       visibleWhitespaceCharacter: nil,

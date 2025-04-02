@@ -13,6 +13,7 @@ import MarkEditCore
 @MainActor
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
+  func notifyEditorDidBecomeIdle()
   func notifyBackgroundColorDidChange(color: Int)
   func notifyViewportScaleDidChange()
   func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
@@ -32,6 +33,9 @@ final class NativeBridgeCore: NativeBridge {
   lazy var methods: [String: NativeMethod] = [
     "notifyWindowDidLoad": { [weak self] in
       self?.notifyWindowDidLoad(parameters: $0)
+    },
+    "notifyEditorDidBecomeIdle": { [weak self] in
+      self?.notifyEditorDidBecomeIdle(parameters: $0)
     },
     "notifyBackgroundColorDidChange": { [weak self] in
       self?.notifyBackgroundColorDidChange(parameters: $0)
@@ -65,6 +69,11 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
+    return .success(nil)
+  }
+
+  private func notifyEditorDidBecomeIdle(parameters: Data) -> Result<Any?, Error>? {
+    module.notifyEditorDidBecomeIdle()
     return .success(nil)
   }
 

@@ -96,6 +96,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
   }
+
+  func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+    if AppRuntimeConfig.autoSaveWhenIdle && NSDocumentController.shared.hasDirtyDocuments {
+      // Block terminating since there are unsaved documents
+      return .terminateCancel
+    }
+
+    return .terminateNow
+  }
 }
 
 // MARK: - URL Handling
