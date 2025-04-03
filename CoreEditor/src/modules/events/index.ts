@@ -23,6 +23,8 @@ export function startObserving() {
       link.startClickable();
       task.startClickable();
     }
+
+    storage.keyPressTime = Date.now();
   });
 
   document.addEventListener('keyup', event => {
@@ -99,6 +101,10 @@ export function isMetaKeyDown() {
   return storage.isMetaKeyDown;
 }
 
+export function hasRecentKeyPress() {
+  return Date.now() - storage.keyPressTime < 150;
+}
+
 export function resetKeyStates() {
   storage.isMouseDown = false;
   storage.isMetaKeyDown = false;
@@ -162,10 +168,12 @@ const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
   isMouseDown: boolean;
   isMetaKeyDown: boolean;
+  keyPressTime: number;
   selectedTextBeforeCompose: boolean;
 } = {
   scrollTimer: undefined,
   isMouseDown: false,
   isMetaKeyDown: false,
+  keyPressTime: 0,
   selectedTextBeforeCompose: false,
 };
