@@ -4,10 +4,11 @@ import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { globalState, editingState } from '../../common/store';
 import { clearSyntaxSelections } from '../commands';
 import { startCompletion, isPanelVisible } from '../completion';
+import { hasRecentKeyPress } from '../events';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
-import { adjustGutterPositions } from '../lines';
+import { adjustActiveLineGutter, adjustGutterPositions } from '../lines';
 import { tokenizePosition } from '../tokenizer';
-import { scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
+import { refreshEditFocus, scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
 
 import hasSelection from '../selection/hasSelection';
 import redrawSelectionLayer from '../selection/redrawSelectionLayer';
@@ -169,9 +170,19 @@ export function observeChanges() {
           clearTimeout(storage.gutterUpdater);
         }
 
-        // To handle a case where line number rects are not correctly updated
         if (update.docChanged) {
+          // To handle a case where line number rects are not correctly updated
           update.view.requestMeasure();
+
+          requestAnimationFrame(() => {
+            // To handle a case where the active line doesn't report correct height, possibly due to text predictions
+            adjustActiveLineGutter();
+
+            // Content changed without key press, could be a system event like accepting inline predictions
+            if (!hasRecentKeyPress()) {
+              refreshEditFocus(); // Caret can be misplaced accepting inline predictions
+            }
+          });
         }
 
         const caretOffsetY = storage.caretOffsetY;

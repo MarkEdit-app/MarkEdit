@@ -22,6 +22,37 @@ export function getVisibleLines() {
   return lines;
 }
 
+export function getLineElement(pos: number): HTMLElement | null {
+  let node: Node | null = window.editor.domAtPos(pos).node;
+  while (node && !(node instanceof HTMLElement && node.classList.contains('cm-line'))) {
+    node = node.parentNode;
+  }
+
+  return node;
+}
+
+export function adjustActiveLineGutter() {
+  if (!window.config.showLineNumbers) {
+    return;
+  }
+
+  const { selection, doc } = window.editor.state;
+  const { from: lineFrom, number: lineNumber } = doc.lineAt(selection.main.from);
+  const lineElement = getLineElement(lineFrom);
+  if (lineElement === null) {
+    return;
+  }
+
+  const gutterElement = [...document.querySelectorAll('.cm-lineNumbers .cm-gutterElement')].find((element: HTMLElement) => {
+    return parseInt(element.innerText) === lineNumber;
+  }) as HTMLElement | null;
+
+  if (gutterElement !== null) {
+    const height = lineElement.getBoundingClientRect().height;
+    gutterElement.style.height = `${height}px`;
+  }
+}
+
 export function adjustGutterPositions(className: 'lineNumbers' | 'gutterHover' = 'lineNumbers') {
   if (!window.config.showLineNumbers) {
     return;

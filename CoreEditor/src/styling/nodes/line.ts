@@ -1,6 +1,7 @@
 import { BlockInfo, layer, RectangleMarker } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { almostEqual, getViewportScale } from '../../common/utils';
+import { getLineElement } from '../../modules/lines';
 
 const rectPadding = 2.0;
 const layerClass = 'cm-md-activeIndicator';
@@ -46,6 +47,7 @@ class Layer extends RectangleMarker {
 
   constructor(content: HTMLElement, lineBlock: BlockInfo) {
     const contentRect = content.getBoundingClientRect();
+    const lineRect = getLineElement(lineBlock.from)?.getBoundingClientRect();
 
     // The rect is wider than lineRect, it fills the entire contentDOM
     const rectToDraw = (() => {
@@ -57,8 +59,7 @@ class Layer extends RectangleMarker {
       }
 
       const scale = getViewportScale();
-      const top = rects.reduce((acc, cur) => Math.min(acc, cur.top), 1e9);
-      const height = rects.reduce((acc, cur) => Math.max(acc, cur.top + cur.height), -1e9) - top;
+      const width = contentRect.width * scale;
 
       const left = (() => {
         if (window.config.lineWrapping) {
@@ -76,13 +77,17 @@ class Layer extends RectangleMarker {
         return gutter.getBoundingClientRect().width + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
       })();
 
+      // Rely on the actual line element for precise calculation
+      if (lineRect !== undefined) {
+        const scroller = window.editor.scrollDOM;
+        const offset = scroller.scrollTop - scroller.getBoundingClientRect().top;
+        return new DOMRect(left, lineRect.top + offset, width, lineRect.height);
+      }
+
       // The rect that is slightly taller than the caret, centered vertically
-      return new DOMRect(
-        left,                       // x
-        top - rectPadding,          // y
-        contentRect.width * scale,  // width
-        height + rectPadding * 2,   // height
-      );
+      const top = rects.reduce((acc, cur) => Math.min(acc, cur.top), 1e9);
+      const height = rects.reduce((acc, cur) => Math.max(acc, cur.top + cur.height), -1e9) - top;
+      return new DOMRect(left, top - rectPadding, width, height + rectPadding * 2);
     })();
 
     super(layerClass, rectToDraw.left, rectToDraw.top, rectToDraw.width, rectToDraw.height);
