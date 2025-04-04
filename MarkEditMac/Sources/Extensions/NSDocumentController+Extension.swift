@@ -10,11 +10,7 @@ import MarkEditKit
 
 extension NSDocumentController {
   var hasDirtyDocuments: Bool {
-    let documents = NSDocumentController.shared.documents.compactMap {
-      $0 as? EditorDocument
-    }
-
-    return documents.contains { $0.isContentDirty }
+    !dirtyDocuments.isEmpty
   }
 
   /**
@@ -22,5 +18,19 @@ extension NSDocumentController {
    */
   func setOpenPanelDirectory(_ directory: String) {
     UserDefaults.standard.setValue(directory, forKey: NSNavLastRootDirectory)
+  }
+}
+
+// MARK: - Private
+
+private extension NSDocumentController {
+  var dirtyDocuments: [EditorDocument] {
+    NSDocumentController.shared.documents.compactMap {
+      guard let document = $0 as? EditorDocument, document.isContentDirty else {
+        return nil
+      }
+
+      return document
+    }
   }
 }
