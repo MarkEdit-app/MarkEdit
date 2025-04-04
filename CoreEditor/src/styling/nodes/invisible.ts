@@ -96,12 +96,22 @@ function renderInvisibles(regexp: RegExp, selectionOnly: boolean) {
       return null;
     }
 
+    // Disable decoration for empty rendering
+    if (invisible === ' ' && window.config.visibleWhitespaceCharacter === '') {
+      return null;
+    }
+
     return getOrCreateDeco(invisible, pos);
   }));
 }
 
 function renderLineBreaks(selectionOnly: boolean) {
   return createDecoPlugin(() => {
+    // Disable decoration for empty rendering
+    if (window.config.visibleLineBreakCharacter === '') {
+      return Decoration.none;
+    }
+
     const decos = getVisibleLines()
       .map(({ to: pos }) => {
         if (shouldIgnorePosition(pos, selectionOnly)) {
