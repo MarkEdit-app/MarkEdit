@@ -58,6 +58,15 @@
   </suite>
 
   <suite name="MarkEdit Suite" code="mked" description="MarkEdit specific classes.">
+    <enumeration name="saveable file format" code="savf">
+      <enumerator name="Markdown" code="md  " description="Markdown format">
+        <cocoa string-value="net.daringfireball.markdown"/>
+      </enumerator>
+      <enumerator name="Text" code="txt " description="Plain text format">
+        <cocoa string-value="public.text"/>
+      </enumerator>
+    </enumeration>
+    
     <command name="evaluate" code="mkedevjs" description="Evaluate JavaScript on a document and get the result. Throws an error if no such document exists.">
         <direct-parameter type="document" description="The document to run JavaScript in."/>
         <parameter type="text" name="JavaScript" code="mdjs" description="The JavaScript code to evaluate.">
@@ -68,12 +77,12 @@
         </result>
     </command>
 
-    <class name="document" code="docx" description="A MarkEdit document." plural="documents" inherits="document">
+    <class name="document" code="docu" description="A MarkEdit document." plural="documents" inherits="document">
       <cocoa class="MarkEdit.EditorDocument"/>
       <property name="source" code="mdsc" type="text" access="rw" description="The raw markdown source of the document.">
         <cocoa key="source"/>
       </property>
-      <contents name="formatted text" code="mdmd" type="rich text" description="The rich text content of the document.">
+      <contents name="formatted text" code="mdmd" type="rich text" access="r" description="The rich text content of the document.">
         <cocoa key="formattedText"/>
       </contents>
       <responds-to command="evaluate">

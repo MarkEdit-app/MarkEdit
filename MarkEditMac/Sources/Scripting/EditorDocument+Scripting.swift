@@ -17,6 +17,7 @@ extension EditorDocument {
     set(newValue) {
       if newValue != self.stringValue {
         guard let targetEditor = targetEditor(for: nil) else { return }
+        self.stringValue = newValue
         targetEditor.bridge.core.replaceText(text: newValue, granularity: .wholeDocument)
       }
     }
