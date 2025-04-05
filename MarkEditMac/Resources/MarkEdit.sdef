@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
-<dictionary title="MarkEdit Terminology" xmlns:xi="http://www.w3.org/2003/XInclude">
+<dictionary title="MarkEdit Terminology" xmlns:xi="http://www.w3.org/2001/XInclude">
   <xi:include href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef" xpointer="xpointer(/dictionary/suite)"/>
 
   <suite name="Text Suite" code="????" description="A set of basic classes for text processing.">
@@ -12,6 +12,8 @@
 
     <class name="rich text" plural="text" code="ricT" description="Rich (styled) text">
       <cocoa class="NSTextStorage"/>
+      <type type="text"/>
+
       <element type="paragraph">
         <cocoa key="paragraphs"/>
       </element>
@@ -24,12 +26,12 @@
       <element type="attribute run">
         <cocoa key="attributeRuns"/>
       </element>
-      <element type="attachment">
-        <cocoa key="attachments"/>
-      </element>
+
+      <!-- This is always {0,0,0} currently, but could get syntax highlight color eventually -->
       <property name="color" code="colr" type="RGB color" description="The color of the first character.">
         <cocoa key="foregroundColor"/>
       </property>
+
       <property name="font" code="font" type="text" description="The name of the font of the first character.">
         <cocoa key="fontName"/>
       </property>
@@ -37,56 +39,47 @@
         <cocoa key="fontSize"/>
       </property>
     </class>
-    <class name="attachment" code="atts" inherits="rich text" description="Represents an inline text attachment.  This class is used mainly for make commands.">
-      <cocoa class="NSAttachmentTextStorage"/>
-      <property name="file name" code="atfn" type="text" description="The path to the file for the attachment">
-        <!-- This property should be deprecated like all the other path-centric properties, and replaced with a type="file" property. -->
-        <cocoa key="filename"/>
-      </property>
-    </class>
     <class name="paragraph" code="cpar" inherits="rich text" description="This subdivides the text into paragraphs.">
       <cocoa class="NSTextStorage"/>
+      <type type="text"/>
     </class>
     <class name="word" code="cwor" inherits="rich text" description="This subdivides the text into words.">
       <cocoa class="NSTextStorage"/>
+      <type type="text"/>
     </class>
     <class name="character" code="cha " inherits="rich text" description="This subdivides the text into characters.">
       <cocoa class="NSTextStorage"/>
+      <type type="text"/>
     </class>
     <class name="attribute run" code="catr" inherits="rich text" description="This subdivides the text into chunks that all have the same attributes.">
       <cocoa class="NSTextStorage"/>
+      <type type="text"/>
     </class>
   </suite>
 
   <suite name="MarkEdit Suite" code="mked" description="MarkEdit specific classes.">
-    <enumeration name="saveable file format" code="savf">
-      <enumerator name="Markdown" code="md  " description="Markdown format">
-        <cocoa string-value="net.daringfireball.markdown"/>
-      </enumerator>
-      <enumerator name="Text" code="txt " description="Plain text format">
-        <cocoa string-value="public.text"/>
-      </enumerator>
-      <enumerator name="Data" code="data" description="Raw bytes format">
-        <cocoa string-value="public.data"/>
-      </enumerator>
-    </enumeration>
-    
-    <command name="evaluate JavaScript" code="mkedexjs" description="Evaluate JavaScript on a document and get the result, throws an error if no such document exists.">
-        <cocoa class="MarkEdit.RunJSScriptCommand"/>
-        <direct-parameter type="text" description="The document to run JavaScript in."/>
-        <result>
+    <command name="evaluate" code="mkedevjs" description="Evaluate JavaScript on a document and get the result. Throws an error if no such document exists.">
+        <direct-parameter type="document" description="The document to run JavaScript in."/>
+        <parameter type="text" name="JavaScript" code="mdjs" description="The JavaScript code to evaluate.">
+          <cocoa key="script"/>
+        </parameter>
+        <result description="The value returned once the script finishes executing.">
           <type type="any"/>
         </result>
     </command>
 
-    <class name="document" code="docu" description="A MarkEdit document." plural="documents" inherits="document">
+    <class name="document" code="docx" description="A MarkEdit document." plural="documents" inherits="document">
       <cocoa class="MarkEdit.EditorDocument"/>
-      <property name="source" code="mdsc" type="text" access="rw" description="Source in the document.">
+      <property name="source" code="mdsc" type="text" access="rw" description="The raw markdown source of the document.">
         <cocoa key="source"/>
       </property>
-      <responds-to command="evaluate JavaScript"/>
+      <contents name="formatted text" code="mdmd" type="rich text" description="The rich text content of the document.">
+        <cocoa key="formattedText"/>
+      </contents>
+      <responds-to command="evaluate">
+        <cocoa method="handleEvaluateCommand:"/>
+      </responds-to>
     </class>
-    
   </suite>
 
 </dictionary>
