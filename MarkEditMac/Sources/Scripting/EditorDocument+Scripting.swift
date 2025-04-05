@@ -167,7 +167,6 @@ private extension NSAppleEventDescriptor {
         self.insert(valueDescriptor, at: index + 1)
       }
     default:
-      print("No types recognized")
       self.init()
     }
   }
