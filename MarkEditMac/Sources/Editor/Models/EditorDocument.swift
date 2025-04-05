@@ -102,6 +102,21 @@ final class EditorDocument: NSDocument {
     NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)
   }
+
+  func saveContent(_ sender: Any?, completion: (() -> Void)? = nil) {
+    Task {
+      await updateContent(userInitiated: true) {
+        super.save(sender)
+        completion?()
+      }
+
+      if sender != nil {
+        hostViewController?.cancelCompletion()
+      }
+
+      isContentDirty = false
+    }
+  }
 }
 
 // MARK: - Overridden
@@ -251,9 +266,7 @@ extension EditorDocument {
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
-    saveContent(sender) { [weak self] in
-      self?.isContentDirty = false
-    }
+    saveContent(sender)
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
@@ -458,19 +471,6 @@ private extension EditorDocument {
 
   var hasBeenReverted: Bool {
     Date.now.timeIntervalSince(revertedDate) < 1
-  }
-
-  func saveContent(_ sender: Any?, completion: (() -> Void)? = nil) {
-    Task {
-      await updateContent(userInitiated: true) {
-        super.save(sender)
-        completion?()
-      }
-
-      if sender != nil {
-        hostViewController?.cancelCompletion()
-      }
-    }
   }
 
   func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
