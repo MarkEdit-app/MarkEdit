@@ -16,20 +16,9 @@ extension NSDocumentController {
   func saveDirtyDocuments() async {
     await withTaskGroup(of: Void.self) { group in
       for document in dirtyDocuments {
-        group.addTask { @MainActor in
-          await withCheckedContinuation { continuation in
-            document.saveContent(nil) {
-              continuation.resume()
-            }
-          }
+        group.addTask {
+          await document.waitUntilSaveCompleted()
         }
-      }
-    }
-
-    // It takes sometime to actually save the document
-    await withCheckedContinuation { continuation in
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-        continuation.resume()
       }
     }
   }

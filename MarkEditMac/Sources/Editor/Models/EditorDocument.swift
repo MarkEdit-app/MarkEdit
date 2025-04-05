@@ -103,18 +103,18 @@ final class EditorDocument: NSDocument {
     addWindowController(windowController)
   }
 
-  func saveContent(_ sender: Any?, completion: (() -> Void)? = nil) {
-    Task {
-      await updateContent(userInitiated: true) {
-        super.save(sender)
-        completion?()
+  func waitUntilSaveCompleted(delay: TimeInterval = 0.5) async {
+    await withCheckedContinuation { continuation in
+      saveContent(nil) {
+        continuation.resume()
       }
+    }
 
-      if sender != nil {
-        hostViewController?.cancelCompletion()
+    // It takes sometime to actually save the document
+    await withCheckedContinuation { continuation in
+      DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+        continuation.resume()
       }
-
-      isContentDirty = false
     }
   }
 }
@@ -471,6 +471,21 @@ private extension EditorDocument {
 
   var hasBeenReverted: Bool {
     Date.now.timeIntervalSince(revertedDate) < 1
+  }
+
+  func saveContent(_ sender: Any?, completion: (() -> Void)? = nil) {
+    Task {
+      await updateContent(userInitiated: true) {
+        super.save(sender)
+        completion?()
+      }
+
+      if sender != nil {
+        hostViewController?.cancelCompletion()
+      }
+
+      isContentDirty = false
+    }
   }
 
   func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
