@@ -5,6 +5,14 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Markdown</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>md</string>
@@ -17,12 +25,6 @@
 				<string>mdtext</string>
 				<string>mdtxt</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Markdown</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>net.daringfireball.markdown</string>
@@ -39,38 +41,38 @@
 				<string>dyn.ah62d4rv4ge8043a</string>
 				<string>dyn.ah62d4rv4ge81c5pe</string>
 			</array>
-			<key>LSTypeIsPackage</key>
-			<false/>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>textbundle</string>
-			</array>
-			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>1</integer>
 			<key>CFBundleTypeName</key>
 			<string>Text Bundle</string>
+			<key>LSTypeIsPackage</key>
+			<integer>1</integer>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
+			<key>NSIsRelatedItemType</key>
+			<true/>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>textbundle</string>
+			</array>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>org.textbundle.package</string>
 			</array>
-			<key>LSTypeIsPackage</key>
-			<integer>1</integer>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
-			<key>NSIsRelatedItemType</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Plain Text</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -82,12 +84,14 @@
 				<string>public.utf16-plain-text</string>
 				<string>public.text</string>
 			</array>
-			<key>LSTypeIsPackage</key>
-			<false/>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
 		</dict>
 	</array>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>OSAScriptingDefinition</key>
+	<string>MarkEdit.sdef</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -103,10 +107,55 @@
 			</array>
 		</dict>
 	</array>
-	<key>NSAppleScriptEnabled</key>
-	<true/>
-	<key>OSAScriptingDefinition</key>
-	<string>MarkEdit.sdef</string>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Markdown</string>
+			<key>UTTypeIdentifier</key>
+			<string>net.daringfireball.markdown</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://daringfireball.net/projects/markdown/</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>md</string>
+					<string>markdown</string>
+					<string>mdown</string>
+					<string>mdwn</string>
+					<string>mkdn</string>
+					<string>mkd</string>
+					<string>mdoc</string>
+					<string>mdtext</string>
+					<string>mdtxt</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Text Bundle</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.textbundle.package</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.textbundle.org</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>textbundle</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -180,55 +229,6 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>txt</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>com.apple.package</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Text Bundle</string>
-			<key>UTTypeIdentifier</key>
-			<string>org.textbundle.package</string>
-			<key>UTTypeReferenceURL</key>
-			<string>http://www.textbundle.org</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>textbundle</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
-	<key>UTImportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.plain-text</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Markdown</string>
-			<key>UTTypeIdentifier</key>
-			<string>net.daringfireball.markdown</string>
-			<key>UTTypeReferenceURL</key>
-			<string>https://daringfireball.net/projects/markdown/</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>md</string>
-					<string>markdown</string>
-					<string>mdown</string>
-					<string>mdwn</string>
-					<string>mkdn</string>
-					<string>mkd</string>
-					<string>mdoc</string>
-					<string>mdtext</string>
-					<string>mdtxt</string>
 				</array>
 			</dict>
 		</dict>
