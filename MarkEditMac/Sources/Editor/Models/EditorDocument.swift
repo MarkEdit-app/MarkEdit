@@ -103,9 +103,9 @@ final class EditorDocument: NSDocument {
     addWindowController(windowController)
   }
 
-  func waitUntilSaveCompleted(delay: TimeInterval = 0.5) async {
+  func waitUntilSaveCompleted(userInitiated: Bool = true, delay: TimeInterval = 0.5) async {
     await withCheckedContinuation { continuation in
-      saveContent(nil) {
+      saveContent(userInitiated: userInitiated) {
         continuation.resume()
       }
     }
@@ -115,6 +115,21 @@ final class EditorDocument: NSDocument {
       DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
         continuation.resume()
       }
+    }
+  }
+
+  func saveContent(sender: Any? = nil, userInitiated: Bool = true, completion: (() -> Void)? = nil) {
+    Task {
+      await updateContent(userInitiated: userInitiated) {
+        super.save(sender)
+        completion?()
+      }
+
+      if sender != nil {
+        hostViewController?.cancelCompletion()
+      }
+
+      isContentDirty = false
     }
   }
 }
@@ -199,7 +214,7 @@ extension EditorDocument {
 
     // Extra save if changes are saved periodically
     if shouldSaveWhenIdle && isContentDirty {
-      return saveContent(nil, completion: canClose)
+      return saveContent(completion: canClose)
     }
 
     // General cases
@@ -266,7 +281,7 @@ extension EditorDocument {
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
-    saveContent(sender)
+    saveContent(sender: sender)
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
@@ -381,7 +396,7 @@ extension EditorDocument: FileVersionPickerDelegate {
 
     stringValue = contents
     hostViewController?.resetEditor()
-    saveContent(nil)
+    saveContent()
   }
 
   func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool) {
@@ -473,21 +488,6 @@ private extension EditorDocument {
     Date.now.timeIntervalSince(revertedDate) < 1
   }
 
-  func saveContent(_ sender: Any?, completion: (() -> Void)? = nil) {
-    Task {
-      await updateContent(userInitiated: true) {
-        super.save(sender)
-        completion?()
-      }
-
-      if sender != nil {
-        hostViewController?.cancelCompletion()
-      }
-
-      isContentDirty = false
-    }
-  }
-
   func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
@@ -544,7 +544,7 @@ private extension EditorDocument {
       performClose()
     } else {
       // Saved
-      document.saveContent(nil, completion: performClose)
+      document.saveContent(completion: performClose)
     }
   }
 }
