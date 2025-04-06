@@ -207,14 +207,14 @@ extension EditorDocument {
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
     if isNewFile {
       Task {
-        await updateContent(userInitiated: true, saveAction: canClose)
+        await updateContent(userInitiated: false, saveAction: canClose)
       }
       return
     }
 
     // Extra save if changes are saved periodically
     if shouldSaveWhenIdle && isContentDirty {
-      return saveContent(completion: canClose)
+      return saveContent(userInitiated: false, completion: canClose)
     }
 
     // General cases
