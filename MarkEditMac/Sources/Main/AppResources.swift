@@ -217,6 +217,14 @@ enum Localized {
     static let cannotBeUndone = String(localized: "This action cannot be undone.", comment: "Alert message for cannot undo")
   }
 
+  enum Scripting {
+    static let missingCommandErrorMeesage = String(localized: "Couldn't find a command to handle incoming Apple Event.", comment: "Script error when MarkEdit has no command to handle the incoming Apple Event")
+    static let missingArgumentErrorMessage = String(localized: "Argument '%@' not found in event descriptor. The descriptor is likely malformed.", comment: "Script error when a command argument is missing due to a corrupted Apple Event")
+    static let editorNotFoundErrorMessage = String(localized: "No editor for document %@ found.", comment: "Script error when MarkEdit cannot find the editor view to run document commands in")
+    static let jsEvaluationErrorMessage = String(localized: "JavaScript evaluation failed at line %d, column %d: %@", comment: "Script error when JavaScript evaluation raises a detailed error")
+    static let unknownJSErrorMessage = String(localized: "JavaScript evaluation failed for an unknown reason.", comment: "Script error when JavaScript evaluation raises an error with no details")
+  }
+
   enum Updater {
     static let upToDateTitle = String(localized: "You're up-to-date!", comment: "Title for the up-to-date info")
     static let upToDateMessage = String(localized: "MarkEdit %@ is currently the latest version.", comment: "Message for the up-to-date info")

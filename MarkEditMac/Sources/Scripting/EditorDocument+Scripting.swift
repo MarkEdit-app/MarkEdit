@@ -5,26 +5,25 @@
 //  Created by Stephen Kaplan on 4/2/25.
 //
 
-import Carbon
 import MarkEditKit
 
 extension EditorDocument {
   /// Raw markdown string of the document.
-  @objc var source: String {
+  @objc var scriptingSource: String {
     get {
-      return self.stringValue
+      return stringValue
     }
-    set(newValue) {
-      if newValue != self.stringValue {
-        guard let targetEditor = targetEditor(for: nil) else { return }
-        self.stringValue = newValue
+    set {
+      if newValue != stringValue {
+        guard let targetEditor = scriptingTargetEditor(for: nil) else { return }
+        stringValue = newValue
         targetEditor.bridge.core.replaceText(text: newValue, granularity: .wholeDocument)
       }
     }
   }
 
   /// Rich text of the document.
-  @objc var formattedText: NSTextStorage? {
+  @objc var scriptingRichText: NSTextStorage? {
       let markdownOptions = AttributedString.MarkdownParsingOptions(
         allowsExtendedAttributes: true,
         interpretedSyntax: .full,
@@ -34,7 +33,7 @@ extension EditorDocument {
 
       // Process lines separately to ensure they stay distinct
       let newlineString = NSAttributedString(string: "\n")
-      let attributedSource = self.source.components(separatedBy: .newlines)
+      let attributedSource = scriptingSource.components(separatedBy: .newlines)
       .map { component in
         do {
           return try NSMutableAttributedString(markdown: component, options: markdownOptions)
@@ -51,15 +50,13 @@ extension EditorDocument {
   }
 
   /// Executes a user-provided JS script in the document's webview.
-  @objc func handleEvaluateCommand(_ command: NSScriptCommand) -> Any? {
+  @objc func scriptingHandleEvaluateCommand(_ command: NSScriptCommand) -> Any? {
     guard let inputString = command.evaluatedArguments?["script"] as? String else {
-      let scriptError = ScriptError.missingInput(message: "No JavaScript script provided")
-      command.scriptErrorString = scriptError.localizedDescription
-      command.scriptErrorNumber = scriptError.code
+      ScriptingError.missingArgument("script").applyToCommand(command)
       return nil
     }
 
-    guard let targetEditor = self.targetEditor(for: command) else {
+    guard let targetEditor = scriptingTargetEditor(for: command) else {
       return nil
     }
 
@@ -69,10 +66,8 @@ extension EditorDocument {
     command.suspendExecution()
     targetEditor.webView.evaluateJavaScript(jsText) { value, error in
       if let error = error as NSError? {
-        let scriptError = ScriptError.jsEvalError(jsError: error)
-        command.scriptErrorString = scriptError.localizedDescription
-        command.scriptErrorNumber = scriptError.code
-        command.resumeExecution(withResult: error.localizedDescription)
+        ScriptingError.jsEvaluationError(error).applyToCommand(command)
+        command.resumeExecution(withResult: NSAppleEventDescriptor.null())
         return
       }
 
@@ -87,24 +82,23 @@ extension EditorDocument {
 // MARK: - Private
 
 private extension EditorDocument {
-  func currentCommand() -> NSScriptCommand? {
+  func currentScriptCommand() -> NSScriptCommand? {
     guard let currentCommand = NSScriptCommand.current() else {
-      Logger.log(.error, "Couldn't find a command to handle incoming Apple Event.")
+      Logger.log(.error, ScriptingError.missingCommand.localizedDescription)
       return nil
     }
     return currentCommand
   }
 
-  func targetEditor(for command: NSScriptCommand?) -> EditorViewController? {
-    guard let currentCommand = command == nil ? currentCommand() : command else {
-      Logger.log(.error, "Couldn't find a command to handle incoming Apple Event.")
+  func scriptingTargetEditor(for command: NSScriptCommand?) -> EditorViewController? {
+    guard let currentCommand = command == nil ? currentScriptCommand() : command else {
+      Logger.log(.error, ScriptingError.missingCommand.localizedDescription)
       return nil
     }
 
-    guard let targetEditor = self.windowControllers.first?.contentViewController as? EditorViewController else {
-      let scriptError = ScriptError.missingInput(message: "Couldn't find active editor")
-      currentCommand.scriptErrorString = scriptError.localizedDescription
-      currentCommand.scriptErrorNumber = scriptError.code
+    guard let targetEditor = windowControllers.first?.contentViewController as? EditorViewController else {
+      let documentName = displayName ?? defaultDraftName()
+      ScriptingError.editorNotFound(documentName).applyToCommand(currentCommand)
       return nil
     }
 
@@ -130,7 +124,8 @@ private extension NSAppleEventDescriptor {
       /* keyASUserRecordFields reference:
        * https://developer.apple.com/documentation/professional-video-applications/supporting-conversions-with-scripting-class-extensions
        */
-      self.setDescriptor(userRecord, forKeyword: UInt32(keyASUserRecordFields))
+      let keyASUserRecordFields: UInt32 = 1970500198
+      setDescriptor(userRecord, forKeyword: UInt32(keyASUserRecordFields))
       currentIndex += 2
     }
   }
@@ -165,7 +160,7 @@ private extension NSAppleEventDescriptor {
       self.init(listDescriptor: ())
       for (index, element) in arrayValue.enumerated() {
         let valueDescriptor = NSAppleEventDescriptor(with: element)
-        self.insert(valueDescriptor, at: index + 1)
+        insert(valueDescriptor, at: index + 1)
       }
     default:
       self.init()

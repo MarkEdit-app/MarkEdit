@@ -171,6 +171,9 @@
         }
       }
     },
+    "Argument '%@' not found in event descriptor. The descriptor is likely malformed." : {
+      "comment" : "Script error when a command argument is missing due to a corrupted Apple Event"
+    },
     "Assistant" : {
       "comment" : "Window title for assistant settings",
       "localizations" : {
@@ -458,6 +461,9 @@
           }
         }
       }
+    },
+    "Couldn't find a command to handle incoming Apple Event." : {
+      "comment" : "Script error when MarkEdit has no command to handle the incoming Apple Event"
     },
     "Create a new document, with optional parameters to set the file name and the initial content." : {
       "localizations" : {
@@ -1466,6 +1472,20 @@
         }
       }
     },
+    "JavaScript evaluation failed at line %d, column %d: %@" : {
+      "comment" : "Script error when JavaScript evaluation raises a detailed error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "JavaScript evaluation failed at line %1$d, column %2$d: %3$@"
+          }
+        }
+      }
+    },
+    "JavaScript evaluation failed for an unknown reason." : {
+      "comment" : "Script error when JavaScript evaluation raises an error with no details"
+    },
     "Keep caret in the middle" : {
       "comment" : "Explanation for typewriter mode",
       "localizations" : {
@@ -1854,6 +1874,9 @@
           }
         }
       }
+    },
+    "No editor for document %@ found." : {
+      "comment" : "Script error when MarkEdit cannot find the editor view to run document commands in"
     },
     "No versions match the specified condition." : {
       "comment" : "Alert title for no versions found",

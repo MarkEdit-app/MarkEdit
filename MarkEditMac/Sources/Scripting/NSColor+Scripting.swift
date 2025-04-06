@@ -9,7 +9,7 @@ extension NSColor {
   static let RGBColorCoefficient: CGFloat = 65535
 
   /// Unpacks incoming color descriptors into NSColor objects.
-  @objc func scriptRGBColor(with descriptor: NSAppleEventDescriptor) -> NSColor? {
+  @objc func scriptingRGBColor(with descriptor: NSAppleEventDescriptor) -> NSColor? {
     guard descriptor.descriptorType == typeRGBColor else { return nil }
 
     let data = descriptor.data
@@ -32,7 +32,7 @@ extension NSColor {
 
   /// Packs NSColor objects into event descriptors to send to AppleScript.
   @objc func scriptingRGBColorDescriptor() -> NSAppleEventDescriptor {
-    guard let calibratedColor = self.usingColorSpace(.deviceRGB) else {
+    guard let calibratedColor = usingColorSpace(.deviceRGB) else {
       return NSAppleEventDescriptor.null()
     }
 

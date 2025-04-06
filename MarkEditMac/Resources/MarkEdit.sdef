@@ -80,13 +80,13 @@
     <class name="document" code="docu" description="A MarkEdit document." plural="documents" inherits="document">
       <cocoa class="MarkEdit.EditorDocument"/>
       <property name="source" code="mdsc" type="text" access="rw" description="The raw markdown source of the document.">
-        <cocoa key="source"/>
+        <cocoa key="scriptingSource"/>
       </property>
       <contents name="formatted text" code="mdmd" type="rich text" access="r" description="The rich text content of the document.">
-        <cocoa key="formattedText"/>
+        <cocoa key="scriptingRichText"/>
       </contents>
       <responds-to command="evaluate">
-        <cocoa method="handleEvaluateCommand:"/>
+        <cocoa method="scriptingHandleEvaluateCommand:"/>
       </responds-to>
     </class>
   </suite>
