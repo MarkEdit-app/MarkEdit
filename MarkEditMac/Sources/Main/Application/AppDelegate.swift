@@ -101,7 +101,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     if AppRuntimeConfig.autoSaveWhenIdle && NSDocumentController.shared.hasDirtyDocuments {
       // Terminate after all dirty documents are saved
       Task {
-        await NSDocumentController.shared.saveDirtyDocuments(userInitiated: false)
+        await NSDocumentController.shared.saveDirtyDocuments()
         application.terminate(nil)
       }
 
