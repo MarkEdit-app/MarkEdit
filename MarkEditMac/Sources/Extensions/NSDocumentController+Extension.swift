@@ -13,11 +13,11 @@ extension NSDocumentController {
     !dirtyDocuments.isEmpty
   }
 
-  func saveDirtyDocuments() async {
+  func saveDirtyDocuments(userInitiated: Bool = true) async {
     await withTaskGroup(of: Void.self) { group in
       for document in dirtyDocuments {
         group.addTask {
-          await document.waitUntilSaveCompleted()
+          await document.waitUntilSaveCompleted(userInitiated: userInitiated)
         }
       }
     }
