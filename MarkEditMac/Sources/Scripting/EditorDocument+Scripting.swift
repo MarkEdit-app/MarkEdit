@@ -49,6 +49,28 @@ extension EditorDocument {
       return NSTextStorage(attributedString: attributedSource)
   }
 
+  @objc var scriptingSelectedText: String {
+    get {
+      guard let command = currentScriptCommand(),
+            let targetEditor = scriptingTargetEditor(for: command) else {
+        return ""
+      }
+
+      command.suspendExecution()
+      Task {
+        let text = try await targetEditor.bridge.selection.getText()
+        command.resumeExecution(withResult: NSAppleEventDescriptor(with: text))
+      }
+      return self.stringValue
+    }
+    set {
+      guard let targetEditor = scriptingTargetEditor(for: nil) else { return }
+      Task {
+        targetEditor.bridge.core.replaceText(text: newValue, granularity: .selection)
+      }
+    }
+  }
+
   /// Executes a user-provided JS script in the document's webview.
   @objc func scriptingHandleEvaluateCommand(_ command: NSScriptCommand) -> Any? {
     guard let inputString = command.evaluatedArguments?["script"] as? String else {

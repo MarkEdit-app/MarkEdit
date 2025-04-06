@@ -85,6 +85,9 @@
       <contents name="formatted text" code="mdmd" type="rich text" access="r" description="The rich text content of the document.">
         <cocoa key="scriptingRichText"/>
       </contents>
+      <property name="selection" code="mdsl" type="text" access="rw" description="The currently selected text">
+        <cocoa key="scriptingSelectedText"/>
+      </property>
       <responds-to command="evaluate">
         <cocoa method="scriptingHandleEvaluateCommand:"/>
       </responds-to>
