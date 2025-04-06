@@ -102,7 +102,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
       return
     }
 
-    document?.saveContent(userInitiated: false)
+    document?.saveContent()
   }
 
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32) {

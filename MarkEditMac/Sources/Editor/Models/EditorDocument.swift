@@ -103,7 +103,7 @@ final class EditorDocument: NSDocument {
     addWindowController(windowController)
   }
 
-  func waitUntilSaveCompleted(userInitiated: Bool = true, delay: TimeInterval = 0.5) async {
+  func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.5) async {
     await withCheckedContinuation { continuation in
       saveContent(userInitiated: userInitiated) {
         continuation.resume()
@@ -118,7 +118,7 @@ final class EditorDocument: NSDocument {
     }
   }
 
-  func saveContent(sender: Any? = nil, userInitiated: Bool = true, completion: (() -> Void)? = nil) {
+  func saveContent(sender: Any? = nil, userInitiated: Bool = false, completion: (() -> Void)? = nil) {
     Task {
       await updateContent(userInitiated: userInitiated) {
         super.save(sender)
@@ -207,14 +207,17 @@ extension EditorDocument {
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
     if isNewFile {
       Task {
-        await updateContent(userInitiated: false, saveAction: canClose)
+        await updateContent(saveAction: canClose)
       }
       return
     }
 
-    // Extra save if changes are saved periodically
-    if shouldSaveWhenIdle && isContentDirty {
-      return saveContent(userInitiated: false, completion: canClose)
+    // Explicitly save the content before closing.
+    //
+    // Case 1: The content isn't marked as dirty, so auto-saving won't trigger.
+    // Case 2: Occasionally, the ".sb" backup file isn't properly cleaned up.
+    if (shouldSaveWhenIdle && isContentDirty) || (!closeAlwaysConfirmsChanges && isDocumentEdited) {
+      return saveContent(completion: canClose)
     }
 
     // General cases
@@ -281,11 +284,11 @@ extension EditorDocument {
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
-    saveContent(sender: sender)
+    saveContent(sender: sender, userInitiated: true)
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
-    await updateContent(userInitiated: false) {
+    await updateContent {
       // The default autosave doesn't work when the app is about to terminate,
       // it is because we have to do it in an asynchronous way.
       //
@@ -488,7 +491,7 @@ private extension EditorDocument {
     Date.now.timeIntervalSince(revertedDate) < 1
   }
 
-  func updateContent(userInitiated: Bool, saveAction: () -> Void) async {
+  func updateContent(userInitiated: Bool = false, saveAction: () -> Void) async {
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
@@ -544,7 +547,7 @@ private extension EditorDocument {
       performClose()
     } else {
       // Saved
-      document.saveContent(completion: performClose)
+      document.saveContent(userInitiated: true, completion: performClose)
     }
   }
 }
