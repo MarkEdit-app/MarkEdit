@@ -171,8 +171,22 @@
         }
       }
     },
-    "Argument '%@' not found in event descriptor. The descriptor is likely malformed." : {
-      "comment" : "Script error when a command argument is missing due to a corrupted Apple Event"
+    "Argument \"%@\" not found in event descriptor, the descriptor is likely malformed." : {
+      "comment" : "Script error when a command argument is missing due to a corrupted Apple Event",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在事件描述符中找不到参数“%@”，该描述符可能格式不正确。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在事件描述符中找不到引數“%@”，該描述符可能格式不正確。"
+          }
+        }
+      }
     },
     "Assistant" : {
       "comment" : "Window title for assistant settings",
@@ -463,7 +477,21 @@
       }
     },
     "Couldn't find a command to handle incoming Apple Event." : {
-      "comment" : "Script error when MarkEdit has no command to handle the incoming Apple Event"
+      "comment" : "Script error when MarkEdit has no command to handle the incoming Apple Event",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到用于处理接收到 Apple Event 的指令。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到用於處理接收到 Apple Event 的指令。"
+          }
+        }
+      }
     },
     "Create a new document, with optional parameters to set the file name and the initial content." : {
       "localizations" : {
@@ -1480,11 +1508,37 @@
             "state" : "new",
             "value" : "JavaScript evaluation failed at line %1$d, column %2$d: %3$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JavaScript 执行在第 %1$d 行，第 %2$d 列失败：%3$@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JavaScript 執行在第 %1$d 行，第 %2$d 欄失敗：%3$@"
+          }
         }
       }
     },
     "JavaScript evaluation failed for an unknown reason." : {
-      "comment" : "Script error when JavaScript evaluation raises an error with no details"
+      "comment" : "Script error when JavaScript evaluation raises an error with no details",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JavaScript 执行因未知原因失败。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JavaScript 執行因未知原因失敗。"
+          }
+        }
+      }
     },
     "Keep caret in the middle" : {
       "comment" : "Explanation for typewriter mode",
@@ -1875,8 +1929,22 @@
         }
       }
     },
-    "No editor for document %@ found." : {
-      "comment" : "Script error when MarkEdit cannot find the editor view to run document commands in"
+    "No editor for document \"%@\" found." : {
+      "comment" : "Script error when MarkEdit cannot find the editor view to run document commands in",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到用于文稿“%@”的编辑器。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到用於文件“%@”的編輯器。"
+          }
+        }
+      }
     },
     "No versions match the specified condition." : {
       "comment" : "Alert title for no versions found",

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -51,6 +51,9 @@
 		874BE70E29BB73CA002F83BA /* UpdateFileContentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874BE70D29BB73CA002F83BA /* UpdateFileContentIntent.swift */; };
 		8752CEB6295B2F8800BA9D5B /* EditorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8752CEB5295B2F8800BA9D5B /* EditorPanelView.swift */; };
 		8757F7FC2AAC815F001957DD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8757F7FB2AAC815F001957DD /* Localizable.xcstrings */; };
+		87585FE22DA3EC7A0053069E /* EditorDocument+Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87585FDE2DA3EC7A0053069E /* EditorDocument+Scripting.swift */; };
+		87585FE32DA3EC7A0053069E /* NSColor+Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87585FDF2DA3EC7A0053069E /* NSColor+Scripting.swift */; };
+		87585FE42DA3EC7A0053069E /* Error+Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87585FE02DA3EC7A0053069E /* Error+Scripting.swift */; };
 		876578FA2993853500A1388A /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 876578F92993853500A1388A /* index.html */; };
 		8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8765FD242AF28F1000C645A8 /* AppUpdater.swift */; };
 		8765FD292AF291D300C645A8 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8765FD282AF291D300C645A8 /* AppVersion.swift */; };
@@ -174,6 +177,9 @@
 		8757F7F92AAC815F001957DD /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		8757F7FA2AAC815F001957DD /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		8757F7FB2AAC815F001957DD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		87585FDE2DA3EC7A0053069E /* EditorDocument+Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorDocument+Scripting.swift"; sourceTree = "<group>"; };
+		87585FDF2DA3EC7A0053069E /* NSColor+Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSColor+Scripting.swift"; sourceTree = "<group>"; };
+		87585FE02DA3EC7A0053069E /* Error+Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Scripting.swift"; sourceTree = "<group>"; };
 		876578F92993853500A1388A /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = "CoreEditor/src/@light/dist/index.html"; sourceTree = SOURCE_ROOT; };
 		8765FD242AF28F1000C645A8 /* AppUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdater.swift; sourceTree = "<group>"; };
 		8765FD282AF291D300C645A8 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
@@ -219,10 +225,6 @@
 		87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+FileSystem.swift"; sourceTree = "<group>"; };
 		B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = MarkEdit.sdef; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		B0F4563A2D9D404C006E5614 /* Scripting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Scripting; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		870A519F294700DE0095C7EB /* Frameworks */ = {
@@ -341,11 +343,11 @@
 		870A51C52947103A0095C7EB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				B0F4563A2D9D404C006E5614 /* Scripting */,
 				873D6403295FD2FF0095DEF7 /* Main */,
 				870A51C429470D830095C7EB /* Editor */,
 				870F1797298577A000003DA7 /* Panels */,
 				874BE6F229BB37D5002F83BA /* Shortcuts */,
+				87585FE12DA3EC7A0053069E /* Scripting */,
 				8780AC0A29822C5500065EF4 /* Settings */,
 				8765FD262AF291A300C645A8 /* Updater */,
 				87850C8429482A6A00D1A952 /* Extensions */,
@@ -446,6 +448,16 @@
 				874BE70D29BB73CA002F83BA /* UpdateFileContentIntent.swift */,
 			);
 			path = Intents;
+			sourceTree = "<group>";
+		};
+		87585FE12DA3EC7A0053069E /* Scripting */ = {
+			isa = PBXGroup;
+			children = (
+				87585FDE2DA3EC7A0053069E /* EditorDocument+Scripting.swift */,
+				87585FDF2DA3EC7A0053069E /* NSColor+Scripting.swift */,
+				87585FE02DA3EC7A0053069E /* Error+Scripting.swift */,
+			);
+			path = Scripting;
 			sourceTree = "<group>";
 		};
 		8765FD262AF291A300C645A8 /* Updater */ = {
@@ -565,9 +577,6 @@
 			dependencies = (
 				87BFF24E298AB754006C31E4 /* PBXTargetDependency */,
 				8729240F2951525C007156B1 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B0F4563A2D9D404C006E5614 /* Scripting */,
 			);
 			name = MarkEditMac;
 			packageProductDependencies = (
@@ -729,6 +738,9 @@
 				8752CEB6295B2F8800BA9D5B /* EditorPanelView.swift in Sources */,
 				870A51BA294702AF0095C7EB /* EditorWindowController.swift in Sources */,
 				874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */,
+				87585FE22DA3EC7A0053069E /* EditorDocument+Scripting.swift in Sources */,
+				87585FE32DA3EC7A0053069E /* NSColor+Scripting.swift in Sources */,
+				87585FE42DA3EC7A0053069E /* Error+Scripting.swift in Sources */,
 				87A73AB3294C4B27006A710E /* EditorWebView.swift in Sources */,
 				8767BBAF295A8BA500BFACAE /* EditorViewController+UI.swift in Sources */,
 				878AABE92CB111410081C5E1 /* EditorMenuItem.swift in Sources */,
