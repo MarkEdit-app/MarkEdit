@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="MarkEdit Terminology" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef" xpointer="xpointer(/dictionary/suite)"/>
+
+  <suite name="Text Suite" code="????" description="A set of basic classes for text processing.">
+    <cocoa name="NSTextSuite"/>
+
+    <value-type name="RGB color" code="cRGB">
+      <cocoa class="NSColor"/>
+    </value-type>
+
+    <class name="rich text" plural="text" code="ricT" description="Rich (styled) text">
+      <cocoa class="NSTextStorage"/>
+      <type type="text"/>
+
+      <element type="paragraph">
+        <cocoa key="paragraphs"/>
+      </element>
+      <element type="word">
+        <cocoa key="words"/>
+      </element>
+      <element type="character">
+        <cocoa key="characters"/>
+      </element>
+      <element type="attribute run">
+        <cocoa key="attributeRuns"/>
+      </element>
+
+      <!-- This is always {0,0,0} currently, but could get syntax highlight color eventually -->
+      <property name="color" code="colr" type="RGB color" description="The color of the first character.">
+        <cocoa key="foregroundColor"/>
+      </property>
+
+      <property name="font" code="font" type="text" description="The name of the font of the first character.">
+        <cocoa key="fontName"/>
+      </property>
+      <property name="size" code="ptsz" type="number" description="The size in points of the first character.">
+        <cocoa key="fontSize"/>
+      </property>
+    </class>
+    <class name="paragraph" code="cpar" inherits="rich text" description="This subdivides the text into paragraphs.">
+      <cocoa class="NSTextStorage"/>
+      <type type="text"/>
+    </class>
+    <class name="word" code="cwor" inherits="rich text" description="This subdivides the text into words.">
+      <cocoa class="NSTextStorage"/>
+      <type type="text"/>
+    </class>
+    <class name="character" code="cha " inherits="rich text" description="This subdivides the text into characters.">
+      <cocoa class="NSTextStorage"/>
+      <type type="text"/>
+    </class>
+    <class name="attribute run" code="catr" inherits="rich text" description="This subdivides the text into chunks that all have the same attributes.">
+      <cocoa class="NSTextStorage"/>
+      <type type="text"/>
+    </class>
+  </suite>
+
+  <suite name="MarkEdit Suite" code="mked" description="MarkEdit specific classes.">
+    <enumeration name="saveable file format" code="savf">
+      <enumerator name="Markdown" code="md  " description="Markdown format">
+        <cocoa string-value="net.daringfireball.markdown"/>
+      </enumerator>
+      <enumerator name="Text" code="txt " description="Plain text format">
+        <cocoa string-value="public.text"/>
+      </enumerator>
+    </enumeration>
+    
+    <command name="evaluate" code="mkedevjs" description="Evaluate JavaScript on a document and get the result. Throws an error if no such document exists.">
+        <direct-parameter type="document" description="The document to run JavaScript in."/>
+        <parameter type="text" name="JavaScript" code="mdjs" description="The JavaScript code to evaluate.">
+          <cocoa key="script"/>
+        </parameter>
+        <result description="The value returned once the script finishes executing.">
+          <type type="any"/>
+        </result>
+    </command>
+
+    <class name="document" code="docu" description="A MarkEdit document." plural="documents" inherits="document">
+      <cocoa class="MarkEdit.EditorDocument"/>
+      <property name="source" code="mdsc" type="text" access="rw" description="The raw markdown source of the document.">
+        <cocoa key="scriptingSource"/>
+      </property>
+      <contents name="formatted text" code="mdmd" type="rich text" access="r" description="The rich text content of the document.">
+        <cocoa key="scriptingRichText"/>
+      </contents>
+      <property name="selection" code="mdsl" type="text" access="rw" description="The currently selected text">
+        <cocoa key="scriptingSelectedText"/>
+      </property>
+      <responds-to command="evaluate">
+        <cocoa method="scriptingHandleEvaluateCommand:"/>
+      </responds-to>
+    </class>
+  </suite>
+
+</dictionary>
+

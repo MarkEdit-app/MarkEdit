@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -97,6 +97,7 @@
 		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 		87FAFFD72BE0B6A300FA509D /* AppDelegate+FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */; };
+		B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,7 +217,12 @@
 		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 		87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+FileSystem.swift"; sourceTree = "<group>"; };
+		B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = MarkEdit.sdef; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B0F4563A2D9D404C006E5614 /* Scripting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Scripting; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		870A519F294700DE0095C7EB /* Frameworks */ = {
@@ -314,6 +320,7 @@
 				870A51C8294752530095C7EB /* index.html */,
 				870A51A9294700E00095C7EB /* Assets.xcassets */,
 				8757F7FB2AAC815F001957DD /* Localizable.xcstrings */,
+				B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -334,6 +341,7 @@
 		870A51C52947103A0095C7EB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B0F4563A2D9D404C006E5614 /* Scripting */,
 				873D6403295FD2FF0095DEF7 /* Main */,
 				870A51C429470D830095C7EB /* Editor */,
 				870F1797298577A000003DA7 /* Panels */,
@@ -558,6 +566,9 @@
 				87BFF24E298AB754006C31E4 /* PBXTargetDependency */,
 				8729240F2951525C007156B1 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				B0F4563A2D9D404C006E5614 /* Scripting */,
+			);
 			name = MarkEditMac;
 			packageProductDependencies = (
 				870F177C29855CA500003DA7 /* MarkEditKit */,
@@ -647,6 +658,7 @@
 				870A51AA294700E00095C7EB /* Assets.xcassets in Resources */,
 				8757F7FC2AAC815F001957DD /* Localizable.xcstrings in Resources */,
 				870A51AD294700E00095C7EB /* Main.storyboard in Resources */,
+				B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

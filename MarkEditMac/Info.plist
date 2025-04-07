@@ -88,6 +88,10 @@
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
 		</dict>
 	</array>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>OSAScriptingDefinition</key>
+	<string>MarkEdit.sdef</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
