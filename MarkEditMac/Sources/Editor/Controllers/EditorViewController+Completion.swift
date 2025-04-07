@@ -46,6 +46,16 @@ extension EditorViewController {
         language: nil,
         inSpellDocumentWithTag: 0
       ) ?? [])
+
+      // Misspelled correction as a guess
+      if let correction = spellChecker.correction(
+        forWordRange: partialRange,
+        in: anchor.text,
+        language: "",
+        inSpellDocumentWithTag: 0
+      ) {
+        completions.append(correction)
+      }
     }
 
     // If there is an exact match, always make it the first element
