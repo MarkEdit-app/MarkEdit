@@ -218,9 +218,9 @@ enum Localized {
   }
 
   enum Scripting {
-    static let missingCommandErrorMeesage = String(localized: "Couldn't find a command to handle incoming Apple Event.", comment: "Script error when MarkEdit has no command to handle the incoming Apple Event")
-    static let missingArgumentErrorMessage = String(localized: "Argument '%@' not found in event descriptor. The descriptor is likely malformed.", comment: "Script error when a command argument is missing due to a corrupted Apple Event")
-    static let editorNotFoundErrorMessage = String(localized: "No editor for document %@ found.", comment: "Script error when MarkEdit cannot find the editor view to run document commands in")
+    static let missingCommandErrorMessage = String(localized: "Couldn't find a command to handle incoming Apple Event.", comment: "Script error when MarkEdit has no command to handle the incoming Apple Event")
+    static let missingArgumentErrorMessage = String(localized: "Argument \"%@\" not found in event descriptor, the descriptor is likely malformed.", comment: "Script error when a command argument is missing due to a corrupted Apple Event")
+    static let editorNotFoundErrorMessage = String(localized: "No editor for document \"%@\" found.", comment: "Script error when MarkEdit cannot find the editor view to run document commands in")
     static let jsEvaluationErrorMessage = String(localized: "JavaScript evaluation failed at line %d, column %d: %@", comment: "Script error when JavaScript evaluation raises a detailed error")
     static let unknownJSErrorMessage = String(localized: "JavaScript evaluation failed for an unknown reason.", comment: "Script error when JavaScript evaluation raises an error with no details")
   }

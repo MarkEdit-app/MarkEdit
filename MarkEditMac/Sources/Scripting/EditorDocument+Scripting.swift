@@ -1,6 +1,6 @@
 //
 //  EditorDocument+Scripting.swift
-//  MarkEdit
+//  MarkEditMac
 //
 //  Created by Stephen Kaplan on 4/2/25.
 //
@@ -14,26 +14,31 @@ extension EditorDocument {
       return stringValue
     }
     set {
-      if newValue != stringValue {
-        guard let targetEditor = scriptingTargetEditor(for: nil) else { return }
-        stringValue = newValue
-        targetEditor.bridge.core.replaceText(text: newValue, granularity: .wholeDocument)
+      guard newValue != stringValue else {
+        return
       }
+
+      guard let targetEditor = scriptingTargetEditor(for: nil) else {
+        return
+      }
+
+      stringValue = newValue
+      targetEditor.bridge.core.replaceText(text: newValue, granularity: .wholeDocument)
     }
   }
 
   /// Rich text of the document.
   @objc var scriptingRichText: NSTextStorage? {
-      let markdownOptions = AttributedString.MarkdownParsingOptions(
-        allowsExtendedAttributes: true,
-        interpretedSyntax: .full,
-        failurePolicy: .returnPartiallyParsedIfPossible,
-        appliesSourcePositionAttributes: true
-      )
+    let markdownOptions = AttributedString.MarkdownParsingOptions(
+      allowsExtendedAttributes: true,
+      interpretedSyntax: .full,
+      failurePolicy: .returnPartiallyParsedIfPossible,
+      appliesSourcePositionAttributes: true
+    )
 
-      // Process lines separately to ensure they stay distinct
-      let newlineString = NSAttributedString(string: "\n")
-      let attributedSource = scriptingSource.components(separatedBy: .newlines)
+    // Process lines separately to ensure they stay distinct
+    let newlineString = NSAttributedString(string: "\n")
+    let attributedSource = scriptingSource.components(separatedBy: .newlines)
       .map { component in
         do {
           return try NSMutableAttributedString(markdown: component, options: markdownOptions)
@@ -46,7 +51,7 @@ extension EditorDocument {
         result.append(element)
       }
 
-      return NSTextStorage(attributedString: attributedSource)
+    return NSTextStorage(attributedString: attributedSource)
   }
 
   @objc var scriptingSelectedText: String {
@@ -57,23 +62,28 @@ extension EditorDocument {
       }
 
       command.suspendExecution()
+
       Task {
         let text = try await targetEditor.bridge.selection.getText()
         command.resumeExecution(withResult: NSAppleEventDescriptor(with: text))
       }
-      return self.stringValue
+
+      return stringValue
     }
     set {
-      guard let targetEditor = scriptingTargetEditor(for: nil) else { return }
+      guard let targetEditor = scriptingTargetEditor(for: nil) else {
+        return
+      }
+
       Task {
         targetEditor.bridge.core.replaceText(text: newValue, granularity: .selection)
       }
     }
   }
 
-  /// Executes a user-provided JS script in the document's webview.
+  /// Executes a user-provided JS script in the document's web view.
   @objc func scriptingHandleEvaluateCommand(_ command: NSScriptCommand) -> Any? {
-    guard let inputString = command.evaluatedArguments?["script"] as? String else {
+    guard let script = command.evaluatedArguments?["script"] as? String else {
       ScriptingError.missingArgument("script").applyToCommand(command)
       return nil
     }
@@ -82,11 +92,8 @@ extension EditorDocument {
       return nil
     }
 
-    // Preserve newlines for better error reporting
-    let jsText = inputString.replacingOccurrences(of: "\\n", with: "\\\\n")
-
     command.suspendExecution()
-    targetEditor.webView.evaluateJavaScript(jsText) { value, error in
+    targetEditor.webView.evaluateJavaScript(script) { value, error in
       if let error = error as NSError? {
         ScriptingError.jsEvaluationError(error).applyToCommand(command)
         command.resumeExecution(withResult: NSAppleEventDescriptor.null())
@@ -97,6 +104,7 @@ extension EditorDocument {
       let descriptor = NSAppleEventDescriptor(with: value)
       command.resumeExecution(withResult: descriptor)
     }
+
     return nil
   }
 }
@@ -109,6 +117,7 @@ private extension EditorDocument {
       Logger.log(.error, ScriptingError.missingCommand.localizedDescription)
       return nil
     }
+
     return currentCommand
   }
 
@@ -132,9 +141,10 @@ private extension NSAppleEventDescriptor {
   /// Initializes a descriptor from a dictionary with arbitrary keys using user record fields.
   convenience init(dictionary: [String: Any]) {
     self.init(recordDescriptor: ())
-    let userRecord = Self.list()
 
+    let userRecord = Self.list()
     var currentIndex = 0
+
     for (key, value) in dictionary {
       // keyASUserRecordFields has a list of alternating keys and values
       let valueDescriptor = NSAppleEventDescriptor(with: value)
