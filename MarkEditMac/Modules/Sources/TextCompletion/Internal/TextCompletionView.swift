@@ -14,7 +14,8 @@ struct TextCompletionView: View {
 
   private enum Constants {
     static let fontSize: Double = 14
-    static let itemWidth: Double = 112
+    static let minimumItemWidth: Double = 112
+    static let maximumItemWidth: Double = 320
     static let itemHeight: Double = 24
     static let itemPadding: Double = 4
   }
@@ -71,7 +72,7 @@ struct TextCompletionView: View {
                   let bounds = CGRect(
                     x: 0,
                     y: 0,
-                    width: Constants.itemWidth,
+                    width: Constants.minimumItemWidth,
                     height: Constants.itemHeight
                   )
 
@@ -99,10 +100,12 @@ struct TextCompletionView: View {
     }
   }
 
-  static func panelSize(itemCount: Int) -> CGSize {
-    CGSize(
-      width: Constants.itemWidth + 2 * Constants.itemPadding,
-      height: Double(min(8, itemCount)) * Constants.itemHeight + 2 * Constants.itemPadding
+  static func panelSize(itemCount: Int, preferredWidth: Double) -> CGSize {
+    let width = min(max(preferredWidth, Constants.minimumItemWidth), Constants.maximumItemWidth)
+    let height = Double(min(8, itemCount)) * Constants.itemHeight
+    return CGSize(
+      width: width + 2 * Constants.itemPadding,
+      height: height + 2 * Constants.itemPadding
     )
   }
 }

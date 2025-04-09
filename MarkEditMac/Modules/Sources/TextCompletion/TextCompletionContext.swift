@@ -57,10 +57,14 @@ public final class TextCompletionContext {
     panel.updateCompletions(Array(completions.prefix(50)), query: query)
     panel.selectTop()
 
-    let panelSize = TextCompletionView.panelSize(itemCount: completions.count)
+    let panelPadding: Double = 10
+    let panelSize = TextCompletionView.panelSize(
+      itemCount: completions.count,
+      preferredWidth: panel.frame.width + panelPadding * 2
+    )
+
     let safeArea = parentWindow.contentView?.safeAreaInsets.top ?? 0
     let caretPadding: Double = 5
-    let panelPadding: Double = 10
 
     var origin = CGPoint(
       x: caretRect.origin.x - caretPadding,

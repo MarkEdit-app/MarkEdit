@@ -10,7 +10,7 @@ import SwiftUI
 @MainActor
 final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
   private var state = TextCompletionState()
-  private var mainView: NSView?
+  private var mainView: NSHostingView<TextCompletionView>?
 
   init(localizable: TextCompletionLocalizable, commitCompletion: @escaping () -> Void) {
     super.init(
@@ -53,6 +53,16 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
   func updateCompletions(_ completions: [String], query: String) {
     state.items = completions
     state.query = query
+
+    // Getting a measured view size to better determine the panel width
+    if let measuredSize = mainView?.rootView.measuredSize {
+      let preferredRect = CGRect(
+        origin: frame.origin,
+        size: CGSize(width: measuredSize.width, height: frame.height)
+      )
+
+      setFrame(preferredRect, display: false)
+    }
   }
 
   func selectedCompletion() -> String {
