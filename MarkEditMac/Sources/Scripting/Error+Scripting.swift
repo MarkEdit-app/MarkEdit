@@ -51,14 +51,12 @@ enum ScriptingError: Error, LocalizedError {
         errorMessage
       )
     case let .invalidDestination(_: fileURL, document: document):
-      let fileExtension = fileURL.pathExtension
-
       let validTypes = document.writableTypes(for: .saveOperation)
       let validExtensions = validTypes.compactMap {
         document.fileNameExtension(forType: $0, saveOperation: .saveOperation)
       }
 
-      return String(format: Localized.Scripting.invalidDestinationErrorMessage, fileExtension, validExtensions.joined(separator: ", "))
+      return String(format: Localized.Scripting.invalidDestinationErrorMessage, fileURL.pathExtension, validExtensions.joined(separator: ", "))
     }
   }
 

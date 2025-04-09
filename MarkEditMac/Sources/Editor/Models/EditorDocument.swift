@@ -225,7 +225,7 @@ extension EditorDocument {
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
-    // Support all markdown and plaintext types, but prioritize the configured default
+    // Include all markdown and plaintext types, but prioritize the configured default
     var exportTypes = NewFilenameExtension.allCases
       .sorted { lhs, _ in
         lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
@@ -252,7 +252,11 @@ extension EditorDocument {
     }
 
     let fileExtension = fileURL.pathExtension.lowercased()
-    guard NewFilenameExtension.allCases.contains(where: { $0.rawValue == fileExtension }) else {
+    let isValidExtension = NewFilenameExtension.allCases.contains {
+      $0.rawValue == fileExtension
+    } || ((textBundle != nil) && fileExtension == "textbundle")
+
+    guard isValidExtension else {
       let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
       scriptError.applyToCommand(command)
       return nil
