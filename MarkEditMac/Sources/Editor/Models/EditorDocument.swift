@@ -225,12 +225,40 @@ extension EditorDocument {
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
+    // Support all markdown and plaintext types, but prioritize the configured default
+    var exportTypes = NewFilenameExtension.allCases
+      .sorted { lhs, _ in
+        lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
+      }
+      .map { $0.exportedType }
+
     // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
+    if textBundle != nil {
+      exportTypes.insert("org.textbundle.package", at: 0)
+    }
+
+    return exportTypes
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
+    typeName.isTextBundle ? "textbundle" : NewFilenameExtension.allCases.first { $0.exportedType == typeName }?.rawValue
+  }
+
+  /// Catch invalid output paths early so we can present more informative errors
+  @objc override func handleSave(_ command: NSScriptCommand) -> Any? {
+    guard let fileURL = command.evaluatedArguments?["File"] as? URL else {
+      ScriptingError.missingArgument("File").applyToCommand(command)
+      return nil
+    }
+
+    let fileExtension = fileURL.pathExtension.lowercased()
+    guard NewFilenameExtension.allCases.contains(where: { $0.rawValue == fileExtension }) else {
+      let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
+      scriptError.applyToCommand(command)
+      return nil
+    }
+
+    return super.handleSave(command)
   }
 
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {

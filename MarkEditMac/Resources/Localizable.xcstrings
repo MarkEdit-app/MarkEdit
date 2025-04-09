@@ -273,6 +273,17 @@
         }
       }
     },
+    "Cannot export files with extension '%@'. Supported extensions: %@." : {
+      "comment" : "Script error when attempting to save files with an unsupported extension",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cannot export files with extension '%1$@'. Supported extensions: %2$@."
+          }
+        }
+      }
+    },
     "Case Sensitive" : {
       "comment" : "Toggle case sensitive search",
       "localizations" : {

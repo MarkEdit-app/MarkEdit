@@ -12,6 +12,7 @@ enum ScriptingError: Error, LocalizedError {
   case missingArgument(_ name: String)
   case editorNotFound(_ documentName: String)
   case jsEvaluationError(_ error: NSError)
+  case invalidDestination(_ fileURL: URL, document: EditorDocument)
 
   var code: Int {
     switch self {
@@ -23,6 +24,8 @@ enum ScriptingError: Error, LocalizedError {
       return NSReceiverEvaluationScriptError
     case .jsEvaluationError(_: let error):
       return error.code // WKError.javaScriptExceptionOccurred -- 4
+    case .invalidDestination:
+      return NSArgumentsWrongScriptError
     }
   }
 
@@ -47,6 +50,15 @@ enum ScriptingError: Error, LocalizedError {
         columnNumber,
         errorMessage
       )
+    case let .invalidDestination(_: fileURL, document: document):
+      let fileExtension = fileURL.pathExtension
+
+      let validTypes = document.writableTypes(for: .saveOperation)
+      let validExtensions = validTypes.compactMap {
+        document.fileNameExtension(forType: $0, saveOperation: .saveOperation)
+      }
+
+      return String(format: Localized.Scripting.invalidDestinationErrorMessage, fileExtension, validExtensions.joined(separator: ", "))
     }
   }
 
