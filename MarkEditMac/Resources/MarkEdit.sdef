@@ -59,11 +59,12 @@
 
   <suite name="MarkEdit Suite" code="mked" description="MarkEdit specific classes.">
     <enumeration name="saveable file format" code="savf">
-      <enumerator name="Markdown" code="md  " description="Markdown format">
-        <cocoa string-value="net.daringfireball.markdown"/>
-      </enumerator>
-      <enumerator name="Text" code="txt " description="Plain text format">
+      <enumerator name="Plain Text" code="txt " description="Plain text format">
+        <synonym name="Markdown" code="md  "/>
         <cocoa string-value="public.text"/>
+      </enumerator>
+      <enumerator name="TextBundle" code="txtb" description="Text Bundle format">
+        <cocoa string-value="org.textbundle.package"/>
       </enumerator>
     </enumeration>
     
