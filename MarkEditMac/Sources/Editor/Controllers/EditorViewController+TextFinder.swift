@@ -43,7 +43,7 @@ extension EditorViewController {
     if let searchTerm {
       findPanel.searchField.stringValue = searchTerm
       if searchTerm.isEmpty {
-        findPanel.updateResult(numberOfItems: 0, emptyInput: true)
+        findPanel.updateResult(counter: .init(numberOfItems: 0, currentIndex: -1), emptyInput: true)
       }
     }
 
@@ -140,16 +140,16 @@ extension EditorViewController {
     findPanel.searchField.addToRecents(searchTerm: searchTerm)
     findPanel.resetMenu()
 
-    Task {
-      if let count = try? await bridge.search.updateQuery(options: options) {
-        updateTextFinderPanels(numberOfItems: count)
-      }
-    }
+    bridge.search.updateQuery(options: options)
+    updateSearchCounter()
   }
 
-  func updateTextFinderPanels(numberOfItems: Int) {
-    findPanel.updateResult(numberOfItems: numberOfItems, emptyInput: searchTerm.isEmpty)
-    replacePanel.updateResult(numberOfItems: numberOfItems)
+  func updateSearchCounter() {
+    Task {
+      if let counter = try? await bridge.search.getCounterInfo() {
+        updateTextFinderPanels(counter: counter)
+      }
+    }
   }
 
   func findSelectionInTextFinder() {
@@ -248,6 +248,11 @@ private extension EditorViewController {
     States.configuredFieldEditor = true
   }
 
+  func updateTextFinderPanels(counter: SearchCounterInfo) {
+    findPanel.updateResult(counter: counter, emptyInput: searchTerm.isEmpty)
+    replacePanel.updateResult(numberOfItems: counter.numberOfItems)
+  }
+
   func navigateFindResults(backwards: Bool) async {
     let wasPanelHidden = findPanel.mode == .hidden
     let reselectTerm = webView.isFirstResponder && (wasPanelHidden || searchTerm.isEmpty)
@@ -267,6 +272,8 @@ private extension EditorViewController {
     if !reselectTerm {
       finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
     }
+
+    updateSearchCounter()
   }
 
   func finishFinderNavigation(hadSelectedMatch: Bool) {
