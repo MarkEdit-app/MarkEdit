@@ -76,6 +76,8 @@ extension EditorViewController: EditorWebViewActionDelegate {
       bridge.history.undo()
     case .redo:
       bridge.history.redo()
+    case .selectAll:
+      bridge.selection.selectWholeDocument()
     }
   }
 }
