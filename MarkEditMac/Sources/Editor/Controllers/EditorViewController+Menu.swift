@@ -423,7 +423,7 @@ private extension EditorViewController {
 
   @IBAction func selectWholeDocument(_ sender: Any?) {
     // The default implementation "selectAll" only selects the viewport
-    bridge.selection.selectWholeDocument()
+    currentInput?.performTextAction(.selectAll, sender: sender)
   }
 
   @IBAction func openTableOfContents(_ sender: Any?) {
