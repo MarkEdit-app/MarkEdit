@@ -12,6 +12,7 @@ import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSear
 import { isElementVisible, isPositionVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
 
 import SearchOptions from './options';
+import SearchCounterInfo from './counterInfo';
 import matchFromQuery from './matchFromQuery';
 import rangesFromQuery from './rangesFromQuery';
 import searchOccurrences from './searchOccurrences';
@@ -42,7 +43,7 @@ export function setState(enabled: boolean) {
   storage.isEnabled = enabled;
 }
 
-export function updateQuery(options: SearchOptions): number {
+export function updateQuery(options: SearchOptions) {
   storage.options = options;
   setState(true);
 
@@ -65,7 +66,7 @@ export function updateQuery(options: SearchOptions): number {
     for (const range of ranges) {
       if (isPositionVisible(range.from)) {
         reselect(EditorSelection.range(range.from, range.to));
-        return ranges.length;
+        return;
       }
     }
 
@@ -84,8 +85,6 @@ export function updateQuery(options: SearchOptions): number {
       }
     }
   }
-
-  return ranges.length;
 }
 
 export function updateHasSelection() {
@@ -133,10 +132,11 @@ export function selectNextOccurrence() {
   return foundNext;
 }
 
-export function numberOfMatches(): CodeGen_Int {
-  const query = getSearchQuery(window.editor.state);
-  const ranges = rangesFromQuery(query);
-  return ranges.length as CodeGen_Int;
+export function searchCounterInfo(): SearchCounterInfo {
+  return {
+    numberOfItems: getQueryRanges().length as CodeGen_Int,
+    currentIndex: currentMatchIndex() as CodeGen_Int,
+  };
 }
 
 export function hasVisibleSelectedMatch() {
@@ -172,7 +172,7 @@ export function performOperation(operation: SearchOperation) {
   scrollSearchMatchToVisible();
 }
 
-export type { SearchOperation, SearchOptions };
+export type { SearchOperation, SearchOptions, SearchCounterInfo };
 
 function prepareNavigation(search: string) {
   if (storage.options === undefined) {
@@ -194,11 +194,26 @@ function performFindCommand(command: Command, term: string, direction: 'forward'
   const result = command(window.editor);
 
   // We need to scroll when we don't have a visible match, or the next/previous one is not visible
-  if (matches.length === 0 || (index === boundary && numberOfMatches() > 1)) {
+  if (matches.length === 0 || (index === boundary && getQueryRanges().length > 1)) {
     scrollSearchMatchToVisible();
   }
 
   return result;
+}
+
+function getQueryRanges(query?: SearchQuery) {
+  return rangesFromQuery(query ?? getSearchQuery(window.editor.state));
+}
+
+function currentMatchIndex() {
+  const element = document.querySelector('.cm-searchMatch-selected') as HTMLElement | null;
+  if (element === null) {
+    return -1;
+  }
+
+  const position = window.editor.posAtDOM(element);
+  const ranges = getQueryRanges();
+  return ranges.findIndex(({ from, to }) => from <= position && to >= position);
 }
 
 const storage: {

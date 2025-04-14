@@ -82,6 +82,7 @@ enum Localized {
     static let clearRecents = String(localized: "Clear Recents", comment: "Menu item: clear recents")
     static let findSelection = String(localized: "Find Selection", comment: "Menu item: use selection to find")
     static let selectAllOccurrences = String(localized: "Select All Occurrences", comment: "Menu item: select all occurrences")
+    static let indexOfMatches = String(localized: "%d of %d", comment: "Index of matches, such as 1 of 3")
   }
 
   enum Document {

@@ -30,7 +30,7 @@ public final class WebBridgeSearch {
     webView?.invoke(path: "webModules.search.setState", message: message, completion: completion)
   }
 
-  public func updateQuery(options: SearchOptions) async throws -> Int {
+  public func updateQuery(options: SearchOptions, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let options: SearchOptions
     }
@@ -39,13 +39,7 @@ public final class WebBridgeSearch {
       options: options
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.updateQuery", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
-    }
+    webView?.invoke(path: "webModules.search.updateQuery", message: message, completion: completion)
   }
 
   public func updateHasSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
@@ -122,9 +116,9 @@ public final class WebBridgeSearch {
     }
   }
 
-  public func numberOfMatches() async throws -> Int {
+  public func getCounterInfo() async throws -> SearchCounterInfo {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.numberOfMatches") { result in
+      webView?.invoke(path: "webModules.search.getCounterInfo") { result in
         Task { @MainActor in
           continuation.resume(with: result)
         }
@@ -158,4 +152,17 @@ public enum SearchOperation: String, Codable {
   case selectAllInSelection = "selectAllInSelection"
   case replaceAll = "replaceAll"
   case replaceAllInSelection = "replaceAllInSelection"
+}
+
+/// Info to show text like "1 of 3".
+public struct SearchCounterInfo: Codable {
+  /// Total number of matched items
+  public var numberOfItems: Int
+  /// Index for the selected item, zero-based
+  public var currentIndex: Int
+
+  public init(numberOfItems: Int, currentIndex: Int) {
+    self.numberOfItems = numberOfItems
+    self.currentIndex = currentIndex
+  }
 }

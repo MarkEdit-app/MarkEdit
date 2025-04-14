@@ -135,11 +135,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     if contentEdited {
       if findPanel.mode != .hidden {
-        Task {
-          if let count = try? await bridge.search.numberOfMatches() {
-            updateTextFinderPanels(numberOfItems: count)
-          }
-        }
+        updateSearchCounter()
       }
     } else {
       cancelCompletion()

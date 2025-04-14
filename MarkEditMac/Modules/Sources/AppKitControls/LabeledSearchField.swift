@@ -12,7 +12,7 @@ public final class LabeledSearchField: NSSearchField {
 
   private let labelView = {
     let label = LabelView(frame: .zero)
-    label.font = .systemFont(ofSize: 10)
+    label.font = .monospacedDigitSystemFont(ofSize: 10, weight: .regular)
     label.textColor = .secondaryLabelColor
     return label
   }()
