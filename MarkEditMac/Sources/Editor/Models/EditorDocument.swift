@@ -225,12 +225,27 @@ extension EditorDocument {
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
+    // Include all markdown and plaintext types, but prioritize the configured default
+    let exportedTypes = NewFilenameExtension.allCases
+      .sorted { lhs, _ in
+        lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
+      }
+      .map { $0.exportedType }
+
     // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    textBundle == nil ? [AppPreferences.General.newFilenameExtension.exportedType] : ["org.textbundle.package"]
+    return textBundle == nil ? exportedTypes : ["org.textbundle.package"] + exportedTypes
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    typeName.isTextBundle ? "textbundle" : AppPreferences.General.newFilenameExtension.rawValue
+    if typeName.isTextBundle {
+      return "textbundle"
+    }
+
+    if let preferredExtension = (NewFilenameExtension.allCases.first { $0.exportedType == typeName }) {
+      return preferredExtension.rawValue
+    }
+
+    return AppPreferences.General.newFilenameExtension.rawValue
   }
 
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
