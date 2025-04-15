@@ -206,9 +206,9 @@ function getQueryRanges(query?: SearchQuery) {
 }
 
 function currentMatchIndex() {
-  const element = document.querySelector('.cm-searchMatch-selected') as HTMLElement | null;
+  const element = searchMatchElement();
   if (element === null) {
-    return -1;
+    return -1; // Invalid result of Array.findIndex too
   }
 
   const position = window.editor.posAtDOM(element);
