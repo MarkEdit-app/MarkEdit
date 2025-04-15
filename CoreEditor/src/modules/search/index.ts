@@ -213,7 +213,7 @@ function currentMatchIndex() {
 
   const position = window.editor.posAtDOM(element);
   const ranges = getQueryRanges();
-  return ranges.findIndex(({ from, to }) => from <= position && to >= position);
+  return ranges.findIndex(({ from }) => from === position);
 }
 
 const storage: {
