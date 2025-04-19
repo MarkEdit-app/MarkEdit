@@ -16,14 +16,16 @@ enum Tokenizer {
     let words: Int
     let sentences: Int
     let paragraphs: Int
+    let comments: Int
   }
 
-  static func tokenize(text: String) -> Result {
+  static func tokenize(sourceText: String, trimmedText: String, commentCount: Int) -> Result {
     Result(
-      characters: text.count,
-      words: tokenize(text: text, unit: .word),
-      sentences: tokenize(text: text, unit: .sentence),
-      paragraphs: tokenize(text: text, unit: .paragraph)
+      characters: sourceText.count, // Always use full text for characters
+      words: tokenize(text: trimmedText, unit: .word),
+      sentences: tokenize(text: trimmedText, unit: .sentence),
+      paragraphs: tokenize(text: trimmedText, unit: .paragraph),
+      comments: commentCount
     )
   }
 }

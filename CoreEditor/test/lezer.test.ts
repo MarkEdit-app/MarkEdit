@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
+import { extractComments } from '../src/modules/lezer';
 import * as editor from './utils/editor';
 
 describe('Lezer parser', () => {
@@ -75,6 +76,43 @@ describe('Lezer parser', () => {
     const types = parseTypes(window.editor);
     expect(types).toContain('SetextHeading2');
     expect(types).toContain('HeaderMark');
+  });
+
+  test('test extracting comments', () => {
+    expect(extractComments('<!-- Hello -->')).toStrictEqual({
+      trimmedText: '',
+      commentCount: 1,
+    });
+
+    expect(extractComments('<!-- Hello -->\nWorld')).toStrictEqual({
+      trimmedText: 'World',
+      commentCount: 1,
+    });
+
+    expect(extractComments('<!-- Hello -->\n<!-- World -->')).toStrictEqual({
+      trimmedText: '',
+      commentCount: 2,
+    });
+
+    expect(extractComments('<!-- Hello --> World -->')).toStrictEqual({
+      trimmedText: '',
+      commentCount: 1,
+    });
+
+    expect(extractComments('Hello <!-- Hello \n\n World -->')).toStrictEqual({
+      trimmedText: 'Hello <!-- Hello \n\n World -->',
+      commentCount: 0,
+    });
+
+    expect(extractComments('<!-- Hello \n\n World -->')).toStrictEqual({
+      trimmedText: '',
+      commentCount: 1,
+    });
+
+    expect(extractComments('Hello <!-- Hello \n.\n. World -->')).toStrictEqual({
+      trimmedText: 'Hello ',
+      commentCount: 1,
+    });
   });
 });
 

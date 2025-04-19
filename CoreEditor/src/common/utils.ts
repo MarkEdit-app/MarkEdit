@@ -11,6 +11,10 @@ export function afterDomUpdate(callback: () => void) {
   setTimeout(callback, 50);
 }
 
+export function replaceRange(input: string, from: number, to: number, replacement: string) {
+  return input.slice(0, from) + replacement + input.slice(to);
+}
+
 export function forceRedrawElement(element: HTMLElement) {
   const visibility = element.style.visibility;
   element.style.visibility = 'hidden';

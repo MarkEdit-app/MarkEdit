@@ -88,4 +88,19 @@ export function normalizeLineBreaks(input: string, lineBreak: string | undefined
   return output;
 }
 
+/**
+ * If the position is at a newline, add the newline length to the position.
+ */
+export function takePossibleNewline(input: string, pos: number) {
+  if (input.slice(pos, pos + 2) === CHARS.CRLF) {
+    return pos + 2;
+  }
+
+  if (input.charAt(pos) === CHARS.LF || input.charAt(pos) === CHARS.CR) {
+    return pos + 1;
+  }
+
+  return pos;
+}
+
 export type { LineEndings };

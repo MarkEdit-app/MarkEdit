@@ -12,6 +12,7 @@ public struct StatisticsLocalizable {
   let words: String
   let sentences: String
   let paragraphs: String
+  let comments: String
   let readTime: String
   let fileSize: String
 
@@ -21,6 +22,7 @@ public struct StatisticsLocalizable {
     words: String,
     sentences: String,
     paragraphs: String,
+    comments: String,
     readTime: String,
     fileSize: String
   ) {
@@ -29,6 +31,7 @@ public struct StatisticsLocalizable {
     self.words = words
     self.sentences = sentences
     self.paragraphs = paragraphs
+    self.comments = comments
     self.readTime = readTime
     self.fileSize = fileSize
   }
