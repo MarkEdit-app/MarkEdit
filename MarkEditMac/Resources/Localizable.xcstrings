@@ -398,6 +398,23 @@
         }
       }
     },
+    "Comments" : {
+      "comment" : "Statistics label: count comments",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注释"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "註解"
+          }
+        }
+      }
+    },
     "Compact" : {
       "comment" : "Compact mode for window toolbar",
       "localizations" : {

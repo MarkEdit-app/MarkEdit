@@ -17,12 +17,22 @@ public final class StatisticsController: NSViewController {
   }
 
   private let sourceText: String
+  private let trimmedText: String
+  private let commentCount: Int
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
   private var contentView: NSView?
 
-  public init(sourceText: String, fileURL: URL?, localizable: StatisticsLocalizable) {
+  public init(
+    sourceText: String,
+    trimmedText: String,
+    commentCount: Int,
+    fileURL: URL?,
+    localizable: StatisticsLocalizable
+  ) {
     self.sourceText = sourceText
+    self.trimmedText = trimmedText
+    self.commentCount = commentCount
     self.fileURL = fileURL
     self.localizable = localizable
     super.init(nibName: nil, bundle: nil)
@@ -60,7 +70,11 @@ public final class StatisticsController: NSViewController {
 
     DispatchQueue.global(qos: .userInitiated).async {
       // Natural language processing is time-consuming for large documents
-      let tokenizedResult = Tokenizer.tokenize(text: self.sourceText)
+      let tokenizedResult = Tokenizer.tokenize(
+        sourceText: self.sourceText,
+        trimmedText: self.trimmedText,
+        commentCount: self.commentCount
+      )
 
       // Remove the spinner and show the result view on main thread
       DispatchQueue.main.async {
