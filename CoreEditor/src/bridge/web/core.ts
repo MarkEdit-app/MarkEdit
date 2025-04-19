@@ -1,9 +1,11 @@
 import { WebModule } from '../webModule';
 import {
+  ReadableContent,
   ReplaceGranularity,
   resetEditor,
   clearEditor,
   getEditorText,
+  getReadableContent,
   insertText,
   replaceText,
   handleFocusLost,
@@ -20,6 +22,7 @@ export interface WebModuleCore extends WebModule {
   resetEditor({ text }: { text: string }): void;
   clearEditor(): void;
   getEditorText(): string;
+  getReadableContent(): ReadableContent;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
   handleFocusLost(): void;
@@ -38,6 +41,10 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   getEditorText(): string {
     return getEditorText();
+  }
+
+  getReadableContent(): ReadableContent {
+    return getReadableContent();
   }
 
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void {

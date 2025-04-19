@@ -21,21 +21,18 @@ extension EditorViewController {
     }
 
     Task {
-      // Extract the source to show the statistics view,
-      // use the selected text if the selection is not empty.
-      let (sourceText, fileURL, mainTitle) = await {
-        let selectedText = (try? await bridge.selection.getText()) ?? ""
-        let mainTitle = Localized.Toolbar.statistics
+      guard let content = try? await bridge.core.getReadableContent() else {
+        return Logger.assertFail("Failed to get readable content from the editor")
+      }
 
-        return (
-          selectedText.isEmpty ? (await editorText ?? "") : selectedText,
-          selectedText.isEmpty ? document?.fileURL : nil,
-          selectedText.isEmpty ? mainTitle : "\(mainTitle) (\(Localized.Settings.selection))"
-        )
-      }()
+      let fileURL = content.selectionBased ? nil : document?.fileURL
+      let titleLabel = Localized.Toolbar.statistics
+      let mainTitle = content.selectionBased ? "\(titleLabel) (\(Localized.Settings.selection))" : titleLabel
 
       let statisticsController = StatisticsController(
-        sourceText: sourceText,
+        sourceText: content.sourceText,
+        trimmedText: content.trimmedText,
+        commentCount: content.commentCount,
         fileURL: fileURL,
         localizable: StatisticsLocalizable(
           mainTitle: mainTitle,
@@ -43,6 +40,7 @@ extension EditorViewController {
           words: Localized.Statistics.words,
           sentences: Localized.Statistics.sentences,
           paragraphs: Localized.Statistics.paragraphs,
+          comments: Localized.Statistics.comments,
           readTime: Localized.Statistics.readTime,
           fileSize: Localized.Statistics.fileSize
         )
