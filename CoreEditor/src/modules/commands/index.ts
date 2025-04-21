@@ -1,4 +1,4 @@
-import { EditorView } from '@codemirror/view';
+import { EditorView, KeyBinding } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import {
   copyLineDown,
@@ -119,11 +119,18 @@ export function performEditCommand(command: EditCommand) {
     case EditCommand.moveLineDown: moveLineDown(editor); break;
     case EditCommand.copyLineUp: copyLineUp(editor); break;
     case EditCommand.copyLineDown: copyLineDown(editor); break;
-    case EditCommand.toggleLineComment: toggleComment(editor); break; // Don't call toggleLineComment here, it won't work
+    case EditCommand.toggleLineComment: toggleLineComment(editor); break;
     case EditCommand.toggleBlockComment: toggleBlockComment(editor); break;
     default: break;
   }
 }
+
+export const customizedCommandsKeymap: KeyBinding[] = [
+  {
+    key: 'Mod-/',
+    run: toggleLineComment,
+  },
+];
 
 export { formatContent };
 export type { EditCommand };
@@ -142,6 +149,37 @@ function shrinkSelection(editor: EditorView) {
   if (selection !== undefined) {
     editor.dispatch({ selection });
   }
+}
+
+/**
+ * Improved comment toggling, the behavior of empty line is optimized.
+ */
+function toggleLineComment(editor: EditorView): boolean {
+  const selection = editor.state.selection;
+  const { from, to } = selection.main;
+
+  // Handle the case where inserting comment at an empty line,
+  // only for single selection to make the logic simpler.
+  if (selection.ranges.length === 1 && from === to) {
+    const line = editor.state.doc.lineAt(from);
+    if (line.text.length === 0) {
+      const open = '<!-- ';
+      const close = ' -->';
+      editor.dispatch({
+        changes: {
+          from,
+          insert: open + close,
+        },
+        // Place the caret in the middle so we can continue typing
+        selection: EditorSelection.cursor(from + open.length),
+      });
+
+      return true;
+    }
+  }
+
+  // Works more reliably than toggleLineComment in @codemirror/commands
+  return toggleComment(editor);
 }
 
 const storage: {
