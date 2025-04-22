@@ -130,18 +130,20 @@ public final class WebBridgeSearch {
 public struct SearchOptions: Codable {
   public var search: String
   public var caseSensitive: Bool
+  public var diacriticInsensitive: Bool
+  public var wholeWord: Bool
   public var literal: Bool
   public var regexp: Bool
-  public var wholeWord: Bool
   public var refocus: Bool
   public var replace: String?
 
-  public init(search: String, caseSensitive: Bool, literal: Bool, regexp: Bool, wholeWord: Bool, refocus: Bool, replace: String?) {
+  public init(search: String, caseSensitive: Bool, diacriticInsensitive: Bool, wholeWord: Bool, literal: Bool, regexp: Bool, refocus: Bool, replace: String?) {
     self.search = search
     self.caseSensitive = caseSensitive
+    self.diacriticInsensitive = diacriticInsensitive
+    self.wholeWord = wholeWord
     self.literal = literal
     self.regexp = regexp
-    self.wholeWord = wholeWord
     self.refocus = refocus
     self.replace = replace
   }

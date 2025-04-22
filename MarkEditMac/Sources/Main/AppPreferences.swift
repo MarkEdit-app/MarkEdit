@@ -190,6 +190,9 @@ enum AppPreferences {
     @Storage(key: "search.case-sensitive", defaultValue: false)
     static var caseSensitive: Bool
 
+    @Storage(key: "search.diacritic-insensitive", defaultValue: false)
+    static var diacriticInsensitive: Bool
+
     @Storage(key: "search.whole-word", defaultValue: false)
     static var wholeWord: Bool
 
