@@ -130,9 +130,10 @@ extension EditorViewController {
     let options = SearchOptions(
       search: searchTerm,
       caseSensitive: AppPreferences.Search.caseSensitive,
+      diacriticInsensitive: AppPreferences.Search.diacriticInsensitive,
+      wholeWord: AppPreferences.Search.wholeWord,
       literal: AppPreferences.Search.literalSearch,
       regexp: AppPreferences.Search.regularExpression,
-      wholeWord: AppPreferences.Search.wholeWord,
       refocus: refocus,
       replace: replacePanel.textField.stringValue
     )

@@ -4,6 +4,7 @@ import {
   findPrevious as findPreviousCommand,
   replaceNext as replaceNextCommand,
   selectNextOccurrence as selectNextOccurrenceCommand,
+  SearchCursor,
 } from '@codemirror/search';
 
 import { Command } from '@codemirror/view';
@@ -28,6 +29,29 @@ import {
   performSelectAll,
   performSelectAllInSelection,
 } from './operations';
+
+type Normalizer = (x: string) => string;
+const normalizeDiacritics: Normalizer = x => x.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+// We use the default search panel (in a hidden way),
+// it doesn't have an option to customize the normalize function.
+//
+// Here we overwrite it leveraging its property name.
+Object.defineProperty(SearchCursor.prototype, 'normalize', {
+  get(this: SearchCursor): Normalizer {
+    return storage.normalizers.get(this) ?? (x => x);
+  },
+  set(this: SearchCursor, normalize: Normalizer) {
+    storage.normalizers.set(this, x => {
+      let result = normalize(x);
+      if (storage.options?.diacriticInsensitive ?? false) {
+        result = normalizeDiacritics(result);
+      }
+
+      return result;
+    });
+  },
+});
 
 export function setState(enabled: boolean) {
   if (storage.isEnabled === enabled) {
@@ -148,9 +172,10 @@ export function performOperation(operation: SearchOperation) {
   const options: SearchOptions = storage.options ?? {
     search: '',
     caseSensitive: false,
+    diacriticInsensitive: false,
+    wholeWord: false,
     literal: false,
     regexp: false,
-    wholeWord: false,
     refocus: false,
   };
 
@@ -220,8 +245,10 @@ const storage: {
   isEnabled: boolean;
   hasSelection: boolean;
   options: SearchOptions | undefined;
+  normalizers: WeakMap<SearchCursor, Normalizer>;
 } = {
   isEnabled: false,
   hasSelection: false,
   options: undefined,
+  normalizers: new WeakMap<SearchCursor, Normalizer>(),
 };

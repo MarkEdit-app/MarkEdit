@@ -70,6 +70,7 @@ enum Localized {
     static let find = String(localized: "Find", comment: "Find mode in search menu")
     static let replace = String(localized: "Replace", comment: "Replace mode in search menu")
     static let caseSensitive = String(localized: "Case Sensitive", comment: "Toggle case sensitive search")
+    static let diacriticInsensitive = String(localized: "Diacritic Insensitive", comment: "Toggle diacritic insensitive search")
     static let wholeWord = String(localized: "Whole Word", comment: "Toggle whole word search")
     static let literalSearch = String(localized: "Literal Search", comment: "Toggle literal search")
     static let regularExpression = String(localized: "Regular Expression", comment: "Toggle regular expression for search")

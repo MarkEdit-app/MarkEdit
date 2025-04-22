@@ -667,6 +667,23 @@
         }
       }
     },
+    "Diacritic Insensitive" : {
+      "comment" : "Toggle diacritic insensitive search",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "忽略变音符"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "忽略變音符"
+          }
+        }
+      }
+    },
     "Diff Chars" : {
       "comment" : "Diff by characters",
       "localizations" : {
