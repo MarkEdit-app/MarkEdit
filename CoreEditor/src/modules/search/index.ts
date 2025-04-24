@@ -39,14 +39,27 @@ const normalizeDiacritics: Normalizer = x => x.normalize('NFD').replace(/\p{Diac
 // Here we overwrite it leveraging its property name.
 Object.defineProperty(SearchCursor.prototype, 'normalize', {
   get(this: SearchCursor): Normalizer {
-    return storage.normalizers.get(this) ?? (x => x);
+    return storage.normalizerProperties.get(this) ?? (x => x);
   },
   set(this: SearchCursor, normalize: Normalizer) {
-    storage.normalizers.set(this, x => {
+    storage.normalizerProperties.set(this, x => {
       let result = normalize(x);
       if (storage.options?.diacriticInsensitive ?? false) {
         result = normalizeDiacritics(result);
       }
+
+      // Initialize custom normalizers from the config, runs only once
+      if (storage.customNormalizers === undefined && window.config.searchNormalizers !== undefined) {
+        const entries = Object.entries(window.config.searchNormalizers);
+        storage.customNormalizers = entries.map(([pattern, replacement]) => {
+          const regex = new RegExp(pattern, 'g');
+          return (x: string) => x.replace(regex, replacement);
+        });
+      }
+
+      storage.customNormalizers?.forEach(normalize => {
+        result = normalize(result);
+      });
 
       return result;
     });
@@ -245,10 +258,12 @@ const storage: {
   isEnabled: boolean;
   hasSelection: boolean;
   options: SearchOptions | undefined;
-  normalizers: WeakMap<SearchCursor, Normalizer>;
+  normalizerProperties: WeakMap<SearchCursor, Normalizer>;
+  customNormalizers: Normalizer[] | undefined;
 } = {
   isEnabled: false,
   hasSelection: false,
   options: undefined,
-  normalizers: new WeakMap<SearchCursor, Normalizer>(),
+  normalizerProperties: new WeakMap<SearchCursor, Normalizer>(),
+  customNormalizers: undefined,
 };

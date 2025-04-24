@@ -29,6 +29,7 @@ enum AppRuntimeConfig {
     let headerFontSizeDiffs: [Double]?
     let visibleWhitespaceCharacter: String?
     let visibleLineBreakCharacter: String?
+    let searchNormalizers: [String: String]?
     let checksForUpdates: Bool?
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
@@ -46,6 +47,7 @@ enum AppRuntimeConfig {
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
       case visibleWhitespaceCharacter = "editor.visibleWhitespaceCharacter"
       case visibleLineBreakCharacter = "editor.visibleLineBreakCharacter"
+      case searchNormalizers = "editor.searchNormalizers"
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
@@ -103,6 +105,10 @@ enum AppRuntimeConfig {
     currentDefinition?.visibleLineBreakCharacter
   }
 
+  static var searchNormalizers: [String: String]? {
+    currentDefinition?.searchNormalizers
+  }
+
   static var checksForUpdates: Bool {
     // Enable automatic updates by default
     currentDefinition?.checksForUpdates ?? true
@@ -145,6 +151,7 @@ private extension AppRuntimeConfig {
     headerFontSizeDiffs: nil,
     visibleWhitespaceCharacter: nil,
     visibleLineBreakCharacter: nil,
+    searchNormalizers: nil,
     checksForUpdates: true,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,

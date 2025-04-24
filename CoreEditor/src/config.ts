@@ -70,6 +70,7 @@ export interface Config {
   headerFontSizeDiffs?: number[];
   visibleWhitespaceCharacter?: string;
   visibleLineBreakCharacter?: string;
+  searchNormalizers?: { [key: string]: string };
 }
 
 /**

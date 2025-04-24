@@ -277,7 +277,8 @@ extension AppPreferences {
       indentBehavior: AppRuntimeConfig.indentBehavior,
       headerFontSizeDiffs: AppRuntimeConfig.headerFontSizeDiffs,
       visibleWhitespaceCharacter: AppRuntimeConfig.visibleWhitespaceCharacter,
-      visibleLineBreakCharacter: AppRuntimeConfig.visibleLineBreakCharacter
+      visibleLineBreakCharacter: AppRuntimeConfig.visibleLineBreakCharacter,
+      searchNormalizers: AppRuntimeConfig.searchNormalizers
     )
   }
 }
