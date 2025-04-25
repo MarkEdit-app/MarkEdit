@@ -61,7 +61,7 @@ export function wordTokenizer() {
  * @returns True to ignore the default behavior
  */
 export function interceptInputs() {
-  const marksToWrap = ['~', '$'];
+  const marksToWrap = ['*', '_', '~', '$'];
 
   return EditorView.inputHandler.of((editor, _from, _to, insert) => {
     // Enable auto character pairs only after composition ends,
