@@ -1,6 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { Extension, EditorSelection } from '@codemirror/state';
 import { markdown, markdownLanguage } from '../../src/@vendor/lang-markdown';
+import { Config } from '../../src/config';
 
 export function setUp(doc: string, extensions: Extension = []) {
   const editor = new EditorView({
@@ -13,6 +14,7 @@ export function setUp(doc: string, extensions: Extension = []) {
   });
 
   editor.focus();
+  window.config = {} as Config;
   window.editor = editor;
 }
 
