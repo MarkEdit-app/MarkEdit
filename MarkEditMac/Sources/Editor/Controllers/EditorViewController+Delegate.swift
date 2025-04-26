@@ -76,6 +76,8 @@ extension EditorViewController: EditorWebViewActionDelegate {
       bridge.history.undo()
     case .redo:
       bridge.history.redo()
+    case .selectAll:
+      bridge.selection.selectWholeDocument()
     }
   }
 }
@@ -133,11 +135,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     if contentEdited {
       if findPanel.mode != .hidden {
-        Task {
-          if let count = try? await bridge.search.numberOfMatches() {
-            updateTextFinderPanels(numberOfItems: count)
-          }
-        }
+        updateSearchCounter()
       }
     } else {
       cancelCompletion()

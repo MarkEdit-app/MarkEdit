@@ -56,6 +56,14 @@ struct StatisticsView: View {
             valueText: "\(tokenizedResult.paragraphs)"
           )
 
+          if tokenizedResult.comments > 0 {
+            StatisticsCell(
+              iconName: Icons.comments,
+              titleText: localizable.comments,
+              valueText: "\(tokenizedResult.comments)"
+            )
+          }
+
           if let readTime = ReadTime.estimated(of: tokenizedResult.words) {
             StatisticsCell(
               iconName: Icons.readTime,
@@ -88,6 +96,7 @@ private enum Icons {
   static let words = "text.bubble"
   static let sentences = "textformat.abc.dottedunderline"
   static let paragraphs = "paragraphsign"
+  static let comments = "eye.slash"
   static let readTime = "stopwatch"
   static let fileSize = "doc.text.below.ecg"
 }

@@ -70,6 +70,7 @@ enum Localized {
     static let find = String(localized: "Find", comment: "Find mode in search menu")
     static let replace = String(localized: "Replace", comment: "Replace mode in search menu")
     static let caseSensitive = String(localized: "Case Sensitive", comment: "Toggle case sensitive search")
+    static let diacriticInsensitive = String(localized: "Diacritic Insensitive", comment: "Toggle diacritic insensitive search")
     static let wholeWord = String(localized: "Whole Word", comment: "Toggle whole word search")
     static let literalSearch = String(localized: "Literal Search", comment: "Toggle literal search")
     static let regularExpression = String(localized: "Regular Expression", comment: "Toggle regular expression for search")
@@ -82,6 +83,7 @@ enum Localized {
     static let clearRecents = String(localized: "Clear Recents", comment: "Menu item: clear recents")
     static let findSelection = String(localized: "Find Selection", comment: "Menu item: use selection to find")
     static let selectAllOccurrences = String(localized: "Select All Occurrences", comment: "Menu item: select all occurrences")
+    static let indexOfMatches = String(localized: "%d of %d", comment: "Index of matches, such as 1 of 3")
   }
 
   enum Document {
@@ -98,6 +100,7 @@ enum Localized {
     static let words = String(localized: "Words", comment: "Statistics label: count words")
     static let sentences = String(localized: "Sentences", comment: "Statistics label: count sentences")
     static let paragraphs = String(localized: "Paragraphs", comment: "Statistics label: count paragraphs")
+    static let comments = String(localized: "Comments", comment: "Statistics label: count comments")
     static let readTime = String(localized: "Read Time", comment: "Statistics label: count read time")
     static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
   }

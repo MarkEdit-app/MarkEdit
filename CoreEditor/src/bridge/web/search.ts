@@ -2,6 +2,7 @@ import { WebModule } from '../webModule';
 import {
   SearchOperation,
   SearchOptions,
+  SearchCounterInfo,
   setState,
   updateQuery,
   updateHasSelection,
@@ -11,7 +12,7 @@ import {
   findPrevious,
   replaceNext,
   replaceAll,
-  numberOfMatches,
+  searchCounterInfo,
   hasVisibleSelectedMatch,
   performOperation,
 } from '../../modules/search';
@@ -23,7 +24,7 @@ import {
  */
 export interface WebModuleSearch extends WebModule {
   setState({ enabled }: { enabled: boolean }): void;
-  updateQuery({ options }: { options: SearchOptions }): CodeGen_Int;
+  updateQuery({ options }: { options: SearchOptions }): void;
   updateHasSelection(): void;
   performOperation({ operation }: { operation: SearchOperation }): void;
   findNext({ search }: { search: string }): boolean;
@@ -32,7 +33,7 @@ export interface WebModuleSearch extends WebModule {
   replaceAll(): void;
   selectAllOccurrences(): void;
   selectNextOccurrence(): boolean;
-  numberOfMatches(): CodeGen_Int;
+  getCounterInfo(): SearchCounterInfo;
 }
 
 export class WebModuleSearchImpl implements WebModuleSearch {
@@ -40,8 +41,8 @@ export class WebModuleSearchImpl implements WebModuleSearch {
     setState(enabled);
   }
 
-  updateQuery({ options }: { options: SearchOptions }): CodeGen_Int {
-    return updateQuery(options) as CodeGen_Int;
+  updateQuery({ options }: { options: SearchOptions }): void {
+    return updateQuery(options);
   }
 
   updateHasSelection(): void {
@@ -82,7 +83,7 @@ export class WebModuleSearchImpl implements WebModuleSearch {
     return selectNextOccurrence();
   }
 
-  numberOfMatches(): CodeGen_Int {
-    return numberOfMatches();
+  getCounterInfo(): SearchCounterInfo {
+    return searchCounterInfo();
   }
 }

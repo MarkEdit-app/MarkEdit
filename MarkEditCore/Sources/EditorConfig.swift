@@ -33,6 +33,7 @@ public struct EditorConfig: Encodable {
   let headerFontSizeDiffs: [Double]?
   let visibleWhitespaceCharacter: String?
   let visibleLineBreakCharacter: String?
+  let searchNormalizers: [String: String]?
 
   public init(
     text: String,
@@ -57,7 +58,8 @@ public struct EditorConfig: Encodable {
     indentBehavior: EditorIndentBehavior,
     headerFontSizeDiffs: [Double]?,
     visibleWhitespaceCharacter: String?,
-    visibleLineBreakCharacter: String?
+    visibleLineBreakCharacter: String?,
+    searchNormalizers: [String: String]?
   ) {
     self.text = text
     self.theme = theme
@@ -82,5 +84,6 @@ public struct EditorConfig: Encodable {
     self.headerFontSizeDiffs = headerFontSizeDiffs
     self.visibleWhitespaceCharacter = visibleWhitespaceCharacter
     self.visibleLineBreakCharacter = visibleLineBreakCharacter
+    self.searchNormalizers = searchNormalizers
   }
 }

@@ -10,12 +10,21 @@ import { setUp, setGutterHovered } from './styling/config';
 import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
 import { adjustGutterPositions } from './modules/lines';
+import { extractComments } from './modules/lezer';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
-import { scrollIntoView } from './modules/selection';
+import { removeFrontMatter } from './modules/frontMatter';
+import { selectedMainText, scrollIntoView } from './modules/selection';
 import { markContentClean } from './modules/history';
 
 import { TextEditor } from './api/editor';
 import { editorReadyListeners } from './api/methods';
+
+export interface ReadableContent {
+  selectionBased: boolean;
+  sourceText: string;
+  trimmedText: string;
+  commentCount: CodeGen_Int;
+}
 
 export enum ReplaceGranularity {
   wholeDocument = 'wholeDocument',
@@ -153,6 +162,25 @@ export function getEditorText() {
 
   // Re-join with specified line break, might be CRLF for example
   return lines.join(state.lineBreak);
+}
+
+export function getReadableContent(): ReadableContent {
+  // Extract the source to show the statistics view,
+  // use the selected text if the selection is not empty.
+  const selectedText = selectedMainText();
+  const selectionBased = selectedText.length > 0;
+  const sourceText = selectionBased ? selectedText : getEditorText();
+
+  // Remove front matter and extract comments
+  const actualText = removeFrontMatter(sourceText);
+  const { trimmedText, commentCount } = extractComments(actualText);
+
+  return {
+    selectionBased,
+    sourceText,
+    trimmedText,
+    commentCount: commentCount as CodeGen_Int,
+  };
 }
 
 export function insertText(text: string, from: number, to: number) {

@@ -44,6 +44,16 @@ public final class WebBridgeCore {
     }
   }
 
+  public func getReadableContent() async throws -> ReadableContent {
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.core.getReadableContent") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
+      }
+    }
+  }
+
   public func insertText(text: String, from: Int, to: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
@@ -102,6 +112,20 @@ public final class WebBridgeCore {
     )
 
     webView?.invoke(path: "webModules.core.setHasModalSheet", message: message, completion: completion)
+  }
+}
+
+public struct ReadableContent: Codable {
+  public var selectionBased: Bool
+  public var sourceText: String
+  public var trimmedText: String
+  public var commentCount: Int
+
+  public init(selectionBased: Bool, sourceText: String, trimmedText: String, commentCount: Int) {
+    self.selectionBased = selectionBased
+    self.sourceText = sourceText
+    self.trimmedText = trimmedText
+    self.commentCount = commentCount
   }
 }
 

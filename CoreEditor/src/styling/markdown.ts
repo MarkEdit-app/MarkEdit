@@ -59,7 +59,7 @@ export const markdownExtendedData = {
       // Default
       '(', '[', '{', '\'', '"',
       // Custom
-      '`', '*', '_',
+      '`',
     ],
   },
 };

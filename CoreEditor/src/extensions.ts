@@ -29,6 +29,7 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { tocKeymap } from './modules/toc';
+import { customizedCommandsKeymap } from './modules/commands';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
 const theme = new Compartment;
@@ -104,8 +105,19 @@ export function extensions(options: { lineBreak?: string }) {
 
     // Keymap
     keymap.of([
-      // We use cmd-i to toggle italic
-      ...defaultKeymap.filter(keymap => keymap.key !== 'Mod-i'),
+      ...defaultKeymap.filter(keymap => {
+        // We use cmd-i to toggle italic
+        if (keymap.key === 'Mod-i') {
+          return false;
+        }
+
+        // We use customizedCommandsKeymap instead
+        if (keymap.key === 'Mod-/') {
+          return false;
+        }
+
+        return true;
+      }),
       ...historyKeymap,
       ...closeBracketsKeymap,
       ...foldKeymap,
@@ -113,6 +125,7 @@ export function extensions(options: { lineBreak?: string }) {
       // however, MarkEdit runs on a WebView instead of browsers, we do want to bind the tab key.
       ...indentationKeymap,
       ...tocKeymap,
+      ...customizedCommandsKeymap,
     ]),
 
     // Markdown

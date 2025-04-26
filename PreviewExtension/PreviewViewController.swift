@@ -94,7 +94,8 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       indentBehavior: .never,
       headerFontSizeDiffs: nil,
       visibleWhitespaceCharacter: nil,
-      visibleLineBreakCharacter: nil
+      visibleLineBreakCharacter: nil,
+      searchNormalizers: nil
     )
 
     webView.loadHTMLString(config.toHtml, baseURL: nil)

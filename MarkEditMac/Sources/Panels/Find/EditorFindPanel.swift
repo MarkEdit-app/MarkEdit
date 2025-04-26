@@ -69,10 +69,19 @@ final class EditorFindPanel: EditorPanelView {
 // MARK: - Exposed Methods
 
 extension EditorFindPanel {
-  func updateResult(numberOfItems: Int, emptyInput: Bool) {
-    self.numberOfItems = numberOfItems
-    searchField.updateLabel(text: emptyInput ? "" : "\(numberOfItems)")
+  func updateResult(counter: SearchCounterInfo, emptyInput: Bool) {
+    numberOfItems = counter.numberOfItems
     findButtons.isEnabled = numberOfItems > 0
+
+    if emptyInput {
+      searchField.updateLabel(text: "")
+    } else if numberOfItems > 0 && counter.currentIndex >= 0 {
+      let text = String(format: Localized.Search.indexOfMatches, counter.currentIndex + 1, numberOfItems)
+      searchField.updateLabel(text: text)
+    } else {
+      searchField.updateLabel(text: "\(numberOfItems)")
+    }
+
     resetMenu()
   }
 }

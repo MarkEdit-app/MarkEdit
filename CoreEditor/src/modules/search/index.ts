@@ -4,6 +4,7 @@ import {
   findPrevious as findPreviousCommand,
   replaceNext as replaceNextCommand,
   selectNextOccurrence as selectNextOccurrenceCommand,
+  SearchCursor,
 } from '@codemirror/search';
 
 import { Command } from '@codemirror/view';
@@ -12,6 +13,7 @@ import { SearchQuery, openSearchPanel, closeSearchPanel, setSearchQuery, getSear
 import { isElementVisible, isPositionVisible, scrollIntoView, scrollSearchMatchToVisible, selectedMainText } from '../selection';
 
 import SearchOptions from './options';
+import SearchCounterInfo from './counterInfo';
 import matchFromQuery from './matchFromQuery';
 import rangesFromQuery from './rangesFromQuery';
 import searchOccurrences from './searchOccurrences';
@@ -28,6 +30,42 @@ import {
   performSelectAllInSelection,
 } from './operations';
 
+type Normalizer = (x: string) => string;
+const normalizeDiacritics: Normalizer = x => x.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+// We use the default search panel (in a hidden way),
+// it doesn't have an option to customize the normalize function.
+//
+// Here we overwrite it leveraging its property name.
+Object.defineProperty(SearchCursor.prototype, 'normalize', {
+  get(this: SearchCursor): Normalizer {
+    return storage.normalizerProperties.get(this) ?? (x => x);
+  },
+  set(this: SearchCursor, normalize: Normalizer) {
+    storage.normalizerProperties.set(this, x => {
+      let result = normalize(x);
+      if (storage.options?.diacriticInsensitive ?? false) {
+        result = normalizeDiacritics(result);
+      }
+
+      // Initialize custom normalizers from the config, runs only once
+      if (storage.customNormalizers === undefined && window.config.searchNormalizers !== undefined) {
+        const entries = Object.entries(window.config.searchNormalizers);
+        storage.customNormalizers = entries.map(([pattern, replacement]) => {
+          const regex = new RegExp(pattern, 'g');
+          return (x: string) => x.replace(regex, replacement);
+        });
+      }
+
+      storage.customNormalizers?.forEach(normalize => {
+        result = normalize(result);
+      });
+
+      return result;
+    });
+  },
+});
+
 export function setState(enabled: boolean) {
   if (storage.isEnabled === enabled) {
     return;
@@ -42,7 +80,7 @@ export function setState(enabled: boolean) {
   storage.isEnabled = enabled;
 }
 
-export function updateQuery(options: SearchOptions): number {
+export function updateQuery(options: SearchOptions) {
   storage.options = options;
   setState(true);
 
@@ -65,7 +103,7 @@ export function updateQuery(options: SearchOptions): number {
     for (const range of ranges) {
       if (isPositionVisible(range.from)) {
         reselect(EditorSelection.range(range.from, range.to));
-        return ranges.length;
+        return;
       }
     }
 
@@ -84,8 +122,6 @@ export function updateQuery(options: SearchOptions): number {
       }
     }
   }
-
-  return ranges.length;
 }
 
 export function updateHasSelection() {
@@ -133,10 +169,11 @@ export function selectNextOccurrence() {
   return foundNext;
 }
 
-export function numberOfMatches(): CodeGen_Int {
-  const query = getSearchQuery(window.editor.state);
-  const ranges = rangesFromQuery(query);
-  return ranges.length as CodeGen_Int;
+export function searchCounterInfo(): SearchCounterInfo {
+  return {
+    numberOfItems: getQueryRanges().length as CodeGen_Int,
+    currentIndex: currentMatchIndex() as CodeGen_Int,
+  };
 }
 
 export function hasVisibleSelectedMatch() {
@@ -148,9 +185,10 @@ export function performOperation(operation: SearchOperation) {
   const options: SearchOptions = storage.options ?? {
     search: '',
     caseSensitive: false,
+    diacriticInsensitive: false,
+    wholeWord: false,
     literal: false,
     regexp: false,
-    wholeWord: false,
     refocus: false,
   };
 
@@ -172,7 +210,7 @@ export function performOperation(operation: SearchOperation) {
   scrollSearchMatchToVisible();
 }
 
-export type { SearchOperation, SearchOptions };
+export type { SearchOperation, SearchOptions, SearchCounterInfo };
 
 function prepareNavigation(search: string) {
   if (storage.options === undefined) {
@@ -194,19 +232,38 @@ function performFindCommand(command: Command, term: string, direction: 'forward'
   const result = command(window.editor);
 
   // We need to scroll when we don't have a visible match, or the next/previous one is not visible
-  if (matches.length === 0 || (index === boundary && numberOfMatches() > 1)) {
+  if (matches.length === 0 || (index === boundary && getQueryRanges().length > 1)) {
     scrollSearchMatchToVisible();
   }
 
   return result;
 }
 
+function getQueryRanges(query?: SearchQuery) {
+  return rangesFromQuery(query ?? getSearchQuery(window.editor.state));
+}
+
+function currentMatchIndex() {
+  const element = searchMatchElement();
+  if (element === null) {
+    return -1; // Invalid result of Array.findIndex too
+  }
+
+  const position = window.editor.posAtDOM(element);
+  const ranges = getQueryRanges();
+  return ranges.findIndex(({ from }) => from === position);
+}
+
 const storage: {
   isEnabled: boolean;
   hasSelection: boolean;
   options: SearchOptions | undefined;
+  normalizerProperties: WeakMap<SearchCursor, Normalizer>;
+  customNormalizers: Normalizer[] | undefined;
 } = {
   isEnabled: false,
   hasSelection: false,
   options: undefined,
+  normalizerProperties: new WeakMap<SearchCursor, Normalizer>(),
+  customNormalizers: undefined,
 };

@@ -20,6 +20,10 @@ extension EditorFindPanel {
     caseItem.tag = Option.caseSensitive.rawValue
     caseItem.setOn(AppPreferences.Search.caseSensitive)
 
+    let diacriticItem = menu.addItem(withTitle: Localized.Search.diacriticInsensitive, action: #selector(toggleDiacriticInsensitive(_:)))
+    diacriticItem.tag = Option.diacriticInsensitive.rawValue
+    diacriticItem.setOn(AppPreferences.Search.diacriticInsensitive)
+
     let wholeWordItem = menu.addItem(withTitle: Localized.Search.wholeWord, action: #selector(toggleWholeWord(_:)))
     wholeWordItem.tag = Option.wholeWord.rawValue
     wholeWordItem.setOn(AppPreferences.Search.wholeWord)
@@ -61,9 +65,10 @@ extension EditorFindPanel {
 private extension EditorFindPanel {
   enum Option: Int, CaseIterable {
     case caseSensitive = 20001
-    case wholeWord = 20002
-    case literalSearch = 20003
-    case regularExpression = 20004
+    case diacriticInsensitive = 20002
+    case wholeWord = 20003
+    case literalSearch = 20004
+    case regularExpression = 20005
   }
 
   @objc func enableFindMode(_ sender: NSMenuItem) {
@@ -76,6 +81,11 @@ private extension EditorFindPanel {
 
   @objc func toggleCaseSensitive(_ sender: NSMenuItem) {
     AppPreferences.Search.caseSensitive.toggle()
+    updateOptions(sender)
+  }
+
+  @objc func toggleDiacriticInsensitive(_ sender: NSMenuItem) {
+    AppPreferences.Search.diacriticInsensitive.toggle()
     updateOptions(sender)
   }
 
