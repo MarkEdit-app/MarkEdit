@@ -226,35 +226,64 @@ extension EditorDocument {
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
     // Include all markdown and plaintext types, but prioritize the configured default
-    var exportTypes = NewFilenameExtension.allCases
+    let exportedTypes = NewFilenameExtension.allCases
       .sorted { lhs, _ in
         lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
       }
       .map { $0.exportedType }
 
     // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    if textBundle != nil {
-      exportTypes.insert("org.textbundle.package", at: 0)
-    }
-
-    return exportTypes
+    return textBundle == nil ? exportedTypes : ["org.textbundle.package"] + exportedTypes
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    typeName.isTextBundle ? "textbundle" : NewFilenameExtension.allCases.first { $0.exportedType == typeName }?.rawValue
+    if typeName.isTextBundle {
+      return "textbundle"
+    }
+
+    if let preferredExtension = (NewFilenameExtension.allCases.first { $0.exportedType == typeName }) {
+      return preferredExtension.rawValue
+    }
+
+    return AppPreferences.General.newFilenameExtension.rawValue
   }
 
   /// Catch invalid output paths early so we can present more informative errors
-  @objc override func handleSave(_ command: NSScriptCommand) -> Any? {
+  override func handleSave(_ command: NSScriptCommand) -> Any? {
     guard let fileURL = command.evaluatedArguments?["File"] as? URL else {
-      ScriptingError.missingArgument("File").applyToCommand(command)
+      // Save without predefined destination (will open save panel if needed)
+      return super.handleSave(command)
+    }
+
+    let inputExtension = fileURL.pathExtension.lowercased()
+
+    // Support extensionless paths by bypassing file type validation
+    if inputExtension.isEmpty {
+      Task {
+        try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveToOperation)
+      }
       return nil
     }
 
-    let fileExtension = fileURL.pathExtension.lowercased()
+    // Provided limited support for the 'as' parameter
+    if let desiredType = command.evaluatedArguments?["FileType"] as? String {
+      let desiredExtenion = NewFilenameExtension.allCases.first {
+        $0.exportedType == desiredType
+      }?.rawValue ?? AppPreferences.General.newFilenameExtension.rawValue
+
+      if inputExtension == desiredExtenion {
+        return super.handleSave(command)
+      } else {
+        // Raise error because we cannot adjust the extension due to sandbox restrictions
+        let scriptError = ScriptingError.extensionMistach(fileURL, expectedExtension: desiredExtenion, outputType: desiredType)
+        scriptError.applyToCommand(command)
+        return nil
+      }
+    }
+
     let isValidExtension = NewFilenameExtension.allCases.contains {
-      $0.rawValue == fileExtension
-    } || ((textBundle != nil) && fileExtension == "textbundle")
+      $0.rawValue == inputExtension
+    } || (textBundle != nil) && inputExtension == "textbundle"
 
     guard isValidExtension else {
       let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
