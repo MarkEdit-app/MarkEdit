@@ -260,7 +260,7 @@ extension EditorDocument {
     // Support extensionless paths by bypassing file type validation
     if inputExtension.isEmpty {
       Task {
-        try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveToOperation)
+        try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveOperation)
       }
       return nil
     }
