@@ -13,7 +13,7 @@ enum ScriptingError: Error, LocalizedError {
   case editorNotFound(_ documentName: String)
   case jsEvaluationError(_ error: NSError)
   case invalidDestination(_ fileURL: URL, document: EditorDocument)
-  case extensionMistach(_ fileURL: URL, expectedExtension: String, outputType: String)
+  case extensionMistach(expectedExtension: String, outputType: String)
 
   var code: Int {
     switch self {
@@ -59,7 +59,7 @@ enum ScriptingError: Error, LocalizedError {
         document.fileNameExtension(forType: $0, saveOperation: .saveOperation)
       }
       return String(format: Localized.Scripting.invalidDestinationErrorMessage, fileURL.pathExtension, validExtensions.joined(separator: ", "))
-    case let .extensionMistach(_, expectedExtension: expectedExtension, outputType: outputType):
+    case let .extensionMistach(expectedExtension: expectedExtension, outputType: outputType):
       return String(format: Localized.Scripting.extensionMismatchErrorMessage, outputType, expectedExtension)
     }
   }

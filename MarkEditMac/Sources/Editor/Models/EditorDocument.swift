@@ -275,7 +275,7 @@ extension EditorDocument {
         return super.handleSave(command)
       } else {
         // Raise error because we cannot adjust the extension due to sandbox restrictions
-        let scriptError = ScriptingError.extensionMistach(fileURL, expectedExtension: desiredExtenion, outputType: desiredType)
+        let scriptError = ScriptingError.extensionMistach(expectedExtension: desiredExtenion, outputType: desiredType)
         scriptError.applyToCommand(command)
         return nil
       }
@@ -283,7 +283,7 @@ extension EditorDocument {
 
     let isValidExtension = NewFilenameExtension.allCases.contains {
       $0.rawValue == inputExtension
-    } || (textBundle != nil) && inputExtension == "textbundle"
+    } || (textBundle != nil && inputExtension == "textbundle")
 
     guard isValidExtension else {
       let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
