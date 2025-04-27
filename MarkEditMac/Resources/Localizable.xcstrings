@@ -296,6 +296,17 @@
         }
       }
     },
+    "Cannot export files with extension \"%@\". Supported extensions: %@." : {
+      "comment" : "Script error when attempting to save files with an unsupported extension",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cannot export files with extension \"%1$@\". Supported extensions: %2$@."
+          }
+        }
+      }
+    },
     "Case Sensitive" : {
       "comment" : "Toggle case sensitive search",
       "localizations" : {
@@ -3389,6 +3400,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫作工具"
+          }
+        }
+      }
+    },
+    "Wrong file extension for type \"%@\". Use \".%@\" instead." : {
+      "comment" : "Script save error when the path extension does not match the output type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Wrong file extension for type \"%1$@\". Use \".%2$@\" instead."
           }
         }
       }

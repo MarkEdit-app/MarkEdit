@@ -226,6 +226,8 @@ enum Localized {
     static let editorNotFoundErrorMessage = String(localized: "No editor for document \"%@\" found.", comment: "Script error when MarkEdit cannot find the editor view to run document commands in")
     static let jsEvaluationErrorMessage = String(localized: "JavaScript evaluation failed at line %d, column %d: %@", comment: "Script error when JavaScript evaluation raises a detailed error")
     static let unknownJSErrorMessage = String(localized: "JavaScript evaluation failed for an unknown reason.", comment: "Script error when JavaScript evaluation raises an error with no details")
+    static let invalidDestinationErrorMessage = String(localized: "Cannot export files with extension \"%@\". Supported extensions: %@.", comment: "Script error when attempting to save files with an unsupported extension")
+    static let extensionMismatchErrorMessage = String(localized: "Wrong file extension for type \"%@\". Use \".%@\" instead.", comment: "Script save error when the path extension does not match the output type")
   }
 
   enum Updater {

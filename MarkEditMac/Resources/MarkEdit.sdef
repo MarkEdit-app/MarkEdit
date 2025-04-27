@@ -58,12 +58,23 @@
   </suite>
 
   <suite name="MarkEdit Suite" code="mked" description="MarkEdit specific classes.">
-    <enumeration name="saveable file format" code="savf">
-      <enumerator name="Markdown" code="md  " description="Markdown format">
-        <cocoa string-value="net.daringfireball.markdown"/>
+    <enumeration name="saveable file format" code="savf" description="File formats for the save command.">
+      <documentation>
+        <html>
+          When using &lt;i&gt;save in &lt;b&gt;file&lt;/b&gt; as &lt;b&gt;type&lt;/b&gt;&lt;/i&gt;, the extension of &lt;b&gt;file&lt;/b&gt; must match the expected extension for &lt;b&gt;type&lt;/b&gt;. If &lt;b&gt;file&lt;/b&gt; has no extension, then the type is ignored.
+        </html>
+       </documentation>
+      <enumerator name="Plain Text" code="txt " description="Plain text format using the &quot;.txt&quot; extension.">
+        <cocoa string-value="app.markedit.txt"/>
       </enumerator>
-      <enumerator name="Text" code="txt " description="Plain text format">
-        <cocoa string-value="public.text"/>
+      <enumerator name="Markdown" code="md  " description="Markdown format using the &quot;.md&quot; extension.">
+        <cocoa string-value="app.markedit.md"/>
+      </enumerator>
+      <enumerator name="MarkdownFull" code="mkdn" description="Markdown format using the &quot;.markdown&quot; extension">
+        <cocoa string-value="app.markedit.markdown"/>
+      </enumerator>
+      <enumerator name="TextBundle" code="txtb" description="Text Bundle format using the &quot;.textbundle&quot; extension.">
+        <cocoa string-value="org.textbundle.package"/>
       </enumerator>
     </enumeration>
     

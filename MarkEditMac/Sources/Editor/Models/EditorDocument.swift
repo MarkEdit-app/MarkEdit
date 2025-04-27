@@ -248,6 +248,52 @@ extension EditorDocument {
     return AppPreferences.General.newFilenameExtension.rawValue
   }
 
+  /// Catch invalid output paths early so we can present more informative errors
+  override func handleSave(_ command: NSScriptCommand) -> Any? {
+    guard let fileURL = command.evaluatedArguments?["File"] as? URL else {
+      // Save without predefined destination (will open save panel if needed)
+      return super.handleSave(command)
+    }
+
+    let inputExtension = fileURL.pathExtension.lowercased()
+
+    // Support extensionless paths by bypassing file type validation
+    if inputExtension.isEmpty {
+      Task {
+        try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveOperation)
+      }
+      return nil
+    }
+
+    // Provided limited support for the 'as' parameter
+    if let desiredType = command.evaluatedArguments?["FileType"] as? String {
+      let desiredExtenion = NewFilenameExtension.allCases.first {
+        $0.exportedType == desiredType
+      }?.rawValue ?? AppPreferences.General.newFilenameExtension.rawValue
+
+      if inputExtension == desiredExtenion {
+        return super.handleSave(command)
+      } else {
+        // Raise error because we cannot adjust the extension due to sandbox restrictions
+        let scriptError = ScriptingError.extensionMistach(expectedExtension: desiredExtenion, outputType: desiredType)
+        scriptError.applyToCommand(command)
+        return nil
+      }
+    }
+
+    let isValidExtension = NewFilenameExtension.allCases.contains {
+      $0.rawValue == inputExtension
+    } || (textBundle != nil && inputExtension == "textbundle")
+
+    guard isValidExtension else {
+      let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
+      scriptError.applyToCommand(command)
+      return nil
+    }
+
+    return super.handleSave(command)
+  }
+
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
     if let defaultDirectory = AppRuntimeConfig.defaultSaveDirectory {
       // Overriding savePanel.directoryURL does not work as intended
