@@ -357,7 +357,7 @@ extension EditorDocument {
   }
 }
 
-// MARK: Scripting
+// MARK: - Scripting
 
 extension EditorDocument {
   /// Handle save operations from AppleScript.
@@ -410,7 +410,7 @@ extension EditorDocument {
   }
 }
 
-// MARK: Version Browsing
+// MARK: - Version Browsing
 
 extension EditorDocument: FileVersionPickerDelegate {
   override func browseVersions(_ sender: Any?) {
