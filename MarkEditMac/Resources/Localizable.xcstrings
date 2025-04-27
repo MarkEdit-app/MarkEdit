@@ -296,13 +296,25 @@
         }
       }
     },
-    "Cannot export files with extension \"%@\". Supported extensions: %@." : {
+    "Cannot export files with extension \"%@\", supported extensions: %@." : {
       "comment" : "Script error when attempting to save files with an unsupported extension",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Cannot export files with extension \"%1$@\". Supported extensions: %2$@."
+            "value" : "Cannot export files with extension \"%1$@\", supported extensions: %2$@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持导出“%1$@”格式的文件，支持的格式：%2$@。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支援匯出“%1$@”格式的檔案，支援的格式：%2$@。"
           }
         }
       }
@@ -3404,13 +3416,25 @@
         }
       }
     },
-    "Wrong file extension for type \"%@\". Use \".%@\" instead." : {
+    "Wrong file extension for type \"%@\", use \".%@\" instead." : {
       "comment" : "Script save error when the path extension does not match the output type",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Wrong file extension for type \"%1$@\". Use \".%2$@\" instead."
+            "value" : "Wrong file extension for type \"%1$@\", use \".%2$@\" instead."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%1$@”类型的扩展名错误，请使用“.%2$@”。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%1$@”型別的副檔名錯誤，請使用“.%2$@”。"
           }
         }
       }

@@ -13,7 +13,7 @@ enum ScriptingError: Error, LocalizedError {
   case editorNotFound(_ documentName: String)
   case jsEvaluationError(_ error: NSError)
   case invalidDestination(_ fileURL: URL, document: EditorDocument)
-  case extensionMistach(expectedExtension: String, outputType: String)
+  case extensionMismatch(expectedExtension: String, outputType: String)
 
   var code: Int {
     switch self {
@@ -27,7 +27,7 @@ enum ScriptingError: Error, LocalizedError {
       return error.code // WKError.javaScriptExceptionOccurred -- 4
     case .invalidDestination:
       return NSArgumentsWrongScriptError
-    case .extensionMistach:
+    case .extensionMismatch:
       return NSArgumentsWrongScriptError
     }
   }
@@ -53,14 +53,23 @@ enum ScriptingError: Error, LocalizedError {
         columnNumber,
         errorMessage
       )
-    case let .invalidDestination(_: fileURL, document: document):
+    case let .invalidDestination(fileURL, document):
       let validTypes = document.writableTypes(for: .saveOperation)
       let validExtensions = validTypes.compactMap {
         document.fileNameExtension(forType: $0, saveOperation: .saveOperation)
       }
-      return String(format: Localized.Scripting.invalidDestinationErrorMessage, fileURL.pathExtension, validExtensions.joined(separator: ", "))
-    case let .extensionMistach(expectedExtension: expectedExtension, outputType: outputType):
-      return String(format: Localized.Scripting.extensionMismatchErrorMessage, outputType, expectedExtension)
+
+      return String(
+        format: Localized.Scripting.invalidDestinationErrorMessage,
+        fileURL.pathExtension,
+        validExtensions.joined(separator: ", ")
+      )
+    case let .extensionMismatch(expectedExtension, outputType):
+      return String(
+        format: Localized.Scripting.extensionMismatchErrorMessage,
+        outputType,
+        expectedExtension
+      )
     }
   }
 
