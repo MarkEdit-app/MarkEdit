@@ -359,6 +359,10 @@ enum NewFilenameExtension: String, Codable, CaseIterable {
   var uniformType: UTType {
     UTType(exportedType) ?? .plainText // public.plain-text
   }
+
+  static func preferredExtension(for typeName: String) -> Self {
+    (allCases.first { $0.exportedType == typeName }) ?? AppPreferences.General.newFilenameExtension
+  }
 }
 
 enum ToolbarMode: Codable {

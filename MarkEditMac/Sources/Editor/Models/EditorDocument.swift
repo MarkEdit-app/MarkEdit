@@ -241,57 +241,7 @@ extension EditorDocument {
       return "textbundle"
     }
 
-    if let preferredExtension = (NewFilenameExtension.allCases.first { $0.exportedType == typeName }) {
-      return preferredExtension.rawValue
-    }
-
-    return AppPreferences.General.newFilenameExtension.rawValue
-  }
-
-  /// Catch invalid output paths early so we can present more informative errors
-  override func handleSave(_ command: NSScriptCommand) -> Any? {
-    guard let fileURL = command.evaluatedArguments?["File"] as? URL else {
-      // Save without predefined destination (will open save panel if needed)
-      return super.handleSave(command)
-    }
-
-    let inputExtension = fileURL.pathExtension.lowercased()
-
-    // Support extensionless paths by bypassing file type validation
-    if inputExtension.isEmpty {
-      Task {
-        try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveOperation)
-      }
-      return nil
-    }
-
-    // Provided limited support for the 'as' parameter
-    if let desiredType = command.evaluatedArguments?["FileType"] as? String {
-      let desiredExtenion = NewFilenameExtension.allCases.first {
-        $0.exportedType == desiredType
-      }?.rawValue ?? AppPreferences.General.newFilenameExtension.rawValue
-
-      if inputExtension == desiredExtenion {
-        return super.handleSave(command)
-      } else {
-        // Raise error because we cannot adjust the extension due to sandbox restrictions
-        let scriptError = ScriptingError.extensionMistach(expectedExtension: desiredExtenion, outputType: desiredType)
-        scriptError.applyToCommand(command)
-        return nil
-      }
-    }
-
-    let isValidExtension = NewFilenameExtension.allCases.contains {
-      $0.rawValue == inputExtension
-    } || (textBundle != nil && inputExtension == "textbundle")
-
-    guard isValidExtension else {
-      let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
-      scriptError.applyToCommand(command)
-      return nil
-    }
-
-    return super.handleSave(command)
+    return NewFilenameExtension.preferredExtension(for: typeName).rawValue
   }
 
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
@@ -404,6 +354,59 @@ extension EditorDocument {
   override func revert(toContentsOf url: URL, ofType typeName: String) throws {
     revertedDate = .now
     try super.revert(toContentsOf: url, ofType: typeName)
+  }
+}
+
+// MARK: Scripting
+
+extension EditorDocument {
+  /// Handle save operations from AppleScript.
+  ///
+  /// Override to catch invalid output paths early so we can present more informative errors.
+  override func handleSave(_ command: NSScriptCommand) -> Any? {
+    guard let fileURL = command.evaluatedArguments?["File"] as? URL else {
+      // Save without predefined destination (will open save panel if needed)
+      return super.handleSave(command)
+    }
+
+    let inputExtension = fileURL.pathExtension.lowercased()
+
+    // Support extension-less paths by bypassing file type validation
+    if inputExtension.isEmpty {
+      Task {
+        try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveOperation)
+      }
+      return nil
+    }
+
+    // Provided limited support for the 'as' parameter
+    if let desiredType = command.evaluatedArguments?["FileType"] as? String {
+      let desiredExtension = NewFilenameExtension.preferredExtension(for: desiredType).rawValue
+      if inputExtension == desiredExtension {
+        return super.handleSave(command)
+      }
+
+      // Raise error because we cannot adjust the extension due to sandbox restrictions
+      let scriptError = ScriptingError.extensionMismatch(
+        expectedExtension: desiredExtension,
+        outputType: desiredType
+      )
+
+      scriptError.applyToCommand(command)
+      return nil
+    }
+
+    let isValidExtension = NewFilenameExtension.allCases.contains {
+      $0.rawValue == inputExtension
+    } || (textBundle != nil && inputExtension == "textbundle")
+
+    guard isValidExtension else {
+      let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
+      scriptError.applyToCommand(command)
+      return nil
+    }
+
+    return super.handleSave(command)
   }
 }
 
