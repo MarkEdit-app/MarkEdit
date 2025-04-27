@@ -30,7 +30,7 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
 
     const editor = window.editor;
     const state = editor.state;
-    const pos = state.selection.main.anchor;
+    const pos = state.selection.main.to;
     const anchor = anchorAtPos(pos);
 
     // Defensive fix for string slicing issue,
@@ -73,7 +73,7 @@ export function invalidateCache() {
 
 export function acceptInlinePrediction(prediction: string) {
   const editor = window.editor;
-  const anchor = editor.state.selection.main.anchor;
+  const anchor = editor.state.selection.main.to;
   const line = editor.state.doc.lineAt(anchor);
 
   // Generate a slice for string comparison.
