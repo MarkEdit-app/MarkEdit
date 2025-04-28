@@ -125,7 +125,7 @@ public final class TextCompletionContext {
 // MARK: - Private
 
 private extension NSScreen {
-  var dockHeight: Double {
-    frame.height - visibleFrame.height
+  @MainActor var dockHeight: Double {
+    frame.height - visibleFrame.height - (NSApp.mainMenu?.menuBarHeight ?? 0)
   }
 }
