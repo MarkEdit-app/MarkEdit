@@ -95,7 +95,7 @@ describe('Lezer parser', () => {
     });
 
     expect(extractComments('<!-- Hello --> World -->')).toStrictEqual({
-      trimmedText: '',
+      trimmedText: ' World -->',
       commentCount: 1,
     });
 
@@ -112,6 +112,11 @@ describe('Lezer parser', () => {
     expect(extractComments('Hello <!-- Hello \n.\n. World -->')).toStrictEqual({
       trimmedText: 'Hello ',
       commentCount: 1,
+    });
+
+    expect(extractComments('<!-- Hello -->World\n\nHello <!-- World -->')).toStrictEqual({
+      trimmedText: 'World\n\nHello ',
+      commentCount: 2,
     });
   });
 });
