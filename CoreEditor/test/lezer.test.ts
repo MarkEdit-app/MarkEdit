@@ -79,6 +79,11 @@ describe('Lezer parser', () => {
   });
 
   test('test extracting comments', () => {
+    expect(extractComments('Hello')).toStrictEqual({
+      trimmedText: 'Hello',
+      commentCount: 0,
+    });
+
     expect(extractComments('<!-- Hello -->')).toStrictEqual({
       trimmedText: '',
       commentCount: 1,
