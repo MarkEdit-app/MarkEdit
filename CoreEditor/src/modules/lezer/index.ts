@@ -4,6 +4,15 @@ import { replaceRange } from '../../common/utils';
 import { takePossibleNewline } from '../lineEndings';
 
 export function extractComments(source: string) {
+  // Fail fast since we cannot find an open tag of comments
+  if (!source.includes('<!--')) {
+    return {
+      trimmedText: source,
+      commentCount: 0,
+    };
+  }
+
+  // Parse the content as syntax tree, time-consuming for long content
   const tree = markdownParser.parse(source);
   const comments: { from: number; to: number }[] = [];
 
