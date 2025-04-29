@@ -44,7 +44,7 @@ public final class WebBridgeCore {
     }
   }
 
-  public func getReadableContent() async throws -> ReadableContent {
+  public func getReadableContent() async throws -> ReadableContentPair {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.core.getReadableContent") { result in
         Task { @MainActor in
@@ -115,14 +115,22 @@ public final class WebBridgeCore {
   }
 }
 
+public struct ReadableContentPair: Codable {
+  public var fullText: ReadableContent
+  public var selection: ReadableContent?
+
+  public init(fullText: ReadableContent, selection: ReadableContent?) {
+    self.fullText = fullText
+    self.selection = selection
+  }
+}
+
 public struct ReadableContent: Codable {
-  public var selectionBased: Bool
   public var sourceText: String
   public var trimmedText: String
   public var commentCount: Int
 
-  public init(selectionBased: Bool, sourceText: String, trimmedText: String, commentCount: Int) {
-    self.selectionBased = selectionBased
+  public init(sourceText: String, trimmedText: String, commentCount: Int) {
     self.sourceText = sourceText
     self.trimmedText = trimmedText
     self.commentCount = commentCount

@@ -91,7 +91,7 @@ let package = Package(
     ),
     .target(
       name: "FileVersion",
-      dependencies: ["MarkEditKit", "AppKitControls"],
+      dependencies: ["AppKitControls", "MarkEditKit"],
       path: "Sources/FileVersion",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
@@ -113,7 +113,7 @@ let package = Package(
     ),
     .target(
       name: "Previewer",
-      dependencies: ["MarkEditKit", "AppKitExtensions"],
+      dependencies: ["AppKitExtensions", "MarkEditKit"],
       path: "Sources/Previewer",
       resources: [
         .process("Resources"),
@@ -138,7 +138,7 @@ let package = Package(
     ),
     .target(
       name: "Statistics",
-      dependencies: ["AppKitExtensions"],
+      dependencies: ["AppKitExtensions", "MarkEditKit"],
       path: "Sources/Statistics",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")

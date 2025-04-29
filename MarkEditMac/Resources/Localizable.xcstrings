@@ -809,6 +809,23 @@
         }
       }
     },
+    "Document" : {
+      "comment" : "Statistics mode: full document",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全文档"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全文件"
+          }
+        }
+      }
+    },
     "Done" : {
       "comment" : "Button title, confirm an action",
       "localizations" : {
@@ -2621,7 +2638,7 @@
       }
     },
     "Selection" : {
-      "comment" : "Show invisibles for selected ranges",
+      "comment" : "Show invisibles for selected ranges\nStatistics mode: selection",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

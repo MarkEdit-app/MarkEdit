@@ -19,11 +19,15 @@ import { markContentClean } from './modules/history';
 import { TextEditor } from './api/editor';
 import { editorReadyListeners } from './api/methods';
 
-export interface ReadableContent {
-  selectionBased: boolean;
+type ReadableContent = {
   sourceText: string;
   trimmedText: string;
   commentCount: CodeGen_Int;
+};
+
+export interface ReadableContentPair {
+  fullText: ReadableContent;
+  selection?: ReadableContent;
 }
 
 export enum ReplaceGranularity {
@@ -164,22 +168,26 @@ export function getEditorText() {
   return lines.join(state.lineBreak);
 }
 
-export function getReadableContent(): ReadableContent {
-  // Extract the source to show the statistics view,
-  // use the selected text if the selection is not empty.
-  const selectedText = selectedMainText();
-  const selectionBased = selectedText.length > 0;
-  const sourceText = selectionBased ? selectedText : getEditorText();
+export function getReadableContent(): ReadableContentPair {
+  const getContent = (sourceText: string): ReadableContent => {
+    // Remove front matter and extract comments
+    const actualText = removeFrontMatter(sourceText);
+    const { trimmedText, commentCount } = extractComments(actualText);
 
-  // Remove front matter and extract comments
-  const actualText = removeFrontMatter(sourceText);
-  const { trimmedText, commentCount } = extractComments(actualText);
+    return {
+      sourceText,
+      trimmedText,
+      commentCount: commentCount as CodeGen_Int,
+    };
+  };
 
   return {
-    selectionBased,
-    sourceText,
-    trimmedText,
-    commentCount: commentCount as CodeGen_Int,
+    fullText: getContent(getEditorText()),
+    selection: (() => {
+      // Get readable content for selection if the selection is not empty.
+      const selectedText = selectedMainText();
+      return selectedText.length > 0 ? getContent(selectedText) : undefined;
+    })(),
   };
 }
 

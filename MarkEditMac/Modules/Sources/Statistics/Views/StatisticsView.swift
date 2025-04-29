@@ -5,28 +5,67 @@
 //
 
 import AppKit
+import AppKitExtensions
 import SwiftUI
 
 struct StatisticsView: View {
-  private let tokenizedResult: Tokenizer.Result
+  private let fullResult: Tokenizer.Result
+  private let selectionResult: Tokenizer.Result?
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
 
+  @State private var viewingMode: ViewingMode = .selection
+  @State private var localMonitor: Any?
+
   init(
-    tokenizedResult: Tokenizer.Result,
+    fullResult: Tokenizer.Result,
+    selectionResult: Tokenizer.Result?,
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
-    self.tokenizedResult = tokenizedResult
+    self.fullResult = fullResult
+    self.selectionResult = selectionResult
     self.fileURL = fileURL
     self.localizable = localizable
   }
 
   var body: some View {
     VStack(spacing: 0) {
-      Text(localizable.mainTitle)
-        .fontWeight(.semibold)
-        .frame(height: 36)
+      VStack {
+        if selectionResult != nil {
+          Picker(localizable.mainTitle, selection: $viewingMode) {
+            Text(localizable.selection).tag(ViewingMode.selection)
+            Text(localizable.document).tag(ViewingMode.document)
+          }
+          .labelsHidden() // Hide the label while keeping the accessibility
+          .pickerStyle(.segmented)
+          .padding()
+          .onAppear {
+            localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+              switch event.keyCode {
+              case .kVK_LeftArrow:
+                viewingMode = .selection
+                return nil
+              case .kVK_RightArrow:
+                viewingMode = .document
+                return nil
+              default:
+                return event
+              }
+            }
+          }
+          .onDisappear {
+            if let localMonitor {
+              NSEvent.removeMonitor(localMonitor)
+              self.localMonitor = nil
+            }
+          }
+        } else {
+          Text(localizable.mainTitle)
+            .fontWeight(.semibold)
+        }
+      }
+      .frame(height: 36)
 
       Divider()
 
@@ -72,7 +111,8 @@ struct StatisticsView: View {
             )
           }
 
-          if let fileSize = FileSize.readableSize(of: fileURL) {
+          // The file size is shown only when we are viewing the full document
+          if isViewingDocument, let fileSize = FileSize.readableSize(of: fileURL) {
             StatisticsCell(
               iconName: Icons.fileSize,
               titleText: localizable.fileSize,
@@ -91,12 +131,32 @@ struct StatisticsView: View {
 
 // MARK: - Private
 
-private enum Icons {
-  static let characters = "textformat"
-  static let words = "text.bubble"
-  static let sentences = "textformat.abc.dottedunderline"
-  static let paragraphs = "paragraphsign"
-  static let comments = "eye.slash"
-  static let readTime = "stopwatch"
-  static let fileSize = "doc.text.below.ecg"
+private extension StatisticsView {
+  enum ViewingMode: Int {
+    case selection = 0
+    case document = 1
+  }
+
+  enum Icons {
+    static let characters = "textformat"
+    static let words = "text.bubble"
+    static let sentences = "textformat.abc.dottedunderline"
+    static let paragraphs = "paragraphsign"
+    static let comments = "eye.slash"
+    static let readTime = "stopwatch"
+    static let fileSize = "doc.text.below.ecg"
+  }
+
+  var isViewingDocument: Bool {
+    // We are viewing full document if there's no selection, or we explicitly selected the document section
+    selectionResult == nil || viewingMode == .document
+  }
+
+  var tokenizedResult: Tokenizer.Result {
+    if !isViewingDocument, let selectionResult {
+      return selectionResult
+    }
+
+    return fullResult
+  }
 }
