@@ -8,6 +8,8 @@ import Foundation
 
 public struct StatisticsLocalizable {
   let mainTitle: String
+  let selection: String
+  let document: String
   let characters: String
   let words: String
   let sentences: String
@@ -18,6 +20,8 @@ public struct StatisticsLocalizable {
 
   public init(
     mainTitle: String,
+    selection: String,
+    document: String,
     characters: String,
     words: String,
     sentences: String,
@@ -27,6 +31,8 @@ public struct StatisticsLocalizable {
     fileSize: String
   ) {
     self.mainTitle = mainTitle
+    self.selection = selection
+    self.document = document
     self.characters = characters
     self.words = words
     self.sentences = sentences

@@ -25,17 +25,13 @@ extension EditorViewController {
         return Logger.assertFail("Failed to get readable content from the editor")
       }
 
-      let fileURL = content.selectionBased ? nil : document?.fileURL
-      let titleLabel = Localized.Toolbar.statistics
-      let mainTitle = content.selectionBased ? "\(titleLabel) (\(Localized.Settings.selection))" : titleLabel
-
       let statisticsController = StatisticsController(
-        sourceText: content.sourceText,
-        trimmedText: content.trimmedText,
-        commentCount: content.commentCount,
-        fileURL: fileURL,
+        content: content,
+        fileURL: document?.fileURL,
         localizable: StatisticsLocalizable(
-          mainTitle: mainTitle,
+          mainTitle: Localized.Toolbar.statistics,
+          selection: Localized.Statistics.selection,
+          document: Localized.Statistics.document,
           characters: Localized.Statistics.characters,
           words: Localized.Statistics.words,
           sentences: Localized.Statistics.sentences,

@@ -6,6 +6,7 @@
 
 import AppKit
 import SwiftUI
+import MarkEditKit
 
 /**
  UI to show statistics of text.
@@ -16,23 +17,17 @@ public final class StatisticsController: NSViewController {
     static let contentHeight: Double = 288
   }
 
-  private let sourceText: String
-  private let trimmedText: String
-  private let commentCount: Int
+  private let content: ReadableContentPair
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
   private var contentView: NSView?
 
   public init(
-    sourceText: String,
-    trimmedText: String,
-    commentCount: Int,
+    content: ReadableContentPair,
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
-    self.sourceText = sourceText
-    self.trimmedText = trimmedText
-    self.commentCount = commentCount
+    self.content = content
     self.fileURL = fileURL
     self.localizable = localizable
     super.init(nibName: nil, bundle: nil)
@@ -68,13 +63,10 @@ public final class StatisticsController: NSViewController {
       spinner.heightAnchor.constraint(equalToConstant: 24),
     ])
 
-    DispatchQueue.global(qos: .userInitiated).async {
-      // Natural language processing is time-consuming for large documents
-      let tokenizedResult = Tokenizer.tokenize(
-        sourceText: self.sourceText,
-        trimmedText: self.trimmedText,
-        commentCount: self.commentCount
-      )
+    // Natural language processing is time-consuming for large documents
+    Task.detached(priority: .userInitiated) {
+      let fullResult = self.content.fullText.tokenized
+      let selectionResult = self.content.selection?.tokenized
 
       // Remove the spinner and show the result view on main thread
       DispatchQueue.main.async {
@@ -82,7 +74,8 @@ public final class StatisticsController: NSViewController {
         spinner.removeFromSuperview()
 
         let contentView = NSHostingView(rootView: StatisticsView(
-          tokenizedResult: tokenizedResult,
+          fullResult: fullResult,
+          selectionResult: selectionResult,
           fileURL: self.fileURL,
           localizable: self.localizable
         ))
@@ -94,8 +87,27 @@ public final class StatisticsController: NSViewController {
     }
   }
 
+  override public func viewDidAppear() {
+    super.viewDidAppear()
+    view.window?.makeFirstResponder(self)
+  }
+
   override public func viewDidLayout() {
     super.viewDidLayout()
     contentView?.frame = view.bounds
+  }
+}
+
+extension ReadableContentPair: @unchecked @retroactive Sendable {}
+
+// MARK: - Private
+
+private extension ReadableContent {
+  var tokenized: Tokenizer.Result {
+    Tokenizer.tokenize(
+      sourceText: sourceText,
+      trimmedText: trimmedText,
+      commentCount: commentCount
+    )
   }
 }

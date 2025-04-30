@@ -96,6 +96,8 @@ enum Localized {
   }
 
   enum Statistics {
+    static let selection = String(localized: "Selection", comment: "Statistics mode: selection")
+    static let document = String(localized: "Document", comment: "Statistics mode: full document")
     static let characters = String(localized: "Characters", comment: "Statistics label: count characters")
     static let words = String(localized: "Words", comment: "Statistics label: count words")
     static let sentences = String(localized: "Sentences", comment: "Statistics label: count sentences")
