@@ -1,7 +1,38 @@
+import { EditorState } from '@codemirror/state';
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language';
+import { SyntaxNodeRef } from '@lezer/common';
 import { parser as htmlParser } from '@lezer/html';
 import { parser as markdownParser } from '@lezer/markdown';
 import { replaceRange } from '../../common/utils';
 import { takePossibleNewline } from '../lineEndings';
+
+export function getSyntaxTree(state: EditorState, sizeLimit = 102400) {
+  const length = state.doc.length;
+  // When the doc is small enough (default 100 KB), we can safely try getting a parse tree
+  if (length < sizeLimit) {
+    return ensureSyntaxTree(state, length) ?? syntaxTree(state);
+  }
+
+  // Note that, it's not going to iterate the entire tree (might not have been parsed).
+  //
+  // This is by design because of potential performance issues.
+  return syntaxTree(state);
+}
+
+export function getNodesNamed(state: EditorState, nodeName: string) {
+  const nodes: SyntaxNodeRef[] = [];
+
+  getSyntaxTree(state).iterate({
+    from: 0, to: state.doc.length,
+    enter: node => {
+      if (node.name === nodeName) {
+        nodes.push(node.node);
+      }
+    },
+  });
+
+  return nodes;
+}
 
 export function extractComments(source: string) {
   // Fail fast since we cannot find an open tag of comments

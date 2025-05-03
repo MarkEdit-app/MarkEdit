@@ -5,7 +5,7 @@ import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdo
 import { tags } from './builder';
 import { listIndentStyle } from './nodes/indent';
 import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './nodes/code';
-import { linkStyle } from './nodes/link';
+import { linkStyles } from './nodes/link';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
 import { taskMarkerStyle } from './nodes/task';
@@ -72,7 +72,7 @@ export const markdownExtendedData = {
 export const renderExtensions = [
   inlineCodeStyle,
   codeBlockStyle,
-  linkStyle,
+  linkStyles,
   listIndentStyle,
   tableStyle,
   frontMatterStyle,

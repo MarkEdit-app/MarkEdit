@@ -193,6 +193,10 @@ extension EditorViewController: EditorModuleCoreDelegate {
     // Failed eventually
     Logger.log(.info, "Failed to open link: \(link)")
   }
+
+  func editorCoreLightWarning(_ sender: EditorModuleCore) {
+    NSSound.beep()
+  }
 }
 
 // MARK: - EditorModuleCompletionDelegate

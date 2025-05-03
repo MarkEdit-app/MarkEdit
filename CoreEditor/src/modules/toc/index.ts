@@ -1,8 +1,8 @@
 import { KeyBinding } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
-import { ensureSyntaxTree, syntaxTree } from '@codemirror/language';
 import { HeadingInfo } from './types';
 import { frontMatterRange } from '../frontMatter';
+import { getSyntaxTree } from '../lezer';
 import { scrollToSelection } from '../selection';
 import { saveGoBackSelection } from '../selection/navigate';
 import selectWithRanges from '../selection/selectWithRanges';
@@ -32,20 +32,7 @@ export function getTableOfContents() {
   const state = editor.state;
   const results: HeadingInfo[] = [];
 
-  const tree = (() => {
-    const length = state.doc.length;
-    // When the doc is small enough (100 KB), we can safely try getting a parse tree
-    if (length < 100 * 1024) {
-      return ensureSyntaxTree(state, length) ?? syntaxTree(state);
-    }
-
-    // Note that, it's not going to iterate the entire tree (might not have been parsed).
-    //
-    // This is by design because of potential performance issues.
-    return syntaxTree(state);
-  })();
-
-  tree.iterate({
+  getSyntaxTree(state).iterate({
     from: 0, to: state.doc.length,
     enter: node => {
       // Detect both ATXHeading and SetextHeading

@@ -21,6 +21,7 @@ public protocol NativeModuleCore: NativeModule {
   func notifyContentOffsetDidChange()
   func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
   func notifyLinkClicked(link: String)
+  func notifyLightWarning()
 }
 
 public extension NativeModuleCore {
@@ -57,6 +58,9 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyLinkClicked": { [weak self] in
       self?.notifyLinkClicked(parameters: $0)
+    },
+    "notifyLightWarning": { [weak self] in
+      self?.notifyLightWarning(parameters: $0)
     },
   ]
 
@@ -172,6 +176,11 @@ final class NativeBridgeCore: NativeBridge {
     }
 
     module.notifyLinkClicked(link: message.link)
+    return .success(nil)
+  }
+
+  private func notifyLightWarning(parameters: Data) -> Result<Any?, Error>? {
+    module.notifyLightWarning()
     return .success(nil)
   }
 }
