@@ -16,4 +16,5 @@ export interface NativeModuleCore extends NativeModule {
   notifyContentOffsetDidChange(): void;
   notifyCompositionEnded({ selectedLineColumn }: { selectedLineColumn: LineColumnInfo }): void;
   notifyLinkClicked({ link }: { link: string }): void;
+  notifyLightWarning(): void;
 }

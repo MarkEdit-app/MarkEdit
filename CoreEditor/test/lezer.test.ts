@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { extractComments } from '../src/modules/lezer';
+import { getNodesNamed, extractComments } from '../src/modules/lezer';
 import * as editor from './utils/editor';
 
 describe('Lezer parser', () => {
@@ -76,6 +76,29 @@ describe('Lezer parser', () => {
     const types = parseTypes(window.editor);
     expect(types).toContain('SetextHeading2');
     expect(types).toContain('HeaderMark');
+  });
+
+  test('test footnote', () => {
+    editor.setUp('[^footnote]\n\n[^footnote]:');
+
+    const types = parseTypes(window.editor);
+    expect(types).toContain('Link');
+    expect(types).toContain('LinkMark');
+  });
+
+  test('test reference style link', () => {
+    editor.setUp('[reference][link]\n\n[link]:');
+
+    const types = parseTypes(window.editor);
+    expect(types).toContain('Link');
+    expect(types).toContain('LinkLabel');
+  });
+
+  test('test getNodesNamed', () => {
+    editor.setUp('[^footnote]\n\n[reference][link]\n\n[standard](link)');
+
+    const nodes = getNodesNamed(window.editor.state, 'Link');
+    expect(nodes.length).toBe(3);
   });
 
   test('test extracting comments', () => {

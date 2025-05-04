@@ -24,19 +24,19 @@
         }
       }
     },
-    "⌘-click to open link" : {
+    "⌘-click to follow" : {
       "comment" : "Tooltip for links",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "⌘ 点击打开链接"
+            "value" : "⌘ 点击以跟随"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "⌘ 點選開啟連結"
+            "value" : "⌘ 點選以跟隨"
           }
         }
       }

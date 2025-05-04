@@ -51,7 +51,7 @@ const config = import.meta.env.PROD ? window.config : {
   indentBehavior: 'paragraph',
   localizable: {
     previewButtonTitle: 'Preview',
-    cmdClickToOpenLink: '⌘-click to open link',
+    cmdClickToFollow: '⌘-click to follow',
     cmdClickToToggleTodo: '⌘-click to toggle todo',
   },
 } as Config;

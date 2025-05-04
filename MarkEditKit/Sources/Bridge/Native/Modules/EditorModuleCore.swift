@@ -23,6 +23,7 @@ public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreContentOffsetDidChange(_ sender: EditorModuleCore)
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo)
   func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String)
+  func editorCoreLightWarning(_ sender: EditorModuleCore)
 }
 
 public final class EditorModuleCore: NativeModuleCore {
@@ -77,5 +78,9 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyLinkClicked(link: String) {
     delegate?.editorCoreLinkClicked(self, link: link)
+  }
+
+  public func notifyLightWarning() {
+    delegate?.editorCoreLightWarning(self)
   }
 }
