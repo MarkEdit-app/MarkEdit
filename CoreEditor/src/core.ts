@@ -10,7 +10,7 @@ import { setUp, setGutterHovered } from './styling/config';
 import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
 import { adjustGutterPositions } from './modules/lines';
-import { extractComments } from './modules/lezer';
+import { getReadableContent } from './modules/lezer';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { removeFrontMatter } from './modules/frontMatter';
 import { selectedMainText, scrollIntoView } from './modules/selection';
@@ -22,6 +22,7 @@ import { editorReadyListeners } from './api/methods';
 type ReadableContent = {
   sourceText: string;
   trimmedText: string;
+  paragraphCount: CodeGen_Int;
   commentCount: CodeGen_Int;
 };
 
@@ -168,15 +169,16 @@ export function getEditorText() {
   return lines.join(state.lineBreak);
 }
 
-export function getReadableContent(): ReadableContentPair {
+export function getReadableContentPair(): ReadableContentPair {
   const getContent = (sourceText: string): ReadableContent => {
-    // Remove front matter and extract comments
+    // Remove front matter and parse the content to get paragraphs and comments
     const actualText = removeFrontMatter(sourceText);
-    const { trimmedText, commentCount } = extractComments(actualText);
+    const { trimmedText, paragraphCount, commentCount } = getReadableContent(actualText);
 
     return {
       sourceText,
       trimmedText,
+      paragraphCount: paragraphCount as CodeGen_Int,
       commentCount: commentCount as CodeGen_Int,
     };
   };
