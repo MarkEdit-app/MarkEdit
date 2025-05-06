@@ -21,7 +21,7 @@ extension EditorViewController {
     }
 
     Task {
-      guard let content = try? await bridge.core.getReadableContent() else {
+      guard let content = try? await bridge.core.getReadableContentPair() else {
         return Logger.assertFail("Failed to get readable content from the editor")
       }
 

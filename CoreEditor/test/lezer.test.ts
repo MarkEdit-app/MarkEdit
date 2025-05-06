@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { getNodesNamed, extractComments } from '../src/modules/lezer';
+import { getNodesNamed, getReadableContent } from '../src/modules/lezer';
 import * as editor from './utils/editor';
 
 describe('Lezer parser', () => {
@@ -101,49 +101,58 @@ describe('Lezer parser', () => {
     expect(nodes.length).toBe(3);
   });
 
-  test('test extracting comments', () => {
-    expect(extractComments('Hello')).toStrictEqual({
+  test('test getting readable content', () => {
+    expect(getReadableContent('Hello')).toStrictEqual({
       trimmedText: 'Hello',
+      paragraphCount: 1,
       commentCount: 0,
     });
 
-    expect(extractComments('<!-- Hello -->')).toStrictEqual({
+    expect(getReadableContent('<!-- Hello -->')).toStrictEqual({
       trimmedText: '',
+      paragraphCount: 0,
       commentCount: 1,
     });
 
-    expect(extractComments('<!-- Hello -->\nWorld')).toStrictEqual({
+    expect(getReadableContent('<!-- Hello -->\nWorld')).toStrictEqual({
       trimmedText: 'World',
+      paragraphCount: 1,
       commentCount: 1,
     });
 
-    expect(extractComments('<!-- Hello -->\n<!-- World -->')).toStrictEqual({
+    expect(getReadableContent('<!-- Hello -->\n<!-- World -->')).toStrictEqual({
       trimmedText: '',
+      paragraphCount: 0,
       commentCount: 2,
     });
 
-    expect(extractComments('<!-- Hello --> World -->')).toStrictEqual({
+    expect(getReadableContent('<!-- Hello --> World -->')).toStrictEqual({
       trimmedText: ' World -->',
+      paragraphCount: 0,
       commentCount: 1,
     });
 
-    expect(extractComments('Hello <!-- Hello \n\n World -->')).toStrictEqual({
+    expect(getReadableContent('Hello <!-- Hello \n\n World -->')).toStrictEqual({
       trimmedText: 'Hello <!-- Hello \n\n World -->',
+      paragraphCount: 2,
       commentCount: 0,
     });
 
-    expect(extractComments('<!-- Hello \n\n World -->')).toStrictEqual({
+    expect(getReadableContent('<!-- Hello \n\n World -->')).toStrictEqual({
       trimmedText: '',
+      paragraphCount: 0,
       commentCount: 1,
     });
 
-    expect(extractComments('Hello <!-- Hello \n.\n. World -->')).toStrictEqual({
+    expect(getReadableContent('Hello <!-- Hello \n.\n. World -->')).toStrictEqual({
       trimmedText: 'Hello ',
+      paragraphCount: 1,
       commentCount: 1,
     });
 
-    expect(extractComments('<!-- Hello -->World\n\nHello <!-- World -->')).toStrictEqual({
+    expect(getReadableContent('<!-- Hello -->World\n\nHello <!-- World -->')).toStrictEqual({
       trimmedText: 'World\n\nHello ',
+      paragraphCount: 1,
       commentCount: 2,
     });
   });

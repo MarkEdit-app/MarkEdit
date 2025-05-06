@@ -9,8 +9,8 @@ import AppKitExtensions
 import SwiftUI
 
 struct StatisticsView: View {
-  private let fullResult: Tokenizer.Result
-  private let selectionResult: Tokenizer.Result?
+  private let fullResult: StatisticsResult
+  private let selectionResult: StatisticsResult?
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
 
@@ -18,8 +18,8 @@ struct StatisticsView: View {
   @State private var localMonitor: Any?
 
   init(
-    fullResult: Tokenizer.Result,
-    selectionResult: Tokenizer.Result?,
+    fullResult: StatisticsResult,
+    selectionResult: StatisticsResult?,
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
@@ -74,36 +74,36 @@ struct StatisticsView: View {
           StatisticsCell(
             iconName: Icons.characters,
             titleText: localizable.characters,
-            valueText: "\(tokenizedResult.characters)"
+            valueText: "\(currentResult.characters)"
           )
 
           StatisticsCell(
             iconName: Icons.words,
             titleText: localizable.words,
-            valueText: "\(tokenizedResult.words)"
+            valueText: "\(currentResult.words)"
           )
 
           StatisticsCell(
             iconName: Icons.sentences,
             titleText: localizable.sentences,
-            valueText: "\(tokenizedResult.sentences)"
+            valueText: "\(currentResult.sentences)"
           )
 
           StatisticsCell(
             iconName: Icons.paragraphs,
             titleText: localizable.paragraphs,
-            valueText: "\(tokenizedResult.paragraphs)"
+            valueText: "\(currentResult.paragraphs)"
           )
 
-          if tokenizedResult.comments > 0 {
+          if currentResult.comments > 0 {
             StatisticsCell(
               iconName: Icons.comments,
               titleText: localizable.comments,
-              valueText: "\(tokenizedResult.comments)"
+              valueText: "\(currentResult.comments)"
             )
           }
 
-          if let readTime = ReadTime.estimated(of: tokenizedResult.words) {
+          if let readTime = ReadTime.estimated(of: currentResult.words) {
             StatisticsCell(
               iconName: Icons.readTime,
               titleText: localizable.readTime,
@@ -152,7 +152,7 @@ private extension StatisticsView {
     selectionResult == nil || viewingMode == .document
   }
 
-  var tokenizedResult: Tokenizer.Result {
+  var currentResult: StatisticsResult {
     if !isViewingDocument, let selectionResult {
       return selectionResult
     }

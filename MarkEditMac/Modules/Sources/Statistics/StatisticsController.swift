@@ -65,8 +65,8 @@ public final class StatisticsController: NSViewController {
 
     // Natural language processing is time-consuming for large documents
     Task.detached(priority: .userInitiated) {
-      let fullResult = self.content.fullText.tokenized
-      let selectionResult = self.content.selection?.tokenized
+      let fullResult = self.content.fullText.result
+      let selectionResult = self.content.selection?.result
 
       // Remove the spinner and show the result view on main thread
       DispatchQueue.main.async {
@@ -103,11 +103,18 @@ extension ReadableContentPair: @unchecked @retroactive Sendable {}
 // MARK: - Private
 
 private extension ReadableContent {
-  var tokenized: Tokenizer.Result {
-    Tokenizer.tokenize(
-      sourceText: sourceText,
-      trimmedText: trimmedText,
-      commentCount: commentCount
+  var result: StatisticsResult {
+    StatisticsResult(
+      // Length of the full text
+      characters: sourceText.count,
+      // Result from the syntax tree
+      paragraphs: paragraphCount,
+      // Result from the syntax tree
+      comments: commentCount,
+      // Result from the NLP tokenizer
+      words: Tokenizer.count(text: trimmedText, unit: .word),
+      // Result from the NLP tokenizer
+      sentences: Tokenizer.count(text: trimmedText, unit: .sentence)
     )
   }
 }

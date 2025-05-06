@@ -44,9 +44,9 @@ public final class WebBridgeCore {
     }
   }
 
-  public func getReadableContent() async throws -> ReadableContentPair {
+  public func getReadableContentPair() async throws -> ReadableContentPair {
     return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.core.getReadableContent") { result in
+      webView?.invoke(path: "webModules.core.getReadableContentPair") { result in
         Task { @MainActor in
           continuation.resume(with: result)
         }
@@ -128,11 +128,13 @@ public struct ReadableContentPair: Codable {
 public struct ReadableContent: Codable {
   public var sourceText: String
   public var trimmedText: String
+  public var paragraphCount: Int
   public var commentCount: Int
 
-  public init(sourceText: String, trimmedText: String, commentCount: Int) {
+  public init(sourceText: String, trimmedText: String, paragraphCount: Int, commentCount: Int) {
     self.sourceText = sourceText
     self.trimmedText = trimmedText
+    self.paragraphCount = paragraphCount
     self.commentCount = commentCount
   }
 }
