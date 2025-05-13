@@ -39,7 +39,7 @@ private extension AppDelegate {
       $0?.superMenuItem?.isHidden = document?.fileURL == nil
     }
 
-    fileFromClipboardItem?.isHidden = !NSPasteboard.general.canPaste
+    fileFromClipboardItem?.isHidden = !NSPasteboard.general.hasText
   }
 
   func reconfigureMainEditMenu(document: EditorDocument?) {
@@ -50,7 +50,7 @@ private extension AppDelegate {
 
       editUndoItem?.isEnabled = await document.canUndo
       editRedoItem?.isEnabled = await document.canRedo
-      editPasteItem?.isEnabled = NSPasteboard.general.canPaste
+      editPasteItem?.isEnabled = NSPasteboard.general.hasText
     }
 
     // [macOS 15] The system one doesn't work for WKWebView

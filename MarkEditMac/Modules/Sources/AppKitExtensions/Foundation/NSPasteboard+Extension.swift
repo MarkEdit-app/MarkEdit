@@ -7,20 +7,26 @@
 import AppKit
 
 public extension NSPasteboard {
-  var canPaste: Bool {
-    pasteboardItems?.isEmpty == false
+  var hasText: Bool {
+    pasteboardItems?.contains { $0.types.contains(.string) } == true
   }
 
   var string: String? {
     string(forType: .string)
   }
 
-  var url: String? {
-    guard let string else {
-      return string(forType: .URL)
+  func url() async -> String? {
+    guard #available(macOS 15.4, *) else {
+      guard let string else {
+        return string(forType: .URL)
+      }
+
+      return NSDataDetector.extractURL(from: string)
     }
 
-    return NSDataDetector.extractURL(from: string)
+    // This alerts the user only when the pasteboard really contains links
+    let values = try? await NSPasteboard.general.detectedValues(for: [\.links])
+    return values?.links.first?.url.absoluteString
   }
 
   func overwrite(string: String?) {
