@@ -22,7 +22,7 @@ extension EditorViewController {
       // Try our best to guess from selection and clipboard
       bridge.format.insertHyperLink(
         title: prefersURL ? defaultTitle : title,
-        url: prefersURL ? text : (NSPasteboard.general.url ?? "https://"),
+        url: prefersURL ? text : (await NSPasteboard.general.url() ?? "https://"),
         prefix: prefix
       )
     }

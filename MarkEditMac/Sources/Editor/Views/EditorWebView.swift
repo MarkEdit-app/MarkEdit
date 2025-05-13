@@ -134,7 +134,7 @@ private extension EditorWebView {
 
       // Disable paste for empty pasteboard
       if item.tag == WKContextMenuItemTag.paste.rawValue {
-        item.isEnabled = NSPasteboard.general.canPaste
+        item.isEnabled = NSPasteboard.general.hasText
       }
 
       // Hide native items that require text selection
