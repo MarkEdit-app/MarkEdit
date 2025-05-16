@@ -48,9 +48,6 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     // it can be an issue for whitespace rendering, especially for "selection" mode.
     whiteSpace: 'pre-wrap',
   },
-  '.cm-focused': {
-    outline: 'none',
-  },
   '.cm-foldGutter': {
     padding: '0 4px',
     opacity: '0',
