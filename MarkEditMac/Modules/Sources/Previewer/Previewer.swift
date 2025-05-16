@@ -35,6 +35,8 @@ public final class Previewer: NSViewController {
     return webView
   }()
 
+  private var isRenderComplete = false
+
   public init(code: String, type: PreviewType) {
     self.code = code
     self.type = type
@@ -67,7 +69,19 @@ public final class Previewer: NSViewController {
 
   override public func viewDidLayout() {
     super.viewDidLayout()
-    webView.frame = view.bounds
+
+    if isRenderComplete {
+      // Fill the popover
+      webView.frame = view.bounds
+    } else {
+      // Create a big enough canvas to render the content
+      webView.frame = CGRect(
+        x: 0,
+        y: 0,
+        width: Constants.maximumWidth,
+        height: view.frame.height
+      )
+    }
   }
 
   private var indexHtml: String? {
@@ -142,6 +156,9 @@ private extension Previewer {
         width: max(min(body["width"] ?? view.frame.width, Constants.maximumWidth), Constants.popoverSize),
         height: max(height, Constants.minimumHeight)
       )
+
+      isRenderComplete = true
+      view.needsLayout = true
     }
   }
 }
