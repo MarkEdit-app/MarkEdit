@@ -1,10 +1,12 @@
 import { v4 as UUID } from 'uuid';
-import { MenuItem, Alert, TextBox } from 'markedit-api';
+import { MenuItem, MenuItemState, Alert, TextBox, SavePanelOptions } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
 import { afterDomUpdate } from '../common/utils';
 import { getRect, scrollToSelection, isPositionVisible } from '../modules/selection';
+
+export type { MenuItemState };
 
 export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
   const items = Array.isArray(spec) ? spec : [spec];
@@ -49,6 +51,10 @@ export function showTextBox(spec?: TextBox): Promise<string | undefined> {
   return window.nativeModules.api.showTextBox(textBox ?? {});
 }
 
+export function showSavePanel(options: SavePanelOptions): Promise<boolean> {
+  return window.nativeModules.api.showSavePanel({ options });
+}
+
 export function handleMainMenuAction(id: string) {
   const action = mainActions.get(id);
   if (action !== undefined) {
@@ -68,20 +74,30 @@ export function handleContextMenuAction(id: string) {
   contextActions.clear();
 }
 
-function createMenuItem(item: MenuItem, actions: Map<string, () => void>): WebMenuItem {
+export function getMenuItemState(id: string) {
+  const action = mainActions.get(id) ?? contextActions.get(id);
+  if (action === undefined) {
+    return {};
+  }
+
+  return action() as MenuItemState;
+}
+
+function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMenuItem {
   // Generate identifiers for actions so that native functions can retrieve and invoke them later
-  const actionID = (() => {
-    if (item.action === undefined) {
+  const generateID = (action?: ActionType) => {
+    if (action === undefined) {
       return undefined;
     }
 
     const identifier = UUID();
-    actions.set(identifier, item.action);
+    actions.set(identifier, action);
     return identifier;
-  })();
+  };
 
   return {
-    actionID,
+    actionID: generateID(item.action),
+    stateGetterID: generateID(item.state),
     separator: item.separator ?? false,
     title: item.title,
     key: item.key,
@@ -90,5 +106,6 @@ function createMenuItem(item: MenuItem, actions: Map<string, () => void>): WebMe
   };
 };
 
-const mainActions = new Map<string, () => void>();
-const contextActions = new Map<string, () => void>();
+type ActionType = () => void | MenuItemState;
+const mainActions = new Map<string, ActionType>();
+const contextActions = new Map<string, ActionType>();

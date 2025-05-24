@@ -240,6 +240,24 @@ extension EditorViewController {
     return true
   }
 
+  func updateUserDefinedMenus(_ menu: NSMenu) {
+    let items = menu.items.compactMap {
+      $0 as? UserDefinedMenuItem
+    }
+
+    items.forEach { item in
+      guard let stateGetterID = item.stateGetterID else {
+        return
+      }
+
+      Task {
+        let state = try? await bridge.api.getMenuItemState(id: stateGetterID)
+        item.isEnabled = item.isEnabled && (state?.isEnabled ?? true)
+        item.setOn(state?.isSelected ?? false)
+      }
+    }
+  }
+
   func resetUserDefinedMenuItems() {
     guard let menu = NSApp.appDelegate?.mainExtensionsMenu else {
       return Logger.assertFail("Missing main extensions menu")
@@ -312,11 +330,35 @@ extension EditorViewController {
 
     return alert.runModal() == .alertFirstButtonReturn ? textField.stringValue : nil
   }
+
+  func showSavePanel(data: Data, fileName: String?) -> Bool {
+    let savePanel = NSSavePanel()
+    savePanel.nameFieldStringValue = fileName ?? ""
+    savePanel.isExtensionHidden = false
+    savePanel.titlebarAppearsTransparent = true
+
+    guard savePanel.runModal() == .OK, let url = savePanel.url else {
+      // Cancelled
+      return false
+    }
+
+    do {
+      try data.write(to: url, options: .atomic)
+      return true
+    } catch {
+      Logger.log(.error, "Failed to save the file")
+      return false
+    }
+  }
 }
 
 // MARK: - Private
 
 private extension EditorViewController {
+  final class UserDefinedMenuItem: NSMenuItem {
+    var stateGetterID: String?
+  }
+
   var contentHeight: Double {
     view.bounds.height - view.safeAreaInsets.top
   }
@@ -348,21 +390,22 @@ private extension EditorViewController {
     if spec.separator {
       return .separator()
     } else if let children = spec.children {
-      let item = NSMenuItem(title: spec.title ?? "")
+      let item = UserDefinedMenuItem(title: spec.title ?? "")
       item.submenu = createMenu(items: children, handler: handler)
       return item
     } else if let title = spec.title {
-      let item = NSMenuItem(title: title)
+      let item = UserDefinedMenuItem(title: title)
       if let actionID = spec.actionID {
         item.addAction { handler(actionID, nil) }
       }
 
+      item.stateGetterID = spec.stateGetterID
       item.keyEquivalent = spec.key ?? ""
       item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
       return item
     } else {
       Logger.assertFail("Invalid spec of menu item: \(spec)")
-      return NSMenuItem()
+      return UserDefinedMenuItem()
     }
   }
 
@@ -375,6 +418,7 @@ private extension EditorViewController {
       menu.addItem($0)
     }
 
+    menu.delegate = self
     return menu
   }
 }

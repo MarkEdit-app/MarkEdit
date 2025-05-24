@@ -1,3 +1,4 @@
+import { SavePanelOptions } from 'markedit-api';
 import { NativeModule } from '../nativeModule';
 import { WebMenuItem } from '../../@types/WebMenuItem';
 import { WebPoint } from '../../@types/WebPoint';
@@ -15,4 +16,5 @@ export interface NativeModuleAPI extends NativeModule {
   showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
   showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;
+  showSavePanel({ options }: { options: SavePanelOptions }): Promise<boolean>;
 }

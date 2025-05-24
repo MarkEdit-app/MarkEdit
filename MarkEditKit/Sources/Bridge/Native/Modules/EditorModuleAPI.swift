@@ -28,6 +28,7 @@ public protocol EditorModuleAPIDelegate: AnyObject {
     placeholder: String?,
     defaultValue: String?
   ) -> String?
+  func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) -> Bool
 }
 
 public final class EditorModuleAPI: NativeModuleAPI {
@@ -108,6 +109,22 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
     delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
+  }
+
+  public func showSavePanel(options: SavePanelOptions) -> Bool {
+    let data: Data = {
+      if let source = options.data, let data = Data(base64Encoded: source) {
+        return data
+      }
+
+      if let source = options.string, let data = source.data(using: .utf8) {
+        return data
+      }
+
+      return Data()
+    }()
+
+    return delegate?.editorAPI(self, showSavePanel: data, fileName: options.fileName) == true
   }
 }
 

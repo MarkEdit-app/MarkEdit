@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { handleMainMenuAction, handleContextMenuAction } from '../../api/ui';
+import { handleMainMenuAction, handleContextMenuAction, getMenuItemState, MenuItemState } from '../../api/ui';
 
 /**
  * @shouldExport true
@@ -9,6 +9,7 @@ import { handleMainMenuAction, handleContextMenuAction } from '../../api/ui';
 export interface WebModuleAPI extends WebModule {
   handleMainMenuAction({ id }: { id: string }): void;
   handleContextMenuAction({ id }: { id: string }): void;
+  getMenuItemState({ id }: { id: string }): MenuItemState;
 }
 
 export class WebModuleAPIImpl implements WebModuleAPI {
@@ -18,5 +19,9 @@ export class WebModuleAPIImpl implements WebModuleAPI {
 
   handleContextMenuAction({ id }: { id: string }): void {
     handleContextMenuAction(id);
+  }
+
+  getMenuItemState({ id }: { id: string }): MenuItemState {
+    return getMenuItemState(id);
   }
 }

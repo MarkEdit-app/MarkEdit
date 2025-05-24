@@ -299,6 +299,10 @@ extension EditorViewController: EditorModuleAPIDelegate {
   func editorAPI(_ sender: EditorModuleAPI, showTextBox title: String?, placeholder: String?, defaultValue: String?) -> String? {
     showTextBox(title: title, placeholder: placeholder, defaultValue: defaultValue)
   }
+
+  func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) -> Bool {
+    showSavePanel(data: data, fileName: fileName)
+  }
 }
 
 // MARK: - EditorFindPanelDelegate
