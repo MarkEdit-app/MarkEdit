@@ -95,6 +95,7 @@ extension EditorViewController {
 extension EditorViewController: NSMenuDelegate {
   func menuNeedsUpdate(_ menu: NSMenu) {
     updateToolbarItemMenus(menu)
+    updateUserDefinedMenus(menu)
   }
 
   func menuWillOpen(_ menu: NSMenu) {

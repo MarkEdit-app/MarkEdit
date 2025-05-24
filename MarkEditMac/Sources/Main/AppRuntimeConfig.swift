@@ -19,8 +19,6 @@ enum AppRuntimeConfig {
       let modifiers: [String]
     }
 
-    // swiftlint:disable discouraged_optional_boolean
-
     let autoCharacterPairs: Bool?
     let autoSaveWhenIdle: Bool?
     let closeAlwaysConfirmsChanges: Bool?
@@ -35,8 +33,6 @@ enum AppRuntimeConfig {
     let defaultSaveDirectory: String?
     let disableCorsRestrictions: Bool?
     let mainWindowHotKey: HotKey?
-
-    // swiftlint:enable discouraged_optional_boolean
 
     enum CodingKeys: String, CodingKey {
       case autoCharacterPairs = "editor.autoCharacterPairs"
@@ -56,6 +52,16 @@ enum AppRuntimeConfig {
     }
   }
 
+  static let jsonLiteral: String = {
+    {
+      guard let fileData, (try? JSONSerialization.jsonObject(with: fileData, options: [])) != nil else {
+        return nil
+      }
+
+      return fileData.toString()
+    }() ?? "{}"
+  }()
+
   static var autoCharacterPairs: Bool {
     // Enable auto character pairs by default
     currentDefinition?.autoCharacterPairs ?? true
@@ -70,7 +76,6 @@ enum AppRuntimeConfig {
     return currentDefinition?.autoSaveWhenIdle ?? false
   }
 
-  // swiftlint:disable:next discouraged_optional_boolean
   static var closeAlwaysConfirmsChanges: Bool? {
     // Changes are saved automatically by default
     currentDefinition?.closeAlwaysConfirmsChanges
@@ -142,6 +147,11 @@ enum AppRuntimeConfig {
 // MARK: - Private
 
 private extension AppRuntimeConfig {
+  /**
+   The raw JSON data of the settings.json file.
+   */
+  static let fileData = try? Data(contentsOf: AppCustomization.settings.fileURL)
+
   static let defaultDefinition = Definition(
     autoCharacterPairs: true,
     autoSaveWhenIdle: nil,
@@ -160,7 +170,7 @@ private extension AppRuntimeConfig {
   )
 
   static let currentDefinition: Definition? = {
-    guard let fileData = try? Data(contentsOf: AppCustomization.settings.fileURL) else {
+    guard let fileData else {
       Logger.assertFail("Missing settings.json to proceed")
       return nil
     }
