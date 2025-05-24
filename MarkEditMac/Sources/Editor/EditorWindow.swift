@@ -15,7 +15,6 @@ final class EditorWindow: NSWindow {
     }
   }
 
-  // swiftlint:disable:next discouraged_optional_boolean
   var reduceTransparency: Bool? {
     didSet {
       layoutIfNeeded()
