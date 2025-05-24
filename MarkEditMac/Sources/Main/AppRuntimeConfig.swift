@@ -19,8 +19,6 @@ enum AppRuntimeConfig {
       let modifiers: [String]
     }
 
-    // swiftlint:disable discouraged_optional_boolean
-
     let autoCharacterPairs: Bool?
     let autoSaveWhenIdle: Bool?
     let closeAlwaysConfirmsChanges: Bool?
@@ -35,8 +33,6 @@ enum AppRuntimeConfig {
     let defaultSaveDirectory: String?
     let disableCorsRestrictions: Bool?
     let mainWindowHotKey: HotKey?
-
-    // swiftlint:enable discouraged_optional_boolean
 
     enum CodingKeys: String, CodingKey {
       case autoCharacterPairs = "editor.autoCharacterPairs"
@@ -70,7 +66,6 @@ enum AppRuntimeConfig {
     return currentDefinition?.autoSaveWhenIdle ?? false
   }
 
-  // swiftlint:disable:next discouraged_optional_boolean
   static var closeAlwaysConfirmsChanges: Bool? {
     // Changes are saved automatically by default
     currentDefinition?.closeAlwaysConfirmsChanges

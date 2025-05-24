@@ -9,6 +9,9 @@ disabled_rules:
   # Rationale: There are cases where you may want to declare the string enum value explicitly
   - redundant_string_enum_value
 
+  # Rationale: Allow optional properties in typescript objects
+  - discouraged_optional_boolean
+
 opt_in_rules:
 
   # Rationale: When using map, we think of it being used to transform a current array into something else
@@ -61,9 +64,6 @@ opt_in_rules:
 
   # Rationale: Prevents coder error
   - discouraged_direct_init
-
-  # Rationale: A nil bool is a tri-state variable which can be modeled more clearly
-  - discouraged_optional_boolean
 
   # Rationale: Imports are not required more than once.
   - duplicate_imports
