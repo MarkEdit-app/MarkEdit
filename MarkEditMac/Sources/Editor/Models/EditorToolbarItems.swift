@@ -20,6 +20,7 @@ extension NSToolbarItem {
     }
 
     if let menu {
+      menu.needsHack = true
       item.menu = menu
     } else {
       Logger.log(.error, "Missing menu for NSMenuToolbarItem")
