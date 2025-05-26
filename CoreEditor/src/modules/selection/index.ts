@@ -49,7 +49,9 @@ export function selectedMainText(): string {
 }
 
 export function selectWholeDocument() {
-  selectAllCommand(window.editor);
+  if (window.editor.hasFocus) {
+    selectAllCommand(window.editor);
+  }
 }
 
 /**
