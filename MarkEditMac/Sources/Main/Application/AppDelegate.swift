@@ -102,10 +102,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       // Terminate after all dirty documents are saved
       Task {
         await NSDocumentController.shared.saveDirtyDocuments()
-        application.terminate(nil)
+        application.reply(toApplicationShouldTerminate: true)
       }
 
-      return .terminateCancel
+      return .terminateLater
     }
 
     return .terminateNow
