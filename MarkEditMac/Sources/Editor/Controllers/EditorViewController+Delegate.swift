@@ -105,6 +105,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
 
     document?.saveContent()
+    bridge.history.markContentClean()
   }
 
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32) {
