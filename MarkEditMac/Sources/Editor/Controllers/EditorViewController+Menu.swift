@@ -40,6 +40,7 @@ extension EditorViewController {
     }.isEnabled = canReplace
 
     let item = NSMenuItem(title: Localized.Search.searchOperations)
+    item.tag = WKContextMenuItemTag.searchMenu.rawValue
     item.submenu = menu
     return item
   }

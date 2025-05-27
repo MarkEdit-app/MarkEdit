@@ -36,10 +36,6 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isReadOnlyMode
   }
 
-  func editorWebViewHasTextSelection(_ webView: EditorWebView) -> Bool {
-    hasTextSelection
-  }
-
   func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem? {
     searchOperationsMenuItem
   }
@@ -79,6 +75,14 @@ extension EditorViewController: EditorWebViewActionDelegate {
     case .selectAll:
       bridge.selection.selectWholeDocument()
     }
+  }
+
+  func editorWebViewEditorState(_ webView: EditorWebView) async -> (hasFocus: Bool, hasSelection: Bool) {
+    guard let state = try? await bridge.core.getEditorState() else {
+      return (true, false) // Default: has focus, no selection
+    }
+
+    return (state.hasFocus, state.hasSelection)
   }
 }
 
@@ -144,7 +148,6 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     // The content is edited once contentEdited is true, it cannot go back
     hasBeenEdited = hasBeenEdited || contentEdited
-    hasTextSelection = !selectedLineColumn.selectionText.isEmpty
 
     // Only update the dirty state when it's edited,
     // the app can launch with an unsaved state (e.g., force quit), it should remain dirty.
