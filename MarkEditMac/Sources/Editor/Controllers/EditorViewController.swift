@@ -16,7 +16,6 @@ final class EditorViewController: NSViewController {
   var hasFinishedLoading = false
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
-  var hasTextSelection = false
   var mouseExitedWindow = false
   var bottomPanelHeight: Double = 0
   var initialContent: String?

@@ -8,6 +8,25 @@
 import WebKit
 import MarkEditKit
 
+/**
+ https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
+ */
+enum WKContextMenuItemTag: Int {
+  case copy = 8
+  case reload = 12
+  case cut = 13
+  case paste = 14
+  case showFonts = 41
+  case defaultDirection = 52
+  case textDirectionDefault = 59
+  case copyLinkWithHighlight = 102
+
+  /**
+   Customized item that shows the search operations.
+   */
+  case searchMenu = 0xbadbabe
+}
+
 enum EditorWebViewMenuAction {
   case findSelection
   case selectAllOccurrences
@@ -16,15 +35,20 @@ enum EditorWebViewMenuAction {
 @MainActor
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
-  func editorWebViewHasTextSelection(_ webView: EditorWebView) -> Bool
   func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem?
   func editorWebViewResignFirstResponder(_ webView: EditorWebView)
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
+
   func editorWebView(
     _ webView: EditorWebView,
     didPerform textAction: EditorTextAction,
     sender: Any?
+  )
+
+  func editorWebViewEditorState(_ webView: EditorWebView) async -> (
+    hasFocus: Bool,
+    hasSelection: Bool
   )
 }
 
@@ -60,6 +84,11 @@ final class EditorWebView: WKWebView {
     menu.items = menu.items.filter { item in
       // Disable "Reload"
       if item.tag == WKContextMenuItemTag.reload.rawValue {
+        return false
+      }
+
+      // Disable "Copy Link with Highlight"
+      if item.tag == WKContextMenuItemTag.copyLinkWithHighlight.rawValue {
         return false
       }
 
@@ -117,39 +146,49 @@ private extension EditorWebView {
   }
 
   func updateMenuItems(menu: NSMenu) {
-    let hasTextSelection = actionDelegate?.editorWebViewHasTextSelection(self) ?? false
-    for item in menu.items {
-      // Just a hint for the keyboard shortcut, not actually functional
-      //
-      // WKWebView.showInspector() in WKWebView+Extension.swift does the heavy lifting
-      if item.identifier == NSUserInterfaceItemIdentifier.inspectElement {
-        item.keyEquivalent = "i"
-        item.keyEquivalentModifierMask = [.option, .command]
-      }
+    Task {
+      let editorState = await actionDelegate?.editorWebViewEditorState(self)
+      let hasFocus = editorState?.hasFocus ?? true
+      let hasSelection = editorState?.hasSelection ?? false
 
-      // Disable copy, cut for empty selection
-      if item.tag == WKContextMenuItemTag.copy.rawValue || item.tag == WKContextMenuItemTag.cut.rawValue {
-        item.isEnabled = hasTextSelection
-      }
+      for item in menu.items {
+        // Just a hint for the keyboard shortcut, not actually functional
+        //
+        // WKWebView.showInspector() in WKWebView+Extension.swift does the heavy lifting
+        if item.identifier == NSUserInterfaceItemIdentifier.inspectElement {
+          item.keyEquivalent = "i"
+          item.keyEquivalentModifierMask = [.option, .command]
+        }
 
-      // Disable paste for empty pasteboard
-      if item.tag == WKContextMenuItemTag.paste.rawValue {
-        item.isEnabled = NSPasteboard.general.hasText
-      }
+        // Disable copy, cut for empty selection (always enable on editor blur)
+        if item.tag == WKContextMenuItemTag.copy.rawValue || item.tag == WKContextMenuItemTag.cut.rawValue {
+          item.isEnabled = hasSelection || !hasFocus
+        }
 
-      // Hide native items that require text selection
-      if let identifier = item.identifier, [
-        NSUserInterfaceItemIdentifier.lookUp,
-        NSUserInterfaceItemIdentifier.searchWeb,
-        NSUserInterfaceItemIdentifier.translate,
-        NSUserInterfaceItemIdentifier.shareMenu,
-      ].contains(identifier) {
-        item.isHidden = !hasTextSelection
-      }
+        // Disable paste for empty pasteboard
+        if item.tag == WKContextMenuItemTag.paste.rawValue {
+          item.isEnabled = NSPasteboard.general.hasText
+        }
 
-      // Hide search items that require text selection
-      if [Localized.Search.findSelection, Localized.Search.selectAllOccurrences].contains(item.title) {
-        item.isHidden = !hasTextSelection
+        // Hide native items that require text selection (always show on editor blur)
+        if let identifier = item.identifier, [
+          NSUserInterfaceItemIdentifier.lookUp,
+          NSUserInterfaceItemIdentifier.searchWeb,
+          NSUserInterfaceItemIdentifier.translate,
+          NSUserInterfaceItemIdentifier.shareMenu,
+        ].contains(identifier) {
+          item.isHidden = !hasSelection && hasFocus
+        }
+
+        // Hide search items that require text selection (always hide on editor blur)
+        if [Localized.Search.findSelection, Localized.Search.selectAllOccurrences].contains(item.title) {
+          item.isHidden = !hasSelection || !hasFocus
+        }
+
+        // Always hide on editor blur
+        if item.title == Localized.Toolbar.textFormat || item.tag == WKContextMenuItemTag.searchMenu.rawValue {
+          item.isHidden = !hasFocus
+        }
       }
     }
   }
@@ -161,19 +200,6 @@ private extension NSMenuItem {
       submenu?.items.contains { $0.tag == tag.rawValue } == true
     }
   }
-}
-
-/**
- https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
- */
-private enum WKContextMenuItemTag: Int {
-  case copy = 8
-  case reload = 12
-  case cut = 13
-  case paste = 14
-  case showFonts = 41
-  case defaultDirection = 52
-  case textDirectionDefault = 59
 }
 
 private extension NSUserInterfaceItemIdentifier {

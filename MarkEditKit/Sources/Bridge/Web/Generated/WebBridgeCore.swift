@@ -34,6 +34,16 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.clearEditor", completion: completion)
   }
 
+  public func getEditorState() async throws -> WebBridgeCoreGetEditorStateReturnType {
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.core.getEditorState") { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
+      }
+    }
+  }
+
   public func getEditorText() async throws -> String {
     return try await withCheckedThrowingContinuation { continuation in
       webView?.invoke(path: "webModules.core.getEditorText") { result in
@@ -112,6 +122,16 @@ public final class WebBridgeCore {
     )
 
     webView?.invoke(path: "webModules.core.setHasModalSheet", message: message, completion: completion)
+  }
+}
+
+public struct WebBridgeCoreGetEditorStateReturnType: Codable {
+  public var hasFocus: Bool
+  public var hasSelection: Bool
+
+  public init(hasFocus: Bool, hasSelection: Bool) {
+    self.hasFocus = hasFocus
+    self.hasSelection = hasSelection
   }
 }
 

@@ -3,6 +3,8 @@ import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
 import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode } from './common/utils';
+
+import hasSelection from './modules/selection/hasSelection';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './modules/events';
@@ -151,6 +153,13 @@ export function clearEditor() {
   editor.dispatch({
     changes: { from: 0, to: editor.state.doc.length, insert: '' },
   });
+}
+
+export function getEditorState() {
+  return {
+    hasFocus: window.editor.hasFocus,
+    hasSelection: hasSelection(),
+  };
 }
 
 export function getEditorText() {

@@ -4,6 +4,7 @@ import {
   ReplaceGranularity,
   resetEditor,
   clearEditor,
+  getEditorState,
   getEditorText,
   getReadableContentPair,
   insertText,
@@ -21,6 +22,7 @@ import {
 export interface WebModuleCore extends WebModule {
   resetEditor({ text }: { text: string }): void;
   clearEditor(): void;
+  getEditorState(): { hasFocus: boolean; hasSelection: boolean };
   getEditorText(): string;
   getReadableContentPair(): ReadableContentPair;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
@@ -37,6 +39,10 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   clearEditor(): void {
     clearEditor();
+  }
+
+  getEditorState(): { hasFocus: boolean; hasSelection: boolean } {
+    return getEditorState();
   }
 
   getEditorText(): string {
