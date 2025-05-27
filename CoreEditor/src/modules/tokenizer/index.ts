@@ -84,6 +84,11 @@ export function tokenizePosition(event: MouseEvent) {
     return null;
   }
 
+  // Only for editor DOM
+  if (!window.editor.dom.contains(event.target as Node)) {
+    return null;
+  }
+
   const editor = window.editor;
   const pos = editor.posAtCoords({ x: event.clientX, y: event.clientY });
   if (pos === null || useBuiltIn(pos)) {
