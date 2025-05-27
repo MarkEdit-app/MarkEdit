@@ -16,6 +16,7 @@ final class Application: NSApplication {
 
   static func main() {
     NSObject.swizzleAccessibilityBundlesOnce
+    NSMenu.swizzleIsUpdatedExcludingContentTypesOnce
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
     NSSpellChecker.swizzleShowCompletionForCandidateOnce
     NSSpellChecker.swizzleCorrectionIndicatorOnce

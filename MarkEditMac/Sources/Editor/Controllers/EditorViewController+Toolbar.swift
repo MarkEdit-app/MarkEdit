@@ -253,28 +253,6 @@ private extension EditorViewController {
       menu.removeItem(item)
     }
 
-    // Make the first item less "disabled" since we use it as a label
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
-      // NSPopupMenuWindow
-      guard let window = (NSApp.windows.last { $0.className.contains("PopupMenu") }) else {
-        return Logger.assertFail("Missing popup menu window")
-      }
-
-      guard let row = (window.contentView?.firstDescendant { (row: NSTableRowView) in
-        row.frame.minY < 10
-      }) else {
-        return Logger.assertFail("Missing table row view")
-      }
-
-      guard let label = (row.firstDescendant { (view: NSTextField) in
-        view.stringValue == Localized.Toolbar.tableOfContents
-      }) else {
-        return Logger.assertFail("Missing table of contents label")
-      }
-
-      label.textColor = .secondaryLabelColor
-    }
-
     Task {
       let tableOfContents = await tableOfContents
       tableOfContents?.forEach { info in

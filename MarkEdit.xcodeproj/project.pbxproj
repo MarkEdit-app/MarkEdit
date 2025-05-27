@@ -96,6 +96,7 @@
 		87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB61F2B284AAD00A3056F /* AppHacks.swift */; };
 		87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE081A294DDA49004AD33A /* AppTheme.swift */; };
 		87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */; };
+		87E2141A2DE4A8400082DDB1 /* NSMenu+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E214192DE4A83E0082DDB1 /* NSMenu+Extension.swift */; };
 		87EB9901295755DA00A56B97 /* MarkEditCore in Frameworks */ = {isa = PBXBuildFile; productRef = 87EB9900295755DA00A56B97 /* MarkEditCore */; };
 		87F2B5F429ACF56E0027103E /* EditorViewController+Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */; };
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
@@ -220,6 +221,7 @@
 		87DCB61F2B284AAD00A3056F /* AppHacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHacks.swift; sourceTree = "<group>"; };
 		87DE081A294DDA49004AD33A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
+		87E214192DE4A83E0082DDB1 /* NSMenu+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenu+Extension.swift"; sourceTree = "<group>"; };
 		87F2B5F329ACF56E0027103E /* EditorViewController+Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Completion.swift"; sourceTree = "<group>"; };
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 		87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+FileSystem.swift"; sourceTree = "<group>"; };
@@ -522,6 +524,7 @@
 				87850C8529482A8600D1A952 /* NSApplication+Extension.swift */,
 				87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */,
 				877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */,
+				87E214192DE4A83E0082DDB1 /* NSMenu+Extension.swift */,
 				87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */,
 			);
 			path = Extensions;
@@ -624,7 +627,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					870A51A1294700DE0095C7EB = {
 						CreatedOnToolsVersion = 14.1;
@@ -718,6 +721,7 @@
 				8729C5A6294B5E6B006F262B /* EditorViewController+Menu.swift in Sources */,
 				87AAEDF7295825D800C8E61C /* EditorFindPanel+Delegate.swift in Sources */,
 				871C995B2973F1E6003FF3A7 /* AppDelegate+Document.swift in Sources */,
+				87E2141A2DE4A8400082DDB1 /* NSMenu+Extension.swift in Sources */,
 				87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */,
 				8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */,
 				873126E4297BAC9C001521A0 /* EditorViewController+Pandoc.swift in Sources */,
