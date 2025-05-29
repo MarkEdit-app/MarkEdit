@@ -12,6 +12,7 @@ import MarkEditKit
  https://github.com/WebKit/WebKit/blob/main/Source/WebKit/Shared/API/c/WKContextMenuItem.cpp
  */
 enum WKContextMenuItemTag: Int {
+  case downloadImage = 5
   case copy = 8
   case reload = 12
   case cut = 13
@@ -82,17 +83,22 @@ final class EditorWebView: WKWebView {
     }
 
     menu.items = menu.items.filter { item in
-      // Disable "Reload"
+      // Remove "Download Image"
+      if item.tag == WKContextMenuItemTag.downloadImage.rawValue {
+        return false
+      }
+
+      // Remove "Reload"
       if item.tag == WKContextMenuItemTag.reload.rawValue {
         return false
       }
 
-      // Disable "Copy Link with Highlight"
+      // Remove "Copy Link with Highlight"
       if item.tag == WKContextMenuItemTag.copyLinkWithHighlight.rawValue {
         return false
       }
 
-      // Disable "Font", "Paragraph Direction", "Selection Direction"
+      // Remove "Font", "Paragraph Direction", "Selection Direction"
       if item.submenuContains(anyOf: .showFonts, .defaultDirection, .textDirectionDefault) {
         return false
       }
