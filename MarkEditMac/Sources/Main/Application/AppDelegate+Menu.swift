@@ -153,6 +153,7 @@ private extension AppDelegate {
   }
 
   @IBAction func grantFolderAccess(_ sender: Any?) {
+    NSApp.closeOpenPanels()
     saveGrantedFolderAsBookmark()
   }
 

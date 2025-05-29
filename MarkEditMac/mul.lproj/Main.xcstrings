@@ -2113,6 +2113,30 @@
         }
       }
     },
+    "j7w-ok-RLg.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Grant Folder Access\"; ObjectID = \"j7w-ok-RLg\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grant Folder Access"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予目录权限"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授予目錄許可權"
+          }
+        }
+      }
+    },
     "jNi-CL-4bf.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Customization Guide\"; ObjectID = \"jNi-CL-4bf\";",
       "extractionState" : "extracted_with_value",

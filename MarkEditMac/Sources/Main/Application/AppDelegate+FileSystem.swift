@@ -20,15 +20,29 @@ extension AppDelegate {
       return
     }
 
-    do {
-      AppPreferences.General.grantedFolderBookmark = try url.bookmarkData(
-        options: .withSecurityScope,
-        includingResourceValuesForKeys: nil,
-        relativeTo: nil
-      )
-    } catch {
-      Logger.log(.error, "Failed to create bookmark data")
+    guard let newBookmark = try? url.bookmarkData(
+      options: .withSecurityScope,
+      includingResourceValuesForKeys: nil,
+      relativeTo: nil
+    ) else {
+      return Logger.log(.error, "Failed to create bookmark data")
     }
+
+    let bookmarkData = AppPreferences.General.grantedFolderBookmark
+    let bookmarkList: [Data] = {
+      if let dataArray = bookmarkData?.decodeToDataArray() {
+        return dataArray
+      }
+
+      if let bookmarkData {
+        return [bookmarkData]
+      }
+
+      return []
+    }()
+
+    let encodedData = bookmarkList.appendingData(newBookmark).encodeToData()
+    AppPreferences.General.grantedFolderBookmark = encodedData
   }
 
   func startAccessingGrantedFolder() {
@@ -36,6 +50,20 @@ extension AppDelegate {
       return
     }
 
+    if let bookmarkList = bookmarkData.decodeToDataArray() {
+      bookmarkList.forEach {
+        startAccessingBookmarkData($0)
+      }
+    } else {
+      startAccessingBookmarkData(bookmarkData)
+    }
+  }
+}
+
+// MARK: - Private
+
+private extension AppDelegate {
+  func startAccessingBookmarkData(_ bookmarkData: Data) {
     do {
       var isStale = false
       let bookmarkURL = try URL(
