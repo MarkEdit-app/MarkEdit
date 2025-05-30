@@ -147,8 +147,15 @@ final class EditorViewController: NSViewController {
 
     let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
     config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
-    config.setURLSchemeHandler(EditorChunkLoader(), forURLScheme: EditorChunkLoader.scheme)
     config.allowsInlinePredictions = NSSpellChecker.InlineCompletion.webKitEnabled
+
+    let chunkLoader = EditorChunkLoader()
+    let imageLoader = EditorImageLoader { [weak self] in
+      self?.document?.folderURL
+    }
+
+    config.setURLSchemeHandler(chunkLoader, forURLScheme: EditorChunkLoader.scheme)
+    config.setURLSchemeHandler(imageLoader, forURLScheme: EditorImageLoader.scheme)
 
     // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready
     if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {

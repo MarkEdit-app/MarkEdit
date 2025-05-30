@@ -92,6 +92,7 @@
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
+		87D7F0212DE8725100985ABF /* EditorImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7F0202DE8724A00985ABF /* EditorImageLoader.swift */; };
 		87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */; };
 		87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB61F2B284AAD00A3056F /* AppHacks.swift */; };
 		87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE081A294DDA49004AD33A /* AppTheme.swift */; };
@@ -217,6 +218,7 @@
 		87BEF30029A88F6800596E17 /* AppCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCustomization.swift; sourceTree = "<group>"; };
 		87BFF238298AAC75006C31E4 /* MarkEditTools */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditTools; sourceTree = "<group>"; };
 		87C3CBFA29545944002A3436 /* MarkEditKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditKit; sourceTree = "<group>"; };
+		87D7F0202DE8724A00985ABF /* EditorImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorImageLoader.swift; sourceTree = "<group>"; };
 		87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceTextField.swift; sourceTree = "<group>"; };
 		87DCB61F2B284AAD00A3056F /* AppHacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHacks.swift; sourceTree = "<group>"; };
 		87DE081A294DDA49004AD33A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				87A73AB1294C4B0A006A710E /* Views */,
 				8767BBAC295A893200BFACAE /* Controllers */,
 				874788612C85E11D00ECF05B /* EditorChunkLoader.swift */,
+				87D7F0202DE8724A00985ABF /* EditorImageLoader.swift */,
 				8790B6EB297036B2000DFC1A /* EditorWindow.swift */,
 				870A51B5294702AF0095C7EB /* EditorWindowController.swift */,
 			);
@@ -739,6 +742,7 @@
 				87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */,
 				87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */,
 				8790ABD42A98F5F40083825C /* EditorViewController+Statistics.swift in Sources */,
+				87D7F0212DE8725100985ABF /* EditorImageLoader.swift in Sources */,
 				8752CEB6295B2F8800BA9D5B /* EditorPanelView.swift in Sources */,
 				870A51BA294702AF0095C7EB /* EditorWindowController.swift in Sources */,
 				874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */,
