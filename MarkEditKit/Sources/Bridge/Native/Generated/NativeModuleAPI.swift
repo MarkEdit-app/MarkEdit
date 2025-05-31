@@ -19,6 +19,7 @@ public protocol NativeModuleAPI: NativeModule {
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String?
+  func showSavePanel(options: SavePanelOptions) -> Bool
 }
 
 public extension NativeModuleAPI {
@@ -49,6 +50,9 @@ final class NativeBridgeAPI: NativeBridge {
     },
     "showTextBox": { [weak self] in
       self?.showTextBox(parameters: $0)
+    },
+    "showSavePanel": { [weak self] in
+      self?.showSavePanel(parameters: $0)
     },
   ]
 
@@ -146,6 +150,23 @@ final class NativeBridgeAPI: NativeBridge {
     let result = module.showTextBox(title: message.title, placeholder: message.placeholder, defaultValue: message.defaultValue)
     return .success(result)
   }
+
+  private func showSavePanel(parameters: Data) -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var options: SavePanelOptions
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = module.showSavePanel(options: message.options)
+    return .success(result)
+  }
 }
 
 /// Represents a menu item in native menus.
@@ -153,14 +174,16 @@ public struct WebMenuItem: Decodable, Equatable {
   public var separator: Bool
   public var title: String?
   public var actionID: String?
+  public var stateGetterID: String?
   public var key: String?
   public var modifiers: [String]?
   public var children: [Self]?
 
-  public init(separator: Bool, title: String?, actionID: String?, key: String?, modifiers: [String]?, children: [Self]?) {
+  public init(separator: Bool, title: String?, actionID: String?, stateGetterID: String?, key: String?, modifiers: [String]?, children: [Self]?) {
     self.separator = separator
     self.title = title
     self.actionID = actionID
+    self.stateGetterID = stateGetterID
     self.key = key
     self.modifiers = modifiers
     self.children = children
@@ -175,5 +198,20 @@ public struct WebPoint: Decodable, Equatable {
   public init(x: Double, y: Double) {
     self.x = x
     self.y = y
+  }
+}
+
+public struct SavePanelOptions: Decodable, Equatable {
+  /// String representation of the file, if applicable.
+  public var string: String?
+  /// Base64 representation of the file, if applicable.
+  public var data: String?
+  /// Default file name.
+  public var fileName: String?
+
+  public init(string: String?, data: String?, fileName: String?) {
+    self.string = string
+    self.data = data
+    self.fileName = fileName
   }
 }

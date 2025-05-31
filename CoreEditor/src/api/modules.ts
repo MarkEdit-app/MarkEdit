@@ -24,6 +24,7 @@ import {
   showContextMenu,
   showAlert,
   showTextBox,
+  showSavePanel,
 } from './methods';
 
 export function initMarkEditModules() {
@@ -60,6 +61,15 @@ export function initMarkEditModules() {
   MarkEdit.showContextMenu = showContextMenu;
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;
+  MarkEdit.showSavePanel = showSavePanel;
+
+  // Override the share method to provide a clear error message
+  navigator.share = (_: ShareData): Promise<void> => {
+    // eslint-disable-next-line compat/compat
+    return Promise.reject(new Error(
+      'Navigator.share() is not allowed in this context. Use MarkEdit.showSavePanel() instead.',
+    ));
+  };
 
   const modules = {
     'markedit-api': { MarkEdit },
