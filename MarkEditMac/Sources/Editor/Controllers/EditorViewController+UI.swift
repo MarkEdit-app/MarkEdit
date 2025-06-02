@@ -517,7 +517,7 @@ extension EditorViewController {
 // MARK: - Private
 
 private extension EditorViewController {
-  final class UserDefinedMenuItem: NSMenuItem {
+  final class UserDefinedMenuItem: NSMenuItem, @unchecked Sendable {
     var stateGetterID: String?
   }
 
