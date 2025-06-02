@@ -259,11 +259,13 @@ extension EditorDocument {
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
-    if typeName.isTextBundle {
-      return "textbundle"
-    }
+    MainActor.unsafeIgnoreIsolation {
+      if typeName.isTextBundle {
+        return "textbundle"
+      }
 
-    return NewFilenameExtension.preferredExtension(for: typeName).rawValue
+      return NewFilenameExtension.preferredExtension(for: typeName).rawValue
+    }
   }
 
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
@@ -295,7 +297,7 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
-    DispatchQueue.global(qos: .userInitiated).async {
+    Task { @MainActor in
       let newValue = {
         if let encoding = AppDocumentController.suggestedTextEncoding {
           return encoding.decode(data: data)
@@ -305,11 +307,9 @@ extension EditorDocument {
         return encoding.decode(data: data, guessEncoding: true)
       }()
 
-      DispatchQueue.main.async {
-        self.fileData = data
-        self.stringValue = newValue
-        self.hostViewController?.representedObject = self
-      }
+      self.fileData = data
+      self.stringValue = newValue
+      self.hostViewController?.representedObject = self
     }
   }
 
@@ -502,8 +502,10 @@ extension EditorDocument {
       return try super.read(from: fileWrapper, ofType: typeName)
     }
 
-    textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
-    try read(from: textBundle?.data ?? Data(), ofType: typeName)
+    try MainActor.assumeIsolated {
+      textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
+      try read(from: textBundle?.data ?? Data(), ofType: typeName)
+    }
   }
 
   override func write(to url: URL, ofType typeName: String) throws {
@@ -511,8 +513,10 @@ extension EditorDocument {
       return try super.write(to: url, ofType: typeName)
     }
 
-    let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
-    try fileWrapper?.write(to: url, originalContentsURL: nil)
+    try MainActor.assumeIsolated {
+      let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
+      try fileWrapper?.write(to: url, originalContentsURL: nil)
+    }
   }
 
   override func duplicate() throws -> NSDocument {
