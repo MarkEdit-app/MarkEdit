@@ -185,7 +185,10 @@ final class EditorViewController: NSViewController {
 
       DispatchQueue.main.async {
         // Non-nil baseURL is required by scenarios like opening local files
-        webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
+        webView.loadHTMLString(
+          html.replacingOccurrences(of: "\"{{USER_SETTINGS}}\"", with: AppRuntimeConfig.jsonLiteral),
+          baseURL: EditorWebView.baseURL
+        )
       }
     }
 

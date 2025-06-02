@@ -41,4 +41,34 @@ public final class WebBridgeAPI {
 
     webView?.invoke(path: "webModules.api.handleContextMenuAction", message: message, completion: completion)
   }
+
+  public func getMenuItemState(id: String) async throws -> MenuItemState {
+    struct Message: Encodable {
+      let id: String
+    }
+
+    let message = Message(
+      id: id
+    )
+
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.api.getMenuItemState", message: message) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
+      }
+    }
+  }
+}
+
+public struct MenuItemState: Codable {
+  /// Whether enabled; defaults to true.
+  public var isEnabled: Bool?
+  /// Whether selected; defaults to false.
+  public var isSelected: Bool?
+
+  public init(isEnabled: Bool?, isSelected: Bool?) {
+    self.isEnabled = isEnabled
+    self.isSelected = isSelected
+  }
 }

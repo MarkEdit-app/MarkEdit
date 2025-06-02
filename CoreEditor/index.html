@@ -19,8 +19,11 @@
     }
   </style>
   <script>
-    MarkEdit = {};
     window.config = "{{EDITOR_CONFIG}}";
+    MarkEdit = {
+      editorConfig: window.config,
+      userSettings: "{{USER_SETTINGS}}",
+    };
   </script>
 </head>
 <body>
