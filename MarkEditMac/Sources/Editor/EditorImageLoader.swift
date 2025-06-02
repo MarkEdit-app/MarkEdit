@@ -30,7 +30,7 @@ final class EditorImageLoader: NSObject, WKURLSchemeHandler {
     }
 
     let fileName = url.absoluteString.replacingOccurrences(of: "\(Self.scheme)://", with: "")
-    let fileURL = baseURL.appending(path: fileName, directoryHint: .notDirectory)
+    let fileURL = baseURL.appending(path: fileName.removingPercentEncoding ?? fileName, directoryHint: .notDirectory)
     let fileData = (try? Data(contentsOf: fileURL)) ?? Data()
     let mimeType = UTType(filenameExtension: fileURL.pathExtension)?.preferredMIMEType
     let contentLength = fileData.count
