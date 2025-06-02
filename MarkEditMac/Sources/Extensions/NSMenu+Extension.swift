@@ -21,7 +21,7 @@ extension NSMenu {
   /**
    The swizzled method handles differently when `needsHack` is flagged true.
    */
-  var needsHack: Bool {
+  @MainActor var needsHack: Bool {
     get {
       (objc_getAssociatedObject(self, &AssociatedObjects.needsHack) as? Bool) ?? false
     }
@@ -66,9 +66,10 @@ extension NSMenu {
 
 private extension NSMenu {
   enum AssociatedObjects {
-    static var needsHack: UInt8 = 0
+    @MainActor static var needsHack: UInt8 = 0
   }
 
+  @MainActor
   @objc func swizzled_isUpdatedExcludingContentTypes(_ contentTypes: Int) -> Bool {
     if needsHack {
       // The original implementation contains an invalid assertion that causes a crash.

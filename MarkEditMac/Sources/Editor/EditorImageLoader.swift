@@ -12,7 +12,7 @@ import MarkEditKit
 /// URL scheme handler to load local images.
 ///
 /// E.g., image-loader://Image.png
-final class EditorImageLoader: NSObject, WKURLSchemeHandler {
+final class EditorImageLoader: NSObject, WKURLSchemeHandler, @unchecked Sendable {
   static let scheme = "image-loader"
   private let getBaseURL: () -> URL?
 

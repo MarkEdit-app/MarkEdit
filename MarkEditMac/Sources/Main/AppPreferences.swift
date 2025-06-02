@@ -403,6 +403,7 @@ enum NewFilenameExtension: String, Codable, CaseIterable {
     UTType(exportedType) ?? .plainText // public.plain-text
   }
 
+  @MainActor
   static func preferredExtension(for typeName: String) -> Self {
     (allCases.first { $0.exportedType == typeName }) ?? AppPreferences.General.newFilenameExtension
   }
