@@ -109,7 +109,7 @@ struct AppCustomization {
     }
 
     if fileType.isDirectory {
-      try? FileManager.default.createDirectory(at: fileURL, withIntermediateDirectories: false)
+      try? FileManager.default.createDirectory(at: fileURL, withIntermediateDirectories: true)
     } else {
       try? contents.toData()?.write(to: fileURL)
     }
