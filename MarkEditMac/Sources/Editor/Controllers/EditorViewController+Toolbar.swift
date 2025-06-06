@@ -240,8 +240,8 @@ private extension EditorViewController {
   }
 
   var writingToolsItem: NSToolbarItem? {
-    if #available(macOS 15.1, *), MarkEditWritingTools.isAvailable {
-      return .with(identifier: .writingTools, menu: customWritingToolsMenu)
+    if #available(macOS 15.1, *), let menu = systemWritingToolsMenu {
+      return .with(identifier: .writingTools, menu: menu)
     } else {
       return nil
     }

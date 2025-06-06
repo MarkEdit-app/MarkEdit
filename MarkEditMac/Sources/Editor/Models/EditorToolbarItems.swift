@@ -111,7 +111,7 @@ extension NSToolbarItem.Identifier {
       .copyPandocCommand,
     ]
     + {
-      if #available(macOS 15.1, *), MarkEditWritingTools.isAvailable {
+      if #available(macOS 15.1, *) {
         return [.writingTools]
       }
 
