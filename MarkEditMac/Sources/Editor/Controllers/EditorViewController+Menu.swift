@@ -46,47 +46,10 @@ extension EditorViewController {
   }
 
   @available(macOS 15.1, *)
-  var customWritingToolsMenu: NSMenu {
-    let menu = NSMenu()
-    let addItem: (WritingTool, String) -> Void = { tool, title in
-      menu.addItem(withTitle: title) { [weak self] in
-        guard let self else {
-          return
-        }
-
-        Task { @MainActor in
-          let reselect = MarkEditWritingTools.shouldReselect(with: tool)
-          let rect = try? await self.bridge.writingTools.getSelectionRect(reselect: reselect)?.cgRect
-          MarkEditWritingTools.show(
-            tool,
-            rect: rect ?? .zero,
-            view: self.webView,
-            delegate: self.webView
-          )
-        }
-      }
-    }
-
-    addItem(.panel, Localized.WritingTools.panel)
-    menu.addItem(.separator())
-
-    addItem(.proofread, Localized.WritingTools.proofread)
-    addItem(.rewrite, Localized.WritingTools.rewrite)
-    menu.addItem(.separator())
-
-    addItem(.makeFriendly, Localized.WritingTools.makeFriendly)
-    addItem(.makeProfessional, Localized.WritingTools.makeProfessional)
-    addItem(.makeConcise, Localized.WritingTools.makeConcise)
-    menu.addItem(.separator())
-
-    addItem(.summarize, Localized.WritingTools.summarize)
-    addItem(.createKeyPoints, Localized.WritingTools.createKeyPoints)
-    addItem(.makeList, Localized.WritingTools.makeList)
-    addItem(.makeTable, Localized.WritingTools.makeTable)
-    menu.addItem(.separator())
-
-    addItem(.compose, Localized.WritingTools.compose)
-    return menu
+  var systemWritingToolsMenu: NSMenu? {
+    NSApp.appDelegate?.mainEditMenu?.items.first {
+      $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
+    }?.submenu
   }
 }
 

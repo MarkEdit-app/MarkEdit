@@ -40,7 +40,7 @@ final class Application: NSApplication {
     // Ensure lines are fully selected for a better WritingTools experience
     if #available(macOS 15.1, *), action == sel_getUid("showWritingTools:") {
       Logger.assert(sender is NSMenuItem, "Invalid sender was found")
-      Logger.assert((target as? AnyObject)?.className == "WKMenuTarget", "Invalid target was found")
+      Logger.assert(target == nil || (target as? AnyObject)?.className == "WKMenuTarget", "Invalid target was found")
 
       if MarkEditWritingTools.shouldReselect(withItem: sender) {
         ensureWritingToolsSelectionRect()

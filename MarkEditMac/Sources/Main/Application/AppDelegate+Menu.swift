@@ -53,16 +53,6 @@ private extension AppDelegate {
       editPasteItem?.isEnabled = NSPasteboard.general.hasText
     }
 
-    // [macOS 15] The system one doesn't work for WKWebView
-    if #available(macOS 15.1, *), let item = (mainEditMenu?.items.first {
-      $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
-    }) {
-      let isEnabled = currentEditor?.webView.isFirstResponder == true
-      item.submenu = currentEditor?.customWritingToolsMenu
-      item.submenu?.autoenablesItems = false
-      item.submenu?.items.forEach { $0.isEnabled = isEnabled }
-    }
-
     editTypewriterItem?.setOn(AppPreferences.Editor.typewriterMode)
   }
 

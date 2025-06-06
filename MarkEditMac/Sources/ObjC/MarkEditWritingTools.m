@@ -9,16 +9,6 @@
 
 @implementation MarkEditWritingTools
 
-+ (BOOL)isAvailable {
-  NSInvocation *invocation = [self invocationWithTarget:[NSTextView class]
-                                         selectorString:@"_supportsWritingTools"];
-  [invocation invoke];
-
-  BOOL returnValue = NO;
-  [invocation getReturnValue:&returnValue];
-  return returnValue;
-}
-
 + (WritingTool)requestedTool {
   for (NSWindow *window in [NSApp windows]) {
     NSViewController *controller = window.contentViewController;
@@ -66,21 +56,6 @@
 
   NSAssert(NO, @"Failed to retrieve affordance icon");
   return nil;
-}
-
-+ (void)showTool:(WritingTool)tool
-            rect:(CGRect)rect
-            view:(NSView *)view
-        delegate:(id)delegate {
-  NSString *selectorString = @"showTool:forSelectionRect:ofView:forDelegate:";
-  NSInvocation *invocation = [self invocationWithTarget:[self writingToolsInstance]
-                                         selectorString:selectorString];
-
-  [invocation setArgument:&tool atIndex:2];
-  [invocation setArgument:&rect atIndex:3];
-  [invocation setArgument:&view atIndex:4];
-  [invocation setArgument:&delegate atIndex:5];
-  [invocation invoke];
 }
 
 + (BOOL)shouldReselectWithItem:(id)item {
