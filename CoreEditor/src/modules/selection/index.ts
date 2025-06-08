@@ -200,11 +200,6 @@ export function refreshEditFocus() {
   });
 }
 
-export function scrollToBottomSmoothly() {
-  const element = window.editor.scrollDOM;
-  element.scrollTo({ top: element.scrollHeight, behavior: 'smooth' });
-}
-
 export function isElementVisible(element: Element) {
   return isRectVisible(element.getBoundingClientRect());
 }
