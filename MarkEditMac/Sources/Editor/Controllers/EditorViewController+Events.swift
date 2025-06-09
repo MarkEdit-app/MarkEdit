@@ -61,14 +61,6 @@ extension EditorViewController {
         return nil
       }
 
-      // Control-Command-Down in WebKit has an incorrect "beep" sound
-      if event.keyCode == .kVK_DownArrow,
-         event.modifierFlags.contains([.control, .command]),
-         let self, self.webView.isFirstResponder {
-        self.bridge.selection.scrollToBottomSmoothly()
-        return nil
-      }
-
       // (Alternatives) F3 to find next, Shift-F3 to find previous
       if event.keyCode == .kVK_F3, let self {
         if event.deviceIndependentFlags == .shift {

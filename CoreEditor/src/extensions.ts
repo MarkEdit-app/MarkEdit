@@ -112,7 +112,7 @@ export function extensions(options: { lineBreak?: string }) {
         }
 
         // We use customizedCommandsKeymap instead
-        if (keymap.key === 'Mod-/') {
+        if (keymap.key === 'Home' || keymap.key === 'End' || keymap.key === 'Mod-/') {
           return false;
         }
 
