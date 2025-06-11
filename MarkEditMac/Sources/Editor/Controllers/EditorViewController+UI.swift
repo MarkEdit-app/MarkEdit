@@ -105,22 +105,14 @@ extension EditorViewController {
   }
 
   func layoutPanels(animated: Bool = false) {
-    findPanel.update(animated).frame = CGRect(
-      x: 0,
-      y: contentHeight - (findPanel.mode == .hidden ? 0 : findPanel.frame.height),
-      width: view.bounds.width,
-      height: findPanel.frame.height
-    )
+    findPanel.update(animated).frame = findPanelRect
+    replacePanel.update(animated).frame = replacePanelRect
+    panelDivider.update(animated).frame = panelDividerRect
 
-    replacePanel.update(animated).frame = CGRect(
-      x: findPanel.frame.minX,
-      y: findPanel.frame.minY - (findPanel.mode == .replace ? replacePanel.frame.height : 0),
-      width: findPanel.frame.width,
-      height: findPanel.frame.height - findPanel.searchField.frame.minY
+    replacePanel.layoutInfo = (
+      findPanel.searchField.frame,
+      findPanel.findButtons.frame.height
     )
-
-    replacePanel.layoutInfo = (findPanel.searchField.frame, findPanel.findButtons.frame.height)
-    panelDivider.update(animated).frame = CGRect(x: 0, y: (findPanel.mode == .replace ? replacePanel : findPanel).frame.minY, width: view.frame.width, height: panelDivider.length)
   }
 
   func layoutWebView(animated: Bool = false) {
@@ -128,7 +120,7 @@ extension EditorViewController {
     // because resizing would introduce unnecessary updates,
     // which results in sluggish animation.
     let height = contentHeight
-    let offset = panelDivider.frame.minY - height
+    let offset = panelDividerRect.minY - height
 
     webView.update(animated).frame = CGRect(
       x: 0,
@@ -369,6 +361,29 @@ private extension EditorViewController {
     case .find: return findPanel.frame.height
     case .replace: return findPanel.frame.height + replacePanel.frame.height
     }
+  }
+
+  var findPanelRect: CGRect {
+    CGRect(
+      x: 0,
+      y: contentHeight - (findPanel.mode == .hidden ? 0 : findPanel.frame.height),
+      width: view.bounds.width,
+      height: findPanel.frame.height
+    )
+  }
+
+  var replacePanelRect: CGRect {
+    CGRect(
+      x: findPanel.frame.minX,
+      y: findPanel.frame.minY - (findPanel.mode == .replace ? replacePanel.frame.height : 0),
+      width: findPanel.frame.width,
+      height: findPanel.frame.height - findPanel.searchField.frame.minY
+    )
+  }
+
+  var panelDividerRect: CGRect {
+    let panelRect = findPanel.mode == .replace ? replacePanelRect : findPanelRect
+    return CGRect(x: 0, y: panelRect.minY, width: view.frame.width, height: panelDivider.length)
   }
 
   @objc func popoverDidShow(_ notification: Notification) {
