@@ -28,6 +28,7 @@ enum AppRuntimeConfig {
     let visibleWhitespaceCharacter: String?
     let visibleLineBreakCharacter: String?
     let searchNormalizers: [String: String]?
+    let useClassicInterface: Bool?
     let checksForUpdates: Bool?
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
@@ -44,6 +45,7 @@ enum AppRuntimeConfig {
       case visibleWhitespaceCharacter = "editor.visibleWhitespaceCharacter"
       case visibleLineBreakCharacter = "editor.visibleLineBreakCharacter"
       case searchNormalizers = "editor.searchNormalizers"
+      case useClassicInterface = "general.useClassicInterface"
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
@@ -115,6 +117,10 @@ enum AppRuntimeConfig {
     currentDefinition?.searchNormalizers
   }
 
+  static var useClassicInterface: Bool {
+    currentDefinition?.useClassicInterface ?? false
+  }
+
   static var checksForUpdates: Bool {
     // Enable automatic updates by default
     currentDefinition?.checksForUpdates ?? true
@@ -163,6 +169,7 @@ private extension AppRuntimeConfig {
     visibleWhitespaceCharacter: nil,
     visibleLineBreakCharacter: nil,
     searchNormalizers: nil,
+    useClassicInterface: nil,
     checksForUpdates: true,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
