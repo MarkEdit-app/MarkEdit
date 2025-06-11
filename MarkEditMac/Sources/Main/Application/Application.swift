@@ -20,6 +20,7 @@ final class Application: NSApplication {
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
     NSSpellChecker.swizzleShowCompletionForCandidateOnce
     NSSpellChecker.swizzleCorrectionIndicatorOnce
+    Bundle.swizzleInfoDictionaryOnce
     UserDefaults.overwriteTextCheckerOnce()
     AppCustomization.createFiles()
 
