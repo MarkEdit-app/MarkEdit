@@ -91,7 +91,7 @@ let package = Package(
     ),
     .target(
       name: "FileVersion",
-      dependencies: ["AppKitControls", "MarkEditKit"],
+      dependencies: ["AppKitControls", "MarkEditKit", "DiffKit"],
       path: "Sources/FileVersion",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")

@@ -81,9 +81,8 @@ extension EditorViewController {
     }
 
     // Animate layout changes
-    NSAnimationContext.runAnimationGroup(
-      duration: 0.2
-    ) { _ in
+    NSAnimationContext.runAnimationGroup { context in
+      context.duration = 0.2
       findPanel.animator().alphaValue = mode == .hidden ? 0 : 1
       replacePanel.animator().alphaValue = mode == .replace ? 1 : 0
       layoutPanels(animated: true)
