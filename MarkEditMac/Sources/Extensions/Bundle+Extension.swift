@@ -7,6 +7,8 @@
 
 import Foundation
 
+#if BUILD_WITH_SDK_26_OR_LATER
+
 extension Bundle {
   static let swizzleInfoDictionaryOnce: () = {
     guard #available(macOS 26.0, *), AppRuntimeConfig.useClassicInterface else {
@@ -26,3 +28,5 @@ extension Bundle {
     return dict
   }
 }
+
+#endif // BUILD_WITH_SDK_26_OR_LATER

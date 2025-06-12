@@ -13,4 +13,5 @@ PRODUCT_BUNDLE_IDENTIFIER = app.cyan.markedit-dev
 MARKETING_VERSION = 1.24.0
 CURRENT_PROJECT_VERSION = 74
 
+#include? "SwiftFlags.xcconfig"
 #include? "Local.xcconfig"

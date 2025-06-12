@@ -3,4 +3,5 @@
 
 ## User settings
 xcuserdata/
+SwiftFlags.xcconfig
 Local.xcconfig
