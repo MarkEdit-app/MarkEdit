@@ -11,6 +11,11 @@ import MarkEditKit
 import Statistics
 
 extension EditorViewController {
+  var contentRectOffset: Double {
+    // E.g., when the find panel shows
+    contentHeight - webView.frame.height
+  }
+
   func setUp() {
     let wrapper = NSView(frame: CGRect(x: 0, y: 0, width: 720, height: 480))
     self.view = wrapper

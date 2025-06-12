@@ -132,7 +132,7 @@ private extension EditorViewController {
       completions,
       query: query,
       parentWindow: parentWindow,
-      caretRect: caretRect
+      caretRect: caretRect.offsetBy(dx: 0, dy: contentRectOffset)
     )
   }
 }
