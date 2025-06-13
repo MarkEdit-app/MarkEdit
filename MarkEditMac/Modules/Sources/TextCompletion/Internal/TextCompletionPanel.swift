@@ -12,7 +12,12 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
   private var state = TextCompletionState()
   private var mainView: NSHostingView<TextCompletionView>?
 
-  init(localizable: TextCompletionLocalizable, commitCompletion: @escaping () -> Void) {
+  init(
+    modernStyle: Bool,
+    effectViewType: NSView.Type,
+    localizable: TextCompletionLocalizable,
+    commitCompletion: @escaping () -> Void
+  ) {
     super.init(
       contentRect: .zero,
       styleMask: .borderless,
@@ -21,12 +26,13 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
     )
 
     let mainView = NSHostingView(rootView: TextCompletionView(
+      modernStyle: modernStyle,
       state: state,
       localizable: localizable,
       commitCompletion: commitCompletion
     ))
 
-    let contentView = ContentView(frame: .zero)
+    let contentView = ContentView(modernStyle: modernStyle, effectViewType: effectViewType, frame: .zero)
     contentView.addSubview(mainView)
 
     self.mainView = mainView
@@ -89,17 +95,20 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
 // MARK: - Private
 
 private final class ContentView: NSView {
-  override init(frame: CGRect) {
+  init(modernStyle: Bool, effectViewType: NSView.Type, frame: CGRect) {
     super.init(frame: frame)
     wantsLayer = true
     layer?.cornerCurve = .continuous
-    layer?.cornerRadius = 5
+    layer?.cornerRadius = modernStyle ? 8 : 5
 
-    let effectView = NSVisualEffectView()
-    effectView.material = .popover
-    effectView.state = .active // Looks less dimmed in non-key windows
+    let effectView = effectViewType.init()
     effectView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(effectView)
+
+    if let blurView = effectView as? NSVisualEffectView {
+      blurView.material = .popover
+      blurView.state = .active // Looks less dimmed in non-key windows
+    }
 
     NSLayoutConstraint.activate([
       effectView.leadingAnchor.constraint(equalTo: leadingAnchor),

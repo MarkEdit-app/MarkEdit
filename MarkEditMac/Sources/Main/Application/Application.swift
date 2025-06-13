@@ -21,9 +21,9 @@ final class Application: NSApplication {
     NSSpellChecker.swizzleShowCompletionForCandidateOnce
     NSSpellChecker.swizzleCorrectionIndicatorOnce
 
-    #if BUILD_WITH_SDK_26_OR_LATER
-      Bundle.swizzleInfoDictionaryOnce
-    #endif
+  #if BUILD_WITH_SDK_26_OR_LATER
+    Bundle.swizzleInfoDictionaryOnce
+  #endif
 
     UserDefaults.overwriteTextCheckerOnce()
     AppCustomization.createFiles()

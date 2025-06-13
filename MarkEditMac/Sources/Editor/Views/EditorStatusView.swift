@@ -35,7 +35,7 @@ final class EditorStatusView: NSView, BackgroundTheming {
 
   override func updateLayer() {
     layer?.borderWidth = 1
-    layer?.cornerRadius = 3
+    layer?.cornerRadius = AppDesign.modernStyle ? 6 : 3
     layer?.cornerCurve = .continuous
     layer?.borderColor = NSColor.plainButtonBorder.cgColor
   }

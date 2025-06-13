@@ -14,6 +14,7 @@ public final class GotoLineWindow: NSWindow {
   }
 
   public init(
+    effectViewType: NSView.Type,
     relativeTo parentRect: CGRect,
     placeholder: String,
     accessibilityHelp: String,
@@ -36,6 +37,7 @@ public final class GotoLineWindow: NSWindow {
     )
 
     self.contentView = GotoLineView(
+      effectViewType: effectViewType,
       frame: rect,
       placeholder: placeholder,
       accessibilityHelp: accessibilityHelp,

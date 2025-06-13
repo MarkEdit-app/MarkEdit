@@ -56,7 +56,7 @@ final class EditorWindow: NSWindow {
       view.isHidden = reduceTransparency == true
 
       // Blend the color of contents behind the window
-      view.blendingMode = .behindWindow
+      (view as? NSVisualEffectView)?.blendingMode = .behindWindow
     }
   }
 }

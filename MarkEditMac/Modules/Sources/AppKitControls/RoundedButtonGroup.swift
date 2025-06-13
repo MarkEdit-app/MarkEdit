@@ -18,11 +18,13 @@ open class RoundedButtonGroup: NSView {
     }
   }
 
+  private let modernStyle: Bool
   private let leftButton: NSButton
   private let rightButton: NSButton
   private let dividerView = DividerView(color: .plainButtonBorder, hairlineWidth: false)
 
-  public init(leftButton: NSButton, rightButton: NSButton) {
+  public init(modernStyle: Bool, leftButton: NonBezelButton, rightButton: NonBezelButton) {
+    self.modernStyle = modernStyle
     self.leftButton = leftButton
     self.rightButton = rightButton
     super.init(frame: .zero)
@@ -33,12 +35,23 @@ open class RoundedButtonGroup: NSView {
 
     wantsLayer = true
     layer?.masksToBounds = true
-    layer?.borderWidth = 1
-    layer?.cornerRadius = 5
+    layer?.borderWidth = modernStyle ? 0 : 1
+    layer?.cornerRadius = Constants.cornerRadius
 
     addSubview(leftButton)
     addSubview(rightButton)
     addSubview(dividerView)
+
+    // Create a "segmented control"-like highlighted state
+    if modernStyle {
+      for button in [leftButton, rightButton] {
+        button.modernStyle = true
+        button.modernCornerRadius = Constants.cornerRadius
+        button.modernStateChanged = { [weak self] isHighlighted in
+          self?.dividerView.isHidden = isHighlighted
+        }
+      }
+    }
   }
 
   @available(*, unavailable)
@@ -67,11 +80,12 @@ open class RoundedButtonGroup: NSView {
       height: frame.height
     )
 
+    let margin: Double = modernStyle ? 4 : 1
     dividerView.frame = CGRect(
       x: (frame.width - dividerView.length) * 0.5,
-      y: 1.0,
+      y: margin,
       width: dividerView.length,
-      height: frame.height - 2.0
+      height: frame.height - margin * 2
     )
   }
 
@@ -81,5 +95,13 @@ open class RoundedButtonGroup: NSView {
 
   override public func hitTest(_ point: NSPoint) -> NSView? {
     isEnabled ? super.hitTest(point) : nil
+  }
+}
+
+// MARK: - Private
+
+private extension RoundedButtonGroup {
+  enum Constants {
+    static let cornerRadius: Double = 5
   }
 }

@@ -212,7 +212,9 @@ final class EditorViewController: NSViewController {
 
   private(set) lazy var completionContext = {
     TextCompletionContext(
-      localize: TextCompletionLocalizable(selectedHint: Localized.General.selected)
+      modernStyle: AppDesign.modernStyle,
+      effectViewType: AppDesign.effectViewType,
+      localizable: TextCompletionLocalizable(selectedHint: Localized.General.selected)
     ) { [weak self] in
       guard let self else {
         return
