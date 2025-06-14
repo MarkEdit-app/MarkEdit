@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TextCompletionView: View {
   @ObservedObject private var state: TextCompletionState
+  private let modernStyle: Bool
   private let localizable: TextCompletionLocalizable
   private let commitCompletion: () -> Void
 
@@ -21,10 +22,12 @@ struct TextCompletionView: View {
   }
 
   init(
+    modernStyle: Bool,
     state: TextCompletionState,
     localizable: TextCompletionLocalizable,
     commitCompletion: @escaping () -> Void
   ) {
+    self.modernStyle = modernStyle
     self.state = state
     self.localizable = localizable
     self.commitCompletion = commitCompletion
@@ -38,7 +41,10 @@ struct TextCompletionView: View {
             ForEach(0..<state.items.count, id: \.self) { index in
               ZStack(alignment: .leading) {
                 if index == state.selectedIndex {
-                  Color.accent.clipShape(RoundedRectangle(cornerRadius: 3.5, style: .continuous))
+                  Color.accent.clipShape(RoundedRectangle(
+                    cornerRadius: modernStyle ? 5.5 : 3.5,
+                    style: .continuous
+                  ))
                 }
 
                 Text({
@@ -55,7 +61,7 @@ struct TextCompletionView: View {
                 }())
                 .font(.system(size: Constants.fontSize))
                 .foregroundColor(index == state.selectedIndex ? .white : .label.opacity(0.75))
-                .padding([.leading, .trailing], Constants.itemPadding)
+                .padding([.leading, .trailing], Constants.itemPadding + (modernStyle ? 2 : 0))
               }
               .frame(
                 maxWidth: .infinity,
@@ -72,7 +78,7 @@ struct TextCompletionView: View {
                   let bounds = CGRect(
                     x: 0,
                     y: 0,
-                    width: Constants.minimumItemWidth,
+                    width: Constants.minimumItemWidth + (modernStyle ? 4 : 0),
                     height: Constants.itemHeight
                   )
 

@@ -13,11 +13,13 @@ public extension NSWindow {
     }
   }
 
-  var toolbarEffectView: NSVisualEffectView? {
-    // What we want is an NSVisualEffectView child of an NSTitlebarView
-    toolbarContainerView?.subviews.compactMap {
-      $0 as? NSVisualEffectView
-    }.first
+  // What we want is an NSVisualEffectView child of an NSTitlebarView
+  //
+  // In macOS Tahoe, it can also be an NSTitlebarBackgroundView for the modern style
+  var toolbarEffectView: NSView? {
+    toolbarContainerView?.subviews.first {
+      ($0 is NSVisualEffectView) || ($0.className == "NSTitlebarBackgroundView")
+    }
   }
 
   var toolbarTitleView: NSView? {

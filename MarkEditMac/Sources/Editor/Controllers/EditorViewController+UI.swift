@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitControls
 import WebKit
 import MarkEditKit
 import Statistics
@@ -153,9 +154,18 @@ extension EditorViewController {
   }
 
   func layoutStatusView() {
+    let margin: Double = {
+      if AppDesign.modernStyle {
+        // To fit better for the huge corner radius
+        return 14
+      }
+
+      return 6
+    }()
+
     statusView.frame = CGRect(
-      x: view.bounds.width - statusView.frame.width - 6,
-      y: bottomPanelHeight + 8, // Vertical margins are intentionally larger to visually look the same
+      x: view.bounds.width - statusView.frame.width - margin,
+      y: bottomPanelHeight + margin + 2, // Vertical margins are intentionally larger to visually look the same
       width: statusView.frame.width,
       height: statusView.frame.height
     )
@@ -387,8 +397,21 @@ private extension EditorViewController {
   }
 
   var panelDividerRect: CGRect {
-    let panelRect = findPanel.mode == .replace ? replacePanelRect : findPanelRect
-    return CGRect(x: 0, y: panelRect.minY, width: view.frame.width, height: panelDivider.length)
+    let offset: Double = {
+      // [macOS 26] Design is likely to be changed
+      if AppDesign.modernStyle && findPanel.mode == .hidden {
+        return contentHeight - panelDivider.length
+      }
+
+      return (findPanel.mode == .replace ? replacePanelRect : findPanelRect).minY
+    }()
+
+    return CGRect(
+      x: 0,
+      y: offset,
+      width: view.frame.width,
+      height: panelDivider.length
+    )
   }
 
   @objc func popoverDidShow(_ notification: Notification) {

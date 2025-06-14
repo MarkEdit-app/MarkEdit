@@ -12,9 +12,9 @@ final class GotoLineView: NSView {
     static let padding: Double = 8
   }
 
-  private let effectView: NSVisualEffectView = {
-    let effectView = NSVisualEffectView()
-    effectView.material = .popover
+  private lazy var effectView: NSView = {
+    let effectView = effectViewType.init()
+    (effectView as? NSVisualEffectView)?.material = .popover
 
     return effectView
   }()
@@ -29,9 +29,11 @@ final class GotoLineView: NSView {
     return textField
   }()
 
+  private let effectViewType: NSView.Type
   private let handler: (Int) -> Void
 
   init(
+    effectViewType: NSView.Type,
     frame: CGRect,
     placeholder: String,
     accessibilityHelp: String,
@@ -39,6 +41,7 @@ final class GotoLineView: NSView {
     defaultLineNumber: Int? = nil,
     handler: @escaping (Int) -> Void
   ) {
+    self.effectViewType = effectViewType
     self.handler = handler
     super.init(frame: frame)
 

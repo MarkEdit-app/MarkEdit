@@ -20,6 +20,10 @@ public extension NSColor {
   static var pushButtonBackground: NSColor {
     .theme(light: .white, dark: NSColor(hexCode: 0x565a61))
   }
+
+  static var modernButtonBackground: NSColor {
+    .theme(light: NSColor(white: 0, alpha: 0.08), dark: NSColor(white: 1, alpha: 0.066))
+  }
 }
 
 // MARK: - Convenience Methods

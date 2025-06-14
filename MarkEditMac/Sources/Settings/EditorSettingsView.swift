@@ -29,8 +29,10 @@ struct EditorSettingsView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      FontPicker(configuration: fontPickerConfiguration, handlers: fontPickerHandlers)
-        .formLabel(Localized.Settings.font)
+      HStack {
+        Text(Localized.Settings.font)
+        FontPicker(configuration: fontPickerConfiguration, handlers: fontPickerHandlers)
+      }
 
       Divider()
 

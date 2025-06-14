@@ -7,6 +7,10 @@
 import AppKit
 
 public class NonBezelButton: NSButton {
+  public var modernStyle = false
+  public var modernCornerRadius: Double = 0
+  public var modernStateChanged: ((_ isHighlighted: Bool) -> Void)?
+
   override init(frame: CGRect) {
     super.init(frame: frame)
   }
@@ -23,9 +27,31 @@ public class NonBezelButton: NSButton {
     let rectPath = NSBezierPath(rect: bounds)
     rectPath.fill()
 
-    if isHighlighted {
-      NSColor.plainButtonHighlighted.setFill()
+    // Classic style:
+    //  - Default: clear background
+    //  - Highlighted: light gray background
+    //
+    // Modern style:
+    //  - Default: light gray background
+    //  - Highlighted: slightly darker light gray, rounded corner
+
+    if modernStyle {
+      modernStateChanged?(isHighlighted)
+      NSColor.modernButtonBackground.setFill()
       rectPath.fill()
+    }
+
+    if isHighlighted {
+      if modernStyle {
+        NSBezierPath(
+          roundedRect: bounds,
+          xRadius: modernCornerRadius,
+          yRadius: modernCornerRadius
+        ).fill()
+      } else {
+        NSColor.plainButtonHighlighted.setFill()
+        rectPath.fill()
+      }
     }
   }
 

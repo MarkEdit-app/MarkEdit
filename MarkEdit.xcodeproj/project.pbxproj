@@ -65,6 +65,7 @@
 		8775A77B29867012005867BF /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 8775A77A29867012005867BF /* FontPicker */; };
 		877A6D802C77248A001EC516 /* NSPopover+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */; };
 		877B965D2C63815000186414 /* AppHotKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B965C2C63815000186414 /* AppHotKeys.swift */; };
+		877D77CC2DFA76E90086180B /* AppDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877D77C92DFA76E50086180B /* AppDesign.swift */; };
 		8780AC182982554800065EF4 /* SettingTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC172982554800065EF4 /* SettingTabs.swift */; };
 		8780AC1C29829EDD00065EF4 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */; };
 		8780AC1E2982A2C900065EF4 /* EditorSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */; };
@@ -193,6 +194,7 @@
 		8772E384294AC60D00111E83 /* EditorReusePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReusePool.swift; sourceTree = "<group>"; };
 		877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPopover+Extension.swift"; sourceTree = "<group>"; };
 		877B965C2C63815000186414 /* AppHotKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHotKeys.swift; sourceTree = "<group>"; };
+		877D77C92DFA76E50086180B /* AppDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDesign.swift; sourceTree = "<group>"; };
 		8780AC172982554800065EF4 /* SettingTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTabs.swift; sourceTree = "<group>"; };
 		8780AC1B29829EDD00065EF4 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		8780AC1D2982A2C900065EF4 /* EditorSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSettingsView.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 			isa = PBXGroup;
 			children = (
 				871C99592973F1C2003FF3A7 /* Application */,
+				877D77C92DFA76E50086180B /* AppDesign.swift */,
 				87DCB61F2B284AAD00A3056F /* AppHacks.swift */,
 				877B965C2C63815000186414 /* AppHotKeys.swift */,
 				87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */,
@@ -775,6 +778,7 @@
 				874AAE2E2959F197000E0E84 /* EditorReplacePanel.swift in Sources */,
 				87585FE22DA3EC7A0053069E /* EditorDocument+Scripting.swift in Sources */,
 				87585FE32DA3EC7A0053069E /* NSColor+Scripting.swift in Sources */,
+				877D77CC2DFA76E90086180B /* AppDesign.swift in Sources */,
 				87585FE42DA3EC7A0053069E /* Error+Scripting.swift in Sources */,
 				87A73AB3294C4B27006A710E /* EditorWebView.swift in Sources */,
 				8767BBAF295A8BA500BFACAE /* EditorViewController+UI.swift in Sources */,
