@@ -55,7 +55,8 @@ final class EditorStatusView: NSView, BackgroundTheming {
     label.stringValue = title
     label.sizeToFit()
 
-    self.frame = label.bounds.insetBy(dx: -4, dy: -2)
+    let insets = AppDesign.modernStyle ? CGPoint(x: -5, y: -3) : CGPoint(x: -4, y: -2)
+    self.frame = label.bounds.insetBy(dx: insets.x, dy: insets.y)
     self.needsLayout = true
   }
 }
