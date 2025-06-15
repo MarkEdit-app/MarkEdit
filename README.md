@@ -47,9 +47,9 @@ If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install mar
 
 ## Platform Compatibility
 
-To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sonoma](https://www.apple.com/newsroom/2023/09/macos-sonoma-is-available-today/) and [macOS Sequoia](https://www.apple.com/macos/macos-sequoia/).
+To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sequoia](https://www.apple.com/macos/macos-sequoia/) and [macOS Tahoe](https://www.apple.com/os/macos/).
 
-Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12), [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13).
+Last-compatible version tags: [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13), [macos-14](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-14).
 
 ## Why MarkEdit is free
 
