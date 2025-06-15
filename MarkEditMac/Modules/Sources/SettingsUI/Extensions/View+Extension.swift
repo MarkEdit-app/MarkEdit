@@ -24,7 +24,9 @@ public extension View {
   }
 
   func formMenuPicker(minWidth: Double = 280) -> some View {
-    pickerStyle(.menu).frame(minWidth: minWidth)
+    pickerStyle(.menu)
+      .modifier(FlexibleButtonSize())
+      .frame(minWidth: minWidth)
   }
 
   func formHorizontalRadio() -> some View {
@@ -55,4 +57,14 @@ private extension HorizontalAlignment {
   }
 
   static let controlAlignment = HorizontalAlignment(ControlAlignment.self)
+}
+
+private struct FlexibleButtonSize: ViewModifier {
+  func body(content: Content) -> some View {
+    if #available(macOS 26.0, *) {
+      content.buttonSizing(.flexible)
+    } else {
+      content
+    }
+  }
 }
