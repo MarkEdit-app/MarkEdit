@@ -20,7 +20,13 @@ enum AppDesign {
 
     return !AppRuntimeConfig.useClassicInterface
   #else
-    return false
+    // macOS Tahoe version number is 16.0 if the SDK is old
+    guard #available(macOS 16.0, *) else {
+      return false
+    }
+
+    // defaults write app.cyan.markedit com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck -bool true
+    return UserDefaults.standard.bool(forKey: "com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck")
   #endif
   }
 
