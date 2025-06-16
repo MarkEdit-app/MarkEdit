@@ -9,9 +9,9 @@
 CODE_SIGN_IDENTITY = -
 DEVELOPMENT_TEAM =
 PRODUCT_BUNDLE_IDENTIFIER = app.cyan.markedit-dev
+SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=macosx26.*] = $(inherited) BUILD_WITH_SDK_26_OR_LATER
 
 MARKETING_VERSION = 1.24.0
 CURRENT_PROJECT_VERSION = 74
 
-#include? "SwiftFlags.xcconfig"
 #include? "Local.xcconfig"
