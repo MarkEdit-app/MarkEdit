@@ -579,7 +579,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 870A51B1294700E00095C7EB /* Build configuration list for PBXNativeTarget "MarkEditMac" */;
 			buildPhases = (
-				87BEC1C02DFA608800EB214F /* Generate Swift Flags */,
 				870A519E294700DE0095C7EB /* Sources */,
 				870A519F294700DE0095C7EB /* Frameworks */,
 				870A51A0294700DE0095C7EB /* Resources */,
@@ -694,28 +693,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		87BEC1C02DFA608800EB214F /* Generate Swift Flags */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Generate Swift Flags";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\nSDK_VERSION=$(xcrun --sdk macosx --show-sdk-version)\nMAJOR_VERSION=$(echo \"$SDK_VERSION\" | cut -d. -f1)\nFILE_PATH=\"${PROJECT_DIR}/SwiftFlags.xcconfig\"\n\nif [ \"$MAJOR_VERSION\" -ge 26 ]; then\n  echo \"SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) BUILD_WITH_SDK_26_OR_LATER\" > \"$FILE_PATH\"\nelse\n  echo \"SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited)\" > \"$FILE_PATH\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		870A519E294700DE0095C7EB /* Sources */ = {
@@ -884,6 +861,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -954,6 +932,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
