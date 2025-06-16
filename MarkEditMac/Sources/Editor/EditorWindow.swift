@@ -53,7 +53,7 @@ final class EditorWindow: NSWindow {
     // Slightly change the toolbar effect to match editor better
     if let view = toolbarEffectView {
       view.alphaValue = prefersTintedToolbar ? 0.3 : 0.7
-      view.isHidden = reduceTransparency == true
+      view.isHidden = reduceTransparency == true || AppDesign.modernTitleBar
 
       // Blend the color of contents behind the window
       (view as? NSVisualEffectView)?.blendingMode = .behindWindow

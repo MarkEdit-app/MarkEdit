@@ -21,6 +21,12 @@ extension EditorViewController {
     let wrapper = NSView(frame: CGRect(x: 0, y: 0, width: 720, height: 480))
     self.view = wrapper
 
+    if AppDesign.modernTitleBar {
+      wrapper.addSubview(modernTitleBarView)
+      wrapper.addSubview(modernEffectView)
+      wrapper.addSubview(modernBackgroundView)
+    }
+
     wrapper.addSubview(replacePanel) // ReplacePanel must go before FindPanel
     wrapper.addSubview(findPanel)
     wrapper.addSubview(panelDivider)
@@ -35,6 +41,45 @@ extension EditorViewController {
     layoutWebView()
     layoutLoadingIndicator()
     layoutStatusView()
+
+    if AppDesign.modernTitleBar {
+      // To avoid duplicate dividers
+      if AppDesign.modernStyle {
+        modernDividerView.alphaValue = 0
+        modernDividerView.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(modernDividerView) // Right above the panels
+        NSLayoutConstraint.activate([
+          modernDividerView.leadingAnchor.constraint(equalTo: findPanel.leadingAnchor),
+          modernDividerView.trailingAnchor.constraint(equalTo: findPanel.trailingAnchor),
+          modernDividerView.topAnchor.constraint(equalTo: findPanel.topAnchor),
+          modernDividerView.heightAnchor.constraint(equalToConstant: modernDividerView.length),
+        ])
+      }
+
+      modernTitleBarView.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+        modernTitleBarView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+        modernTitleBarView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+        modernTitleBarView.topAnchor.constraint(equalTo: wrapper.topAnchor),
+        modernTitleBarView.bottomAnchor.constraint(equalTo: webView.topAnchor),
+      ])
+
+      modernEffectView.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+        modernEffectView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+        modernEffectView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+        modernEffectView.topAnchor.constraint(equalTo: wrapper.topAnchor),
+        modernEffectView.heightAnchor.constraint(equalToConstant: 120), // Just tall enough
+      ])
+
+      modernBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+        modernBackgroundView.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
+        modernBackgroundView.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
+        modernBackgroundView.topAnchor.constraint(equalTo: webView.topAnchor),
+        modernBackgroundView.bottomAnchor.constraint(equalTo: webView.bottomAnchor),
+      ])
+    }
 
     // Initially hide panels to prevent being found by VoiceOver
     findPanel.isHidden = true
@@ -82,6 +127,39 @@ extension EditorViewController {
     let prefersTintedToolbar = theme.prefersTintedToolbar
     (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
 
+    if AppDesign.modernTitleBar {
+      view.window?.backgroundColor = .clear
+      view.window?.toolbarContainerView?.layerBackgroundColor = .clear
+
+      modernTitleBarView.layerBackgroundColor = .clear
+      modernEffectView.isHidden = AppPreferences.Window.reduceTransparency
+      modernBackgroundView.layerBackgroundColor = backgroundColor
+
+      let alphaValue = 0.7
+      let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
+
+      // For NSGlassEffectView, the built-in tintColor is preferred
+    #if BUILD_WITH_SDK_26_OR_LATER
+      if #available(macOS 26.0, *), let glassView = modernEffectView as? NSGlassEffectView {
+        glassView.tintColor = tintColor
+      } else {
+        modernTitleBarView.layerBackgroundColor = tintColor
+      }
+    #else
+      let setter = sel_getUid("setTintColor:")
+      if modernEffectView.responds(to: setter) {
+        modernEffectView.perform(setter, with: tintColor)
+      } else {
+        modernTitleBarView.layerBackgroundColor = tintColor
+      }
+    #endif
+
+      // Hide the effect view and remove the opacity of the title bar view
+      if AppPreferences.Window.reduceTransparency {
+        modernTitleBarView.layerBackgroundColor = backgroundColor
+      }
+    }
+
     statusView.setBackgroundColor(backgroundColor)
     findPanel.setBackgroundColor(backgroundColor)
     replacePanel.setBackgroundColor(backgroundColor)
@@ -119,6 +197,10 @@ extension EditorViewController {
       findPanel.searchField.frame,
       findPanel.findButtons.frame.height
     )
+
+    if modernDividerView.superview != nil {
+      modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : 1
+    }
   }
 
   func layoutWebView(animated: Bool = false) {
@@ -157,7 +239,7 @@ extension EditorViewController {
     let margin: Double = {
       if AppDesign.modernStyle {
         // To fit better for the huge corner radius
-        return 14
+        return 16
       }
 
       return 6
@@ -397,18 +479,9 @@ private extension EditorViewController {
   }
 
   var panelDividerRect: CGRect {
-    let offset: Double = {
-      // [macOS 26] Design is likely to be changed
-      if AppDesign.modernStyle && findPanel.mode == .hidden {
-        return contentHeight - panelDivider.length
-      }
-
-      return (findPanel.mode == .replace ? replacePanelRect : findPanelRect).minY
-    }()
-
-    return CGRect(
+    CGRect(
       x: 0,
-      y: offset,
+      y: (findPanel.mode == .replace ? replacePanelRect : findPanelRect).minY,
       width: view.frame.width,
       height: panelDivider.length
     )

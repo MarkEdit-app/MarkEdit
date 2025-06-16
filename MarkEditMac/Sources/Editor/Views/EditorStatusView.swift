@@ -9,11 +9,25 @@ import AppKit
 import AppKitControls
 import MarkEditKit
 
+// [macOS 26] Clean these up
+
+private protocol ButtonLabeling {
+  var labelView: LabelView { get }
+}
+
+extension TitleOnlyButton: ButtonLabeling {}
+
 /**
  To indicate the current line, column and length of selection.
  */
 final class EditorStatusView: NSView, BackgroundTheming {
-  private let button = TitleOnlyButton(fontSize: 11)
+  private let button: NSButton & ButtonLabeling = {
+    if AppDesign.modernStyle {
+      return GlassButton()
+    }
+
+    return TitleOnlyButton(fontSize: Constants.titleFontSize)
+  }()
 
   init(handler: @escaping () -> Void) {
     super.init(frame: .zero)
@@ -34,8 +48,12 @@ final class EditorStatusView: NSView, BackgroundTheming {
   }
 
   override func updateLayer() {
+    if button is GlassButton {
+      return
+    }
+
     layer?.borderWidth = 1
-    layer?.cornerRadius = AppDesign.modernStyle ? 6 : 3
+    layer?.cornerRadius = 3
     layer?.cornerCurve = .continuous
     layer?.borderColor = NSColor.plainButtonBorder.cgColor
   }
@@ -55,8 +73,7 @@ final class EditorStatusView: NSView, BackgroundTheming {
     label.stringValue = title
     label.sizeToFit()
 
-    let insets = AppDesign.modernStyle ? CGPoint(x: -5, y: -3) : CGPoint(x: -4, y: -2)
-    self.frame = label.bounds.insetBy(dx: insets.x, dy: insets.y)
+    self.frame = label.bounds.insetBy(dx: -4, dy: -2)
     self.needsLayout = true
   }
 }
@@ -79,5 +96,48 @@ extension EditorStatusView {
   override func accessibilityPerformPress() -> Bool {
     button.performClick(nil)
     return true
+  }
+}
+
+// MARK: - Private
+
+private enum Constants {
+  static let titleFontSize: Double = 11
+}
+
+private class GlassButton: NSButton, ButtonLabeling {
+  fileprivate let labelView = LabelView()
+
+  override init(frame frameRect: CGRect) {
+    super.init(frame: frameRect)
+    font = .systemFont(ofSize: 7) // To make the button smaller
+    title = "" // Clear the title and bezel
+
+    labelView.font = .systemFont(ofSize: Constants.titleFontSize)
+    labelView.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(labelView)
+    NSLayoutConstraint.activate([
+      labelView.centerXAnchor.constraint(equalTo: centerXAnchor),
+      labelView.centerYAnchor.constraint(equalTo: centerYAnchor),
+    ])
+
+  #if BUILD_WITH_SDK_26_OR_LATER
+    if #available(macOS 26.0, *) {
+      bezelStyle = .glass
+    }
+  #else
+    if #available(macOS 16.0, *) {
+      bezelStyle = .init(rawValue: 16) ?? .automatic // Glass
+    }
+  #endif
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func resetCursorRects() {
+    addCursorRect(bounds, cursor: .arrow)
   }
 }
