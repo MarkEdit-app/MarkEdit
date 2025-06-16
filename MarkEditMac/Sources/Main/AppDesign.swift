@@ -31,19 +31,34 @@ enum AppDesign {
   }
 
   /**
+   Returns `true` to use a customized title bar for the editor.
+
+   This doesn't require the new SDK and cannot be configured.
+   */
+  static var modernTitleBar: Bool {
+    // [macOS 26] Change this to 26.0
+    guard #available(macOS 16.0, *) else {
+      return false
+    }
+
+    return true
+  }
+
+  /**
    Returns either an `NSVisualEffectView` or an `NSGlassEffectView`.
 
-   `NSGlassEffectView` is used when `modernStyle` is available.
+   `NSGlassEffectView` is used when it is available.
    */
   static var effectViewType: NSView.Type {
   #if BUILD_WITH_SDK_26_OR_LATER
-    guard #available(macOS 26.0, *), modernStyle else {
+    guard #available(macOS 26.0, *) else {
       return NSVisualEffectView.self
     }
 
     return NSGlassEffectView.self
   #else
-    return NSVisualEffectView.self
+    // Reflect a glass effect view when it's available
+    return (NSClassFromString("NSGlassEffectView") as? NSView.Type) ?? NSVisualEffectView.self
   #endif
   }
 }

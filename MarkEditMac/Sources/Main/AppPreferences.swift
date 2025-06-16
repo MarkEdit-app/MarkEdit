@@ -226,7 +226,16 @@ enum AppPreferences {
     @Storage(key: "window.reduce-transparency", defaultValue: false)
     static var reduceTransparency: Bool {
       didSet {
-        performUpdates { ($0.view.window as? EditorWindow)?.reduceTransparency = reduceTransparency }
+        performUpdates { editor in
+          Task { @MainActor in
+            // Modern title bar is implemented in the view controller layer
+            if AppDesign.modernTitleBar {
+              editor.updateWindowColors(AppTheme.current)
+            }
+          }
+
+          (editor.view.window as? EditorWindow)?.reduceTransparency = reduceTransparency
+        }
       }
     }
   }
