@@ -81,7 +81,7 @@ final class EditorViewController: NSViewController {
 
   // Custom views to apply modern effects (either glass or blur) to the title bar
   let modernTitleBarView = NSView()
-  let modernEffectView = AppDesign.effectViewType.init()
+  let modernEffectView = AppDesign.modernEffectView.init()
   let modernBackgroundView = NSView()
   let modernDividerView = DividerView()
 
@@ -219,7 +219,7 @@ final class EditorViewController: NSViewController {
   private(set) lazy var completionContext = {
     TextCompletionContext(
       modernStyle: AppDesign.modernStyle,
-      effectViewType: AppDesign.effectViewType,
+      effectViewType: AppDesign.defaultEffectView,
       localizable: TextCompletionLocalizable(selectedHint: Localized.General.selected)
     ) { [weak self] in
       guard let self else {

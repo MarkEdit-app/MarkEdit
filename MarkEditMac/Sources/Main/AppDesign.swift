@@ -45,20 +45,25 @@ enum AppDesign {
   }
 
   /**
-   Returns either an `NSVisualEffectView` or an `NSGlassEffectView`.
+   Returns either an `NSGlassEffectView`, or an `NSVisualEffectView` as fallback.
 
    `NSGlassEffectView` is used when it is available.
    */
-  static var effectViewType: NSView.Type {
-  #if BUILD_WITH_SDK_26_OR_LATER
-    guard #available(macOS 26.0, *) else {
+  static var modernEffectView: NSView.Type {
+    // [macOS 26] Change this to 26.0
+    guard #available(macOS 16.0, *) else {
       return NSVisualEffectView.self
     }
 
+  #if BUILD_WITH_SDK_26_OR_LATER
     return NSGlassEffectView.self
   #else
     // Reflect a glass effect view when it's available
     return (NSClassFromString("NSGlassEffectView") as? NSView.Type) ?? NSVisualEffectView.self
   #endif
+  }
+
+  static var defaultEffectView: NSView.Type {
+    modernStyle ? modernEffectView : NSVisualEffectView.self
   }
 }
