@@ -8,7 +8,7 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 > [!TIP]
 > Discover our other free and open-source apps at [libremac.github.io](https://libremac.github.io/).
-> 
+>
 > Follow our Mastodon account [@MarkEditApp](https://mastodon.social/@MarkEditApp) for the latest updates.
 
 ## Screenshots
