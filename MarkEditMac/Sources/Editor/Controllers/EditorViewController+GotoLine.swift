@@ -21,7 +21,7 @@ extension EditorViewController {
     }
 
     let window = GotoLineWindow(
-      effectViewType: AppDesign.defaultEffectView,
+      effectViewType: AppDesign.modernEffectView,
       relativeTo: parentRect,
       placeholder: Localized.Document.gotoLineLabel,
       accessibilityHelp: Localized.Document.gotoLineHelp,

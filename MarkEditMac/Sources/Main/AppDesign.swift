@@ -33,7 +33,7 @@ enum AppDesign {
   /**
    Returns `true` to use a customized title bar for the editor.
 
-   This doesn't require the new SDK and cannot be configured.
+   It will be enabled as long as macOS Tahoe runs.
    */
   static var modernTitleBar: Bool {
     // [macOS 26] Change this to 26.0
@@ -47,11 +47,11 @@ enum AppDesign {
   /**
    Returns either an `NSGlassEffectView`, or an `NSVisualEffectView` as fallback.
 
-   `NSGlassEffectView` is used when it is available.
+   `NSGlassEffectView` is used when it is available and `modernStyle` is true.
    */
   static var modernEffectView: NSView.Type {
     // [macOS 26] Change this to 26.0
-    guard #available(macOS 16.0, *) else {
+    guard #available(macOS 16.0, *), modernStyle else {
       return NSVisualEffectView.self
     }
 
@@ -61,9 +61,5 @@ enum AppDesign {
     // Reflect a glass effect view when it's available
     return (NSClassFromString("NSGlassEffectView") as? NSView.Type) ?? NSVisualEffectView.self
   #endif
-  }
-
-  static var defaultEffectView: NSView.Type {
-    modernStyle ? modernEffectView : NSVisualEffectView.self
   }
 }
