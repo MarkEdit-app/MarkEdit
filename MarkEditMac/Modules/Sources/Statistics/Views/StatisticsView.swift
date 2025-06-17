@@ -9,6 +9,7 @@ import AppKitExtensions
 import SwiftUI
 
 struct StatisticsView: View {
+  private let modernStyle: Bool
   private let fullResult: StatisticsResult
   private let selectionResult: StatisticsResult?
   private let fileURL: URL?
@@ -18,11 +19,13 @@ struct StatisticsView: View {
   @State private var localMonitor: Any?
 
   init(
+    modernStyle: Bool,
     fullResult: StatisticsResult,
     selectionResult: StatisticsResult?,
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
+    self.modernStyle = modernStyle
     self.fullResult = fullResult
     self.selectionResult = selectionResult
     self.fileURL = fileURL
@@ -62,10 +65,10 @@ struct StatisticsView: View {
           }
         } else {
           Text(localizable.mainTitle)
-            .fontWeight(.semibold)
+            .font(.system(size: modernStyle ? 14 : 13, weight: .semibold))
         }
       }
-      .frame(height: 36)
+      .frame(height: modernStyle ? 40 : 36)
 
       Divider()
 

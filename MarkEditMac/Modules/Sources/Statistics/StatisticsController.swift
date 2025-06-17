@@ -17,16 +17,19 @@ public final class StatisticsController: NSViewController {
     static let contentHeight: Double = 288
   }
 
+  private let modernStyle: Bool
   private let content: ReadableContentPair
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
   private var contentView: NSView?
 
   public init(
+    modernStyle: Bool,
     content: ReadableContentPair,
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
+    self.modernStyle = modernStyle
     self.content = content
     self.fileURL = fileURL
     self.localizable = localizable
@@ -74,6 +77,7 @@ public final class StatisticsController: NSViewController {
         spinner.removeFromSuperview()
 
         let contentView = NSHostingView(rootView: StatisticsView(
+          modernStyle: self.modernStyle,
           fullResult: fullResult,
           selectionResult: selectionResult,
           fileURL: self.fileURL,
