@@ -23,7 +23,16 @@ extension EditorViewController {
   private enum Constants {
     static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
     static let tableOfContentsMinimumWidth: Double = 160
-    static let normalizedButtonSize: Double = 15 // "bold" icon looks bigger than expected, fix it
+
+    @MainActor static let normalizedButtonSize: Double? = {
+      if AppDesign.modernStyle {
+        // The issue seems fixed with the Liquid Glass design
+        return nil
+      }
+
+      // "bold" icon looks bigger than expected, fix it
+      return 15
+    }()
   }
 
   func updateToolbarItemMenus(_ menu: NSMenu) {
