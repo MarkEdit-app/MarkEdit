@@ -157,7 +157,15 @@ extension EditorViewController {
       modernEffectView.isHidden = AppPreferences.Window.reduceTransparency
       modernTintedView.layerBackgroundColor = .clear
 
-      let alphaValue = prefersTintedToolbar ? 0.7 : 0.3
+      let alphaValue = {
+        if modernEffectView is NSVisualEffectView {
+          return prefersTintedToolbar ? 0.7 : 0.3
+        }
+
+        // Glass view needs less transparent color to be tinted
+        return prefersTintedToolbar ? 0.8 : 0.5
+      }()
+
       let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
 
       // For NSGlassEffectView, the built-in tintColor is preferred
