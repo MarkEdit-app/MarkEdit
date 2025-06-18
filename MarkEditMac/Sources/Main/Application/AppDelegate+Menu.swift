@@ -9,6 +9,21 @@ import AppKit
 import MarkEditKit
 
 extension AppDelegate: NSMenuDelegate {
+  // [macOS 26] Revisit this after each beta release
+  func normalizeMainMenuIcons() {
+    let icon: (String) -> NSImage? = {
+      NSImage(systemSymbolName: $0, accessibilityDescription: nil)
+    }
+
+    modernServicesItem?.image = icon("gearshape.2")
+    modernDeveloperItem?.image = icon("curlybraces")
+    modernPageSetupItem?.image = icon("gear")
+    modernPrintItem?.image = icon("printer")
+    modernBoldItem?.image = icon("bold")
+    modernItalicItem?.image = icon("italic")
+    modernStrikethroughItem?.image = icon("strikethrough")
+  }
+
   func menuNeedsUpdate(_ menu: NSMenu) {
     switch menu {
     case mainFileMenu:

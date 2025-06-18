@@ -36,12 +36,16 @@ enum AppDesign {
    It will be enabled as long as macOS Tahoe runs.
    */
   static var modernTitleBar: Bool {
-    // [macOS 26] Change this to 26.0
-    guard #available(macOS 16.0, *) else {
-      return false
-    }
+    isMacOSTahoe
+  }
 
-    return true
+  /**
+   Returns `true` to gradually add icons to the menu bar.
+
+   It will be enabled as long as macOS Tahoe runs.
+   */
+  static var menuIconEvolution: Bool {
+    isMacOSTahoe
   }
 
   /**
@@ -61,5 +65,18 @@ enum AppDesign {
     // Reflect a glass effect view when it's available
     return (NSClassFromString("NSGlassEffectView") as? NSView.Type) ?? NSVisualEffectView.self
   #endif
+  }
+}
+
+// MARK: - Private
+
+private extension AppDesign {
+  static var isMacOSTahoe: Bool {
+    // [macOS 26] Change this to 26.0
+    guard #available(macOS 16.0, *) else {
+      return false
+    }
+
+    return true
   }
 }

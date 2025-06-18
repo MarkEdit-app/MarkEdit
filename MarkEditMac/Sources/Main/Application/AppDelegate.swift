@@ -47,6 +47,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var formatMathBlockItem: NSMenuItem?
   @IBOutlet weak var windowFloatingItem: NSMenuItem?
 
+  // Items used for AppDesign.menuIconEvolution
+  @IBOutlet weak var modernServicesItem: NSMenuItem?
+  @IBOutlet weak var modernDeveloperItem: NSMenuItem?
+  @IBOutlet weak var modernPageSetupItem: NSMenuItem?
+  @IBOutlet weak var modernPrintItem: NSMenuItem?
+  @IBOutlet weak var modernBoldItem: NSMenuItem?
+  @IBOutlet weak var modernItalicItem: NSMenuItem?
+  @IBOutlet weak var modernStrikethroughItem: NSMenuItem?
+  // Items used for AppDesign.menuIconEvolution
+
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
 
@@ -56,6 +66,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       Task { @MainActor in
         AppTheme.current.updateAppearance()
       }
+    }
+
+    if AppDesign.menuIconEvolution {
+      normalizeMainMenuIcons()
     }
 
     NotificationCenter.default.addObserver(
