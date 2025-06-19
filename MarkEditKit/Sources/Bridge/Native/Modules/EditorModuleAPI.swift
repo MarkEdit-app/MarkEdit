@@ -113,7 +113,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public func showSavePanel(options: SavePanelOptions) -> Bool {
     let data: Data = {
-      if let source = options.data, let data = Data(base64Encoded: source) {
+      if let source = options.data, let data = Data(base64Encoded: source, options: .ignoreUnknownCharacters) {
         return data
       }
 

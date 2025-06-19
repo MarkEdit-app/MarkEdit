@@ -4,6 +4,7 @@
 export interface WebMenuItem {
   separator: boolean;
   title?: string;
+  icon?: string;
   actionID?: string;
   stateGetterID?: string;
   key?: string;

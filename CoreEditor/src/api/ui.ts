@@ -100,6 +100,7 @@ function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMe
     stateGetterID: generateID(item.state),
     separator: item.separator ?? false,
     title: item.title,
+    icon: item.icon,
     key: item.key,
     modifiers: item.modifiers,
     children: item.children?.map(item => createMenuItem(item, actions)),
