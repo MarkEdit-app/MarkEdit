@@ -547,6 +547,7 @@ private extension EditorViewController {
       return .separator()
     } else if let children = spec.children {
       let item = UserDefinedMenuItem(title: spec.title ?? "")
+      item.image = createMenuIcon(spec: spec)
       item.submenu = createMenu(items: children, handler: handler)
       return item
     } else if let title = spec.title {
@@ -556,6 +557,7 @@ private extension EditorViewController {
       }
 
       item.stateGetterID = spec.stateGetterID
+      item.image = createMenuIcon(spec: spec)
       item.keyEquivalent = spec.key ?? ""
       item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
       return item
@@ -576,5 +578,21 @@ private extension EditorViewController {
 
     menu.delegate = self
     return menu
+  }
+
+  func createMenuIcon(spec: WebMenuItem) -> NSImage? {
+    guard let icon = spec.icon else {
+      return nil
+    }
+
+    if let image = NSImage(systemSymbolName: icon, accessibilityDescription: nil) {
+      return image
+    }
+
+    if let data = Data(base64Encoded: icon, options: .ignoreUnknownCharacters) {
+      return NSImage(data: data)
+    }
+
+    return nil
   }
 }

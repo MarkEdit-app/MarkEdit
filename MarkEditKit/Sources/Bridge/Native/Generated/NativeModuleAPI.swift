@@ -173,15 +173,17 @@ final class NativeBridgeAPI: NativeBridge {
 public struct WebMenuItem: Decodable, Equatable {
   public var separator: Bool
   public var title: String?
+  public var icon: String?
   public var actionID: String?
   public var stateGetterID: String?
   public var key: String?
   public var modifiers: [String]?
   public var children: [Self]?
 
-  public init(separator: Bool, title: String?, actionID: String?, stateGetterID: String?, key: String?, modifiers: [String]?, children: [Self]?) {
+  public init(separator: Bool, title: String?, icon: String?, actionID: String?, stateGetterID: String?, key: String?, modifiers: [String]?, children: [Self]?) {
     self.separator = separator
     self.title = title
+    self.icon = icon
     self.actionID = actionID
     self.stateGetterID = stateGetterID
     self.key = key
