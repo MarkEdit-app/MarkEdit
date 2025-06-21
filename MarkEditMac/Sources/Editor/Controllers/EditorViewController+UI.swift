@@ -63,7 +63,6 @@ extension EditorViewController {
         if #available(macOS 26.0, *) {
           (modernEffectView as? NSGlassEffectView)?.cornerRadius = 0
         }
-
       #else
         let setter = sel_getUid("setCornerRadius:")
         if modernEffectView.responds(to: setter) {
