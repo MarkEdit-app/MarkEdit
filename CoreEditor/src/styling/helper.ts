@@ -65,7 +65,7 @@ export function shadowableTextColor(input: string) {
 export function notifyBackgroundColor() {
   const element = window.editor.dom;
   const color = getComputedStyle(element).backgroundColor;
-  const match = color.match(/rgb\( *(\d+), *(\d+), *(\d+) *\)/);
+  const match = color.match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\s*\)/);
   if (match === null) {
     return console.error(`Invalid background color: ${color}`);
   }
@@ -75,5 +75,11 @@ export function notifyBackgroundColor() {
 
   // Change it back to number because we only have parsers to handle numbers in native
   const code = parseInt(`${red}${green}${blue}`, 16) as CodeGen_Int;
-  window.nativeModules.core.notifyBackgroundColorDidChange({ color: code });
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const alpha = parseFloat(match[4] ?? '1.0');
+
+  window.nativeModules.core.notifyBackgroundColorDidChange({
+    color: code,
+    alpha,
+  });
 }

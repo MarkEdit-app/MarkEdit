@@ -130,8 +130,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
     bridge.history.markContentClean()
   }
 
-  func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32) {
-    webBackgroundColor = NSColor(hexCode: color)
+  func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32, alpha: Double) {
+    webBackgroundColor = NSColor(hexCode: color, alpha: alpha)
     updateWindowColors(.current)
   }
 
