@@ -106,14 +106,19 @@ extension EditorViewController: EditorModuleCoreDelegate {
     hasFinishedLoading = true
     resetEditor()
 
-    // We only need the indicator for cold launch because it's slower
-    NSAnimationContext.runAnimationGroup { _ in
-      loadingIndicator.animator().alphaValue = 0
-    } completionHandler: {
-      self.loadingIndicator.removeFromSuperview()
-    }
+    loadingIndicator.scaleTo(0.9, duration: 0.15) {
+      let duration: TimeInterval = 0.35
 
-    loadingIndicator.scaleTo(2.0)
+      NSAnimationContext.runAnimationGroup { context in
+        context.duration = duration
+        self.loadingIndicator.animator().alphaValue = 0
+      } completionHandler: {
+        // Destroy it since we only need the indicator for cold launch
+        self.loadingIndicator.removeFromSuperview()
+      }
+
+      self.loadingIndicator.scaleTo(2.0, duration: duration)
+    }
   }
 
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore) {
