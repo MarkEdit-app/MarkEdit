@@ -88,36 +88,25 @@ public extension NSView {
   }
 
   /// Transform the view to a scale while keeping it centered during the animation.
-  func scaleTo(_ scale: Double, duration: TimeInterval? = nil) {
-    scaleUnitSquare(to: CGSize(width: scale, height: scale))
-    frame = CGRect(
-      x: frame.origin.x,
-      y: frame.origin.y,
-      width: frame.width * scale,
-      height: frame.height * scale
-    )
+  func scaleTo(_ scale: Double, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    wantsLayer = true
+    layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+    layer?.position = CGPoint(x: frame.midX, y: frame.midY)
 
-    let animation = CABasicAnimation()
-    if let duration {
-      animation.duration = duration
-    }
+    CATransaction.begin()
+    CATransaction.setAnimationDuration(duration)
+    CATransaction.setCompletionBlock { completion?() }
 
-    animation.fromValue = CATransform3DMakeScale(1.0, 1.0, 1.0)
-    animation.toValue = CATransform3DMakeScale(scale, scale, 1.0)
-    layer?.add(animation, forKey: "transform.scale")
+    let animation = CABasicAnimation(keyPath: "transform")
+    animation.fromValue = layer?.presentation()?.transform ?? layer?.transform
 
-    NSAnimationContext.runAnimationGroup { context in
-      context.timingFunction = CAMediaTimingFunction(name: .linear)
-      if let duration {
-        context.duration = duration
-      }
+    let transform = CATransform3DMakeScale(scale, scale, 1)
+    animation.toValue = transform
+    animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
-      // Translate the frame to keep it centered
-      animator().frame.origin = CGPoint(
-        x: frame.origin.x - (frame.size.width * (1.0 - 1.0 / scale)) * 0.5,
-        y: frame.origin.y - (frame.size.height * (1.0 - 1.0 / scale)) * 0.5
-      )
-    }
+    layer?.transform = transform
+    layer?.add(animation, forKey: "scale")
+    CATransaction.commit()
   }
 
   /// Enumerate all descendants, recursively, self first.
