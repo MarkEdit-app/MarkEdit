@@ -12,7 +12,7 @@ import MarkEditKit
 // [macOS 26] Clean these up
 
 private protocol ButtonLabeling {
-  var labelView: LabelView { get }
+  @MainActor var labelView: LabelView { get }
 }
 
 extension TitleOnlyButton: ButtonLabeling {}
@@ -113,7 +113,7 @@ private enum Constants {
   static let titleFontSize: Double = 11
 }
 
-private class GlassButton: NSButton, ButtonLabeling {
+private class GlassButton: NSButton, ButtonLabeling, @unchecked Sendable {
   fileprivate let labelView = LabelView()
 
   override init(frame frameRect: CGRect) {
