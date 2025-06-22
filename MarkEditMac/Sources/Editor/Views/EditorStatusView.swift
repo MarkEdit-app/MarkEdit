@@ -115,7 +115,7 @@ private enum Constants {
   static let titleFont: NSFont = .monospacedDigitSystemFont(ofSize: 11, weight: .regular)
 }
 
-private class GlassButton: NSButton, ButtonLabeling {
+private class GlassButton: NSButton, ButtonLabeling, @unchecked Sendable {
   fileprivate let labelView = LabelView()
 
   override init(frame frameRect: CGRect) {
