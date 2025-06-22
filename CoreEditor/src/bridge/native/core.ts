@@ -9,7 +9,7 @@ import { LineColumnInfo } from '../../modules/selection/types';
 export interface NativeModuleCore extends NativeModule {
   notifyWindowDidLoad(): void;
   notifyEditorDidBecomeIdle(): void;
-  notifyBackgroundColorDidChange({ color }: { color: CodeGen_Int }): void;
+  notifyBackgroundColorDidChange(args: { color: CodeGen_Int; alpha: number }): void;
   notifyViewportScaleDidChange(): void;
   notifyViewDidUpdate(args: { contentEdited: boolean; compositionEnded: boolean; isDirty: boolean; selectedLineColumn: LineColumnInfo }): void;
   notifyContentHeightDidChange({ bottomPanelHeight }: { bottomPanelHeight: number }): void;

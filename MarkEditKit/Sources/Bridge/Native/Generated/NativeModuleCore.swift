@@ -14,7 +14,7 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyEditorDidBecomeIdle()
-  func notifyBackgroundColorDidChange(color: Int)
+  func notifyBackgroundColorDidChange(color: Int, alpha: Double)
   func notifyViewportScaleDidChange()
   func notifyViewDidUpdate(contentEdited: Bool, compositionEnded: Bool, isDirty: Bool, selectedLineColumn: LineColumnInfo)
   func notifyContentHeightDidChange(bottomPanelHeight: Double)
@@ -84,6 +84,7 @@ final class NativeBridgeCore: NativeBridge {
   private func notifyBackgroundColorDidChange(parameters: Data) -> Result<Any?, Error>? {
     struct Message: Decodable {
       var color: Int
+      var alpha: Double
     }
 
     let message: Message
@@ -94,7 +95,7 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifyBackgroundColorDidChange(color: message.color)
+    module.notifyBackgroundColorDidChange(color: message.color, alpha: message.alpha)
     return .success(nil)
   }
 
