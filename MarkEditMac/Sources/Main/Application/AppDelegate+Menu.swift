@@ -19,6 +19,7 @@ extension AppDelegate: NSMenuDelegate {
     modernDeveloperItem?.image = icon("curlybraces")
     modernPageSetupItem?.image = icon("gear")
     modernPrintItem?.image = icon("printer")
+    modernFindItem?.image = icon("magnifyingglass")
     modernBoldItem?.image = icon("bold")
     modernItalicItem?.image = icon("italic")
     modernStrikethroughItem?.image = icon("strikethrough")

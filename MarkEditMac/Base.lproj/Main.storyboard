@@ -1038,6 +1038,7 @@ Gw
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="modernBoldItem" destination="WAq-55-Lug" id="3gN-ZT-qtj"/>
                         <outlet property="modernDeveloperItem" destination="qjf-Yo-EMd" id="WLT-yI-Ldu"/>
+                        <outlet property="modernFindItem" destination="4EN-yA-p0u" id="MuE-y8-qCU"/>
                         <outlet property="modernItalicItem" destination="K67-Wt-aYF" id="HkB-fV-JOo"/>
                         <outlet property="modernPageSetupItem" destination="qIS-W8-SiK" id="tzw-kk-zVK"/>
                         <outlet property="modernPrintItem" destination="aTl-1u-JFS" id="e28-vP-xYU"/>

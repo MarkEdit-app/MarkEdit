@@ -52,6 +52,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var modernDeveloperItem: NSMenuItem?
   @IBOutlet weak var modernPageSetupItem: NSMenuItem?
   @IBOutlet weak var modernPrintItem: NSMenuItem?
+  @IBOutlet weak var modernFindItem: NSMenuItem?
   @IBOutlet weak var modernBoldItem: NSMenuItem?
   @IBOutlet weak var modernItalicItem: NSMenuItem?
   @IBOutlet weak var modernStrikethroughItem: NSMenuItem?
