@@ -1039,9 +1039,12 @@ Gw
                         <outlet property="modernBoldItem" destination="WAq-55-Lug" id="3gN-ZT-qtj"/>
                         <outlet property="modernDeveloperItem" destination="qjf-Yo-EMd" id="WLT-yI-Ldu"/>
                         <outlet property="modernFindItem" destination="4EN-yA-p0u" id="MuE-y8-qCU"/>
+                        <outlet property="modernFloatOnTopItem" destination="0C5-FE-fvI" id="vAg-X0-suB"/>
                         <outlet property="modernItalicItem" destination="K67-Wt-aYF" id="HkB-fV-JOo"/>
-                        <outlet property="modernPageSetupItem" destination="qIS-W8-SiK" id="tzw-kk-zVK"/>
-                        <outlet property="modernPrintItem" destination="aTl-1u-JFS" id="e28-vP-xYU"/>
+                        <outlet property="modernNewFileFromClipboardItem" destination="0NS-5A-glR" id="HCf-jy-2QD"/>
+                        <outlet property="modernNewTabItem" destination="dHZ-CH-KLC" id="94c-Sg-CGE"/>
+                        <outlet property="modernSaveAllItem" destination="5W0-LW-fUP" id="P9i-2B-Wi3"/>
+                        <outlet property="modernSelectAllItem" destination="Ruw-6m-B2m" id="uYE-TW-Xt6"/>
                         <outlet property="modernServicesItem" destination="NMo-om-nkz" id="Q83-EJ-f4N"/>
                         <outlet property="modernStrikethroughItem" destination="z7z-Qk-jsC" id="6Iy-0V-Kct"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
