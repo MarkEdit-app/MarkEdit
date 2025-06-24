@@ -155,6 +155,9 @@ extension EditorDocument {
 
       // Newly created files should have a clean state
       if wasDraft {
+        isContentDirty = false
+        markContentDirty(false)
+
         Task { @MainActor in
           hostViewController?.handleFileURLChange()
         }
