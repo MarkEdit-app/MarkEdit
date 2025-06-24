@@ -187,15 +187,17 @@ function followReference(element: HTMLElement, type: string) {
   const state = window.editor.state;
   const from = parseInt(element.getAttribute('data-link-from') ?? '0');
   const to = parseInt(element.getAttribute('data-link-to') ?? '0');
-  const label = element.getAttribute('data-link-label') ?? '';
+  const label = element.getAttribute('data-link-label')?.toLowerCase() ?? '';
   const isDefinition = (pos: number) => state.sliceDoc(pos, pos + 1) === ':';
 
   return scrollIntoTarget(getNodesNamed(state, type).find(node => {
+    // Ignore the node that triggered the event
     if (node.to >= from && node.from <= to) {
       return false;
     }
 
-    if (state.sliceDoc(node.from, node.to) !== label) {
+    // Per spec, reference link label is not case-sensitive
+    if (state.sliceDoc(node.from, node.to).toLowerCase() !== label) {
       return false;
     }
 
