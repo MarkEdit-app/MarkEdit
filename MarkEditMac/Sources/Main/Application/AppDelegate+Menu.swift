@@ -17,12 +17,15 @@ extension AppDelegate: NSMenuDelegate {
 
     modernServicesItem?.image = icon("gearshape.2")
     modernDeveloperItem?.image = icon("curlybraces")
-    modernPageSetupItem?.image = icon("gear")
-    modernPrintItem?.image = icon("printer")
+    modernNewFileFromClipboardItem?.image = icon("list.bullet.clipboard")
+    modernNewTabItem?.image = icon("macwindow.on.rectangle")
+    modernSaveAllItem?.image = icon("square.and.arrow.down.on.square")
+    modernSelectAllItem?.image = icon("character.textbox")
     modernFindItem?.image = icon("magnifyingglass")
     modernBoldItem?.image = icon("bold")
     modernItalicItem?.image = icon("italic")
     modernStrikethroughItem?.image = icon("strikethrough")
+    modernFloatOnTopItem?.image = icon("pin")
   }
 
   func menuNeedsUpdate(_ menu: NSMenu) {

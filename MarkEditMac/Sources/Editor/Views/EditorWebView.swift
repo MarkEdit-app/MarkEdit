@@ -164,6 +164,10 @@ private extension EditorWebView {
         if item.identifier == NSUserInterfaceItemIdentifier.inspectElement {
           item.keyEquivalent = "i"
           item.keyEquivalentModifierMask = [.option, .command]
+
+          if AppDesign.menuIconEvolution {
+            item.image = NSImage(systemSymbolName: "ladybug", accessibilityDescription: nil)
+          }
         }
 
         // Disable copy, cut for empty selection (always enable on editor blur)
