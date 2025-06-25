@@ -93,7 +93,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     attributes[`${prefix}-repeat`] = 'no-repeat';
     return attributes;
   })(),
-  '.cm-visibleSpace::before, .cm-visibleLineBreak': {
+  '.cm-visibleSpace::before, .cm-visibleLineBreak::before': {
     content: 'attr(content)',
     position: 'absolute',
     pointerEvents: 'none',
@@ -176,13 +176,13 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-visibleTab': {
       backgroundColor: colors.visibleSpace,
     },
-    '.cm-visibleSpace::before, .cm-visibleLineBreak': {
+    '.cm-visibleSpace::before, .cm-visibleLineBreak::before': {
       color: colors.visibleSpace,
     },
     '.cm-selectedVisible .cm-visibleTab': {
       backgroundColor: `${colors.text}99`,
     },
-    '.cm-selectedVisible .cm-visibleSpace::before, .cm-selectedVisible .cm-visibleLineBreak': {
+    '.cm-selectedVisible .cm-visibleSpace::before, .cm-selectedVisible .cm-visibleLineBreak::before': {
       color: `${colors.text}99`,
     },
     '.cm-md-activeIndicator': {
