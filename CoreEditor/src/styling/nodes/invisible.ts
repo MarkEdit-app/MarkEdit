@@ -5,6 +5,7 @@ import { InvisiblesBehavior } from '../../config';
 import { calculateFontSize } from './heading';
 import { createMarkDeco } from '../matchers/regex';
 import { createDecoPlugin } from '../helper';
+import { isPositionFolded } from './gutter';
 import { selectedVisiblesDecoration } from './selection';
 import { frontMatterRange } from '../../modules/frontMatter';
 import { refreshEditFocus } from '../../modules/selection';
@@ -115,6 +116,10 @@ function renderLineBreaks(selectionOnly: boolean) {
     const decos = getVisibleLines()
       .map(({ to: pos }) => {
         if (shouldIgnorePosition(pos, selectionOnly)) {
+          return null;
+        }
+
+        if (window.config.showLineNumbers && isPositionFolded(pos)) {
           return null;
         }
 
