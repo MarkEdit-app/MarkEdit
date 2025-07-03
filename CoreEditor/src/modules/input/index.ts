@@ -170,7 +170,7 @@ export function observeChanges() {
           clearTimeout(storage.gutterUpdater);
         }
 
-        if (update.docChanged) {
+        if (editingState.compositionEnded && update.docChanged) {
           // To handle a case where line number rects are not correctly updated
           update.view.requestMeasure();
 
