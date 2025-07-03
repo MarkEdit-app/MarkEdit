@@ -25,6 +25,8 @@ export const classHighlighters = [
     { tag: tags.emphasis, class: 'cm-md-italic' },
     { tag: tags.strikethrough, class: 'cm-md-strikethrough' },
     { tag: tags.url, class: 'cm-md-url' },
+    { tag: tags.codeInfo, class: 'cm-md-codeInfo' },
+    { tag: tags.codeMark, class: 'cm-md-codeMark' },
     { tag: tags.linkMark, class: 'cm-md-linkMark' },
     { tag: tags.listMark, class: 'cm-md-listMark' },
     { tag: tags.quote, class: 'cm-md-quote' },
