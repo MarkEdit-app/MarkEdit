@@ -113,14 +113,32 @@ final class EditorWebView: WKWebView {
     }
 
     menu.addItem(.separator())
-    menu.addItem(withTitle: Localized.Search.findSelection, action: #selector(findSelection(_:)))
-    menu.addItem(withTitle: Localized.Search.selectAllOccurrences, action: #selector(selectAllOccurrences(_:)))
+
+    let findSelectionItem = menu.addItem(
+      withTitle: Localized.Search.findSelection,
+      action: #selector(findSelection(_:))
+    )
+
+    let selectAllOccurrencesItem = menu.addItem(
+      withTitle: Localized.Search.selectAllOccurrences,
+      action: #selector(selectAllOccurrences(_:))
+    )
+
+    if AppDesign.menuIconEvolution {
+      findSelectionItem.image = NSImage(systemSymbolName: "text.page.badge.magnifyingglass", accessibilityDescription: nil)
+      selectAllOccurrencesItem.image = NSImage(systemSymbolName: "selection.pin.in.out", accessibilityDescription: nil)
+    }
 
     // Only add text format items when it's not read-only
     if !(actionDelegate?.editorWebViewIsReadOnlyMode(self) ?? false) {
       let item = NSMenuItem()
       item.title = Localized.Toolbar.textFormat
       item.submenu = NSApp.appDelegate?.textFormatMenu?.copiedMenu
+
+      if AppDesign.menuIconEvolution {
+        item.image = NSImage(systemSymbolName: "bold.italic.underline", accessibilityDescription: nil)
+      }
+
       menu.addItem(item)
     }
 
