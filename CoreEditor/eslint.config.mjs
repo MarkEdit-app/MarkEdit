@@ -8,6 +8,7 @@ import promise from 'eslint-plugin-promise';
 export default [
   {
     ignores: [
+      '.yarn',
       'dist/*',
       'src/@vendor/*',
     ],
