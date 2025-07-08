@@ -18,7 +18,7 @@ extension AppDelegate {
   }
 
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
-    openOrCreateDocument(sender: sender)
+    shouldOpenOrCreateDocument() && openOrCreateDocument(sender: sender)
   }
 
   func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {

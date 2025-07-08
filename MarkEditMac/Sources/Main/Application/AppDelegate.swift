@@ -128,6 +128,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     return .terminateNow
   }
+
+  func shouldOpenOrCreateDocument() -> Bool {
+    if let settingsWindow = settingsWindowController?.window {
+      // We don't open or create documents when the settings pane is the key and visible
+      return !(settingsWindow.isKeyWindow && settingsWindow.isVisible)
+    }
+
+    return true
+  }
 }
 
 // MARK: - URL Handling
