@@ -1,3 +1,5 @@
+import { EditorView } from '@codemirror/view';
+
 import { Config, InvisiblesBehavior } from './src/config';
 import { isReleaseMode } from './src/common/utils';
 
@@ -55,6 +57,21 @@ const config = import.meta.env.PROD ? window.config : {
     cmdClickToToggleTodo: '⌘-click to toggle todo',
   },
 } as Config;
+
+// Hook the theme creation process to save the specs
+window.cachedThemes = [];
+const originalTheme = EditorView.theme;
+EditorView.theme = (spec, options) => {
+  const theme = originalTheme(spec, options);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (spec['@keyframes cm-blink'] === undefined && spec['.cm-md-previewButton'] === undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (theme as any).spec = spec;
+    window.cachedThemes.push(theme);
+  }
+
+  return theme;
+};
 
 window.webModules = {
   config: new WebModuleConfigImpl(),
