@@ -1,3 +1,4 @@
+import { Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { Config, Dynamics } from '../config';
 import { WebModule } from '../bridge/webModule';
@@ -35,6 +36,7 @@ declare global {
     editor: EditorView;
     config: Config;
     dynamics: Dynamics;
+    cachedThemes: Extension[];
     webModules: Record<string, WebModule>;
     nativeModules: {
       core: NativeModuleCore;
