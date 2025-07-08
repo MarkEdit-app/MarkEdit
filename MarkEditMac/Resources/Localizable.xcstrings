@@ -1210,6 +1210,23 @@
         }
       }
     },
+    "Get Custom Themes..." : {
+      "comment" : "Get custom themes from the GitHub",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获取自定义主题…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "獲取自訂主題…"
+          }
+        }
+      }
+    },
     "Get File Content" : {
       "localizations" : {
         "zh-Hans" : {

@@ -39,22 +39,28 @@ struct EditorSettingsView: View {
       SettingsForm {
         Section {
           Picker(Localized.Settings.lightTheme, selection: $lightTheme) {
-            ForEach(AppTheme.allCases, id: \.self) {
-              Text($0.description).tag($0.editorTheme)
-            }
+            createThemePicker()
           }
           .onChange(of: lightTheme) {
-            AppPreferences.Editor.lightTheme = lightTheme
+            if lightTheme == Constants.customThemesTag {
+              getCustomThemes()
+              lightTheme = AppPreferences.Editor.lightTheme // Revert selection
+            } else {
+              AppPreferences.Editor.lightTheme = lightTheme
+            }
           }
           .formMenuPicker()
 
           Picker(Localized.Settings.darkTheme, selection: $darkTheme) {
-            ForEach(AppTheme.allCases, id: \.self) {
-              Text($0.description).tag($0.editorTheme)
-            }
+            createThemePicker()
           }
           .onChange(of: darkTheme) {
-            AppPreferences.Editor.darkTheme = darkTheme
+            if darkTheme == Constants.customThemesTag {
+              getCustomThemes()
+              darkTheme = AppPreferences.Editor.darkTheme // Revert selection
+            } else {
+              AppPreferences.Editor.darkTheme = darkTheme
+            }
           }
           .formMenuPicker()
         }
@@ -164,6 +170,11 @@ struct EditorSettingsView: View {
 // MARK: - Private
 
 private extension EditorSettingsView {
+  enum Constants {
+    static let customThemesTag = "$customThemes"
+    static let customThemesLink = "https://github.com/MarkEdit-app/MarkEdit/wiki/Extensions#list-of-themes"
+  }
+
   var fontPickerConfiguration: FontPickerConfiguration {
     FontPickerConfiguration(
       selectedFontStyle: AppPreferences.Editor.fontStyle,
@@ -187,5 +198,21 @@ private extension EditorSettingsView {
         AppPreferences.Editor.fontSize = fontSize
       }
     )
+  }
+
+  @ViewBuilder
+  func createThemePicker() -> some View {
+    ForEach(AppTheme.allCases, id: \.self) {
+      Text($0.description).tag($0.editorTheme)
+    }
+
+    Divider()
+
+    Text(Localized.Settings.getCustomThemes)
+      .tag(Constants.customThemesTag)
+  }
+
+  func getCustomThemes() {
+    NSWorkspace.shared.safelyOpenURL(string: Constants.customThemesLink)
   }
 }
