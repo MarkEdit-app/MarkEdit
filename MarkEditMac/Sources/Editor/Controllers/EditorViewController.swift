@@ -19,7 +19,7 @@ final class EditorViewController: NSViewController {
   var mouseExitedWindow = false
   var bottomPanelHeight: Double = 0
   var initialContent: String?
-  var webBackgroundColor: NSColor?
+  var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
   var localEventMonitor: Any?
   var writingToolsObservation: NSKeyValueObservation?
   var safeAreaObservation: NSKeyValueObservation?

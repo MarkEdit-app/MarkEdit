@@ -133,6 +133,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32, alpha: Double) {
     webBackgroundColor = NSColor(hexCode: color, alpha: alpha)
     updateWindowColors(.current)
+    AppPreferences.Window.cachedBackgroundColor = .init(hex: color, alpha: alpha)
   }
 
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore) {

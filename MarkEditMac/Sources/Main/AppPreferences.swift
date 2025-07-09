@@ -297,6 +297,36 @@ extension AppPreferences {
   }
 }
 
+extension AppPreferences.Window {
+  struct CodableColor: Codable {
+    let hex: UInt32
+    let alpha: Double
+
+    var nsColor: NSColor {
+      NSColor(hexCode: hex, alpha: alpha)
+    }
+  }
+
+  @Storage(key: "window.light-background-color", defaultValue: nil)
+  private static var lightBackgroundColor: CodableColor?
+
+  @Storage(key: "window.dark-background-color", defaultValue: nil)
+  private static var darkBackgroundColor: CodableColor?
+
+  @MainActor static var cachedBackgroundColor: CodableColor? {
+    get {
+      AppTheme.current.isDark ? darkBackgroundColor : lightBackgroundColor
+    }
+    set {
+      if AppTheme.current.isDark {
+        darkBackgroundColor = newValue
+      } else {
+        lightBackgroundColor = newValue
+      }
+    }
+  }
+}
+
 // MARK: - Types
 
 enum Appearance: Codable {
