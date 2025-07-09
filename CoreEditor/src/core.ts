@@ -106,6 +106,7 @@ export function resetEditor(initialContent: string) {
 
   // Recofigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
+  observeBackgroundColorChanges(editor.dom);
   afterDomUpdate(notifyBackgroundColor);
 
   // eslint-disable-next-line compat/compat
@@ -253,6 +254,22 @@ function observeContentHeightChanges(scrollDOM: HTMLElement) {
   notifyIfChanged();
 }
 
+function observeBackgroundColorChanges(element: HTMLElement) {
+  const observer = new MutationObserver(() => {
+    const currentColor = getComputedStyle(element).backgroundColor;
+    if (currentColor !== storage.backgroundColor) {
+      storage.backgroundColor = currentColor;
+      notifyBackgroundColor(currentColor);
+    }
+  });
+
+  observer.observe(element, {
+    attributes: true,
+    attributeFilter: ['class', 'style'],
+    subtree: false,
+  });
+}
+
 function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   // Fix the vertical scrollbar initially visible for short documents
   scrollDOM.style.overflow = 'hidden';
@@ -291,10 +308,12 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
 
 const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
+  backgroundColor: string;
   viewportScale: number;
   bottomPanelHeight: number;
 } = {
   scrollTimer: undefined,
+  backgroundColor: '',
   viewportScale: 1.0,
   bottomPanelHeight: 0.0,
 };
