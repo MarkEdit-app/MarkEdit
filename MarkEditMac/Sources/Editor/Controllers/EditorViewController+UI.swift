@@ -145,7 +145,7 @@ extension EditorViewController {
     view.window?.backgroundColor = backgroundColor
     view.window?.toolbarContainerView?.layerBackgroundColor = backgroundColor
 
-    let prefersTintedToolbar = theme.prefersTintedToolbar
+    let prefersTintedToolbar = theme.prefersTintedToolbar || backgroundColor.isTintedColor
     (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
 
     if AppDesign.modernTitleBar {
