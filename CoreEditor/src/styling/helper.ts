@@ -62,9 +62,8 @@ export function shadowableTextColor(input: string) {
   }, style);
 }
 
-export function notifyBackgroundColor() {
-  const element = window.editor.dom;
-  const color = getComputedStyle(element).backgroundColor;
+export function notifyBackgroundColor(inputColor?: string) {
+  const color = inputColor ?? getComputedStyle(window.editor.dom).backgroundColor;
   const match = color.match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\s*\)/);
   if (match === null) {
     return console.error(`Invalid background color: ${color}`);
