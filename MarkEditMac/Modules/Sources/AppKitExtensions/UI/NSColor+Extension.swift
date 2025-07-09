@@ -36,6 +36,31 @@ public extension NSColor {
     self.init(red: red, green: green, blue: blue, alpha: alpha)
   }
 
+  /**
+   Returns true if the color is **strongly tinted**.
+   */
+  var isTintedColor: Bool {
+    guard cgColor.alpha > 0.05, let color = usingColorSpace(.deviceRGB) else {
+      return false
+    }
+
+    var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0
+    color.getRed(&red, green: &green, blue: &blue, alpha: nil)
+
+    let maxValue = max(red, green, blue)
+    let minValue = min(red, green, blue)
+    let valueDelta = maxValue - minValue
+
+    let lightness = (maxValue + minValue) * 0.5
+    let saturation = valueDelta == 0 ? 0 : (valueDelta / (1 - abs(2 * lightness - 1)))
+
+    if lightness >= 0.9 {
+      return saturation >= 0.12
+    } else {
+      return saturation >= 0.12 && (1 - lightness) >= 0.08
+    }
+  }
+
   static func theme(light: NSColor, dark: NSColor) -> NSColor {
     NSColor(name: nil) { $0.isDarkMode ? dark : light }
   }
