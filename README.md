@@ -29,7 +29,7 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 MarkEdit is designed to be simple and easy to use. You can also customize the UI and behavior by adding your own scripts, including utilizing CodeMirror extensions.
 
-For example, to add a preview pane in MarkEdit, use the [MarkEdit-preview](https://github.com/MarkEdit-app/MarkEdit-preview) extension.
+For example, use [MarkEdit-preview](https://github.com/MarkEdit-app/MarkEdit-preview) to add a preview pane, and [MarkEdit-theming](https://github.com/MarkEdit-app/MarkEdit-theming) to customize themes.
 
 > To learn more, refer to [Philosophy](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy), [Why MarkEdit](https://github.com/MarkEdit-app/MarkEdit/wiki/Why-MarkEdit) and [MarkEdit-api](https://github.com/MarkEdit-app/MarkEdit-api).
 
