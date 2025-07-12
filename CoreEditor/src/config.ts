@@ -47,7 +47,7 @@ export enum IndentBehavior {
  */
 export interface Config {
   text: string;
-  theme: string;
+  theme: string; // MarkEdit-theming relies on this, add a fallback if renaming becomes necessary
   fontFace: WebFontFace;
   fontSize: number;
   showLineNumbers: boolean;

@@ -1,4 +1,3 @@
-import { EditorView } from '@codemirror/view';
 import { Config, Dynamics } from '../config';
 import { WebModule } from '../bridge/webModule';
 import { NativeModuleCore } from '../bridge/native/core';
@@ -7,6 +6,9 @@ import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
 import { NativeModuleAPI } from '../bridge/native/api';
 
+import type { EditorView } from '@codemirror/view';
+import type { Extension } from '@codemirror/state';
+import type { TagStyle } from '@codemirror/language';
 import type { MarkEdit } from 'markedit-api';
 
 declare global {
@@ -43,6 +45,8 @@ declare global {
       tokenizer: NativeModuleTokenizer;
       api: NativeModuleAPI;
     };
+    __extractStyleRules__: (theme: Extension) => string[] | undefined;
+    __extractHighlightSpecs__: (theme: Extension) => TagStyle[] | undefined;
   }
 
   interface ImportMetaEnv {

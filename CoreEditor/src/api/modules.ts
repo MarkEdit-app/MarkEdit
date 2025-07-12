@@ -97,3 +97,16 @@ export function initMarkEditModules() {
 
   window.require = require as NodeJS.Require;
 }
+
+export function initThemeExtractors() {
+  type Theme = cmState.Extension & {
+    value?: {
+      rules?: string[];
+      specs?: cmLanguage.TagStyle[];
+    };
+  };
+
+  // Private methods used in MarkEdit-theming to stably extract theme properties
+  window.__extractStyleRules__ = (theme: Theme) => theme.value?.rules;
+  window.__extractHighlightSpecs__ = (theme: Theme) => theme.value?.specs;
+}
