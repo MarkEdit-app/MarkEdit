@@ -29,22 +29,12 @@ describe('Test theming internals', () => {
   });
 });
 
-function flattenThemes(root: Extension) {
-  const result: Extension[] = [];
-  const stack: Extension[] = [root];
-
-  while (stack.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const node = stack.pop()!;
-    if (Array.isArray(node)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      node.forEach(o => stack.push(o));
-    } else if ('extension' in node) {
-      stack.push(node.extension);
-    } else {
-      result.push(node);
-    }
+function flattenThemes(node: Extension): Extension[] {
+  if (Array.isArray(node)) {
+    return node.flatMap(flattenThemes);
+  } else if ('extension' in node) {
+    return flattenThemes(node.extension);
+  } else {
+    return [node];
   }
-
-  return result;
 }
