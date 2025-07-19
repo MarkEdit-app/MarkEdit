@@ -163,7 +163,9 @@ private extension AppDelegate {
 
   @IBAction func grantFolderAccess(_ sender: Any?) {
     NSApp.closeOpenPanels()
-    saveGrantedFolderAsBookmark()
+    Task {
+      await saveGrantedFolderAsBookmark()
+    }
   }
 
   @IBAction func newFileFromClipboard(_ sender: Any?) {

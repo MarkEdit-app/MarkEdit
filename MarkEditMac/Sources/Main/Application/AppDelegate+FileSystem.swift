@@ -9,14 +9,14 @@ import AppKit
 import MarkEditKit
 
 extension AppDelegate {
-  func saveGrantedFolderAsBookmark() {
+  func saveGrantedFolderAsBookmark() async {
     let openPanel = NSOpenPanel()
     openPanel.prompt = Localized.General.grantAccess
     openPanel.canChooseDirectories = true
     openPanel.canChooseFiles = false
     openPanel.allowsMultipleSelection = false
 
-    guard openPanel.runModal() == .OK, let url = openPanel.url else {
+    guard await openPanel.begin() == .OK, let url = openPanel.url else {
       return
     }
 
