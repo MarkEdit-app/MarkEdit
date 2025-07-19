@@ -49,8 +49,8 @@
 </head>
 <body>
   <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
-  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
-  <script>
+  <script type="module">
+    import { marked } from "https://cdn.jsdelivr.net/npm/marked@16.1.1/lib/marked.esm.js";
     const container = document.querySelector("#container");
     container.innerHTML = marked.parse("{{DATA}}".code);
   </script>
