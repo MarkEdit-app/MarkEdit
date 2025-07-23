@@ -273,13 +273,7 @@ enum Icons {
   static let terminal = "terminal"
   static let textQuote = "text.quote"
   static let textformat = "textformat"
-  static let wandAndSparkles = {
-    if #available(macOS 15.0, *) {
-      return "wand.and.sparkles"
-    }
-
-    return "wand.and.stars"
-  }()
+  static let wandAndSparkles = "wand.and.sparkles"
 }
 
 extension EditorLocalizable {
