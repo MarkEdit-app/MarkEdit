@@ -13,7 +13,7 @@ extension SettingsTabViewController {
   }
 
   static var assistant: Self {
-    Self(AssistantSettingsView(), title: Localized.Settings.assistant, icon: Icons.wandAndStars)
+    Self(AssistantSettingsView(), title: Localized.Settings.assistant, icon: Icons.wandAndSparkles)
   }
 
   static var general: Self {

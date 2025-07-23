@@ -43,8 +43,7 @@ struct EditorSettingsView: View {
           }
           .onChange(of: lightTheme) {
             if lightTheme == Constants.customThemesTag {
-              getCustomThemes()
-              lightTheme = AppPreferences.Editor.lightTheme // Revert selection
+              getCustomThemes(selection: $lightTheme, revertTo: AppPreferences.Editor.lightTheme)
             } else {
               AppPreferences.Editor.lightTheme = lightTheme
             }
@@ -56,8 +55,7 @@ struct EditorSettingsView: View {
           }
           .onChange(of: darkTheme) {
             if darkTheme == Constants.customThemesTag {
-              getCustomThemes()
-              darkTheme = AppPreferences.Editor.darkTheme // Revert selection
+              getCustomThemes(selection: $darkTheme, revertTo: AppPreferences.Editor.darkTheme)
             } else {
               AppPreferences.Editor.darkTheme = darkTheme
             }
@@ -208,11 +206,18 @@ private extension EditorSettingsView {
 
     Divider()
 
-    Text(Localized.Settings.getCustomThemes)
-      .tag(Constants.customThemesTag)
+    HStack {
+      Image(systemName: Icons.wandAndSparkles)
+      Text(Localized.Settings.getCustomThemes)
+    }.tag(Constants.customThemesTag)
   }
 
-  func getCustomThemes() {
+  func getCustomThemes(selection: Binding<String>, revertTo value: String) {
     NSWorkspace.shared.safelyOpenURL(string: Constants.customThemesLink)
+
+    // In macOS Tahoe, this requires a delay to work
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+      selection.wrappedValue = value
+    }
   }
 }

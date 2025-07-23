@@ -172,7 +172,7 @@ private extension NSToolbarItem.Identifier {
     case .statistics: return Icons.chartPie
     case .shareDocument: return Icons.squareAndArrowUp
     case .copyPandocCommand: return Icons.terminal
-    case .writingTools: return Icons.wandAndStars
+    case .writingTools: return Icons.wandAndSparkles
     default: fatalError("Unexpected toolbar item identifier: \(self)")
     }
   }
