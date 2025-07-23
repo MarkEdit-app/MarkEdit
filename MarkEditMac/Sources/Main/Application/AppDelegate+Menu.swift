@@ -15,6 +15,8 @@ extension AppDelegate: NSMenuDelegate {
       NSImage(systemSymbolName: $0, accessibilityDescription: nil)
     }
 
+    modernCheckForUpdatesItem?.image = icon("arrow.trianglehead.2.clockwise.rotate.90.circle")
+    modernSettingsItem?.image = icon("gear")
     modernServicesItem?.image = icon("gearshape.2")
     modernDeveloperItem?.image = icon("curlybraces")
     modernNewFileFromClipboardItem?.image = icon("list.bullet.clipboard")

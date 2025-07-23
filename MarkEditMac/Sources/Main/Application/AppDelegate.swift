@@ -48,6 +48,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var windowFloatingItem: NSMenuItem?
 
   // Items used for AppDesign.menuIconEvolution
+  @IBOutlet weak var modernCheckForUpdatesItem: NSMenuItem?
+  @IBOutlet weak var modernSettingsItem: NSMenuItem?
   @IBOutlet weak var modernServicesItem: NSMenuItem?
   @IBOutlet weak var modernDeveloperItem: NSMenuItem?
   @IBOutlet weak var modernNewFileFromClipboardItem: NSMenuItem?

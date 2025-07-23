@@ -1037,6 +1037,7 @@ Gw
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="modernBoldItem" destination="WAq-55-Lug" id="3gN-ZT-qtj"/>
+                        <outlet property="modernCheckForUpdatesItem" destination="s40-D9-CoM" id="A9g-EL-sCj"/>
                         <outlet property="modernDeveloperItem" destination="qjf-Yo-EMd" id="WLT-yI-Ldu"/>
                         <outlet property="modernFindItem" destination="4EN-yA-p0u" id="MuE-y8-qCU"/>
                         <outlet property="modernFloatOnTopItem" destination="0C5-FE-fvI" id="vAg-X0-suB"/>
@@ -1046,6 +1047,7 @@ Gw
                         <outlet property="modernSaveAllItem" destination="5W0-LW-fUP" id="P9i-2B-Wi3"/>
                         <outlet property="modernSelectAllItem" destination="Ruw-6m-B2m" id="uYE-TW-Xt6"/>
                         <outlet property="modernServicesItem" destination="NMo-om-nkz" id="Q83-EJ-f4N"/>
+                        <outlet property="modernSettingsItem" destination="BOF-NM-1cW" id="zL7-2C-Hos"/>
                         <outlet property="modernStrikethroughItem" destination="z7z-Qk-jsC" id="6Iy-0V-Kct"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
                         <outlet property="reopenFileMenu" destination="sPG-vJ-QST" id="6e4-Zg-kFp"/>
