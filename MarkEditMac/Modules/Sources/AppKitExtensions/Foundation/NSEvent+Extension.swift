@@ -35,6 +35,7 @@ public extension NSEvent.ModifierFlags {
 
 // https://gist.github.com/eegrok/949034
 public extension UInt16 {
+  static let kVK_ANSI_A: Self = 0x00
   static let kVK_ANSI_F: Self = 0x03
   static let kVK_ANSI_I: Self = 0x22
   static let kVK_Return: Self = 0x24
