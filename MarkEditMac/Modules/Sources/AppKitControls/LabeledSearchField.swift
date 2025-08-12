@@ -8,7 +8,7 @@ import AppKit
 import AppKitExtensions
 
 public final class LabeledSearchField: NSSearchField {
-  private let bezelView = BezelView()
+  private let bezelView = BezelView(cornerRadius: Constants.bezelCornerRadius)
 
   private let labelView = {
     let label = LabelView(frame: .zero)
@@ -20,6 +20,8 @@ public final class LabeledSearchField: NSSearchField {
   override public init(frame: CGRect) {
     super.init(frame: frame)
     usesSingleLineMode = false
+    focusRingType = .exterior
+
     addSubview(bezelView)
     addSubview(labelView)
   }
@@ -56,9 +58,26 @@ public final class LabeledSearchField: NSSearchField {
     cell?.drawInterior(withFrame: bounds, in: self)
   }
 
+  override public func drawFocusRingMask() {
+    // Custom focus ring drawing mostly because macOS Tahoe needs this
+    NSBezierPath(
+      roundedRect: bounds,
+      xRadius: Constants.bezelCornerRadius,
+      yRadius: Constants.bezelCornerRadius
+    ).fill()
+  }
+
   public func updateLabel(text: String) {
     labelView.stringValue = text
     labelView.isHidden = text.isEmpty
     needsLayout = true
+  }
+}
+
+// MARK: - Private
+
+private extension LabeledSearchField {
+  enum Constants {
+    static let bezelCornerRadius: Double = 6.0
   }
 }
