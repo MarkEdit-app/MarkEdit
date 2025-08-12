@@ -156,6 +156,10 @@ final class EditorWebView: WKWebView {
     actionDelegate?.editorWebViewResignFirstResponder(self)
     return super.resignFirstResponder()
   }
+
+  override func accessibilityRole() -> NSAccessibility.Role? {
+    .textArea
+  }
 }
 
 // MARK: - Private
