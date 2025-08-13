@@ -13,7 +13,9 @@ open class RoundedButtonGroup: NSView {
   public var isEnabled: Bool = true {
     didSet {
       let alphaValue: Double = isEnabled ? 1.0 : 0.4
+      leftButton.isEnabled = isEnabled
       leftButton.alphaValue = alphaValue
+      rightButton.isEnabled = isEnabled
       rightButton.alphaValue = alphaValue
     }
   }

@@ -11,15 +11,15 @@ import AppKit
 
 extension EditorFindPanel: NSSearchFieldDelegate {
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-    switch (selector, mode) {
-    case (#selector(insertTab(_:)), .replace):
+    switch (selector, mode, NSApp.isFullKeyboardAccessEnabled) {
+    case (#selector(insertTab(_:)), .replace, false):
       // Focus on the replace panel
       delegate?.editorFindPanelDidPressTabKey(self, isBacktab: false)
       return true
-    case (#selector(insertBacktab(_:)), _):
+    case (#selector(insertBacktab(_:)), _, false):
       delegate?.editorFindPanelDidPressTabKey(self, isBacktab: true)
       return true
-    case (#selector(insertNewline(_:)), _):
+    case (#selector(insertNewline(_:)), _, _):
       // Navigate between search results
       if NSApplication.shared.shiftKeyIsPressed {
         delegate?.editorFindPanelDidClickPrevious(self)
@@ -27,7 +27,7 @@ extension EditorFindPanel: NSSearchFieldDelegate {
         delegate?.editorFindPanelDidClickNext(self)
       }
       return true
-    case (#selector(cancelOperation(_:)), _):
+    case (#selector(cancelOperation(_:)), _, _):
       delegate?.editorFindPanel(self, modeDidChange: .hidden)
       return true
     default:
