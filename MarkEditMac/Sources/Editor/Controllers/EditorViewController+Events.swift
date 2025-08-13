@@ -40,7 +40,7 @@ extension EditorViewController {
       if event.keyCode == .kVK_Tab, let self {
         // It looks like contenteditable works differently compared to NSTextView,
         // the first responder must be self.view to handle tab switching.
-        if event.modifierFlags.contains(.control) {
+        if event.modifierFlags.contains(.control), !NSApp.isFullKeyboardAccessEnabled {
           self.view.window?.makeFirstResponder(self.view)
         }
 

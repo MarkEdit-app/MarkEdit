@@ -95,14 +95,14 @@ extension EditorReplacePanel: NSTextFieldDelegate {
   }
 
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-    switch (selector, replaceButtons.isEnabled) {
-    case (#selector(insertTab(_:)), _):
+    switch (selector, replaceButtons.isEnabled, NSApp.isFullKeyboardAccessEnabled) {
+    case (#selector(insertTab(_:)), _, false):
       delegate?.editorReplacePanelDidPressTabKey(self, isBacktab: false)
       return true
-    case (#selector(insertBacktab(_:)), _):
+    case (#selector(insertBacktab(_:)), _, false):
       delegate?.editorReplacePanelDidPressTabKey(self, isBacktab: true)
       return true
-    case (#selector(insertNewline(_:)), true):
+    case (#selector(insertNewline(_:)), true, _):
       delegate?.editorReplacePanelDidClickReplaceNext(self)
       return true
     default:

@@ -11,6 +11,7 @@ import AppKitControls
 class EditorPanelView: NSView, BackgroundTheming {
   init() {
     super.init(frame: .zero)
+    wantsLayer = true
   }
 
   @available(*, unavailable)

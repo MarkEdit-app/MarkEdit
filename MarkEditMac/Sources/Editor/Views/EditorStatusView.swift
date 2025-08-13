@@ -81,6 +81,14 @@ final class EditorStatusView: NSView, BackgroundTheming {
 // MARK: - Accessibility
 
 extension EditorStatusView {
+  override var canBecomeKeyView: Bool {
+    true
+  }
+
+  override var acceptsFirstResponder: Bool {
+    true
+  }
+
   override func isAccessibilityElement() -> Bool {
     true
   }

@@ -25,9 +25,15 @@ extension EditorViewController {
       wrapper.addSubview(modernBackgroundView)
     }
 
-    wrapper.addSubview(replacePanel) // ReplacePanel must go before FindPanel
     wrapper.addSubview(findPanel)
+    wrapper.addSubview(replacePanel)
     wrapper.addSubview(panelDivider)
+
+    // findPanel is added before replacePanel to ensure the key view loop,
+    // but we want findPanel visually above the replacePanel to play UI tricks.
+    if let findPanelLayer = findPanel.layer {
+      wrapper.layer?.insertSublayer(findPanelLayer, above: replacePanel.layer)
+    }
 
     if AppDesign.modernTitleBar {
       wrapper.addSubview(modernEffectView)
