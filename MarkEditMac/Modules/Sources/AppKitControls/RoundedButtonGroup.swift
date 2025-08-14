@@ -54,6 +54,12 @@ open class RoundedButtonGroup: NSView {
         }
       }
     }
+
+    // Half-rounded corners for the focus ring
+    leftButton.focusRingRadius = Constants.cornerRadius
+    leftButton.focusRingCorners = .left
+    rightButton.focusRingRadius = Constants.cornerRadius
+    rightButton.focusRingCorners = .right
   }
 
   @available(*, unavailable)

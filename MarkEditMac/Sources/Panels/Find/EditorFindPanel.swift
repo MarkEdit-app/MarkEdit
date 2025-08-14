@@ -50,7 +50,7 @@ final class EditorFindPanel: EditorPanelView {
   )
 
   private(set) lazy var doneButton = {
-    let button = NSButton()
+    let button = AquaFocusRingButton()
     button.bezelStyle = .accessoryBarAction
 
     button.attributedTitle = NSAttributedString(
