@@ -5,14 +5,18 @@
 //
 
 import AppKit
+import AppKitExtensions
 
 public class NonBezelButton: NSButton {
+  public var focusRingRadius: Double?
+  public var focusRingCorners: NSBezierPath.Corners?
   public var modernStyle = false
   public var modernCornerRadius: Double = 0
   public var modernStateChanged: ((_ isHighlighted: Bool) -> Void)?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+    focusRingType = .exterior
   }
 
   @available(*, unavailable)
@@ -53,6 +57,14 @@ public class NonBezelButton: NSButton {
         rectPath.fill()
       }
     }
+  }
+
+  override public func drawFocusRingMask() {
+    guard let focusRingRadius, let focusRingCorners else {
+      return super.drawFocusRingMask()
+    }
+
+    NSBezierPath(roundedRect: bounds, radius: focusRingRadius, corners: focusRingCorners).fill()
   }
 
   override public func resetCursorRects() {
