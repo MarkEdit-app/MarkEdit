@@ -54,7 +54,7 @@ function findSectionEnd(headerNode: SyntaxNode, level: number) {
   return last.to
 }
 
-const headerIndent = foldService.of((state, start, end) => {
+export const headerIndent = foldService.of((state, start, end) => {
   for (let node: SyntaxNode | null = syntaxTree(state).resolveInner(end, -1); node; node = node.parent) {
     if (node.from < start) break
     let heading = node.type.prop(headingProp)
@@ -66,7 +66,7 @@ const headerIndent = foldService.of((state, start, end) => {
 })
 
 export function mkLang(parser: MarkdownParser) {
-  return new Language(data, parser, [headerIndent], "markdown")
+  return new Language(data, parser, [], "markdown")
 }
 
 /// Language support for strict CommonMark.

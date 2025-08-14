@@ -98,7 +98,7 @@ export function startClickable(inputElement?: HTMLElement) {
   linkElement.style.textDecoration = 'underline';
 
   // Find the actual text node and use its color
-  const text = [...linkElement.children].find(node => node.textContent !== null);
+  const text = [...linkElement.children].find(node => (node.textContent as string | null) !== null);
   if (text !== undefined) {
     linkElement.style.textDecorationColor = getComputedStyle(text).color;
   }
