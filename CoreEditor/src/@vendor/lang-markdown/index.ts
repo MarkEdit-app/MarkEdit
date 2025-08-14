@@ -4,7 +4,7 @@ import {Language, LanguageSupport, LanguageDescription, syntaxTree} from "@codem
 import {Completion, CompletionContext} from "@codemirror/autocomplete"
 import {MarkdownExtension, MarkdownParser, parseCode} from "@lezer/markdown"
 import {html, htmlCompletionSource} from "@codemirror/lang-html"
-import {commonmarkLanguage, markdownLanguage, mkLang, getCodeParser} from "./markdown"
+import {commonmarkLanguage, markdownLanguage, mkLang, getCodeParser, headerIndent} from "./markdown"
 import {insertNewlineContinueMarkup, deleteMarkupBackward} from "./commands"
 export {commonmarkLanguage, markdownLanguage, insertNewlineContinueMarkup, deleteMarkupBackward}
 
@@ -59,7 +59,7 @@ export function markdown(config: {
        htmlTagLanguage = htmlNoMatch} = config
   if (!(parser instanceof MarkdownParser)) throw new RangeError("Base parser provided to `markdown` should be a Markdown parser")
   let extensions = config.extensions ? [config.extensions] : []
-  let support = [htmlTagLanguage.support], defaultCode
+  let support = [htmlTagLanguage.support, headerIndent], defaultCode
   if (defaultCodeLanguage instanceof LanguageSupport) {
     support.push(defaultCodeLanguage.support)
     defaultCode = defaultCodeLanguage.language

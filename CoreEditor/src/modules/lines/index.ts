@@ -95,7 +95,7 @@ function adjustGutter(element: HTMLElement | undefined, targetFontSize: string) 
   }
 
   const { fontSize, fontFamily } = getComputedStyle(element);
-  const paddingTop = getHeightDiff(element.textContent ?? '', targetFontSize, fontSize, fontFamily);
+  const paddingTop = getHeightDiff((element.textContent as string | null) ?? '', targetFontSize, fontSize, fontFamily);
   element.style.paddingTop = `${paddingTop}px`;
 }
 
