@@ -28,7 +28,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@eslint/plugin-kit": "^0.3.3",
+    "@eslint/plugin-kit": "^0.3.5",
     "@types/eslint": "^8.56.12",
     "@types/jest": "^29.5.4",
     "@types/js-yaml": "^4.0.5",
