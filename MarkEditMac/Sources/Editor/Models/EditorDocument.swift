@@ -16,6 +16,7 @@ import TextBundle
  */
 final class EditorDocument: NSDocument {
   var fileData: Data?
+  var spellDocTag: Int?
   var stringValue = ""
   var isContentDirty = false // Different from "isDocumentEdited", used mostly for "autoSaveWhenIdle"
   var isReadOnlyMode = false
@@ -132,6 +133,14 @@ final class EditorDocument: NSDocument {
       isContentDirty = false
     }
   }
+
+  func prepareSpellDocTag() {
+    guard spellDocTag == nil else {
+      return
+    }
+
+    spellDocTag = NSSpellChecker.uniqueSpellDocumentTag()
+  }
 }
 
 // MARK: - Overridden
@@ -225,6 +234,14 @@ extension EditorDocument {
 
     // General cases
     canClose()
+  }
+
+  override func close() {
+    super.close()
+
+    if let spellDocTag {
+      NSSpellChecker.shared.closeSpellDocument(withTag: spellDocTag)
+    }
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {

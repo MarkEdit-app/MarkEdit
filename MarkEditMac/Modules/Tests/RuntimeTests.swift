@@ -49,12 +49,12 @@ final class RuntimeTests: XCTestCase {
   }
 
   func testExistenceOfShowCompletionForCandidate() {
-    let checker = NSSpellChecker()
+    let checker = NSSpellChecker.shared
     testExistenceOfSelector(object: checker, selector: "showCompletionForCandidate:selectedRange:offset:inString:rect:view:completionHandler:")
   }
 
   func testExistenceOfCancelCorrection() {
-    let checker = NSSpellChecker()
+    let checker = NSSpellChecker.shared
     testExistenceOfSelector(object: checker, selector: "cancelCorrectionIndicatorForView:")
   }
 

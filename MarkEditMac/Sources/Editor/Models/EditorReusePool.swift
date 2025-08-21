@@ -20,6 +20,9 @@ final class EditorReusePool {
     if controllerPool.isEmpty {
       controllerPool.append(EditorViewController())
     }
+
+    // Try if warmup can fix the empty suggestion bug
+    NSSpellChecker.shared.checkSpelling(of: "warmup", startingAt: 0)
   }
 
   func dequeueViewController() -> EditorViewController {
