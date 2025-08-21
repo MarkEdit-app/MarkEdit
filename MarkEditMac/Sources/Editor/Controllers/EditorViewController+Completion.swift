@@ -25,6 +25,13 @@ extension EditorViewController {
     completionContext.toIndex = completionContext.fromIndex + partialRange.length
     var completions = [String]()
 
+    document?.prepareSpellDocTag()
+    let spellDocTag = document?.spellDocTag ?? 0
+
+    // Explicitly do some harmless updates
+    spellChecker.automaticallyIdentifiesLanguages = true
+    spellChecker.updatePanels()
+
     if AppPreferences.Assistant.wordsInDocument {
       // Remove tokens if they are exactly the same as the typing prefix
       completions.append(contentsOf: tokenizedWords.filter { $0 != prefix })
@@ -35,7 +42,7 @@ extension EditorViewController {
         forPartialWordRange: partialRange,
         in: anchor.text,
         language: nil,
-        inSpellDocumentWithTag: 0
+        inSpellDocumentWithTag: spellDocTag
       ) ?? [])
     }
 
@@ -44,7 +51,7 @@ extension EditorViewController {
         forWordRange: partialRange,
         in: anchor.text,
         language: nil,
-        inSpellDocumentWithTag: 0
+        inSpellDocumentWithTag: spellDocTag
       ) ?? [])
 
       // Misspelled correction as a guess
@@ -52,7 +59,7 @@ extension EditorViewController {
         forWordRange: partialRange,
         in: anchor.text,
         language: "",
-        inSpellDocumentWithTag: 0
+        inSpellDocumentWithTag: spellDocTag
       ) {
         completions.append(correction)
       }
@@ -65,6 +72,10 @@ extension EditorViewController {
 
     updateCompletionPanel(isVisible: !completions.isEmpty)
     updateCompletionPanel(completions: completions.deduplicated, query: prefix)
+
+    if completions.isEmpty {
+      NSSound.beep()
+    }
   }
 
   func commitCompletion() {

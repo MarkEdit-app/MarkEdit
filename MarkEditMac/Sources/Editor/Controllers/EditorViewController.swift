@@ -72,6 +72,10 @@ final class EditorViewController: NSViewController {
     representedObject as? EditorDocument
   }
 
+  var spellChecker: NSSpellChecker {
+    NSSpellChecker.shared
+  }
+
   var isFindPanelFirstResponder: Bool {
     guard findPanel.mode != .hidden else {
       return false
@@ -217,10 +221,6 @@ final class EditorViewController: NSViewController {
     }
 
     return webView
-  }()
-
-  private(set) lazy var spellChecker = {
-    NSSpellChecker()
   }()
 
   private(set) lazy var completionContext = {
