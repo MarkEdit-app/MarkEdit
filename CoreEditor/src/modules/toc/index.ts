@@ -49,9 +49,17 @@ export function getTableOfContents() {
         }
       }
 
-      // ATXHeading can have up to 3 leading spaces and arbitrary number of spaces between # and visible characters,
-      // example of a valid section header: "   #  Hello"
-      const title = state.sliceDoc(node.from, node.to).replace(/ {0,3}#+ +/, '');
+      // Extract title differently for ATX vs Setext headings
+      let title: string;
+      if (node.name.startsWith('ATXHeading')) {
+        // ATXHeading can have up to 3 leading spaces and arbitrary number of spaces between # and visible characters,
+        // example of a valid section header: "   #  Hello"
+        title = state.sliceDoc(node.from, node.to).replace(/ {0,3}#+ +/, '');
+      } else {
+        // SetextHeading: extract only the first line (title), ignore the underline
+        const fullContent = state.sliceDoc(node.from, node.to);
+        title = fullContent.split('\n')[0].trim();
+      }
       const level = parseInt(match[1]);
 
       results.push({
