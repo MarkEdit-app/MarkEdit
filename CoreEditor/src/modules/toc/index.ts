@@ -42,21 +42,29 @@ export function getTableOfContents() {
       }
 
       // If it's inside a front matter section, we will not treat it as a section header
-      if (node.name.startsWith('SetextHeading')) {
+      const isSetext = node.name.startsWith('SetextHeading');
+      if (isSetext) {
         const range = frontMatterRange();
         if (range !== undefined && node.from >= range.from && node.to <= range.to) {
           return;
         }
       }
 
-      // ATXHeading can have up to 3 leading spaces and arbitrary number of spaces between # and visible characters,
-      // example of a valid section header: "   #  Hello"
-      const title = state.sliceDoc(node.from, node.to).replace(/ {0,3}#+ +/, '');
-      const level = parseInt(match[1]);
+      const title = (() => {
+        const text = state.sliceDoc(node.from, node.to);
+        if (isSetext) {
+          // SetextHeading has a line break
+          return text.split(state.lineBreak)[0].trim();
+        } else {
+          // ATXHeading can have up to 3 leading spaces and arbitrary number of spaces between # and visible characters,
+          // example of a valid section header: "   #  Hello"
+          return text.replace(/ {0,3}#+ +/, '');
+        }
+      })();
 
       results.push({
         title: title.length > 64 ? title.substring(0, 64) + '...' : title,
-        level: level as CodeGen_Int,
+        level: parseInt(match[1]) as CodeGen_Int,
         from: node.from as CodeGen_Int,
         to: node.to as CodeGen_Int,
         selected: false,
@@ -64,17 +72,12 @@ export function getTableOfContents() {
     },
   });
 
-  const baseLevel = results.reduce((acc, cur) => Math.min(acc, cur.level), 6);
-  const selection = state.selection.main.head;
-
   for (let index = 0; index < results.length; ++index) {
     const item = results[index];
     const next = results[index + 1] as HeadingInfo | undefined;
 
-    // Indent each level with 2 spaces, the top level is not indented
-    item.title = `${' '.repeat((item.level - baseLevel) * 2)}${item.title}`;
-
     // Mark an item as selected if the main selection is between the current item and the next item
+    const selection = state.selection.main.head;
     item.selected = selection >= item.from && selection < (next?.from ?? Number.MAX_SAFE_INTEGER);
   }
 

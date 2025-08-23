@@ -596,8 +596,8 @@ private extension EditorDocument {
       stringValue = editorText
     }
 
-    // If a leading H1 is given, use it as the suggested filename, it will be used to override the displayName
-    if fileURL == nil, let heading = await hostViewController?.tableOfContents?.first, heading.level == 1 {
+    // If the content contains headings, use the first one to override the displayName
+    if fileURL == nil, let heading = await hostViewController?.tableOfContents?.first {
       suggestedFilename = heading.title
     } else {
       suggestedFilename = nil

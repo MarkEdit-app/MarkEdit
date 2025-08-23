@@ -264,8 +264,10 @@ private extension EditorViewController {
 
     Task {
       let tableOfContents = await tableOfContents
+      let baseLevel = tableOfContents?.map { $0.level }.min() ?? 1
+
       tableOfContents?.forEach { info in
-        let title = info.title.components(separatedBy: .newlines).first ?? info.title
+        let title = String(repeating: " ", count: (info.level - baseLevel) * 2) + info.title
         let item = menu.addItem(withTitle: title, action: #selector(self.gotoHeader(_:)))
         item.representedObject = info
         item.setAccessibilityLabel(title)
