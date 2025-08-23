@@ -72,4 +72,34 @@ describe('Table of contents module', () => {
     expect(results[0].title).toBe('This is a title');
     // This should be usable for filename suggestion
   });
+
+  test('test edge case - longer underline than title', async() => {
+    editor.setUp('Short\n====================');
+    await sleep(200);
+    const results = toc.getTableOfContents();
+
+    expect(results.length).toBe(1);
+    expect(results[0].level).toBe(1);
+    expect(results[0].title).toBe('Short');
+  });
+
+  test('test edge case - shorter underline than title', async() => {
+    editor.setUp('This is a very long title that is longer than underline\n=========');
+    await sleep(200);
+    const results = toc.getTableOfContents();
+
+    expect(results.length).toBe(1);
+    expect(results[0].level).toBe(1);
+    expect(results[0].title).toBe('This is a very long title that is longer than underline');
+  });
+
+  test('test edge case - title with leading/trailing whitespace', async() => {
+    editor.setUp('  Title with spaces  \n===================');
+    await sleep(200);
+    const results = toc.getTableOfContents();
+
+    expect(results.length).toBe(1);
+    expect(results[0].level).toBe(1);
+    expect(results[0].title).toBe('Title with spaces');
+  });
 });
