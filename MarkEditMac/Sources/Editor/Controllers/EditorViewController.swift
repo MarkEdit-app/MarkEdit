@@ -163,6 +163,7 @@ final class EditorViewController: NSViewController {
     }
 
     let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
+    config.userContentController = controller
     config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
     config.allowsInlinePredictions = NSSpellChecker.InlineCompletion.webKitEnabled
 
@@ -182,9 +183,6 @@ final class EditorViewController: NSViewController {
         Logger.assertFail("Missing setWritingToolsBehavior: method in WKWebViewConfiguration")
       }
     }
-
-    config.processPool = EditorReusePool.shared.processPool
-    config.userContentController = controller
 
     let webView = EditorWebView(frame: .zero, configuration: config)
     webView.isInspectable = true
