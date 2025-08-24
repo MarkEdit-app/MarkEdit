@@ -14,7 +14,6 @@ import WebKit
 @MainActor
 final class EditorReusePool {
   static let shared = EditorReusePool()
-  let processPool = WKProcessPool()
 
   func warmUp() {
     if controllerPool.isEmpty {

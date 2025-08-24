@@ -415,7 +415,7 @@ enum ToolbarMode: Codable {
   case hidden
 }
 
-extension NSWindow.TabbingMode: Codable {}
+extension NSWindow.TabbingMode: @retroactive Codable {}
 
 // MARK: - Private
 
