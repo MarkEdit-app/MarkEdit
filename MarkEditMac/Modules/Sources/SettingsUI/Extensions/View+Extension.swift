@@ -34,6 +34,15 @@ public extension View {
   func formDescription(fontSize: Double = 12) -> some View {
     font(.system(size: fontSize)).foregroundStyle(.secondary)
   }
+
+  func formBreathingInset() -> some View {
+    if #available(macOS 26.0, *) {
+      // For unknown reasons, this is required to prevent extreme tight spacing
+      return padding(.top, .ulpOfOne)
+    }
+
+    return self
+  }
 }
 
 // MARK: - Private

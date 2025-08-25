@@ -47,6 +47,7 @@ struct GeneralSettingsView: View {
             AppPreferences.General.quitAlwaysKeepsWindows = quitAlwaysKeepsWindows
           }
           .formLabel(Localized.Settings.windowRestoration)
+          .formBreathingInset()
       }
 
       Section {
