@@ -122,8 +122,10 @@ final class EditorDocument: NSDocument {
   func saveContent(sender: Any? = nil, userInitiated: Bool = false, completion: (() -> Void)? = nil) {
     Task {
       await updateContent(userInitiated: userInitiated) {
-        super.save(sender)
-        completion?()
+        DispatchQueue.main.async {
+          super.save(sender)
+          completion?()
+        }
       }
 
       if sender != nil {
