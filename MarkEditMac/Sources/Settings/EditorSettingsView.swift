@@ -125,6 +125,7 @@ struct EditorSettingsView: View {
             AppPreferences.Editor.lineWrapping = lineWrapping
           }
           .formLabel(Localized.Settings.lineWrappingLabel)
+          .formBreathingInset()
 
           Picker(Localized.Settings.lineHeight, selection: $lineHeight) {
             Text(Localized.Settings.tightHeight).tag(LineHeight.tight)
@@ -135,6 +136,7 @@ struct EditorSettingsView: View {
             AppPreferences.Editor.lineHeight = lineHeight
           }
           .formHorizontalRadio()
+          .formBreathingInset()
         }
 
         Section {
