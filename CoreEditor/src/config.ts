@@ -65,7 +65,6 @@ export interface Config {
   localizable?: Localizable;
   // Runtime config from settings.json, not dynamically changeable
   autoCharacterPairs: boolean;
-  autoSaveWhenIdle: boolean;
   indentBehavior: IndentBehavior;
   headerFontSizeDiffs?: number[];
   visibleWhitespaceCharacter?: string;

@@ -122,12 +122,12 @@ extension EditorViewController: EditorModuleCoreDelegate {
   }
 
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore) {
-    guard document?.shouldSaveWhenIdle == true else {
-      return
+    if document?.shouldSaveWhenIdle == true {
+      document?.saveContent()
+      bridge.history.markContentClean()
+    } else {
+      document?.updateContent()
     }
-
-    document?.saveContent()
-    bridge.history.markContentClean()
   }
 
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32, alpha: Double) {

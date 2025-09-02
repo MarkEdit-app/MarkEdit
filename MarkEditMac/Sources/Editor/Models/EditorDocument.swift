@@ -120,19 +120,27 @@ final class EditorDocument: NSDocument {
   }
 
   func saveContent(sender: Any? = nil, userInitiated: Bool = false, completion: (() -> Void)? = nil) {
-    Task {
-      await updateContent(userInitiated: userInitiated) {
-        DispatchQueue.main.async {
-          super.save(sender)
-          completion?()
-        }
+    let saveAction = {
+      DispatchQueue.main.async {
+        super.save(sender)
+        completion?()
       }
 
       if sender != nil {
-        hostViewController?.cancelCompletion()
+        self.hostViewController?.cancelCompletion()
       }
+    }
 
-      isContentDirty = false
+    if isContentDirty {
+      updateContent(userInitiated: userInitiated, saveAction: saveAction)
+    } else {
+      saveAction()
+    }
+  }
+
+  func updateContent(userInitiated: Bool = false, saveAction: @escaping (() -> Void) = {}) {
+    Task {
+      await updateContent(userInitiated: userInitiated, saveAction: saveAction)
     }
   }
 
@@ -219,10 +227,7 @@ extension EditorDocument {
     //
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
     if isNewFile {
-      Task {
-        await updateContent(saveAction: canClose)
-      }
-      return
+      return updateContent(saveAction: canClose)
     }
 
     // Explicitly save the content before closing.
@@ -582,7 +587,7 @@ private extension EditorDocument {
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
     // Format when saving files, only if at least one option is enabled
-    if userInitiated && (insertFinalNewline || trimTrailingWhitespace) {
+    if insertFinalNewline || trimTrailingWhitespace {
       await withCheckedContinuation { continuation in
         bridge?.format.formatContent(
           insertFinalNewline: insertFinalNewline,
@@ -605,6 +610,7 @@ private extension EditorDocument {
     }
 
     saveAction()
+    isContentDirty = false
     unblockUserInteraction()
 
     if userInitiated {

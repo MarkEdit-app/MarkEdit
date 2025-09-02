@@ -116,16 +116,14 @@ export function observeChanges() {
         }
       }
 
-      // Changes are saved periodically
-      if (window.config.autoSaveWhenIdle) {
-        if (storage.contentUpdater !== undefined) {
-          clearTimeout(storage.contentUpdater);
-        }
-
-        storage.contentUpdater = setTimeout(() => {
-          window.nativeModules.core.notifyEditorDidBecomeIdle();
-        }, 2500);
+      // Content is updated periodically
+      if (storage.contentUpdater !== undefined) {
+        clearTimeout(storage.contentUpdater);
       }
+
+      storage.contentUpdater = setTimeout(() => {
+        window.nativeModules.core.notifyEditorDidBecomeIdle();
+      }, 2500);
     }
 
     // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
