@@ -207,7 +207,7 @@ opt_in_rules:
   - redundant_objc_attribute
 
   # Rationale: Provides consistency in coding style and brevity
-  - redundant_optional_initialization
+  - implicit_optional_initialization
 
   # Rationale: Provides consistency in coding style and brevity
   - redundant_void_return

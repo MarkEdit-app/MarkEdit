@@ -63,12 +63,12 @@ private extension NSFont {
     .black,
     .init(100), // Impossible value as an upper bound
   ].sorted {
-      // In css, "ultra light" is thicker than "thin", it is the opposite in Cocoa,
-      // sort to avoid unexpected behaviors.
-      //
-      // Note these values are not 1:1 mapping.
-      $0.rawValue < $1.rawValue
-    }
+    // In css, "ultra light" is thicker than "thin", it is the opposite in Cocoa,
+    // sort to avoid unexpected behaviors.
+    //
+    // Note these values are not 1:1 mapping.
+    $0.rawValue < $1.rawValue
+  }
 
   func withDesign(_ design: NSFontDescriptor.SystemDesign) -> NSFont {
     guard let descriptor = fontDescriptor.withDesign(design) else {
