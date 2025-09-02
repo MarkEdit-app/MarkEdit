@@ -48,7 +48,6 @@ const config = import.meta.env.PROD ? window.config : {
   lineHeight: 1.5,
   suggestWhileTyping: false,
   autoCharacterPairs: true,
-  autoSaveWhenIdle: false,
   indentBehavior: 'paragraph',
   localizable: {
     previewButtonTitle: 'Preview',
