@@ -118,10 +118,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationShouldTerminate(_ application: NSApplication) -> NSApplication.TerminateReply {
-    if AppRuntimeConfig.autoSaveWhenIdle && NSDocumentController.shared.hasDirtyDocuments {
-      // Terminate after all dirty documents are saved
+    if AppRuntimeConfig.autoSaveWhenIdle && NSDocumentController.shared.hasOutdatedDocuments {
+      // Terminate after all outdated documents are saved
       Task {
-        await NSDocumentController.shared.saveDirtyDocuments()
+        await NSDocumentController.shared.saveOutdatedDocuments()
         application.reply(toApplicationShouldTerminate: true)
       }
 

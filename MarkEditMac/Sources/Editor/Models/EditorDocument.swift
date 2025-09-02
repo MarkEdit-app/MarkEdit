@@ -18,7 +18,7 @@ final class EditorDocument: NSDocument {
   var fileData: Data?
   var spellDocTag: Int?
   var stringValue = ""
-  var isContentDirty = false // Different from "isDocumentEdited", used mostly for "autoSaveWhenIdle"
+  var isOutdated = false // The content is outdated, needs an update
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -131,7 +131,7 @@ final class EditorDocument: NSDocument {
       }
     }
 
-    if isContentDirty {
+    if isOutdated {
       updateContent(userInitiated: userInitiated, saveAction: saveAction)
     } else {
       saveAction()
@@ -174,7 +174,6 @@ extension EditorDocument {
 
       // Newly created files should have a clean state
       if wasDraft {
-        isContentDirty = false
         Task { @MainActor in
           markContentDirty(false)
           hostViewController?.handleFileURLChange()
@@ -195,7 +194,7 @@ extension EditorDocument {
   override func updateChangeCount(_ change: NSDocument.ChangeType) {
     // The "Edited" label is hidden when changes are saved periodically
     super.updateChangeCount(shouldSaveWhenIdle ? .changeCleared : change)
-    isContentDirty = change != .changeCleared
+    isOutdated = change != .changeCleared
   }
 
   override func canAsynchronouslyWrite(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) -> Bool {
@@ -232,9 +231,9 @@ extension EditorDocument {
 
     // Explicitly save the content before closing.
     //
-    // Case 1: The content isn't marked as dirty, so auto-saving won't trigger.
+    // Case 1: The content isn't outdated, so auto-saving won't trigger.
     // Case 2: Occasionally, the ".sb" backup file isn't properly cleaned up.
-    if (shouldSaveWhenIdle && isContentDirty) || (!closeAlwaysConfirmsChanges && isDocumentEdited) {
+    if (shouldSaveWhenIdle && isOutdated) || (!closeAlwaysConfirmsChanges && isDocumentEdited) {
       return saveContent(completion: canClose)
     }
 
@@ -609,8 +608,8 @@ private extension EditorDocument {
       suggestedFilename = nil
     }
 
+    isOutdated = false
     saveAction()
-    isContentDirty = false
     unblockUserInteraction()
 
     if userInitiated {

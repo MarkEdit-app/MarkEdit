@@ -9,13 +9,13 @@ import AppKit
 import MarkEditKit
 
 extension NSDocumentController {
-  var hasDirtyDocuments: Bool {
-    !dirtyDocuments.isEmpty
+  var hasOutdatedDocuments: Bool {
+    !outdatedDocuments.isEmpty
   }
 
-  func saveDirtyDocuments(userInitiated: Bool = false) async {
+  func saveOutdatedDocuments(userInitiated: Bool = false) async {
     await withTaskGroup(of: Void.self) { group in
-      for document in dirtyDocuments {
+      for document in outdatedDocuments {
         group.addTask {
           await document.waitUntilSaveCompleted(userInitiated: userInitiated)
         }
@@ -34,9 +34,9 @@ extension NSDocumentController {
 // MARK: - Private
 
 private extension NSDocumentController {
-  var dirtyDocuments: [EditorDocument] {
+  var outdatedDocuments: [EditorDocument] {
     NSDocumentController.shared.documents.compactMap {
-      guard let document = $0 as? EditorDocument, document.isContentDirty else {
+      guard let document = $0 as? EditorDocument, document.isOutdated else {
         return nil
       }
 
