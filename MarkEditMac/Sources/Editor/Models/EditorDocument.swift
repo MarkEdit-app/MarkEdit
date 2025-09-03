@@ -18,6 +18,7 @@ final class EditorDocument: NSDocument {
   var fileData: Data?
   var spellDocTag: Int?
   var stringValue = ""
+  var formatCompleted = false // The result of format content is all good
   var isOutdated = false // The content is outdated, needs an update
   var isReadOnlyMode = false
   var isTerminating = false
@@ -131,7 +132,7 @@ final class EditorDocument: NSDocument {
       }
     }
 
-    if isOutdated {
+    if isOutdated || (userInitiated && !formatCompleted) {
       updateContent(userInitiated: userInitiated, saveAction: saveAction)
     } else {
       saveAction()
@@ -587,15 +588,11 @@ private extension EditorDocument {
 
     // Format when saving files, only if at least one option is enabled
     if insertFinalNewline || trimTrailingWhitespace {
-      await withCheckedContinuation { continuation in
-        bridge?.format.formatContent(
-          insertFinalNewline: insertFinalNewline,
-          trimTrailingWhitespace: trimTrailingWhitespace,
-          userInitiated: userInitiated
-        ) { _ in
-          continuation.resume()
-        }
-      }
+      formatCompleted = (try? await bridge?.format.formatContent(
+        insertFinalNewline: insertFinalNewline,
+        trimTrailingWhitespace: trimTrailingWhitespace,
+        userInitiated: userInitiated
+      )) ?? false
     }
 
     if let editorText = await hostViewController?.editorText {

@@ -108,7 +108,7 @@ public final class WebBridgeFormat {
     webView?.invoke(path: "webModules.format.insertTable", message: message, completion: completion)
   }
 
-  public func formatContent(insertFinalNewline: Bool, trimTrailingWhitespace: Bool, userInitiated: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func formatContent(insertFinalNewline: Bool, trimTrailingWhitespace: Bool, userInitiated: Bool) async throws -> Bool {
     struct Message: Encodable {
       let insertFinalNewline: Bool
       let trimTrailingWhitespace: Bool
@@ -121,7 +121,13 @@ public final class WebBridgeFormat {
       userInitiated: userInitiated
     )
 
-    webView?.invoke(path: "webModules.format.formatContent", message: message, completion: completion)
+    return try await withCheckedThrowingContinuation { continuation in
+      webView?.invoke(path: "webModules.format.formatContent", message: message) { result in
+        Task { @MainActor in
+          continuation.resume(with: result)
+        }
+      }
+    }
   }
 
   public func performEditCommand(command: EditCommand, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

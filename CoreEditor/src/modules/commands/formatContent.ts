@@ -34,18 +34,24 @@ export default function formatContent(
     }
   }
 
+  // Whether formatting operations are all taken
+  let isCompleted = true;
+
   if (trimTrailingWhitespace) {
     // We need to update reversely to avoid index shift
     for (let index = state.doc.lines; index >= 1; --index) {
       const line = state.doc.line(index);
       const ranges = state.selection.ranges;
+      const match = /\s+$/g.exec(line.text);
 
       // For implicit formatting, avoid trimming spaces before the caret
       if (!userInitiated && ranges.some(({ from, to }) => from === to && line.to === to)) {
+        if (isCompleted && match !== null) {
+          isCompleted = false;
+        }
         continue;
       }
 
-      const match = /\s+$/g.exec(line.text);
       if (match !== null) {
         apply({
           insert: '',
@@ -55,4 +61,6 @@ export default function formatContent(
       }
     }
   }
+
+  return isCompleted;
 }
