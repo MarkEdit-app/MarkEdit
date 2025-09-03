@@ -41,7 +41,7 @@ export interface WebModuleFormat extends WebModule {
   insertHorizontalRule(): void;
   insertHyperLink({ title, url, prefix }: { title: string; url: string; prefix?: string }): void;
   insertTable({ columnName, itemName }: { columnName: string; itemName: string }): void;
-  formatContent(args: { insertFinalNewline: boolean; trimTrailingWhitespace: boolean; userInitiated: boolean }): void;
+  formatContent(args: { insertFinalNewline: boolean; trimTrailingWhitespace: boolean; userInitiated: boolean }): boolean;
   performEditCommand({ command }: { command: EditCommand }): void;
 }
 
@@ -106,8 +106,8 @@ export class WebModuleFormatImpl implements WebModuleFormat {
     insertTable(columnName, itemName);
   }
 
-  formatContent(args: { insertFinalNewline: boolean; trimTrailingWhitespace: boolean; userInitiated: boolean }): void {
-    formatContent(args.insertFinalNewline, args.trimTrailingWhitespace, args.userInitiated);
+  formatContent(args: { insertFinalNewline: boolean; trimTrailingWhitespace: boolean; userInitiated: boolean }): boolean {
+    return formatContent(args.insertFinalNewline, args.trimTrailingWhitespace, args.userInitiated);
   }
 
   performEditCommand({ command }: { command: EditCommand }): void {
