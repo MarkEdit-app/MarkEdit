@@ -6,8 +6,13 @@ import { getEditorText } from '../../core';
  *
  * @param insertFinalNewline Whether to insert newline at end of file
  * @param trimTrailingWhitespace Whether to remove trailing whitespaces
+ * @param userInitiated Whether the action is explicitly triggered by the user
  */
-export default function formatContent(insertFinalNewline: boolean, trimTrailingWhitespace: boolean) {
+export default function formatContent(
+  insertFinalNewline: boolean,
+  trimTrailingWhitespace: boolean,
+  userInitiated: boolean,
+) {
   const editor = window.editor;
   const state = editor.state;
 
@@ -33,6 +38,13 @@ export default function formatContent(insertFinalNewline: boolean, trimTrailingW
     // We need to update reversely to avoid index shift
     for (let index = state.doc.lines; index >= 1; --index) {
       const line = state.doc.line(index);
+      const ranges = state.selection.ranges;
+
+      // For implicit formatting, avoid trimming spaces before the caret
+      if (!userInitiated && ranges.some(({ from, to }) => from === to && line.to === to)) {
+        continue;
+      }
+
       const match = /\s+$/g.exec(line.text);
       if (match !== null) {
         apply({

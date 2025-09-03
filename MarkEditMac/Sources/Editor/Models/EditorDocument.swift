@@ -590,7 +590,8 @@ private extension EditorDocument {
       await withCheckedContinuation { continuation in
         bridge?.format.formatContent(
           insertFinalNewline: insertFinalNewline,
-          trimTrailingWhitespace: trimTrailingWhitespace
+          trimTrailingWhitespace: trimTrailingWhitespace,
+          userInitiated: userInitiated
         ) { _ in
           continuation.resume()
         }
