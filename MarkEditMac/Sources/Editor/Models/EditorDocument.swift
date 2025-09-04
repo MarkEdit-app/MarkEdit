@@ -141,7 +141,8 @@ final class EditorDocument: NSDocument {
 
   func updateContent(userInitiated: Bool = false, saveAction: @escaping (() -> Void) = {}) {
     Task {
-      await updateContent(userInitiated: userInitiated, saveAction: saveAction)
+      await updateContent(userInitiated: userInitiated)
+      saveAction()
     }
   }
 
@@ -213,8 +214,8 @@ extension EditorDocument {
     }()
 
     let canClose = {
-      // After a small delay to work around a rare hang issue
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+      // Run async to work around a rare hang issue
+      DispatchQueue.main.async {
         super.canClose(
           withDelegate: delegate,
           shouldClose: shouldClose,
@@ -325,27 +326,29 @@ extension EditorDocument {
   }
 
   override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
-    await updateContent {
-      // The default autosave doesn't work when the app is about to terminate,
-      // it is because we have to do it in an asynchronous way.
-      //
-      // To work around this, check a flag to save the document manually.
-      if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
-        try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
-        fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
-      }
+    if isOutdated {
+      await updateContent()
+    }
 
-      // When "Ask to keep changes when closing documents" is enabled,
-      // changes are asked to save explicitly, see also "confirmsChanges(_:shouldClose:)".
-      //
-      // The value can from either system settings or app level overwritten.
-      guard !closeAlwaysConfirmsChanges else {
-        return
-      }
+    // The default autosave doesn't work when the app is about to terminate,
+    // it is because we have to do it in an asynchronous way.
+    //
+    // To work around this, check a flag to save the document manually.
+    if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
+      try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
+      fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
+    }
 
-      Task {
-        try await super.autosave(withImplicitCancellability: implicitlyCancellable)
-      }
+    // When "Ask to keep changes when closing documents" is enabled,
+    // changes are asked to save explicitly, see also "confirmsChanges(_:shouldClose:)".
+    //
+    // The value can from either system settings or app level overwritten.
+    guard !closeAlwaysConfirmsChanges else {
+      return
+    }
+
+    Task {
+      try await super.autosave(withImplicitCancellability: implicitlyCancellable)
     }
   }
 
@@ -582,7 +585,7 @@ private extension EditorDocument {
     Date.now.timeIntervalSince(revertedDate) < 1
   }
 
-  func updateContent(userInitiated: Bool = false, saveAction: () -> Void) async {
+  func updateContent(userInitiated: Bool = false) async {
     let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
     let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
 
@@ -607,7 +610,6 @@ private extension EditorDocument {
     }
 
     isOutdated = false
-    saveAction()
     unblockUserInteraction()
 
     if userInitiated {
