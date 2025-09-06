@@ -9,7 +9,7 @@ import { getNodesNamed } from '../../modules/lezer';
 
 const className = 'cm-md-link';
 const regexp = {
-  standard: /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?([a-zA-Z0-9-]+\.)?[-a-zA-Z0-9@:%._+~#=]+(\.[a-z]+)?\b([-a-zA-Z0-9@:%._+~#=?&//]*)|(\[.*?\]\()(.+?)[\s)]/g,
+  standard: /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?([a-zA-Z0-9-]+\.)?[-a-zA-Z0-9@:%._+~#=]+(\.[a-z]+)?\b([-a-zA-Z0-9@:%._+~#=?&//]*)|(\[.*?\]\()(.+?)[\s)]|(<[^>]*\b(?:src|srcset|href|poster)\s*=\s*["'])([^"']*)["']/gi,
   footnote: /^\[\^[^\]]+\]$/,
   reference: /^\[[^\]]+\] ?\[([^\]]+)\]$/,
 };
@@ -36,13 +36,15 @@ const standardStyle = createDecoPlugin(() => {
       const spec = createSpec();
       const deco = Decoration.mark(spec);
 
-      if (match[4]) {
-        // Markdown links, only decorate the part inside parentheses
-        add(from + match[4].length, to - 1, deco);
-      } else {
-        // Normal links, decorate the full match
-        add(from, to, deco);
+      // HTML links (6) and Markdown links (4), only decorate a portion of the match
+      for (const index of [6, 4]) {
+        if (match[index]) {
+          return add(from + match[index].length, to - 1, deco);
+        }
       }
+
+      // Normal links, decorate the full match
+      add(from, to, deco);
     },
   });
 
