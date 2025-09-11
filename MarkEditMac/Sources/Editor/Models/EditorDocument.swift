@@ -186,7 +186,12 @@ extension EditorDocument {
 
   override var displayName: String? {
     get {
-      suggestedFilename ?? externalFilename ?? super.displayName
+      // Default file name for new drafts, pre-filled in the save panel
+      if fileURL == nil, let newFileName = suggestedFilename ?? externalFilename {
+        return newFileName
+      }
+
+      return super.displayName
     }
     set {
       super.displayName = newValue
