@@ -23,6 +23,11 @@ extension EditorViewController {
       configureFieldEditor()
       removeFloatingUIElements()
 
+      // Open the find panel with a query update from other apps
+      if findPanel.mode == .hidden && nativeSearchQueryChanged {
+        updateTextFinderQuery()
+      }
+
       // When the user explicitly changes the mode to replace (from the find panel menu),
       // the focus should still be the find field.
       let textField = (mode == .replace && !explicitly) ? replacePanel.textField : findPanel.searchField
@@ -142,6 +147,11 @@ extension EditorViewController {
 
     bridge.search.updateQuery(options: options)
     updateSearchCounter()
+
+    if AppRuntimeConfig.nativeSearchQuerySync {
+      nativeSearchQueryChanged = false
+      NSPasteboard.find.string = searchTerm
+    }
   }
 
   func updateSearchCounter() {
@@ -254,6 +264,10 @@ private extension EditorViewController {
   }
 
   func navigateFindResults(backwards: Bool) async {
+    guard !nativeSearchQueryChanged else {
+      return updateTextFinderQuery()
+    }
+
     let wasPanelHidden = findPanel.mode == .hidden
     let reselectTerm = webView.isFirstResponder && (wasPanelHidden || searchTerm.isEmpty)
 

@@ -85,4 +85,9 @@ extension EditorFindPanel {
 
     resetMenu()
   }
+
+  func clearCounter() {
+    let info = SearchCounterInfo(numberOfItems: 0, currentIndex: -1)
+    updateResult(counter: info, emptyInput: true)
+  }
 }

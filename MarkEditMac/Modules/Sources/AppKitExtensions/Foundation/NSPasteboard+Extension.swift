@@ -7,12 +7,26 @@
 import AppKit
 
 public extension NSPasteboard {
+  static var find: Self {
+    Self(name: .find)
+  }
+
   var hasText: Bool {
     pasteboardItems?.contains { $0.types.contains(.string) } == true
   }
 
   var string: String? {
-    string(forType: .string)
+    get {
+      string(forType: .string)
+    }
+    set {
+      guard let newValue else {
+        return
+      }
+
+      declareTypes([.string], owner: nil)
+      setString(newValue, forType: .string)
+    }
   }
 
   func url() async -> String? {
