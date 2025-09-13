@@ -167,6 +167,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     // The content is edited once contentEdited is true, it cannot go back
     hasBeenEdited = hasBeenEdited || contentEdited
+    document?.isOutdated = contentEdited
 
     // Only update the dirty state when it's edited,
     // the app can launch with an unsaved state (e.g., force quit), it should remain dirty.

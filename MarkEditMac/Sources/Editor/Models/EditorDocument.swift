@@ -122,7 +122,7 @@ final class EditorDocument: NSDocument {
 
   func saveContent(sender: Any? = nil, userInitiated: Bool = false, completion: (() -> Void)? = nil) {
     let saveAction = {
-      DispatchQueue.main.async {
+      DispatchQueue.main.executeDelayed {
         super.save(sender)
         completion?()
       }
@@ -201,7 +201,6 @@ extension EditorDocument {
   override func updateChangeCount(_ change: NSDocument.ChangeType) {
     // The "Edited" label is hidden when changes are saved periodically
     super.updateChangeCount(shouldSaveWhenIdle ? .changeCleared : change)
-    isOutdated = change != .changeCleared
   }
 
   override func canAsynchronouslyWrite(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) -> Bool {
@@ -220,7 +219,7 @@ extension EditorDocument {
 
     let canClose = {
       // Run async to work around a rare hang issue
-      DispatchQueue.main.async {
+      DispatchQueue.main.executeDelayed {
         super.canClose(
           withDelegate: delegate,
           shouldClose: shouldClose,
@@ -645,5 +644,14 @@ private extension EditorDocument {
       // Saved
       document.saveContent(userInitiated: true, completion: performClose)
     }
+  }
+}
+
+private extension DispatchQueue {
+  func executeDelayed(_ execute: @escaping () -> Void) {
+    DispatchQueue.main.asyncAfter(
+      deadline: .now() + 0.02,
+      execute: execute
+    )
   }
 }
