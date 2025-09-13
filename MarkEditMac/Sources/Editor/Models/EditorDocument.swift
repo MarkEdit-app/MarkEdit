@@ -140,7 +140,7 @@ final class EditorDocument: NSDocument {
   }
 
   func updateContent(userInitiated: Bool = false, saveAction: @escaping (() -> Void) = {}) {
-    Task {
+    Task { @MainActor in
       await updateContent(userInitiated: userInitiated)
       saveAction()
     }
@@ -351,7 +351,7 @@ extension EditorDocument {
       return
     }
 
-    Task {
+    Task { @MainActor in
       try await super.autosave(withImplicitCancellability: implicitlyCancellable)
     }
   }
@@ -406,7 +406,7 @@ extension EditorDocument {
 
     // Support extension-less paths by bypassing file type validation
     if inputExtension.isEmpty {
-      Task {
+      Task { @MainActor in
         try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveOperation)
       }
       return nil
@@ -553,7 +553,7 @@ extension EditorDocument {
     // For now let's just print plain text,
     // we don't expect printing to be used a lot.
 
-    Task {
+    Task { @MainActor in
       // Alignment
       printInfo.isHorizontallyCentered = true
       printInfo.isVerticallyCentered = false
