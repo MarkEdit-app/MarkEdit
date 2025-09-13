@@ -174,7 +174,7 @@ opt_in_rules:
   - operator_usage_whitespace
 
   # Rationale: Provides consistency in coding style
-  - operator_whitespace
+  - function_name_whitespace
 
   # Rationale: Prevents coder error
   - overridden_super_call
