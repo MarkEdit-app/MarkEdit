@@ -119,6 +119,15 @@ extension EditorViewController {
       }
     }
 
+    if AppRuntimeConfig.nativeSearchQuerySync {
+      NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(windowDidBecomeKey(_:)),
+        name: NSWindow.didBecomeKeyNotification,
+        object: nil
+      )
+    }
+
     // Track popovers that use editor as the positioning container
     NotificationCenter.default.addObserver(
       self,
@@ -556,6 +565,26 @@ private extension EditorViewController {
       width: view.frame.width,
       height: panelDivider.length
     )
+  }
+
+  @objc func windowDidBecomeKey(_ notification: Notification) {
+    guard (notification.object as? NSWindow) == view.window else {
+      return
+    }
+
+    guard let query = NSPasteboard.find.string, query != findPanel.searchField.stringValue else {
+      return
+    }
+
+    findPanel.searchField.stringValue = query
+    findPanel.searchField.selectAll()
+    nativeSearchQueryChanged = true
+
+    if findPanel.isFirstResponder {
+      updateTextFinderQuery()
+    } else {
+      findPanel.clearCounter()
+    }
   }
 
   @objc func popoverDidShow(_ notification: Notification) {

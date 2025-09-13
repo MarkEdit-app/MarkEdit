@@ -17,6 +17,7 @@ final class EditorViewController: NSViewController {
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
   var mouseExitedWindow = false
+  var nativeSearchQueryChanged = false
   var bottomPanelHeight: Double = 0
   var initialContent: String?
   var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
