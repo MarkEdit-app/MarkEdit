@@ -64,17 +64,8 @@ extension EditorViewController {
 
       if let effectView = modernEffectView as? NSVisualEffectView {
         effectView.material = .titlebar
-      } else {
-      #if BUILD_WITH_SDK_26_OR_LATER
-        if #available(macOS 26.0, *) {
-          (modernEffectView as? NSGlassEffectView)?.cornerRadius = 0
-        }
-      #else
-        let setter = sel_getUid("setCornerRadius:")
-        if modernEffectView.responds(to: setter) {
-          modernEffectView.perform(setter, with: 0)
-        }
-      #endif
+      } else if #available(macOS 26.0, *) {
+        (modernEffectView as? NSGlassEffectView)?.cornerRadius = 0
       }
 
       modernEffectView.clipsToBounds = true // To cut the shadows
@@ -183,20 +174,11 @@ extension EditorViewController {
       let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
 
       // For NSGlassEffectView, the built-in tintColor is preferred
-    #if BUILD_WITH_SDK_26_OR_LATER
       if #available(macOS 26.0, *), let glassView = modernEffectView as? NSGlassEffectView {
         glassView.tintColor = tintColor
       } else {
         modernTintedView.layerBackgroundColor = tintColor
       }
-    #else
-      let setter = sel_getUid("setTintColor:")
-      if modernEffectView.responds(to: setter) {
-        modernEffectView.perform(setter, with: tintColor)
-      } else {
-        modernTintedView.layerBackgroundColor = tintColor
-      }
-    #endif
 
       // Hide the effect view and remove the opacity of the title bar view
       if AppPreferences.Window.reduceTransparency {

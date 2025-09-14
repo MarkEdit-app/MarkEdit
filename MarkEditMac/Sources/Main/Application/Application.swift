@@ -24,10 +24,8 @@ final class Application: NSApplication {
     UserDefaults.overwriteTextCheckerOnce()
     AppCustomization.createFiles()
 
-    #if BUILD_WITH_SDK_26_OR_LATER
-      // Must after AppCustomization.createFiles()
-      Bundle.swizzleInfoDictionaryOnce
-    #endif
+    // Must after AppCustomization.createFiles()
+    Bundle.swizzleInfoDictionaryOnce
 
     let application = Self.shared
     let delegate = AppDelegate()
