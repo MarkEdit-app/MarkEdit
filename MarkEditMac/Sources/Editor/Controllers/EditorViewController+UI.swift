@@ -35,14 +35,14 @@ extension EditorViewController {
       wrapper.layer?.insertSublayer(findPanelLayer, above: replacePanel.layer)
     }
 
+    wrapper.addSubview(webView)
+    wrapper.addSubview(statusView)
+
     if AppDesign.modernTitleBar {
       wrapper.addSubview(modernEffectView)
       wrapper.addSubview(modernTintedView)
       wrapper.addSubview(modernDividerView)
     }
-
-    wrapper.addSubview(webView)
-    wrapper.addSubview(statusView)
 
     if !hasFinishedLoading {
       wrapper.addSubview(loadingIndicator)
@@ -524,8 +524,8 @@ private extension EditorViewController {
 
   var replacePanelRect: CGRect {
     CGRect(
-      x: findPanel.frame.minX,
-      y: findPanel.frame.minY - (findPanel.mode == .replace ? replacePanel.frame.height : 0),
+      x: findPanelRect.minX,
+      y: findPanelRect.minY - (findPanel.mode == .replace ? replacePanel.frame.height : 0),
       width: findPanel.frame.width,
       height: findPanel.frame.height - findPanel.searchField.frame.minY
     )
