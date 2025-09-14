@@ -533,7 +533,6 @@ private extension EditorViewController {
 
   var panelDividerRect: CGRect {
     let offset: Double = {
-      // [macOS 26] Design is likely to be changed
       if AppDesign.modernStyle && findPanel.mode == .hidden {
         return contentHeight - panelDivider.length
       }
