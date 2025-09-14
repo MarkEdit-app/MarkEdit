@@ -649,9 +649,6 @@ private extension EditorDocument {
 
 private extension DispatchQueue {
   func executeDelayed(_ execute: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(
-      deadline: .now() + 0.02,
-      execute: execute
-    )
+    asyncAfter(deadline: .now() + 0.02, execute: execute)
   }
 }
