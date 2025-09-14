@@ -10,10 +10,10 @@ on:
 jobs:
   markedit-mac:
     name: MarkEditMac
-    runs-on: macos-15
+    runs-on: macos-26
     if: github.event.pull_request.draft == false
     env:
-      node-version: '20.x'
+      node-version: '22.x'
       DEVELOPER_DIR: /Applications/Xcode_26.0.app/Contents/Developer
 
     defaults:
@@ -21,9 +21,9 @@ jobs:
         working-directory: 'CoreEditor'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.node-version }}
           cache: 'npm'
