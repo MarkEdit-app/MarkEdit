@@ -2,7 +2,7 @@
 
 # MarkEdit
 
-[![](https://img.shields.io/badge/Platform-macOS_14.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit/releases/latest) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
+[![](https://img.shields.io/badge/Platform-macOS_15.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit/releases/latest) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
 
 MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
 
@@ -47,9 +47,9 @@ If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install mar
 
 ## Platform Compatibility
 
-To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sonoma](https://www.apple.com/newsroom/2023/09/macos-sonoma-is-available-today/) and [macOS Sequoia](https://www.apple.com/macos/macos-sequoia/).
+To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sequoia](https://www.apple.com/macos/macos-sequoia/) and [macOS Tahoe](https://www.apple.com/os/macos/).
 
-Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12), [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13).
+Last-compatible version tags: [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13), [macos-14](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-14).
 
 ## Why MarkEdit is free
 

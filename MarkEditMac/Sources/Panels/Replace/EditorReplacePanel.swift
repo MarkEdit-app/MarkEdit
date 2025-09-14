@@ -46,11 +46,9 @@ final class EditorReplacePanel: EditorPanelView {
     alphaValue = 0
     isHidden = true
 
-  #if BUILD_WITH_SDK_26_OR_LATER
     if #available(macOS 26.0, *) {
       textField.prefersCompactControlSizeMetrics = true
     }
-  #endif
 
     addSubview(textField)
     addSubview(replaceButtons)

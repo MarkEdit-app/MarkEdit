@@ -23,8 +23,7 @@ public final class AquaFocusRingButton: NSButton {
   }
 
   override public func drawFocusRingMask() {
-    // [macOS 26] Change this to 26.0
-    if #available(macOS 16.0, *) {
+    if #available(macOS 26.0, *) {
       return super.drawFocusRingMask()
     }
 
