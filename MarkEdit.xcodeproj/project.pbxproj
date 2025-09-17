@@ -61,6 +61,7 @@
 		8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */; };
 		8767BBB5295AD62700BFACAE /* EditorReplaceButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */; };
 		8769BABE2C65F9D400EDA0A6 /* AppRuntimeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */; };
+		876D70872E7A8E9D00E308A4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 876D70862E7A8E9D00E308A4 /* AppIcon.icon */; };
 		8772E385294AC60D00111E83 /* EditorReusePool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8772E384294AC60D00111E83 /* EditorReusePool.swift */; };
 		8775A77B29867012005867BF /* FontPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 8775A77A29867012005867BF /* FontPicker */; };
 		877A6D802C77248A001EC516 /* NSPopover+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */; };
@@ -191,6 +192,7 @@
 		8767BBB0295A8C1D00BFACAE /* EditorViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Delegate.swift"; sourceTree = "<group>"; };
 		8767BBB4295AD62700BFACAE /* EditorReplaceButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceButtons.swift; sourceTree = "<group>"; };
 		8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRuntimeConfig.swift; sourceTree = "<group>"; };
+		876D70862E7A8E9D00E308A4 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		8772E384294AC60D00111E83 /* EditorReusePool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReusePool.swift; sourceTree = "<group>"; };
 		877A6D7F2C77248A001EC516 /* NSPopover+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPopover+Extension.swift"; sourceTree = "<group>"; };
 		877B965C2C63815000186414 /* AppHotKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHotKeys.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				87ACA65B2C858AF4008E24BA /* chunks */,
 				870A51C8294752530095C7EB /* index.html */,
 				870A51A9294700E00095C7EB /* Assets.xcassets */,
+				876D70862E7A8E9D00E308A4 /* AppIcon.icon */,
 				8757F7FB2AAC815F001957DD /* Localizable.xcstrings */,
 				B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */,
 			);
@@ -678,6 +681,7 @@
 				87132AA32C188FE900FD262B /* AppShortcuts.xcstrings in Resources */,
 				870A51AA294700E00095C7EB /* Assets.xcassets in Resources */,
 				8757F7FC2AAC815F001957DD /* Localizable.xcstrings in Resources */,
+				876D70872E7A8E9D00E308A4 /* AppIcon.icon in Resources */,
 				870A51AD294700E00095C7EB /* Main.storyboard in Resources */,
 				B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */,
 			);
