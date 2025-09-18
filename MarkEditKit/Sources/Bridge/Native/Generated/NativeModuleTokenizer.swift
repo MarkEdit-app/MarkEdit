@@ -12,9 +12,9 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleTokenizer: NativeModule {
-  func tokenize(anchor: TextTokenizeAnchor) -> [String: Any]
-  func moveWordBackward(anchor: TextTokenizeAnchor) -> Int
-  func moveWordForward(anchor: TextTokenizeAnchor) -> Int
+  func tokenize(anchor: TextTokenizeAnchor) async -> [String: Any]
+  func moveWordBackward(anchor: TextTokenizeAnchor) async -> Int
+  func moveWordForward(anchor: TextTokenizeAnchor) async -> Int
 }
 
 public extension NativeModuleTokenizer {
@@ -26,13 +26,13 @@ final class NativeBridgeTokenizer: NativeBridge {
   static let name = "tokenizer"
   lazy var methods: [String: NativeMethod] = [
     "tokenize": { [weak self] in
-      self?.tokenize(parameters: $0)
+      await self?.tokenize(parameters: $0)
     },
     "moveWordBackward": { [weak self] in
-      self?.moveWordBackward(parameters: $0)
+      await self?.moveWordBackward(parameters: $0)
     },
     "moveWordForward": { [weak self] in
-      self?.moveWordForward(parameters: $0)
+      await self?.moveWordForward(parameters: $0)
     },
   ]
 
@@ -43,7 +43,7 @@ final class NativeBridgeTokenizer: NativeBridge {
     self.module = module
   }
 
-  private func tokenize(parameters: Data) -> Result<Any?, Error>? {
+  private func tokenize(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
     }
@@ -56,11 +56,11 @@ final class NativeBridgeTokenizer: NativeBridge {
       return .failure(error)
     }
 
-    let result = module.tokenize(anchor: message.anchor)
+    let result = await module.tokenize(anchor: message.anchor)
     return .success(result)
   }
 
-  private func moveWordBackward(parameters: Data) -> Result<Any?, Error>? {
+  private func moveWordBackward(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
     }
@@ -73,11 +73,11 @@ final class NativeBridgeTokenizer: NativeBridge {
       return .failure(error)
     }
 
-    let result = module.moveWordBackward(anchor: message.anchor)
+    let result = await module.moveWordBackward(anchor: message.anchor)
     return .success(result)
   }
 
-  private func moveWordForward(parameters: Data) -> Result<Any?, Error>? {
+  private func moveWordForward(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
     }
@@ -90,7 +90,7 @@ final class NativeBridgeTokenizer: NativeBridge {
       return .failure(error)
     }
 
-    let result = module.moveWordForward(anchor: message.anchor)
+    let result = await module.moveWordForward(anchor: message.anchor)
     return .success(result)
   }
 }

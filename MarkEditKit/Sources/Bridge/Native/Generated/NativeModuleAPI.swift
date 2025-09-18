@@ -12,14 +12,14 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleAPI: NativeModule {
-  func getFileInfo() -> String?
-  func getPasteboardItems() -> String?
-  func getPasteboardString() -> String?
+  func getFileInfo() async -> String?
+  func getPasteboardItems() async -> String?
+  func getPasteboardString() async -> String?
   func addMainMenuItems(items: [WebMenuItem])
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
-  func showAlert(title: String?, message: String?, buttons: [String]?) -> Int
-  func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String?
-  func showSavePanel(options: SavePanelOptions) -> Bool
+  func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
+  func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String?
+  func showSavePanel(options: SavePanelOptions) async -> Bool
 }
 
 public extension NativeModuleAPI {
@@ -31,28 +31,28 @@ final class NativeBridgeAPI: NativeBridge {
   static let name = "api"
   lazy var methods: [String: NativeMethod] = [
     "getFileInfo": { [weak self] in
-      self?.getFileInfo(parameters: $0)
+      await self?.getFileInfo(parameters: $0)
     },
     "getPasteboardItems": { [weak self] in
-      self?.getPasteboardItems(parameters: $0)
+      await self?.getPasteboardItems(parameters: $0)
     },
     "getPasteboardString": { [weak self] in
-      self?.getPasteboardString(parameters: $0)
+      await self?.getPasteboardString(parameters: $0)
     },
     "addMainMenuItems": { [weak self] in
-      self?.addMainMenuItems(parameters: $0)
+      await self?.addMainMenuItems(parameters: $0)
     },
     "showContextMenu": { [weak self] in
-      self?.showContextMenu(parameters: $0)
+      await self?.showContextMenu(parameters: $0)
     },
     "showAlert": { [weak self] in
-      self?.showAlert(parameters: $0)
+      await self?.showAlert(parameters: $0)
     },
     "showTextBox": { [weak self] in
-      self?.showTextBox(parameters: $0)
+      await self?.showTextBox(parameters: $0)
     },
     "showSavePanel": { [weak self] in
-      self?.showSavePanel(parameters: $0)
+      await self?.showSavePanel(parameters: $0)
     },
   ]
 
@@ -63,22 +63,22 @@ final class NativeBridgeAPI: NativeBridge {
     self.module = module
   }
 
-  private func getFileInfo(parameters: Data) -> Result<Any?, Error>? {
-    let result = module.getFileInfo()
+  private func getFileInfo(parameters: Data) async -> Result<Any?, Error>? {
+    let result = await module.getFileInfo()
     return .success(result)
   }
 
-  private func getPasteboardItems(parameters: Data) -> Result<Any?, Error>? {
-    let result = module.getPasteboardItems()
+  private func getPasteboardItems(parameters: Data) async -> Result<Any?, Error>? {
+    let result = await module.getPasteboardItems()
     return .success(result)
   }
 
-  private func getPasteboardString(parameters: Data) -> Result<Any?, Error>? {
-    let result = module.getPasteboardString()
+  private func getPasteboardString(parameters: Data) async -> Result<Any?, Error>? {
+    let result = await module.getPasteboardString()
     return .success(result)
   }
 
-  private func addMainMenuItems(parameters: Data) -> Result<Any?, Error>? {
+  private func addMainMenuItems(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var items: [WebMenuItem]
     }
@@ -95,7 +95,7 @@ final class NativeBridgeAPI: NativeBridge {
     return .success(nil)
   }
 
-  private func showContextMenu(parameters: Data) -> Result<Any?, Error>? {
+  private func showContextMenu(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var items: [WebMenuItem]
       var location: WebPoint
@@ -113,7 +113,7 @@ final class NativeBridgeAPI: NativeBridge {
     return .success(nil)
   }
 
-  private func showAlert(parameters: Data) -> Result<Any?, Error>? {
+  private func showAlert(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var title: String?
       var message: String?
@@ -128,11 +128,11 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    let result = module.showAlert(title: message.title, message: message.message, buttons: message.buttons)
+    let result = await module.showAlert(title: message.title, message: message.message, buttons: message.buttons)
     return .success(result)
   }
 
-  private func showTextBox(parameters: Data) -> Result<Any?, Error>? {
+  private func showTextBox(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var title: String?
       var placeholder: String?
@@ -147,11 +147,11 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    let result = module.showTextBox(title: message.title, placeholder: message.placeholder, defaultValue: message.defaultValue)
+    let result = await module.showTextBox(title: message.title, placeholder: message.placeholder, defaultValue: message.defaultValue)
     return .success(result)
   }
 
-  private func showSavePanel(parameters: Data) -> Result<Any?, Error>? {
+  private func showSavePanel(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var options: SavePanelOptions
     }
@@ -164,7 +164,7 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    let result = module.showSavePanel(options: message.options)
+    let result = await module.showSavePanel(options: message.options)
     return .success(result)
   }
 }
