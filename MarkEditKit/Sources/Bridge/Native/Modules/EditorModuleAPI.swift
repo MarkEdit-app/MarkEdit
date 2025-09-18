@@ -38,7 +38,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
     self.delegate = delegate
   }
 
-  public func getFileInfo() -> String? {
+  public func getFileInfo() async -> String? {
     guard let fileURL = delegate?.editorAPIGetFileURL(self) else {
       return nil
     }
@@ -56,7 +56,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
     return try? JSONSerialization.data(withJSONObject: json).toString()
   }
 
-  public func getPasteboardItems() -> String? {
+  public func getPasteboardItems() async -> String? {
   #if os(macOS)
     let pasteboard = NSPasteboard.general
     let types = pasteboard.types ?? []
@@ -82,7 +82,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
   #endif
   }
 
-  public func getPasteboardString() -> String? {
+  public func getPasteboardString() async -> String? {
   #if os(macOS)
     return NSPasteboard.general.string(forType: .string)
   #else
@@ -103,15 +103,15 @@ public final class EditorModuleAPI: NativeModuleAPI {
     delegate?.editorAPI(self, showContextMenu: items, location: location)
   }
 
-  public func showAlert(title: String?, message: String?, buttons: [String]?) -> Int {
+  public func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int {
     delegate?.editorAPI(self, alertWith: title, message: message, buttons: buttons) ?? 0
   }
 
-  public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
+  public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
     delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
   }
 
-  public func showSavePanel(options: SavePanelOptions) -> Bool {
+  public func showSavePanel(options: SavePanelOptions) async -> Bool {
     let data: Data = {
       if let source = options.data, let data = Data(base64Encoded: source, options: .ignoreUnknownCharacters) {
         return data

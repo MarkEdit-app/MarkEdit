@@ -11,7 +11,7 @@ import MarkEditCore
 public final class EditorModuleTokenizer: NativeModuleTokenizer {
   public init() {}
 
-  public func tokenize(anchor: TextTokenizeAnchor) -> [String: Any] {
+  public func tokenize(anchor: TextTokenizeAnchor) async -> [String: Any] {
     let tokenizer = NLTokenizer(unit: .word)
     tokenizer.string = anchor.text
 
@@ -22,7 +22,7 @@ public final class EditorModuleTokenizer: NativeModuleTokenizer {
     return ["from": bounds.lower, "to": max(bounds.upper, bounds.lower + 1)]
   }
 
-  public func moveWordBackward(anchor: TextTokenizeAnchor) -> Int {
+  public func moveWordBackward(anchor: TextTokenizeAnchor) async -> Int {
     if let location = (locations(in: anchor.text).last { $0 < anchor.pos }) {
       return location + anchor.offset
     }
@@ -31,7 +31,7 @@ public final class EditorModuleTokenizer: NativeModuleTokenizer {
     return anchor.pos + anchor.offset - 1
   }
 
-  public func moveWordForward(anchor: TextTokenizeAnchor) -> Int {
+  public func moveWordForward(anchor: TextTokenizeAnchor) async -> Int {
     if let location = (locations(in: anchor.text).first { $0 > anchor.pos }) {
       return location + anchor.offset
     }
