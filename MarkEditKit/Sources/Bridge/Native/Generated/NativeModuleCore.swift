@@ -33,34 +33,34 @@ final class NativeBridgeCore: NativeBridge {
   static let name = "core"
   lazy var methods: [String: NativeMethod] = [
     "notifyWindowDidLoad": { [weak self] in
-      self?.notifyWindowDidLoad(parameters: $0)
+      await self?.notifyWindowDidLoad(parameters: $0)
     },
     "notifyEditorDidBecomeIdle": { [weak self] in
-      self?.notifyEditorDidBecomeIdle(parameters: $0)
+      await self?.notifyEditorDidBecomeIdle(parameters: $0)
     },
     "notifyBackgroundColorDidChange": { [weak self] in
-      self?.notifyBackgroundColorDidChange(parameters: $0)
+      await self?.notifyBackgroundColorDidChange(parameters: $0)
     },
     "notifyViewportScaleDidChange": { [weak self] in
-      self?.notifyViewportScaleDidChange(parameters: $0)
+      await self?.notifyViewportScaleDidChange(parameters: $0)
     },
     "notifyViewDidUpdate": { [weak self] in
-      self?.notifyViewDidUpdate(parameters: $0)
+      await self?.notifyViewDidUpdate(parameters: $0)
     },
     "notifyContentHeightDidChange": { [weak self] in
-      self?.notifyContentHeightDidChange(parameters: $0)
+      await self?.notifyContentHeightDidChange(parameters: $0)
     },
     "notifyContentOffsetDidChange": { [weak self] in
-      self?.notifyContentOffsetDidChange(parameters: $0)
+      await self?.notifyContentOffsetDidChange(parameters: $0)
     },
     "notifyCompositionEnded": { [weak self] in
-      self?.notifyCompositionEnded(parameters: $0)
+      await self?.notifyCompositionEnded(parameters: $0)
     },
     "notifyLinkClicked": { [weak self] in
-      self?.notifyLinkClicked(parameters: $0)
+      await self?.notifyLinkClicked(parameters: $0)
     },
     "notifyLightWarning": { [weak self] in
-      self?.notifyLightWarning(parameters: $0)
+      await self?.notifyLightWarning(parameters: $0)
     },
   ]
 
@@ -71,17 +71,17 @@ final class NativeBridgeCore: NativeBridge {
     self.module = module
   }
 
-  private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyWindowDidLoad(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
     return .success(nil)
   }
 
-  private func notifyEditorDidBecomeIdle(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyEditorDidBecomeIdle(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyEditorDidBecomeIdle()
     return .success(nil)
   }
 
-  private func notifyBackgroundColorDidChange(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyBackgroundColorDidChange(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var color: Int
       var alpha: Double
@@ -99,12 +99,12 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyViewportScaleDidChange(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyViewportScaleDidChange(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyViewportScaleDidChange()
     return .success(nil)
   }
 
-  private func notifyViewDidUpdate(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyViewDidUpdate(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var contentEdited: Bool
       var compositionEnded: Bool
@@ -124,7 +124,7 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyContentHeightDidChange(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyContentHeightDidChange(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var bottomPanelHeight: Double
     }
@@ -141,12 +141,12 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyContentOffsetDidChange(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyContentOffsetDidChange(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyContentOffsetDidChange()
     return .success(nil)
   }
 
-  private func notifyCompositionEnded(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyCompositionEnded(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var selectedLineColumn: LineColumnInfo
     }
@@ -163,7 +163,7 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyLinkClicked(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyLinkClicked(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var link: String
     }
@@ -180,7 +180,7 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyLightWarning(parameters: Data) -> Result<Any?, Error>? {
+  private func notifyLightWarning(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyLightWarning()
     return .success(nil)
   }

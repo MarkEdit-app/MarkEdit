@@ -45,7 +45,7 @@ public final class EditorMessageHandler: NSObject, Sendable, WKScriptMessageHand
       return reportError("Invalid parameters from native method: \(moduleMethodPath)")
     }
 
-    guard let result = invokeNative(parameters) else {
+    guard let result = await invokeNative(parameters) else {
       return reportError("Missing result from native method: \(moduleMethodPath)")
     }
 
