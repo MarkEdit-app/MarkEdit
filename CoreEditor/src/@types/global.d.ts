@@ -5,6 +5,7 @@ import { NativeModuleCompletion } from '../bridge/native/completion';
 import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
 import { NativeModuleAPI } from '../bridge/native/api';
+import { NativeModuleFoundationModels } from '../bridge/native/foundationModels';
 
 import type { EditorView } from '@codemirror/view';
 import type { Extension } from '@codemirror/state';
@@ -13,6 +14,7 @@ import type { MarkEdit } from 'markedit-api';
 
 declare global {
   type CodeGen_Int = number & { _brand: never };
+  type CodeGen_UInt64 = number & { _brand: never };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type CodeGen_Self = any & { _brand: never };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +46,7 @@ declare global {
       preview: NativeModulePreview;
       tokenizer: NativeModuleTokenizer;
       api: NativeModuleAPI;
+      foundationModels: NativeModuleFoundationModels;
     };
     __extractStyleRules__: (theme: Extension) => string[] | undefined;
     __extractHighlightSpecs__: (theme: Extension) => TagStyle[] | undefined;

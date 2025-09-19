@@ -23,6 +23,7 @@ public struct WebModuleBridge {
   public let toc: WebBridgeTableOfContents
   public let api: WebBridgeAPI
   public let writingTools: WebBridgeWritingTools
+  public let foundationModels: WebBridgeFoundationModels
 
   public init(webView: WKWebView) {
     self.config = WebBridgeConfig(webView: webView)
@@ -37,5 +38,6 @@ public struct WebModuleBridge {
     self.toc = WebBridgeTableOfContents(webView: webView)
     self.api = WebBridgeAPI(webView: webView)
     self.writingTools = WebBridgeWritingTools(webView: webView)
+    self.foundationModels = WebBridgeFoundationModels(webView: webView)
   }
 }

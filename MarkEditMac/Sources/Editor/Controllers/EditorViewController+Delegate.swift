@@ -312,6 +312,18 @@ extension EditorViewController: EditorModuleAPIDelegate {
   }
 }
 
+// MARK: - EditorModuleFoundationModelsDelegate
+
+extension EditorViewController: EditorModuleFoundationModelsDelegate {
+  func editorFoundationModelsApplyStreamUpdate(
+    _ sender: EditorModuleFoundationModels,
+    streamID: String,
+    response: LanguageModelResponse
+  ) {
+    bridge.foundationModels.applyStreamUpdate(streamID: streamID, response: response)
+  }
+}
+
 // MARK: - EditorFindPanelDelegate
 
 extension EditorViewController: EditorFindPanelDelegate {
