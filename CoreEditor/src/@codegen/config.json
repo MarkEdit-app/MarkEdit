@@ -13,6 +13,7 @@
     },
     "predefinedTypes": [
       "CodeGen_Int",
+      "CodeGen_UInt64",
       "CodeGen_Self",
       "CodeGen_Dict"
     ],
@@ -42,6 +43,7 @@
       "namedTypesOutputPath": "../../../MarkEditCore/Sources/EditorSharedTypes.swift",
       "typeNameMap": {
         "CodeGen_Int": "Int",
+        "CodeGen_UInt64": "UInt64",
         "CodeGen_Self": "Self",
         "CodeGen_Dict": "[String: Any]"
       }
