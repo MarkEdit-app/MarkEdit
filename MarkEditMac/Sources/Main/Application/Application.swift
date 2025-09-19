@@ -25,9 +25,7 @@ final class Application: NSApplication {
     AppCustomization.createFiles()
 
     // Must after AppCustomization.createFiles()
-    if #available(macOS 26.0, *), AppRuntimeConfig.useClassicInterface {
-      Bundle.swizzleInfoDictionaryOnce()
-    }
+    Bundle.swizzleInfoDictionaryOnce
 
     let application = Self.shared
     let delegate = AppDelegate()
