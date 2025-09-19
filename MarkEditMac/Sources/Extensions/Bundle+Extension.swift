@@ -19,9 +19,9 @@ extension Bundle {
     )
   }()
 
-  @objc var swizzled_infoDictionary: [String: Any]? {
-    var dict = self.swizzled_infoDictionary
-    dict?["UIDesignRequiresCompatibility"] = true
+  @objc var swizzled_infoDictionary: NSDictionary? {
+    let dict = NSMutableDictionary(dictionary: self.swizzled_infoDictionary ?? [:])
+    dict["UIDesignRequiresCompatibility"] = true
 
     return dict
   }
