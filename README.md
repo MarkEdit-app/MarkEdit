@@ -1,4 +1,8 @@
-<img src="./Icon.png" width="96">
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/MarkEdit-app/MarkEdit/main/Icon.png" width="96">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MarkEdit-app/MarkEdit/main/Icon-dark.png" width="96">
+  <img src="./Icon.png" width="96">
+</picture>
 
 # MarkEdit
 
