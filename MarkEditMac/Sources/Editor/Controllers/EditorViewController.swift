@@ -28,12 +28,7 @@ final class EditorViewController: NSViewController {
   var userDefinedMenuItems = [EditorMenuItem]()
 
   weak var presentedMenu: NSMenu?
-  weak var presentedPopover: NSPopover? {
-    willSet {
-      // Close the existing popover to ensure that only one is presented
-      presentedPopover?.close()
-    }
-  }
+  weak var presentedPopover: NSPopover?
 
   var editorText: String? {
     get async {
