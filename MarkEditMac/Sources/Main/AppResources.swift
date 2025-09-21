@@ -107,20 +107,8 @@ enum Localized {
     static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
   }
 
-  // [macOS 15] Pending official localization to learn from
   enum WritingTools {
     static let title = String(localized: "Writing Tools", comment: "Writing Tools")
-    static let panel = String(localized: "Show Writing Tools", comment: "[WritingTools] Panel")
-    static let proofread = String(localized: "Proofread", comment: "[WritingTools] Proofread")
-    static let rewrite = String(localized: "Rewrite", comment: "[WritingTools] Rewrite")
-    static let makeFriendly = String(localized: "Make Friendly", comment: "[WritingTools] Make Friendly")
-    static let makeProfessional = String(localized: "Make Professional", comment: "[WritingTools] Make Professional")
-    static let makeConcise = String(localized: "Make Concise", comment: "[WritingTools] Make Concise")
-    static let summarize = String(localized: "Summarize", comment: "[WritingTools] Summarize")
-    static let createKeyPoints = String(localized: "Create Key Points", comment: "[WritingTools] Create Key Points")
-    static let makeList = String(localized: "Make List", comment: "[WritingTools] Make List")
-    static let makeTable = String(localized: "Make Table", comment: "[WritingTools] Make Table")
-    static let compose = String(localized: "Compose...", comment: "[WritingTools] Compose")
   }
 
   enum Settings {
