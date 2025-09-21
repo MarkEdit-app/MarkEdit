@@ -375,20 +375,32 @@ private extension EditorViewController {
 
 private extension EditorViewController {
   @IBAction func undo(_ sender: Any?) {
-    currentInput?.performTextAction(.undo, sender: sender)
+    if let currentInput {
+      currentInput.performTextAction(.undo, sender: sender)
+    } else {
+      NSApp.sendAction(#selector(undo(_:)), to: nil, from: sender)
+    }
   }
 
   @IBAction func redo(_ sender: Any?) {
-    currentInput?.performTextAction(.redo, sender: sender)
-  }
-
-  @IBAction func gotoLine(_ sender: Any?) {
-    showGotoLineWindow(sender)
+    if let currentInput {
+      currentInput.performTextAction(.redo, sender: sender)
+    } else {
+      NSApp.sendAction(#selector(redo(_:)), to: nil, from: sender)
+    }
   }
 
   @IBAction func selectWholeDocument(_ sender: Any?) {
     // The default implementation "selectAll" only selects the viewport
-    currentInput?.performTextAction(.selectAll, sender: sender)
+    if let currentInput {
+      currentInput.performTextAction(.selectAll, sender: sender)
+    } else {
+      NSApp.sendAction(#selector(selectAll(_:)), to: nil, from: sender)
+    }
+  }
+
+  @IBAction func gotoLine(_ sender: Any?) {
+    showGotoLineWindow(sender)
   }
 
   @IBAction func openTableOfContents(_ sender: Any?) {
@@ -499,8 +511,14 @@ private extension EditorViewController {
   }
 
   var currentInput: EditorTextInput? {
+    guard view.window?.isKeyWindow == true else {
+      return nil
+    }
+
     let textInput = view.window?.firstResponder as? EditorTextInput
-    Logger.assert(textInput != nil, "The firstResponder is not EditorTextInput")
+    if textInput == nil {
+      Logger.log(.info, "The firstResponder is not EditorTextInput")
+    }
 
     return textInput
   }
