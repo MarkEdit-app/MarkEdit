@@ -250,7 +250,7 @@ private extension EditorViewController {
 
   var writingToolsItem: NSToolbarItem? {
     if #available(macOS 15.1, *), let menu = systemWritingToolsMenu {
-      return .with(identifier: .writingTools, menu: menu)
+      return .with(identifier: .writingTools, menu: menu.copiedMenu)
     } else {
       return nil
     }
