@@ -472,23 +472,6 @@
         }
       }
     },
-    "Compose..." : {
-      "comment" : "[WritingTools] Compose",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "撰写…"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "撰寫…"
-          }
-        }
-      }
-    },
     "Content" : {
       "localizations" : {
         "zh-Hans" : {
@@ -568,23 +551,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
-          }
-        }
-      }
-    },
-    "Create Key Points" : {
-      "comment" : "[WritingTools] Create Key Points",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创建要点"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "建立要點"
           }
         }
       }
@@ -1790,91 +1756,6 @@
         }
       }
     },
-    "Make Concise" : {
-      "comment" : "[WritingTools] Make Concise",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "简洁化"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "簡潔化"
-          }
-        }
-      }
-    },
-    "Make Friendly" : {
-      "comment" : "[WritingTools] Make Friendly",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "友好化"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "友好化"
-          }
-        }
-      }
-    },
-    "Make List" : {
-      "comment" : "[WritingTools] Make List",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "制作列表"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "製作列表"
-          }
-        }
-      }
-    },
-    "Make Professional" : {
-      "comment" : "[WritingTools] Make Professional",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "专业化"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "專業化"
-          }
-        }
-      }
-    },
-    "Make Table" : {
-      "comment" : "[WritingTools] Make Table",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "制作表格"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "製作表格"
-          }
-        }
-      }
-    },
     "MarkEdit %@ is available!" : {
       "comment" : "Title for new version available",
       "localizations" : {
@@ -2264,23 +2145,6 @@
         }
       }
     },
-    "Proofread" : {
-      "comment" : "[WritingTools] Proofread",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "校对"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "校對"
-          }
-        }
-      }
-    },
     "Quit always keeps windows" : {
       "comment" : "Whether to keep windows when quit the app",
       "localizations" : {
@@ -2519,23 +2383,6 @@
         }
       }
     },
-    "Rewrite" : {
-      "comment" : "[WritingTools] Rewrite",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重写"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重寫"
-          }
-        }
-      }
-    },
     "Save Changes" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2722,23 +2569,6 @@
         }
       }
     },
-    "Show Writing Tools" : {
-      "comment" : "[WritingTools] Panel",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示写作工具"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示寫作工具"
-          }
-        }
-      }
-    },
     "Show:" : {
       "comment" : "Label for display options",
       "localizations" : {
@@ -2837,23 +2667,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "鍵入時提供補全"
-          }
-        }
-      }
-    },
-    "Summarize" : {
-      "comment" : "[WritingTools] Summarize",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "总结"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "總結"
           }
         }
       }
