@@ -1,13 +1,10 @@
 import { v4 as UUID } from 'uuid';
-import { LanguageModel, LanguageModelGenerationOptions, LanguageModelName, LanguageModelResponse, LanguageModelStream } from 'markedit-api';
+import { LanguageModel, LanguageModelGenerationOptions, LanguageModelResponse, LanguageModelStream } from 'markedit-api';
 import { LanguageModelGenerationOptions as SimplifiedGenerationOptions } from '../bridge/native/foundationModels';
 
-export function languageModel(name: LanguageModelName): LanguageModel | undefined {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (name !== 'Apple-Foundation-Models') {
-    return undefined;
-  }
-
+export function languageModel(): LanguageModel {
+  // The only supported model at this time is Apple's Foundation Models
+  //
   // https://developer.apple.com/documentation/FoundationModels
   const nativeModule = window.nativeModules.foundationModels;
   return {
