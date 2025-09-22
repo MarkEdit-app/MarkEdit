@@ -24,23 +24,8 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     self.delegate = delegate
   }
 
-  public func availability() -> LanguageModelAvailability {
-    guard #available(macOS 26.0, *) else {
-      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unsupported OS Version")
-    }
-
-    switch SystemLanguageModel.default.availability {
-    case .available:
-      return LanguageModelAvailability(isAvailable: true, unavailableReason: nil)
-    case .unavailable(.deviceNotEligible):
-      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Device Not Eligible")
-    case .unavailable(.appleIntelligenceNotEnabled):
-      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Apple Intelligence Not Enabled")
-    case .unavailable(.modelNotReady):
-      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Model Not Ready")
-    @unknown default:
-      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unknown")
-    }
+  public func availability() async -> String {
+    defaultModelAvailability.jsonEncoded
   }
 
   public func createSession(instructions: String?) async -> String? {
@@ -142,6 +127,25 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
   }
 
   // MARK: - Private
+
+  private var defaultModelAvailability: LanguageModelAvailability {
+    guard #available(macOS 26.0, *) else {
+      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unsupported OS Version")
+    }
+
+    switch SystemLanguageModel.default.availability {
+    case .available:
+      return LanguageModelAvailability(isAvailable: true, unavailableReason: nil)
+    case .unavailable(.deviceNotEligible):
+      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Device Not Eligible")
+    case .unavailable(.appleIntelligenceNotEnabled):
+      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Apple Intelligence Not Enabled")
+    case .unavailable(.modelNotReady):
+      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Model Not Ready")
+    @unknown default:
+      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unknown")
+    }
+  }
 
   // [macOS 26] Change the value type to LanguageModelSession
   private var sessionPool = [String: AnyObject]()
