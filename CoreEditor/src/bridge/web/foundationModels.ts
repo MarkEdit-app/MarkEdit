@@ -1,4 +1,4 @@
-import { LanguageModelResponse } from 'markedit-api';
+import { LanguageModelAvailability, LanguageModelResponse } from 'markedit-api';
 import { applyStreamUpdate } from '../../api/languageModel';
 import { WebModule } from '../webModule';
 
@@ -8,10 +8,18 @@ import { WebModule } from '../webModule';
  * @overrideModuleName WebBridgeFoundationModels
  */
 export interface WebModuleFoundationModels extends WebModule {
+  /**
+   * Don't call this directly, it does nothing.
+   */
+  __generateTypes__(_types: { arg0: LanguageModelAvailability }): void;
   applyStreamUpdate(args: { streamID: string; response: LanguageModelResponse }): void;
 }
 
 export class WebModuleFoundationModelsImpl implements WebModuleFoundationModels {
+  __generateTypes__(_types: { arg0: LanguageModelAvailability }): void {
+    // no-op
+  }
+
   applyStreamUpdate(args: { streamID: string; response: LanguageModelResponse }): void {
     applyStreamUpdate(args.streamID, args.response);
   }

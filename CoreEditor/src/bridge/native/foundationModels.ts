@@ -1,4 +1,3 @@
-import { LanguageModelAvailability } from 'markedit-api';
 import { NativeModule } from '../nativeModule';
 
 export interface LanguageModelGenerationOptions {
@@ -20,7 +19,7 @@ export type LanguageModelSampling = {
  * @bridgeName NativeBridgeFoundationModels
 */
 export interface NativeModuleFoundationModels extends NativeModule {
-  availability(): Promise<LanguageModelAvailability>;
+  availability(): Promise<string>;
   createSession(options?: { instructions?: string }): Promise<string | undefined>;
   isResponding({ sessionID }: { sessionID?: string }): Promise<boolean>;
   respondTo(args: { sessionID?: string; prompt: string; options?: LanguageModelGenerationOptions }): Promise<string>;

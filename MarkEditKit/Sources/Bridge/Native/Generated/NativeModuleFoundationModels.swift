@@ -12,7 +12,7 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleFoundationModels: NativeModule {
-  func availability() async -> LanguageModelAvailability
+  func availability() async -> String
   func createSession(instructions: String?) async -> String?
   func isResponding(sessionID: String?) async -> Bool
   func respondTo(sessionID: String?, prompt: String, options: LanguageModelGenerationOptions?) async -> String
@@ -127,16 +127,6 @@ final class NativeBridgeFoundationModels: NativeBridge {
 
     module.streamResponseTo(sessionID: message.sessionID, streamID: message.streamID, prompt: message.prompt, options: message.options)
     return .success(nil)
-  }
-}
-
-public struct LanguageModelAvailability: Encodable, Equatable {
-  public var isAvailable: Bool
-  public var unavailableReason: String?
-
-  public init(isAvailable: Bool, unavailableReason: String?) {
-    self.isAvailable = isAvailable
-    self.unavailableReason = unavailableReason
   }
 }
 

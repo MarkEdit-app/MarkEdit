@@ -18,6 +18,19 @@ public final class WebBridgeFoundationModels {
     self.webView = webView
   }
 
+  /// Don't call this directly, it does nothing.
+  public func __generateTypes__(arg0: LanguageModelAvailability, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    struct Message: Encodable {
+      let arg0: LanguageModelAvailability
+    }
+
+    let message = Message(
+      arg0: arg0
+    )
+
+    webView?.invoke(path: "webModules.foundationModels.__generateTypes__", message: message, completion: completion)
+  }
+
   public func applyStreamUpdate(streamID: String, response: LanguageModelResponse, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let streamID: String
@@ -30,6 +43,16 @@ public final class WebBridgeFoundationModels {
     )
 
     webView?.invoke(path: "webModules.foundationModels.applyStreamUpdate", message: message, completion: completion)
+  }
+}
+
+public struct LanguageModelAvailability: Codable {
+  public var isAvailable: Bool
+  public var unavailableReason: String?
+
+  public init(isAvailable: Bool, unavailableReason: String?) {
+    self.isAvailable = isAvailable
+    self.unavailableReason = unavailableReason
   }
 }
 

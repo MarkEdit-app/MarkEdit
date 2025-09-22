@@ -8,7 +8,10 @@ export function languageModel(): LanguageModel {
   // https://developer.apple.com/documentation/FoundationModels
   const nativeModule = window.nativeModules.foundationModels;
   return {
-    availability: () => nativeModule.availability(),
+    availability: async() => {
+      const availability = await nativeModule.availability();
+      return JSON.parse(availability);
+    },
     createSession: async(options) => {
       const sessionID = await nativeModule.createSession(options);
       return {
