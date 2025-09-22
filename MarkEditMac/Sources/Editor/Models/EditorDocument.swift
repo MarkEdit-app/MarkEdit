@@ -105,7 +105,7 @@ final class EditorDocument: NSDocument {
     addWindowController(windowController)
   }
 
-  func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.5) async {
+  func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.8) async {
     await withCheckedContinuation { continuation in
       saveContent(userInitiated: userInitiated) {
         continuation.resume()
