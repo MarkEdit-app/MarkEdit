@@ -27,8 +27,8 @@ public protocol EditorModuleAPIDelegate: AnyObject {
     showTextBox title: String?,
     placeholder: String?,
     defaultValue: String?
-  ) -> String?
-  func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) -> Bool
+  ) async -> String?
+  func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) async -> Bool
 }
 
 public final class EditorModuleAPI: NativeModuleAPI {
@@ -108,7 +108,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 
   public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
-    delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
+    await delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
   }
 
   public func showSavePanel(options: SavePanelOptions) async -> Bool {
@@ -124,7 +124,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
       return Data()
     }()
 
-    return delegate?.editorAPI(self, showSavePanel: data, fileName: options.fileName) == true
+    return (await delegate?.editorAPI(self, showSavePanel: data, fileName: options.fileName)) == true
   }
 }
 

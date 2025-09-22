@@ -433,7 +433,7 @@ extension EditorViewController {
     return alert.runModal()
   }
 
-  func showTextBox(title: String?, placeholder: String?, defaultValue: String?) -> String? {
+  func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
     class TextField: NSTextField {
       override func performKeyEquivalent(with event: NSEvent) -> Bool {
         // The default "selectAll" is not available here
@@ -460,26 +460,44 @@ extension EditorViewController {
       forName: NSWindow.didBecomeKeyNotification,
       object: nil,
       queue: .main
-    ) { [weak self] in
-      if let window = $0.object as? NSWindow, window == textField.window {
-        window.makeFirstResponder(textField)
-        if let observer = self?.textBoxInputObserver {
-          self?.textBoxInputObserver = nil
-          NotificationCenter.default.removeObserver(observer)
+    ) { [weak self] notification in
+      Task { @MainActor in
+        if let window = notification.object as? NSWindow, window == textField.window {
+          window.makeFirstResponder(textField)
+          if let observer = self?.textBoxInputObserver {
+            self?.textBoxInputObserver = nil
+            NotificationCenter.default.removeObserver(observer)
+          }
         }
       }
     }
 
-    return alert.runModal() == .alertFirstButtonReturn ? textField.stringValue : nil
+    let response = await {
+      guard let window = view.window else {
+        return alert.runModal()
+      }
+
+      return await alert.beginSheetModal(for: window)
+    }()
+
+    return response == .alertFirstButtonReturn ? textField.stringValue : nil
   }
 
-  func showSavePanel(data: Data, fileName: String?) -> Bool {
+  func showSavePanel(data: Data, fileName: String?) async -> Bool {
     let savePanel = NSSavePanel()
     savePanel.nameFieldStringValue = fileName ?? ""
     savePanel.isExtensionHidden = false
     savePanel.titlebarAppearsTransparent = true
 
-    guard savePanel.runModal() == .OK, let url = savePanel.url else {
+    let response = await {
+      guard let window = view.window else {
+        return savePanel.runModal()
+      }
+
+      return await savePanel.beginSheetModal(for: window)
+    }()
+
+    guard response == .OK, let url = savePanel.url else {
       // Cancelled
       return false
     }
