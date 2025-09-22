@@ -303,12 +303,12 @@ extension EditorViewController: EditorModuleAPIDelegate {
     return response.rawValue - NSApplication.ModalResponse.alertFirstButtonReturn.rawValue
   }
 
-  func editorAPI(_ sender: EditorModuleAPI, showTextBox title: String?, placeholder: String?, defaultValue: String?) -> String? {
-    showTextBox(title: title, placeholder: placeholder, defaultValue: defaultValue)
+  func editorAPI(_ sender: EditorModuleAPI, showTextBox title: String?, placeholder: String?, defaultValue: String?) async -> String? {
+    await showTextBox(title: title, placeholder: placeholder, defaultValue: defaultValue)
   }
 
-  func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) -> Bool {
-    showSavePanel(data: data, fileName: fileName)
+  func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) async -> Bool {
+    await showSavePanel(data: data, fileName: fileName)
   }
 }
 
