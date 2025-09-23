@@ -261,9 +261,10 @@ function enableGutterHoverEffects() {
 
 function createStyleSheet(styleText: string, enabled = true) {
   const style = document.createElement('style');
+  document.head.appendChild(style);
+
   style.textContent = styleText;
   style.disabled = !enabled;
 
-  document.head.appendChild(style);
   return style;
 }
