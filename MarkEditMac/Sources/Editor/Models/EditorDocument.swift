@@ -20,6 +20,7 @@ final class EditorDocument: NSDocument {
   var stringValue = ""
   var formatCompleted = false // The result of format content is all good
   var isOutdated = false // The content is outdated, needs an update
+  var isWritingToFile = false
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -105,7 +106,7 @@ final class EditorDocument: NSDocument {
     addWindowController(windowController)
   }
 
-  func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.8) async {
+  func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.6) async {
     await withCheckedContinuation { continuation in
       saveContent(userInitiated: userInitiated) {
         continuation.resume()
@@ -124,6 +125,7 @@ final class EditorDocument: NSDocument {
     let saveAction = {
       DispatchQueue.main.executeDelayed {
         super.save(sender)
+        self.isWritingToFile = false
         completion?()
       }
 
@@ -132,7 +134,8 @@ final class EditorDocument: NSDocument {
       }
     }
 
-    if isOutdated || (userInitiated && !formatCompleted) {
+    isWritingToFile = true
+    if isOutdated || (userInitiated && needsFormatting) {
       updateContent(userInitiated: userInitiated, saveAction: saveAction)
     } else {
       saveAction()
@@ -587,6 +590,14 @@ private extension EditorDocument {
 
   var hasBeenReverted: Bool {
     Date.now.timeIntervalSince(revertedDate) < 1
+  }
+
+  var needsFormatting: Bool {
+    guard !formatCompleted else {
+      return false
+    }
+
+    return AppPreferences.Assistant.insertFinalNewline || AppPreferences.Assistant.trimTrailingWhitespace
   }
 
   func updateContent(userInitiated: Bool = false) async {
