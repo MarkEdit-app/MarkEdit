@@ -112,15 +112,15 @@ extension EditorViewController {
 
     NotificationCenter.default.addObserver(
       self,
-      selector: #selector(windowDidBecomeKey(_:)),
-      name: NSWindow.didBecomeKeyNotification,
+      selector: #selector(windowDidBecomeMain(_:)),
+      name: NSWindow.didBecomeMainNotification,
       object: nil
     )
 
     NotificationCenter.default.addObserver(
       self,
-      selector: #selector(windowDidResignKey(_:)),
-      name: NSWindow.didResignKeyNotification,
+      selector: #selector(windowDidResignMain(_:)),
+      name: NSWindow.didResignMainNotification,
       object: nil
     )
 
@@ -163,8 +163,8 @@ extension EditorViewController {
       view.window?.backgroundColor = .clear
       view.window?.toolbarContainerView?.layerBackgroundColor = .clear
 
-      let isKeyWindow = view.window?.isKeyWindow ?? false
-      let reduceTransparency = !isKeyWindow || AppPreferences.Window.reduceTransparency
+      let isMainWindow = view.window?.isMainWindow ?? false
+      let reduceTransparency = !isMainWindow || AppPreferences.Window.reduceTransparency
       modernBackgroundView.layerBackgroundColor = backgroundColor
       modernEffectView.isHidden = reduceTransparency
       modernTintedView.layerBackgroundColor = .clear
@@ -573,7 +573,7 @@ private extension EditorViewController {
     )
   }
 
-  @objc func windowDidBecomeKey(_ notification: Notification) {
+  @objc func windowDidBecomeMain(_ notification: Notification) {
     guard (notification.object as? NSWindow) == view.window else {
       return
     }
@@ -587,7 +587,7 @@ private extension EditorViewController {
     }
   }
 
-  @objc func windowDidResignKey(_ notification: Notification) {
+  @objc func windowDidResignMain(_ notification: Notification) {
     guard (notification.object as? NSWindow) == view.window else {
       return
     }
