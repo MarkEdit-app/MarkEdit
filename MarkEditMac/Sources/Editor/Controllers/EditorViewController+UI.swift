@@ -110,14 +110,19 @@ extension EditorViewController {
       }
     }
 
-    if AppRuntimeConfig.nativeSearchQuerySync {
-      NotificationCenter.default.addObserver(
-        self,
-        selector: #selector(windowDidBecomeKey(_:)),
-        name: NSWindow.didBecomeKeyNotification,
-        object: nil
-      )
-    }
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(windowDidBecomeKey(_:)),
+      name: NSWindow.didBecomeKeyNotification,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(windowDidResignKey(_:)),
+      name: NSWindow.didResignKeyNotification,
+      object: nil
+    )
 
     // Track popovers that use editor as the positioning container
     NotificationCenter.default.addObserver(
@@ -158,8 +163,10 @@ extension EditorViewController {
       view.window?.backgroundColor = .clear
       view.window?.toolbarContainerView?.layerBackgroundColor = .clear
 
+      let isKeyWindow = view.window?.isKeyWindow ?? false
+      let reduceTransparency = !isKeyWindow || AppPreferences.Window.reduceTransparency
       modernBackgroundView.layerBackgroundColor = backgroundColor
-      modernEffectView.isHidden = AppPreferences.Window.reduceTransparency
+      modernEffectView.isHidden = reduceTransparency
       modernTintedView.layerBackgroundColor = .clear
 
       let alphaValue = {
@@ -181,7 +188,7 @@ extension EditorViewController {
       }
 
       // Hide the effect view and remove the opacity of the title bar view
-      if AppPreferences.Window.reduceTransparency {
+      if reduceTransparency {
         modernTintedView.layerBackgroundColor = backgroundColor
       }
     }
@@ -571,18 +578,22 @@ private extension EditorViewController {
       return
     }
 
-    guard let query = NSPasteboard.find.string, query != findPanel.searchField.stringValue else {
+    if AppDesign.modernStyle {
+      updateWindowColors(.current)
+    }
+
+    if AppRuntimeConfig.nativeSearchQuerySync {
+      updateNativeSearchQuery()
+    }
+  }
+
+  @objc func windowDidResignKey(_ notification: Notification) {
+    guard (notification.object as? NSWindow) == view.window else {
       return
     }
 
-    findPanel.searchField.stringValue = query
-    findPanel.searchField.selectAll()
-    nativeSearchQueryChanged = true
-
-    if findPanel.isFirstResponder {
-      updateTextFinderQuery()
-    } else {
-      findPanel.clearCounter()
+    if AppDesign.modernStyle {
+      updateWindowColors(.current)
     }
   }
 
