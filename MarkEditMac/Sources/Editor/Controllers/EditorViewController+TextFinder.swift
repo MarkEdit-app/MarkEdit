@@ -154,6 +154,22 @@ extension EditorViewController {
     }
   }
 
+  func updateNativeSearchQuery() {
+    guard let query = NSPasteboard.find.string, query != findPanel.searchField.stringValue else {
+      return
+    }
+
+    findPanel.searchField.stringValue = query
+    findPanel.searchField.selectAll()
+    nativeSearchQueryChanged = true
+
+    if findPanel.isFirstResponder {
+      updateTextFinderQuery()
+    } else {
+      findPanel.clearCounter()
+    }
+  }
+
   func updateSearchCounter() {
     Task {
       if let counter = try? await bridge.search.getCounterInfo() {
