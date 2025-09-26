@@ -44,7 +44,7 @@ enum AppDesign {
    `NSGlassEffectView` is used when it is available and `modernStyle` is true.
    */
   static var modernEffectView: NSView.Type {
-    guard #available(macOS 26.0, *), modernStyle else {
+    guard #available(macOS 26.0, *), modernStyle && AppRuntimeConfig.visualEffectType == .glass else {
       return NSVisualEffectView.self
     }
 
