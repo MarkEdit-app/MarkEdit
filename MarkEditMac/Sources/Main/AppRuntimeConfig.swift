@@ -14,6 +14,11 @@ import MarkEditKit
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
   struct Definition: Codable {
+    enum VisualEffectType: String, Codable {
+      case glass = "glass"
+      case blur = "blur"
+    }
+
     struct HotKey: Codable {
       let key: String
       let modifiers: [String]
@@ -30,6 +35,7 @@ enum AppRuntimeConfig {
     let searchNormalizers: [String: String]?
     let nativeSearchQuerySync: Bool?
     let useClassicInterface: Bool?
+    let visualEffectType: VisualEffectType?
     let checksForUpdates: Bool?
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
@@ -48,6 +54,7 @@ enum AppRuntimeConfig {
       case searchNormalizers = "editor.searchNormalizers"
       case nativeSearchQuerySync = "editor.nativeSearchQuerySync"
       case useClassicInterface = "general.useClassicInterface"
+      case visualEffectType = "general.visualEffectType"
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
@@ -127,6 +134,10 @@ enum AppRuntimeConfig {
     currentDefinition?.useClassicInterface ?? false
   }
 
+  static var visualEffectType: Definition.VisualEffectType {
+    currentDefinition?.visualEffectType ?? .glass
+  }
+
   static var checksForUpdates: Bool {
     // Enable automatic updates by default
     currentDefinition?.checksForUpdates ?? true
@@ -177,6 +188,7 @@ private extension AppRuntimeConfig {
     searchNormalizers: nil,
     nativeSearchQuerySync: nil,
     useClassicInterface: nil,
+    visualEffectType: nil,
     checksForUpdates: true,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
