@@ -183,6 +183,7 @@ extension EditorViewController {
       // For NSGlassEffectView, the built-in tintColor is preferred
       if #available(macOS 26.0, *), let glassView = modernEffectView as? NSGlassEffectView {
         glassView.tintColor = tintColor
+        glassView.layerBackgroundColor = backgroundColor.withAlphaComponent(0.66)
       } else {
         modernTintedView.layerBackgroundColor = tintColor
       }
