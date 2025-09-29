@@ -300,8 +300,8 @@ extension EditorViewController: EditorModuleAPIDelegate {
     alertWith title: String?,
     message: String?,
     buttons: [String]?
-  ) -> Int {
-    let response = showAlert(title: title, message: message, buttons: buttons)
+  ) async -> Int {
+    let response = await showAlert(title: title, message: message, buttons: buttons)
     return response.rawValue - NSApplication.ModalResponse.alertFirstButtonReturn.rawValue
   }
 

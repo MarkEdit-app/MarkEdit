@@ -429,7 +429,7 @@ extension EditorViewController {
     menu.popUp(positioning: nil, at: location, in: webView)
   }
 
-  func showAlert(title: String?, message: String?, buttons: [String]?) -> NSApplication.ModalResponse {
+  func showAlert(title: String?, message: String?, buttons: [String]?) async -> NSApplication.ModalResponse {
     let alert = NSAlert()
     alert.messageText = title ?? ""
     alert.informativeText = message ?? ""
@@ -438,7 +438,7 @@ extension EditorViewController {
       alert.addButton(withTitle: $0)
     }
 
-    return alert.runModal()
+    return await presentSheetModal(alert)
   }
 
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
@@ -480,14 +480,7 @@ extension EditorViewController {
       }
     }
 
-    let response = await {
-      guard let window = view.window else {
-        return alert.runModal()
-      }
-
-      return await alert.beginSheetModal(for: window)
-    }()
-
+    let response = await presentSheetModal(alert)
     return response == .alertFirstButtonReturn ? textField.stringValue : nil
   }
 
@@ -497,15 +490,7 @@ extension EditorViewController {
     savePanel.isExtensionHidden = false
     savePanel.titlebarAppearsTransparent = true
 
-    let response = await {
-      guard let window = view.window else {
-        return savePanel.runModal()
-      }
-
-      return await savePanel.beginSheetModal(for: window)
-    }()
-
-    guard response == .OK, let url = savePanel.url else {
+    guard await presentSheetModal(savePanel) == .OK, let url = savePanel.url else {
       // Cancelled
       return false
     }
