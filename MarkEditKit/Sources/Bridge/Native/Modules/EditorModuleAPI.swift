@@ -21,7 +21,7 @@ public protocol EditorModuleAPIDelegate: AnyObject {
     alertWith title: String?,
     message: String?,
     buttons: [String]?
-  ) -> Int
+  ) async -> Int
   func editorAPI(
     _ sender: EditorModuleAPI,
     showTextBox title: String?,
@@ -104,7 +104,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 
   public func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int {
-    delegate?.editorAPI(self, alertWith: title, message: message, buttons: buttons) ?? 0
+    await delegate?.editorAPI(self, alertWith: title, message: message, buttons: buttons) ?? 0
   }
 
   public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {

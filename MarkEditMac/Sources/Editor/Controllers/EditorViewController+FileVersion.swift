@@ -9,13 +9,13 @@ import AppKit
 import MarkEditKit
 
 extension EditorViewController {
-  func deleteFileVersions(_ versions: [NSFileVersion]) {
+  func deleteFileVersions(_ versions: [NSFileVersion]) async {
     let alert = NSAlert()
     alert.alertStyle = .warning
 
     guard !versions.isEmpty else {
       alert.messageText = Localized.FileVersion.noVersionsTitle
-      alert.runModal()
+      await presentSheetModal(alert)
       return
     }
 
@@ -25,7 +25,7 @@ extension EditorViewController {
     alert.addButton(withTitle: Localized.General.delete)
     alert.addButton(withTitle: Localized.General.cancel)
 
-    guard alert.runModal() == .alertFirstButtonReturn else {
+    guard await presentSheetModal(alert) == .alertFirstButtonReturn else {
       return
     }
 

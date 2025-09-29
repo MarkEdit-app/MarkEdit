@@ -358,7 +358,9 @@ private extension EditorViewController {
       return
     }
 
-    deleteFileVersions(document.otherVersions(olderThanDays: days))
+    Task {
+      await deleteFileVersions(document.otherVersions(olderThanDays: days))
+    }
   }
 
   @IBAction func deleteVersionsByCapacity(_ sender: Any?) {
@@ -367,7 +369,9 @@ private extension EditorViewController {
       return
     }
 
-    deleteFileVersions(document.otherVersions(olderThanMaxLength: maxLength))
+    Task {
+      await deleteFileVersions(document.otherVersions(olderThanMaxLength: maxLength))
+    }
   }
 }
 
