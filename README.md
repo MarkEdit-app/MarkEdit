@@ -6,7 +6,7 @@
 
 # MarkEdit
 
-[![](https://img.shields.io/badge/Platform-macOS_15.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit/releases/latest) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
+[![](https://img.shields.io/badge/Platform-macOS_15.0+-blue?color=007bff)](https://github.com/MarkEdit-app/MarkEdit?tab=readme-ov-file#platform-compatibility) [![](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/MarkEdit-app/MarkEdit/actions/workflows/build-and-test.yml)
 
 MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just like _TextEdit_ on Mac but dedicated to `Markdown`.
 
@@ -35,6 +35,8 @@ MarkEdit is designed to be simple and easy to use. You can also customize the UI
 
 For example, use [MarkEdit-preview](https://github.com/MarkEdit-app/MarkEdit-preview) to add a preview pane, and [MarkEdit-theming](https://github.com/MarkEdit-app/MarkEdit-theming) to customize themes.
 
+On macOS Tahoe, you can also use [MarkEdit-ai-writer](https://github.com/MarkEdit-app/MarkEdit-ai-writer) to effortlessly access Apple's generative language models.
+
 > To learn more, refer to [Philosophy](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy), [Why MarkEdit](https://github.com/MarkEdit-app/MarkEdit/wiki/Why-MarkEdit) and [MarkEdit-api](https://github.com/MarkEdit-app/MarkEdit-api).
 
 ## Installation
@@ -53,7 +55,7 @@ If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install mar
 
 To be focused, we only support the latest two major macOS releases. For now, they are [macOS Sequoia](https://www.apple.com/macos/macos-sequoia/) and [macOS Tahoe](https://www.apple.com/os/macos/).
 
-Last-compatible version tags: [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13), [macos-14](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-14).
+Last-compatible version tags: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-12), [macos-13](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-13), [macos-14](https://github.com/MarkEdit-app/MarkEdit/releases/tag/macos-14).
 
 ## Why MarkEdit is free
 
@@ -77,7 +79,7 @@ For bug reports, please [open an issue](https://github.com/MarkEdit-app/MarkEdit
 
 For code changes, bug fixes are generally welcomed, feel free to [open pull requests](https://github.com/MarkEdit-app/MarkEdit/compare). However, we hesitate to add new features ([why](https://github.com/MarkEdit-app/MarkEdit/wiki/Why-MarkEdit#feature-poor)); please fork the repository and make your own.
 
-For localization, please also open an issue as mentioned above first.
+For localization, we don't plan to add new languages, as maintaining high quality across them would be difficult for us.
 
 Thanks in advance.
 
