@@ -652,14 +652,21 @@ private extension EditorDocument {
       // Reverted or no unsaved changes
       performClose()
     } else {
+      // Delay this for two reasons:
+      //  1. To make it clear to users that their changes are saved
+      //  2. To avoid leftover .sb copies when a document is closed too quickly
+      let closeDelayed = {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: performClose)
+      }
+
       // Saved
-      document.saveContent(userInitiated: true, completion: performClose)
+      document.saveContent(userInitiated: true, completion: closeDelayed)
     }
   }
 }
 
 private extension DispatchQueue {
   func executeDelayed(_ execute: @escaping () -> Void) {
-    asyncAfter(deadline: .now() + 0.02, execute: execute)
+    asyncAfter(deadline: .now() + 0.05, execute: execute)
   }
 }
