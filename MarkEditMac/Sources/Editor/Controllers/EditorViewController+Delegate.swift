@@ -106,8 +106,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
     hasFinishedLoading = true
     resetEditor()
 
-    loadingIndicator.scaleTo(0.9, duration: 0.15) {
-      let duration: TimeInterval = 0.35
+    loadingIndicator.scaleTo(0.9, duration: 0.1) {
+      let duration: TimeInterval = 0.3
 
       NSAnimationContext.runAnimationGroup { context in
         context.duration = duration
