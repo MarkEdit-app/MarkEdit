@@ -107,6 +107,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       Task {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
+
+      DispatchQueue.global(qos: .utility).async {
+        let defaults = UserDefaults.standard.dictionaryRepresentation()
+        let plist = defaults.merging(AppRuntimeConfig.jsonObject) { _, rhs in rhs }
+        let fileData = try? PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
+        try? fileData?.write(to: AppCustomization.debugDirectory.fileURL.appending(path: "user-settings.xml"))
+      }
     }
 
     // Check for updates on a weekly basis, for users who never quit apps

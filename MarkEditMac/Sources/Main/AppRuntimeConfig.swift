@@ -74,6 +74,14 @@ enum AppRuntimeConfig {
     }() ?? "{}"
   }()
 
+  static var jsonObject: [String: Any] {
+    guard let data = fileData, let object = try? JSONSerialization.jsonObject(with: data) else {
+      return [:]
+    }
+
+    return (object as? [String: Any]) ?? [:]
+  }
+
   static var autoCharacterPairs: Bool {
     // Enable auto character pairs by default
     currentDefinition?.autoCharacterPairs ?? true
