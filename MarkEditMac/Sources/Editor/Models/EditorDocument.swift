@@ -609,6 +609,12 @@ private extension EditorDocument {
 
     if let editorText = await hostViewController?.editorText {
       stringValue = editorText
+
+      DispatchQueue.global(qos: .utility).async {
+        let fileData = editorText.toData() ?? Data()
+        let directory = AppCustomization.debugDirectory.fileURL
+        try? fileData.write(to: directory.appending(path: "last-edited.md"))
+      }
     }
 
     // If the content contains headings, use the first one to override the displayName
