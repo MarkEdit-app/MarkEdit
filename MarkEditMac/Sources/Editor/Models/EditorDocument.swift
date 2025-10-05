@@ -20,7 +20,6 @@ final class EditorDocument: NSDocument {
   var stringValue = ""
   var formatCompleted = false // The result of format content is all good
   var isOutdated = false // The content is outdated, needs an update
-  var isWritingToFile = false
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -125,16 +124,10 @@ final class EditorDocument: NSDocument {
     let saveAction = {
       DispatchQueue.main.executeDelayed {
         super.save(sender)
-        self.isWritingToFile = false
         completion?()
-      }
-
-      if sender != nil {
-        self.hostViewController?.cancelCompletion()
       }
     }
 
-    isWritingToFile = true
     if isOutdated || (userInitiated && needsFormatting) {
       updateContent(userInitiated: userInitiated, saveAction: saveAction)
     } else {
@@ -329,6 +322,10 @@ extension EditorDocument {
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
+    guard isOutdated || needsFormatting else {
+      return super.save(sender)
+    }
+
     saveContent(sender: sender, userInitiated: true)
   }
 
@@ -344,14 +341,6 @@ extension EditorDocument {
     if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
       try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
       fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
-    }
-
-    // When "Ask to keep changes when closing documents" is enabled,
-    // changes are asked to save explicitly, see also "confirmsChanges(_:shouldClose:)".
-    //
-    // The value can from either system settings or app level overwritten.
-    guard !closeAlwaysConfirmsChanges else {
-      return
     }
 
     Task { @MainActor in
