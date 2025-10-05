@@ -131,6 +131,10 @@ final class EditorDocument: NSDocument {
         updateContent(userInitiated: userInitiated, saveAction: saveAction)
       } else {
         saveAction()
+
+        if userInitiated {
+          markContentClean()
+        }
       }
     }
   }
@@ -322,7 +326,9 @@ extension EditorDocument {
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
   override func save(_ sender: Any?) {
     guard isOutdated || needsFormatting else {
-      return super.save(sender)
+      super.save(sender)
+      markContentClean()
+      return
     }
 
     saveContent(sender: sender, userInitiated: true)
@@ -616,8 +622,12 @@ private extension EditorDocument {
     unblockUserInteraction()
 
     if userInitiated {
-      bridge?.history.markContentClean()
+      markContentClean()
     }
+  }
+
+  func markContentClean() {
+    bridge?.history.markContentClean()
   }
 
   @objc func confirmsChanges(_ document: EditorDocument, shouldClose: Bool) {
