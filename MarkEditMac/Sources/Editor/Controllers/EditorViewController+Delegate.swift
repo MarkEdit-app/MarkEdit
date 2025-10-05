@@ -122,6 +122,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
   }
 
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore) {
+    guard view.window != nil else {
+      // Fail fast since the editor is not available
+      return
+    }
+
     if document?.shouldSaveWhenIdle == true {
       document?.saveContent()
       bridge.history.markContentClean()
