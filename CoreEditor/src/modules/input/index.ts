@@ -123,7 +123,7 @@ export function observeChanges() {
 
       storage.contentUpdater = setTimeout(() => {
         window.nativeModules.core.notifyEditorDidBecomeIdle();
-      }, 2000);
+      }, 1500);
     }
 
     // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
