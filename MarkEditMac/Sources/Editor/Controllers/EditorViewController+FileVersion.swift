@@ -29,7 +29,7 @@ extension EditorViewController {
       return
     }
 
-    DispatchQueue.global(qos: .background).async {
+    DispatchQueue.global(qos: .default).async {
       do {
         try versions.forEach { try $0.remove() }
       } catch {
