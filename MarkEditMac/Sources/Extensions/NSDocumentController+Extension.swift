@@ -36,7 +36,7 @@ extension NSDocumentController {
 private extension NSDocumentController {
   var outdatedDocuments: [EditorDocument] {
     NSDocumentController.shared.documents.compactMap {
-      guard let document = $0 as? EditorDocument, document.isOutdated || document.isWritingToFile else {
+      guard let document = $0 as? EditorDocument, document.isOutdated else {
         return nil
       }
 
