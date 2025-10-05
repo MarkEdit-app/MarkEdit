@@ -121,17 +121,17 @@ final class EditorDocument: NSDocument {
   }
 
   func saveContent(sender: Any? = nil, userInitiated: Bool = false, completion: (() -> Void)? = nil) {
-    let saveAction = {
-      DispatchQueue.main.executeDelayed {
+    Task { @MainActor in
+      let saveAction = {
         super.save(sender)
         completion?()
       }
-    }
 
-    if isOutdated || (userInitiated && needsFormatting) {
-      updateContent(userInitiated: userInitiated, saveAction: saveAction)
-    } else {
-      saveAction()
+      if isOutdated || (userInitiated && needsFormatting) {
+        updateContent(userInitiated: userInitiated, saveAction: saveAction)
+      } else {
+        saveAction()
+      }
     }
   }
 
@@ -214,14 +214,11 @@ extension EditorDocument {
     }()
 
     let canClose = {
-      // Run async to work around a rare hang issue
-      DispatchQueue.main.executeDelayed {
-        super.canClose(
-          withDelegate: delegate,
-          shouldClose: shouldClose,
-          contextInfo: contextInfo
-        )
-      }
+      super.canClose(
+        withDelegate: delegate,
+        shouldClose: shouldClose,
+        contextInfo: contextInfo
+      )
     }
 
     // Closing a new document, force sync to make sure the content is propagated.
@@ -240,7 +237,9 @@ extension EditorDocument {
     }
 
     // General cases
-    canClose()
+    Task { @MainActor in
+      canClose()
+    }
   }
 
   override func close() {
@@ -651,11 +650,5 @@ private extension EditorDocument {
       // Saved
       document.saveContent(userInitiated: true, completion: closeDelayed)
     }
-  }
-}
-
-private extension DispatchQueue {
-  func executeDelayed(_ execute: @escaping () -> Void) {
-    asyncAfter(deadline: .now() + 0.05, execute: execute)
   }
 }
