@@ -122,6 +122,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
     }
+
+    // Install uncaught exception handler
+    AppExceptionCatcher.install()
   }
 
   func applicationShouldTerminate(_ application: NSApplication) -> NSApplication.TerminateReply {

@@ -90,6 +90,7 @@
 		87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */; };
 		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */; };
 		87B3ED8F2CBE1E12001FA6CE /* DiffKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87B3ED8E2CBE1E12001FA6CE /* DiffKit */; };
+		87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */; };
 		87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BD071129699A290053EF5F /* EditorViewController+Preview.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BE2E342DF9B5C000A51CF4 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE2E332DF9B5BB00A51CF4 /* Bundle+Extension.swift */; };
@@ -218,6 +219,7 @@
 		87ACB6932BD8CA8400CE6F9E /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
 		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extension.swift"; sourceTree = "<group>"; };
+		87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppExceptionCatcher.swift; sourceTree = "<group>"; };
 		87BD071129699A290053EF5F /* EditorViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Preview.swift"; sourceTree = "<group>"; };
 		87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+GotoLine.swift"; sourceTree = "<group>"; };
 		87BE2E332DF9B5BB00A51CF4 /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 				87AAEE0129585ADC00C8E61C /* AppPreferences.swift */,
 				87BEF30029A88F6800596E17 /* AppCustomization.swift */,
 				8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */,
+				87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -743,6 +746,7 @@
 				877B965D2C63815000186414 /* AppHotKeys.swift in Sources */,
 				87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */,
 				87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */,
+				87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */,
 				8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */,
 				87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */,
 				870F17682985285B00003DA7 /* EditorViewController+Config.swift in Sources */,
