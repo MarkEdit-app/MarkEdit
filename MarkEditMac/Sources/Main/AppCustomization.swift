@@ -19,13 +19,14 @@ struct AppCustomization {
     case stylesDirectory
     case editorScript
     case scriptsDirectory
+    case debugDirectory
     case pandoc
     case settings
 
     var tagName: String? {
       switch self {
       case .editorStyle, .stylesDirectory: return "style"
-      case .editorScript, .scriptsDirectory, .pandoc, .settings: return nil
+      case .editorScript, .scriptsDirectory, .debugDirectory, .pandoc, .settings: return nil
       }
     }
 
@@ -35,6 +36,7 @@ struct AppCustomization {
       case .stylesDirectory: return "styles"
       case .editorScript: return "editor.js"
       case .scriptsDirectory: return "scripts"
+      case .debugDirectory: return "debug"
       case .pandoc: return "pandoc.yaml"
       case .settings: return "settings.json"
       }
@@ -42,7 +44,7 @@ struct AppCustomization {
 
     var isDirectory: Bool {
       switch self {
-      case .stylesDirectory, .scriptsDirectory: return true
+      case .stylesDirectory, .scriptsDirectory, .debugDirectory: return true
       default: return false
       }
     }
@@ -52,6 +54,7 @@ struct AppCustomization {
   static let stylesDirectory = Self(fileType: .stylesDirectory)
   static let editorScript = Self(fileType: .editorScript)
   static let scriptsDirectory = Self(fileType: .scriptsDirectory)
+  static let debugDirectory = Self(fileType: .debugDirectory)
   static let pandoc = Self(fileType: .pandoc)
   static let settings = Self(fileType: .settings)
 
@@ -60,6 +63,7 @@ struct AppCustomization {
     stylesDirectory.createFile()
     editorScript.createFile()
     scriptsDirectory.createFile()
+    debugDirectory.createFile()
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
     settings.createFile(AppRuntimeConfig.defaultContents)
   }
