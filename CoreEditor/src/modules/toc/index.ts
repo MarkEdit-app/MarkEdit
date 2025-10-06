@@ -84,6 +84,15 @@ export function getTableOfContents() {
   return results;
 }
 
+export function getLinkAnchor(title: string) {
+  return title
+    .normalize('NFKD')
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{Letter}\p{Number}\s\-_]/gu, '')
+    .replace(/\s+/g, '-');
+}
+
 export function selectPreviousSection() {
   const toc = getTableOfContents();
   const index = Math.max(0, toc.findIndex(info => info.selected) - 1);

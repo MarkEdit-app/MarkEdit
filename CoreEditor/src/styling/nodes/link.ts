@@ -6,6 +6,7 @@ import { createDecos } from '../matchers/lezer';
 import { isReleaseMode } from '../../common/utils';
 import { isMetaKeyDown } from '../../modules/events';
 import { getNodesNamed } from '../../modules/lezer';
+import { getTableOfContents, getLinkAnchor, gotoHeader } from '../../modules/toc';
 
 const className = 'cm-md-link';
 const regexp = {
@@ -139,6 +140,11 @@ export function handleMouseUp(event: MouseEvent) {
     return followReference(element, type);
   }
 
+  // Internal anchors like [Title][#anchor]
+  if (link.startsWith('#')) {
+    return followLinkAnchor(link.substring(1).toLowerCase());
+  }
+
   // [standard][link] or <standard-link>
   if (isReleaseMode) {
     window.nativeModules.core.notifyLinkClicked({ link });
@@ -211,6 +217,16 @@ function followReference(element: HTMLElement, type: string) {
     // For [reference][link], always goto the definition
     return isDefinition(node.to);
   }));
+}
+
+function followLinkAnchor(anchor: string) {
+  const header = getTableOfContents().find(({ title }) => getLinkAnchor(title) === anchor);
+  if (header === undefined) {
+    window.nativeModules.core.notifyLightWarning();
+    return;
+  }
+
+  gotoHeader(header);
 }
 
 function scrollIntoTarget(target?: SyntaxNodeRef) {
