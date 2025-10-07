@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
-import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion } from '@codemirror/autocomplete';
+import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 
@@ -75,7 +75,7 @@ export function isPanelVisible() {
 }
 
 export function hasTooltipCompletion() {
-  return document.querySelector('.cm-tooltip-autocomplete') !== null;
+  return tooltipCompletionStatus(window.editor.state) === 'active';
 }
 
 export function toggleTooltipCompletion() {
