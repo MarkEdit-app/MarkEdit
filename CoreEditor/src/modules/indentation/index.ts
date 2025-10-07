@@ -1,6 +1,8 @@
 import { KeyBinding } from '@codemirror/view';
 import { indentLess, indentMore, insertTab } from '@codemirror/commands';
+import { acceptCompletion as acceptTooltipCompletion } from '@codemirror/autocomplete';
 import { TabKeyBehavior } from './types';
+import { hasTooltipCompletion } from '../completion';
 import replaceSelections from '../commands/replaceSelections';
 
 /**
@@ -10,7 +12,12 @@ export const indentationKeymap: KeyBinding[] = [
   {
     key: 'Tab',
     preventDefault: true,
-    run: ({ state, dispatch }) => {
+    run: editor => {
+      if (hasTooltipCompletion()) {
+        acceptTooltipCompletion(editor);
+        return true;
+      }
+
       switch (window.config.tabKeyBehavior) {
         case TabKeyBehavior.insertTwoSpaces:
           replaceSelections('  ');
@@ -19,9 +26,9 @@ export const indentationKeymap: KeyBinding[] = [
           replaceSelections('    ');
           return true;
         case TabKeyBehavior.indentMore:
-          return indentMore({ state, dispatch });
+          return indentMore(editor);
         default:
-          return insertTab({ state, dispatch });
+          return insertTab(editor);
       }
     },
   },

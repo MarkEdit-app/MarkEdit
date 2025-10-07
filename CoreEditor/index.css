@@ -2,6 +2,7 @@
 
 :root {
   color-scheme: light dark;
+  --tooltip-completion-max-height: 156px;
 }
 
 html, body {

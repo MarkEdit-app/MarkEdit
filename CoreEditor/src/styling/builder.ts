@@ -82,6 +82,18 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-snippetFieldPosition': {
     borderLeft: 'none',
   },
+  '.cm-tooltip-autocomplete': {
+    overflow: 'auto',
+    marginTop: '5px',
+    borderRadius: '5px',
+    maxWidth: '280px',
+  },
+  '.cm-tooltip-autocomplete ul': {
+    maxHeight: 'var(--tooltip-completion-max-height) !important',
+  },
+  '.cm-tooltip-autocomplete ul li': {
+    padding: '4px !important',
+  },
   // Extended
   '.cm-visibleTab': (() => {
     // Chrome right now doesn't support mask-image, prefix them with -webkit- for testing purpose
@@ -166,6 +178,23 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     '.cm-selectionMatch': {
       backgroundColor: colors.selectionHighlight,
+    },
+    // Autocomplete
+    '.cm-tooltip-autocomplete': {
+      border: `1px solid ${colors.visibleSpace}`,
+      backgroundColor: `${colors.background}99`,
+      backdropFilter: 'blur(10px)',
+      boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
+    },
+    '.cm-tooltip-autocomplete ul li[aria-selected]': {
+      backgroundColor: `${colors.selection}66`,
+    },
+    '.cm-tooltip-autocomplete ul li, .cm-tooltip-autocomplete ul li[aria-selected]': {
+      color: colors.text,
+    },
+    '.cm-completionMatchedText': {
+      textDecoration: 'none',
+      ...shadowableTextColor(colors.accent),
     },
     // Control characters
     '.cm-specialChar': {

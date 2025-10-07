@@ -1,5 +1,7 @@
 import { KeyBinding } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
+import { CompletionContext, CompletionResult } from '@codemirror/autocomplete';
+import { syntaxTree } from '@codemirror/language';
 import { HeadingInfo } from './types';
 import { frontMatterRange } from '../frontMatter';
 import { getSyntaxTree } from '../lezer';
@@ -26,6 +28,36 @@ export const tocKeymap: KeyBinding[] = [
     },
   },
 ];
+
+// https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
+export const anchorCompletionData = {
+  autocomplete: (context: CompletionContext): CompletionResult | null => {
+    const before = context.matchBefore(/#[\p{L}\p{N}_]*/u);
+    if (!context.explicit && !before) {
+      return null;
+    }
+
+    if (context.view === undefined) {
+      return null;
+    }
+
+    const node = syntaxTree(context.view.state).resolveInner(context.pos);
+    if (node.name !== 'Link') {
+      return null;
+    }
+
+    return {
+      from: before ? before.from : context.pos,
+      options: getTableOfContents().map(info => {
+        return {
+          type: 'text',
+          label: '#' + getLinkAnchor(info.title),
+        };
+      }),
+      validFor: /^#[\p{L}\p{N}_]*$/u,
+    };
+  },
+};
 
 export function getTableOfContents() {
   const editor = window.editor;
