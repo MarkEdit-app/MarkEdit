@@ -4,7 +4,7 @@ import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion } from '@codemirror/autocomplete';
 import { globalState, editingState } from '../../common/store';
 import { clearSyntaxSelections } from '../commands';
-import { startCompletion, isPanelVisible, hasTooltipCompletion } from '../completion';
+import { startCompletion, isPanelVisible } from '../completion';
 import { hasRecentKeyPress } from '../events';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
 import { adjustActiveLineGutter, adjustGutterPositions } from '../lines';
@@ -64,7 +64,7 @@ export function wordTokenizer() {
 export function interceptInputs() {
   const marksToWrap = ['*', '_', '~', '$'];
 
-  return EditorView.inputHandler.of((editor, _from, _to, insert) => {
+  return EditorView.inputHandler.of((editor, from, to, insert) => {
     // Enable auto character pairs only after composition ends,
     // some characters act as marked text in certain languages, e.g., typing '`' followed by 'a' to input 'à'.
     const autoCharacterPairs = window.config.autoCharacterPairs && editingState.compositionEnded;
@@ -87,6 +87,11 @@ export function interceptInputs() {
       window.nativeModules.completion.cancelCompletion();
     }
 
+    // Try tooltip completion if selection is replaced
+    if (from !== to && insert.length > 0) {
+      setTimeout(() => startTooltipCompletion(editor), 200);
+    }
+
     // Fallback to default behavior
     return false;
   });
@@ -105,19 +110,6 @@ export function observeChanges() {
     if (update.docChanged) {
       // This should be called before updating the native view
       setHistoryExplictlyMoved(update);
-
-      let shouldComplete = true;
-      update.changes.iterChanges((from, to, _, __, inserted) => {
-        // Try tooltip completion if selection is replaced
-        if (shouldComplete && to > from && inserted.length > 0) {
-          shouldComplete = false;
-          setTimeout(() => {
-            if (!hasTooltipCompletion()) {
-              startTooltipCompletion(update.view);
-            }
-          }, 200);
-        }
-      });
 
       if (!update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
         // We need this because we have different line height for headings,
