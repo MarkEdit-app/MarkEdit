@@ -32,12 +32,12 @@ export const tocKeymap: KeyBinding[] = [
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
 export const anchorCompletionData = {
   autocomplete: (context: CompletionContext): CompletionResult | null => {
-    const before = context.matchBefore(/#[\p{L}\p{N}_]*/u);
-    if (!context.explicit && !before) {
+    if (context.view === undefined) {
       return null;
     }
 
-    if (context.view === undefined) {
+    const match = context.matchBefore(/#[\p{L}\p{N}_]*/u);
+    if (match === null) {
       return null;
     }
 
@@ -47,7 +47,7 @@ export const anchorCompletionData = {
     }
 
     return {
-      from: before ? before.from : context.pos,
+      from: match.from,
       options: getTableOfContents().map(info => {
         return {
           type: 'text',

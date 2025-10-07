@@ -1,9 +1,10 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Transaction } from '@codemirror/state';
 import { foldEffect, unfoldEffect } from '@codemirror/language';
+import { startCompletion as startTooltipCompletion } from '@codemirror/autocomplete';
 import { globalState, editingState } from '../../common/store';
 import { clearSyntaxSelections } from '../commands';
-import { startCompletion, isPanelVisible } from '../completion';
+import { startCompletion, isPanelVisible, hasTooltipCompletion } from '../completion';
 import { hasRecentKeyPress } from '../events';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
 import { adjustActiveLineGutter, adjustGutterPositions } from '../lines';
@@ -104,6 +105,19 @@ export function observeChanges() {
     if (update.docChanged) {
       // This should be called before updating the native view
       setHistoryExplictlyMoved(update);
+
+      let shouldComplete = true;
+      update.changes.iterChanges((from, to, _, __, inserted) => {
+        // Try tooltip completion if selection is replaced
+        if (shouldComplete && to > from && inserted.length > 0) {
+          shouldComplete = false;
+          setTimeout(() => {
+            if (!hasTooltipCompletion()) {
+              startTooltipCompletion(update.view);
+            }
+          }, 200);
+        }
+      });
 
       if (!update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
         // We need this because we have different line height for headings,
