@@ -1,8 +1,10 @@
 import * as cmView from '@codemirror/view';
 import * as cmState from '@codemirror/state';
 import * as cmLanguage from '@codemirror/language';
+import * as cmLangMarkdown from '../@vendor/lang-markdown';
 import * as cmCommands from '@codemirror/commands';
 import * as cmSearch from '@codemirror/search';
+import * as cmAutocomplete from '@codemirror/autocomplete';
 
 import * as lezerCommon from '@lezer/common';
 import * as lezerHighlight from '@lezer/highlight';
@@ -34,11 +36,13 @@ export function initMarkEditModules() {
     view: cmView,
     state: cmState,
     language: cmLanguage,
+    langMarkdown: cmLangMarkdown,
     commands: {
       ...cmCommands,
       ...customHistory,
     },
     search: cmSearch,
+    autocomplete: cmAutocomplete,
   };
 
   const lezer = {
@@ -79,8 +83,10 @@ export function initMarkEditModules() {
     '@codemirror/view': codemirror.view,
     '@codemirror/state': codemirror.state,
     '@codemirror/language': codemirror.language,
+    '@codemirror/lang-markdown': codemirror.langMarkdown,
     '@codemirror/commands': codemirror.commands,
     '@codemirror/search': codemirror.search,
+    '@codemirror/autocomplete': codemirror.autocomplete,
     '@lezer/common': lezer.common,
     '@lezer/highlight': lezer.highlight,
     '@lezer/markdown': lezer.markdown,
