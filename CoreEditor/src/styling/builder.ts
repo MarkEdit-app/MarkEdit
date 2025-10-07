@@ -193,6 +193,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       color: colors.text,
     },
     '.cm-completionMatchedText': {
+      fontWeight: '500',
       textDecoration: 'none',
       ...shadowableTextColor(colors.accent),
     },
