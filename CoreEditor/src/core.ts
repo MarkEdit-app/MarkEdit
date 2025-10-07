@@ -11,7 +11,7 @@ import { resetKeyStates } from './modules/events';
 import { setUp, setGutterHovered } from './styling/config';
 import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
-import { adjustGutterPositions } from './modules/lines';
+import { recalculateTextMetrics } from './modules/config';
 import { getReadableContent } from './modules/lezer';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { removeFrontMatter } from './modules/frontMatter';
@@ -110,7 +110,7 @@ export function resetEditor(initialContent: string) {
   afterDomUpdate(notifyBackgroundColor);
 
   // eslint-disable-next-line compat/compat
-  requestAnimationFrame(() => adjustGutterPositions());
+  requestAnimationFrame(() => recalculateTextMetrics());
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
   window.nativeModules.core.notifyViewDidUpdate({

@@ -13,7 +13,7 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
-import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { autocompletion, closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
@@ -28,7 +28,7 @@ import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
-import { tocKeymap } from './modules/toc';
+import { tocKeymap, anchorCompletionData } from './modules/toc';
 import { customizedCommandsKeymap } from './modules/commands';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
@@ -131,6 +131,14 @@ export function extensions(options: { lineBreak?: string }) {
     // Markdown
     markdownConfigurator.of(markdownConfigurations()),
     markdownLanguage.data.of(markdownExtendedData),
+    markdownLanguage.data.of(anchorCompletionData),
+
+    // Enable autocomplete from language data
+    autocompletion({
+      icons: false,
+      activateOnTypingDelay: 200,
+      compareCompletions: () => 0, // Don't sort options
+    }),
 
     // Styling
     classHighlighters,
@@ -158,6 +166,7 @@ export function markdownConfigurations() {
       ...markdownExtensions,
       ...userMarkdownConfigs(),
     ],
+    completeHTMLTags: false,
   });
 }
 

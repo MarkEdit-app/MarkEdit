@@ -1,4 +1,6 @@
 import { EditorSelection } from '@codemirror/state';
+import { syntaxTree } from '@codemirror/language';
+import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 
@@ -33,6 +35,11 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
     const pos = state.selection.main.to;
     const anchor = anchorAtPos(pos);
 
+    // Inside a link, try anchor completion
+    if (syntaxTree(state).resolveInner(pos).name === 'Link') {
+      return toggleTooltipCompletion();
+    }
+
     // Defensive fix for string slicing issue,
     // the pos at the end of a string is valid and it's the most common case for word completion.
     if (anchor.pos < 0 && anchor.pos > anchor.text.length) {
@@ -65,6 +72,18 @@ export function setPanelVisible(visible: boolean) {
 
 export function isPanelVisible() {
   return storage.panelVisible;
+}
+
+export function hasTooltipCompletion() {
+  return document.querySelector('.cm-tooltip-autocomplete') !== null;
+}
+
+export function toggleTooltipCompletion() {
+  if (hasTooltipCompletion()) {
+    closeTooltipCompletion(window.editor);
+  } else {
+    startTooltipCompletion(window.editor);
+  }
 }
 
 export function invalidateCache() {

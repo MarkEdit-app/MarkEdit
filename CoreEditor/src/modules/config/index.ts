@@ -24,7 +24,7 @@ export function setFontFace(fontFace: WebFontFace) {
   window.config.fontFace = fontFace;
   window.editor.requestMeasure();
 
-  adjustGutterPositions();
+  recalculateTextMetrics();
 }
 
 export function setFontSize(fontSize: number) {
@@ -38,7 +38,7 @@ export function setFontSize(fontSize: number) {
     setTimeout(refreshEditFocus, 300);
   }
 
-  adjustGutterPositions();
+  recalculateTextMetrics();
 }
 
 export function setShowLineNumbers(enabled: boolean) {
@@ -134,3 +134,19 @@ export function setSuggestWhileTyping(enabled: boolean) {
   window.config.suggestWhileTyping = enabled;
   completion.invalidateCache();
 }
+
+export function recalculateTextMetrics() {
+  adjustGutterPositions();
+
+  const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+  context.font = `${window.config.fontSize}px ${window.config.fontFace.family}`;
+
+  const metrics = context.measureText('#markedit-v1.0');
+  const rowHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent + 8; // padding = 4px
+  const totalHeight = `${rowHeight * 6}px`;
+
+  const rootElement = document.documentElement;
+  rootElement.style.setProperty('--tooltip-completion-max-height', totalHeight);
+}
+
+const canvas = document.createElement('canvas');
