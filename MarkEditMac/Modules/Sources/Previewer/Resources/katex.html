@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>katex</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.css">
   <style>
     :root {
       color-scheme: light dark;
@@ -20,7 +20,7 @@
 <body>
   <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script type="module" type="text/javascript">
-    import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.mjs";
+    import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.mjs";
     const container = document.querySelector("#container");
     container.innerHTML = katex.renderToString("{{DATA}}".code, { throwOnError: false, displayMode: true });
   </script>
