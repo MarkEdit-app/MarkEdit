@@ -41,17 +41,21 @@ export const anchorCompletionData = {
       return null;
     }
 
-    const node = syntaxTree(context.view.state).resolveInner(context.pos);
-    if (node.name !== 'Link') {
+    const insideLink = syntaxTree(context.view.state).resolveInner(context.pos).name === 'Link';
+    const hasPartialLink = context.matchBefore(/\]\([ \t]*#/) !== null;
+    if (!insideLink && !hasPartialLink) {
       return null;
     }
 
     return {
       from: match.from,
       options: getTableOfContents().map(info => {
+        const label = '#' + getLinkAnchor(info.title);
+        const suffix = (!insideLink && hasPartialLink) ? ')' : '';
         return {
           type: 'text',
-          label: '#' + getLinkAnchor(info.title),
+          label,
+          apply: label + suffix,
         };
       }),
       validFor: /^#[\p{L}\p{N}_]*$/u,
