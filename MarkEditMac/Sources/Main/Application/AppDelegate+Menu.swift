@@ -28,6 +28,8 @@ extension AppDelegate: NSMenuDelegate {
     modernItalicItem?.image = icon("italic")
     modernStrikethroughItem?.image = icon("strikethrough")
     modernFloatOnTopItem?.image = icon("pin")
+    modernIssueTrackerItem?.image = icon("smallcircle.filled.circle")
+    modernVersionHistoryItem?.image = icon("clock.arrow.trianglehead.counterclockwise.rotate.90")
   }
 
   func menuNeedsUpdate(_ menu: NSMenu) {

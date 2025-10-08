@@ -61,6 +61,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var modernItalicItem: NSMenuItem?
   @IBOutlet weak var modernStrikethroughItem: NSMenuItem?
   @IBOutlet weak var modernFloatOnTopItem: NSMenuItem?
+  @IBOutlet weak var modernIssueTrackerItem: NSMenuItem?
+  @IBOutlet weak var modernVersionHistoryItem: NSMenuItem?
   // Items used for AppDesign.menuIconEvolution
 
   private var appearanceObservation: NSKeyValueObservation?
