@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -1041,6 +1040,7 @@ Gw
                         <outlet property="modernDeveloperItem" destination="qjf-Yo-EMd" id="WLT-yI-Ldu"/>
                         <outlet property="modernFindItem" destination="4EN-yA-p0u" id="MuE-y8-qCU"/>
                         <outlet property="modernFloatOnTopItem" destination="0C5-FE-fvI" id="vAg-X0-suB"/>
+                        <outlet property="modernIssueTrackerItem" destination="uKp-pC-7O6" id="sjd-Zo-dh4"/>
                         <outlet property="modernItalicItem" destination="K67-Wt-aYF" id="HkB-fV-JOo"/>
                         <outlet property="modernNewFileFromClipboardItem" destination="0NS-5A-glR" id="HCf-jy-2QD"/>
                         <outlet property="modernNewTabItem" destination="dHZ-CH-KLC" id="94c-Sg-CGE"/>
@@ -1049,6 +1049,7 @@ Gw
                         <outlet property="modernServicesItem" destination="NMo-om-nkz" id="Q83-EJ-f4N"/>
                         <outlet property="modernSettingsItem" destination="BOF-NM-1cW" id="zL7-2C-Hos"/>
                         <outlet property="modernStrikethroughItem" destination="z7z-Qk-jsC" id="6Iy-0V-Kct"/>
+                        <outlet property="modernVersionHistoryItem" destination="0DE-Av-fBj" id="C93-WN-pAM"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
                         <outlet property="reopenFileMenu" destination="sPG-vJ-QST" id="6e4-Zg-kFp"/>
                         <outlet property="textFormatMenu" destination="yy7-cF-JbT" id="FfG-yi-NE6"/>
