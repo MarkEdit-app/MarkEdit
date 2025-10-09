@@ -181,13 +181,13 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Autocomplete
     '.cm-tooltip-autocomplete': {
-      border: `1px solid ${colors.visibleSpace}`,
+      border: `1px solid ${colors.text}4d`,
       backgroundColor: `${colors.background}99`,
       backdropFilter: 'blur(10px)',
       boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
     },
     '.cm-tooltip-autocomplete ul li[aria-selected]': {
-      backgroundColor: `${colors.selection}66`,
+      backgroundColor: `${colors.text}1a`,
     },
     '.cm-tooltip-autocomplete ul li, .cm-tooltip-autocomplete ul li[aria-selected]': {
       color: colors.text,
