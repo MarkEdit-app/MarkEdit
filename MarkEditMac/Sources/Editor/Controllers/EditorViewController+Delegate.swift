@@ -317,6 +317,16 @@ extension EditorViewController: EditorModuleAPIDelegate {
   func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) async -> Bool {
     await showSavePanel(data: data, fileName: fileName)
   }
+
+  func editorAPI(_ sender: EditorModuleAPI, runService name: String, input: String?) async -> Bool {
+    let pboard = NSPasteboard.general
+    pboard.string = input ?? ""
+
+    // The pasteboard item is used as input, but it's not done synchronously
+    let result = NSPerformService(name, pboard)
+    try? await Task.sleep(for: .seconds(0.5))
+    return result
+  }
 }
 
 // MARK: - EditorModuleFoundationModelsDelegate

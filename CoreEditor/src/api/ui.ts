@@ -55,6 +55,10 @@ export function showSavePanel(options: SavePanelOptions): Promise<boolean> {
   return window.nativeModules.api.showSavePanel({ options });
 }
 
+export function runService(name: string, input?: string): Promise<boolean> {
+  return window.nativeModules.api.runService({ name, input });
+}
+
 export function handleMainMenuAction(id: string) {
   const action = mainActions.get(id);
   if (action !== undefined) {

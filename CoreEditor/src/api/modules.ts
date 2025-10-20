@@ -29,6 +29,7 @@ import {
   showAlert,
   showTextBox,
   showSavePanel,
+  runService,
 } from './methods';
 
 export function initMarkEditModules() {
@@ -69,6 +70,7 @@ export function initMarkEditModules() {
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;
   MarkEdit.showSavePanel = showSavePanel;
+  MarkEdit.runService = runService;
 
   // Override the share method to provide a clear error message
   navigator.share = (_: ShareData): Promise<void> => {
