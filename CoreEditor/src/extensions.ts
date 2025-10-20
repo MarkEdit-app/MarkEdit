@@ -105,6 +105,10 @@ export function extensions(options: { lineBreak?: string }) {
 
     // Keymap
     keymap.of([
+      // CodeMirror built-in
+      //
+      // Order matters
+      ...closeBracketsKeymap,
       ...defaultKeymap.filter(keymap => {
         // We use cmd-i to toggle italic
         if (keymap.key === 'Mod-i') {
@@ -119,8 +123,10 @@ export function extensions(options: { lineBreak?: string }) {
         return true;
       }),
       ...historyKeymap,
-      ...closeBracketsKeymap,
       ...foldKeymap,
+
+      // MarkEdit customized
+      //
       // By default CodeMirror disables tab (character) insertion (https://codemirror.net/examples/tab/),
       // however, MarkEdit runs on a WebView instead of browsers, we do want to bind the tab key.
       ...indentationKeymap,
