@@ -20,6 +20,7 @@ public protocol NativeModuleAPI: NativeModule {
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String?
   func showSavePanel(options: SavePanelOptions) async -> Bool
+  func runService(name: String, input: String?) async -> Bool
 }
 
 public extension NativeModuleAPI {
@@ -53,6 +54,9 @@ final class NativeBridgeAPI: NativeBridge {
     },
     "showSavePanel": { [weak self] in
       await self?.showSavePanel(parameters: $0)
+    },
+    "runService": { [weak self] in
+      await self?.runService(parameters: $0)
     },
   ]
 
@@ -165,6 +169,24 @@ final class NativeBridgeAPI: NativeBridge {
     }
 
     let result = await module.showSavePanel(options: message.options)
+    return .success(result)
+  }
+
+  private func runService(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var name: String
+      var input: String?
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.runService(name: message.name, input: message.input)
     return .success(result)
   }
 }

@@ -17,4 +17,5 @@ export interface NativeModuleAPI extends NativeModule {
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
   showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;
   showSavePanel({ options }: { options: SavePanelOptions }): Promise<boolean>;
+  runService({ name, input }: { name: string; input?: string }): Promise<boolean>;
 }

@@ -29,6 +29,7 @@ public protocol EditorModuleAPIDelegate: AnyObject {
     defaultValue: String?
   ) async -> String?
   func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) async -> Bool
+  func editorAPI(_ sender: EditorModuleAPI, runService name: String, input: String?) async -> Bool
 }
 
 public final class EditorModuleAPI: NativeModuleAPI {
@@ -125,6 +126,10 @@ public final class EditorModuleAPI: NativeModuleAPI {
     }()
 
     return (await delegate?.editorAPI(self, showSavePanel: data, fileName: options.fileName)) == true
+  }
+
+  public func runService(name: String, input: String?) async -> Bool {
+    (await delegate?.editorAPI(self, runService: name, input: input)) == true
   }
 }
 
