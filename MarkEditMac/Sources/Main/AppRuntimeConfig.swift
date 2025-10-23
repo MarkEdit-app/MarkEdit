@@ -34,6 +34,7 @@ enum AppRuntimeConfig {
     let visibleLineBreakCharacter: String?
     let searchNormalizers: [String: String]?
     let nativeSearchQuerySync: Bool?
+    let customToolbarItems: [CustomToolbarItem]?
     let useClassicInterface: Bool?
     let visualEffectType: VisualEffectType?
     let checksForUpdates: Bool?
@@ -53,6 +54,7 @@ enum AppRuntimeConfig {
       case visibleLineBreakCharacter = "editor.visibleLineBreakCharacter"
       case searchNormalizers = "editor.searchNormalizers"
       case nativeSearchQuerySync = "editor.nativeSearchQuerySync"
+      case customToolbarItems = "editor.customToolbarItems"
       case useClassicInterface = "general.useClassicInterface"
       case visualEffectType = "general.visualEffectType"
       case checksForUpdates = "general.checksForUpdates"
@@ -138,6 +140,10 @@ enum AppRuntimeConfig {
     currentDefinition?.nativeSearchQuerySync ?? false
   }
 
+  static var customToolbarItems: [CustomToolbarItem] {
+    currentDefinition?.customToolbarItems ?? []
+  }
+
   static var useClassicInterface: Bool {
     currentDefinition?.useClassicInterface ?? false
   }
@@ -176,6 +182,25 @@ enum AppRuntimeConfig {
   }
 }
 
+struct CustomToolbarItem: Codable {
+  let title: String
+  let icon: String
+  let actionName: String?
+  let menuName: String?
+
+  var identifier: NSToolbarItem.Identifier {
+    let components = [
+      title,
+      icon,
+      actionName,
+      menuName,
+    ].compactMap { $0 }.joined(separator: "-")
+
+    let prefix = "app.markedit.custom"
+    return NSToolbarItem.Identifier(rawValue: "\(prefix).\(components.sha256Hash)")
+  }
+}
+
 // MARK: - Private
 
 private extension AppRuntimeConfig {
@@ -195,6 +220,7 @@ private extension AppRuntimeConfig {
     visibleLineBreakCharacter: nil,
     searchNormalizers: nil,
     nativeSearchQuerySync: nil,
+    customToolbarItems: nil,
     useClassicInterface: nil,
     visualEffectType: nil,
     checksForUpdates: true,

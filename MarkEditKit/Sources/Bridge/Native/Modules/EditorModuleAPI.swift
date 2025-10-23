@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import CryptoKit
 
 #if os(macOS)
   import AppKit
@@ -94,9 +93,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public func addMainMenuItems(items: [WebMenuItem]) {
     delegate?.editorAPI(self, addMainMenuItems: items.map { item in
-      let hash = SHA256.hash(data: Data(item.uniqueID.utf8))
-      let id = hash.map { String(format: "%02x", $0) }.joined()
-      return (id, item)
+      (item.uniqueID.sha256Hash, item)
     })
   }
 

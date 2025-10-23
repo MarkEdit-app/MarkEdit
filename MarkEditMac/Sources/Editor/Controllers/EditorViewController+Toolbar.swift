@@ -63,6 +63,12 @@ extension EditorViewController {
       return
     }
   }
+
+  func customItem(with identifier: NSToolbarItem.Identifier) -> CustomToolbarItem? {
+    AppRuntimeConfig.customToolbarItems.first {
+      $0.identifier.rawValue == identifier.rawValue
+    }
+  }
 }
 
 // MARK: - NSToolbarDelegate
@@ -88,7 +94,12 @@ extension EditorViewController: NSToolbarDelegate {
       case .shareDocument: return shareDocumentItem
       case .copyPandocCommand: return copyPandocCommandItem
       case .writingTools: return writingToolsItem
-      default: return nil
+      default:
+        if let customItem = customItem(with: itemIdentifier) {
+          return .with(identifier: itemIdentifier, customItem: customItem)
+        }
+
+        return nil
       }
     }()
 
@@ -109,7 +120,9 @@ extension EditorViewController: NSToolbarDelegate {
   }
 
   func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-    NSToolbarItem.Identifier.allItems
+    NSToolbarItem.Identifier.allItems + AppRuntimeConfig.customToolbarItems.map {
+      $0.identifier
+    }
   }
 }
 

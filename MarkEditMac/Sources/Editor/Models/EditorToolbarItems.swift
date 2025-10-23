@@ -47,6 +47,26 @@ extension NSToolbarItem {
     return item
   }
 
+  static func with(identifier: NSToolbarItem.Identifier, customItem: CustomToolbarItem) -> NSToolbarItem {
+    let type = customItem.menuName == nil ? NSToolbarItem.self : NSMenuToolbarItem.self
+    let item = type.init(itemIdentifier: identifier)
+
+    item.label = customItem.title
+    item.image = NSImage(systemSymbolName: customItem.icon, accessibilityDescription: item.label)
+
+    if let actionName = customItem.actionName {
+      item.addAction {
+        if let menuItem = NSApp.mainMenu?.descendantNamed(actionName) {
+          menuItem.performAction()
+        } else {
+          Logger.log(.error, "Missing action named: \(actionName)")
+        }
+      }
+    }
+
+    return item
+  }
+
   /// Used in toolTip as a hint, values should match mainMenu.
   var shortcutHint: String? {
     switch itemIdentifier {
