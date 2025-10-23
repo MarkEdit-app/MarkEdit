@@ -34,6 +34,20 @@ extension NSMenu {
       )
     }
   }
+
+  func descendantNamed(_ title: String) -> NSMenuItem? {
+    for item in items {
+      if item.title == title {
+        return item
+      }
+
+      if let descendant = item.submenu?.descendantNamed(title) {
+        return descendant
+      }
+    }
+
+    return nil
+  }
 }
 
 // MARK: - Private

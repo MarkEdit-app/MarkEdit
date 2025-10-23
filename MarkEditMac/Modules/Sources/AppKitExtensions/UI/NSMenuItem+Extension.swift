@@ -38,6 +38,15 @@ public extension NSMenuItem {
       self.isEnabled = isEnabled && target != nil && action != nil
     }
   }
+
+  @MainActor
+  func performAction() {
+    guard let action else {
+      return
+    }
+
+    NSApp.sendAction(action, to: target, from: self)
+  }
 }
 
 extension NSControl.StateValue {
