@@ -5,8 +5,8 @@ import {Completion, CompletionContext} from "@codemirror/autocomplete"
 import {MarkdownExtension, MarkdownParser, parseCode} from "@lezer/markdown"
 import {html, htmlCompletionSource} from "@codemirror/lang-html"
 import {commonmarkLanguage, markdownLanguage, mkLang, getCodeParser, headerIndent} from "./markdown"
-import {insertNewlineContinueMarkup, deleteMarkupBackward} from "./commands"
-export {commonmarkLanguage, markdownLanguage, insertNewlineContinueMarkup, deleteMarkupBackward}
+import {insertNewlineContinueMarkup, insertNewlineContinueMarkupCommand, deleteMarkupBackward} from "./commands"
+export {commonmarkLanguage, markdownLanguage, insertNewlineContinueMarkup, insertNewlineContinueMarkupCommand, deleteMarkupBackward}
 
 /// A small keymap with Markdown-specific bindings. Binds Enter to
 /// [`insertNewlineContinueMarkup`](#lang-markdown.insertNewlineContinueMarkup)
@@ -48,7 +48,7 @@ export function markdown(config: {
   /// The returned language contains
   /// [`pasteURLAsLink`](#lang-markdown.pasteURLAsLink) as a support
   /// extension unless you set this to false.
-  pasteURLAsLink?: boolean
+  pasteURLAsLink?: boolean,
   /// By default, HTML tags in the document are handled by the [HTML
   /// language](https://github.com/codemirror/lang-html) package with
   /// tag matching turned off. You can pass in an alternative language

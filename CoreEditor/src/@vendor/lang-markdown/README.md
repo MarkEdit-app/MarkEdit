@@ -25,6 +25,19 @@ we have a [code of
 conduct](http://contributor-covenant.org/version/1/1/0/) that applies
 to communication around the project.
 
+## Usage
+
+```javascript
+import {EditorView, basicSetup} from "codemirror"
+import {markdown} from "@codemirror/lang-markdown"
+
+const view = new EditorView({
+  parent: document.body,
+  doc: `*CodeMirror* Markdown \`mode\``,
+  extensions: [basicSetup, markdown()]
+})
+```
+
 ## API Reference
 
 @markdown
@@ -35,6 +48,10 @@ to communication around the project.
 
 @insertNewlineContinueMarkup
 
+@insertNewlineContinueMarkupCommand
+
 @deleteMarkupBackward
 
 @markdownKeymap
+
+@pasteURLAsLink
