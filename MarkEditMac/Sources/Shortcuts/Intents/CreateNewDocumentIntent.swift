@@ -19,7 +19,7 @@ struct CreateNewDocumentIntent: AppIntent {
   @Parameter(title: "File Name")
   var fileName: String?
 
-  @Parameter(title: "Initial Content")
+  @Parameter(title: "Initial Content", default: "")
   var initialContent: String?
 
   @MainActor
