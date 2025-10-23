@@ -59,10 +59,10 @@ extension AppDelegate: NSMenuDelegate {
 private extension AppDelegate {
   func reconfigureMainFileMenu(document: EditorDocument?) {
     [openFileInMenu, reopenFileMenu, lineEndingsMenu].forEach {
-      $0?.superMenuItem?.isHidden = document?.fileURL == nil
+      $0?.superMenuItem?.isEnabled = document?.fileURL != nil
     }
 
-    fileFromClipboardItem?.isHidden = !NSPasteboard.general.hasText
+    fileFromClipboardItem?.isEnabled = NSPasteboard.general.hasText
   }
 
   func reconfigureMainEditMenu(document: EditorDocument?) {

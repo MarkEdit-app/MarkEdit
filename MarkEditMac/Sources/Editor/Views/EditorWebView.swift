@@ -202,24 +202,24 @@ private extension EditorWebView {
           item.isEnabled = NSPasteboard.general.hasText
         }
 
-        // Hide native items that require text selection (always show on editor blur)
+        // Disable native items that require text selection (always show on editor blur)
         if let identifier = item.identifier, [
           NSUserInterfaceItemIdentifier.lookUp,
           NSUserInterfaceItemIdentifier.searchWeb,
           NSUserInterfaceItemIdentifier.translate,
           NSUserInterfaceItemIdentifier.shareMenu,
         ].contains(identifier) {
-          item.isHidden = !hasSelection && hasFocus
+          item.isEnabled = hasSelection || !hasFocus
         }
 
-        // Hide search items that require text selection (always hide on editor blur)
+        // Disable search items that require text selection (always disabled on editor blur)
         if [Localized.Search.findSelection, Localized.Search.selectAllOccurrences].contains(item.title) {
-          item.isHidden = !hasSelection || !hasFocus
+          item.isEnabled = hasSelection && hasFocus
         }
 
-        // Always hide on editor blur
+        // Always disable on editor blur
         if item.title == Localized.Toolbar.textFormat || item.tag == WKContextMenuItemTag.searchMenu.rawValue {
-          item.isHidden = !hasFocus
+          item.isEnabled = hasFocus
         }
       }
     }
