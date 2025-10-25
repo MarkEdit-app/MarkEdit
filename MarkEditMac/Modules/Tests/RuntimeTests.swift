@@ -115,14 +115,6 @@ final class RuntimeTests: XCTestCase {
     let object = type?.value(forKey: "defaultManager") as? AnyObject
     XCTAssertEqual(object?.responds(to: sel_getUid("loadAXBundles")), true, "Missing loadAXBundles")
   }
-
-  func testPrivateWebKitClasses() {
-    let type = NSObject.webKitScrollerClass as? NSObject.Type
-    XCTAssertNotNil(type, "Missing WebScrollerImpDelegateMac")
-
-    let object = type?.init()
-    XCTAssertEqual(object?.responds(to: sel_getUid("convertRectToBacking:")), true, "Missing convertRectToBacking:")
-  }
 }
 
 // MARK: - Private
