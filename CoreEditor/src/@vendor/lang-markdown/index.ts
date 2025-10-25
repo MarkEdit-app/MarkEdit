@@ -23,32 +23,32 @@ const htmlNoMatch = html({matchClosingTags: false})
 export function markdown(config: {
   /// When given, this language will be used by default to parse code
   /// blocks.
-  defaultCodeLanguage?: Language | LanguageSupport,
+  defaultCodeLanguage?: Language | LanguageSupport
   /// A source of language support for highlighting fenced code
   /// blocks. When it is an array, the parser will use
   /// [`LanguageDescription.matchLanguageName`](#language.LanguageDescription^matchLanguageName)
   /// with the fenced code info to find a matching language. When it
   /// is a function, will be called with the info string and may
   /// return a language or `LanguageDescription` object.
-  codeLanguages?: readonly LanguageDescription[] | ((info: string) => Language | LanguageDescription | null),
+  codeLanguages?: readonly LanguageDescription[] | ((info: string) => Language | LanguageDescription | null)
   /// Set this to false to disable installation of the Markdown
   /// [keymap](#lang-markdown.markdownKeymap).
-  addKeymap?: boolean,
+  addKeymap?: boolean
   /// Markdown parser
   /// [extensions](https://github.com/lezer-parser/markdown#user-content-markdownextension)
   /// to add to the parser.
-  extensions?: MarkdownExtension,
+  extensions?: MarkdownExtension
   /// The base language to use. Defaults to
   /// [`commonmarkLanguage`](#lang-markdown.commonmarkLanguage).
-  base?: Language,
+  base?: Language
   /// By default, the extension installs an autocompletion source that
   /// completes HTML tags when a `<` is typed. Set this to false to
   /// disable this.
-  completeHTMLTags?: boolean,
+  completeHTMLTags?: boolean
   /// The returned language contains
   /// [`pasteURLAsLink`](#lang-markdown.pasteURLAsLink) as a support
   /// extension unless you set this to false.
-  pasteURLAsLink?: boolean,
+  pasteURLAsLink?: boolean
   /// By default, HTML tags in the document are handled by the [HTML
   /// language](https://github.com/codemirror/lang-html) package with
   /// tag matching turned off. You can pass in an alternative language
