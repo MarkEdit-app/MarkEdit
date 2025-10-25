@@ -23,4 +23,11 @@ public extension NSObject {
     Bundle(path: path)?.load()
     return NSClassFromString("AXBBundleManager")
   }
+
+  /**
+   Private class used in WebKit to control the drawing of the scrollbar.
+   */
+  static var webKitScrollerClass: AnyClass? {
+    NSClassFromString("WebScrollerImpDelegateMac")
+  }
 }

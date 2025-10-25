@@ -33,6 +33,31 @@ extension NSObject {
       swizzledMethod: swizzledMethod
     )
   }()
+
+  static let swizzleWebKitScrollerOnce: () = {
+    guard #available(macOS 26.0, *), !AppRuntimeConfig.useClassicInterface else {
+      return
+    }
+
+    guard let webKitScrollerClass else {
+      return Logger.assertFail("Failed to get the class to swizzle")
+    }
+
+    let originalSelector = #selector(NSScreen.convertRectToBacking(_:))
+    let swizzledSelector = #selector(swizzled_convertRectToBacking(_:))
+
+    guard let originalMethod = class_getInstanceMethod(webKitScrollerClass, originalSelector), let swizzledMethod = class_getInstanceMethod(NSObject.self, swizzledSelector) else {
+      return Logger.assertFail("Failed to get the method to swizzle")
+    }
+
+    safelyExchangeMethods(
+      type: webKitScrollerClass,
+      originalSelector: originalSelector,
+      originalMethod: originalMethod,
+      swizzledSelector: swizzledSelector,
+      swizzledMethod: swizzledMethod
+    )
+  }()
 }
 
 // MARK: - Private
@@ -60,5 +85,12 @@ private extension NSObject {
     }
 
     return true
+  }
+
+  @objc func swizzled_convertRectToBacking(_ rect: CGRect) -> CGRect {
+    var rect = self.swizzled_convertRectToBacking(rect)
+    rect.size.height = max(0, rect.height - 15)
+
+    return rect
   }
 }
