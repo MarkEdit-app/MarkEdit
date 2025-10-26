@@ -51,6 +51,7 @@
     "vite-plugin-singlefile": "^2.0.1"
   },
   "resolutions": {
+    "@lezer/highlight": "1.2.1",
     "@types/eslint": "8.56.12",
     "@typescript-eslint/parser": "7.18.0",
     "typescript-eslint": "7.18.0",
