@@ -44,7 +44,7 @@ final class EditorWindow: NSWindow {
     toolbar = NSToolbar() // Required for multi-tab layout
     toolbarMode = AppPreferences.Window.toolbarMode
     tabbingMode = AppPreferences.Window.tabbingMode
-    reduceTransparency = AppPreferences.Window.reduceTransparency
+    reduceTransparency = AppDesign.reduceTransparency
   }
 
   override func layoutIfNeeded() {
