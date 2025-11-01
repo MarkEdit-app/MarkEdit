@@ -162,7 +162,7 @@ extension EditorViewController {
 
     if AppDesign.modernTitleBar {
       let isMainWindow = view.window?.isMainWindow ?? false
-      let reduceTransparency = !isMainWindow || AppPreferences.Window.reduceTransparency
+      let reduceTransparency = !isMainWindow || AppDesign.reduceTransparency
       let baseColor = backgroundColor.withAlphaComponent(reduceTransparency ? 1.0 : 0.01)
 
       view.window?.backgroundColor = baseColor

@@ -38,6 +38,10 @@ enum AppDesign {
     isMacOSTahoe
   }
 
+  static var reduceTransparency: Bool {
+    AppPreferences.Window.reduceTransparency || NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency
+  }
+
   /**
    Returns either an `NSGlassEffectView`, or an `NSVisualEffectView` as fallback.
 
