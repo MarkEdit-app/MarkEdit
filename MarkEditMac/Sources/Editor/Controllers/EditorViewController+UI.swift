@@ -161,14 +161,16 @@ extension EditorViewController {
     (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
 
     if AppDesign.modernTitleBar {
-      view.window?.backgroundColor = .clear
-      view.window?.toolbarContainerView?.layerBackgroundColor = .clear
-
       let isMainWindow = view.window?.isMainWindow ?? false
       let reduceTransparency = !isMainWindow || AppPreferences.Window.reduceTransparency
+      let baseColor = backgroundColor.withAlphaComponent(reduceTransparency ? 1.0 : 0.1)
+
+      view.window?.backgroundColor = baseColor
+      view.window?.toolbarContainerView?.layerBackgroundColor = baseColor
+
       modernBackgroundView.layerBackgroundColor = backgroundColor
       modernEffectView.isHidden = reduceTransparency
-      modernTintedView.layerBackgroundColor = .clear
+      modernTintedView.layerBackgroundColor = baseColor
 
       let alphaValue = {
         if modernEffectView is NSVisualEffectView {
