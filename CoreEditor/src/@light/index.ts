@@ -50,7 +50,7 @@ scrollIntoView(0);
 // To keep the app size smaller, we don't have bridge here,
 // inject function to window directly.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const bridge = (window as any);
+const bridge = window as any;
 const storage: { scrollbarOffset?: number } = {};
 
 bridge.setTheme = (name: string) => {
