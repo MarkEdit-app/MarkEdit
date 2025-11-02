@@ -204,10 +204,10 @@ export function observeChanges() {
       // Gutter update triggered by fold or unfold actions (immediately)
       if (update.transactions.some(tr => tr.effects.some(e => e.is(foldEffect) || e.is(unfoldEffect)))) {
         adjustGutterPositions();
+      }
 
-        if (globalState.gutterHovered) {
-          adjustGutterPositions('gutterHover');
-        }
+      if (globalState.gutterHovered) {
+        adjustGutterPositions('gutterHover');
       }
     }
   });
