@@ -33,6 +33,7 @@ export default [
         ],
       },
     },
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts'],
     rules: {
       'no-case-declarations': 'error',
       'no-prototype-builtins': 'error',
@@ -54,6 +55,7 @@ export default [
 
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'always' }],
       '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-unnecessary-type-arguments': 'error',
       '@typescript-eslint/no-unnecessary-type-constraint': 'error',
@@ -75,7 +77,7 @@ export default [
       'no-redeclare': 'off',
       '@typescript-eslint/no-redeclare': 'error',
       'no-throw-literal': 'off',
-      '@typescript-eslint/no-throw-literal': 'error',
+      '@typescript-eslint/only-throw-error': 'error',
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-unused-vars': 'off',
@@ -84,7 +86,13 @@ export default [
       '@typescript-eslint/return-await': 'error',
 
       'indent': 'off',
-      '@typescript-eslint/indent': ['error', 2],
+      '@stylistic/indent': ['error', 2, {
+        SwitchCase: 1,
+        ignoredNodes: [
+          'TSEnumMember',
+          'TSEnumDeclaration > TSEnumMember',
+        ],
+      }],
 
       '@stylistic/array-bracket-spacing': ['error', 'never'],
       '@stylistic/member-delimiter-style': 'error',

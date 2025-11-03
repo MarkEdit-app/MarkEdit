@@ -27,6 +27,8 @@ export const indentationKeymap: KeyBinding[] = [
           return true;
         case TabKeyBehavior.indentMore:
           return indentMore(editor);
+        case TabKeyBehavior.insertTab:
+        case undefined:
         default:
           return insertTab(editor);
       }

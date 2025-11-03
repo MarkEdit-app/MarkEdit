@@ -69,6 +69,7 @@ function simply(options?: LanguageModelGenerationOptions): SimplifiedGenerationO
         case 'greedy': return { greedy: true };
         case 'top-k': return { top_k: sampling.value as CodeGen_Int, seed: sampling.seed as CodeGen_UInt64 };
         case 'top-p': return { top_p: sampling.value, seed: sampling.seed as CodeGen_UInt64 };
+        case undefined:
         default: return undefined;
       }
     })(),

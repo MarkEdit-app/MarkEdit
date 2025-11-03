@@ -23,6 +23,7 @@ import { classHighlighters, markdownExtensions, markdownExtendedData, renderExte
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
+import { IndentBehavior } from './config';
 
 import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
@@ -178,8 +179,9 @@ export function markdownConfigurations() {
 
 function indentBehaviorExtension() {
   switch (window.config.indentBehavior) {
-    case 'paragraph': return paragraphIndentStyle;
-    case 'line': return lineIndentStyle;
+    case IndentBehavior.never: return [];
+    case IndentBehavior.paragraph: return paragraphIndentStyle;
+    case IndentBehavior.line: return lineIndentStyle;
     default: return [];
   }
 }
