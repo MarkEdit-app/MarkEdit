@@ -27,7 +27,8 @@ html, body {
   -webkit-user-select: none;
 
   /* To work around a WebKit bug where :hover is not cleared when mouse is outside the window */
-  margin: 1px;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 
 .cm-lineNumbers {
