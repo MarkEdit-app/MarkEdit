@@ -15,7 +15,7 @@ export interface QueryCursor {
 
 export function cursorFromQuery(query: SearchQuery) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const anyQuery = (query as any);
+  const anyQuery = query as any;
   if (typeof anyQuery.create !== 'function') {
     return null;
   }

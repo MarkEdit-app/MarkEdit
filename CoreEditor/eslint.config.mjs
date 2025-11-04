@@ -4,6 +4,7 @@ import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import compat from 'eslint-plugin-compat';
 import promise from 'eslint-plugin-promise';
+import stylistic from '@stylistic/eslint-plugin';
 
 export default [
   {
@@ -18,6 +19,9 @@ export default [
   compat.configs['flat/recommended'],
   promise.configs['flat/recommended'],
   {
+    plugins: {
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -29,13 +33,13 @@ export default [
         ],
       },
     },
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts'],
     rules: {
       'no-case-declarations': 'error',
       'no-prototype-builtins': 'error',
-      'array-bracket-spacing': ['error', 'never'],
-      'eol-last': 'error',
-      'no-new-wrappers': 'error',
       'no-array-constructor': 'error',
+      'no-new-wrappers': 'error',
+      'eol-last': 'error',
 
       'no-restricted-syntax': [
         'error',
@@ -51,7 +55,7 @@ export default [
 
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/member-delimiter-style': 'error',
+      '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'always' }],
       '@typescript-eslint/no-unnecessary-condition': 'error',
       '@typescript-eslint/no-unnecessary-type-arguments': 'error',
       '@typescript-eslint/no-unnecessary-type-constraint': 'error',
@@ -60,47 +64,48 @@ export default [
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
-      '@typescript-eslint/type-annotation-spacing': 'error',
       '@typescript-eslint/explicit-member-accessibility': ['error', { accessibility: 'no-public' }],
       '@typescript-eslint/consistent-type-exports': ['error', { fixMixedExportsWithInlineTypeSpecifier: true }],
       '@typescript-eslint/class-literal-property-style': 'error',
 
-      'brace-style': 'off',
-      '@typescript-eslint/brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
-      'comma-dangle': 'off',
-      '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
-      'comma-spacing': 'off',
-      '@typescript-eslint/comma-spacing': 'error',
       'dot-notation': 'off',
       '@typescript-eslint/dot-notation': 'error',
-      'func-call-spacing': 'off',
-      '@typescript-eslint/func-call-spacing': 'error',
-      'indent': 'off',
-      '@typescript-eslint/indent': ['error', 2],
-      'keyword-spacing': 'off',
-      '@typescript-eslint/keyword-spacing': 'error',
       'no-dupe-class-members': 'off',
       '@typescript-eslint/no-dupe-class-members': 'error',
-      'no-extra-parens': 'off',
-      '@typescript-eslint/no-extra-parens': ['error', 'functions'],
       'no-invalid-this': 'off',
       '@typescript-eslint/no-invalid-this': 'error',
       'no-redeclare': 'off',
       '@typescript-eslint/no-redeclare': 'error',
       'no-throw-literal': 'off',
-      '@typescript-eslint/no-throw-literal': 'error',
+      '@typescript-eslint/only-throw-error': 'error',
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { 'ignoreRestSiblings': true, 'argsIgnorePattern': '^_' }],
-      'object-curly-spacing': 'off',
-      '@typescript-eslint/object-curly-spacing': ['error', 'always'],
-      'quotes': 'off',
-      '@typescript-eslint/quotes': [2, 'single', { 'avoidEscape': true }],
       'no-return-await': 'off',
       '@typescript-eslint/return-await': 'error',
-      'semi': 'off',
-      '@typescript-eslint/semi': 'error',
+
+      'indent': 'off',
+      '@stylistic/indent': ['error', 2, {
+        SwitchCase: 1,
+        ignoredNodes: [
+          'TSEnumMember',
+          'TSEnumDeclaration > TSEnumMember',
+        ],
+      }],
+
+      '@stylistic/array-bracket-spacing': ['error', 'never'],
+      '@stylistic/member-delimiter-style': 'error',
+      '@stylistic/type-annotation-spacing': 'error',
+      '@stylistic/brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/comma-spacing': 'error',
+      '@stylistic/function-call-spacing': 'error',
+      '@stylistic/keyword-spacing': 'error',
+      '@stylistic/no-extra-parens': ['error', 'functions'],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/quotes': [2, 'single', { 'avoidEscape': true }],
+      '@stylistic/semi': 'error',
 
       'promise/prefer-await-to-then': 'error',
     },

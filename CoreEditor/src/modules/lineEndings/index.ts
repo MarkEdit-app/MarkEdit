@@ -45,7 +45,7 @@ export function setLineEndings(lineEndings: LineEndings) {
 
 export function getLineBreak(string: string, defaultValue?: string) {
   // Detect characters, inspired by: https://www.npmjs.com/package/detect-newline
-  const lineBreaks = string.match(/(?:\r?\n|\r)/g) || [];
+  const lineBreaks = string.match(/(?:\r?\n|\r)/g) ?? [];
   const LFs = lineBreaks.filter(ch => ch === CHARS.LF).length;
   const CRLFs = lineBreaks.filter(ch => ch === CHARS.CRLF).length;
   const CRs = lineBreaks.filter(ch => ch === CHARS.CR).length;

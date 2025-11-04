@@ -37,7 +37,7 @@ export function removeFrontMatter(source: string) {
 function isYaml(source: string) {
   try {
     return typeof loadYaml(source) === 'object';
-  } catch (error) {
+  } catch {
     return false;
   }
 }

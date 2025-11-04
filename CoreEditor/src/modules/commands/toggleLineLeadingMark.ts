@@ -15,7 +15,7 @@ export default function toggleLineLeadingMark(mark: string, level: number) {
   // Remove all marks only if all lines have exactly the destination level
   const removeMarks = !lines.some(line => {
     const match = line.text.match(regex);
-    return !match || match[2].length !== level;
+    return match?.[2].length !== level;
   });
 
   // Iterate multiple lines reversely

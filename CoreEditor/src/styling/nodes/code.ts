@@ -33,12 +33,12 @@ export const previewMermaid = createDecoPlugin(() => {
     }
 
     const container = node.node.parent;
-    if (container === null || container.name !== 'FencedCode') {
+    if (container?.name !== 'FencedCode') {
       return null;
     }
 
     const boundary = container.lastChild;
-    if (boundary === null || boundary.name !== 'CodeMark') {
+    if (boundary?.name !== 'CodeMark') {
       return null;
     }
 
