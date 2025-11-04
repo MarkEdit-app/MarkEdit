@@ -26,7 +26,7 @@ final class EditorStatusView: NSView, BackgroundTheming {
       return GlassButton()
     }
 
-    return TitleOnlyButton(fontSize: Constants.titleFontSize)
+    return TitleOnlyButton(font: Constants.titleFont)
   }()
 
   init(handler: @escaping () -> Void) {
@@ -110,7 +110,7 @@ extension EditorStatusView {
 // MARK: - Private
 
 private enum Constants {
-  static let titleFontSize: Double = 11
+  static let titleFont: NSFont = .monospacedDigitSystemFont(ofSize: 11, weight: .regular)
 }
 
 private class GlassButton: NSButton, ButtonLabeling {
@@ -121,7 +121,7 @@ private class GlassButton: NSButton, ButtonLabeling {
     font = .systemFont(ofSize: 7) // To make the button smaller
     title = "" // Clear the title and bezel
 
-    labelView.font = .systemFont(ofSize: Constants.titleFontSize)
+    labelView.font = Constants.titleFont
     labelView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(labelView)
     NSLayoutConstraint.activate([
