@@ -9,15 +9,15 @@ import AppKit
 public final class TitleOnlyButton: NonBezelButton {
   public let labelView = LabelView(frame: .zero)
 
-  public init(title: String? = nil, fontSize: Double? = nil) {
+  public init(title: String? = nil, font: NSFont? = nil) {
     super.init(frame: .zero)
 
     labelView.stringValue = title ?? ""
     labelView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(labelView)
 
-    if let fontSize {
-      labelView.font = .systemFont(ofSize: fontSize)
+    if let font {
+      labelView.font = font
     }
 
     NSLayoutConstraint.activate([
