@@ -47,7 +47,7 @@ Get `MarkEdit.dmg` from the <a href="https://github.com/MarkEdit-app/MarkEdit/re
 
 MarkEdit checks for updates automatically. You can also check manually via the main `MarkEdit` menu, or browse version history [here](https://github.com/MarkEdit-app/MarkEdit/releases).
 
-If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install markedit` in your terminal and you're all set.
+If you prefer a [Homebrew](https://brew.sh/) installation, run `brew install --cask markedit` in your terminal and you're all set.
 
 > We used to publish MarkEdit to the Mac App Store, [but no longer](https://github.com/MarkEdit-app/MarkEdit/wiki/Philosophy#be-a-good-macos-citizen). Don't worry about the security warning; releases are signed with a certificate from an identified developer and [notarized](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution).
 
