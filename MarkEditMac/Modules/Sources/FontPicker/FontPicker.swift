@@ -56,49 +56,54 @@ public struct FontPicker: View {
         }
       )
 
-      Menu {
-        systemFontButton(
-          style: .systemDefault,
-          name: configuration.defaultFontName,
-          design: .default
-        )
+      ZStack(alignment: .bottomLeading) {
+        IdentifiableWrapper()
+          .frame(width: 1, height: 1)
 
-        systemFontButton(
-          style: .systemMono,
-          name: configuration.monoFontName,
-          design: .monospaced
-        )
+        Menu {
+          systemFontButton(
+            style: .systemDefault,
+            name: configuration.defaultFontName,
+            design: .default
+          )
 
-        systemFontButton(
-          style: .systemRounded,
-          name: configuration.roundedFontName,
-          design: .rounded
-        )
+          systemFontButton(
+            style: .systemMono,
+            name: configuration.monoFontName,
+            design: .monospaced
+          )
 
-        systemFontButton(
-          style: .systemSerif,
-          name: configuration.serifFontName,
-          design: .serif
-        )
+          systemFontButton(
+            style: .systemRounded,
+            name: configuration.roundedFontName,
+            design: .rounded
+          )
 
-        Divider()
+          systemFontButton(
+            style: .systemSerif,
+            name: configuration.serifFontName,
+            design: .serif
+          )
 
-        Button(configuration.moreFontsItemTitle) {
-          presentFontMenu()
-        }
+          Divider()
 
-        Button(configuration.openPanelButtonTitle) {
-          FontManagerDelegate.shared.fontDidChange = { font in
-            changeFontStyle(.customFont(name: font.fontName))
-            changeFontSize(font.pointSize)
+          Button(configuration.moreFontsItemTitle) {
+            presentFontMenu()
           }
 
-          NSFontManager.shared.target = FontManagerDelegate.shared
-          NSFontPanel.shared.setPanelFont(selectedFont, isMultiple: false)
-          NSFontPanel.shared.orderBack(nil)
+          Button(configuration.openPanelButtonTitle) {
+            FontManagerDelegate.shared.fontDidChange = { font in
+              changeFontStyle(.customFont(name: font.fontName))
+              changeFontSize(font.pointSize)
+            }
+
+            NSFontManager.shared.target = FontManagerDelegate.shared
+            NSFontPanel.shared.setPanelFont(selectedFont, isMultiple: false)
+            NSFontPanel.shared.orderBack(nil)
+          }
+        } label: {
+          Text(configuration.selectButtonTitle)
         }
-      } label: {
-        Text(configuration.selectButtonTitle)
       }
     }
     .padding(.vertical, 20)
@@ -146,9 +151,7 @@ private extension FontPicker {
       return
     }
 
-    guard let sourceView = (contentView.firstDescendant { (view: NSTextField) in
-      view.stringValue == configuration.selectButtonTitle
-    }) else {
+    guard let sourceView = (contentView.firstDescendant { $0 is IdentifiableView }) else {
       return
     }
 
@@ -170,7 +173,13 @@ private extension FontPicker {
       )
     }
 
-    let location = CGPoint(x: -6, y: sourceView.frame.height + 13)
+    let location = CGPoint(x: configuration.modernStyle ? -4 : 0, y: sourceView.frame.height - 10)
     menu.popUp(positioning: nil, at: location, in: sourceView)
   }
+}
+
+private class IdentifiableView: NSView {}
+private struct IdentifiableWrapper: NSViewRepresentable {
+  func makeNSView(context: Context) -> NSView { IdentifiableView() }
+  func updateNSView(_ nsView: NSView, context: Context) {}
 }

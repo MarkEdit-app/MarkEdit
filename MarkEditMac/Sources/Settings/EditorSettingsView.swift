@@ -177,6 +177,7 @@ private extension EditorSettingsView {
 
   var fontPickerConfiguration: FontPickerConfiguration {
     FontPickerConfiguration(
+      modernStyle: AppDesign.modernStyle,
       selectedFontStyle: AppPreferences.Editor.fontStyle,
       selectedFontSize: AppPreferences.Editor.fontSize,
       selectButtonTitle: Localized.Settings.selectFont,
