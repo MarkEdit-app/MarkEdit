@@ -8,6 +8,7 @@ import AppKit
 import CoreText
 
 public struct FontPickerConfiguration {
+  let modernStyle: Bool
   let selectedFontStyle: FontStyle
   let selectedFontSize: Double
   let selectButtonTitle: String
@@ -19,6 +20,7 @@ public struct FontPickerConfiguration {
   let serifFontName: String
 
   public init(
+    modernStyle: Bool,
     selectedFontStyle: FontStyle,
     selectedFontSize: Double,
     selectButtonTitle: String,
@@ -29,6 +31,7 @@ public struct FontPickerConfiguration {
     roundedFontName: String,
     serifFontName: String
   ) {
+    self.modernStyle = modernStyle
     self.selectedFontStyle = selectedFontStyle
     self.selectedFontSize = selectedFontSize
     self.selectButtonTitle = selectButtonTitle
