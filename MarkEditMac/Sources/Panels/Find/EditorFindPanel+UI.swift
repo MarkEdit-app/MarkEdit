@@ -18,11 +18,6 @@ extension EditorFindPanel {
     alphaValue = 0
     resetMenu()
 
-    if #available(macOS 26.0, *) {
-      searchField.prefersCompactControlSizeMetrics = true
-      doneButton.prefersCompactControlSizeMetrics = true
-    }
-
     searchField.placeholderString = Localized.Search.find
     searchField.delegate = self
     searchField.target = self
