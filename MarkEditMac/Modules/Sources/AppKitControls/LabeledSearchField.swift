@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 
 public final class LabeledSearchField: NSSearchField {
+  private let modernStyle: Bool
   private let bezelView = BezelView(cornerRadius: Constants.bezelCornerRadius)
 
   private let labelView = {
@@ -17,8 +18,10 @@ public final class LabeledSearchField: NSSearchField {
     return label
   }()
 
-  override public init(frame: CGRect) {
-    super.init(frame: frame)
+  public init(modernStyle: Bool) {
+    self.modernStyle = modernStyle
+    super.init(frame: .zero)
+
     usesSingleLineMode = false
     focusRingType = .exterior
 
@@ -50,6 +53,26 @@ public final class LabeledSearchField: NSSearchField {
         width: labelView.frame.minX - clipView.frame.minX,
         height: clipView.frame.height
       )
+    }
+
+    // To completely clip the unnecessary capsule-style border
+    if modernStyle {
+      #if DEBUG
+        var hasAppKitSearchField = false
+      #endif
+
+      enumerateDescendants { view in
+        if view.className.contains("AppKitSearchField") {
+          #if DEBUG
+            hasAppKitSearchField = true
+          #endif
+          view.layer?.cornerRadius = view.frame.height * 0.5
+        }
+      }
+
+      #if DEBUG
+        assert(hasAppKitSearchField, "Missing AppKitSearchField in NSSearchField")
+      #endif
     }
   }
 
