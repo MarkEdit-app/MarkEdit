@@ -12,7 +12,7 @@ import Foundation
 
 @MainActor
 public protocol EditorModuleAPIDelegate: AnyObject {
-  func editorAPIGetFileURL(_ sender: EditorModuleAPI) -> URL?
+  func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL?
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
   func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint)
   func editorAPI(
@@ -38,19 +38,87 @@ public final class EditorModuleAPI: NativeModuleAPI {
     self.delegate = delegate
   }
 
-  public func getFileInfo() async -> String? {
-    guard let fileURL = delegate?.editorAPIGetFileURL(self) else {
+  public func createFile(options: CreateFileOptions) async -> Bool {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: options.path) else {
+      return false
+    }
+
+    if options.overwrites == true {
+      var isDirectory: ObjCBool = false
+      if FileManager.default.fileExists(atPath: fileURL.path, isDirectory: &isDirectory) && isDirectory.boolValue {
+        try? FileManager.default.removeItem(at: fileURL)
+      }
+    }
+
+    do {
+      if options.isDirectory == true {
+        try FileManager.default.createDirectory(
+          at: fileURL,
+          withIntermediateDirectories: true
+        )
+      } else {
+        try options.decodedData.write(to: fileURL, options: {
+          if options.overwrites == true {
+            return .atomic
+          }
+
+          return [.atomic, .withoutOverwriting]
+        }())
+      }
+
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  public func deleteFile(path: String) async -> Bool {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
+      return false
+    }
+
+    do {
+      try FileManager.default.removeItem(at: fileURL)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  public func listFiles(path: String) async -> [String]? {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
       return nil
     }
 
-    let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path)
-    Logger.assert(attributes != nil, "Cannot get file attributes of: \(fileURL)")
+    let fileManager = FileManager.default
+    let filePath = fileURL.path(percentEncoded: false)
+    return try? fileManager.contentsOfDirectory(atPath: filePath)
+  }
+
+  public func getFileContent(path: String?) async -> String? {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
+      return nil
+    }
+
+    return try? Data(contentsOf: fileURL).toString()
+  }
+
+  public func getFileInfo(path: String?) async -> String? {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
+      return nil
+    }
+
+    guard let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path) else {
+      return nil
+    }
 
     let json: [String: Any] = [
       "filePath": fileURL.path,
-      "fileSize": Double(attributes?[.size] as? Int64 ?? 0),
-      "creationDate": (attributes?[.creationDate] as? Date ?? .distantPast).timeIntervalSince1970,
-      "modificationDate": (attributes?[.modificationDate] as? Date ?? .distantPast).timeIntervalSince1970,
+      "fileSize": Double(attributes[.size] as? Int64 ?? 0),
+      "creationDate": (attributes[.creationDate] as? Date ?? .distantPast).timeIntervalSince1970,
+      "modificationDate": (attributes[.modificationDate] as? Date ?? .distantPast).timeIntervalSince1970,
+      "parentPath": fileURL.deletingLastPathComponent().path,
+      "isDirectory": (attributes[.type] as? FileAttributeType) == .typeDirectory,
     ]
 
     return try? JSONSerialization.data(withJSONObject: json).toString()
@@ -110,25 +178,18 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 
   public func showSavePanel(options: SavePanelOptions) async -> Bool {
-    let data: Data = {
-      if let source = options.data, let data = Data(base64Encoded: source, options: .ignoreUnknownCharacters) {
-        return data
-      }
-
-      if let source = options.string, let data = source.data(using: .utf8) {
-        return data
-      }
-
-      return Data()
-    }()
-
-    return (await delegate?.editorAPI(self, showSavePanel: data, fileName: options.fileName)) == true
+    await delegate?.editorAPI(self, showSavePanel: options.decodedData, fileName: options.fileName) == true
   }
 
   public func runService(name: String, input: String?) async -> Bool {
     (await delegate?.editorAPI(self, runService: name, input: input)) == true
   }
 }
+
+// MARK: - Internal
+
+extension CreateFileOptions: WebDataTransfer {}
+extension SavePanelOptions: WebDataTransfer {}
 
 // MARK: - Private
 
@@ -141,5 +202,24 @@ private extension WebMenuItem {
       "\(modifiers ?? [])",
       "[\((children ?? []).map { $0.uniqueID }.joined(separator: ", "))]",
     ].joined(separator: ", ")
+  }
+}
+
+private protocol WebDataTransfer {
+  var string: String? { get }
+  var data: String? { get }
+}
+
+private extension WebDataTransfer {
+  var decodedData: Data {
+    if let source = data, let data = Data(base64Encoded: source, options: .ignoreUnknownCharacters) {
+      return data
+    }
+
+    if let source = string, let data = source.data(using: .utf8) {
+      return data
+    }
+
+    return Data()
   }
 }

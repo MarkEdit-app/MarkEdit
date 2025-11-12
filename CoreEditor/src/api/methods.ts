@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 import { LanguageDescription } from '@codemirror/language';
 import { MarkdownConfig } from '@lezer/markdown';
-import { FileInfo, PasteboardItem } from 'markedit-api';
+import { CreateFileOptions, FileInfo, PasteboardItem } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
 
 export function onEditorReady(listener: (editorView: EditorView) => void) {
@@ -13,8 +13,24 @@ export function onEditorReady(listener: (editorView: EditorView) => void) {
   }
 }
 
-export async function getFileInfo(): Promise<FileInfo | undefined> {
-  const info = await window.nativeModules.api.getFileInfo();
+export async function createFile(options: CreateFileOptions): Promise<boolean> {
+  return window.nativeModules.api.createFile({ options });
+}
+
+export async function deleteFile(path: string): Promise<boolean> {
+  return window.nativeModules.api.deleteFile({ path });
+}
+
+export async function listFiles(path: string): Promise<string[] | undefined> {
+  return window.nativeModules.api.listFiles({ path });
+}
+
+export async function getFileContent(path?: string): Promise<string | undefined> {
+  return window.nativeModules.api.getFileContent({ path });
+}
+
+export async function getFileInfo(path?: string): Promise<FileInfo | undefined> {
+  const info = await window.nativeModules.api.getFileInfo({ path });
 
   // eslint-disable-next-line compat/compat
   return new Promise(resolve => {
@@ -24,6 +40,8 @@ export async function getFileInfo(): Promise<FileInfo | undefined> {
         fileSize: number;
         creationDate: number;
         modificationDate: number;
+        parentPath: string;
+        isDirectory: boolean;
       } = JSON.parse(info);
 
       return {
@@ -31,6 +49,8 @@ export async function getFileInfo(): Promise<FileInfo | undefined> {
         fileSize: json.fileSize,
         creationDate: new Date(json.creationDate * 1000),
         modificationDate: new Date(json.modificationDate * 1000),
+        parentPath: json.parentPath,
+        isDirectory: json.isDirectory,
       };
     })());
   });
