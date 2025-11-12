@@ -288,8 +288,12 @@ extension EditorViewController: EditorModulePreviewDelegate {
 // MARK: - EditorModuleAPIDelegate
 
 extension EditorViewController: EditorModuleAPIDelegate {
-  func editorAPIGetFileURL(_ sender: EditorModuleAPI) -> URL? {
-    document?.fileURL
+  func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL? {
+    guard let path else {
+      return document?.fileURL
+    }
+
+    return URL(filePath: path)
   }
 
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {

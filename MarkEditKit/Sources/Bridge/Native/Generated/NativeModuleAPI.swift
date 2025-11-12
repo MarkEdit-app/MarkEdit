@@ -12,7 +12,11 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleAPI: NativeModule {
-  func getFileInfo() async -> String?
+  func createFile(options: CreateFileOptions) async -> Bool
+  func deleteFile(path: String) async -> Bool
+  func listFiles(path: String) async -> [String]?
+  func getFileContent(path: String?) async -> String?
+  func getFileInfo(path: String?) async -> String?
   func getPasteboardItems() async -> String?
   func getPasteboardString() async -> String?
   func addMainMenuItems(items: [WebMenuItem])
@@ -31,6 +35,18 @@ public extension NativeModuleAPI {
 final class NativeBridgeAPI: NativeBridge {
   static let name = "api"
   lazy var methods: [String: NativeMethod] = [
+    "createFile": { [weak self] in
+      await self?.createFile(parameters: $0)
+    },
+    "deleteFile": { [weak self] in
+      await self?.deleteFile(parameters: $0)
+    },
+    "listFiles": { [weak self] in
+      await self?.listFiles(parameters: $0)
+    },
+    "getFileContent": { [weak self] in
+      await self?.getFileContent(parameters: $0)
+    },
     "getFileInfo": { [weak self] in
       await self?.getFileInfo(parameters: $0)
     },
@@ -67,8 +83,88 @@ final class NativeBridgeAPI: NativeBridge {
     self.module = module
   }
 
+  private func createFile(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var options: CreateFileOptions
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.createFile(options: message.options)
+    return .success(result)
+  }
+
+  private func deleteFile(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.deleteFile(path: message.path)
+    return .success(result)
+  }
+
+  private func listFiles(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.listFiles(path: message.path)
+    return .success(result)
+  }
+
+  private func getFileContent(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String?
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.getFileContent(path: message.path)
+    return .success(result)
+  }
+
   private func getFileInfo(parameters: Data) async -> Result<Any?, Error>? {
-    let result = await module.getFileInfo()
+    struct Message: Decodable {
+      var path: String?
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.getFileInfo(path: message.path)
     return .success(result)
   }
 
@@ -188,6 +284,29 @@ final class NativeBridgeAPI: NativeBridge {
 
     let result = await module.runService(name: message.name, input: message.input)
     return .success(result)
+  }
+}
+
+public struct CreateFileOptions: Decodable, Equatable {
+  /// File path.
+  ///
+  /// It must be one that the app can access. See the [wiki](https://github.com/MarkEdit-app/MarkEdit/wiki/Customization#grant-folder-access) for more details.
+  public var path: String
+  /// If set to true, a directory will be created instead.
+  public var isDirectory: Bool?
+  /// If set to true, existing files with the same path will be overwritten.
+  public var overwrites: Bool?
+  /// String representation of the file, if applicable.
+  public var string: String?
+  /// Base64 representation of the file, if applicable.
+  public var data: String?
+
+  public init(path: String, isDirectory: Bool?, overwrites: Bool?, string: String?, data: String?) {
+    self.path = path
+    self.isDirectory = isDirectory
+    self.overwrites = overwrites
+    self.string = string
+    self.data = data
   }
 }
 

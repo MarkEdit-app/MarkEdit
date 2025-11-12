@@ -18,6 +18,10 @@ import { languageModel } from './languageModel';
 
 import {
   onEditorReady,
+  createFile,
+  deleteFile,
+  listFiles,
+  getFileContent,
   getFileInfo,
   getPasteboardItems,
   getPasteboardString,
@@ -59,6 +63,10 @@ export function initMarkEditModules() {
   MarkEdit.lezer = lezer;
 
   MarkEdit.onEditorReady = onEditorReady;
+  MarkEdit.createFile = createFile;
+  MarkEdit.deleteFile = deleteFile;
+  MarkEdit.listFiles = listFiles;
+  MarkEdit.getFileContent = getFileContent;
   MarkEdit.getFileInfo = getFileInfo;
   MarkEdit.getPasteboardItems = getPasteboardItems;
   MarkEdit.getPasteboardString = getPasteboardString;
