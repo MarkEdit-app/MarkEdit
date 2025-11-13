@@ -57,13 +57,9 @@ public final class EditorModuleAPI: NativeModuleAPI {
           withIntermediateDirectories: true
         )
       } else {
-        try options.decodedData.write(to: fileURL, options: {
-          if options.overwrites == true {
-            return .atomic
-          }
-
-          return [.atomic, .withoutOverwriting]
-        }())
+        if !FileManager.default.fileExists(atPath: fileURL.path) || options.overwrites == true {
+          try options.decodedData.write(to: fileURL, options: .atomic)
+        }
       }
 
       return true
