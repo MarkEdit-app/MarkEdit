@@ -4468,6 +4468,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-yaml@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "js-yaml@npm:4.1.1"
+  dependencies:
+    argparse: "npm:^2.0.1"
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: 10c0/561c7d7088c40a9bb53cc75becbfb1df6ae49b34b5e6e5a81744b14ae8667ec564ad2527709d1a6e7d5e5fa6d483aa0f373a50ad98d42fde368ec4a190d4fae7
+  languageName: node
+  linkType: hard
+
 "jsdom@npm:^20.0.0":
   version: 20.0.3
   resolution: "jsdom@npm:20.0.3"
@@ -4732,7 +4743,7 @@ __metadata:
     eslint-plugin-promise: "npm:^7.2.1"
     jest: "npm:^29.6.4"
     jest-environment-jsdom: "npm:^29.6.4"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.1.1"
     markedit-api: "https://github.com/MarkEdit-app/MarkEdit-api#v0.16.0"
     rollup: "npm:^4.0.0"
     ts-gyb: "npm:^0.12.0"
