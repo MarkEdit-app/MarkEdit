@@ -29,20 +29,18 @@ export const customCompletionData = {
 
     // Internal anchors like [title](#heading)
     if (matchText.startsWith('#') && nodeName !== 'Image') {
-      return new Promise(resolve => {
-        resolve({
-          from: match.from,
-          options: getTableOfContents().map(info => {
-            const label = '#' + getLinkAnchor(info.title);
-            return {
-              type: 'text',
-              label,
-              apply: label + closeBracket,
-            };
-          }),
-          validFor: /^#[\p{L}\p{N}_]*$/u,
-        });
-      });
+      return {
+        from: match.from,
+        options: getTableOfContents().map(info => {
+          const label = '#' + getLinkAnchor(info.title);
+          return {
+            type: 'text',
+            label,
+            apply: label + closeBracket,
+          };
+        }),
+        validFor: /^#[\p{L}\p{N}_]*$/u,
+      };
     }
 
     return null;
