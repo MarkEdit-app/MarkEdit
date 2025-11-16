@@ -1,7 +1,5 @@
 import { KeyBinding } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
-import { CompletionContext, CompletionResult } from '@codemirror/autocomplete';
-import { syntaxTree } from '@codemirror/language';
 import { HeadingInfo } from './types';
 import { frontMatterRange } from '../frontMatter';
 import { getSyntaxTree } from '../lezer';
@@ -28,40 +26,6 @@ export const tocKeymap: KeyBinding[] = [
     },
   },
 ];
-
-// https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
-export const anchorCompletionData = {
-  autocomplete: (context: CompletionContext): CompletionResult | null => {
-    if (context.view === undefined) {
-      return null;
-    }
-
-    const match = context.matchBefore(/#[\p{L}\p{N}_]*/u);
-    if (match === null) {
-      return null;
-    }
-
-    const insideLink = syntaxTree(context.view.state).resolveInner(context.pos).name === 'Link';
-    const hasPartialLink = context.matchBefore(/\]\([ \t]*#/) !== null;
-    if (!insideLink && !hasPartialLink) {
-      return null;
-    }
-
-    return {
-      from: match.from,
-      options: getTableOfContents().map(info => {
-        const label = '#' + getLinkAnchor(info.title);
-        const suffix = (!insideLink && hasPartialLink) ? ')' : '';
-        return {
-          type: 'text',
-          label,
-          apply: label + suffix,
-        };
-      }),
-      validFor: /^#[\p{L}\p{N}_]*$/u,
-    };
-  },
-};
 
 export function getTableOfContents() {
   const editor = window.editor;

@@ -29,8 +29,9 @@ import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
-import { tocKeymap, anchorCompletionData } from './modules/toc';
 import { customizedCommandsKeymap } from './modules/commands';
+import { customCompletionData } from './modules/completion';
+import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
 const theme = new Compartment;
@@ -138,7 +139,7 @@ export function extensions(options: { lineBreak?: string }) {
     // Markdown
     markdownConfigurator.of(markdownConfigurations()),
     markdownLanguage.data.of(markdownExtendedData),
-    markdownLanguage.data.of(anchorCompletionData),
+    markdownLanguage.data.of(customCompletionData),
 
     // Enable autocomplete from language data
     autocompletion({
