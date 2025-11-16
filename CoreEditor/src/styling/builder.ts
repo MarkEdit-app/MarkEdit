@@ -93,6 +93,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   },
   '.cm-tooltip-autocomplete ul li': {
     padding: '4px !important',
+    lineHeight: '1.2 !important',
   },
   // Extended
   '.cm-visibleTab': (() => {

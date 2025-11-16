@@ -138,15 +138,19 @@ export function setSuggestWhileTyping(enabled: boolean) {
 export function recalculateTextMetrics() {
   adjustGutterPositions();
 
-  const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-  context.font = `${window.config.fontSize}px ${window.config.fontFace.family}`;
+  const span = document.createElement('span');
+  span.style.font = `${window.config.fontSize}px ${window.config.fontFace.family}`;
+  span.style.lineHeight = '1.2';
+  span.style.position = 'absolute';
+  span.style.visibility = 'hidden';
+  span.textContent = '#markedit-v1.0';
+  document.body.appendChild(span);
 
-  const metrics = context.measureText('#markedit-v1.0');
-  const rowHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent + 8; // padding = 4px
+  const metrics = span.getBoundingClientRect();
+  const rowHeight = metrics.height + 8; // padding = 4px
   const totalHeight = `${rowHeight * 6}px`;
 
-  const rootElement = document.documentElement;
-  rootElement.style.setProperty('--tooltip-completion-max-height', totalHeight);
+  document.documentElement.style.setProperty('--tooltip-completion-max-height', totalHeight);
+  document.body.removeChild(span);
 }
 
-const canvas = document.createElement('canvas');
