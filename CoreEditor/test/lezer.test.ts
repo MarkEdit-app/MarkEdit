@@ -87,9 +87,10 @@ describe('Lezer parser', () => {
   });
 
   test('test markdown link', () => {
-    editor.setUp('[title](url)');
+    editor.setUp('![image](url)\n\n[title](url)');
 
     const types = parseTypes(window.editor);
+    expect(types).toContain('Image');
     expect(types).toContain('Link');
     expect(types).toContain('LinkMark');
     expect(types).toContain('URL');

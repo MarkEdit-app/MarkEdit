@@ -1,8 +1,53 @@
 import { EditorSelection } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
-import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus } from '@codemirror/autocomplete';
+import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
+import { getLinkAnchor, getTableOfContents } from '../toc';
+
+// https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
+export const customCompletionData = {
+  autocomplete: async(context: CompletionContext): Promise<CompletionResult | null> => {
+    if (context.view === undefined) {
+      return null;
+    }
+
+    const match = context.matchBefore(/#[\p{L}\p{N}_]*/u);
+    if (match === null) {
+      return null;
+    }
+
+    const nodeName = syntaxTree(context.view.state).resolveInner(context.pos).name;
+    const insideLink = nodeName === 'Link' || nodeName === 'Image';
+    const hasPartialLink = context.matchBefore(/\]\([ \t]*#/) !== null;
+    if (!insideLink && !hasPartialLink) {
+      return null;
+    }
+
+    const matchText = match.text;
+    const closeBracket = (!insideLink && hasPartialLink) ? ')' : '';
+
+    // Internal anchors like [title](#heading)
+    if (matchText.startsWith('#') && nodeName !== 'Image') {
+      return new Promise(resolve => {
+        resolve({
+          from: match.from,
+          options: getTableOfContents().map(info => {
+            const label = '#' + getLinkAnchor(info.title);
+            return {
+              type: 'text',
+              label,
+              apply: label + closeBracket,
+            };
+          }),
+          validFor: /^#[\p{L}\p{N}_]*$/u,
+        });
+      });
+    }
+
+    return null;
+  },
+};
 
 /**
  * The start of a multi-stage completion process:
