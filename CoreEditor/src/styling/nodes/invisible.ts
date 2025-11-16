@@ -40,6 +40,10 @@ export function invisiblesExtension(behavior: InvisiblesBehavior, hasSelection: 
   return [];
 }
 
+export function alwaysRenderInvisibles() {
+  return window.config.invisiblesBehavior === InvisiblesBehavior.always;
+}
+
 // This function renders the space before the main caret by forcing a focus change.
 //
 // The reason we need this special rendering logic is that <span> elements can mess up autocorrect features,
@@ -130,10 +134,6 @@ function renderLineBreaks(selectionOnly: boolean) {
 
     return Decoration.set(decos);
   });
-}
-
-function alwaysRenderInvisibles() {
-  return window.config.invisiblesBehavior === InvisiblesBehavior.always;
 }
 
 function caretTextPosition() {
