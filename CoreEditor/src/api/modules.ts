@@ -16,25 +16,10 @@ import * as customHistory from '../@vendor/commands/history';
 import { TextEditor } from './editor';
 import { languageModel } from './languageModel';
 
-import {
-  onEditorReady,
-  createFile,
-  deleteFile,
-  listFiles,
-  getFileContent,
-  getFileInfo,
-  getPasteboardItems,
-  getPasteboardString,
-  addExtension,
-  addMarkdownConfig,
-  addCodeLanguage,
-  addMainMenuItem,
-  showContextMenu,
-  showAlert,
-  showTextBox,
-  showSavePanel,
-  runService,
-} from './methods';
+import { onEditorReady, addExtension, addMarkdownConfig, addCodeLanguage } from './methods';
+import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
+import { createFile, deleteFile, listFiles, getFileContent, getFileInfo } from './files';
+import { getPasteboardItems, getPasteboardString } from './pasteboard';
 
 export function initMarkEditModules() {
   const codemirror = {
