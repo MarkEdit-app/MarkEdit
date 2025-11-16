@@ -24,7 +24,7 @@
     "@lezer/highlight": "^1.0.0",
     "@lezer/lr": "^1.0.0",
     "@lezer/markdown": "^1.0.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
