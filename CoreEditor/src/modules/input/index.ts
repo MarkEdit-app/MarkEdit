@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection, Transaction } from '@codemirror/state';
 import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion } from '@codemirror/autocomplete';
+import { alwaysRenderInvisibles } from '../../styling/nodes/invisible';
 import { globalState, editingState } from '../../common/store';
 import { clearSyntaxSelections } from '../commands';
 import { startCompletion, isPanelVisible } from '../completion';
@@ -119,6 +120,16 @@ export function observeChanges() {
         // Make sure the main selection is always centered for typewriter mode
         if (window.config.typewriterMode) {
           scrollToSelection('center');
+        }
+      }
+
+      // Work around a composition mode bug where whitespaces are not updated,
+      // we can probably remove this once EditContext is available.
+      if (alwaysRenderInvisibles() && !editingState.compositionEnded) {
+        const caretPos = update.startState.selection.main.from;
+        const enclosingText = update.startState.sliceDoc(caretPos - 1, caretPos + 1);
+        if (enclosingText === '  ') {
+          refreshEditFocus();
         }
       }
 
