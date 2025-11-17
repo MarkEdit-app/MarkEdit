@@ -1,25 +1,22 @@
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, EditorState } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 import { getLinkAnchor, getTableOfContents } from '../toc';
+import { getFileInfo, listFiles } from '../../api/files';
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
 export const customCompletionData = {
   autocomplete: async(context: CompletionContext): Promise<CompletionResult | null> => {
-    if (context.view === undefined) {
-      return null;
-    }
-
-    const match = context.matchBefore(/#[\p{L}\p{N}_]*/u);
+    const match = context.matchBefore(/[#./].*/);
     if (match === null) {
       return null;
     }
 
-    const nodeName = syntaxTree(context.view.state).resolveInner(context.pos).name;
-    const insideLink = nodeName === 'Link' || nodeName === 'Image';
-    const hasPartialLink = context.matchBefore(/\]\([ \t]*#/) !== null;
+    const nodeName = linkNodeName(context.state, context.pos);
+    const insideLink = nodeName !== undefined;
+    const hasPartialLink = context.matchBefore(/\[.*\]\(.*/) !== null;
     if (!insideLink && !hasPartialLink) {
       return null;
     }
@@ -40,6 +37,25 @@ export const customCompletionData = {
           };
         }),
         validFor: /^#[\p{L}\p{N}_]*$/u,
+      };
+    }
+
+    // Relative file paths like [file](/docs.md)
+    if (matchText.startsWith('.') || matchText.startsWith('/')) {
+      const directory = matchText.includes('/') ? matchText.substring(0, matchText.lastIndexOf('/')) : matchText;
+      const parentPath = (await getFileInfo())?.parentPath ?? '';
+      const filenames = (await listFiles(joinPaths(parentPath, directory)))?.filter(name => name !== '.DS_Store');
+
+      return {
+        from: match.from,
+        options: (filenames ?? []).map(filename => {
+          const label = joinPaths(directory, filename);
+          return {
+            type: 'text',
+            label,
+            apply: label.replace(/ /g, '%20') + closeBracket,
+          };
+        }),
       };
     }
 
@@ -79,7 +95,7 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
     const anchor = anchorAtPos(pos);
 
     // Inside a link, try anchor completion
-    if (syntaxTree(state).resolveInner(pos).name === 'Link') {
+    if (linkNodeName(state, pos) !== undefined) {
       return toggleTooltipCompletion();
     }
 
@@ -157,6 +173,23 @@ export function acceptInlinePrediction(prediction: string) {
       });
     }
   }
+}
+
+function linkNodeName(state: EditorState, pos: number) {
+  const nodeName = syntaxTree(state).resolveInner(pos).name;
+  if (nodeName === 'Link' || nodeName === 'Image') {
+    return nodeName;
+  }
+
+  return undefined;
+}
+
+function joinPaths(path1: string, path2: string) {
+  if (path1.endsWith('/')) {
+    return path1 + path2;
+  }
+
+  return path1 + '/' + path2;
 }
 
 const storage: {
