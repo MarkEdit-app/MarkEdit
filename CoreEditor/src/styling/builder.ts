@@ -86,7 +86,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     overflow: 'auto',
     marginTop: '5px',
     borderRadius: '5px',
-    maxWidth: '280px',
+    maxWidth: '1280px',
   },
   '.cm-tooltip-autocomplete ul': {
     maxHeight: 'var(--tooltip-completion-max-height) !important',
@@ -188,7 +188,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
     },
     '.cm-tooltip-autocomplete ul li[aria-selected]': {
-      backgroundColor: `${colors.text}1a`,
+      backgroundColor: `${colors.text}12`,
     },
     '.cm-tooltip-autocomplete ul li, .cm-tooltip-autocomplete ul li[aria-selected]': {
       color: colors.text,
