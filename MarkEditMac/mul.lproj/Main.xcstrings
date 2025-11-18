@@ -2459,7 +2459,8 @@
             "value" : "option-esc"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "My7-8t-jlU.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Complete\"; ObjectID = \"My7-8t-jlU\";",
