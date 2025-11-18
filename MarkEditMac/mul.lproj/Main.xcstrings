@@ -2449,6 +2449,18 @@
         }
       }
     },
+    "My7-8t-jlU.ibShadowedToolTip" : {
+      "comment" : "Class = \"NSMenuItem\"; ibShadowedToolTip = \"option-esc\"; ObjectID = \"My7-8t-jlU\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "option-esc"
+          }
+        }
+      }
+    },
     "My7-8t-jlU.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Complete\"; ObjectID = \"My7-8t-jlU\";",
       "extractionState" : "extracted_with_value",

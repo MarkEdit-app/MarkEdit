@@ -2026,6 +2026,9 @@
         }
       }
     },
+    "option-esc" : {
+      "shouldTranslate" : false
+    },
     "Paragraphs" : {
       "comment" : "Statistics label: count paragraphs",
       "localizations" : {
@@ -2094,19 +2097,19 @@
         }
       }
     },
-    "Press ⌥ ESC to show the panel." : {
+    "Press ⌥ ⎋ to show the panel." : {
       "comment" : "Hint for using word completion",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按下 ⌥ ESC 来显示列表。"
+            "value" : "按下 ⌥ ⎋ 来显示列表。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "按下 ⌥ ESC 來顯示列表。"
+            "value" : "按下 ⌥ ⎋ 來顯示列表。"
           }
         }
       }
