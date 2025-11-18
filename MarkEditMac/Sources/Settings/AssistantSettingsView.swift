@@ -69,6 +69,7 @@ struct AssistantSettingsView: View {
 
           Text(Localized.Settings.completionHint)
             .formDescription()
+            .help("option-esc")
         }
         .formLabel(alignment: .top, Localized.Settings.completion)
       }

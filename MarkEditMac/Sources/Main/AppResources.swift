@@ -164,7 +164,7 @@ enum Localized {
     static let wordsInDocument = String(localized: "Words in document", comment: "Option for words in documents suggestion")
     static let standardWords = String(localized: "Standard words", comment: "Option for standard words suggestion")
     static let guessedWords = String(localized: "Guessed words", comment: "Option for guessed words suggestion")
-    static let completionHint = String(localized: "Press ⌥ ESC to show the panel.", comment: "Hint for using word completion")
+    static let completionHint = String(localized: "Press ⌥ ⎋ to show the panel.", comment: "Hint for using word completion")
     static let autocomplete = String(localized: "Autocomplete:", comment: "Label for autocomplete options")
     static let inlinePredictions = String(localized: "Inline Predictions", comment: "Whether to allow inline predictions")
     static let suggestWhileTyping = String(localized: "Suggest while typing", comment: "Whether to suggest while typing")
