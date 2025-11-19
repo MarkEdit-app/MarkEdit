@@ -1,6 +1,7 @@
+import { EditorView } from '@codemirror/view';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
-import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult } from '@codemirror/autocomplete';
+import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult, insertCompletionText, pickedCompletion, Completion } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 import { getLinkAnchor, getTableOfContents } from '../toc';
@@ -24,6 +25,19 @@ export const customCompletionData = {
     const matchText = match.text;
     const closeBracket = (!insideLink && hasPartialLink) ? ')' : '';
 
+    const applyCompletion = (editor: EditorView, completion: Completion, from: number, to: number, text: string) => {
+      editor.dispatch({
+        ...insertCompletionText(editor.state, text, from, to),
+        annotations: pickedCompletion.of(completion),
+      });
+
+      if (closeBracket.length > 0) {
+        editor.dispatch({
+          selection: EditorSelection.cursor(from + text.length - closeBracket.length),
+        });
+      }
+    };
+
     // Internal anchors like [title](#heading)
     if (matchText.startsWith('#') && nodeName !== 'Image') {
       return {
@@ -33,7 +47,7 @@ export const customCompletionData = {
           return {
             type: 'text',
             label,
-            apply: label + closeBracket,
+            apply: (editor, completion, from, to) => applyCompletion(editor, completion, from, to, label + closeBracket),
           };
         }),
         validFor: /^#[\p{L}\p{N}_]*$/u,
@@ -53,7 +67,17 @@ export const customCompletionData = {
           return {
             type: 'text',
             label,
-            apply: label.replace(/ /g, '%20') + closeBracket,
+            apply: async(editor, completion, from, to) => {
+              const filePath = joinPaths(parentPath, label);
+              const isDirectory = (await getFileInfo(filePath))?.isDirectory === true;
+              const escapedText = label.replace(/ /g, '%20');
+              const textToApply = (isDirectory ? joinPaths(escapedText, '') : escapedText) + closeBracket;
+              applyCompletion(editor, completion, from, to, textToApply);
+
+              if (isDirectory) {
+                setTimeout(() => startTooltipCompletion(editor), 200);
+              }
+            },
           };
         }),
       };
