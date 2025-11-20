@@ -4,12 +4,12 @@ import { syntaxTree } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult, insertCompletionText, pickedCompletion, Completion } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
-import { getFootnoteLabels } from '../footnote';
+import { getFootnoteLabels, getReferenceLinkLabels } from '../link';
 import { getLinkAnchor, getTableOfContents } from '../toc';
 import { getFileInfo, listFiles } from '../../api/files';
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
-export const customCompletionData = {
+export const standardLinkCompletion = {
   autocomplete: async(context: CompletionContext): Promise<CompletionResult | null> => {
     const match = context.matchBefore(/[#./^].*/);
     if (match === null) {
@@ -93,6 +93,24 @@ export const customCompletionData = {
     }
 
     return null;
+  },
+};
+
+// https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
+export const referenceLinkCompletion = {
+  autocomplete: (context: CompletionContext): CompletionResult | null => {
+    const regex = /(\[.+\]\[).*/;
+    const match = context.matchBefore(regex);
+    if (match === null || context.tokenBefore(['Link']) === null) {
+      return null;
+    }
+
+    const prefix = match.text.match(regex);
+    const offset = prefix === null ? 0 : prefix[1].length;
+    return {
+      from: match.from + offset,
+      options: getReferenceLinkLabels(context.state).map(label => ({ type: 'text', label })),
+    };
   },
 };
 

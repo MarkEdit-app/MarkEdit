@@ -30,7 +30,7 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { customizedCommandsKeymap } from './modules/commands';
-import { customCompletionData } from './modules/completion';
+import { standardLinkCompletion, referenceLinkCompletion } from './modules/completion';
 import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
@@ -139,7 +139,8 @@ export function extensions(options: { lineBreak?: string }) {
     // Markdown
     markdownConfigurator.of(markdownConfigurations()),
     markdownLanguage.data.of(markdownExtendedData),
-    markdownLanguage.data.of(customCompletionData),
+    markdownLanguage.data.of(standardLinkCompletion),
+    markdownLanguage.data.of(referenceLinkCompletion),
 
     // Enable autocomplete from language data
     autocompletion({
