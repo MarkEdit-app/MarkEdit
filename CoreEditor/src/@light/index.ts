@@ -5,6 +5,7 @@ import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
 import { Config } from '../config';
 import { setUp, setTheme } from '../styling/config';
 import { classHighlighters, markdownExtensions, renderExtensions } from '../styling/markdown';
+import { linkStyles } from '../styling/nodes/link';
 import { scrollIntoView } from '../modules/selection';
 
 import GitHubLight from '../styling/themes/github-light';
@@ -36,6 +37,7 @@ const extensions = [
   classHighlighters,
   theme.of(loadTheme(config.theme)),
   renderExtensions,
+  linkStyles,
 ];
 
 const doc = config.text;
