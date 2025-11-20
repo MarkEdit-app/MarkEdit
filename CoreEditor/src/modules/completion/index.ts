@@ -4,13 +4,14 @@ import { syntaxTree } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult, insertCompletionText, pickedCompletion, Completion } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
+import { getFootnoteLabels } from '../footnote';
 import { getLinkAnchor, getTableOfContents } from '../toc';
 import { getFileInfo, listFiles } from '../../api/files';
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
 export const customCompletionData = {
   autocomplete: async(context: CompletionContext): Promise<CompletionResult | null> => {
-    const match = context.matchBefore(/[#./].*/);
+    const match = context.matchBefore(/[#./^].*/);
     if (match === null) {
       return null;
     }
@@ -80,6 +81,14 @@ export const customCompletionData = {
             },
           };
         }),
+      };
+    }
+
+    // Footnotes like [^footnote]
+    if (matchText.startsWith('^')) {
+      return {
+        from: match.from,
+        options: getFootnoteLabels(context.state).map(label => ({ type: 'text', label })),
       };
     }
 
