@@ -21,6 +21,7 @@ import { history, historyKeymap } from './@vendor/commands/history';
 import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, markdownExtendedData, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
+import { linkStyles } from './styling/nodes/link';
 import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
 import { IndentBehavior } from './config';
@@ -154,7 +155,8 @@ export function extensions(options: { lineBreak?: string }) {
     theme.of(loadTheme(window.config.theme)),
     renderExtensions,
     actionExtensions,
-    invisibles.of([]), // Lower priority to have line breaks at the end
+    invisibles.of([]), // Must after actionExtensions to have line breaks at the end
+    linkStyles, // Must after invisibles because whitespaces can break this
     selectedLines.of([]),
 
     // Input handling
