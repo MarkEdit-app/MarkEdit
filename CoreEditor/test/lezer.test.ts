@@ -107,7 +107,7 @@ describe('Lezer parser', () => {
   test('test getNodesNamed', () => {
     editor.setUp('[^footnote]\n\n[reference][link]\n\n[standard](link)');
 
-    const nodes = getNodesNamed(window.editor.state, 'Link');
+    const nodes = getNodesNamed(window.editor.state, ['Link']);
     expect(nodes.length).toBe(3);
   });
 

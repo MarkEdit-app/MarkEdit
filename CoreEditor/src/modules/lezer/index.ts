@@ -19,13 +19,13 @@ export function getSyntaxTree(state: EditorState, sizeLimit = 102400) {
   return syntaxTree(state);
 }
 
-export function getNodesNamed(state: EditorState, nodeName: string) {
+export function getNodesNamed(state: EditorState, nodeNames: string[]) {
   const nodes: SyntaxNodeRef[] = [];
 
   getSyntaxTree(state).iterate({
     from: 0, to: state.doc.length,
     enter: node => {
-      if (node.name === nodeName) {
+      if (nodeNames.includes(node.name)) {
         nodes.push(node.node);
       }
     },
