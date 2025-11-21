@@ -196,7 +196,7 @@ function followReference(element: HTMLElement, type: string) {
   const label = element.getAttribute('data-link-label')?.toLowerCase() ?? '';
   const isDefinition = (pos: number) => state.sliceDoc(pos, pos + 1) === ':';
 
-  return scrollIntoTarget(getNodesNamed(state, type).find(node => {
+  return scrollIntoTarget(getNodesNamed(state, [type, 'LinkLabel']).find(node => {
     // Ignore the node that triggered the event
     if (node.to >= from && node.from <= to) {
       return false;
