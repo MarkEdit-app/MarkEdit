@@ -37,12 +37,14 @@ const standardStyle = createDecoPlugin(() => {
       const spec = createSpec();
       const deco = Decoration.mark(spec);
 
-      // HTML links, only decorate a portion of the match
-      if (match[6]) {
-        return add(from + match[6].length, to - 1, deco);
+      // HTML links (6) and Markdown links (4), only decorate a portion of the match
+      for (const index of [6, 4]) {
+        if (match[index]) {
+          return add(from + match[index].length, to - 1, deco);
+        }
       }
 
-      // Markdown links and normal URL literals, decorate the full match
+      // Normal links, decorate the full match
       add(from, to, deco);
     },
   });
