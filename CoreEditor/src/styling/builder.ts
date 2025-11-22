@@ -43,11 +43,6 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   },
   '@keyframes cm-blink': { '40%, 90%': { opacity: 1 }, '60%, 70%': { opacity: 0 } },
   '@keyframes cm-blink2': { '40%, 90%': { opacity: 1 }, '60%, 70%': { opacity: 0 } },
-  '.cm-lineWrapping': {
-    // Prefer pre-wrap over break-spaces because trailing whitespaces can lead to extra line breaks,
-    // it can be an issue for whitespace rendering, especially for "selection" mode.
-    whiteSpace: 'pre-wrap',
-  },
   '.cm-foldGutter': {
     padding: '0 4px',
     opacity: '0',
