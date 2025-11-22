@@ -24,7 +24,9 @@ export const standardLinkCompletion = {
     }
 
     const matchText = match.text;
-    const closeBracket = (!insideLink && hasPartialLink) ? ')' : '';
+    const partialMode = !insideLink && hasPartialLink;
+    const boundaryPos = partialMode ? undefined : bracketBoundary(context);
+    const closeBracket = partialMode ? ')' : '';
 
     const applyCompletion = (editor: EditorView, completion: Completion, from: number, to: number, text: string) => {
       editor.dispatch({
@@ -43,6 +45,7 @@ export const standardLinkCompletion = {
     if (matchText.startsWith('#') && nodeName !== 'Image') {
       return {
         from: match.from,
+        to: boundaryPos,
         options: getTableOfContents().map(info => {
           const label = '#' + getLinkAnchor(info.title);
           return {
@@ -63,6 +66,7 @@ export const standardLinkCompletion = {
 
       return {
         from: match.from,
+        to: boundaryPos,
         options: (filenames ?? []).map(filename => {
           const label = joinPaths(directory, filename);
           return {
@@ -109,6 +113,7 @@ export const referenceLinkCompletion = {
     const offset = prefix === null ? 0 : prefix[1].length;
     return {
       from: match.from + offset,
+      to: bracketBoundary(context),
       options: getReferenceLinkLabels(context.state).map(label => ({ type: 'text', label })),
     };
   },
@@ -228,7 +233,7 @@ export function acceptInlinePrediction(prediction: string) {
 
 function linkNodeName(state: EditorState, pos: number) {
   const nodeName = syntaxTree(state).resolveInner(pos).name;
-  if (nodeName === 'Link' || nodeName === 'Image') {
+  if (['Link', 'Image', 'URL'].includes(nodeName)) {
     return nodeName;
   }
 
@@ -241,6 +246,22 @@ function joinPaths(path1: string, path2: string) {
   }
 
   return path1 + '/' + path2;
+}
+
+function bracketBoundary(context: CompletionContext) {
+  let offset = context.state.selection.main.to;
+  const lineEnd = context.state.doc.lineAt(offset).to;
+
+  while (offset < lineEnd) {
+    const ch = context.state.sliceDoc(offset, offset + 1);
+    if (ch === ')' || ch === ']') {
+      return offset;
+    }
+
+    ++offset;
+  }
+
+  return undefined;
 }
 
 const storage: {
