@@ -5,7 +5,7 @@ export function getFootnoteLabels(state: EditorState): string[] {
 }
 
 export function getReferenceLinkLabels(state: EditorState): string[] {
-  return extractLabels(state, /^\[([^\]]+)\]:\s+/gm);
+  return extractLabels(state, /^\[([^^][^\]]*)\]:\s+/gm);
 }
 
 function extractLabels(state: EditorState, regexp: RegExp): string[] {
