@@ -21,7 +21,7 @@ export class PreviewWidget extends WidgetView {
 
     const button = span.appendChild(document.createElement('span'));
     button.dataset.code = this.code;
-    button.dataset.type = this.code;
+    button.dataset.type = this.type;
     button.dataset.pos = `${this.pos}`;
 
     button.title = window.config.localizable?.previewButtonTitle ?? '';
