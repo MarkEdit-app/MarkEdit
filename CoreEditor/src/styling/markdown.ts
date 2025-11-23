@@ -1,8 +1,9 @@
 import { syntaxHighlighting } from '@codemirror/language';
 import { classHighlighter, tagHighlighter, styleTags } from '@lezer/highlight';
 import { MarkdownConfig } from '@lezer/markdown';
-import { markdownMathExtension as mathExtension } from '../@vendor/joplin/markdownMathParser';
+import { markdownMathExtension as markdownMathConfig } from '../@vendor/joplin/markdownMathParser';
 import { tags } from './builder';
+import { linkDefinitionConfig } from './nodes/def';
 import { listIndentStyle } from './nodes/indent';
 import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './nodes/code';
 import { previewTable, tableStyle } from './nodes/table';
@@ -45,12 +46,16 @@ export const markdownExtensions: MarkdownConfig[] = [
         ListMark: tags.listMark,
         QuoteMark: tags.quoteMark,
         LinkMark: tags.linkMark,
+        LinkDefinition: tags.linkDefinition,
+        LinkDefinitionID: tags.link,
+        LinkDefinitionMark: tags.linkMark,
         'SetextHeading1/...': tags.setextHeading1,
         'SetextHeading2/...': tags.setextHeading2,
       }),
     ],
   },
-  mathExtension,
+  linkDefinitionConfig,
+  markdownMathConfig,
 ];
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
