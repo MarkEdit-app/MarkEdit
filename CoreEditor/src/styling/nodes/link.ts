@@ -34,18 +34,28 @@ const standardStyle = createDecoPlugin(() => {
     regexp: regexp.standard,
     boundary: /\S/,
     decorate: (add, from, to, match) => {
-      const spec = createSpec();
-      const deco = Decoration.mark(spec);
+      const createDeco = (attributes?: { [key: string]: string }) => {
+        return Decoration.mark(createSpec(attributes));
+      };
 
-      // HTML links (6) and Markdown links (4), only decorate a portion of the match
-      for (const index of [6, 4]) {
-        if (match[index]) {
-          return add(from + match[index].length, to - 1, deco);
+      // HTML links, only decorate the url part
+      if (match[6]) {
+        return add(from + match[6].length, to - 1, createDeco());
+      }
+
+      // Markdown links
+      if (match[4]) {
+        // Decorate the full match and add the url as an attribute
+        if (match[5]) {
+          return add(from, to, createDeco({ 'data-link-url': match[5] }));
         }
+
+        // Usually speaking, this should not happen
+        return add(from + match[4].length, to - 1, createDeco());
       }
 
       // Normal links, decorate the full match
-      add(from, to, deco);
+      add(from, to, createDeco());
     },
   });
 
@@ -171,7 +181,7 @@ function extractLink(target: EventTarget | null) {
 
   // It's OK to have a trailing period in a valid url,
   // but generally it's the end of a sentence and we want to remove the period.
-  const link = element.innerText;
+  const link = element.dataset.linkUrl ?? element.innerText;
   if (link.endsWith('.') === true && link.endsWith('..') !== true) {
     return { element, link: link.slice(0, -1) };
   }
