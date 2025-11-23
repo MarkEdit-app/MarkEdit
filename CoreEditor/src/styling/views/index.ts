@@ -20,9 +20,9 @@ export class PreviewWidget extends WidgetView {
     span.addEventListener('mouseleave', () => span.style.background = '');
 
     const button = span.appendChild(document.createElement('span'));
-    button.setAttribute('data-code', this.code);
-    button.setAttribute('data-type', this.type);
-    button.setAttribute('data-pos', `${this.pos}`);
+    button.dataset.code = this.code;
+    button.dataset.type = this.type;
+    button.dataset.pos = `${this.pos}`;
 
     button.title = window.config.localizable?.previewButtonTitle ?? '';
     button.className = 'cm-md-previewButton';
