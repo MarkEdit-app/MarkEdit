@@ -56,7 +56,7 @@ const standardStyle = createDecoPlugin(() => {
  * For `[^footnote]` and `[reference][link]`.
  */
 const referenceStyle = createDecoPlugin(() => {
-  return createDecos('Link', ({ from, to }) => {
+  return createDecos(['Link', 'LinkDefinition'], ({ from, to }) => {
     const content = window.editor.state.sliceDoc(from, to);
     const newDeco = (type: 'Link' | 'LinkLabel', label: string) => Decoration.mark(createSpec({
       'data-link-type': type,
@@ -198,7 +198,7 @@ function followReference(element: HTMLElement, type: string) {
   const label = element.getAttribute('data-link-label')?.toLowerCase() ?? '';
   const isDefinition = (pos: number) => state.sliceDoc(pos, pos + 1) === ':';
 
-  return scrollIntoTarget(getNodesNamed(state, [type, 'LinkLabel']).find(node => {
+  return scrollIntoTarget(getNodesNamed(state, [type, 'LinkLabel', 'LinkDefinition']).find(node => {
     // Ignore the node that triggered the event
     if (node.to >= from && node.from <= to) {
       return false;

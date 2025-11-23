@@ -15,6 +15,7 @@ const tags = {
   listMark: Tag.define(),
   quoteMark: Tag.define(),
   linkMark: Tag.define(),
+  linkDefinition: Tag.define(),
   setextHeading1: Tag.define(),
   setextHeading2: Tag.define(),
 };
