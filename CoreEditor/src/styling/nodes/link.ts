@@ -135,8 +135,8 @@ export function handleMouseUp(event: MouseEvent) {
   }
 
   // [^footnote] or [reference][link]
-  const type = element.getAttribute('data-link-type');
-  if (type !== null) {
+  const type = element.dataset.linkType;
+  if (type !== undefined) {
     return followReference(element, type);
   }
 
@@ -193,9 +193,9 @@ function createSpec(attributes?: { [key: string]: string }) {
 
 function followReference(element: HTMLElement, type: string) {
   const state = window.editor.state;
-  const from = parseInt(element.getAttribute('data-link-from') ?? '0');
-  const to = parseInt(element.getAttribute('data-link-to') ?? '0');
-  const label = element.getAttribute('data-link-label')?.toLowerCase() ?? '';
+  const from = parseInt(element.dataset.linkFrom ?? '0');
+  const to = parseInt(element.dataset.linkTo ?? '0');
+  const label = element.dataset.linkLabel?.toLowerCase() ?? '';
   const isDefinition = (pos: number) => state.sliceDoc(pos, pos + 1) === ':';
 
   return scrollIntoTarget(getNodesNamed(state, [type, 'LinkLabel', 'LinkDefinition']).find(node => {

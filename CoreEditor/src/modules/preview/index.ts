@@ -15,13 +15,13 @@ export function showPreview(event: MouseEvent) {
     return;
   }
 
-  const code = target.getAttribute('data-code');
-  if (code === null) {
+  const code = target.dataset.code;
+  if (code === undefined) {
     return;
   }
 
-  const pos = target.getAttribute('data-pos');
-  if (pos === null) {
+  const pos = target.dataset.pos;
+  if (pos === undefined) {
     return;
   }
 
@@ -30,7 +30,7 @@ export function showPreview(event: MouseEvent) {
     return;
   }
 
-  const type = target.getAttribute('data-type') as PreviewType;
+  const type = target.dataset.type as PreviewType;
   window.nativeModules.preview.show({ code, type, rect: getClientRect(rect) });
 
   cancelDefaultEvent(event);
