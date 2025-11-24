@@ -10,6 +10,7 @@ export function sayHello(name: string = 'World'): string {
 /**
  * Get the package version.
  * @returns The package version string
+ * @note This is a test package, version is hardcoded for simplicity
  */
 export function getVersion(): string {
   return '1.0.0';
