@@ -2,6 +2,10 @@
   "name": "markedit-app",
   "version": "1.0.0",
   "description": "Just like TextEdit on Mac but dedicated to Markdown.",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "vite",
     "lint": "eslint .",
@@ -25,6 +29,7 @@
     "@lezer/lr": "^1.0.0",
     "@lezer/markdown": "^1.0.0",
     "js-yaml": "^4.1.1",
+    "markedit-hello": "workspace:*",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

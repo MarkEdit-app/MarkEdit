@@ -1,0 +1,20 @@
+{
+  "name": "markedit-hello",
+  "version": "1.0.0",
+  "description": "A test package for MarkEdit workspace",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "markedit",
+    "test"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
