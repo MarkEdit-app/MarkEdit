@@ -8,7 +8,7 @@ This package serves as a proof-of-concept for the CoreEditor monorepo structure.
 
 - Local package creation within the workspace
 - Vite-based build system
-- ESLint integration with TypeScript
+- Shared configuration (ESLint and TypeScript configs inherited from root)
 - Package dependencies within the workspace
 
 ## Usage
@@ -43,11 +43,20 @@ The package builds to both formats:
 - `dist/index.js` - ES Module format (for modern bundlers)
 - `dist/index.d.ts` - TypeScript type definitions
 
+## Configuration
+
+This package reuses configurations from the main package:
+- **ESLint**: Extends `../../eslint.config.mjs` 
+- **TypeScript**: Extends `../../tsconfig.json`
+- **Vite**: Custom config for library build mode
+
+This approach avoids configuration duplication across packages while maintaining consistency.
+
 ## Development
 
 This package is part of the CoreEditor workspace. To make changes:
 
 1. Edit files in `src/`
-2. Run `yarn lint` to check code style
+2. Run `yarn lint` to check code style (runs workspace-level linting)
 3. Run `yarn build` to compile
 4. The compiled output will be in `dist/`
