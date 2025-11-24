@@ -2,10 +2,13 @@
   "name": "markedit-hello",
   "version": "1.0.0",
   "description": "A test package for MarkEdit workspace",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "dev": "vite",
+    "lint": "eslint .",
+    "build": "vite build",
     "clean": "rm -rf dist"
   },
   "keywords": [
@@ -15,6 +18,17 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "@eslint/plugin-kit": "^0.3.5",
+    "@stylistic/eslint-plugin": "^5.5.0",
+    "@types/eslint": "^9.6.1",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.39.0",
+    "eslint-plugin-compat": "^6.0.2",
+    "eslint-plugin-promise": "^7.2.1",
+    "globals": "^15.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.46.2",
+    "vite": "^7.1.11",
+    "vite-plugin-dts": "^4.0.0"
   }
 }
