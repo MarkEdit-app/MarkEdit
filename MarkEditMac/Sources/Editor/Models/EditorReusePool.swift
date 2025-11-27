@@ -16,7 +16,7 @@ final class EditorReusePool {
   static let shared = EditorReusePool()
 
   func warmUp() {
-    if controllerPool.isEmpty {
+    while controllerPool.count < Constants.numberOfWarmUp {
       controllerPool.append(EditorViewController())
     }
 
@@ -30,10 +30,10 @@ final class EditorReusePool {
     }
 
     let controller = EditorViewController()
-    if controllerPool.count < 2 {
+    if controllerPool.count < Constants.numberOfKeepAlive {
       // The theory here is that loading resources from WKWebViews is expensive,
-      // we make a pool that always keeps two instances in memory,
-      // if users open more than two editors, it's expected to be slower.
+      // we make a pool that always keeps a few instances in memory,
+      // if users open more editors than that, it's expected to be slower.
       controllerPool.append(controller)
     }
 
@@ -54,4 +54,9 @@ final class EditorReusePool {
   private var controllerPool = [EditorViewController]()
 
   private init() {}
+
+  private enum Constants {
+    static let numberOfWarmUp: Int = 2
+    static let numberOfKeepAlive: Int = 3
+  }
 }
