@@ -62,7 +62,7 @@ public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable {
     case .gb18030: return string.data(using: .GB_18030_2000)
     case .big5: return string.data(using: .big5)
     case .japaneseEUC: return string.data(using: .japaneseEUC)
-    case .shiftJIS: return string.data(using: .shiftJIS)
+    case .shiftJIS: return string.data(using: String.Encoding.shiftJIS)
     case .koreanEUC: return string.data(using: .EUC_KR)
     }
   }
