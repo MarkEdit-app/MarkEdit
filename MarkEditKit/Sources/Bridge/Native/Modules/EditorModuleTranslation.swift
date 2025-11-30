@@ -10,7 +10,7 @@ import Translation
 import MarkEditCore
 
 public final class EditorModuleTranslation: NativeModuleTranslation {
-  public init () {}
+  public init() {}
 
   public func translate(text: String, from: String?, to: String?) async -> String {
     guard #available(macOS 26.0, *) else {
