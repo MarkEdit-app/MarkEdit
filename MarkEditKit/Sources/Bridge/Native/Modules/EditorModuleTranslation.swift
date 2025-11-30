@@ -14,7 +14,7 @@ public final class EditorModuleTranslation: NativeModuleTranslation {
 
   public func translate(text: String, from: String?, to: String?) async -> String {
     guard #available(macOS 26.0, *) else {
-      return TranslationResponse(error: "Session Unavailable").jsonEncoded
+      return TranslationResponse(error: "Unsupported OS Version").jsonEncoded
     }
 
     do {
