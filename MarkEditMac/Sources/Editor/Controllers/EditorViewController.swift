@@ -141,6 +141,7 @@ final class EditorViewController: NSViewController {
       EditorModuleTokenizer(),
       EditorModuleAPI(delegate: self),
       EditorModuleFoundationModels(delegate: self),
+      EditorModuleTranslation(),
     ])
 
     let handler = EditorMessageHandler(modules: modules)

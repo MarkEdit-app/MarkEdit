@@ -23,6 +23,7 @@ import { NativeModulePreview } from './src/bridge/native/preview';
 import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 import { NativeModuleAPI } from './src/bridge/native/api';
 import { NativeModuleFoundationModels } from './src/bridge/native/foundationModels';
+import { NativeModuleTranslation } from './src/bridge/native/translation';
 
 import { resetEditor } from './src/core';
 import { initThemeExtractors, initMarkEditModules } from './src/api/modules';
@@ -81,6 +82,7 @@ window.nativeModules = {
   tokenizer: createNativeModule<NativeModuleTokenizer>('tokenizer'),
   api: createNativeModule<NativeModuleAPI>('api'),
   foundationModels: createNativeModule<NativeModuleFoundationModels>('foundationModels'),
+  translation: createNativeModule<NativeModuleTranslation>('translation'),
 };
 
 window.onload = () => {
