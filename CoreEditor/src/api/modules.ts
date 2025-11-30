@@ -14,6 +14,7 @@ import * as lezerLr from '@lezer/lr';
 import * as customHistory from '../@vendor/commands/history';
 
 import { TextEditor } from './editor';
+import { Translator } from './translation';
 import { languageModel } from './languageModel';
 
 import { onEditorReady, addExtension, addMarkdownConfig, addCodeLanguage } from './methods';
@@ -43,6 +44,7 @@ export function initMarkEditModules() {
   };
 
   MarkEdit.editorAPI = new TextEditor();
+  MarkEdit.translationService = new Translator();
   MarkEdit.languageModel = languageModel;
   MarkEdit.codemirror = codemirror;
   MarkEdit.lezer = lezer;
