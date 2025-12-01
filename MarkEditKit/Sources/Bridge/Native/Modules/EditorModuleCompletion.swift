@@ -19,7 +19,7 @@ public protocol EditorModuleCompletionDelegate: AnyObject {
   )
 
   func editorCompletionTokenizeWholeDocument(_ sender: EditorModuleCompletion) -> Bool
-  func editorCompletionDidCommit(_ sender: EditorModuleCompletion)
+  func editorCompletionDidCommit(_ sender: EditorModuleCompletion, insert: String?)
   func editorCompletionDidCancel(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectPrevious(_ sender: EditorModuleCompletion)
   func editorCompletionDidSelectNext(_ sender: EditorModuleCompletion)
@@ -69,8 +69,8 @@ public final class EditorModuleCompletion: NativeModuleCompletion {
     )
   }
 
-  public func commitCompletion() {
-    delegate?.editorCompletionDidCommit(self)
+  public func commitCompletion(insert: String?) {
+    delegate?.editorCompletionDidCommit(self, insert: insert)
   }
 
   public func cancelCompletion() {

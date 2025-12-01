@@ -8,7 +8,7 @@ import { TextTokenizeAnchor } from '../../modules/tokenizer/types';
  */
 export interface NativeModuleCompletion extends NativeModule {
   requestCompletions({ anchor, fullText }: { anchor: TextTokenizeAnchor; fullText?: string }): void;
-  commitCompletion(): void;
+  commitCompletion({ insert }: { insert?: string }): void;
   cancelCompletion(): void;
   selectPrevious(): void;
   selectNext(): void;

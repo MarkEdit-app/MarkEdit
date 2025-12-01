@@ -252,8 +252,8 @@ extension EditorViewController: EditorModuleCompletionDelegate {
     AppPreferences.Assistant.wordsInDocument
   }
 
-  func editorCompletionDidCommit(_ sender: EditorModuleCompletion) {
-    commitCompletion()
+  func editorCompletionDidCommit(_ sender: EditorModuleCompletion, insert: String?) {
+    commitCompletion(insert: insert ?? "")
   }
 
   func editorCompletionDidCancel(_ sender: EditorModuleCompletion) {
