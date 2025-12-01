@@ -13,7 +13,7 @@ import MarkEditCore
 @MainActor
 public protocol NativeModuleCompletion: NativeModule {
   func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?)
-  func commitCompletion()
+  func commitCompletion(insert: String?)
   func cancelCompletion()
   func selectPrevious()
   func selectNext()
@@ -78,7 +78,19 @@ final class NativeBridgeCompletion: NativeBridge {
   }
 
   private func commitCompletion(parameters: Data) async -> Result<Any?, Error>? {
-    module.commitCompletion()
+    struct Message: Decodable {
+      var insert: String?
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.commitCompletion(insert: message.insert)
     return .success(nil)
   }
 

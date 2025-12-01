@@ -158,8 +158,9 @@ function observeEventsForCompletion() {
       return skipDefaultBehavior();
     }
 
-    if (event.key === 'Enter' || event.key === 'Tab') {
-      window.nativeModules.completion.commitCompletion();
+    if (['Enter', 'Tab', ',', '.'].includes(event.key)) {
+      const insert = event.key.length > 1 ? undefined : `${event.key} `;
+      window.nativeModules.completion.commitCompletion({ insert });
       return skipDefaultBehavior();
     }
 

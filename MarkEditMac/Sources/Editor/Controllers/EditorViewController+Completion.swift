@@ -78,9 +78,9 @@ extension EditorViewController {
     }
   }
 
-  func commitCompletion() {
+  func commitCompletion(insert: String = "") {
     bridge.core.insertText(
-      text: completionContext.selectedText,
+      text: completionContext.selectedText + insert,
       from: completionContext.fromIndex,
       to: completionContext.toIndex
     )
