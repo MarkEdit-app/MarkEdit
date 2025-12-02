@@ -22,13 +22,20 @@ final class AppDocumentController: NSDocumentController {
       setOpenPanelDirectory(defaultDirectory)
     }
 
-    openPanel.accessoryView = EditorSaveOptionsView.wrapper(for: .textEncoding) { result in
-      if case .textEncoding(let value) = result {
+    openPanel.accessoryView = EditorSaveOptionsView.wrapper(for: .openPanel) { [weak openPanel] result in
+      switch result {
+      case .textEncoding(let value):
         Self.suggestedTextEncoding = value
+      case .showHiddenFiles(let value):
+        openPanel?.showsHiddenFiles = value
+      default:
+        Logger.assertFail("Invalid change: \(result)")
       }
     }
 
     Self.suggestedTextEncoding = nil
+    openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
+
     return await super.beginOpenPanel(openPanel, forTypes: inTypes)
   }
 

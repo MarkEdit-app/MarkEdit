@@ -281,12 +281,14 @@ extension EditorDocument {
     }
 
     if textBundle == nil {
-      savePanel.accessoryView = EditorSaveOptionsView.wrapper(for: .all) { [weak self, weak savePanel] result in
+      savePanel.accessoryView = EditorSaveOptionsView.wrapper(for: .savePanel) { [weak self, weak savePanel] result in
         switch result {
         case .fileExtension(let value):
           savePanel?.enforceUniformType(value.uniformType)
         case .textEncoding(let value):
           self?.suggestedTextEncoding = value
+        default:
+          Logger.assertFail("Invalid change: \(result)")
         }
       }
     } else {
