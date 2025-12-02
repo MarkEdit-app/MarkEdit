@@ -2572,6 +2572,23 @@
         }
       }
     },
+    "Show Hidden Files" : {
+      "comment" : "Label for save panel accessory view",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示隐藏文件"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示隱藏檔案"
+          }
+        }
+      }
+    },
     "Show:" : {
       "comment" : "Label for display options",
       "localizations" : {

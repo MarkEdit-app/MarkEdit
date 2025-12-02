@@ -28,6 +28,9 @@ enum AppPreferences {
     @Storage(key: "general.default-text-encoding", defaultValue: .utf8)
     static var defaultTextEncoding: EditorTextEncoding
 
+    @Storage(key: "general.show-hidden-files", defaultValue: false)
+    static var showHiddenFiles: Bool
+
     @Storage(key: "general.default-line-endings", defaultValue: .lf)
     static var defaultLineEndings: LineEndings {
       didSet {

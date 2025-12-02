@@ -18,16 +18,20 @@ struct EditorSaveOptionsView: View {
     let rawValue: Int
     static let fileExtension = Self(rawValue: 1 << 0)
     static let textEncoding = Self(rawValue: 1 << 1)
-    static let all: Self = [.fileExtension, .textEncoding]
+    static let showHiddenFiles = Self(rawValue: 1 << 2)
+    static let savePanel: Self = [.fileExtension, .textEncoding]
+    static let openPanel: Self = [.textEncoding, .showHiddenFiles]
   }
 
   enum Result {
     case fileExtension(value: NewFilenameExtension)
     case textEncoding(value: EditorTextEncoding)
+    case showHiddenFiles(value: Bool)
   }
 
   @State private var filenameExtension = AppPreferences.General.newFilenameExtension
   @State private var textEncoding = AppPreferences.General.defaultTextEncoding
+  @State private var showHiddenFiles = AppPreferences.General.showHiddenFiles
 
   private let options: Options
   private let onValueChange: ((Result) -> Void)
@@ -65,6 +69,16 @@ struct EditorSaveOptionsView: View {
             onValueChange(.textEncoding(value: textEncoding))
           }
           .formMenuPicker(minWidth: 120)
+        }
+
+        if options.contains(.showHiddenFiles) {
+          Toggle(isOn: $showHiddenFiles) {
+            Text(Localized.Document.showHiddenFiles)
+          }
+          .onChange(of: showHiddenFiles) {
+            AppPreferences.General.showHiddenFiles = showHiddenFiles
+            onValueChange(.showHiddenFiles(value: showHiddenFiles))
+          }
         }
       }
     }
