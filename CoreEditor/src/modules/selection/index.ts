@@ -120,7 +120,7 @@ export function scrollCaretToVisible(strategy: ScrollStrategy = 'end') {
   const editor = window.editor;
   const pos = editor.state.selection.main.to;
   const coords = editor.coordsAtPos(pos);
-  const margin = 45;
+  const margin = 55;
 
   if (coords === null) {
     return scrollIntoView(pos);
