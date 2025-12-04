@@ -56,6 +56,12 @@ extension EditorViewController {
         return nil
       }
 
+      // Press Fn-Control-F to fill the window, see #1167
+      if event.keyCode == .kVK_ANSI_F, event.deviceIndependentFlags == [.function, .control] {
+        NSApp.sendAction(sel_getUid("_zoomFill:"), to: nil, from: nil)
+        return nil
+      }
+
       // Press F to potentially change the find mode or switch focus between two fields
       if event.keyCode == .kVK_ANSI_F, let self, self.updateTextFinderModeIfNeeded(event) {
         return nil
