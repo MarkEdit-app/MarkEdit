@@ -1,12 +1,24 @@
-import { EditorView } from '@codemirror/view';
-import { EditorSelection, EditorState } from '@codemirror/state';
+import { EditorView, keymap } from '@codemirror/view';
+import { EditorSelection, EditorState, Prec } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
-import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult, insertCompletionText, pickedCompletion, Completion } from '@codemirror/autocomplete';
+import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult, insertCompletionText, pickedCompletion, Completion, autocompletion, completionKeymap } from '@codemirror/autocomplete';
 import { editingState } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 import { getFootnoteLabels, getReferenceLinkLabels } from '../link';
 import { getLinkAnchor, getTableOfContents } from '../toc';
 import { getFileInfo, listFiles } from '../../api/files';
+
+export const autocompleteExtensions = [
+  autocompletion({
+    icons: false,
+    defaultKeymap: false, // See the filtered completionKeymap below
+    activateOnTypingDelay: 200,
+    compareCompletions: () => 0, // Don't sort options
+  }),
+
+  // In some keyboards this is used to insert the backtick, see #1171
+  Prec.highest(keymap.of(completionKeymap.filter(keymap => keymap.mac !== 'Alt-`'))),
+];
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
 export const standardLinkCompletion = {
