@@ -13,7 +13,7 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
-import { autocompletion, closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { markdown, markdownLanguage } from './@vendor/lang-markdown';
 import { languages } from './@vendor/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
@@ -31,7 +31,7 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { customizedCommandsKeymap } from './modules/commands';
-import { standardLinkCompletion, referenceLinkCompletion } from './modules/completion';
+import { autocompleteExtensions, standardLinkCompletion, referenceLinkCompletion } from './modules/completion';
 import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
 
@@ -144,11 +144,7 @@ export function extensions(options: { lineBreak?: string }) {
     markdownLanguage.data.of(referenceLinkCompletion),
 
     // Enable autocomplete from language data
-    autocompletion({
-      icons: false,
-      activateOnTypingDelay: 200,
-      compareCompletions: () => 0, // Don't sort options
-    }),
+    autocompleteExtensions,
 
     // Styling
     classHighlighters,
