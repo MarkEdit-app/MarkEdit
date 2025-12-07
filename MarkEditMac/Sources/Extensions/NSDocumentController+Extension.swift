@@ -27,7 +27,7 @@ extension NSDocumentController {
    Force the override of the last root directory for NSOpenPanel and NSSavePanel.
    */
   func setOpenPanelDirectory(_ directory: String) {
-    UserDefaults.standard.setValue(directory, forKey: NSNavLastRootDirectory)
+    UserDefaults.standard.set(directory, forKey: NSNavLastRootDirectory)
   }
 }
 
