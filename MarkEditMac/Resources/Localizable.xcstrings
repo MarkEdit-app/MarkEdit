@@ -926,6 +926,23 @@
         }
       }
     },
+    "File Extension:" : {
+      "comment" : "Label for save panel accessory view (shorter than 'Filename Extension' to avoid save panel layout issues)",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件扩展名："
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檔案副檔名："
+          }
+        }
+      }
+    },
     "File Name" : {
       "localizations" : {
         "zh-Hans" : {
@@ -955,23 +972,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "檔案大小"
-          }
-        }
-      }
-    },
-    "Filename Extension:" : {
-      "comment" : "Label for save panel accessory view",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文件扩展名："
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "檔案副檔名："
           }
         }
       }

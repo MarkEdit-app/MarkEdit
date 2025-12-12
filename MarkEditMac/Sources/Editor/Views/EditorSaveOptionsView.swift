@@ -44,7 +44,7 @@ struct EditorSaveOptionsView: View {
     SettingsForm(padding: 8) {
       Section {
         if options.contains(.fileExtension) {
-          Picker(Localized.Document.filenameExtension, selection: $filenameExtension) {
+          Picker(Localized.Document.fileExtension, selection: $filenameExtension) {
             ForEach(NewFilenameExtension.allCases, id: \.self) {
               Text($0.rawValue).tag($0)
             }
