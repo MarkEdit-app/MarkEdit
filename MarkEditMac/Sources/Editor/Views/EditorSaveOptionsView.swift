@@ -13,7 +13,7 @@ import MarkEditKit
 /**
  Observable object to synchronize showHiddenFiles state with external changes.
  */
-final class ShowHiddenFilesObserver: ObservableObject {
+final class ShowHiddenFilesObserver: ObservableObject, @unchecked Sendable {
   @Published var value: Bool
   
   init(initialValue: Bool) {
