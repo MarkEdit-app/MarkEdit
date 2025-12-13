@@ -12,6 +12,11 @@ import MarkEditKit
 
 /**
  Observable object to synchronize showHiddenFiles state with external changes.
+ 
+ Conforms to @unchecked Sendable because:
+ - All mutations happen on the main thread (KVO callbacks dispatch to main queue)
+ - SwiftUI bindings only access the value on the main thread
+ - The observer is created and used within a single async context
  */
 final class ShowHiddenFilesObserver: ObservableObject, @unchecked Sendable {
   @Published var value: Bool
