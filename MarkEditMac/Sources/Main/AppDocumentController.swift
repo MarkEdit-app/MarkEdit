@@ -39,8 +39,8 @@ final class AppDocumentController: NSDocumentController {
       case .textEncoding(let value):
         Self.suggestedTextEncoding = value
       case .showHiddenFiles(let value):
+        // Only update the panel; preference update is handled by KVO observer
         openPanel?.showsHiddenFiles = value
-        AppPreferences.General.showHiddenFiles = value
       default:
         Logger.assertFail("Invalid change: \(result)")
       }
