@@ -23,6 +23,8 @@ private final class PanelObserver: ObservableObject {
     if let panel = panel {
       observation = panel.observe(\.showsHiddenFiles, options: [.new]) { [weak self] _, change in
         guard let self = self, let newValue = change.newValue else { return }
+        // Only update if the value actually changed to avoid infinite loops
+        guard self.showsHiddenFiles != newValue else { return }
         DispatchQueue.main.async {
           self.showsHiddenFiles = newValue
           AppPreferences.General.showHiddenFiles = newValue
