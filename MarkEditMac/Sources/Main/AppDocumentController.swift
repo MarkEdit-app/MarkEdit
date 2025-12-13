@@ -50,7 +50,11 @@ final class AppDocumentController: NSDocumentController {
     openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
 
     let result = await super.beginOpenPanel(openPanel, forTypes: inTypes)
-    _ = observation // Keep observation alive until panel is dismissed
+    
+    // Keep the observation alive until this point (after panel is dismissed)
+    // The observation is automatically cleaned up when it goes out of scope
+    withExtendedLifetime(observation) {}
+    
     return result
   }
 

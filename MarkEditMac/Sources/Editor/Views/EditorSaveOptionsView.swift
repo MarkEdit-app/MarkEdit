@@ -50,6 +50,8 @@ struct EditorSaveOptionsView: View {
   init(options: Options, showHiddenFilesObserver: ShowHiddenFilesObserver? = nil, onValueChange: @escaping ((Result) -> Void)) {
     self.options = options
     self.onValueChange = onValueChange
+    // For save panels (.savePanel options), no observer is needed since showHiddenFiles is not included
+    // For open panels (.openPanel options), an observer should be provided for KVO synchronization
     self.showHiddenFilesObserver = showHiddenFilesObserver ?? ShowHiddenFilesObserver(initialValue: AppPreferences.General.showHiddenFiles)
   }
 
