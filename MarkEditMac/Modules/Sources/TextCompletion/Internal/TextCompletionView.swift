@@ -8,7 +8,7 @@ import AppKit
 import SwiftUI
 
 struct TextCompletionView: View {
-  @ObservedObject private var state: TextCompletionState
+  private var state: TextCompletionState
   private let modernStyle: Bool
   private let localizable: TextCompletionLocalizable
   private let commitCompletion: () -> Void
