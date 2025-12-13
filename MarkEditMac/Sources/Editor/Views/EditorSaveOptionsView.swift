@@ -11,22 +11,6 @@ import SettingsUI
 import MarkEditKit
 
 /**
- Observable object to synchronize showHiddenFiles state with external changes.
- 
- Conforms to @unchecked Sendable because:
- - All mutations happen on the main thread (KVO callbacks dispatch to main queue)
- - SwiftUI bindings only access the value on the main thread
- - The observer is created and used within a single async context
- */
-final class ShowHiddenFilesObserver: ObservableObject, @unchecked Sendable {
-  @Published var value: Bool
-  
-  init(initialValue: Bool) {
-    self.value = initialValue
-  }
-}
-
-/**
  Accessory view used in NSSavePanel to provide additional options.
  */
 struct EditorSaveOptionsView: View {
@@ -47,21 +31,13 @@ struct EditorSaveOptionsView: View {
 
   @State private var filenameExtension = AppPreferences.General.newFilenameExtension
   @State private var textEncoding = AppPreferences.General.defaultTextEncoding
-  @ObservedObject private var showHiddenFilesObserver: ShowHiddenFilesObserver
+  @State private var showHiddenFiles = AppPreferences.General.showHiddenFiles
 
   private let options: Options
   private let onValueChange: ((Result) -> Void)
-  
-  init(options: Options, showHiddenFilesObserver: ShowHiddenFilesObserver? = nil, onValueChange: @escaping ((Result) -> Void)) {
-    self.options = options
-    self.onValueChange = onValueChange
-    // For save panels (.savePanel options), no observer is needed since showHiddenFiles is not included
-    // For open panels (.openPanel options), an observer should be provided for KVO synchronization
-    self.showHiddenFilesObserver = showHiddenFilesObserver ?? ShowHiddenFilesObserver(initialValue: AppPreferences.General.showHiddenFiles)
-  }
 
-  static func wrapper(for options: Options, showHiddenFilesObserver: ShowHiddenFilesObserver? = nil, onValueChange: @escaping ((Result) -> Void)) -> NSView {
-    NSHostingView(rootView: Self(options: options, showHiddenFilesObserver: showHiddenFilesObserver, onValueChange: onValueChange))
+  static func wrapper(for options: Options, onValueChange: @escaping ((Result) -> Void)) -> NSView {
+    NSHostingView(rootView: Self(options: options, onValueChange: onValueChange))
   }
 
   var body: some View {
@@ -96,11 +72,12 @@ struct EditorSaveOptionsView: View {
         }
 
         if options.contains(.showHiddenFiles) {
-          Toggle(isOn: $showHiddenFilesObserver.value) {
+          Toggle(isOn: $showHiddenFiles) {
             Text(Localized.Document.showHiddenFiles)
           }
-          .onChange(of: showHiddenFilesObserver.value) {
-            onValueChange(.showHiddenFiles(value: showHiddenFilesObserver.value))
+          .onChange(of: showHiddenFiles) {
+            AppPreferences.General.showHiddenFiles = showHiddenFiles
+            onValueChange(.showHiddenFiles(value: showHiddenFiles))
           }
         }
       }
