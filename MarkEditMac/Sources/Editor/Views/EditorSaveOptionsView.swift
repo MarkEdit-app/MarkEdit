@@ -21,9 +21,11 @@ private final class PanelObserver: ObservableObject {
   private var observation: NSKeyValueObservation?
   
   init(panel: NSSavePanel?) {
+    // Initialize with the panel's current value or fall back to preferences
     self.showsHiddenFiles = panel?.showsHiddenFiles ?? AppPreferences.General.showHiddenFiles
     
     if let panel = panel {
+      // Observe future changes; .initial option is not needed since we already captured the initial value above
       observation = panel.observe(\.showsHiddenFiles, options: [.new]) { [weak self] _, change in
         guard let self = self, let newValue = change.newValue else { return }
         // Only update if the value actually changed to avoid infinite loops
