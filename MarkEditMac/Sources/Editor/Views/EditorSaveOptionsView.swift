@@ -12,6 +12,9 @@ import MarkEditKit
 
 /**
  Observable object to manage KVO observation of NSSavePanel.showsHiddenFiles.
+ 
+ The NSKeyValueObservation is automatically cleaned up when this object is deallocated,
+ which happens when the SwiftUI view containing the @StateObject is dismissed.
  */
 private final class PanelObserver: ObservableObject {
   @Published var showsHiddenFiles: Bool
@@ -25,9 +28,15 @@ private final class PanelObserver: ObservableObject {
         guard let self = self, let newValue = change.newValue else { return }
         // Only update if the value actually changed to avoid infinite loops
         guard self.showsHiddenFiles != newValue else { return }
-        DispatchQueue.main.async {
+        
+        if Thread.isMainThread {
           self.showsHiddenFiles = newValue
           AppPreferences.General.showHiddenFiles = newValue
+        } else {
+          DispatchQueue.main.async {
+            self.showsHiddenFiles = newValue
+            AppPreferences.General.showHiddenFiles = newValue
+          }
         }
       }
     }
