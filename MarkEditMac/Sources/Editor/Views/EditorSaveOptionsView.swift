@@ -11,37 +11,13 @@ import SettingsUI
 import MarkEditKit
 
 /**
- Observable object to manage KVO observation of NSSavePanel.showsHiddenFiles.
- 
- The NSKeyValueObservation is automatically cleaned up when this object is deallocated,
- which happens when the SwiftUI view containing the @StateObject is dismissed.
+ Observable object to synchronize showHiddenFiles state with external changes.
  */
-private final class PanelObserver: ObservableObject {
-  @Published var showsHiddenFiles: Bool
-  private var observation: NSKeyValueObservation?
+final class ShowHiddenFilesObserver: ObservableObject {
+  @Published var value: Bool
   
-  init(panel: NSSavePanel?) {
-    // Initialize with the panel's current value or fall back to preferences
-    self.showsHiddenFiles = panel?.showsHiddenFiles ?? AppPreferences.General.showHiddenFiles
-    
-    if let panel = panel {
-      // Observe future changes; .initial option is not needed since we already captured the initial value above
-      observation = panel.observe(\.showsHiddenFiles, options: [.new]) { [weak self] _, change in
-        guard let self = self, let newValue = change.newValue else { return }
-        // Only update if the value actually changed to avoid infinite loops
-        guard self.showsHiddenFiles != newValue else { return }
-        
-        if Thread.isMainThread {
-          self.showsHiddenFiles = newValue
-          AppPreferences.General.showHiddenFiles = newValue
-        } else {
-          DispatchQueue.main.async {
-            self.showsHiddenFiles = newValue
-            AppPreferences.General.showHiddenFiles = newValue
-          }
-        }
-      }
-    }
+  init(initialValue: Bool) {
+    self.value = initialValue
   }
 }
 
@@ -66,19 +42,19 @@ struct EditorSaveOptionsView: View {
 
   @State private var filenameExtension = AppPreferences.General.newFilenameExtension
   @State private var textEncoding = AppPreferences.General.defaultTextEncoding
-  @StateObject private var panelObserver: PanelObserver
+  @ObservedObject private var showHiddenFilesObserver: ShowHiddenFilesObserver
 
   private let options: Options
   private let onValueChange: ((Result) -> Void)
-
-  init(options: Options, panel: NSSavePanel? = nil, onValueChange: @escaping ((Result) -> Void)) {
+  
+  init(options: Options, showHiddenFilesObserver: ShowHiddenFilesObserver? = nil, onValueChange: @escaping ((Result) -> Void)) {
     self.options = options
     self.onValueChange = onValueChange
-    _panelObserver = StateObject(wrappedValue: PanelObserver(panel: panel))
+    self.showHiddenFilesObserver = showHiddenFilesObserver ?? ShowHiddenFilesObserver(initialValue: AppPreferences.General.showHiddenFiles)
   }
 
-  static func wrapper(for options: Options, panel: NSSavePanel? = nil, onValueChange: @escaping ((Result) -> Void)) -> NSView {
-    NSHostingView(rootView: Self(options: options, panel: panel, onValueChange: onValueChange))
+  static func wrapper(for options: Options, showHiddenFilesObserver: ShowHiddenFilesObserver? = nil, onValueChange: @escaping ((Result) -> Void)) -> NSView {
+    NSHostingView(rootView: Self(options: options, showHiddenFilesObserver: showHiddenFilesObserver, onValueChange: onValueChange))
   }
 
   var body: some View {
@@ -113,12 +89,11 @@ struct EditorSaveOptionsView: View {
         }
 
         if options.contains(.showHiddenFiles) {
-          Toggle(isOn: $panelObserver.showsHiddenFiles) {
+          Toggle(isOn: $showHiddenFilesObserver.value) {
             Text(Localized.Document.showHiddenFiles)
           }
-          .onChange(of: panelObserver.showsHiddenFiles) {
-            AppPreferences.General.showHiddenFiles = panelObserver.showsHiddenFiles
-            onValueChange(.showHiddenFiles(value: panelObserver.showsHiddenFiles))
+          .onChange(of: showHiddenFilesObserver.value) {
+            onValueChange(.showHiddenFiles(value: showHiddenFilesObserver.value))
           }
         }
       }

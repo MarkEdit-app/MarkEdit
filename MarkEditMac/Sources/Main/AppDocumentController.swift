@@ -22,12 +22,25 @@ final class AppDocumentController: NSDocumentController {
       setOpenPanelDirectory(defaultDirectory)
     }
 
-    openPanel.accessoryView = EditorSaveOptionsView.wrapper(for: .openPanel, panel: openPanel) { [weak openPanel] result in
+    // Create an observer to sync showHiddenFiles between the panel and the view
+    let showHiddenFilesObserver = ShowHiddenFilesObserver(initialValue: AppPreferences.General.showHiddenFiles)
+    
+    // Set up KVO to observe changes from keyboard shortcut (Cmd+Shift+.)
+    let observation = openPanel.observe(\.showsHiddenFiles, options: [.new]) { [weak showHiddenFilesObserver] _, change in
+      guard let newValue = change.newValue else { return }
+      DispatchQueue.main.async {
+        showHiddenFilesObserver?.value = newValue
+        AppPreferences.General.showHiddenFiles = newValue
+      }
+    }
+    
+    openPanel.accessoryView = EditorSaveOptionsView.wrapper(for: .openPanel, showHiddenFilesObserver: showHiddenFilesObserver) { [weak openPanel] result in
       switch result {
       case .textEncoding(let value):
         Self.suggestedTextEncoding = value
       case .showHiddenFiles(let value):
         openPanel?.showsHiddenFiles = value
+        AppPreferences.General.showHiddenFiles = value
       default:
         Logger.assertFail("Invalid change: \(result)")
       }
@@ -36,7 +49,9 @@ final class AppDocumentController: NSDocumentController {
     Self.suggestedTextEncoding = nil
     openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
 
-    return await super.beginOpenPanel(openPanel, forTypes: inTypes)
+    let result = await super.beginOpenPanel(openPanel, forTypes: inTypes)
+    _ = observation // Keep observation alive until panel is dismissed
+    return result
   }
 
   override func saveAllDocuments(_ sender: Any?) {
