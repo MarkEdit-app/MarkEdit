@@ -73,7 +73,7 @@ final class EditorStatusView: NSView, BackgroundTheming {
     label.stringValue = title
     label.sizeToFit()
 
-    self.frame = label.bounds.insetBy(dx: -4, dy: AppDesign.modernStyle ? -4 : -2)
+    self.frame = label.bounds.insetBy(dx: -4, dy: AppDesign.modernStyle ? -3 : -2)
     self.needsLayout = true
   }
 }
