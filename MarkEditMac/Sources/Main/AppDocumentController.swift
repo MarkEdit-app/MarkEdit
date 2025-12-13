@@ -22,7 +22,7 @@ final class AppDocumentController: NSDocumentController {
       setOpenPanelDirectory(defaultDirectory)
     }
 
-    openPanel.accessoryView = EditorSaveOptionsView.wrapper(for: .openPanel) { [weak openPanel] result in
+    openPanel.accessoryView = EditorSaveOptionsView.wrapper(for: .openPanel, panel: openPanel) { [weak openPanel] result in
       switch result {
       case .textEncoding(let value):
         Self.suggestedTextEncoding = value
