@@ -4,10 +4,11 @@
 //  Created by cyan on 3/4/23.
 //
 
-import Combine
+import Observation
 
-final class TextCompletionState: ObservableObject {
-  @Published var items = [String]()
-  @Published var query = ""
-  @Published var selectedIndex = 0
+@Observable
+final class TextCompletionState {
+  var items = [String]()
+  var query = ""
+  var selectedIndex = 0
 }
