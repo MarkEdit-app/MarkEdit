@@ -185,13 +185,36 @@ private extension AppUpdater {
       alert.addButton(withTitle: Localized.Updater.skipThisVersion)
     }
 
-    switch alert.runModal() {
-    case .alertFirstButtonReturn: // View Release Page
+    let showAlert = {
+      switch alert.runModal() {
+      case .alertFirstButtonReturn: // View Release Page
+        NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
+      case .alertThirdButtonReturn: // Skip This Version
+        AppPreferences.Updater.skippedVersions.insert(newVersion.name)
+      default:
+        break
+      }
+    }
+
+    guard !explicitly, let delegate = NSApp.appDelegate else {
+      return showAlert()
+    }
+
+    let mainUpdateItem = delegate.mainUpdateItem
+    mainUpdateItem?.title = String(format: Localized.Updater.newVersionOut, newVersion.name)
+    mainUpdateItem?.isHidden = false
+
+    delegate.presentUpdateItem?.addAction("app.markedit.present-update") {
       NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
-    case .alertThirdButtonReturn: // Skip This Version
+    }
+
+    delegate.postponeUpdateItem?.addAction("app.markedit.postpone-update") {
+      mainUpdateItem?.isHidden = true
+    }
+
+    delegate.ignoreUpdateItem?.addAction("app.markedit.ignore-update") {
+      mainUpdateItem?.isHidden = true
       AppPreferences.Updater.skippedVersions.insert(newVersion.name)
-    default:
-      break
     }
   }
 }

@@ -17,8 +17,12 @@ public protocol ClosureActionable: AnyObject {
 
 public extension ClosureActionable {
   func addAction(_ action: @escaping () -> Void) {
+    addAction(UUID().uuidString, action: action)
+  }
+
+  func addAction(_ key: String, action: @escaping () -> Void) {
     let target = Handler(action)
-    objc_setAssociatedObject(self, UUID().uuidString, target, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+    objc_setAssociatedObject(self, key, target, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
 
     self.target = target
     self.action = #selector(Handler.invoke)
