@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24412"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -998,6 +998,23 @@ Gw
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem hidden="YES" id="ETL-k6-svK">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" id="bfk-LV-yGQ">
+                                    <items>
+                                        <menuItem secondaryImage="arrow.up.right.square" catalog="system" id="CtF-Ha-tmF">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="lCr-84-fJd"/>
+                                        <menuItem secondaryImage="bell" catalog="system" id="r3b-uF-Yy9">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem secondaryImage="bell.slash" catalog="system" id="he5-WD-tCA">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>
@@ -1027,6 +1044,7 @@ Gw
                         <outlet property="formatMathItem" destination="wIF-eb-cez" id="iQQ-q9-gor"/>
                         <outlet property="formatNumberingItem" destination="vhv-qY-5Gc" id="rOt-cw-00U"/>
                         <outlet property="formatTodoItem" destination="DZc-Ee-Asp" id="O5Q-gx-Kg0"/>
+                        <outlet property="ignoreUpdateItem" destination="he5-WD-tCA" id="Zjr-Ee-iYb"/>
                         <outlet property="lineEndingsCRItem" destination="ANU-wC-fmd" id="mWb-3A-dYc"/>
                         <outlet property="lineEndingsCRLFItem" destination="mc2-DH-5Iy" id="w6F-ls-MGF"/>
                         <outlet property="lineEndingsLFItem" destination="qOk-v8-kKx" id="4t7-oc-c7R"/>
@@ -1034,6 +1052,7 @@ Gw
                         <outlet property="mainEditMenu" destination="W48-6f-4Dl" id="xUc-Fy-SjE"/>
                         <outlet property="mainExtensionsMenu" destination="nkD-z6-yjV" id="40H-WY-xHu"/>
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>
+                        <outlet property="mainUpdateItem" destination="ETL-k6-svK" id="rQZ-1x-GRC"/>
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="modernBoldItem" destination="WAq-55-Lug" id="3gN-ZT-qtj"/>
                         <outlet property="modernCheckForUpdatesItem" destination="s40-D9-CoM" id="A9g-EL-sCj"/>
@@ -1051,6 +1070,8 @@ Gw
                         <outlet property="modernStrikethroughItem" destination="z7z-Qk-jsC" id="6Iy-0V-Kct"/>
                         <outlet property="modernVersionHistoryItem" destination="0DE-Av-fBj" id="C93-WN-pAM"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
+                        <outlet property="postponeUpdateItem" destination="r3b-uF-Yy9" id="8kS-ni-Kae"/>
+                        <outlet property="presentUpdateItem" destination="CtF-Ha-tmF" id="2Nf-Yp-0T9"/>
                         <outlet property="reopenFileMenu" destination="sPG-vJ-QST" id="6e4-Zg-kFp"/>
                         <outlet property="textFormatMenu" destination="yy7-cF-JbT" id="FfG-yi-NE6"/>
                         <outlet property="windowFloatingItem" destination="0C5-FE-fvI" id="hM7-gl-t1f"/>
@@ -1096,4 +1117,9 @@ Gw
             <point key="canvasLocation" x="75" y="655"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrow.up.right.square" catalog="system" width="15" height="14"/>
+        <image name="bell" catalog="system" width="15" height="16"/>
+        <image name="bell.slash" catalog="system" width="15" height="17"/>
+    </resources>
 </document>

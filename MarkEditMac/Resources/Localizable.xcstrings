@@ -58,6 +58,23 @@
         }
       }
     },
+    "✨ %@ is out" : {
+      "comment" : "Title format for new version is out",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "✨ %@ 已发布"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "✨ %@ 已釋出"
+          }
+        }
+      }
+    },
     "1 tab" : {
       "comment" : "Use 1 tab as the indent unit",
       "localizations" : {

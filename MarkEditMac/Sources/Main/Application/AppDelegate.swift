@@ -47,6 +47,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var formatMathBlockItem: NSMenuItem?
   @IBOutlet weak var windowFloatingItem: NSMenuItem?
 
+  @IBOutlet weak var mainUpdateItem: NSMenuItem?
+  @IBOutlet weak var presentUpdateItem: NSMenuItem?
+  @IBOutlet weak var postponeUpdateItem: NSMenuItem?
+  @IBOutlet weak var ignoreUpdateItem: NSMenuItem?
+
   // Items used for AppDesign.menuIconEvolution
   @IBOutlet weak var modernCheckForUpdatesItem: NSMenuItem?
   @IBOutlet weak var modernSettingsItem: NSMenuItem?
@@ -106,6 +111,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+      self.presentUpdateItem?.title = Localized.Updater.viewReleasePage
+      self.postponeUpdateItem?.title = Localized.Updater.remindMeLater
+      self.ignoreUpdateItem?.title = Localized.Updater.skipThisVersion
+
       Task {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
