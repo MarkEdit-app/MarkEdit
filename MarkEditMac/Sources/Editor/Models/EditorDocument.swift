@@ -103,6 +103,15 @@ final class EditorDocument: NSDocument {
 
     NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)
+
+    #if DEBUG
+      if ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] == "YES" {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          windowController.window?.setFrameSize(CGSize(width: 720, height: 480))
+          windowController.window?.center()
+        }
+      }
+    #endif
   }
 
   func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.6) async {
