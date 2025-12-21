@@ -69,6 +69,9 @@ extension EditorViewController: NSMenuDelegate {
     DispatchQueue.main.async {
       self.presentedMenu = nil
     }
+
+    // Reflect state changes earlier
+    updateUserDefinedMenus(menu)
   }
 }
 
