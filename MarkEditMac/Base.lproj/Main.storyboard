@@ -21,24 +21,24 @@
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Check for Updates..." id="s40-D9-CoM">
+                                        <menuItem title="Check for Updates..." secondaryImage="arrow.trianglehead.2.clockwise.rotate.90.circle" catalog="system" id="s40-D9-CoM">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="checkForUpdates:" target="Voe-Tx-rLC" id="KoB-Gc-HGX"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                        <menuItem title="Preferences…" secondaryImage="gear" catalog="system" keyEquivalent="," id="BOF-NM-1cW">
                                             <connections>
                                                 <action selector="showPreferences:" target="Voe-Tx-rLC" id="NhX-ob-GbB"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
-                                        <menuItem title="Services" id="NMo-om-nkz">
+                                        <menuItem title="Services" secondaryImage="gearshape.2" catalog="system" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
                                         </menuItem>
-                                        <menuItem title="Developer" id="qjf-Yo-EMd">
+                                        <menuItem title="Developer" secondaryImage="curlybraces" catalog="system" id="qjf-Yo-EMd">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Developer" id="KrK-C3-Ckx">
                                                 <items>
@@ -107,13 +107,13 @@
                                                 <action selector="newDocument:" target="Ady-hI-5gd" id="4Si-XN-c54"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="New File from Clipboard" keyEquivalent="n" id="0NS-5A-glR">
+                                        <menuItem title="New File from Clipboard" secondaryImage="list.bullet.clipboard" catalog="system" keyEquivalent="n" id="0NS-5A-glR">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
                                                 <action selector="newFileFromClipboard:" target="Voe-Tx-rLC" id="pJC-h1-fZk"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="New Tab" keyEquivalent="t" id="dHZ-CH-KLC">
+                                        <menuItem title="New Tab" secondaryImage="macwindow.on.rectangle" catalog="system" keyEquivalent="t" id="dHZ-CH-KLC">
                                             <connections>
                                                 <action selector="createNewTab:" target="Ady-hI-5gd" id="ybh-8g-tSk"/>
                                             </connections>
@@ -147,7 +147,7 @@
                                                 <action selector="saveDocument:" target="Ady-hI-5gd" id="teZ-XB-qJY"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Save All" keyEquivalent="s" id="5W0-LW-fUP">
+                                        <menuItem title="Save All" secondaryImage="square.and.arrow.down.on.square" catalog="system" keyEquivalent="s" id="5W0-LW-fUP">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="saveAllDocuments:" target="Voe-Tx-rLC" id="6Ov-7Z-60H"/>
@@ -405,7 +405,7 @@ Gw
                                                 <action selector="complete:" target="Ady-hI-5gd" id="S4o-Kb-uyV"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Select All" keyEquivalent="a" id="Ruw-6m-B2m">
+                                        <menuItem title="Select All" secondaryImage="character.textbox" catalog="system" keyEquivalent="a" id="Ruw-6m-B2m">
                                             <connections>
                                                 <action selector="selectWholeDocument:" target="Ady-hI-5gd" id="VLu-xb-TLI"/>
                                             </connections>
@@ -549,7 +549,7 @@ Gw
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="uyl-h8-XO2"/>
-                                        <menuItem title="Find" id="4EN-yA-p0u">
+                                        <menuItem title="Find" secondaryImage="magnifyingglass" catalog="system" id="4EN-yA-p0u">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Find" id="1b7-l0-nxx">
                                                 <items>
@@ -786,17 +786,17 @@ Gw
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="sbg-ii-uU7"/>
-                                        <menuItem title="Bold" keyEquivalent="b" id="WAq-55-Lug">
+                                        <menuItem title="Bold" secondaryImage="bold" catalog="system" keyEquivalent="b" id="WAq-55-Lug">
                                             <connections>
                                                 <action selector="toggleBold:" target="Ady-hI-5gd" id="12B-Ug-mxm"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Italic" keyEquivalent="i" id="K67-Wt-aYF">
+                                        <menuItem title="Italic" secondaryImage="italic" catalog="system" keyEquivalent="i" id="K67-Wt-aYF">
                                             <connections>
                                                 <action selector="toggleItalic:" target="Ady-hI-5gd" id="LyV-Pc-Za4"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Strikethrough" keyEquivalent="s" id="z7z-Qk-jsC">
+                                        <menuItem title="Strikethrough" secondaryImage="strikethrough" catalog="system" keyEquivalent="s" id="z7z-Qk-jsC">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
                                                 <action selector="toggleStrikethrough:" target="Ady-hI-5gd" id="FKc-1t-Zzw"/>
@@ -955,7 +955,7 @@ Gw
                                                 <action selector="performZoom:" target="Ady-hI-5gd" id="DIl-cC-cCs"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Float on Top" id="0C5-FE-fvI">
+                                        <menuItem title="Float on Top" secondaryImage="pin" catalog="system" id="0C5-FE-fvI">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="toggleWindowFloating:" target="Ady-hI-5gd" id="hSb-TF-JQb"/>
@@ -983,13 +983,13 @@ Gw
                                                 <action selector="showHelp:" target="Voe-Tx-rLC" id="ba9-aC-ghc"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Issue Tracker" id="uKp-pC-7O6">
+                                        <menuItem title="Issue Tracker" secondaryImage="smallcircle.filled.circle" catalog="system" id="uKp-pC-7O6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="openIssueTracker:" target="Voe-Tx-rLC" id="rd4-7Y-b3U"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Version History" id="0DE-Av-fBj">
+                                        <menuItem title="Version History" secondaryImage="clock.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" id="0DE-Av-fBj">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="openVersionHistory:" target="Voe-Tx-rLC" id="fsU-GM-N8j"/>
@@ -1054,21 +1054,6 @@ Gw
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>
                         <outlet property="mainUpdateItem" destination="ETL-k6-svK" id="rQZ-1x-GRC"/>
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
-                        <outlet property="modernBoldItem" destination="WAq-55-Lug" id="3gN-ZT-qtj"/>
-                        <outlet property="modernCheckForUpdatesItem" destination="s40-D9-CoM" id="A9g-EL-sCj"/>
-                        <outlet property="modernDeveloperItem" destination="qjf-Yo-EMd" id="WLT-yI-Ldu"/>
-                        <outlet property="modernFindItem" destination="4EN-yA-p0u" id="MuE-y8-qCU"/>
-                        <outlet property="modernFloatOnTopItem" destination="0C5-FE-fvI" id="vAg-X0-suB"/>
-                        <outlet property="modernIssueTrackerItem" destination="uKp-pC-7O6" id="sjd-Zo-dh4"/>
-                        <outlet property="modernItalicItem" destination="K67-Wt-aYF" id="HkB-fV-JOo"/>
-                        <outlet property="modernNewFileFromClipboardItem" destination="0NS-5A-glR" id="HCf-jy-2QD"/>
-                        <outlet property="modernNewTabItem" destination="dHZ-CH-KLC" id="94c-Sg-CGE"/>
-                        <outlet property="modernSaveAllItem" destination="5W0-LW-fUP" id="P9i-2B-Wi3"/>
-                        <outlet property="modernSelectAllItem" destination="Ruw-6m-B2m" id="uYE-TW-Xt6"/>
-                        <outlet property="modernServicesItem" destination="NMo-om-nkz" id="Q83-EJ-f4N"/>
-                        <outlet property="modernSettingsItem" destination="BOF-NM-1cW" id="zL7-2C-Hos"/>
-                        <outlet property="modernStrikethroughItem" destination="z7z-Qk-jsC" id="6Iy-0V-Kct"/>
-                        <outlet property="modernVersionHistoryItem" destination="0DE-Av-fBj" id="C93-WN-pAM"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
                         <outlet property="postponeUpdateItem" destination="r3b-uF-Yy9" id="8kS-ni-Kae"/>
                         <outlet property="presentUpdateItem" destination="CtF-Ha-tmF" id="2Nf-Yp-0T9"/>
@@ -1118,8 +1103,23 @@ Gw
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.trianglehead.2.clockwise.rotate.90.circle" catalog="system" width="15" height="15"/>
         <image name="arrow.up.right.square" catalog="system" width="15" height="14"/>
         <image name="bell" catalog="system" width="15" height="16"/>
         <image name="bell.slash" catalog="system" width="15" height="17"/>
+        <image name="bold" catalog="system" width="11" height="12"/>
+        <image name="character.textbox" catalog="system" width="19" height="14"/>
+        <image name="clock.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="16" height="15"/>
+        <image name="curlybraces" catalog="system" width="15" height="16"/>
+        <image name="gear" catalog="system" width="17" height="16"/>
+        <image name="gearshape.2" catalog="system" width="20" height="16"/>
+        <image name="italic" catalog="system" width="10" height="12"/>
+        <image name="list.bullet.clipboard" catalog="system" width="14" height="19"/>
+        <image name="macwindow.on.rectangle" catalog="system" width="19" height="15"/>
+        <image name="magnifyingglass" catalog="system" width="16" height="15"/>
+        <image name="pin" catalog="system" width="15" height="17"/>
+        <image name="smallcircle.filled.circle" catalog="system" width="15" height="15"/>
+        <image name="square.and.arrow.down.on.square" catalog="system" width="17" height="20"/>
+        <image name="strikethrough" catalog="system" width="14" height="12"/>
     </resources>
 </document>

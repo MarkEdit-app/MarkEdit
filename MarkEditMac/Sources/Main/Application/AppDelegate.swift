@@ -52,24 +52,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var postponeUpdateItem: NSMenuItem?
   @IBOutlet weak var ignoreUpdateItem: NSMenuItem?
 
-  // Items used for AppDesign.menuIconEvolution
-  @IBOutlet weak var modernCheckForUpdatesItem: NSMenuItem?
-  @IBOutlet weak var modernSettingsItem: NSMenuItem?
-  @IBOutlet weak var modernServicesItem: NSMenuItem?
-  @IBOutlet weak var modernDeveloperItem: NSMenuItem?
-  @IBOutlet weak var modernNewFileFromClipboardItem: NSMenuItem?
-  @IBOutlet weak var modernNewTabItem: NSMenuItem?
-  @IBOutlet weak var modernSaveAllItem: NSMenuItem?
-  @IBOutlet weak var modernSelectAllItem: NSMenuItem?
-  @IBOutlet weak var modernFindItem: NSMenuItem?
-  @IBOutlet weak var modernBoldItem: NSMenuItem?
-  @IBOutlet weak var modernItalicItem: NSMenuItem?
-  @IBOutlet weak var modernStrikethroughItem: NSMenuItem?
-  @IBOutlet weak var modernFloatOnTopItem: NSMenuItem?
-  @IBOutlet weak var modernIssueTrackerItem: NSMenuItem?
-  @IBOutlet weak var modernVersionHistoryItem: NSMenuItem?
-  // Items used for AppDesign.menuIconEvolution
-
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
 
@@ -79,10 +61,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       Task { @MainActor in
         AppTheme.current.updateAppearance()
       }
-    }
-
-    if AppDesign.menuIconEvolution {
-      normalizeMainMenuIcons()
     }
 
     NotificationCenter.default.addObserver(

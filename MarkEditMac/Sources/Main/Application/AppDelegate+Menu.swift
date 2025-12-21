@@ -9,29 +9,6 @@ import AppKit
 import MarkEditKit
 
 extension AppDelegate: NSMenuDelegate {
-  // [macOS 26] Revisit this after each beta release
-  func normalizeMainMenuIcons() {
-    let icon: (String) -> NSImage? = {
-      NSImage(systemSymbolName: $0, accessibilityDescription: nil)
-    }
-
-    modernCheckForUpdatesItem?.image = icon("arrow.trianglehead.2.clockwise.rotate.90.circle")
-    modernSettingsItem?.image = icon("gear")
-    modernServicesItem?.image = icon("gearshape.2")
-    modernDeveloperItem?.image = icon("curlybraces")
-    modernNewFileFromClipboardItem?.image = icon("list.bullet.clipboard")
-    modernNewTabItem?.image = icon("macwindow.on.rectangle")
-    modernSaveAllItem?.image = icon("square.and.arrow.down.on.square")
-    modernSelectAllItem?.image = icon("character.textbox")
-    modernFindItem?.image = icon("magnifyingglass")
-    modernBoldItem?.image = icon("bold")
-    modernItalicItem?.image = icon("italic")
-    modernStrikethroughItem?.image = icon("strikethrough")
-    modernFloatOnTopItem?.image = icon("pin")
-    modernIssueTrackerItem?.image = icon("smallcircle.filled.circle")
-    modernVersionHistoryItem?.image = icon("clock.arrow.trianglehead.counterclockwise.rotate.90")
-  }
-
   func menuNeedsUpdate(_ menu: NSMenu) {
     switch menu {
     case mainFileMenu:
