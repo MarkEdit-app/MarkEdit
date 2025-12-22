@@ -58,19 +58,19 @@
         }
       }
     },
-    "✨ %@ is out" : {
+    "🎉 %@ is out" : {
       "comment" : "Title format for new version is out",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "✨ %@ 已发布"
+            "value" : "🎉 %@ 已发布"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "✨ %@ 已釋出"
+            "value" : "🎉 %@ 已釋出"
           }
         }
       }
