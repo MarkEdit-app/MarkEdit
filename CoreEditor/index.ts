@@ -1,4 +1,4 @@
-import { Config, InvisiblesBehavior } from './src/config';
+import { Config, IndentBehavior, InvisiblesBehavior } from './src/config';
 import { isReleaseMode } from './src/common/utils';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
@@ -51,7 +51,8 @@ const config = import.meta.env.PROD ? window.config : {
   lineHeight: 1.5,
   suggestWhileTyping: false,
   autoCharacterPairs: true,
-  indentBehavior: 'paragraph',
+  indentBehavior: IndentBehavior.paragraph,
+  standardDirectories: {},
   localizable: {
     previewButtonTitle: 'Preview',
     cmdClickToFollow: '⌘-click to follow',

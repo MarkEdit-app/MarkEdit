@@ -1,4 +1,4 @@
-import { CreateFileOptions, FileInfo } from 'markedit-api';
+import { CreateFileOptions, DirectoryType, FileInfo } from 'markedit-api';
 
 export async function createFile(options: CreateFileOptions): Promise<boolean> {
   return window.nativeModules.api.createFile({ options });
@@ -41,4 +41,8 @@ export async function getFileInfo(path?: string): Promise<FileInfo | undefined> 
       };
     })());
   });
+}
+
+export function getDirectoryPath(type: DirectoryType): string {
+  return window.config.standardDirectories[type];
 }
