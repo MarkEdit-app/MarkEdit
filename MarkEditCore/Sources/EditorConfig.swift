@@ -23,6 +23,7 @@ public struct EditorConfig: Encodable {
   let lineWrapping: Bool
   let lineHeight: Double
   let suggestWhileTyping: Bool
+  let standardDirectories: [String: String]
   let defaultLineBreak: String?
   let tabKeyBehavior: Int?
   let indentUnit: String?
@@ -48,6 +49,7 @@ public struct EditorConfig: Encodable {
     lineWrapping: Bool,
     lineHeight: Double,
     suggestWhileTyping: Bool,
+    standardDirectories: [String: String],
     defaultLineBreak: String?,
     tabKeyBehavior: Int?,
     indentUnit: String?,
@@ -72,6 +74,7 @@ public struct EditorConfig: Encodable {
     self.lineWrapping = lineWrapping
     self.lineHeight = lineHeight
     self.suggestWhileTyping = suggestWhileTyping
+    self.standardDirectories = standardDirectories
     self.defaultLineBreak = defaultLineBreak
     self.tabKeyBehavior = tabKeyBehavior
     self.indentUnit = indentUnit

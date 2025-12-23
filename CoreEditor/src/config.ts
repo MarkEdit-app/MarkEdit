@@ -59,6 +59,7 @@ export interface Config {
   lineWrapping: boolean;
   lineHeight: number;
   suggestWhileTyping: boolean;
+  standardDirectories: { [key: string]: string };
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;

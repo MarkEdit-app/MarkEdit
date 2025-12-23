@@ -284,6 +284,7 @@ extension AppPreferences {
       lineWrapping: Editor.lineWrapping,
       lineHeight: Editor.lineHeight.multiplier,
       suggestWhileTyping: Assistant.suggestWhileTyping,
+      standardDirectories: URL.standardDirectories,
       defaultLineBreak: General.defaultLineEndings.characters,
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,
