@@ -1610,13 +1610,13 @@
       }
     },
     "GdB-IP-6C8.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Open In...\"; ObjectID = \"GdB-IP-6C8\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Open In…\"; ObjectID = \"GdB-IP-6C8\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Open In..."
+            "value" : "Open In…"
           }
         },
         "zh-Hans" : {
@@ -3327,13 +3327,13 @@
       }
     },
     "s40-D9-CoM.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Check for Updates...\"; ObjectID = \"s40-D9-CoM\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Check for Updates…\"; ObjectID = \"s40-D9-CoM\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Check for Updates..."
+            "value" : "Check for Updates…"
           }
         },
         "zh-Hans" : {
@@ -3519,13 +3519,13 @@
       }
     },
     "Tuy-2U-frg.title" : {
-      "comment" : "Class = \"NSMenu\"; title = \"Open In...\"; ObjectID = \"Tuy-2U-frg\";",
+      "comment" : "Class = \"NSMenu\"; title = \"Open In…\"; ObjectID = \"Tuy-2U-frg\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Open In..."
+            "value" : "Open In…"
           }
         },
         "zh-Hans" : {
@@ -4047,13 +4047,13 @@
       }
     },
     "wBj-kZ-XmW.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Go to Line...\"; ObjectID = \"wBj-kZ-XmW\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Go to Line…\"; ObjectID = \"wBj-kZ-XmW\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Go to Line..."
+            "value" : "Go to Line…"
           }
         },
         "zh-Hans" : {
@@ -4335,13 +4335,13 @@
       }
     },
     "yv7-Am-Rb2.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Learn More...\"; ObjectID = \"yv7-Am-Rb2\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Learn More…\"; ObjectID = \"yv7-Am-Rb2\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Learn More..."
+            "value" : "Learn More…"
           }
         },
         "zh-Hans" : {

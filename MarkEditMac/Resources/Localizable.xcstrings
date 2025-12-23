@@ -1193,7 +1193,7 @@
         }
       }
     },
-    "Get Custom Themes..." : {
+    "Get Custom Themes…" : {
       "comment" : "Get custom themes from the GitHub",
       "localizations" : {
         "zh-Hans" : {
@@ -2026,7 +2026,7 @@
         }
       }
     },
-    "Open Font Panel..." : {
+    "Open Font Panel…" : {
       "comment" : "Menu item for selecting custom fonts",
       "localizations" : {
         "zh-Hans" : {
@@ -2487,7 +2487,7 @@
         }
       }
     },
-    "Select..." : {
+    "Select…" : {
       "comment" : "Menu label for selecting fonts",
       "localizations" : {
         "zh-Hans" : {
