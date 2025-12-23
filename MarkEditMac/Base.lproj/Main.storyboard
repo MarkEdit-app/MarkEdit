@@ -21,7 +21,7 @@
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Check for Updates..." secondaryImage="arrow.trianglehead.2.clockwise.rotate.90.circle" catalog="system" id="s40-D9-CoM">
+                                        <menuItem title="Check for Updates…" secondaryImage="arrow.trianglehead.2.clockwise.rotate.90.circle" catalog="system" id="s40-D9-CoM">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="checkForUpdates:" target="Voe-Tx-rLC" id="KoB-Gc-HGX"/>
@@ -230,7 +230,7 @@
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="KaR-GR-i0Y"/>
-                                                    <menuItem title="Learn More..." id="yv7-Am-Rb2">
+                                                    <menuItem title="Learn More…" id="yv7-Am-Rb2">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="learnPandoc:" target="Ady-hI-5gd" id="z8q-nL-VUU"/>
@@ -246,9 +246,9 @@
                                                 <action selector="revealInFinder:" target="Ady-hI-5gd" id="bfk-c8-dF4"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Open In..." hidden="YES" id="GdB-IP-6C8">
+                                        <menuItem title="Open In…" hidden="YES" id="GdB-IP-6C8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Open In..." id="Tuy-2U-frg">
+                                            <menu key="submenu" title="Open In…" id="Tuy-2U-frg">
                                                 <connections>
                                                     <outlet property="delegate" destination="Voe-Tx-rLC" id="pvg-ql-wd5"/>
                                                 </connections>
@@ -411,7 +411,7 @@ Gw
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Ts4-WW-MvM"/>
-                                        <menuItem title="Go to Line..." keyEquivalent="l" id="wBj-kZ-XmW">
+                                        <menuItem title="Go to Line…" keyEquivalent="l" id="wBj-kZ-XmW">
                                             <connections>
                                                 <action selector="gotoLine:" target="Ady-hI-5gd" id="puP-5D-Fgc"/>
                                             </connections>
