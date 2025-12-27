@@ -10,7 +10,7 @@ import AppIntents
 
 struct CreateNewDocumentIntent: AppIntent {
   static let title: LocalizedStringResource = "Create New Document"
-  static let description = IntentDescription("Create a new document, with optional parameters to set the file name and the initial content.")
+  static let description = IntentDescription("Creates a new document, with optional parameters to set the file name and the initial content.")
   static let openAppWhenRun = true
   static var parameterSummary: some ParameterSummary {
     Summary("New Document named \(\.$fileName) with \(\.$initialContent)")

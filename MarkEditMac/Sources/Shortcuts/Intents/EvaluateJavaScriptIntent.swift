@@ -9,7 +9,7 @@ import AppIntents
 
 struct EvaluateJavaScriptIntent: AppIntent {
   static let title: LocalizedStringResource = "Evaluate JavaScript"
-  static let description = IntentDescription("Evaluate JavaScript and get the result on the active document, throws an error if no editor is opened.")
+  static let description = IntentDescription("Evaluates JavaScript and gets the result on the active document; throws an error if no editor is opened.")
   static var parameterSummary: some ParameterSummary {
     Summary("Evaluate JavaScript with \(\.$content)")
   }

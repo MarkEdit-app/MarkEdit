@@ -33,7 +33,7 @@ struct UpdateFileContentIntent: AppIntent {
   }
 
   static let title: LocalizedStringResource = "Update File Content"
-  static let description = IntentDescription("Update file content of the active document, throws an error if no editor is opened.")
+  static let description = IntentDescription("Updates file content of the active document; throws an error if no editor is opened.")
   static var parameterSummary: some ParameterSummary {
     Summary("Update file with \(\.$content)") {
       \.$granularity
