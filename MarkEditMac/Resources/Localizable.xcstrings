@@ -556,7 +556,7 @@
         }
       }
     },
-    "Create a new document, with optional parameters to set the file name and the initial content." : {
+    "Creates a new document, with optional parameters to set the file name and the initial content." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -893,7 +893,7 @@
         }
       }
     },
-    "Evaluate JavaScript and get the result on the active document, throws an error if no editor is opened." : {
+    "Evaluates JavaScript and gets the result on the active document; throws an error if no editor is opened." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1226,7 +1226,7 @@
         }
       }
     },
-    "Get file content of the active document, throws an error if no editor is opened." : {
+    "Gets file content of the active document; throws an error if no editor is opened." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -3098,7 +3098,7 @@
         }
       }
     },
-    "Update file content of the active document, throws an error if no editor is opened." : {
+    "Updates file content of the active document; throws an error if no editor is opened." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
