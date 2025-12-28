@@ -440,7 +440,7 @@ extension EditorViewController {
 
         menuItem.setEnabledRecursively(isEnabled: true)
         toolbarItem.menu = menuItem.submenu ?? NSMenu()
-      } else if let submenu = NSApp.mainMenu?.descendantNamed(title)?.submenu?.copiedMenu {
+      } else if let submenu = NSApp.mainMenu?.firstMenuNamed(title)?.submenu?.copiedMenu {
         toolbarItem.menu = submenu
       } else {
         Logger.log(.error, "Missing menu named: \(title)")

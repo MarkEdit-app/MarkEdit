@@ -56,7 +56,7 @@ extension NSToolbarItem {
 
     if let actionName = customItem.actionName {
       item.addAction {
-        if let menuItem = NSApp.mainMenu?.descendantNamed(actionName) {
+        if let menuItem = NSApp.mainMenu?.firstActionNamed(actionName) {
           menuItem.performAction()
         } else {
           Logger.log(.error, "Missing action named: \(actionName)")
