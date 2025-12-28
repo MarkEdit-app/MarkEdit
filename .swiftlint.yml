@@ -44,16 +44,16 @@ opt_in_rules:
   # Rationale: Provides consistency in coding style
   - compiler_protocol_init
 
-  # Rationale: A more clear and consise way to check if something exists
+  # Rationale: A more clear and concise way to check if something exists
   - contains_over_filter_count
 
-  # Rationale: A more clear and consise way to check if something exists
+  # Rationale: A more clear and concise way to check if something exists
   - contains_over_filter_is_empty
 
-  # Rationale: A more clear and consise way to check if something exists
+  # Rationale: A more clear and concise way to check if something exists
   - contains_over_first_not_nil
 
-  # Rationale: A more clear and consise way to check if a range exists
+  # Rationale: A more clear and concise way to check if a range exists
   - contains_over_range_nil_comparison
 
   # Rationale: Provides consistency in coding style and follows modern practices of the language
@@ -230,7 +230,7 @@ opt_in_rules:
   # Rationale: Provides consistency in coding style
   - statement_position
 
-  # Rationale: Provides cleaniness of code
+  # Rationale: Provides cleanliness of code
   - superfluous_disable_command
 
   # Rationale: Provides consistency in coding style
@@ -380,7 +380,7 @@ opt_in_rules:
   # Test classes must implement balanced setUp and tearDown methods
   - balanced_xctest_lifecycle
 
-  # Types used for hosting only static members should be implemeted as a caseless enum to avoid instantiation.
+  # Types used for hosting only static members should be implemented as a caseless enum to avoid instantiation.
   - convenience_type
 
   # Number of associated values in an enum should be low
@@ -404,7 +404,7 @@ opt_in_rules:
   # Trailing closure syntax should be used whenever possible.
   - trailing_closure
 
-  # Uncallable or unreachabable implimentations should be marked unavailable
+  # Uncallable or unreachable implementations should be marked unavailable
   - unavailable_function
 
   # Catch statements should not declare error variables without type casting.
