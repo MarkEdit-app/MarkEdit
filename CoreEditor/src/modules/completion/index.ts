@@ -30,7 +30,7 @@ export const standardLinkCompletion = {
 
     const nodeName = linkNodeName(context.state, context.pos);
     const insideLink = nodeName !== undefined;
-    const hasPartialLink = context.matchBefore(/\[.*\]\(.*/) !== null;
+    const hasPartialLink = context.matchBefore(/\[.*\]\([^)]*/) !== null;
     if (!insideLink && !hasPartialLink) {
       return null;
     }
