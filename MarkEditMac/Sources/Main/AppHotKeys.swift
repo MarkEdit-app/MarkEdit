@@ -64,30 +64,23 @@ enum AppHotKeys {
       &eventHotKey
     )
 
-    guard registerError == noErr else {
-      return Logger.log(.error, "Failed to register hotKey: \(keyCode), \(modifiers)")
+    if registerError != noErr {
+      Logger.log(.error, "Failed to register hotKey: \(keyCode), \(modifiers)")
     }
 
-    guard let dispatcher = GetEventDispatcherTarget() else {
-      return Logger.log(.error, "Failed to get GetEventDispatcherTarget()")
-    }
-
-    var eventHandler: EventHandlerRef?
-    let installError = InstallEventHandler(
-      dispatcher,
-      { _, event, _ in handleEvent(event) },
-      0,
-      nil,
-      nil,
-      &eventHandler
-    )
-
-    guard installError == noErr else {
-      return Logger.log(.error, "Failed to install event handler for hotKey")
-    }
-
+    installEventHandler()
     mappedHandlers[hotKeyID] = handler
     hotKeyID += 1
+  }
+}
+
+// MARK: - Private
+
+private extension AppHotKeys {
+  static func installEventHandler() {
+    guard eventHandler == nil, let target = GetEventDispatcherTarget() else {
+      return
+    }
 
     let eventTypes = [
       EventTypeSpec(
@@ -96,12 +89,22 @@ enum AppHotKeys {
       ),
     ]
 
-    AddEventTypesToHandler(eventHandler, 1, eventTypes)
+    let installError = InstallEventHandler(
+      target,
+      { _, event, _ in handleEvent(event) },
+      eventTypes.count,
+      eventTypes,
+      nil,
+      &eventHandler
+    )
+
+    if installError != noErr {
+      Logger.log(.error, "Failed to install event handler for hotKey")
+    }
   }
 }
 
-// MARK: - Private
-
+@MainActor private var eventHandler: EventHandlerRef?
 @MainActor private var hotKeyID = UInt32(0)
 @MainActor private var mappedHandlers = [UInt32: () -> Void]()
 
