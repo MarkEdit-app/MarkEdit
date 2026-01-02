@@ -87,22 +87,12 @@ private extension NSPasteboard {
     }
   }
 
-  @discardableResult
-  func setDataItems(_ items: [NSPasteboard.PasteboardType: Data]) -> Bool {
-    var items = items
-    legacyTypes.forEach {
-      // Ensure legacy types are consistent to prevent the changes from being reverted
-      items[.init($0.key)] = items[.init($0.value)]
-    }
-
-    var result = true
+  func setDataItems(_ items: [NSPasteboard.PasteboardType: Data]) {
     declareTypes(Array(items.keys), owner: nil)
 
     for (type, data) in items {
-      result = result && setData(data, forType: type)
+      setData(data, forType: type)
     }
-
-    return result
   }
 }
 
@@ -124,18 +114,3 @@ private extension String {
     return output
   }
 }
-
-private let legacyTypes = [
-  "NSStringPboardType": "public.utf8-plain-text",
-  "NSFilenamesPboardType": "public.file-url",
-  "NeXT TIFF v4.0 pasteboard type": "public.tiff",
-  "NeXT Rich Text Format v1.0 pasteboard type": "public.rtf",
-  "NeXT RTFD pasteboard type": "com.apple.flat-rtfd",
-  "Apple HTML pasteboard type": "public.html",
-  "Apple Web Archive pasteboard type": "com.apple.webarchive",
-  "Apple URL pasteboard type": "public.url",
-  "Apple PDF pasteboard type": "com.adobe.pdf",
-  "Apple PNG pasteboard type": "public.png",
-  "NSColor pasteboard type": "com.apple.cocoa.pasteboard.color",
-  "iOS rich content paste pasteboard type": "com.apple.uikit.attributedstring",
-]
