@@ -386,6 +386,10 @@ extension EditorViewController {
   }
 
   func resetUserDefinedMenuItems() {
+    guard view.window?.isKeyWindow == true else {
+      return Logger.log(.debug, "Menu items are for the key window")
+    }
+
     guard let menu = NSApp.appDelegate?.mainExtensionsMenu else {
       return Logger.assertFail("Missing main extensions menu")
     }
