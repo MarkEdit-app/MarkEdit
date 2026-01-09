@@ -34,9 +34,24 @@ public extension UserDefaults {
     ]
 
     featureKeys.forEach {
-      standard.setValue(true, forKey: $0)
+      standard.set(true, forKey: $0)
     }
 
-    standard.setValue(true, forKey: enabledFlag)
+    standard.set(true, forKey: enabledFlag)
+  }
+
+  static func resetTilingState(for key: String) {
+    // E.g., "NSWindow Frame Editor" it's fine if we cannot find it
+    guard let value = standard.string(forKey: key) else {
+      return
+    }
+
+    // E.g., 0 135 1496 803 0 0 1496 938 {"tilingState":{"tilingPosition":9,"normalizedSize":...
+    guard let range = value.range(of: " {\"tilingState\"") else {
+      return
+    }
+
+    // E.g., 0 135 1496 803 0 0 1496 938
+    standard.set(String(value.prefix(upTo: range.lowerBound)), forKey: key)
   }
 }

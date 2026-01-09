@@ -59,6 +59,22 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     editorViewController?.bridge.core.handleFocusLost()
   }
 
+  func windowShouldZoom(_ window: NSWindow, toFrame newFrame: NSRect) -> Bool {
+    // By default, zooming a window doesn't clear the tiling state,
+    // this is different from moving or resizing the window.
+    //
+    // We manually clear the tiling state after a short delay to keep the behavior consistent.
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+      guard let autosaveName = self?.windowFrameAutosaveName else {
+        return
+      }
+
+      UserDefaults.resetTilingState(for: "NSWindow Frame \(autosaveName)")
+    }
+
+    return true
+  }
+
   func windowDidResize(_ notification: Notification) {
     window?.saveFrame(usingName: windowFrameAutosaveName)
     editorViewController?.cancelCompletion()

@@ -8,6 +8,7 @@ import XCTest
 import WebKit
 import AppKitExtensions
 
+@MainActor
 final class RuntimeTests: XCTestCase {
   func testExistenceOfAppIcon() {
     guard let bundle = (Bundle.allBundles.first { $0.bundleURL.lastPathComponent == "MarkEdit.app" }) else {
