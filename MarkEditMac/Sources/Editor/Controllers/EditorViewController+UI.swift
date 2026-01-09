@@ -205,7 +205,7 @@ extension EditorViewController {
   @available(macOS 15.1, *)
   func updateWritingTools(isActive: Bool) {
     let performUpdate = {
-      // Ignore beforeInput handling to work around undo stack issues
+      // Work around undo stack and selection range issues
       self.bridge.writingTools.setActive(
         isActive: isActive,
         reselect: MarkEditWritingTools.shouldReselect(with: MarkEditWritingTools.requestedTool)
