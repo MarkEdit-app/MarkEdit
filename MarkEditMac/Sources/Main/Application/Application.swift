@@ -41,7 +41,7 @@ final class Application: NSApplication {
       sanitizePasteboard()
     }
 
-    // Ensure lines are fully selected for a better WritingTools experience
+    // Ensure lines are fully selected for a better Writing Tools experience
     if #available(macOS 15.1, *), action == sel_getUid("showWritingTools:") {
       Logger.assert(sender is NSMenuItem, "Invalid sender was found")
       Logger.assert(target == nil || (target as? AnyObject)?.className == "WKMenuTarget", "Invalid target was found")
