@@ -209,7 +209,7 @@ private extension AppRuntimeConfig {
 
   static let defaultDefinition = Definition(
     autoCharacterPairs: true,
-    autoSaveWhenIdle: nil,
+    autoSaveWhenIdle: false,
     closeAlwaysConfirmsChanges: nil,
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
@@ -217,8 +217,8 @@ private extension AppRuntimeConfig {
     visibleWhitespaceCharacter: nil,
     visibleLineBreakCharacter: nil,
     searchNormalizers: nil,
-    nativeSearchQuerySync: nil,
-    customToolbarItems: nil,
+    nativeSearchQuerySync: false,
+    customToolbarItems: [],
     useClassicInterface: nil,
     visualEffectType: nil,
     checksForUpdates: true,
