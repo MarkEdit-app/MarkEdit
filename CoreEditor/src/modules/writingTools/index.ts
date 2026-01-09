@@ -4,8 +4,30 @@ import { getClientRect } from '../../common/utils';
 export function setActive(isActive: boolean, reselect: boolean) {
   storage.isActive = isActive;
 
+  if (storage.selectionKeeper !== undefined) {
+    clearInterval(storage.selectionKeeper);
+    storage.selectionKeeper = undefined;
+  }
+
   if (isActive && reselect) {
     ensureSelectionRect();
+
+    // Apple Writing Tools sometimes randomly selects portion of the current line,
+    // Unfortunately, there is no event we can observe to detect that behavior.
+    //
+    // Here we periodically reselect the current line to prevent that.
+    storage.selectionKeeper = setInterval(() => {
+      const state = window.editor.state;
+      const selection = state.selection.main;
+      const { from } = state.doc.lineAt(selection.from);
+      const { to } = state.doc.lineAt(selection.to);
+
+      if (selection.from !== from || selection.to !== to) {
+        window.editor.dispatch({
+          selection: EditorSelection.range(from, to),
+        });
+      }
+    }, 500);
   }
 }
 
@@ -57,6 +79,8 @@ export function ensureSelectionRect() {
 
 const storage: {
   isActive: boolean;
+  selectionKeeper: ReturnType<typeof setInterval> | undefined;
 } = {
   isActive: false,
+  selectionKeeper: undefined,
 };
