@@ -173,13 +173,9 @@ final class EditorViewController: NSViewController {
     config.setURLSchemeHandler(chunkLoader, forURLScheme: EditorChunkLoader.scheme)
     config.setURLSchemeHandler(imageLoader, forURLScheme: EditorImageLoader.scheme)
 
-    // [macOS 15] Enable complete mode for WritingTools, need this because its public API is not ready
+    // Respect user settings for Writing Tools behavior
     if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
-      if config.responds(to: sel_getUid("setWritingToolsBehavior:")) {
-        config.setValue(writingToolsBehavior, forKey: "writingToolsBehavior")
-      } else {
-        Logger.assertFail("Missing setWritingToolsBehavior: method in WKWebViewConfiguration")
-      }
+      config.writingToolsBehavior = writingToolsBehavior
     }
 
     let webView = EditorWebView(frame: .zero, configuration: config)
@@ -205,7 +201,7 @@ final class EditorViewController: NSViewController {
       }
     }
 
-    // [macOS 15] Detect WritingTools visibility to work around issues
+    // [macOS 15] Detect Writing Tools visibility to work around issues
     if #available(macOS 15.1, *) {
       writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
         guard let self else {

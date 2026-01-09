@@ -211,7 +211,7 @@ extension EditorViewController {
         reselect: MarkEditWritingTools.shouldReselect(with: MarkEditWritingTools.requestedTool)
       )
 
-      // Invisible rendering doesn't work well with WritingTools, temporarily disable it for now
+      // Invisible rendering doesn't work well with Writing Tools, temporarily disable it for now
       self.setInvisiblesBehavior(behavior: isActive ? .never : AppPreferences.Editor.invisiblesBehavior)
     }
 

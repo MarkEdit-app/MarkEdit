@@ -108,13 +108,11 @@ enum AppRuntimeConfig {
     currentDefinition?.indentBehavior ?? .never
   }
 
-  // [macOS 15] Move to public API when it's ready
-  static var writingToolsBehavior: Int? {
-    /// https://developer.apple.com/documentation/webkit/wkwebviewconfiguration/4459101-writingtoolsbehavior
+  static var writingToolsBehavior: NSWritingToolsBehavior? {
     switch currentDefinition?.writingToolsBehavior {
-    case "none": return -1
-    case "complete": return 1
-    case "limited": return 2
+    case "none": return NSWritingToolsBehavior.none
+    case "complete": return NSWritingToolsBehavior.complete
+    case "limited": return NSWritingToolsBehavior.limited
     default: return nil
     }
   }
