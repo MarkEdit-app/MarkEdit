@@ -115,8 +115,12 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
     if let uniformType = UTType(filenameExtension: fileURL.pathExtension) {
       json["typeIdentifier"] = uniformType.identifier
-      json["mimeType"] = uniformType.preferredMIMEType
-      json["filenameExtension"] = uniformType.preferredFilenameExtension
+      if let mimeType = uniformType.preferredMIMEType {
+        json["mimeType"] = mimeType
+      }
+      if let filenameExtension = uniformType.preferredFilenameExtension {
+        json["filenameExtension"] = filenameExtension
+      }
     }
 
     return try? JSONSerialization.data(withJSONObject: json).toString()
