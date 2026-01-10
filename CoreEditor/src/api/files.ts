@@ -13,7 +13,11 @@ export async function listFiles(path: string): Promise<string[] | undefined> {
 }
 
 export async function getFileContent(path?: string): Promise<string | undefined> {
-  return window.nativeModules.api.getFileContent({ path });
+  return window.nativeModules.api.getFileContent({ path, base64Encoded: false });
+}
+
+export async function getFileDataURI(path?: string): Promise<string | undefined> {
+  return window.nativeModules.api.getFileContent({ path, base64Encoded: true });
 }
 
 export async function getFileInfo(path?: string): Promise<FileInfo | undefined> {
