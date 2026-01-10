@@ -85,7 +85,7 @@ enum AppUpdater {
 private extension AppUpdater {
   static var automatically: Bool {
     // Can be disabled through either settings.json or an incompatible update
-    AppRuntimeConfig.checksForUpdates && !AppPreferences.Updater.completelyDisabled
+    AppRuntimeConfig.updateBehavior != .never && !AppPreferences.Updater.completelyDisabled
   }
 
   static func extractReleaseInfo(from version: AppVersion) async -> ReleaseInfo? {
@@ -196,7 +196,7 @@ private extension AppUpdater {
       }
     }
 
-    guard !explicitly, let delegate = NSApp.appDelegate else {
+    guard !explicitly && AppRuntimeConfig.updateBehavior == .quiet, let delegate = NSApp.appDelegate else {
       return showAlert()
     }
 

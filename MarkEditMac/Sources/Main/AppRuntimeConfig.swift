@@ -19,6 +19,12 @@ enum AppRuntimeConfig {
       case blur = "blur"
     }
 
+    enum UpdateBehavior: String, Codable {
+      case quiet = "quiet"
+      case notify = "notify"
+      case never = "never"
+    }
+
     struct HotKey: Codable {
       let key: String
       let modifiers: [String]
@@ -37,7 +43,8 @@ enum AppRuntimeConfig {
     let customToolbarItems: [CustomToolbarItem]?
     let useClassicInterface: Bool?
     let visualEffectType: VisualEffectType?
-    let checksForUpdates: Bool?
+    let updateBehavior: UpdateBehavior?
+    let checksForUpdates: Bool? // [Deprecated] Kept for backward compatibility
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
     let disableCorsRestrictions: Bool?
@@ -57,6 +64,7 @@ enum AppRuntimeConfig {
       case customToolbarItems = "editor.customToolbarItems"
       case useClassicInterface = "general.useClassicInterface"
       case visualEffectType = "general.visualEffectType"
+      case updateBehavior = "general.updateBehavior"
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
@@ -150,9 +158,12 @@ enum AppRuntimeConfig {
     currentDefinition?.visualEffectType ?? .glass
   }
 
-  static var checksForUpdates: Bool {
-    // Enable automatic updates by default
-    currentDefinition?.checksForUpdates ?? true
+  static var updateBehavior: Definition.UpdateBehavior {
+    guard currentDefinition?.checksForUpdates ?? true else {
+      return .never
+    }
+
+    return currentDefinition?.updateBehavior ?? .quiet
   }
 
   static var defaultOpenDirectory: String? {
@@ -221,7 +232,8 @@ private extension AppRuntimeConfig {
     customToolbarItems: [],
     useClassicInterface: nil,
     visualEffectType: nil,
-    checksForUpdates: true,
+    updateBehavior: .quiet,
+    checksForUpdates: nil,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
     disableCorsRestrictions: nil,
