@@ -19,7 +19,7 @@ import { languageModel } from './languageModel';
 
 import { onEditorReady, addExtension, addMarkdownConfig, addCodeLanguage } from './methods';
 import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
-import { createFile, deleteFile, listFiles, getFileContent, getFileDataURI, getFileInfo, getDirectoryPath } from './files';
+import { createFile, deleteFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
 
 export function initMarkEditModules() {
@@ -54,7 +54,7 @@ export function initMarkEditModules() {
   MarkEdit.deleteFile = deleteFile;
   MarkEdit.listFiles = listFiles;
   MarkEdit.getFileContent = getFileContent;
-  MarkEdit.getFileDataURI = getFileDataURI;
+  MarkEdit.getFileObject = getFileObject;
   MarkEdit.getFileInfo = getFileInfo;
   MarkEdit.getDirectoryPath = getDirectoryPath;
   MarkEdit.getPasteboardItems = getPasteboardItems;

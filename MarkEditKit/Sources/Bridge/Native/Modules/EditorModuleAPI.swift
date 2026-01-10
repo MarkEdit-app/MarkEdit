@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 #if os(macOS)
   import AppKit
@@ -91,16 +92,34 @@ public final class EditorModuleAPI: NativeModuleAPI {
     return try? fileManager.contentsOfDirectory(atPath: filePath)
   }
 
-  public func getFileContent(path: String?, base64Encoded: Bool) async -> String? {
+  public func getFileContent(path: String?) async -> String? {
     guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
       return nil
     }
 
-    guard let fileData = try? Data(contentsOf: fileURL) else {
+    return try? Data(contentsOf: fileURL).toString()
+  }
+
+  public func getFileObject(path: String?) async -> String? {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
       return nil
     }
 
-    return base64Encoded ? fileData.base64EncodedString() : fileData.toString()
+    guard let fileData = try? Data(contentsOf: fileURL).base64EncodedString() else {
+      return nil
+    }
+
+    var json: [String: Any] = [
+      "data": fileData,
+    ]
+
+    if let uniformType = UTType(filenameExtension: fileURL.pathExtension) {
+      json["typeIdentifier"] = uniformType.identifier
+      json["mimeType"] = uniformType.preferredMIMEType
+      json["filenameExtension"] = uniformType.preferredFilenameExtension
+    }
+
+    return try? JSONSerialization.data(withJSONObject: json).toString()
   }
 
   public func getFileInfo(path: String?) async -> String? {

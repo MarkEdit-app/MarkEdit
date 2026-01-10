@@ -15,7 +15,8 @@ public protocol NativeModuleAPI: NativeModule {
   func createFile(options: CreateFileOptions) async -> Bool
   func deleteFile(path: String) async -> Bool
   func listFiles(path: String) async -> [String]?
-  func getFileContent(path: String?, base64Encoded: Bool) async -> String?
+  func getFileContent(path: String?) async -> String?
+  func getFileObject(path: String?) async -> String?
   func getFileInfo(path: String?) async -> String?
   func getPasteboardItems() async -> String?
   func getPasteboardString() async -> String?
@@ -46,6 +47,9 @@ final class NativeBridgeAPI: NativeBridge {
     },
     "getFileContent": { [weak self] in
       await self?.getFileContent(parameters: $0)
+    },
+    "getFileObject": { [weak self] in
+      await self?.getFileObject(parameters: $0)
     },
     "getFileInfo": { [weak self] in
       await self?.getFileInfo(parameters: $0)
@@ -137,7 +141,6 @@ final class NativeBridgeAPI: NativeBridge {
   private func getFileContent(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String?
-      var base64Encoded: Bool
     }
 
     let message: Message
@@ -148,7 +151,24 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.getFileContent(path: message.path, base64Encoded: message.base64Encoded)
+    let result = await module.getFileContent(path: message.path)
+    return .success(result)
+  }
+
+  private func getFileObject(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String?
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.getFileObject(path: message.path)
     return .success(result)
   }
 
