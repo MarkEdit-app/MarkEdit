@@ -15,7 +15,7 @@ public protocol NativeModuleAPI: NativeModule {
   func createFile(options: CreateFileOptions) async -> Bool
   func deleteFile(path: String) async -> Bool
   func listFiles(path: String) async -> [String]?
-  func getFileContent(path: String?) async -> String?
+  func getFileContent(path: String?, base64Encoded: Bool) async -> String?
   func getFileInfo(path: String?) async -> String?
   func getPasteboardItems() async -> String?
   func getPasteboardString() async -> String?
@@ -137,6 +137,7 @@ final class NativeBridgeAPI: NativeBridge {
   private func getFileContent(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String?
+      var base64Encoded: Bool
     }
 
     let message: Message
@@ -147,7 +148,7 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.getFileContent(path: message.path)
+    let result = await module.getFileContent(path: message.path, base64Encoded: message.base64Encoded)
     return .success(result)
   }
 

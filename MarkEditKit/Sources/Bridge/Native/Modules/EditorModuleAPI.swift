@@ -91,12 +91,16 @@ public final class EditorModuleAPI: NativeModuleAPI {
     return try? fileManager.contentsOfDirectory(atPath: filePath)
   }
 
-  public func getFileContent(path: String?) async -> String? {
+  public func getFileContent(path: String?, base64Encoded: Bool) async -> String? {
     guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
       return nil
     }
 
-    return try? Data(contentsOf: fileURL).toString()
+    guard let fileData = try? Data(contentsOf: fileURL) else {
+      return nil
+    }
+
+    return base64Encoded ? fileData.base64EncodedString() : fileData.toString()
   }
 
   public func getFileInfo(path: String?) async -> String? {

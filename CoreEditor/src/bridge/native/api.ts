@@ -12,7 +12,7 @@ export interface NativeModuleAPI extends NativeModule {
   createFile({ options }: { options: CreateFileOptions }): Promise<boolean>;
   deleteFile({ path }: { path: string }): Promise<boolean>;
   listFiles({ path }: { path: string }): Promise<string[] | undefined>;
-  getFileContent({ path }: { path: string | undefined }): Promise<string | undefined>;
+  getFileContent({ path, base64Encoded }: { path: string | undefined; base64Encoded: boolean }): Promise<string | undefined>;
   getFileInfo({ path }: { path: string | undefined }): Promise<string | undefined>;
   getPasteboardItems(): Promise<string | undefined>;
   getPasteboardString(): Promise<string | undefined>;
