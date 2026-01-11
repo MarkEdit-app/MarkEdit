@@ -20,6 +20,7 @@ public final class SettingsRootViewController: NSTabViewController {
 
     let window = NSPanel(contentViewController: contentVC)
     window.styleMask = [.titled, .closable]
+    window.collectionBehavior = .moveToActiveSpace
 
     return NSWindowController(window: window)
   }
@@ -38,7 +39,7 @@ public final class SettingsRootViewController: NSTabViewController {
 
   override public func viewDidAppear() {
     super.viewDidAppear()
-    view.window?.moveToCenter()
+    view.window?.centerOnScreen()
   }
 }
 
