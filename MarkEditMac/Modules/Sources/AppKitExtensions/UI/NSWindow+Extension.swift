@@ -35,15 +35,15 @@ public extension NSWindow {
     setFrame(frame, display: flag, animate: animated)
   }
 
-  /// Move to the center of the screen, the built-in .center() method doesn't work reliably.
-  func moveToCenter() {
-    guard let visibleSize = screen?.visibleFrame.size, let fullSize = screen?.frame.size else {
+  /// Move the window to the center of a screen, with an offset to look optically more centered.
+  func centerOnScreen(_ screen: NSScreen? = .main, offset: Double = 20) {
+    guard let visibleFrame = (screen ?? self.screen)?.visibleFrame else {
       return
     }
 
     setFrameOrigin(CGPoint(
-      x: (visibleSize.width - frame.size.width) * 0.5,
-      y: (visibleSize.height - frame.size.height) * 0.5 + fullSize.height - visibleSize.height
+      x: visibleFrame.minX + (visibleFrame.width - frame.size.width) * 0.5,
+      y: visibleFrame.minY + (visibleFrame.height - frame.size.height) * 0.5 + offset
     ))
   }
 
