@@ -1,9 +1,25 @@
-import { Decoration } from '@codemirror/view';
-import { Range } from '@codemirror/state';
+import { BlockWrapper, Decoration } from '@codemirror/view';
+import { Range, RangeValue } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
 import { WidgetView } from '../views/types';
 import { lineDecoRanges } from '../helper';
+
+/**
+ * Build block wrappers by leveraging language lexers.
+ *
+ * @param nodeName Node name(s), such as "CodeBlock" for code blocks
+ * @param className Class to decorate the node
+ */
+export function createBlockWrappers(nodeName: string | string[], className: string, attributes?: { [key: string]: string }) {
+  return BlockWrapper.set(createNodeRanges(nodeName, node => BlockWrapper.create({
+    tagName: 'div',
+    attributes: {
+      'class': className,
+      ...attributes,
+    },
+  }).range(node.from, node.to)));
+}
 
 /**
  * Create mark decorations.
@@ -53,8 +69,18 @@ export function createLineDeco(nodeName: string | string[], className: string, a
  * @param builder Closure to create the Decoration(s)
  */
 export function createDecos(nodeName: string | string[], builder: (node: SyntaxNodeRef) => Range<Decoration> | Range<Decoration>[] | null) {
+  return Decoration.set(createNodeRanges(nodeName, builder));
+}
+
+/**
+ * Build generic node ranges by leveraging language lexers.
+ *
+ * @param nodeName Node name(s), such as "ATXHeading1" for headings
+ * @param builder Closure to create the range(s)
+ */
+function createNodeRanges<T extends RangeValue>(nodeName: string | string[], builder: (node: SyntaxNodeRef) => Range<T> | Range<T>[] | null) {
   const editor = window.editor;
-  const ranges: Range<Decoration>[] = [];
+  const ranges: Range<T>[] = [];
   const nodeNames = Array.isArray(nodeName) ? nodeName : [nodeName];
 
   for (const { from, to } of editor.visibleRanges) {
@@ -69,5 +95,5 @@ export function createDecos(nodeName: string | string[], builder: (node: SyntaxN
     });
   }
 
-  return Decoration.set(ranges.sort((lhs, rhs) => lhs.from - rhs.from));
+  return ranges.sort((lhs, rhs) => lhs.from - rhs.from);
 }
