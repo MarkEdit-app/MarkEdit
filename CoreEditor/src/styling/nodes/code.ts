@@ -1,5 +1,5 @@
-import { createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
-import { createDecoPlugin } from '../helper';
+import { createBlockWrappers, createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
+import { createBlockPlugin, createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../views';
 import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
@@ -11,16 +11,20 @@ export const inlineCodeStyle = createDecoPlugin(() => {
 });
 
 /**
- * Always use monospace font for FencedCode.
+ * Always use monospace font for FencedCode and CodeBlock.
  */
-export const codeBlockStyle = createDecoPlugin(() => {
-  return createLineDeco(['FencedCode', 'CodeBlock'], 'cm-md-monospace cm-md-codeBlock', {
-    'spellcheck': 'false',
-    'autocorrect': 'off',
-    'autocomplete': 'off',
-    'autocapitalize': 'off',
-  });
-});
+export const codeBlockStyle = (() => {
+  const nodeNames = ['FencedCode', 'CodeBlock'];
+  return [
+    createBlockPlugin(() => createBlockWrappers(nodeNames, 'cm-md-codeBlockWrapper', {
+      'spellcheck': 'false',
+      'autocorrect': 'off',
+      'autocomplete': 'off',
+      'autocapitalize': 'off',
+    })),
+    createDecoPlugin(() => createLineDeco(nodeNames, 'cm-md-monospace cm-md-codeBlock')),
+  ];
+})();
 
 /**
  * Enable [preview] button for https://mermaid.js.org/.
