@@ -1,5 +1,9 @@
 import { CreateFileOptions, DirectoryType, FileInfo, FileObject } from 'markedit-api';
 
+export async function openFile(path: string): Promise<boolean> {
+  return window.nativeModules.api.openFile({ path });
+}
+
 export async function createFile(options: CreateFileOptions): Promise<boolean> {
   return window.nativeModules.api.createFile({ options });
 }

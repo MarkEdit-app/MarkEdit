@@ -288,6 +288,10 @@ extension EditorViewController: EditorModulePreviewDelegate {
 // MARK: - EditorModuleAPIDelegate
 
 extension EditorViewController: EditorModuleAPIDelegate {
+  func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool {
+    NSWorkspace.shared.openOrReveal(url: fileURL)
+  }
+
   func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL? {
     guard let path else {
       return document?.fileURL

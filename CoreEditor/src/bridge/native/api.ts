@@ -9,6 +9,7 @@ import { WebPoint } from '../../@types/WebPoint';
  * @bridgeName NativeBridgeAPI
  */
 export interface NativeModuleAPI extends NativeModule {
+  openFile({ path }: { path: string }): Promise<boolean>;
   createFile({ options }: { options: CreateFileOptions }): Promise<boolean>;
   deleteFile({ path }: { path: string }): Promise<boolean>;
   listFiles({ path }: { path: string }): Promise<string[] | undefined>;
