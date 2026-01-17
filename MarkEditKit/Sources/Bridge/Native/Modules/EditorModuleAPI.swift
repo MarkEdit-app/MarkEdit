@@ -13,6 +13,7 @@ import UniformTypeIdentifiers
 
 @MainActor
 public protocol EditorModuleAPIDelegate: AnyObject {
+  func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool
   func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL?
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
   func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint)
@@ -37,6 +38,10 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public init(delegate: EditorModuleAPIDelegate) {
     self.delegate = delegate
+  }
+
+  public func openFile(path: String) async -> Bool {
+    delegate?.editorAPIOpenFile(self, fileURL: URL(filePath: path)) == true
   }
 
   public func createFile(options: CreateFileOptions) async -> Bool {

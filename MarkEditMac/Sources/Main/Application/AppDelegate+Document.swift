@@ -61,6 +61,14 @@ extension AppDelegate {
     }
   }
 
+  func openFile(queryDict: [String: String]?) {
+    if let filePath = queryDict?["path"] {
+      NSWorkspace.shared.openOrReveal(url: URL(filePath: filePath))
+    } else {
+      NSApp.showOpenPanel()
+    }
+  }
+
   func createNewFile(queryDict: [String: String]?) {
     let fileName = queryDict?["filename"]
     let initialContent = queryDict?["initial-content"]

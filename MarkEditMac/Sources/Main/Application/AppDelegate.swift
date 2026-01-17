@@ -152,8 +152,8 @@ extension AppDelegate {
         // markedit://new-file?filename=Untitled&initial-content=Hello
         createNewFile(queryDict: components?.queryDict)
       case "open":
-        // markedit://open
-        application.showOpenPanel()
+        // markedit://open or markedit://open?path=Untitled.md
+        openFile(queryDict: components?.queryDict)
       default:
         break
       }

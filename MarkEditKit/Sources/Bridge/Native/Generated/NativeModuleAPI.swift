@@ -12,6 +12,7 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleAPI: NativeModule {
+  func openFile(path: String) async -> Bool
   func createFile(options: CreateFileOptions) async -> Bool
   func deleteFile(path: String) async -> Bool
   func listFiles(path: String) async -> [String]?
@@ -36,6 +37,9 @@ public extension NativeModuleAPI {
 final class NativeBridgeAPI: NativeBridge {
   static let name = "api"
   lazy var methods: [String: NativeMethod] = [
+    "openFile": { [weak self] in
+      await self?.openFile(parameters: $0)
+    },
     "createFile": { [weak self] in
       await self?.createFile(parameters: $0)
     },
@@ -85,6 +89,23 @@ final class NativeBridgeAPI: NativeBridge {
 
   init(_ module: NativeModuleAPI) {
     self.module = module
+  }
+
+  private func openFile(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.openFile(path: message.path)
+    return .success(result)
   }
 
   private func createFile(parameters: Data) async -> Result<Any?, Error>? {
