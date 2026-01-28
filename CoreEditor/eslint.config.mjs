@@ -11,6 +11,7 @@ export default [
     ignores: [
       '.yarn',
       'dist/*',
+      'packages/*/dist/*',
       'src/@vendor/*',
     ],
   },

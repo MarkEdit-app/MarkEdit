@@ -2,6 +2,8 @@
   "name": "markedit-app",
   "version": "1.0.0",
   "description": "Just like TextEdit on Mac but dedicated to Markdown.",
+  "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
     "dev": "vite",
     "lint": "eslint .",
