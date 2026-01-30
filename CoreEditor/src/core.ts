@@ -21,6 +21,23 @@ import { markContentClean } from './modules/history';
 import { TextEditor } from './api/editor';
 import { editorReadyListeners } from './api/methods';
 
+// Work around a WebKit bug, text jiggles back and forth when resizing the window
+window.addEventListener('resize', () => {
+  const editor = window.editor as EditorView | null;
+  if (typeof editor?.requestMeasure === 'function') {
+    editor.requestMeasure();
+  }
+});
+
+// Observe viewport scale changes, i.e., pinch to zoom
+window.visualViewport?.addEventListener('resize', () => {
+  const viewportScale = getViewportScale();
+  if (!almostEqual(viewportScale, storage.viewportScale)) {
+    window.nativeModules.core.notifyViewportScaleDidChange();
+    storage.viewportScale = viewportScale;
+  }
+});
+
 type ReadableContent = {
   sourceText: string;
   trimmedText: string;
@@ -122,18 +139,6 @@ export function resetEditor(initialContent: string) {
       columnText: '',
       selectionText: '',
     },
-  });
-
-  // Work around a WebKit bug, text jiggles back and forth when resizing the window
-  window.addEventListener('resize', () => editor.requestMeasure());
-
-  // Observe viewport scale changes, i.e., pinch to zoom
-  window.visualViewport?.addEventListener('resize', () => {
-    const viewportScale = getViewportScale();
-    if (!almostEqual(viewportScale, storage.viewportScale)) {
-      window.nativeModules.core.notifyViewportScaleDidChange();
-      storage.viewportScale = viewportScale;
-    }
   });
 
   // The content should be initially clean
