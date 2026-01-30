@@ -241,15 +241,26 @@ function enableGutterHoverEffects() {
     return;
   }
 
-  // Intead of using the :hover pseudo class,
+  if (storage.mouseLeaveHandler !== undefined) {
+    gutterDOM.removeEventListener('mouseleave', storage.mouseLeaveHandler);
+  }
+
+  if (storage.mouseEnterHandler !== undefined) {
+    gutterDOM.removeEventListener('mouseenter', storage.mouseEnterHandler);
+  }
+
+  // Instead of using the :hover pseudo class,
   // which is not reliable on WebKit when releasing the mouse outside the window,
   // we handle hover state manually and expose methods to native.
-  gutterDOM.addEventListener('mouseleave', () => setGutterHovered(false));
-  gutterDOM.addEventListener('mouseenter', () => {
+  storage.mouseLeaveHandler = () => setGutterHovered(false);
+  storage.mouseEnterHandler = () => {
     if (!isMouseDown()) {
       setGutterHovered(true);
     }
-  });
+  };
+
+  gutterDOM.addEventListener('mouseleave', storage.mouseLeaveHandler);
+  gutterDOM.addEventListener('mouseenter', storage.mouseEnterHandler);
 
   // Delay setting the transition to work around the issue mentioned in #436
   const foldGutter = document.querySelector('.cm-foldGutter') as HTMLElement | null;
@@ -268,3 +279,11 @@ function createStyleSheet(styleText: string, enabled = true) {
 
   return style;
 }
+
+const storage: {
+  mouseLeaveHandler: (() => void) | undefined;
+  mouseEnterHandler: (() => void) | undefined;
+} = {
+  mouseLeaveHandler: undefined,
+  mouseEnterHandler: undefined,
+};
