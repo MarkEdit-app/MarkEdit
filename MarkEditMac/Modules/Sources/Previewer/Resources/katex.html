@@ -19,7 +19,7 @@
 </head>
 <body>
   <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
-  <script type="module" type="text/javascript">
+  <script type="module">
     import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.mjs";
     const container = document.querySelector("#container");
     container.innerHTML = katex.renderToString("{{DATA}}".code, { throwOnError: false, displayMode: true });
