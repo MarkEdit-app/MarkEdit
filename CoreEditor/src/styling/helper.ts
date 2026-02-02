@@ -1,16 +1,5 @@
-import { BlockWrapper, Decoration, DOMEventHandlers, EditorView, ViewPlugin } from '@codemirror/view';
+import { Decoration, DOMEventHandlers, EditorView, ViewPlugin } from '@codemirror/view';
 import { Range, RangeSet } from '@codemirror/state';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createBlockPlugin(builder: () => RangeSet<BlockWrapper>, eventHandlers?: DOMEventHandlers<any>) {
-  return ViewPlugin.fromClass(class {}, {
-    provide: () => EditorView.blockWrappers.of(editor => {
-      window.editor = editor;
-      return builder();
-    }),
-    eventHandlers,
-  });
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createDecoPlugin(builder: () => RangeSet<Decoration>, eventHandlers?: DOMEventHandlers<any>) {
