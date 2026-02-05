@@ -10,6 +10,9 @@ public extension NSWorkspace {
   func openTerminal() {
     let identifiers = [
       "com.googlecode.iterm2",  // iTerm2
+      "com.mitchellh.ghostty",  // Ghostty
+      "dev.warp.Warp-Stable",   // Warp
+      "com.github.wez.wezterm", // WezTerm
       "com.eltima.cmd1",        // Commander One
       "com.csw.macwise",        // MacWise
       "net.kovidgoyal.kitty",   // Kitty
