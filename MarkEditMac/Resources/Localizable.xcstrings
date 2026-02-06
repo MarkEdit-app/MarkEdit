@@ -1,1174 +1,1174 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "%d of %d" : {
-      "comment" : "Index of matches, such as 1 of 3",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$d of %2$d"
+  "sourceLanguage": "en",
+  "strings": {
+    "%d of %d": {
+      "comment": "Index of matches, such as 1 of 3",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$d of %2$d"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$d/%2$d"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d/%2$d"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$d/%2$d"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d/%2$d"
           }
         }
       }
     },
-    "⌘-click to follow" : {
-      "comment" : "Tooltip for links",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⌘ 点击以跟随"
+    "⌘-click to follow": {
+      "comment": "Tooltip for links",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘ 点击以跟随"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⌘ 點選以跟隨"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘ 點選以跟隨"
           }
         }
       }
     },
-    "⌘-click to toggle todo" : {
-      "comment" : "Tooltip for tasks",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⌘ 点击切换完成状态"
+    "⌘-click to toggle todo": {
+      "comment": "Tooltip for tasks",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘ 点击切换完成状态"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⌘ 點選切換完成狀態"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌘ 點選切換完成狀態"
           }
         }
       }
     },
-    "🎉 %@ is out" : {
-      "comment" : "Title format for new version is out",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🎉 %@ 已发布"
+    "🎉 %@ is out": {
+      "comment": "Title format for new version is out",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎉 %@ 已发布"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🎉 %@ 已釋出"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎉 %@ 已釋出"
           }
         }
       }
     },
-    "1 tab" : {
-      "comment" : "Use 1 tab as the indent unit",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 个制表符"
+    "1 tab": {
+      "comment": "Use 1 tab as the indent unit",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 个制表符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 個制表符"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 個制表符"
           }
         }
       }
     },
-    "2 spaces" : {
-      "comment" : "Use 2 spaces as the indent unit",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2 个空格"
+    "2 spaces": {
+      "comment": "Use 2 spaces as the indent unit",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 个空格"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2 個空格"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 個空格"
           }
         }
       }
     },
-    "2 tabs" : {
-      "comment" : "Use 2 tabs as the indent unit",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2 个制表符"
+    "2 tabs": {
+      "comment": "Use 2 tabs as the indent unit",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 个制表符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2 個制表符"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 個制表符"
           }
         }
       }
     },
-    "4 spaces" : {
-      "comment" : "Use 4 spaces as the indent unit",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "4 个空格"
+    "4 spaces": {
+      "comment": "Use 4 spaces as the indent unit",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 个空格"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "4 個空格"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 個空格"
           }
         }
       }
     },
-    "Active line indicator" : {
-      "comment" : "Option to show active line indicator",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前行指示器"
+    "Active line indicator": {
+      "comment": "Option to show active line indicator",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前行指示器"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "當前行指示器"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "當前行指示器"
           }
         }
       }
     },
-    "All" : {
-      "comment" : "Button title, perform actions to all items",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全部"
+    "All": {
+      "comment": "Button title, perform actions to all items",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全部"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部"
           }
         }
       }
     },
-    "Always" : {
-      "comment" : "Always show invisibles",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "总是"
+    "Always": {
+      "comment": "Always show invisibles",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "总是"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "總是"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "總是"
           }
         }
       }
     },
-    "Appearance:" : {
-      "comment" : "Appearance for the app",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外观："
+    "Appearance:": {
+      "comment": "Appearance for the app",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外观："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外觀："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外觀："
           }
         }
       }
     },
-    "Argument \"%@\" not found in event descriptor, the descriptor is likely malformed." : {
-      "comment" : "Script error when a command argument is missing due to a corrupted Apple Event",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在事件描述符中找不到参数“%@”，该描述符可能格式不正确。"
+    "Argument “%@” not found in event descriptor, the descriptor is likely malformed.": {
+      "comment": "Script error when a command argument is missing due to a corrupted Apple Event",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在事件描述符中找不到参数“%@”，该描述符可能格式不正确。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在事件描述符中找不到引數“%@”，該描述符可能格式不正確。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在事件描述符中找不到引數“%@”，該描述符可能格式不正確。"
           }
         }
       }
     },
-    "Assistant" : {
-      "comment" : "Window title for assistant settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "辅助"
+    "Assistant": {
+      "comment": "Window title for assistant settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "辅助"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "輔助"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輔助"
           }
         }
       }
     },
-    "Autocomplete:" : {
-      "comment" : "Label for autocomplete options",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自动补全："
+    "Autocomplete:": {
+      "comment": "Label for autocomplete options",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自动补全："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自動補全："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動補全："
           }
         }
       }
     },
-    "Automatic" : {
-      "comment" : "Automatic window tabbing mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自动"
+    "Automatic": {
+      "comment": "Automatic window tabbing mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自动"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自動"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動"
           }
         }
       }
     },
-    "Bold" : {
-      "comment" : "Toolbar item to toggle bold",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "粗体"
+    "Bold": {
+      "comment": "Toolbar item to toggle bold",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "粗体"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "粗體"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "粗體"
           }
         }
       }
     },
-    "Cancel" : {
-      "comment" : "Button title, cancel an action",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取消"
+    "Cancel": {
+      "comment": "Button title, cancel an action",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取消"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
           }
         }
       }
     },
-    "Cannot export files with extension \"%@\", supported extensions: %@." : {
-      "comment" : "Script error when attempting to save files with an unsupported extension",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Cannot export files with extension \"%1$@\", supported extensions: %2$@."
+    "Cannot export files with extension “%@”, supported extensions: %@.": {
+      "comment": "Script error when attempting to save files with an unsupported extension",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Cannot export files with extension \"%1$@\", supported extensions: %2$@."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不支持导出“%1$@”格式的文件，支持的格式：%2$@。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支持导出“%1$@”格式的文件，支持的格式：%2$@。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不支援匯出“%1$@”格式的檔案，支援的格式：%2$@。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支援匯出“%1$@”格式的檔案，支援的格式：%2$@。"
           }
         }
       }
     },
-    "Case Sensitive" : {
-      "comment" : "Toggle case sensitive search",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大小写敏感"
+    "Case Sensitive": {
+      "comment": "Toggle case sensitive search",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大小写敏感"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "大小寫敏感"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大小寫敏感"
           }
         }
       }
     },
-    "Characters" : {
-      "comment" : "Statistics label: count characters",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "字符数量"
+    "Characters": {
+      "comment": "Statistics label: count characters",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字符数量"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "字元數量"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字元數量"
           }
         }
       }
     },
-    "Check Version History" : {
-      "comment" : "Title for the \"Check Version History\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "检查版本记录"
+    "Check Version History": {
+      "comment": "Title for the \"Check Version History\" button",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "检查版本记录"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "檢查版本記錄"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檢查版本記錄"
           }
         }
       }
     },
-    "Classic Mac OS (CR)" : {
-      "comment" : "Line endings used on Classic Mac OS",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Classic Mac OS (CR)"
+    "Classic Mac OS (CR)": {
+      "comment": "Line endings used on Classic Mac OS",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classic Mac OS (CR)"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Classic Mac OS (CR)"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classic Mac OS (CR)"
           }
         }
       }
     },
-    "Clear Recents" : {
-      "comment" : "Menu item: clear recents",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "清除最近"
+    "Clear Recents": {
+      "comment": "Menu item: clear recents",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除最近"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "清除最近"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除最近"
           }
         }
       }
     },
-    "Column" : {
-      "comment" : "Column name for table creation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "列"
+    "Column": {
+      "comment": "Column name for table creation",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "欄"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "欄"
           }
         }
       }
     },
-    "Comments" : {
-      "comment" : "Statistics label: count comments",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "注释"
+    "Comments": {
+      "comment": "Statistics label: count comments",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "注释"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "註解"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "註解"
           }
         }
       }
     },
-    "Compact" : {
-      "comment" : "Compact mode for window toolbar",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "紧凑"
+    "Compact": {
+      "comment": "Compact mode for window toolbar",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "紧凑"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "緊湊"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊湊"
           }
         }
       }
     },
-    "Completion:" : {
-      "comment" : "Label for word completion options",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "单词补全："
+    "Completion:": {
+      "comment": "Label for word completion options",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "单词补全："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "單字補全："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "單字補全："
           }
         }
       }
     },
-    "Content" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "内容"
+    "Content": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内容"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "內容"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "內容"
           }
         }
       }
     },
-    "Control Character" : {
-      "comment" : "Phrase used in CodeMirror to indicate control character",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "控制字符"
+    "Control Character": {
+      "comment": "Phrase used in CodeMirror to indicate control character",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "控制字符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "控制字元"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "控制字元"
           }
         }
       }
     },
-    "Copy Pandoc Command" : {
-      "comment" : "Toolbar item to copy pandoc command",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拷贝 Pandoc 指令"
+    "Copy Pandoc Command": {
+      "comment": "Toolbar item to copy pandoc command",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷贝 Pandoc 指令"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拷貝 Pandoc 指令"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷貝 Pandoc 指令"
           }
         }
       }
     },
-    "Couldn't find a command to handle incoming Apple Event." : {
-      "comment" : "Script error when MarkEdit has no command to handle the incoming Apple Event",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "找不到用于处理接收到 Apple Event 的指令。"
+    "Couldn’t find a command to handle incoming Apple Event.": {
+      "comment": "Script error when MarkEdit has no command to handle the incoming Apple Event",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到用于处理接收到 Apple Event 的指令。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "找不到用於處理接收到 Apple Event 的指令。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到用於處理接收到 Apple Event 的指令。"
           }
         }
       }
     },
-    "Creates a new document, with optional parameters to set the file name and the initial content." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建一个文档，可通过可选参数来设置文件名和初始内容。"
+    "Creates a new document, with optional parameters to set the file name and the initial content.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建一个文档，可通过可选参数来设置文件名和初始内容。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
           }
         }
       }
     },
-    "Create New Document" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创建新文档"
+    "Create New Document": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "创建新文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "建立新文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "建立新文件"
           }
         }
       }
     },
-    "Dark" : {
-      "comment" : "Always use dark mode for the app",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "深色"
+    "Dark": {
+      "comment": "Always use dark mode for the app",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深色"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "深色"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深色"
           }
         }
       }
     },
-    "Dark Theme:" : {
-      "comment" : "Dark theme for the editor",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "深色主题："
+    "Dark Theme:": {
+      "comment": "Dark theme for the editor",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深色主题："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "深色主題："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深色主題："
           }
         }
       }
     },
-    "Default Line Endings:" : {
-      "comment" : "Line endings for creating new files",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "默认行尾格式："
+    "Default Line Endings:": {
+      "comment": "Line endings for creating new files",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "默认行尾格式："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "預設行尾格式："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預設行尾格式："
           }
         }
       }
     },
-    "Default Text Encoding:" : {
-      "comment" : "Text encoding for opening and saving files",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "默认文本编码："
+    "Default Text Encoding:": {
+      "comment": "Text encoding for opening and saving files",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "默认文本编码："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "預設文字編碼："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預設文字編碼："
           }
         }
       }
     },
-    "Delete" : {
-      "comment" : "Button title, confirm the deletion",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "删除"
+    "Delete": {
+      "comment": "Button title, confirm the deletion",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "刪除"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除"
           }
         }
       }
     },
-    "Diacritic Insensitive" : {
-      "comment" : "Toggle diacritic insensitive search",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "忽略变音符"
+    "Diacritic Insensitive": {
+      "comment": "Toggle diacritic insensitive search",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "忽略变音符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "忽略變音符"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "忽略變音符"
           }
         }
       }
     },
-    "Diff Chars" : {
-      "comment" : "Diff by characters",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按字符对比"
+    "Diff Chars": {
+      "comment": "Diff by characters",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按字符对比"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按字元對比"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按字元對比"
           }
         }
       }
     },
-    "Diff Lines" : {
-      "comment" : "Diff by lines",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按行对比"
+    "Diff Lines": {
+      "comment": "Diff by lines",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按行对比"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按行對比"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按行對比"
           }
         }
       }
     },
-    "Diff Words" : {
-      "comment" : "Diff by words",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按单词对比"
+    "Diff Words": {
+      "comment": "Diff by words",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按单词对比"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按單詞對比"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按單詞對比"
           }
         }
       }
     },
-    "Dim inactive lines" : {
-      "comment" : "Explanation for focus mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "淡化非当前行"
+    "Dim inactive lines": {
+      "comment": "Explanation for focus mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "淡化非当前行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "淡化非當前行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "淡化非當前行"
           }
         }
       }
     },
-    "Disable Update Checks" : {
-      "comment" : "Title for the \"Disable Update Checks\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "禁止更新检查"
+    "Disable Update Checks": {
+      "comment": "Title for the \"Disable Update Checks\" button",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "禁止更新检查"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "禁止更新檢查"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "禁止更新檢查"
           }
         }
       }
     },
-    "Disallowed" : {
-      "comment" : "Disallowed window tabbing mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "禁用"
+    "Disallowed": {
+      "comment": "Disallowed window tabbing mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "禁用"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "禁止"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "禁止"
           }
         }
       }
     },
-    "Document" : {
-      "comment" : "Statistics mode: full document",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全文档"
+    "Document": {
+      "comment": "Statistics mode: full document",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全文件"
           }
         }
       }
     },
-    "Done" : {
-      "comment" : "Button title, confirm an action",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完成"
+    "Done": {
+      "comment": "Button title, confirm an action",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完成"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成"
           }
         }
       }
     },
-    "Edit Behavior:" : {
-      "comment" : "Editor behavior like focus mode and typewriter mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "编辑行为："
+    "Edit Behavior:": {
+      "comment": "Editor behavior like focus mode and typewriter mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "编辑行为："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "編輯行為："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯行為："
           }
         }
       }
     },
-    "Editor" : {
-      "comment" : "Window title for editor settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "编辑器"
+    "Editor": {
+      "comment": "Window title for editor settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "编辑器"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "編輯器"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯器"
           }
         }
       }
     },
-    "Enter the line number and hit return" : {
-      "comment" : "Help text for goto line window",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "输入行号并按下回车键"
+    "Enter the line number and hit return": {
+      "comment": "Help text for goto line window",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入行号并按下回车键"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "輸入行號並按下回車鍵"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輸入行號並按下回車鍵"
           }
         }
       }
     },
-    "Evaluate JavaScript" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "运行 JavaScript"
+    "Evaluate JavaScript": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "运行 JavaScript"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "執行 JavaScript"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "執行 JavaScript"
           }
         }
       }
     },
-    "Evaluates JavaScript and gets the result on the active document; throws an error if no editor is opened." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在当前活跃文档运行 JavaScript 并获取结果，没有打开的编辑器时将抛出异常。"
+    "Evaluates JavaScript and gets the result on the active document; throws an error if no editor is opened.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在当前活跃文档运行 JavaScript 并获取结果，没有打开的编辑器时将抛出异常。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在當前活躍文件執行 JavaScript 並獲取結果，沒有開啟的編輯器時將丟擲異常。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在當前活躍文件執行 JavaScript 並獲取結果，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }
     },
-    "Evaluate JavaScript with ${content}" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用 ${content} 运行 JavaScript"
+    "Evaluate JavaScript with ${content}": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 ${content} 运行 JavaScript"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用 ${content} 執行 JavaScript"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 ${content} 執行 JavaScript"
           }
         }
       }
     },
-    "Failed to get the update." : {
-      "comment" : "Title for failed to get the update",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法获取更新。"
+    "Failed to get the update.": {
+      "comment": "Title for failed to get the update",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法获取更新。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法获取更新。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法获取更新。"
           }
         }
       }
     },
-    "File Extension:" : {
-      "comment" : "Label for save panel accessory view (shorter than 'Filename Extension' to avoid save panel layout issues)",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文件扩展名："
+    "File Extension:": {
+      "comment": "Label for save panel accessory view (shorter than 'Filename Extension' to avoid save panel layout issues)",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件扩展名："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "檔案副檔名："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檔案副檔名："
           }
         }
       }
     },
-    "File Name" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文件名"
+    "File Name": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件名"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "檔案名"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檔案名"
           }
         }
       }
     },
-    "File Size" : {
-      "comment" : "Statistics label: count file size",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文件大小"
+    "File Size": {
+      "comment": "Statistics label: count file size",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件大小"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "檔案大小"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檔案大小"
           }
         }
       }
     },
-    "Find" : {
-      "comment" : "Find mode in search menu",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查找"
+    "Find": {
+      "comment": "Find mode in search menu",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查找"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尋找"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尋找"
           }
         }
       }
     },
-    "Find Selection" : {
-      "comment" : "Menu item: use selection to find",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查找选中内容"
+    "Find Selection": {
+      "comment": "Menu item: use selection to find",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查找选中内容"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尋找選中內容"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尋找選中內容"
           }
         }
       }
     },
-    "Fold Line" : {
-      "comment" : "Phrase used in CodeMirror fold a line",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "折叠行"
+    "Fold Line": {
+      "comment": "Phrase used in CodeMirror fold a line",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折叠行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "折疊行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折疊行"
           }
         }
       }
     },
-    "Folded Code" : {
-      "comment" : "Phrase used in CodeMirror to indicated folded code",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "折叠的代码"
+    "Folded Code": {
+      "comment": "Phrase used in CodeMirror to indicated folded code",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折叠的代码"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "折疊的程式碼"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折疊的程式碼"
           }
         }
       }
     },
-    "Folded Lines" : {
-      "comment" : "Phrase used in CodeMirror to indicate folded lines",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "折叠的行"
+    "Folded Lines": {
+      "comment": "Phrase used in CodeMirror to indicate folded lines",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折叠的行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "折疊的行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "折疊的行"
           }
         }
       }
     },
-    "Font:" : {
-      "comment" : "Label for font settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "字体："
+    "Font:": {
+      "comment": "Label for font settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字体："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "字體："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字體："
           }
         }
       }
     },
-    "Format Files:" : {
-      "comment" : "Label for file formatting options",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "格式化文件："
+    "Format Files:": {
+      "comment": "Label for file formatting options",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "格式化文件："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "格式化檔案："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "格式化檔案："
           }
         }
       }
     },
-    "Format when saving files." : {
-      "comment" : "Hint for format files on save",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存时进行格式化。"
+    "Format when saving files.": {
+      "comment": "Hint for format files on save",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存时进行格式化。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "儲存時進行格式化。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存時進行格式化。"
           }
         }
       }
     },
-    "Found %lld versions, would you like to delete them?" : {
-      "comment" : "Alert title (format) for number of versions found",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Found %lld version, would you like to delete it?"
+    "Found %lld versions, would you like to delete them?": {
+      "comment": "Alert title (format) for number of versions found",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Found %lld version, would you like to delete it?"
                 }
               },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "new",
-                  "value" : "Found %lld versions, would you like to delete them?"
+              "other": {
+                "stringUnit": {
+                  "state": "new",
+                  "value": "Found %lld versions, would you like to delete them?"
                 }
               }
             }
           }
         },
-        "zh-Hans" : {
-          "variations" : {
-            "plural" : {
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "找到 %lld 个版本，要删除吗？"
+        "zh-Hans": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "找到 %lld 个版本，要删除吗？"
                 }
               }
             }
           }
         },
-        "zh-Hant" : {
-          "variations" : {
-            "plural" : {
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "找到 %lld 個版本，要刪除嗎？"
+        "zh-Hant": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "找到 %lld 個版本，要刪除嗎？"
                 }
               }
             }
@@ -1176,2170 +1176,2170 @@
         }
       }
     },
-    "General" : {
-      "comment" : "Window title for general settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通用"
+    "General": {
+      "comment": "Window title for general settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通用"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一般"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一般"
           }
         }
       }
     },
-    "Get Custom Themes…" : {
-      "comment" : "Get custom themes from the GitHub",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "获取自定义主题…"
+    "Get Custom Themes…": {
+      "comment": "Get custom themes from the GitHub",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "获取自定义主题…"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "獲取自訂主題…"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "獲取自訂主題…"
           }
         }
       }
     },
-    "Get File Content" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "获取文件内容"
+    "Get File Content": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "获取文件内容"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "獲取檔案內容"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "獲取檔案內容"
           }
         }
       }
     },
-    "Gets file content of the active document; throws an error if no editor is opened." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "获取当前活跃文档的内容，没有打开的编辑器时将抛出异常。"
+    "Gets file content of the active document; throws an error if no editor is opened.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "获取当前活跃文档的内容，没有打开的编辑器时将抛出异常。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "獲取當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "獲取當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }
     },
-    "Go to Line" : {
-      "comment" : "Placeholder text for goto line window",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "跳转到行"
+    "Go to Line": {
+      "comment": "Placeholder text for goto line window",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳转到行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "跳轉到行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳轉到行"
           }
         }
       }
     },
-    "Grant Access" : {
-      "comment" : "Open panel prompt, used for granting access for the selected folder",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "授予权限"
+    "Grant Access": {
+      "comment": "Open panel prompt, used for granting access for the selected folder",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授予权限"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "授予許可權"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授予許可權"
           }
         }
       }
     },
-    "Granularity" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "粒度"
+    "Granularity": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "粒度"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "粒度"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "粒度"
           }
         }
       }
     },
-    "Guessed words" : {
-      "comment" : "Option for guessed words suggestion",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "猜测的单词"
+    "Guessed words": {
+      "comment": "Option for guessed words suggestion",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "猜测的单词"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "猜測的單字"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "猜測的單字"
           }
         }
       }
     },
-    "Headers" : {
-      "comment" : "Toolbar item to toggle heading levels",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标题"
+    "Headers": {
+      "comment": "Toolbar item to toggle heading levels",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标题"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標題"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標題"
           }
         }
       }
     },
-    "Hidden" : {
-      "comment" : "Hidden mode for window toolbar",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隐藏"
+    "Hidden": {
+      "comment": "Hidden mode for window toolbar",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隐藏"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隱藏"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隱藏"
           }
         }
       }
     },
-    "Horizontal Rule" : {
-      "comment" : "Toolbar item to insert horizontal rule",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "水平分割线"
+    "Horizontal Rule": {
+      "comment": "Toolbar item to insert horizontal rule",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "水平分割线"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "水平分割線"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "水平分割線"
           }
         }
       }
     },
-    "Indents more" : {
-      "comment" : "Press tab key to indent more",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "增加缩进"
+    "Indents more": {
+      "comment": "Press tab key to indent more",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "增加缩进"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "增加縮排"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "增加縮排"
           }
         }
       }
     },
-    "Initial Content" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "初始内容"
+    "Initial Content": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初始内容"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "初始內容"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初始內容"
           }
         }
       }
     },
-    "Inline Predictions" : {
-      "comment" : "Whether to allow inline predictions",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "输入预测"
+    "Inline Predictions": {
+      "comment": "Whether to allow inline predictions",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入预测"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "預測字詞"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預測字詞"
           }
         }
       }
     },
-    "Insert Code" : {
-      "comment" : "Toolbar item to insert code",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入代码"
+    "Insert Code": {
+      "comment": "Toolbar item to insert code",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入代码"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入程式碼"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入程式碼"
           }
         }
       }
     },
-    "Insert final newline" : {
-      "comment" : "Option for inserting newline at end of file",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入最终换行"
+    "Insert final newline": {
+      "comment": "Option for inserting newline at end of file",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入最终换行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入最終換行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入最終換行"
           }
         }
       }
     },
-    "Insert Image" : {
-      "comment" : "Toolbar item to insert image",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入图片"
+    "Insert Image": {
+      "comment": "Toolbar item to insert image",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入图片"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入圖片"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入圖片"
           }
         }
       }
     },
-    "Insert Line Break" : {
-      "comment" : "Insert a line break into the current editor",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入换行符"
+    "Insert Line Break": {
+      "comment": "Insert a line break into the current editor",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入换行符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入換行符"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入換行符"
           }
         }
       }
     },
-    "Insert Link" : {
-      "comment" : "Toolbar item to insert link",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入链接"
+    "Insert Link": {
+      "comment": "Toolbar item to insert link",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入链接"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入連結"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入連結"
           }
         }
       }
     },
-    "Insert Tab" : {
-      "comment" : "Insert a tab into the current editor",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入制表符"
+    "Insert Tab": {
+      "comment": "Insert a tab into the current editor",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入制表符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入製表符"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入製表符"
           }
         }
       }
     },
-    "Inserts 2 spaces" : {
-      "comment" : "Press tab key to insert 2 spaces",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入 2 个空格"
+    "Inserts 2 spaces": {
+      "comment": "Press tab key to insert 2 spaces",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入 2 个空格"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入 2 個空格"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入 2 個空格"
           }
         }
       }
     },
-    "Inserts 4 spaces" : {
-      "comment" : "Press tab key to insert 4 spaces",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入 4 个空格"
+    "Inserts 4 spaces": {
+      "comment": "Press tab key to insert 4 spaces",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入 4 个空格"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入 4 個空格"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入 4 個空格"
           }
         }
       }
     },
-    "Inserts tab character" : {
-      "comment" : "Default tab key behavior",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入制表符"
+    "Inserts tab character": {
+      "comment": "Default tab key behavior",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入制表符"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "插入制表符"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "插入制表符"
           }
         }
       }
     },
-    "Italic" : {
-      "comment" : "Toolbar item to toggle italic",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "斜体"
+    "Italic": {
+      "comment": "Toolbar item to toggle italic",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "斜体"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "斜體"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "斜體"
           }
         }
       }
     },
-    "Item" : {
-      "comment" : "Item name for table creation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "项目"
+    "Item": {
+      "comment": "Item name for table creation",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "项目"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "項目"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目"
           }
         }
       }
     },
-    "JavaScript evaluation failed at line %d, column %d: %@" : {
-      "comment" : "Script error when JavaScript evaluation raises a detailed error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "JavaScript evaluation failed at line %1$d, column %2$d: %3$@"
+    "JavaScript evaluation failed at line %d, column %d: %@": {
+      "comment": "Script error when JavaScript evaluation raises a detailed error",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "JavaScript evaluation failed at line %1$d, column %2$d: %3$@"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JavaScript 执行在第 %1$d 行，第 %2$d 列失败：%3$@"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JavaScript 执行在第 %1$d 行，第 %2$d 列失败：%3$@"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JavaScript 執行在第 %1$d 行，第 %2$d 欄失敗：%3$@"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JavaScript 執行在第 %1$d 行，第 %2$d 欄失敗：%3$@"
           }
         }
       }
     },
-    "JavaScript evaluation failed for an unknown reason." : {
-      "comment" : "Script error when JavaScript evaluation raises an error with no details",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JavaScript 执行因未知原因失败。"
+    "JavaScript evaluation failed for an unknown reason.": {
+      "comment": "Script error when JavaScript evaluation raises an error with no details",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JavaScript 执行因未知原因失败。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JavaScript 執行因未知原因失敗。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JavaScript 執行因未知原因失敗。"
           }
         }
       }
     },
-    "Keep caret in the middle" : {
-      "comment" : "Explanation for typewriter mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保持光标居中"
+    "Keep caret in the middle": {
+      "comment": "Explanation for typewriter mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保持光标居中"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保持游標居中"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保持游標居中"
           }
         }
       }
     },
-    "Light" : {
-      "comment" : "Always use light mode for the app",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "浅色"
+    "Light": {
+      "comment": "Always use light mode for the app",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "浅色"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "浅色"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "浅色"
           }
         }
       }
     },
-    "Light Theme:" : {
-      "comment" : "Light theme for the editor",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "浅色主题："
+    "Light Theme:": {
+      "comment": "Light theme for the editor",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "浅色主题："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "淺色主題："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "淺色主題："
           }
         }
       }
     },
-    "Line Height:" : {
-      "comment" : "Label for line height option",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "行高："
+    "Line Height:": {
+      "comment": "Label for line height option",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行高："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "行高："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行高："
           }
         }
       }
     },
-    "Line numbers" : {
-      "comment" : "Option to show line numbers",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "行号"
+    "Line numbers": {
+      "comment": "Option to show line numbers",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行号"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "行號"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行號"
           }
         }
       }
     },
-    "Line Wrapping:" : {
-      "comment" : "Label for line wrapping option",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自动折行："
+    "Line Wrapping:": {
+      "comment": "Label for line wrapping option",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自动折行："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自動折行："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動折行："
           }
         }
       }
     },
-    "Literal Search" : {
-      "comment" : "Toggle literal search",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "字面查找"
+    "Literal Search": {
+      "comment": "Toggle literal search",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字面查找"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "字面尋找"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字面尋找"
           }
         }
       }
     },
-    "macOS / Unix (LF)" : {
-      "comment" : "Line endings used on macOS and Unix",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "macOS / Unix (LF)"
+    "macOS / Unix (LF)": {
+      "comment": "Line endings used on macOS and Unix",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS / Unix (LF)"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "macOS / Unix (LF)"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS / Unix (LF)"
           }
         }
       }
     },
-    "MarkEdit %@ is available!" : {
-      "comment" : "Title for new version available",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MarkEdit %@ 已发布！"
+    "MarkEdit %@ is available!": {
+      "comment": "Title for new version available",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MarkEdit %@ 已发布！"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MarkEdit %@ 已釋出！"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MarkEdit %@ 已釋出！"
           }
         }
       }
     },
-    "MarkEdit %@ is currently the latest version." : {
-      "comment" : "Message for the up-to-date info",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MarkEdit %@ 是目前的最新版本。"
+    "MarkEdit %@ is currently the latest version.": {
+      "comment": "Message for the up-to-date info",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MarkEdit %@ 是目前的最新版本。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MarkEdit %@ 是目前的最新版本。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MarkEdit %@ 是目前的最新版本。"
           }
         }
       }
     },
-    "Missing active document to proceed." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有活跃的文档来进行下一步。"
+    "Missing active document to proceed.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有活跃的文档来进行下一步。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "沒有活躍的文件來進行下一步。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有活躍的文件來進行下一步。"
           }
         }
       }
     },
-    "More Fonts" : {
-      "comment" : "Menu item to browse all fonts",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更多字体"
+    "More Fonts": {
+      "comment": "Menu item to browse all fonts",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更多字体"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更多字型"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更多字型"
           }
         }
       }
     },
-    "Never" : {
-      "comment" : "Never show invisibles",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从不"
+    "Never": {
+      "comment": "Never show invisibles",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从不"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "從不"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "從不"
           }
         }
       }
     },
-    "New Document" : {
-      "comment" : "Menu item: create a new document",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建文档"
+    "New Document": {
+      "comment": "Menu item: create a new document",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新增文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增文件"
           }
         }
       }
     },
-    "New Document named ${fileName} with ${initialContent}" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "以 ${initialContent} 新建名为 ${fileName} 的文档"
+    "New Document named ${fileName} with ${initialContent}": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以 ${initialContent} 新建名为 ${fileName} 的文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "以 ${initialContent} 新增名為 ${fileName} 的文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以 ${initialContent} 新增名為 ${fileName} 的文件"
           }
         }
       }
     },
-    "New Filename Extension:" : {
-      "comment" : "Filename extension for new files",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新文件扩展名："
+    "New Filename Extension:": {
+      "comment": "Filename extension for new files",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新文件扩展名："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新檔案副檔名："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新檔案副檔名："
           }
         }
       }
     },
-    "New Window Behavior:" : {
-      "comment" : "Behavior when creating new windows",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新窗口行为："
+    "New Window Behavior:": {
+      "comment": "Behavior when creating new windows",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新窗口行为："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新視窗行為："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新視窗行為："
           }
         }
       }
     },
-    "Next" : {
-      "comment" : "Button title, move to the next item",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下一个"
+    "Next": {
+      "comment": "Button title, move to the next item",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一个"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下一個"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一個"
           }
         }
       }
     },
-    "No editor for document \"%@\" found." : {
-      "comment" : "Script error when MarkEdit cannot find the editor view to run document commands in",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "找不到用于文稿“%@”的编辑器。"
+    "No editor for document “%@” found.": {
+      "comment": "Script error when MarkEdit cannot find the editor view to run document commands in",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到用于文稿“%@”的编辑器。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "找不到用於文件“%@”的編輯器。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到用於文件“%@”的編輯器。"
           }
         }
       }
     },
-    "No versions match the specified condition." : {
-      "comment" : "Alert title for no versions found",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有符合条件的版本。"
+    "No versions match the specified condition.": {
+      "comment": "Alert title for no versions found",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有符合条件的版本。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "沒有符合條件的版本。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合條件的版本。"
           }
         }
       }
     },
-    "Normal" : {
-      "comment" : "Normal line spacing\nNormal mode for window toolbar",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正常"
+    "Normal": {
+      "comment": "Normal line spacing\nNormal mode for window toolbar",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正常"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正常"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正常"
           }
         }
       }
     },
-    "Not Now" : {
-      "comment" : "Title for the \"Not Now\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "等下再说"
+    "Not Now": {
+      "comment": "Title for the \"Not Now\" button",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "等下再说"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "等下再說"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "等下再說"
           }
         }
       }
     },
-    "Open Document" : {
-      "comment" : "Menu item: open an existing document",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开文档"
+    "Open Document": {
+      "comment": "Menu item: open an existing document",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打開文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開文件"
           }
         }
       }
     },
-    "Open Font Panel…" : {
-      "comment" : "Menu item for selecting custom fonts",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开字体面板…"
+    "Open Font Panel…": {
+      "comment": "Menu item for selecting custom fonts",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开字体面板…"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打開字體面板…"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開字體面板…"
           }
         }
       }
     },
-    "option-esc" : {
-      "shouldTranslate" : false
+    "option-esc": {
+      "shouldTranslate": false
     },
-    "Paragraphs" : {
-      "comment" : "Statistics label: count paragraphs",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "段落数量"
+    "Paragraphs": {
+      "comment": "Statistics label: count paragraphs",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "段落数量"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "段落數量"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "段落數量"
           }
         }
       }
     },
-    "Please check your network connection or get the latest release from the version history." : {
-      "comment" : "Message for failed to get the update",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请检查您的网络连接，或从版本记录中获取最新版本。"
+    "Please check your network connection or get the latest release from the version history.": {
+      "comment": "Message for failed to get the update",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请检查您的网络连接，或从版本记录中获取最新版本。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "請檢查您的網路連線，或從版本記錄中獲取最新版本。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請檢查您的網路連線，或從版本記錄中獲取最新版本。"
           }
         }
       }
     },
-    "Prefer Indent Using:" : {
-      "comment" : "Label for indent unit settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "缩进偏好："
+    "Prefer Indent Using:": {
+      "comment": "Label for indent unit settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缩进偏好："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "縮排偏好："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "縮排偏好："
           }
         }
       }
     },
-    "Preferred" : {
-      "comment" : "Preferred window tabbing mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "首选"
+    "Preferred": {
+      "comment": "Preferred window tabbing mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "首选"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "首選"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "首選"
           }
         }
       }
     },
-    "Press ⌥ ⎋ to show the panel." : {
-      "comment" : "Hint for using word completion",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按下 ⌥ ⎋ 来显示列表。"
+    "Press ⌥ ⎋ to show the panel.": {
+      "comment": "Hint for using word completion",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按下 ⌥ ⎋ 来显示列表。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按下 ⌥ ⎋ 來顯示列表。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按下 ⌥ ⎋ 來顯示列表。"
           }
         }
       }
     },
-    "Preview" : {
-      "comment" : "Button title for code preview",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "预览"
+    "Preview": {
+      "comment": "Button title for code preview",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "预览"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "預覽"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預覽"
           }
         }
       }
     },
-    "Previous" : {
-      "comment" : "Button title, move to the previous item",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上一个"
+    "Previous": {
+      "comment": "Button title, move to the previous item",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上一个"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上一個"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上一個"
           }
         }
       }
     },
-    "Quit always keeps windows" : {
-      "comment" : "Whether to keep windows when quit the app",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "退出时总是保留窗口"
+    "Quit always keeps windows": {
+      "comment": "Whether to keep windows when quit the app",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "退出时总是保留窗口"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "退出時總是保留視窗"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "退出時總是保留視窗"
           }
         }
       }
     },
-    "Quote" : {
-      "comment" : "Toolbar item to toggle blockquote",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "引用"
+    "Quote": {
+      "comment": "Toolbar item to toggle blockquote",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "引用"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "引用"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "引用"
           }
         }
       }
     },
-    "Read Time" : {
-      "comment" : "Statistics label: count read time",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "阅读时间"
+    "Read Time": {
+      "comment": "Statistics label: count read time",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阅读时间"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "閱讀時間"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閱讀時間"
           }
         }
       }
     },
-    "Recent Searches" : {
-      "comment" : "Menu item: recent searches",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近的搜索"
+    "Recent Searches": {
+      "comment": "Menu item: recent searches",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近的搜索"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近的搜尋"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近的搜尋"
           }
         }
       }
     },
-    "Reduce Transparency:" : {
-      "comment" : "Label for the option to reduce window transparency",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "降低透明度："
+    "Reduce Transparency:": {
+      "comment": "Label for the option to reduce window transparency",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "降低透明度："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "減少透明度："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "減少透明度："
           }
         }
       }
     },
-    "Regular Expression" : {
-      "comment" : "Toggle regular expression for search",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正则表达式"
+    "Regular Expression": {
+      "comment": "Toggle regular expression for search",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正则表达式"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正規表示法"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正規表示法"
           }
         }
       }
     },
-    "Relaxed" : {
-      "comment" : "Relaxed line spacing",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "宽松"
+    "Relaxed": {
+      "comment": "Relaxed line spacing",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "宽松"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "寬鬆"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "寬鬆"
           }
         }
       }
     },
-    "Remind Me Later" : {
-      "comment" : "Title for the \"Remind Me Later\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "稍后提醒我"
+    "Remind Me Later": {
+      "comment": "Title for the \"Remind Me Later\" button",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "稍后提醒我"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "稍後提醒我"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "稍後提醒我"
           }
         }
       }
     },
-    "Remove the toolbar blur" : {
-      "comment" : "Explanation for the option to reduce window transparency",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "移除工具栏模糊效果"
+    "Remove the toolbar blur": {
+      "comment": "Explanation for the option to reduce window transparency",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移除工具栏模糊效果"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "移除工具列模糊效果"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移除工具列模糊效果"
           }
         }
       }
     },
-    "Render Invisibles:" : {
-      "comment" : "Label for invisibles behavior setting",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "渲染不可见字符："
+    "Render Invisibles:": {
+      "comment": "Label for invisibles behavior setting",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "渲染不可见字符："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "渲染不可見字元："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "渲染不可見字元："
           }
         }
       }
     },
-    "Replace" : {
-      "comment" : "Replace mode in search menu",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "替换"
+    "Replace": {
+      "comment": "Replace mode in search menu",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "替换"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取代"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取代"
           }
         }
       }
     },
-    "Replace All" : {
-      "comment" : "Replace all occurrences",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全部替换"
+    "Replace All": {
+      "comment": "Replace all occurrences",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部替换"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全部取代"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部取代"
           }
         }
       }
     },
-    "Replace All in Selection" : {
-      "comment" : "Replace all occurrences in selection",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在所选内容中全部替换"
+    "Replace All in Selection": {
+      "comment": "Replace all occurrences in selection",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在所选内容中全部替换"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在所選範圍中全部取代"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在所選範圍中全部取代"
           }
         }
       }
     },
-    "Revert to This Version" : {
-      "comment" : "Title for button to select a file version",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "复原到此版本"
+    "Revert to This Version": {
+      "comment": "Title for button to select a file version",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "复原到此版本"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "回復成此版本"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回復成此版本"
           }
         }
       }
     },
-    "Save Changes" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存改动"
+    "Save Changes": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存改动"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "儲存改動"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存改動"
           }
         }
       }
     },
-    "Search Operations" : {
-      "comment" : "Search operations",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "搜索操作"
+    "Search Operations": {
+      "comment": "Search operations",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜索操作"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "搜尋操作"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋操作"
           }
         }
       }
     },
-    "Select All" : {
-      "comment" : "Select all occurrences",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全选"
+    "Select All": {
+      "comment": "Select all occurrences",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全选"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全選"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全選"
           }
         }
       }
     },
-    "Select All in Selection" : {
-      "comment" : "Select all occurrences in selection",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在所选内容中全选"
+    "Select All in Selection": {
+      "comment": "Select all occurrences in selection",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在所选内容中全选"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在所選範圍中進行全選"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在所選範圍中進行全選"
           }
         }
       }
     },
-    "Select All Occurrences" : {
-      "comment" : "Menu item: select all occurrences",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择所有相同项"
+    "Select All Occurrences": {
+      "comment": "Menu item: select all occurrences",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择所有相同项"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇所有相同項"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇所有相同項"
           }
         }
       }
     },
-    "Select…" : {
-      "comment" : "Menu label for selecting fonts",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择…"
+    "Select…": {
+      "comment": "Menu label for selecting fonts",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择…"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇…"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇…"
           }
         }
       }
     },
-    "Selected" : {
-      "comment" : "General title that indicates something is selected",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已选择"
+    "Selected": {
+      "comment": "General title that indicates something is selected",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已选择"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已選擇"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已選擇"
           }
         }
       }
     },
-    "Selection" : {
-      "comment" : "Show invisibles for selected ranges\nStatistics mode: selection",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选中区域"
+    "Selection": {
+      "comment": "Show invisibles for selected ranges\nStatistics mode: selection",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选中区域"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選中區域"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選中區域"
           }
         }
       }
     },
-    "Selection status" : {
-      "comment" : "Option to show selection status",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择状态"
+    "Selection status": {
+      "comment": "Option to show selection status",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择状态"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇狀態"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇狀態"
           }
         }
       }
     },
-    "Sentences" : {
-      "comment" : "Statistics label: count sentences",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "句子数量"
+    "Sentences": {
+      "comment": "Statistics label: count sentences",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "句子数量"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "句子數量"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "句子數量"
           }
         }
       }
     },
-    "Share this document" : {
-      "comment" : "Toolbar item to share the document",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分享此文档"
+    "Share this document": {
+      "comment": "Toolbar item to share the document",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享此文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分享此文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享此文件"
           }
         }
       }
     },
-    "Show Hidden Files" : {
-      "comment" : "Label for save panel accessory view",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示隐藏文件"
+    "Show Hidden Files": {
+      "comment": "Label for save panel accessory view",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示隐藏文件"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示隱藏檔案"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示隱藏檔案"
           }
         }
       }
     },
-    "Show:" : {
-      "comment" : "Label for display options",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示："
+    "Show:": {
+      "comment": "Label for display options",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示："
           }
         }
       }
     },
-    "Skip This Version" : {
-      "comment" : "Title for the \"Skip This Version\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "跳过这个版本"
+    "Skip This Version": {
+      "comment": "Title for the \"Skip This Version\" button",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳过这个版本"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "跳過這個版本"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳過這個版本"
           }
         }
       }
     },
-    "Standard words" : {
-      "comment" : "Option for standard words suggestion",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标准单词"
+    "Standard words": {
+      "comment": "Option for standard words suggestion",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标准单词"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標準單字"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標準單字"
           }
         }
       }
     },
-    "Statistics" : {
-      "comment" : "Toolbar item to show statistics",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "统计数据"
+    "Statistics": {
+      "comment": "Toolbar item to show statistics",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "统计数据"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "統計數字"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "統計數字"
           }
         }
       }
     },
-    "Strikethrough" : {
-      "comment" : "Toolbar item to toggle strikethrough",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "删除线"
+    "Strikethrough": {
+      "comment": "Toolbar item to toggle strikethrough",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除线"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "刪除線"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除線"
           }
         }
       }
     },
-    "Suggest while typing" : {
-      "comment" : "Whether to suggest while typing",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "键入时提供补全"
+    "Suggest while typing": {
+      "comment": "Whether to suggest while typing",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "键入时提供补全"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "鍵入時提供補全"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鍵入時提供補全"
           }
         }
       }
     },
-    "System" : {
-      "comment" : "Follow the system appearance",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系统"
+    "System": {
+      "comment": "Follow the system appearance",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系統"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系統"
           }
         }
       }
     },
-    "System Default" : {
-      "comment" : "System default font name",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系统默认"
+    "System Default": {
+      "comment": "System default font name",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统默认"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系統預設"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系統預設"
           }
         }
       }
     },
-    "System Mono" : {
-      "comment" : "System mono font name",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系统等宽"
+    "System Mono": {
+      "comment": "System mono font name",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统等宽"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系統等寬"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系統等寬"
           }
         }
       }
     },
-    "System Rounded" : {
-      "comment" : "System rounded font name",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系统圆润"
+    "System Rounded": {
+      "comment": "System rounded font name",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统圆润"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系統圓潤"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系統圓潤"
           }
         }
       }
     },
-    "System Serif" : {
-      "comment" : "System serif font name",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系统衬线"
+    "System Serif": {
+      "comment": "System serif font name",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系统衬线"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "系統襯線"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "系統襯線"
           }
         }
       }
     },
-    "Tab Key:" : {
-      "comment" : "Label for tab key behavior settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "制表键："
+    "Tab Key:": {
+      "comment": "Label for tab key behavior settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "制表键："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "製表鍵："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "製表鍵："
           }
         }
       }
     },
-    "Tabbing Mode:" : {
-      "comment" : "Label for window tabbing mode settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标签模式："
+    "Tabbing Mode:": {
+      "comment": "Label for window tabbing mode settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标签模式："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標籤模式："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標籤模式："
           }
         }
       }
     },
-    "Table" : {
-      "comment" : "Toolbar item to insert table",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "表格"
+    "Table": {
+      "comment": "Toolbar item to insert table",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "表格"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "表格"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "表格"
           }
         }
       }
     },
-    "Table of Contents" : {
-      "comment" : "Toolbar item to show table of contents",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "内容目录"
+    "Table of Contents": {
+      "comment": "Toolbar item to show table of contents",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内容目录"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "內容目錄"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "內容目錄"
           }
         }
       }
     },
-    "Text Encoding:" : {
-      "comment" : "Label for save panel accessory view",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文本编码："
+    "Text Encoding:": {
+      "comment": "Label for save panel accessory view",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文本编码："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文字編碼："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文字編碼："
           }
         }
       }
     },
-    "Text Format" : {
-      "comment" : "Toolbar item to use text format menu",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文本格式"
+    "Text Format": {
+      "comment": "Toolbar item to use text format menu",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文本格式"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文字格式"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文字格式"
           }
         }
       }
     },
-    "This action cannot be undone." : {
-      "comment" : "Alert message for cannot undo",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此操作无法被撤销。"
+    "This action cannot be undone.": {
+      "comment": "Alert message for cannot undo",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此操作无法被撤销。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此操作無法被撤銷。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此操作無法被撤銷。"
           }
         }
       }
     },
-    "This release requires macOS %@ or later and cannot be installed without upgrading your operating system." : {
-      "comment" : "Message for minimum required OS version",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此更新需要 macOS %@ 或更高版本，在升级您的系统版本之前无法安装。"
+    "This release requires macOS %@ or later and cannot be installed without upgrading your operating system.": {
+      "comment": "Message for minimum required OS version",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此更新需要 macOS %@ 或更高版本，在升级您的系统版本之前无法安装。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此更新需要 macOS %@ 或更高版本，在升級您的系統版本之前無法安裝。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此更新需要 macOS %@ 或更高版本，在升級您的系統版本之前無法安裝。"
           }
         }
       }
     },
-    "Tight" : {
-      "comment" : "Tight line spacing",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "紧凑"
+    "Tight": {
+      "comment": "Tight line spacing",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "紧凑"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "緊湊"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊湊"
           }
         }
       }
     },
-    "title" : {
-      "comment" : "Default title used for link insertion",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标题"
+    "title": {
+      "comment": "Default title used for link insertion",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标题"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標題"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標題"
           }
         }
       }
     },
-    "Toggle List" : {
-      "comment" : "Toolbar item to toggle bullet list",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "切换列表"
+    "Toggle List": {
+      "comment": "Toolbar item to toggle bullet list",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切换列表"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "切換列表"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切換列表"
           }
         }
       }
     },
-    "Toolbar Mode:" : {
-      "comment" : "Label for window toolbar mode",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "工具栏模式："
+    "Toolbar Mode:": {
+      "comment": "Label for window toolbar mode",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具栏模式："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "工具列模式："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具列模式："
           }
         }
       }
     },
-    "Trailing" : {
-      "comment" : "Show trailing invisibles",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尾部空白"
+    "Trailing": {
+      "comment": "Show trailing invisibles",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尾部空白"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尾部空白"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尾部空白"
           }
         }
       }
     },
-    "Trim trailing whitespace" : {
-      "comment" : "Option for trimming trailing whitespaces",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "移除尾部空白"
+    "Trim trailing whitespace": {
+      "comment": "Option for trimming trailing whitespaces",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移除尾部空白"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "移除尾部空白"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移除尾部空白"
           }
         }
       }
     },
-    "Unfold" : {
-      "comment" : "Phrase used in CodeMirror to unfold a piece of text",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "展开"
+    "Unfold": {
+      "comment": "Phrase used in CodeMirror to unfold a piece of text",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "展开"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "展開"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "展開"
           }
         }
       }
     },
-    "Unfold Line" : {
-      "comment" : "Phrase used in CodeMirror to unfold a line",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "展开行"
+    "Unfold Line": {
+      "comment": "Phrase used in CodeMirror to unfold a line",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "展开行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "展開行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "展開行"
           }
         }
       }
     },
-    "Unfolded Lines" : {
-      "comment" : "Phrase used in CodeMirror to indicate unfolded lines",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "展开的行"
+    "Unfolded Lines": {
+      "comment": "Phrase used in CodeMirror to indicate unfolded lines",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "展开的行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "展開的行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "展開的行"
           }
         }
       }
     },
-    "Update File Content" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新文件内容"
+    "Update File Content": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新文件内容"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新檔案內容"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新檔案內容"
           }
         }
       }
     },
-    "Updates file content of the active document; throws an error if no editor is opened." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新当前活跃文档的内容，没有打开的编辑器时将抛出异常。"
+    "Updates file content of the active document; throws an error if no editor is opened.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新当前活跃文档的内容，没有打开的编辑器时将抛出异常。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }
     },
-    "Update file with ${content}" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用 ${content} 更新文件"
+    "Update file with ${content}": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 ${content} 更新文件"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用 ${content} 更新檔案"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 ${content} 更新檔案"
           }
         }
       }
     },
-    "View Release Page" : {
-      "comment" : "Title for the \"View Release Page\" button",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看发布页面"
+    "View Release Page": {
+      "comment": "Title for the \"View Release Page\" button",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看发布页面"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "檢視釋出頁面"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檢視釋出頁面"
           }
         }
       }
     },
-    "Whole Document" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "整个文档"
+    "Whole Document": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整个文档"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "整個文件"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整個文件"
           }
         }
       }
     },
-    "Whole Word" : {
-      "comment" : "Toggle whole word search",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "整词查找"
+    "Whole Word": {
+      "comment": "Toggle whole word search",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整词查找"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "整詞尋找"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整詞尋找"
           }
         }
       }
     },
-    "Window" : {
-      "comment" : "Window title for window settings",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "窗口"
+    "Window": {
+      "comment": "Window title for window settings",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "窗口"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "視窗"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "視窗"
           }
         }
       }
     },
-    "Window Restoration:" : {
-      "comment" : "Label for window restoration options",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "窗口恢复："
+    "Window Restoration:": {
+      "comment": "Label for window restoration options",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "窗口恢复："
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "視窗恢復："
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "視窗恢復："
           }
         }
       }
     },
-    "Windows (CRLF)" : {
-      "comment" : "Line endings used on Windows",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Windows (CRLF)"
+    "Windows (CRLF)": {
+      "comment": "Line endings used on Windows",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows (CRLF)"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Windows (CRLF)"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Windows (CRLF)"
           }
         }
       }
     },
-    "Words" : {
-      "comment" : "Statistics label: count words",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "单词数量"
+    "Words": {
+      "comment": "Statistics label: count words",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "单词数量"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "單字數量"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "單字數量"
           }
         }
       }
     },
-    "Words in document" : {
-      "comment" : "Option for words in documents suggestion",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文档中的单词"
+    "Words in document": {
+      "comment": "Option for words in documents suggestion",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文档中的单词"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "文件中的單字"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件中的單字"
           }
         }
       }
     },
-    "Wrap lines to editor width" : {
-      "comment" : "Explanation for line wrapping option",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按编辑器的宽度换行"
+    "Wrap lines to editor width": {
+      "comment": "Explanation for line wrapping option",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按编辑器的宽度换行"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按編輯器的寬度換行"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按編輯器的寬度換行"
           }
         }
       }
     },
-    "Writing Tools" : {
-      "comment" : "Writing Tools",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "写作工具"
+    "Writing Tools": {
+      "comment": "Writing Tools",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写作工具"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "寫作工具"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "寫作工具"
           }
         }
       }
     },
-    "Wrong file extension for type \"%@\", use \".%@\" instead." : {
-      "comment" : "Script save error when the path extension does not match the output type",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Wrong file extension for type \"%1$@\", use \".%2$@\" instead."
+    "Wrong file extension for type “%@”, use “.%@” instead.": {
+      "comment": "Script save error when the path extension does not match the output type",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wrong file extension for type \"%1$@\", use \".%2$@\" instead."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“%1$@”类型的扩展名错误，请使用“.%2$@”。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%1$@”类型的扩展名错误，请使用“.%2$@”。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“%1$@”型別的副檔名錯誤，請使用“.%2$@”。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%1$@”型別的副檔名錯誤，請使用“.%2$@”。"
           }
         }
       }
     },
-    "You're up-to-date!" : {
-      "comment" : "Title for the up-to-date info",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "您已安装最新版本！"
+    "You’re up-to-date!": {
+      "comment": "Title for the up-to-date info",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "您已安装最新版本！"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "您已安裝最新版本！"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "您已安裝最新版本！"
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
