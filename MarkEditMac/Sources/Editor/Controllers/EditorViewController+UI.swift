@@ -378,9 +378,10 @@ extension EditorViewController {
       }
 
       Task {
-        let state = try? await bridge.api.getMenuItemState(id: stateGetterID)
-        item.isEnabled = item.isEnabled && (state?.isEnabled ?? true)
-        item.setOn(state?.isSelected ?? false)
+        if let state = try? await bridge.api.getMenuItemState(id: stateGetterID) {
+          item.isEnabled = view.window != nil && (state.isEnabled ?? true)
+          item.setOn(state.isSelected ?? false)
+        }
       }
     }
   }
@@ -449,6 +450,8 @@ extension EditorViewController {
       } else {
         Logger.log(.error, "Missing menu named: \(title)")
       }
+
+      updateUserDefinedMenus(toolbarItem.menu)
     }
   }
 
