@@ -10,7 +10,7 @@ import { getTableOfContents, getLinkAnchor, gotoHeader } from '../../modules/toc
 
 const className = 'cm-md-link';
 const regexp = {
-  standard: /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?([a-zA-Z0-9-]+\.)?[-a-zA-Z0-9@:%._+~#=]+(\.[a-z]+)?\b([-a-zA-Z0-9@:%._+~#=?&//]*)|(\[.*?\]\()(.+?)[\s)]|(<[^>]*\b(?:src|srcset|href|poster)\s*=\s*["'])([^"']*)["']/gi,
+  standard: /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?([a-zA-Z0-9-]+\.)?[-a-zA-Z0-9@:%._+~#=]+(\.[a-z]+)?\b([-a-zA-Z0-9@:%._+~#=?&//]*)|(\[[^\]]*\]\()([^)]+(?:\)[^)]+)*)\)|(<[^>]*\b(?:src|srcset|href|poster)\s*=\s*["'])([^"']*)["']/gi,
   footnote: /^\[\^[^\]]+\]$/,
   reference: /^\[[^\]]+\] ?\[([^\]]+)\]$/,
 };
