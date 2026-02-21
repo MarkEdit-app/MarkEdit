@@ -359,7 +359,8 @@ class HistoryState {
   pop(side: BranchName, state: EditorState, onlySelection: boolean): Transaction | null {
     let branch = side == BranchName.Done ? this.done : this.undone
     if (branch.length == 0) return null
-    let event = branch[branch.length - 1], selection = event.selectionsAfter[0] || state.selection
+    let event = branch[branch.length - 1], selection = event.selectionsAfter[0] ||
+      (event.startSelection ? event.startSelection.map(event.changes!.invertedDesc, 1) : state.selection)
     if (onlySelection && event.selectionsAfter.length) {
       return state.update({
         selection: event.selectionsAfter[event.selectionsAfter.length - 1],

@@ -50,7 +50,7 @@
 <body>
   <div id="container" style="width: 1600px; text-align: center; opacity: 0; transition: opacity 0.3s;"></div>
   <script type="module">
-    import { marked } from "https://cdn.jsdelivr.net/npm/marked@17.0.1/lib/marked.esm.js";
+    import { marked } from "https://cdn.jsdelivr.net/npm/marked@17.0.3/lib/marked.esm.js";
     const container = document.querySelector("#container");
     container.innerHTML = marked.parse("{{DATA}}".code);
   </script>
