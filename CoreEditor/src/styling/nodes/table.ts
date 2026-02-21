@@ -1,5 +1,5 @@
-import { createLineDeco, createWidgetDeco } from '../matchers/lezer';
-import { createDecoPlugin } from '../helper';
+import { createBlockWrappers, createLineDeco, createWidgetDeco } from '../matchers/lezer';
+import { createBlockPlugin, createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../views';
 import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
@@ -7,6 +7,7 @@ import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/prev
  * Always use monospace font for Table.
  */
 export const tableStyle = [
+  createBlockPlugin(() => createBlockWrappers('Table', 'cm-md-tableWrapper')),
   createDecoPlugin(() => createLineDeco('Table', 'cm-md-monospace cm-md-table')),
 ];
 

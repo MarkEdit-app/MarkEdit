@@ -1,9 +1,25 @@
-import { Decoration } from '@codemirror/view';
+import { BlockWrapper, Decoration } from '@codemirror/view';
 import { Range, RangeValue } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
 import { WidgetView } from '../views/types';
 import { lineDecoRanges } from '../helper';
+
+/**
+ * Build block wrappers by leveraging language lexers.
+ *
+ * @param nodeName Node name(s), such as "CodeBlock" for code blocks
+ * @param className Class to decorate the node
+ */
+export function createBlockWrappers(nodeName: string | string[], className: string, attributes?: { [key: string]: string }) {
+  return BlockWrapper.set(createNodeRanges(nodeName, node => BlockWrapper.create({
+    tagName: 'div',
+    attributes: {
+      'class': className,
+      ...attributes,
+    },
+  }).range(node.from, node.to)));
+}
 
 /**
  * Create mark decorations.

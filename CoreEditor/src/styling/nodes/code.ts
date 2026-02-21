@@ -1,5 +1,5 @@
-import { createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
-import { createDecoPlugin } from '../helper';
+import { createBlockWrappers, createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
+import { createBlockPlugin, createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../views';
 import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
@@ -16,6 +16,12 @@ export const inlineCodeStyle = createDecoPlugin(() => {
 export const codeBlockStyle = (() => {
   const nodeNames = ['FencedCode', 'CodeBlock'];
   return [
+    createBlockPlugin(() => createBlockWrappers(nodeNames, 'cm-md-codeBlockWrapper', {
+      'spellcheck': 'false',
+      'autocorrect': 'off',
+      'autocomplete': 'off',
+      'autocapitalize': 'off',
+    })),
     createDecoPlugin(() => createLineDeco(nodeNames, 'cm-md-monospace cm-md-codeBlock')),
   ];
 })();
