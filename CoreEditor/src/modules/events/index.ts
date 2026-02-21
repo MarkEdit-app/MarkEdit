@@ -80,10 +80,16 @@ export function startObserving() {
   });
 
   // It happens usually when the page is scaled, i.e., it's not the actual size
-  document.addEventListener('scroll', () => {
-    clearTimeout(storage.scrollTimer);
-    storage.scrollTimer = setTimeout(() => window.nativeModules.core.notifyContentOffsetDidChange(), 100);
-  });
+  if ('onscrollend' in window) { // [macOS] 26.2
+    document.addEventListener('scrollend', () => {
+      window.nativeModules.core.notifyContentOffsetDidChange();
+    });
+  } else {
+    document.addEventListener('scroll', () => {
+      clearTimeout(storage.scrollTimer);
+      storage.scrollTimer = setTimeout(() => window.nativeModules.core.notifyContentOffsetDidChange(), 100);
+    });
+  }
 
   // Captures the time a context menu is opened, primarily to prevent automatic line break selection
   document.addEventListener('contextmenu', () => {

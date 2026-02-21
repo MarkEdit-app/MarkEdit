@@ -110,16 +110,22 @@ export function resetEditor(initialContent: string) {
   observeContentHeightChanges(scrollDOM);
   fixWebKitWheelIssues(scrollDOM);
 
-  scrollDOM.addEventListener('scroll', () => {
-    if (storage.scrollTimer !== undefined) {
-      clearTimeout(storage.scrollTimer);
-      storage.scrollTimer = undefined;
-    }
-
-    storage.scrollTimer = setTimeout(() => {
+  if ('onscrollend' in window) { // [macOS] 26.2
+    scrollDOM.addEventListener('scrollend', () => {
       window.nativeModules.core.notifyContentOffsetDidChange();
-    }, 100);
-  });
+    });
+  } else {
+    scrollDOM.addEventListener('scroll', () => {
+      if (storage.scrollTimer !== undefined) {
+        clearTimeout(storage.scrollTimer);
+        storage.scrollTimer = undefined;
+      }
+
+      storage.scrollTimer = setTimeout(() => {
+        window.nativeModules.core.notifyContentOffsetDidChange();
+      }, 100);
+    });
+  }
 
   // Recofigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
