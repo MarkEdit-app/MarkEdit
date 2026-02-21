@@ -444,17 +444,17 @@ Gw
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Font" id="VwK-Nx-wgD">
                                                 <items>
-                                                    <menuItem title="Reset to Default" keyEquivalent="0" id="Ghc-zK-wBC">
+                                                    <menuItem title="Reset to Default" secondaryImage="equal" catalog="system" keyEquivalent="0" id="Ghc-zK-wBC">
                                                         <connections>
                                                             <action selector="resetFontSize:" target="Ady-hI-5gd" id="Vxw-Bb-rzi"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Bigger" keyEquivalent="+" id="ErA-Lh-vDf">
+                                                    <menuItem title="Bigger" secondaryImage="textformat.size.larger" catalog="system" keyEquivalent="+" id="ErA-Lh-vDf">
                                                         <connections>
                                                             <action selector="makeFontBigger:" target="Ady-hI-5gd" id="MZD-dv-bmQ"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Smaller" keyEquivalent="-" id="crU-NP-BJu">
+                                                    <menuItem title="Smaller" secondaryImage="textformat.size.smaller" catalog="system" keyEquivalent="-" id="crU-NP-BJu">
                                                         <connections>
                                                             <action selector="makeFontSmaller:" target="Ady-hI-5gd" id="8uW-QM-0le"/>
                                                         </connections>
@@ -1111,6 +1111,7 @@ Gw
         <image name="character.textbox" catalog="system" width="19" height="14"/>
         <image name="clock.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="16" height="15"/>
         <image name="curlybraces" catalog="system" width="15" height="16"/>
+        <image name="equal" catalog="system" width="12" height="8"/>
         <image name="gear" catalog="system" width="17" height="16"/>
         <image name="gearshape.2" catalog="system" width="20" height="16"/>
         <image name="italic" catalog="system" width="10" height="12"/>
@@ -1121,5 +1122,7 @@ Gw
         <image name="smallcircle.filled.circle" catalog="system" width="15" height="15"/>
         <image name="square.and.arrow.down.on.square" catalog="system" width="17" height="20"/>
         <image name="strikethrough" catalog="system" width="14" height="12"/>
+        <image name="textformat.size.larger" catalog="system" width="11" height="12"/>
+        <image name="textformat.size.smaller" catalog="system" width="9" height="9"/>
     </resources>
 </document>
