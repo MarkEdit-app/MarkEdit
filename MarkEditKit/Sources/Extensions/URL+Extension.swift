@@ -28,6 +28,10 @@ public extension URL {
     deletingPathExtension().appendingPathExtension(pathExtension)
   }
 
+  var hasQuarantineAttribute: Bool {
+    getxattr(path, "com.apple.quarantine", nil, 0, 0, 0) >= 0
+  }
+
   func removeQuarantineAttribute() {
     _ = removexattr(path, "com.apple.quarantine", 0)
   }
