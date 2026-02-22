@@ -358,9 +358,6 @@ extension EditorDocument {
     // To work around this, check a flag to save the document manually.
     if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
       try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
-      if !hadQuarantineOnOpen {
-        fileURL.removeQuarantineAttribute()
-      }
       fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
     }
 
@@ -369,13 +366,11 @@ extension EditorDocument {
     }
   }
 
-  override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, completionHandler: @escaping (Error?) -> Void) {
-    super.save(to: url, ofType: typeName, for: saveOperation) { error in
-      if error == nil, !self.hadQuarantineOnOpen {
-        url.removeQuarantineAttribute()
-      }
+  override func writeSafely(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) throws {
+    try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
 
-      completionHandler(error)
+    if !hadQuarantineOnOpen {
+      url.removeQuarantineAttribute()
     }
   }
 
