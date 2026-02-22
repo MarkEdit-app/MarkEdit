@@ -27,6 +27,10 @@ public extension URL {
   func replacingPathExtension(_ pathExtension: String) -> URL {
     deletingPathExtension().appendingPathExtension(pathExtension)
   }
+
+  func removeQuarantineAttribute() {
+    _ = removexattr(path, "com.apple.quarantine", 0)
+  }
 }
 
 // MARK: - Private

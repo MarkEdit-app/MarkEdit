@@ -356,11 +356,22 @@ extension EditorDocument {
     // To work around this, check a flag to save the document manually.
     if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
       try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
+      fileURL.removeQuarantineAttribute()
       fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
     }
 
     Task { @MainActor in
       try await super.autosave(withImplicitCancellability: implicitlyCancellable)
+    }
+  }
+
+  override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType, completionHandler: @escaping (Error?) -> Void) {
+    super.save(to: url, ofType: typeName, for: saveOperation) { error in
+      if error == nil {
+        url.removeQuarantineAttribute()
+      }
+
+      completionHandler(error)
     }
   }
 
