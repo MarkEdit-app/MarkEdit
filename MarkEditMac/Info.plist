@@ -89,8 +89,6 @@
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
 		</dict>
 	</array>
-	<key>LSFileQuarantineEnabled</key>
-	<false/>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>OSAScriptingDefinition</key>
