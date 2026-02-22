@@ -64,7 +64,6 @@ final class EditorDocument: NSDocument {
 
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
-  private var hadQuarantineOnOpen = false
   private var suggestedTextEncoding: EditorTextEncoding?
   private weak var hostViewController: EditorViewController?
 
@@ -315,7 +314,6 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
-    hadQuarantineOnOpen = fileURL?.hasQuarantineAttribute ?? false
     DispatchQueue.global(qos: .userInitiated).async {
       let newValue = {
         if let encoding = AppDocumentController.suggestedTextEncoding {
@@ -363,14 +361,6 @@ extension EditorDocument {
 
     Task { @MainActor in
       try await super.autosave(withImplicitCancellability: implicitlyCancellable)
-    }
-  }
-
-  override func writeSafely(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) throws {
-    try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
-
-    if !hadQuarantineOnOpen {
-      url.removeQuarantineAttribute()
     }
   }
 
