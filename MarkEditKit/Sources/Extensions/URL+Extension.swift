@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 public extension URL {
   var localizedName: String {
@@ -24,6 +25,18 @@ public extension URL {
     }
   }
 
+  var isBinaryFile: Bool {
+    if textFileExtensions.contains(pathExtension.lowercased()) {
+      return false
+    }
+
+    if suggestedFileType?.conforms(to: .text) ?? true {
+      return false
+    }
+
+    return true
+  }
+
   func replacingPathExtension(_ pathExtension: String) -> URL {
     deletingPathExtension().appendingPathExtension(pathExtension)
   }
@@ -35,4 +48,28 @@ private extension URL {
   var isSymbolicLink: Bool {
     (try? resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) ?? false
   }
+
+  var suggestedFileType: UTType? {
+    if let associatedType = (try? resourceValues(forKeys: [.contentTypeKey]))?.contentType {
+      return associatedType
+    }
+
+    return UTType(filenameExtension: pathExtension)
+  }
 }
+
+private let textFileExtensions = Set(
+  [
+    "md",
+    "markdown",
+    "mdown",
+    "mdwn",
+    "mkdn",
+    "mkd",
+    "mdoc",
+    "mdtext",
+    "mdtxt",
+    "textbundle",
+    "txt",
+  ]
+)

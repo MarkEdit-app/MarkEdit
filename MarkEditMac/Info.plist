@@ -88,6 +88,22 @@
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Binary File</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
+		</dict>
 	</array>
 	<key>NSAppleScriptEnabled</key>
 	<true/>

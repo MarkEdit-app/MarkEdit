@@ -39,6 +39,30 @@ final class AppDocumentController: NSDocumentController {
     return await super.beginOpenPanel(openPanel, forTypes: inTypes)
   }
 
+  override func openDocument(
+    withContentsOf url: URL,
+    display displayDocument: Bool,
+    completionHandler: @escaping (NSDocument?, Bool, (any Error)?) -> Void
+  ) {
+    if url.isBinaryFile {
+      // Dead loop prevention
+      if Bundle.main.isDefaultApp(toOpen: url) {
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+      } else {
+        NSWorkspace.shared.open(url)
+      }
+
+      // Ignore the default opening logic
+      completionHandler(nil, false, nil)
+    } else {
+      super.openDocument(
+        withContentsOf: url,
+        display: displayDocument,
+        completionHandler: completionHandler
+      )
+    }
+  }
+
   override func saveAllDocuments(_ sender: Any?) {
     // The default implementation doesn't work
     documents.forEach { $0.save(sender) }
