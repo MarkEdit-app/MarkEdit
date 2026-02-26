@@ -78,6 +78,24 @@ describe('Lezer parser', () => {
     expect(types).toContain('HeaderMark');
   });
 
+  test('test FrontMatter', () => {
+    editor.setUp('---\ntitle: MarkEdit\n---\n\nHello World');
+
+    const types = parseTypes(window.editor);
+    expect(types).toContain('Frontmatter');
+    expect(types).toContain('DashLine');
+    expect(types).toContain('BlockMapping');
+    expect(types).toContain('Pair');
+    expect(types).toContain('Key');
+    expect(types).toContain('Literal');
+    expect(types).toContain(':');
+
+    // These nodes are present without proper frontMatter parsing
+    expect(types).not.toContain('HorizontalRule');
+    expect(types).not.toContain('SetextHeading2');
+    expect(types).not.toContain('HeaderMark');
+  });
+
   test('test footnote', () => {
     editor.setUp('[^footnote]\n\n[^footnote]:');
 

@@ -7,7 +7,6 @@ import { createMarkDeco } from '../matchers/regex';
 import { createDecoPlugin } from '../helper';
 import { isPositionFolded } from './gutter';
 import { selectedVisiblesDecoration } from './selection';
-import { frontMatterRange } from '../../modules/frontMatter';
 import { refreshEditFocus } from '../../modules/selection';
 import { getVisibleLines } from '../../modules/lines';
 import { LineBreakWidget } from '../views';
@@ -154,11 +153,6 @@ function shouldIgnorePosition(pos: number, selectionOnly: boolean) {
  */
 function getOrCreateDeco(invisible: string, pos: number) {
   const fontSize = (() => {
-    const range = frontMatterRange();
-    if (range !== undefined && pos >= range.from && pos <= range.to) {
-      return window.config.fontSize;
-    }
-
     const state = window.editor.state;
     const node = syntaxTree(state).resolve(pos);
     return calculateFontSize(window.config.fontSize, headingLevel(node.type));

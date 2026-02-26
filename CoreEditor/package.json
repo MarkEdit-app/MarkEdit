@@ -15,6 +15,7 @@
   "dependencies": {
     "@codemirror/autocomplete": "^6.0.0",
     "@codemirror/commands": "^6.0.0",
+    "@codemirror/lang-yaml": "^6.0.0",
     "@codemirror/language": "^6.0.0",
     "@codemirror/language-data": "^6.0.0",
     "@codemirror/search": "^6.0.0",
@@ -24,7 +25,6 @@
     "@lezer/highlight": "^1.0.0",
     "@lezer/lr": "^1.0.0",
     "@lezer/markdown": "^1.0.0",
-    "js-yaml": "^4.1.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
@@ -32,7 +32,6 @@
     "@stylistic/eslint-plugin": "^5.5.0",
     "@types/eslint": "^9.6.1",
     "@types/jest": "^29.5.4",
-    "@types/js-yaml": "^4.0.5",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/parser": "^8.46.2",
     "esbuild": "^0.25.0",

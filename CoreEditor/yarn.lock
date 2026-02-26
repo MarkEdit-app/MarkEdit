@@ -2352,13 +2352,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:^4.0.5":
-  version: 4.0.9
-  resolution: "@types/js-yaml@npm:4.0.9"
-  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
-  languageName: node
-  linkType: hard
-
 "@types/jsdom@npm:^21.1.7":
   version: 21.1.7
   resolution: "@types/jsdom@npm:21.1.7"
@@ -5087,6 +5080,7 @@ __metadata:
   dependencies:
     "@codemirror/autocomplete": "npm:^6.0.0"
     "@codemirror/commands": "npm:^6.0.0"
+    "@codemirror/lang-yaml": "npm:^6.0.0"
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/language-data": "npm:^6.0.0"
     "@codemirror/search": "npm:^6.0.0"
@@ -5100,7 +5094,6 @@ __metadata:
     "@stylistic/eslint-plugin": "npm:^5.5.0"
     "@types/eslint": "npm:^9.6.1"
     "@types/jest": "npm:^29.5.4"
-    "@types/js-yaml": "npm:^4.0.5"
     "@types/uuid": "npm:^10.0.0"
     "@typescript-eslint/parser": "npm:^8.46.2"
     esbuild: "npm:^0.25.0"
@@ -5110,7 +5103,6 @@ __metadata:
     glob: "npm:^12.0.0"
     jest: "npm:^30.2.0"
     jest-environment-jsdom: "npm:^30.2.0"
-    js-yaml: "npm:^4.1.1"
     markedit-api: "https://github.com/MarkEdit-app/MarkEdit-api#v0.21.0"
     rollup: "npm:^4.0.0"
     ts-gyb: "npm:^0.12.0"

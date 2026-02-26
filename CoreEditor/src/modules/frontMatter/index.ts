@@ -1,6 +1,10 @@
-import { load as loadYaml } from 'js-yaml';
+import { yamlFrontmatter as frontMatter } from '@codemirror/lang-yaml';
+import { markdown } from '../../@vendor/lang-markdown';
 import { replaceRange } from '../../common/utils';
 import { takePossibleNewline } from '../lineEndings';
+
+const config = { content: markdown() };
+const parser = frontMatter(config).language.parser;
 
 /**
  * Get the range of possible front matter section.
@@ -17,12 +21,21 @@ export function frontMatterRange(source?: string) {
 
   // Definition: https://jekyllrb.com/docs/front-matter/
   const text = source === undefined ? state.doc.toString() : source;
-  const match = /^---\n(.+?)\n---/s.exec(text);
-  if (match && isYaml(match[1])) {
-    return { from: 0, to: match[0].length };
+  if (!/^---[ \t]*\r?\n[\s\S]*?\n---[ \t]*(?:\r?\n|$)/.test(text)) {
+    return undefined;
   }
 
-  return undefined;
+  const result = { from: -1, to: -1 };
+  parser.parse(text).iterate({
+    enter: node => {
+      if (node.name === 'Frontmatter' && result.from < 0) {
+        result.from = node.from;
+        result.to = node.to;
+      }
+    },
+  });
+
+  return result.from < 0 ? undefined : result;
 }
 
 export function removeFrontMatter(source: string) {
@@ -32,12 +45,4 @@ export function removeFrontMatter(source: string) {
   }
 
   return replaceRange(source, range.from, takePossibleNewline(source, range.to), '');
-}
-
-function isYaml(source: string) {
-  try {
-    return typeof loadYaml(source) === 'object';
-  } catch {
-    return false;
-  }
 }

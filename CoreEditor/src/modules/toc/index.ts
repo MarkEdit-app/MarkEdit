@@ -1,7 +1,6 @@
 import { KeyBinding } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { HeadingInfo } from './types';
-import { frontMatterRange } from '../frontMatter';
 import { getSyntaxTree } from '../lezer';
 import { scrollToSelection } from '../selection';
 import { saveGoBackSelection } from '../selection/navigate';
@@ -41,17 +40,10 @@ export function getTableOfContents() {
         return;
       }
 
-      // If it's inside a front matter section, we will not treat it as a section header
-      const isSetext = node.name.startsWith('SetextHeading');
-      if (isSetext) {
-        const range = frontMatterRange();
-        if (range !== undefined && node.from >= range.from && node.to <= range.to) {
-          return;
-        }
-      }
-
       const title = (() => {
+        const isSetext = node.name.startsWith('SetextHeading');
         const text = state.sliceDoc(node.from, node.to);
+
         if (isSetext) {
           // SetextHeading has a line break
           return text.split(state.lineBreak)[0].trim();
