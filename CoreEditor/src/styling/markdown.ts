@@ -4,7 +4,6 @@ import { MarkdownConfig } from '@lezer/markdown';
 import { markdownMathExtension as markdownMathConfig } from '../@vendor/joplin/markdownMathParser';
 import { tags } from './builder';
 import { linkDefinitionConfig } from './nodes/def';
-import { frontmatterMarkdownConfig } from './nodes/frontmatterConfig';
 import { listIndentStyle } from './nodes/indent';
 import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './nodes/code';
 import { previewTable, tableStyle } from './nodes/table';
@@ -57,7 +56,6 @@ export const markdownExtensions: MarkdownConfig[] = [
   },
   linkDefinitionConfig,
   markdownMathConfig,
-  frontmatterMarkdownConfig,
 ];
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt

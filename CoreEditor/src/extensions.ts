@@ -11,6 +11,7 @@ import {
 
 import { Compartment, EditorState } from '@codemirror/state';
 import { indentUnit as indentUnitFacet, indentOnInput, bracketMatching, foldKeymap } from '@codemirror/language';
+import { yamlFrontmatter as frontMatter } from '@codemirror/lang-yaml';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
@@ -163,7 +164,7 @@ export function extensions(options: { lineBreak?: string }) {
 }
 
 export function markdownConfigurations() {
-  return markdown({
+  const content = markdown({
     base: markdownLanguage,
     codeLanguages: [
       ...languages,
@@ -175,6 +176,8 @@ export function markdownConfigurations() {
     ],
     completeHTMLTags: false,
   });
+
+  return frontMatter({ content });
 }
 
 function indentBehaviorExtension() {
