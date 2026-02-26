@@ -113,10 +113,6 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-md-inlineCode': {
     borderRadius: '3px',
   },
-  '.cm-md-frontMatter, .cm-md-frontMatter *': {
-    fontSize: 'unset !important',
-    fontWeight: 'unset !important',
-  },
 };
 
 // Here we define color independent highlight styles
@@ -218,9 +214,6 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     '.cm-md-inlineCode': {
       backgroundColor: colors.lighterBackground,
-    },
-    '.cm-md-frontMatter, .cm-md-frontMatter *': {
-      color: colors.comment,
     },
     '.cm-md-previewButton': {
       backgroundImage: (() => {

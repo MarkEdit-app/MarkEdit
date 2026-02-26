@@ -1,17 +1,10 @@
-import { Decoration } from '@codemirror/view';
-import { createDecoPlugin, lineDecoRanges } from '../helper';
-import { frontMatterRange } from '../../modules/frontMatter';
+import { createBlockPlugin, createDecoPlugin } from '../helper';
+import { createBlockWrappers, createLineDeco } from '../matchers/lezer';
 
 /**
  * Front Matter: https://jekyllrb.com/docs/front-matter/.
  */
-export const frontMatterStyle = createDecoPlugin(() => {
-  const range = frontMatterRange();
-  if (range === undefined) {
-    return Decoration.none;
-  }
-
-  // We don't have a cm6 parser for yaml just yet,
-  // let's simply decorate the front matter section with a class.
-  return Decoration.set(lineDecoRanges(range.from, range.to, 'cm-md-frontMatter'));
-});
+export const frontMatterStyle = [
+  createBlockPlugin(() => createBlockWrappers('Frontmatter', 'cm-md-frontMatterWrapper')),
+  createDecoPlugin(() => createLineDeco('Frontmatter', 'cm-md-frontMatter')),
+];
