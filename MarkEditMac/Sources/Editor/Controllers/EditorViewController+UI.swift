@@ -443,7 +443,7 @@ extension EditorViewController {
   }
 
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
-    class TextField: NSTextField {
+    class TextField: NSTextField, @unchecked Sendable {
       // The main menu binds "Select All" to `selectWholeDocument(_:)`
       @IBAction func selectWholeDocument(_ sender: Any?) {
         currentEditor()?.selectAll(nil)
