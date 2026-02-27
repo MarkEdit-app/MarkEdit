@@ -29,7 +29,7 @@ public enum EditorInvisiblesBehavior: String, Codable {
   case always = "always"
 }
 
-public enum EditorIndentBehavior: String, Codable {
+public enum EditorIndentBehavior: String, Codable, Sendable {
   case never = "never"
   case paragraph = "paragraph"
   case line = "line"

@@ -658,15 +658,17 @@ private extension EditorDocument {
       return // Cancelled
     }
 
-    let performClose = {
+    let performClose: @Sendable () -> Void = {
       // isReleasedWhenClosed is not initially set to true to prevent crashes when deleting drafts.
       // However, we need to release the window in the confirmsChanges function;
       // otherwise, it will cause a memory leak.
-      document.windowControllers.forEach {
-        $0.window?.isReleasedWhenClosed = true
-      }
+      Task { @MainActor in
+        document.windowControllers.forEach {
+          $0.window?.isReleasedWhenClosed = true
+        }
 
-      document.close()
+        document.close()
+      }
     }
 
     if document.hasBeenReverted || !document.isDocumentEdited {
