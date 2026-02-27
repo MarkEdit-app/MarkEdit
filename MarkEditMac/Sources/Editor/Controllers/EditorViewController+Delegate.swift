@@ -116,7 +116,9 @@ extension EditorViewController: EditorModuleCoreDelegate {
         self.loadingIndicator.animator().alphaValue = 0
       } completionHandler: {
         // Destroy it since we only need the indicator for cold launch
-        self.loadingIndicator.removeFromSuperview()
+        Task { @MainActor in
+          self.loadingIndicator.removeFromSuperview()
+        }
       }
 
       self.loadingIndicator.scaleTo(2.0, duration: duration)

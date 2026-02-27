@@ -493,7 +493,7 @@ extension EditorViewController {
   }
 
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
-    class TextField: NSTextField {
+    class TextField: NSTextField, @unchecked Sendable {
       override func performKeyEquivalent(with event: NSEvent) -> Bool {
         // The default "selectAll" is not available here
         if event.deviceIndependentFlags == .command, event.keyCode == .kVK_ANSI_A {
@@ -520,8 +520,12 @@ extension EditorViewController {
       object: nil,
       queue: .main
     ) { [weak self] notification in
+      guard let window = notification.object as? NSWindow else {
+        return
+      }
+
       Task { @MainActor in
-        if let window = notification.object as? NSWindow, window == textField.window {
+        if window == textField.window {
           window.makeFirstResponder(textField)
           if let observer = self?.textBoxInputObserver {
             self?.textBoxInputObserver = nil
