@@ -29,7 +29,9 @@ extension EditorViewController {
       NSAnimationContext.runAnimationGroup { _ in
         snapshotView.animator().alphaValue = 0
       } completionHandler: {
-        snapshotView.removeFromSuperview()
+        Task { @MainActor in
+          snapshotView.removeFromSuperview()
+        }
       }
     }
   }
