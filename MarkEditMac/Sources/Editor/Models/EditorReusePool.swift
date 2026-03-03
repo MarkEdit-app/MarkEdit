@@ -25,12 +25,9 @@ final class EditorReusePool {
   }
 
   func dequeueViewController() -> EditorViewController {
-    let controller = EditorViewController()
-    defer {
-      preloadedController = controller
-    }
-
-    return preloadedController ?? controller
+    let controller = preloadedController ?? EditorViewController()
+    preloadedController = EditorViewController()
+    return controller
   }
 
   /// All editors, whether with or without a visible window.
