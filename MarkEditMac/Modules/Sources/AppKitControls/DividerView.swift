@@ -17,7 +17,7 @@ public final class DividerView: NSView {
   private let color: NSColor
   private let hairlineWidth: Bool
 
-  public init(color: NSColor = .separatorColor, hairlineWidth: Bool = true) {
+  public init(color: NSColor = .separatorColor, hairlineWidth: Bool = false) {
     self.color = color
     self.hairlineWidth = hairlineWidth
     super.init(frame: .zero)
