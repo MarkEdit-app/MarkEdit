@@ -889,6 +889,13 @@ Gw
                                                 <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cGC-yM-BaF"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="egO-qW-gHN"/>
+                                        <menuItem title="Official Extensions" id="J5p-F8-eb5">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openOfficialExtensions:" target="Voe-Tx-rLC" id="wU2-OV-AbE"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Customization Guide" id="jNi-CL-4bf">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
