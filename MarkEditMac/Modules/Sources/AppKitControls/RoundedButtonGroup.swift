@@ -23,7 +23,7 @@ open class RoundedButtonGroup: NSView {
   private let modernStyle: Bool
   private let leftButton: NSButton
   private let rightButton: NSButton
-  private let dividerView = DividerView(color: .plainButtonBorder, hairlineWidth: false)
+  private let dividerView = DividerView(color: .plainButtonBorder)
 
   public init(modernStyle: Bool, leftButton: NonBezelButton, rightButton: NonBezelButton) {
     self.modernStyle = modernStyle

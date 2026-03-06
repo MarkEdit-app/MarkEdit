@@ -70,6 +70,10 @@ extension EditorViewController {
     findPanel.mode = mode
     findPanel.resetMenu()
 
+    // Titlebar divider isn't reliably shown in modern style, we use a custom view instead
+    let hideTitlebarDivider = mode == .hidden || AppDesign.modernStyle
+    view.window?.titlebarAppearsTransparent = hideTitlebarDivider
+
     // Move the focus back to editor
     if mode == .hidden {
       startTextEditing()

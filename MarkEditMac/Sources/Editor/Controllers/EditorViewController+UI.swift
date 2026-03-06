@@ -27,7 +27,6 @@ extension EditorViewController {
 
     wrapper.addSubview(findPanel)
     wrapper.addSubview(replacePanel)
-    wrapper.addSubview(panelDivider)
 
     // findPanel is added before replacePanel to ensure the key view loop,
     // but we want findPanel visually above the replacePanel to play UI tricks.
@@ -44,6 +43,8 @@ extension EditorViewController {
       wrapper.addSubview(modernDividerView)
     }
 
+    // Views that must be on the top
+    wrapper.addSubview(panelDivider)
     if !hasFinishedLoading {
       wrapper.addSubview(loadingIndicator)
     }
@@ -236,7 +237,7 @@ extension EditorViewController {
     )
 
     if AppDesign.modernTitleBar {
-      modernEffectHeight.constant = view.safeAreaInsets.top
+      modernEffectHeight.constant = view.safeAreaInsets.top + panelDivider.frame.height
       modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : 1
     }
   }
@@ -592,7 +593,7 @@ private extension EditorViewController {
 
   var panelDividerRect: CGRect {
     let offset: Double = {
-      if AppDesign.modernStyle && findPanel.mode == .hidden {
+      if findPanel.mode == .hidden {
         return contentHeight - panelDivider.length
       }
 
