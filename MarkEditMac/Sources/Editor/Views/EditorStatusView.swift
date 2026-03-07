@@ -49,6 +49,8 @@ final class EditorStatusView: NSView, BackgroundTheming {
 
   override func updateLayer() {
     if button is GlassButton {
+      // Clear this, otherwise it appears as a rectangle over text selection
+      layer?.backgroundColor = .clear
       return
     }
 
