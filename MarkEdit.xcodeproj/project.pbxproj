@@ -455,8 +455,8 @@
 				87AAEE0129585ADC00C8E61C /* AppPreferences.swift */,
 				87BEF30029A88F6800596E17 /* AppCustomization.swift */,
 				8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */,
-				87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */,
 				84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */,
+				87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
