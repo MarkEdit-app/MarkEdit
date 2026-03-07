@@ -64,24 +64,15 @@ public final class LabeledSearchField: NSSearchField {
       )
     }
 
-    // To completely remove the unnecessary capsule-style border
     if modernStyle {
-      #if DEBUG
-        var hasAppKitSearchField = false
-      #endif
-
-      enumerateDescendants { view in
-        if view.className.contains("AppKitSearchField") {
-          #if DEBUG
-            hasAppKitSearchField = true
-          #endif
-          renderCustomIcons(modernBezel: view)
-        }
+      // To completely remove the unnecessary capsule-style border
+      if let view = modernBezelView {
+        renderCustomIcons(modernBezel: view)
+      } else {
+        #if DEBUG
+          assertionFailure("Missing AppKitSearchField in NSSearchField")
+        #endif
       }
-
-      #if DEBUG
-        assert(hasAppKitSearchField, "Missing AppKitSearchField in NSSearchField")
-      #endif
     }
   }
 
