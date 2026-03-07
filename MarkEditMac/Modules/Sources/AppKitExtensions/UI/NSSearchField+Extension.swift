@@ -12,6 +12,12 @@ public extension NSSearchField {
     subviews.first { $0.className.hasSuffix("FocusClipView") }
   }
 
+  var modernBezelView: NSView? {
+    firstDescendant {
+      $0.className.contains("AppKitSearchField")
+    }
+  }
+
   var searchButtonCell: NSButtonCell? {
     (cell as? NSSearchFieldCell)?.searchButtonCell
   }

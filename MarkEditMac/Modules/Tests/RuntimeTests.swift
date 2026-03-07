@@ -63,6 +63,22 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: NSImage(), selector: "_setTintColor:")
   }
 
+  func testExistenceOfAppKitSearchField() {
+    let window = NSWindow()
+    window.makeKeyAndOrderFront(nil)
+
+    let searchField = NSSearchField(frame: CGRect(x: 0, y: 0, width: 240, height: 40))
+    window.contentView?.addSubview(searchField)
+
+    let expectation = XCTestExpectation()
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+      expectation.fulfill()
+    }
+
+    wait(for: [expectation])
+    XCTAssertNotNil(searchField.modernBezelView)
+  }
+
   func testRetrievingPopover() {
     class ContentViewController: NSViewController {
       override func loadView() {
