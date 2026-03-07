@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		84FB00F02C6C4AED00850E94 /* MarkEditWritingTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FB00EF2C6C4AED00850E94 /* MarkEditWritingTools.m */; };
+		84FB00F02C6C4AED00850E94 /* MarkEditWritingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB00EF2C6C4AED00850E94 /* MarkEditWritingTools.swift */; };
 		8701D0A42CC12321006AF8C2 /* FileVersion in Frameworks */ = {isa = PBXBuildFile; productRef = 8701D0A32CC12321006AF8C2 /* FileVersion */; };
 		87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87067E2629755D5C0052E795 /* EditorStatusView.swift */; };
 		87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87091B992A963C6B00F5EF0D /* EditorTextInput.swift */; };
@@ -145,9 +145,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		84FB00ED2C6C4AED00850E94 /* MarkEditMac-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MarkEditMac-Bridging-Header.h"; sourceTree = "<group>"; };
-		84FB00EE2C6C4AED00850E94 /* MarkEditWritingTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MarkEditWritingTools.h; sourceTree = "<group>"; };
-		84FB00EF2C6C4AED00850E94 /* MarkEditWritingTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarkEditWritingTools.m; sourceTree = "<group>"; };
+		84FB00EF2C6C4AED00850E94 /* MarkEditWritingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkEditWritingTools.swift; sourceTree = "<group>"; };
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
 		87091B992A963C6B00F5EF0D /* EditorTextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextInput.swift; sourceTree = "<group>"; };
 		8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantSettingsView.swift; sourceTree = "<group>"; };
@@ -291,16 +289,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		84FB00EC2C6C4ADC00850E94 /* ObjC */ = {
-			isa = PBXGroup;
-			children = (
-				84FB00EE2C6C4AED00850E94 /* MarkEditWritingTools.h */,
-				84FB00EF2C6C4AED00850E94 /* MarkEditWritingTools.m */,
-				84FB00ED2C6C4AED00850E94 /* MarkEditMac-Bridging-Header.h */,
-			);
-			path = ObjC;
-			sourceTree = "<group>";
-		};
 		870A5199294700DE0095C7EB = {
 			isa = PBXGroup;
 			children = (
@@ -390,7 +378,6 @@
 				8780AC0A29822C5500065EF4 /* Settings */,
 				8765FD262AF291A300C645A8 /* Updater */,
 				87850C8429482A6A00D1A952 /* Extensions */,
-				84FB00EC2C6C4ADC00850E94 /* ObjC */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -469,6 +456,7 @@
 				87BEF30029A88F6800596E17 /* AppCustomization.swift */,
 				8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */,
 				87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */,
+				84FB00EF2C6C4AED00850E94 /* MarkEditWritingTools.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -817,7 +805,7 @@
 				87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */,
 				8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */,
 				873126E4297BAC9C001521A0 /* EditorViewController+Pandoc.swift in Sources */,
-				84FB00F02C6C4AED00850E94 /* MarkEditWritingTools.m in Sources */,
+				84FB00F02C6C4AED00850E94 /* MarkEditWritingTools.swift in Sources */,
 				87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */,
 				877B965D2C63815000186414 /* AppHotKeys.swift in Sources */,
 				87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */,
@@ -1086,7 +1074,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
 				PRODUCT_NAME = MarkEdit;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "MarkEditMac/Sources/ObjC/MarkEditMac-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1123,7 +1110,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
 				PRODUCT_NAME = MarkEdit;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "MarkEditMac/Sources/ObjC/MarkEditMac-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
