@@ -49,7 +49,7 @@ public final class LabeledSearchField: NSSearchField {
 
     labelView.sizeToFit()
     labelView.frame = CGRect(
-      x: (frame.width - labelView.frame.width) - 25,
+      x: (cancelButtonBounds.minX - labelView.frame.width) - 2.0,
       y: (frame.height - labelView.frame.height) * 0.5,
       width: labelView.frame.width,
       height: labelView.frame.height
