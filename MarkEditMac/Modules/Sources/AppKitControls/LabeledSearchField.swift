@@ -11,6 +11,15 @@ public final class LabeledSearchField: NSSearchField {
   private let modernStyle: Bool
   private let bezelView = BezelView(cornerRadius: Constants.bezelCornerRadius)
 
+  // To render custom icons in modern style due to the unwanted bezel added by Apple
+  private lazy var searchIconView = CustomIconView()
+  private lazy var cancelIconView: CustomIconView = {
+    let view = CustomIconView()
+    view.isHidden = true
+
+    return view
+  }()
+
   private let labelView = {
     let label = LabelView(frame: .zero)
     label.font = .monospacedDigitSystemFont(ofSize: 12, weight: .regular)
@@ -55,7 +64,7 @@ public final class LabeledSearchField: NSSearchField {
       )
     }
 
-    // To completely clip the unnecessary capsule-style border
+    // To completely remove the unnecessary capsule-style border
     if modernStyle {
       #if DEBUG
         var hasAppKitSearchField = false
@@ -66,7 +75,7 @@ public final class LabeledSearchField: NSSearchField {
           #if DEBUG
             hasAppKitSearchField = true
           #endif
-          view.layer?.cornerRadius = view.frame.height * 0.5
+          renderCustomIcons(modernBezel: view)
         }
       }
 
@@ -90,10 +99,42 @@ public final class LabeledSearchField: NSSearchField {
     ).fill()
   }
 
+  override public var stringValue: String {
+    get {
+      super.stringValue
+    }
+    set {
+      super.stringValue = newValue
+      updateCustomCancelIcon()
+    }
+  }
+
+  override public func textDidChange(_ notification: Notification) {
+    super.textDidChange(notification)
+    updateCustomCancelIcon()
+  }
+
   public func updateLabel(text: String) {
     labelView.stringValue = text
     labelView.isHidden = text.isEmpty
     needsLayout = true
+  }
+
+  public func setSearchIconColor(_ tintColor: NSColor?) {
+    let buttonCell = searchButtonCell
+    let iconImage = buttonCell?.image?.copy() as? NSImage
+    iconImage?.setTintColor(tintColor)
+
+    // Must clear first
+    buttonCell?.image = nil
+    buttonCell?.image = iconImage
+
+    if modernStyle {
+      searchIconView.image = nil
+      searchIconView.image = iconImage
+    }
+
+    needsDisplay = true
   }
 }
 
@@ -102,5 +143,52 @@ public final class LabeledSearchField: NSSearchField {
 private extension LabeledSearchField {
   enum Constants {
     static let bezelCornerRadius: Double = 6.0
+  }
+
+  func renderCustomIcons(modernBezel: NSView) {
+    // This is used for styling only, user interactions are not handled here
+    modernBezel.isHidden = true
+
+    searchIconView.image = searchButtonCell?.image
+    searchIconView.frame = customIconBounds(for: searchButtonBounds)
+
+    cancelIconView.image = cancelButtonCell?.image
+    cancelIconView.frame = customIconBounds(for: cancelButtonBounds)
+
+    if searchIconView.superview == nil {
+      addSubview(searchIconView)
+    }
+
+    if cancelIconView.superview == nil {
+      addSubview(cancelIconView)
+    }
+
+    updateCustomCancelIcon()
+  }
+
+  func updateCustomCancelIcon() {
+    guard modernStyle else {
+      return
+    }
+
+    cancelIconView.isHidden = stringValue.isEmpty
+  }
+
+  func customIconBounds(for cellRect: CGRect) -> CGRect {
+    CGRect(x: cellRect.minX, y: 0, width: cellRect.width, height: frame.height)
+  }
+}
+
+private class CustomIconView: NSImageView {
+  override func hitTest(_ point: NSPoint) -> NSView? {
+    nil
+  }
+
+  override func isAccessibilityElement() -> Bool {
+    false
+  }
+
+  override func accessibilityRole() -> NSAccessibility.Role? {
+    .none
   }
 }
