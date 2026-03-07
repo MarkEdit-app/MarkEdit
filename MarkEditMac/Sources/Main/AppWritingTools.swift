@@ -25,42 +25,15 @@ enum WritingTool: Int {
 @available(macOS 15.1, *)
 enum AppWritingTools {
   static var requestedTool: WritingTool {
-    for window in NSApp.windows {
-      guard let controller = window.contentViewController, controller.className == "WTWritingToolsViewController" else {
-        continue
-      }
-
-      // WTWritingToolsConfiguration
-      let configSelector = sel_getUid("writingToolsConfiguration")
-      let target: NSObject = {
-        guard controller.responds(to: configSelector) else {
-          NSLog("Missing method selector for: %@, %@", "\(controller)", "writingToolsConfiguration")
-          return controller
-        }
-
-        let invocation = unsafeBitCast(
-          controller.method(for: configSelector),
-          to: (@convention(c) (NSObject, Selector) -> NSObject?).self
-        )
-
-        return invocation(controller, configSelector) ?? controller
-      }()
-
-      let toolSelector = sel_getUid("requestedTool")
-      guard target.responds(to: toolSelector) else {
-        NSLog("Missing method selector for: %@, %@", "\(target)", "requestedTool")
-        return .panel
-      }
-
-      let invocation = unsafeBitCast(
-        target.method(for: toolSelector),
-        to: (@convention(c) (NSObject, Selector) -> Int).self
-      )
-
-      return WritingTool(rawValue: invocation(target, toolSelector)) ?? .panel
+    guard let controller = NSApp.windows
+      .compactMap(\.contentViewController)
+      .first(where: { $0.className == "WTWritingToolsViewController" }) else {
+      return .panel
     }
 
-    return .panel
+    // WTWritingToolsConfiguration
+    let target: NSObject = invoke(controller, selector: "writingToolsConfiguration") ?? controller
+    return WritingTool(rawValue: invoke(target, selector: "requestedTool")) ?? .panel
   }
 
   static var affordanceIcon: NSImage? {
@@ -107,6 +80,34 @@ enum AppWritingTools {
 
 @available(macOS 15.1, *)
 private extension AppWritingTools {
+  /// Invokes a selector on a target and returns the result as `NSObject?`.
+  static func invoke(_ target: NSObject, selector name: String) -> NSObject? {
+    let selector = sel_getUid(name)
+    guard target.responds(to: selector) else {
+      NSLog("Missing method selector for: %@, %@", "\(target)", name)
+      return nil
+    }
+
+    return unsafeBitCast(
+      target.method(for: selector),
+      to: (@convention(c) (NSObject, Selector) -> NSObject?).self
+    )(target, selector)
+  }
+
+  /// Invokes a selector on a target and returns the result as `Int`.
+  static func invoke(_ target: NSObject, selector name: String) -> Int {
+    let selector = sel_getUid(name)
+    guard target.responds(to: selector) else {
+      NSLog("Missing method selector for: %@, %@", "\(target)", name)
+      return 0
+    }
+
+    return unsafeBitCast(
+      target.method(for: selector),
+      to: (@convention(c) (NSObject, Selector) -> Int).self
+    )(target, selector)
+  }
+
   static var writingToolsInstance: NSObject? {
     guard let cls = NSClassFromString("WTWritingTools") else {
       assertionFailure("Failed to get WTWritingTools class")
@@ -119,12 +120,11 @@ private extension AppWritingTools {
       return nil
     }
 
-    let invocation = unsafeBitCast(
+    let instance = unsafeBitCast(
       method_getImplementation(classMethod),
       to: (@convention(c) (AnyObject, Selector) -> NSObject?).self
-    )
+    )(cls as AnyObject, selector)
 
-    let instance = invocation(cls as AnyObject, selector)
     assert(instance != nil, "Failed to get WTWritingTools instance")
     return instance
   }
