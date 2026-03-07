@@ -32,8 +32,8 @@ enum AppWritingTools {
     }
 
     // WTWritingToolsConfiguration
-    let target: NSObject = invoke(controller, selector: "writingToolsConfiguration") ?? controller
-    return WritingTool(rawValue: invoke(target, selector: "requestedTool")) ?? .panel
+    let target: NSObject = invoke(controller, selector: "writingToolsConfiguration", fallback: nil) ?? controller
+    return WritingTool(rawValue: invoke(target, selector: "requestedTool", fallback: 0)) ?? .panel
   }
 
   static var affordanceIcon: NSImage? {
@@ -80,31 +80,17 @@ enum AppWritingTools {
 
 @available(macOS 15.1, *)
 private extension AppWritingTools {
-  /// Invokes a selector on a target and returns the result as `NSObject?`.
-  static func invoke(_ target: NSObject, selector name: String) -> NSObject? {
+  /// Invokes a selector on a target and returns the result cast to the inferred type.
+  static func invoke<Result>(_ target: NSObject, selector name: String, fallback: Result) -> Result {
     let selector = sel_getUid(name)
     guard target.responds(to: selector) else {
       NSLog("Missing method selector for: %@, %@", "\(target)", name)
-      return nil
+      return fallback
     }
 
     return unsafeBitCast(
       target.method(for: selector),
-      to: (@convention(c) (NSObject, Selector) -> NSObject?).self
-    )(target, selector)
-  }
-
-  /// Invokes a selector on a target and returns the result as `Int`.
-  static func invoke(_ target: NSObject, selector name: String) -> Int {
-    let selector = sel_getUid(name)
-    guard target.responds(to: selector) else {
-      NSLog("Missing method selector for: %@, %@", "\(target)", name)
-      return 0
-    }
-
-    return unsafeBitCast(
-      target.method(for: selector),
-      to: (@convention(c) (NSObject, Selector) -> Int).self
+      to: (@convention(c) (NSObject, Selector) -> Result).self
     )(target, selector)
   }
 
