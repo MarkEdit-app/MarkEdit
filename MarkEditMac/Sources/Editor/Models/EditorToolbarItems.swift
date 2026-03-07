@@ -16,7 +16,7 @@ extension NSToolbarItem {
 
     // Special icon for Writing Tools
     if #available(macOS 15.1, *), identifier == .writingTools {
-      item.image = MarkEditWritingTools.affordanceIcon ?? item.image
+      item.image = AppWritingTools.affordanceIcon ?? item.image
     }
 
     if let menu {

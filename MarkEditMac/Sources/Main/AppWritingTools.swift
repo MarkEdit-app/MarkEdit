@@ -1,5 +1,5 @@
 //
-//  MarkEditWritingTools.swift
+//  AppWritingTools.swift
 //  MarkEditMac
 //
 //  Created by cyan on 8/14/24.
@@ -23,11 +23,10 @@ enum WritingTool: Int {
 }
 
 @available(macOS 15.1, *)
-enum MarkEditWritingTools {
+enum AppWritingTools {
   static var requestedTool: WritingTool {
     for window in NSApp.windows {
-      guard let controller = window.contentViewController,
-            controller.className == "WTWritingToolsViewController" else {
+      guard let controller = window.contentViewController, controller.className == "WTWritingToolsViewController" else {
         continue
       }
 
@@ -39,11 +38,12 @@ enum MarkEditWritingTools {
           return controller
         }
 
-        let impl = unsafeBitCast(
+        let invocation = unsafeBitCast(
           controller.method(for: configSelector),
           to: (@convention(c) (NSObject, Selector) -> NSObject?).self
         )
-        return impl(controller, configSelector) ?? controller
+
+        return invocation(controller, configSelector) ?? controller
       }()
 
       let toolSelector = sel_getUid("requestedTool")
@@ -52,24 +52,27 @@ enum MarkEditWritingTools {
         return .panel
       }
 
-      let impl = unsafeBitCast(
+      let invocation = unsafeBitCast(
         target.method(for: toolSelector),
         to: (@convention(c) (NSObject, Selector) -> Int).self
       )
 
-      return WritingTool(rawValue: impl(target, toolSelector)) ?? .panel
+      return WritingTool(rawValue: invocation(target, toolSelector)) ?? .panel
     }
 
     return .panel
   }
 
   static var affordanceIcon: NSImage? {
-    let configuration = NSImage.SymbolConfiguration(pointSize: 12.5, weight: .medium)
-    let symbolImage = NSImage(systemSymbolName: "apple.writing.tools", accessibilityDescription: nil)
-      ?? NSImage(systemSymbolName: "_gm", accessibilityDescription: nil)
+    let configuration = NSImage.SymbolConfiguration(
+      pointSize: 12.5,
+      weight: .medium
+    )
 
-    if let symbolImage {
-      return symbolImage.withSymbolConfiguration(configuration)
+    for symbolName in ["apple.writing.tools", "_gm"] {
+      if let symbolImage = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil) {
+        return symbolImage.withSymbolConfiguration(configuration)
+      }
     }
 
     guard let affordanceClass = NSClassFromString("WTAffordanceView") as? NSView.Type else {
@@ -103,7 +106,7 @@ enum MarkEditWritingTools {
 // MARK: - Private
 
 @available(macOS 15.1, *)
-private extension MarkEditWritingTools {
+private extension AppWritingTools {
   static var writingToolsInstance: NSObject? {
     guard let cls = NSClassFromString("WTWritingTools") else {
       assertionFailure("Failed to get WTWritingTools class")
@@ -116,12 +119,12 @@ private extension MarkEditWritingTools {
       return nil
     }
 
-    let impl = unsafeBitCast(
+    let invocation = unsafeBitCast(
       method_getImplementation(classMethod),
       to: (@convention(c) (AnyObject, Selector) -> NSObject?).self
     )
-    let instance = impl(cls as AnyObject, selector)
 
+    let instance = invocation(cls as AnyObject, selector)
     assert(instance != nil, "Failed to get WTWritingTools instance")
     return instance
   }

@@ -209,7 +209,7 @@ extension EditorViewController {
       // Work around undo stack and selection range issues
       self.bridge.writingTools.setActive(
         isActive: isActive,
-        reselect: MarkEditWritingTools.shouldReselect(with: MarkEditWritingTools.requestedTool)
+        reselect: AppWritingTools.shouldReselect(with: AppWritingTools.requestedTool)
       )
 
       // Invisible rendering doesn't work well with Writing Tools, temporarily disable it for now
