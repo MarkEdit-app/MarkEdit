@@ -36,4 +36,12 @@ public extension NSImage {
 
     return image
   }
+
+  func setTintColor(_ tintColor: NSColor?) {
+    guard responds(to: sel_getUid("_setTintColor:")) else {
+      return assertionFailure("Missing _setTintColor(_:) to change the tint color")
+    }
+
+    perform(sel_getUid("_setTintColor:"), with: tintColor)
+  }
 }

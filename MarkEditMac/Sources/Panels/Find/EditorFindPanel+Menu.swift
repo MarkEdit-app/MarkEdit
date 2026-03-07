@@ -116,6 +116,6 @@ private extension EditorFindPanel {
     })?.contains { $0.state == .on } ?? false
 
     let tintColor: NSColor? = shouldTint ? .controlAccentColor : nil
-    searchField.setIconTintColor(tintColor)
+    searchField.setSearchIconColor(tintColor)
   }
 }

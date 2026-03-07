@@ -12,6 +12,14 @@ public extension NSSearchField {
     subviews.first { $0.className.hasSuffix("FocusClipView") }
   }
 
+  var searchButtonCell: NSButtonCell? {
+    (cell as? NSSearchFieldCell)?.searchButtonCell
+  }
+
+  var cancelButtonCell: NSButtonCell? {
+    (cell as? NSSearchFieldCell)?.cancelButtonCell
+  }
+
   func addToRecents(searchTerm: String) {
     guard !searchTerm.isEmpty else {
       return
@@ -19,23 +27,5 @@ public extension NSSearchField {
 
     let recents = recentSearches.filter { $0 != searchTerm }
     recentSearches = [searchTerm] + recents
-  }
-
-  func setIconTintColor(_ tintColor: NSColor?) {
-    guard let buttonCell = (cell as? NSSearchFieldCell)?.searchButtonCell else {
-      return
-    }
-
-    guard let iconImage = buttonCell.image else {
-      return
-    }
-
-    guard iconImage.responds(to: sel_getUid("_setTintColor:")) else {
-      return
-    }
-
-    iconImage.perform(sel_getUid("_setTintColor:"), with: tintColor)
-    buttonCell.image = iconImage
-    needsDisplay = true
   }
 }
