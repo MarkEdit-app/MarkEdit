@@ -56,6 +56,7 @@ enum MarkEditWritingTools {
         target.method(for: toolSelector),
         to: (@convention(c) (NSObject, Selector) -> Int).self
       )
+
       return WritingTool(rawValue: impl(target, toolSelector)) ?? .panel
     }
 
