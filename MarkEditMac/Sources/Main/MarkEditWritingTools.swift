@@ -95,7 +95,7 @@ enum MarkEditWritingTools {
 
   static func shouldReselect(with tool: WritingTool) -> Bool {
     // Compose mode can start without text selections
-    return tool != .compose
+    tool != .compose
   }
 }
 
