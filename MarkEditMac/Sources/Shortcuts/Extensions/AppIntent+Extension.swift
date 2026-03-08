@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import AppKit
 
 extension AppIntent {
   /// Returns the current active editor, or nil if not applicable.

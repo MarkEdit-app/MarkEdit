@@ -5,7 +5,7 @@
 //  Created by cyan on 8/9/24.
 //
 
-import Foundation
+import AppKit
 import MarkEditCore
 import MarkEditKit
 

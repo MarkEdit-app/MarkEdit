@@ -5,6 +5,7 @@
 //  Created by Stephen Kaplan on 4/2/25.
 //
 
+import AppKit
 import MarkEditKit
 
 extension EditorDocument {
