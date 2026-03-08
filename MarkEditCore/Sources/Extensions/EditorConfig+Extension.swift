@@ -15,12 +15,16 @@ public extension EditorConfig {
 }
 
 extension EditorConfig {
-  /// index.html built by CoreEditor.
-  private var indexHtml: String? {
+  /// index.html built by CoreEditor, cached since the file never changes at runtime.
+  private static let cachedIndexHtml: String? = {
     guard let path = Bundle.main.url(forResource: "index", withExtension: "html") else {
       fatalError("Missing dist/index.html to set up the editor. In the wiki, see Building CoreEditor.")
     }
 
     return try? Data(contentsOf: path).toString()
+  }()
+
+  private var indexHtml: String? {
+    Self.cachedIndexHtml
   }
 }

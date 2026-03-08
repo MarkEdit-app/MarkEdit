@@ -84,7 +84,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    DispatchQueue.main.async {
       EditorReusePool.shared.warmUp()
     }
 
