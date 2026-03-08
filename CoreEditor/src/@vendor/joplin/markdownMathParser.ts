@@ -15,13 +15,10 @@ const mathBlockStartRegex = /^(?:\s*[>]\s*)?\$\$/;
 const mathBlockEndRegex = /\$\$\s*$/;
 
 const texLanguage = StreamLanguage.define(stexMath);
-export const blockMathTagName = "BlockMath";
-export const blockMathContentTagName = "BlockMathContent";
-export const inlineMathTagName = "InlineMath";
-export const inlineMathContentTagName = "InlineMathContent";
+const blockMathTagName = "BlockMath";
+const blockMathContentTagName = "BlockMathContent";
 
-export const mathTag = Tag.define(tags.monospace);
-export const inlineMathTag = Tag.define(mathTag);
+const mathTag = Tag.define(tags.monospace);
 
 /**
  * Wraps a TeX math-mode parser. This removes [nodeTag] from the syntax tree
