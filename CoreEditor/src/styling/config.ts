@@ -56,7 +56,7 @@ export function setTheme(theme: EditorTheme) {
   setEditorColors(theme.colors);
 }
 
-export function setEditorColors(colors: EditorColors) {
+function setEditorColors(colors: EditorColors) {
   if (styleSheets.accentColor === undefined) {
     styleSheets.accentColor = createStyleSheet('.cm-md-header:not(.cm-md-quote) {}');
   }

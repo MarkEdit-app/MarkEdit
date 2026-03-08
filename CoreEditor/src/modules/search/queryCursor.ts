@@ -6,7 +6,7 @@ export interface QueryResult {
   to: number;
 }
 
-export interface QueryCursor {
+interface QueryCursor {
   matchAll: (state: EditorState, limit: number) => QueryResult[] | null;
   nextMatch: (state: EditorState, from: number, to: number) => QueryResult | null;
   prevMatch: (state: EditorState, from: number, to: number) => QueryResult | null;

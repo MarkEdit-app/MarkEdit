@@ -15,8 +15,3 @@ export interface WebModuleDummy extends WebModule {
   __generateTypes__(_types: { arg0: IndentBehavior }): void;
 }
 
-export class WebModuleDummyImpl implements WebModuleDummy {
-  __generateTypes__(_types: { arg0: IndentBehavior }): void {
-    // no-op
-  }
-}

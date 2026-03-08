@@ -205,7 +205,7 @@ export function hasTooltipCompletion() {
   return tooltipCompletionStatus(window.editor.state) === 'active';
 }
 
-export function toggleTooltipCompletion() {
+function toggleTooltipCompletion() {
   if (hasTooltipCompletion()) {
     closeTooltipCompletion(window.editor);
   } else {
