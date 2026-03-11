@@ -6,16 +6,37 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 final class DocumentBrowserViewController: UIDocumentBrowserViewController {
 
+  init() {
+    // Explicitly declare the content types this browser opens.
+    // Using the bare default init() without content types can produce a blank/dark
+    // screen because UIDocumentBrowserViewController doesn't know what to display.
+    let markdownType = UTType("net.daringfireball.markdown") ?? .plainText
+    super.init(forOpeningContentTypes: [markdownType, .plainText])
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    // Diagnostic: a tinted background confirms this VC is rendering.
+    // Swap to .systemBackground once the file browser UI is confirmed visible.
+    view.backgroundColor = UIColor.systemOrange.withAlphaComponent(0.15)
+
     delegate = self
     allowsDocumentCreation = true
     allowsPickingMultipleItems = false
     browserUserInterfaceStyle = .automatic
     view.tintColor = .systemBlue
+
+    print("[DocumentBrowserViewController] viewDidLoad — view.frame: \(view.frame)")
   }
 }
 

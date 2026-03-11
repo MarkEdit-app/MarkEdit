@@ -51,13 +51,18 @@ final class EditorViewController: UIViewController {
     wv.scrollView.contentInsetAdjustmentBehavior = .never
     wv.translatesAutoresizingMaskIntoConstraints = false
 
-    // Disable rubber-band scrolling — the CodeMirror editor manages its own scroll
+    // Disable rubber-band scrolling — CodeMirror manages its own scroll
     wv.scrollView.bounces = false
 
-    // Load the initial HTML synchronously so the editor is ready when the view appears
-    let html = makeEditorHTML()
-    wv.loadHTMLString(html, baseURL: URL(string: "http://localhost/"))
+    // WKWebViewConfiguration.newConfig() disables the WKWebView background via a private trick
+    // (_drawsBackground = false), making the view transparent until JS paints the editor.
+    // Set an explicit opaque background so the view never flashes black in dark mode.
+    wv.isOpaque = false
+    wv.backgroundColor = .systemBackground
+    wv.scrollView.backgroundColor = .systemBackground
 
+    // loadHTMLString is called in viewDidLoad (after constraints are applied)
+    // so the frame is resolved before the first paint.
     return wv
   }()
 
@@ -80,9 +85,25 @@ final class EditorViewController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = .systemBackground
 
-    setupWebView()
+    setupWebView()      // adds webView to hierarchy and activates constraints
     setupNavigationBar()
     setupKeyboardObservers()
+    loadEditor()        // start HTML load after the frame is established
+  }
+
+  private func loadEditor() {
+    let html = makeEditorHTML()
+
+    // Diagnostic: verify the chunk-loader scheme is present in the generated HTML
+    let schemeCheck = html.contains("chunk-loader://") ? "✓ chunk-loader:// scheme present" : "✗ chunk-loader:// scheme MISSING"
+    print("[EditorViewController] \(schemeCheck)")
+    print("[EditorViewController] HTML preview (first 400 chars):\n\(html.prefix(400))")
+
+    // Diagnostic: log webView frame after Auto Layout has run at least one pass
+    print("[EditorViewController] webView.frame at load time: \(webView.frame)")
+
+    webView.loadHTMLString(html, baseURL: URL(string: "http://localhost/"))
+    print("[EditorViewController] loadHTMLString called")
   }
 
   override func viewWillDisappear(_ animated: Bool) {
