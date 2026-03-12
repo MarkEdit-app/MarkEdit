@@ -83,6 +83,7 @@
         <parameter type="text" name="JavaScript" code="mdjs" description="The JavaScript code to evaluate.">
           <cocoa key="script"/>
         </parameter>
+        <parameter type="boolean" name="callAsyncJavaScript" code="cajs" default="false" description="Allows the evaluation to return a Promise object. When enabled, the JavaScript must return a value."/>
         <result description="The value returned once the script finishes executing.">
           <type type="any"/>
         </result>

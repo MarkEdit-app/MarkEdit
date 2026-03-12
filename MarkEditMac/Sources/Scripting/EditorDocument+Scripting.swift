@@ -93,8 +93,10 @@ extension EditorDocument {
       return nil
     }
 
+    let callAsync = command.evaluatedArguments?["callAsyncJavaScript"] as? Bool ?? false
     command.suspendExecution()
-    targetEditor.webView.evaluateJavaScript(script) { value, error in
+
+    targetEditor.webView.evaluateJavaScript(script, callAsync: callAsync) { value, error in
       if let error = error as NSError? {
         ScriptingError.jsEvaluationError(error).applyToCommand(command)
         command.resumeExecution(withResult: NSAppleEventDescriptor.null())

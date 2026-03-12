@@ -177,6 +177,22 @@
         }
       }
     },
+    "Allows the evaluation to return a Promise object. When enabled, the JavaScript must return a value." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许代码执行返回一个 Promise 对象。启用时，JavaScript 代码必须返回一个值。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許程式碼執行返回一個 Promise 物件。啟用時，JavaScript 程式碼必須返回一個值。"
+          }
+        }
+      }
+    },
     "Always" : {
       "comment" : "Always show invisibles",
       "localizations" : {
@@ -292,6 +308,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "粗體"
+          }
+        }
+      }
+    },
+    "Call Async JavaScript" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调用异步 JavaScript"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "呼叫非同步 JavaScript"
           }
         }
       }
@@ -556,22 +588,6 @@
         }
       }
     },
-    "Creates a new document, with optional parameters to set the file name and the initial content." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建一个文档，可通过可选参数来设置文件名和初始内容。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
-          }
-        }
-      }
-    },
     "Create New Document" : {
       "localizations" : {
         "zh-Hans" : {
@@ -584,6 +600,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "建立新文件"
+          }
+        }
+      }
+    },
+    "Creates a new document, with optional parameters to set the file name and the initial content." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新建一个文档，可通过可选参数来设置文件名和初始内容。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
           }
         }
       }
@@ -893,22 +925,6 @@
         }
       }
     },
-    "Evaluates JavaScript and gets the result on the active document; throws an error if no editor is opened." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在当前活跃文档运行 JavaScript 并获取结果，没有打开的编辑器时将抛出异常。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在當前活躍文件執行 JavaScript 並獲取結果，沒有開啟的編輯器時將丟擲異常。"
-          }
-        }
-      }
-    },
     "Evaluate JavaScript with ${content}" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -922,6 +938,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 ${content} 執行 JavaScript"
+          }
+        }
+      }
+    },
+    "Evaluates JavaScript and gets the result on the active document; throws an error if no editor is opened." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在当前活跃文档运行 JavaScript 并获取结果，没有打开的编辑器时将抛出异常。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在當前活躍文件執行 JavaScript 並獲取結果，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }
@@ -3098,22 +3130,6 @@
         }
       }
     },
-    "Updates file content of the active document; throws an error if no editor is opened." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新当前活跃文档的内容，没有打开的编辑器时将抛出异常。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
-          }
-        }
-      }
-    },
     "Update file with ${content}" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3127,6 +3143,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 ${content} 更新檔案"
+          }
+        }
+      }
+    },
+    "Updates file content of the active document; throws an error if no editor is opened." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新当前活跃文档的内容，没有打开的编辑器时将抛出异常。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
           }
         }
       }

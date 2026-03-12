@@ -12,6 +12,25 @@ import MarkEditCore
  */
 
 public extension WKWebView {
+  func evaluateJavaScript(
+    _ script: String,
+    callAsync: Bool,
+    completionHandler: (@MainActor @Sendable (Any?, (any Error)?) -> Void)? = nil
+  ) {
+    if callAsync {
+      callAsyncJavaScript(script, in: nil, in: .page) { result in
+        switch result {
+        case .success(let value):
+          completionHandler?(value, nil)
+        case .failure(let error):
+          completionHandler?(nil, error)
+        }
+      }
+    } else {
+      evaluateJavaScript(script, completionHandler: completionHandler)
+    }
+  }
+
   func showInspector() {
     let objectSel = sel_getUid("_inspector")
     let methodSel = sel_getUid("show")
