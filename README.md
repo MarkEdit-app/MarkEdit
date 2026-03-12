@@ -23,6 +23,8 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 ![Screenshots 03](/Screenshots/03.png)
 
+![Screenshots 04](/Screenshots/04.png)
+
 ## What makes MarkEdit different
 
 - Privacy-focused: doesn't collect any user data
