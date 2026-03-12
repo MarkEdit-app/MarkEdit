@@ -8,6 +8,7 @@ import WebKit
 
 public extension WKWebViewConfiguration {
   static func newConfig(disableCors: Bool = false) -> WKWebViewConfiguration {
+#if os(macOS)
     class Configuration: WKWebViewConfiguration {
       // To mimic settable isOpaque on iOS,
       // which is required for the background color and initial white flash in dark mode
@@ -33,5 +34,13 @@ public extension WKWebViewConfiguration {
     }
 
     return config
+#else
+    // On iOS, the WKWebView's `isOpaque` and `backgroundColor` are directly settable
+    // and provide the same functionality without needing private macOS-only APIs.
+    // The private selectors (_developerExtrasEnabled, _webSecurityEnabled) either don't
+    // exist on iOS or behave differently, and would trigger assertionFailure in debug builds.
+    _ = disableCors // unused on iOS; CORS is not a concern for our custom URL scheme
+    return WKWebViewConfiguration()
+#endif
   }
 }

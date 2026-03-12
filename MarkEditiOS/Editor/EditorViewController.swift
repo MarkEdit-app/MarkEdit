@@ -48,16 +48,17 @@ final class EditorViewController: UIViewController {
     let wv = WKWebView(frame: .zero, configuration: config)
     wv.isInspectable = true
     wv.uiDelegate = self
-    wv.scrollView.contentInsetAdjustmentBehavior = .never
+    wv.navigationDelegate = self
+    wv.scrollView.contentInsetAdjustmentBehavior = .scrollableAxes
     wv.translatesAutoresizingMaskIntoConstraints = false
 
     // Disable rubber-band scrolling — CodeMirror manages its own scroll
     wv.scrollView.bounces = false
 
-    // WKWebViewConfiguration.newConfig() disables the WKWebView background via a private trick
-    // (_drawsBackground = false), making the view transparent until JS paints the editor.
-    // Set an explicit opaque background so the view never flashes black in dark mode.
-    wv.isOpaque = false
+    // Keep the WebView opaque with the system background color while the editor JS loads.
+    // Once the editor fires editorCoreBackgroundColorDidChange, we update to the theme color.
+    // Using isOpaque=false before content loads causes a black flash in dark mode.
+    wv.isOpaque = true
     wv.backgroundColor = .systemBackground
     wv.scrollView.backgroundColor = .systemBackground
 
@@ -94,16 +95,14 @@ final class EditorViewController: UIViewController {
   private func loadEditor() {
     let html = makeEditorHTML()
 
-    // Diagnostic: verify the chunk-loader scheme is present in the generated HTML
-    let schemeCheck = html.contains("chunk-loader://") ? "✓ chunk-loader:// scheme present" : "✗ chunk-loader:// scheme MISSING"
-    print("[EditorViewController] \(schemeCheck)")
-    print("[EditorViewController] HTML preview (first 400 chars):\n\(html.prefix(400))")
-
-    // Diagnostic: log webView frame after Auto Layout has run at least one pass
-    print("[EditorViewController] webView.frame at load time: \(webView.frame)")
+    // Diagnostics visible in Console.app (NSLog goes to system log; print() does not)
+    let schemeCheck = html.contains("chunk-loader://") ? "chunk-loader:// scheme PRESENT" : "chunk-loader:// scheme MISSING"
+    NSLog("[MarkEditiOS] EditorViewController loadEditor: %@", schemeCheck)
+    NSLog("[MarkEditiOS] EditorViewController webView.frame at load: %@", NSCoder.string(for: webView.frame))
+    NSLog("[MarkEditiOS] EditorViewController HTML first 300 chars: %@", String(html.prefix(300)))
 
     webView.loadHTMLString(html, baseURL: URL(string: "http://localhost/"))
-    print("[EditorViewController] loadHTMLString called")
+    NSLog("[MarkEditiOS] EditorViewController loadHTMLString called")
   }
 
   override func viewWillDisappear(_ animated: Bool) {
@@ -118,8 +117,11 @@ final class EditorViewController: UIViewController {
 
   private func setupWebView() {
     view.addSubview(webView)
+    // Top is below the navigation bar; left/right/bottom are full-bleed.
+    // contentInsetAdjustmentBehavior = .scrollableAxes (set on the scrollView) handles
+    // the home-indicator safe area so content isn't hidden behind it.
     NSLayoutConstraint.activate([
-      webView.topAnchor.constraint(equalTo: view.topAnchor),
+      webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
       webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -337,6 +339,22 @@ final class EditorViewController: UIViewController {
   }
 }
 
+// MARK: - WKNavigationDelegate
+
+extension EditorViewController: WKNavigationDelegate {
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    NSLog("[MarkEditiOS] EditorViewController webView didFinish navigation")
+  }
+
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: any Error) {
+    NSLog("[MarkEditiOS] EditorViewController webView didFail navigation: %@", error.localizedDescription)
+  }
+
+  func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
+    NSLog("[MarkEditiOS] EditorViewController webView didFailProvisionalNavigation: %@", error.localizedDescription)
+  }
+}
+
 // MARK: - WKUIDelegate
 
 extension EditorViewController: WKUIDelegate {
@@ -358,6 +376,7 @@ extension EditorViewController: WKUIDelegate {
 
 extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
+    NSLog("[MarkEditiOS] EditorViewController editorCoreWindowDidLoad — editor JS is ready")
     hasFinishedLoading = true
     // Load the document content into the editor
     bridge.core.resetEditor(text: document.stringValue) { [weak self] _ in

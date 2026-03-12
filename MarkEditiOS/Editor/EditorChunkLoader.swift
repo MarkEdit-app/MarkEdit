@@ -18,7 +18,7 @@ final class EditorChunkLoader: NSObject, WKURLSchemeHandler {
     do {
       try serve(urlSchemeTask)
     } catch {
-      print("[EditorChunkLoader] ✗ \(error.localizedDescription) — \(urlSchemeTask.request.url?.absoluteString ?? "nil")")
+      NSLog("[MarkEditiOS] EditorChunkLoader FAILED: %@ — %@", error.localizedDescription, urlSchemeTask.request.url?.absoluteString ?? "nil")
       urlSchemeTask.didFailWithError(error)
     }
   }
@@ -55,7 +55,7 @@ private extension EditorChunkLoader {
     // url.path() already begins with "/", so concatenate directly to avoid a double-slash.
     // e.g. host="chunks", url.path()="/index-abc.js" → resourcePath="chunks/index-abc.js"
     let resourcePath = host + url.path()
-    print("[EditorChunkLoader] → \(resourcePath)")
+    NSLog("[MarkEditiOS] EditorChunkLoader loading: %@", resourcePath)
 
     // Primary lookup: relative path form "chunks/filename.js"
     let fileURL: URL
@@ -88,7 +88,7 @@ private extension EditorChunkLoader {
       headerFields: headerFields
     ) ?? URLResponse(url: url, mimeType: contentType, expectedContentLength: fileData.count, textEncodingName: nil)
 
-    print("[EditorChunkLoader] ✓ \(fileData.count) bytes — \(resourcePath)")
+    NSLog("[MarkEditiOS] EditorChunkLoader served %d bytes: %@", fileData.count, resourcePath)
     urlSchemeTask.didReceive(response)
     urlSchemeTask.didReceive(fileData)
     urlSchemeTask.didFinish()

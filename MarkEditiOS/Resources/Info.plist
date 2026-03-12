@@ -52,6 +52,12 @@
 	<true/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<!-- Required for UIDocumentBrowserViewController to function correctly -->
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	<!-- Default launch screen — prevents white flash before the root VC renders -->
+	<key>UILaunchScreen</key>
+	<dict/>
 
 	<!-- Supported interface orientations (iPhone) -->
 	<key>UISupportedInterfaceOrientations</key>
