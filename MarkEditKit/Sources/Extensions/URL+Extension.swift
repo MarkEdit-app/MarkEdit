@@ -69,6 +69,7 @@ private let textFileExtensions = Set(
     "mdoc",
     "mdtext",
     "mdtxt",
+    "mmd",
     "textbundle",
     "txt",
   ]
