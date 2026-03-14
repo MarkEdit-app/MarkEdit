@@ -193,4 +193,8 @@ private extension AppDelegate {
       settingsWindowController?.showWindow(self)
     }
   }
+
+  @IBAction func openSettingsJSON(_ sender: Any?) {
+    NSWorkspace.shared.open(AppCustomization.settings.fileURL)
+  }
 }

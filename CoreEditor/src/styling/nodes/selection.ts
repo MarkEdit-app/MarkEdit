@@ -1,5 +1,6 @@
-import { Decoration, DecorationSet, ViewPlugin, ViewUpdate } from '@codemirror/view';
-import { lineDecoRanges as createDeco } from '../helper';
+import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { lineDecoRanges } from '../helper';
 
 /**
  * We only decorate active lines with a cm-md-activeIndicator layer,
@@ -20,8 +21,9 @@ export const selectedLinesDecoration = createViewPlugin('cm-selectedLineRange');
 function createViewPlugin(className: string) {
   return ViewPlugin.fromClass(class {
     decorations: DecorationSet;
-    constructor() {
-      this.decorations = Decoration.none;
+    constructor(editor: EditorView) {
+      window.editor = editor;
+      this.decorations = createLineDecos(editor.state, className);
     }
 
     update(update: ViewUpdate) {
@@ -30,9 +32,13 @@ function createViewPlugin(className: string) {
         return;
       }
 
-      const ranges = update.state.selection.ranges;
-      const lineDecos = ranges.flatMap(range => createDeco(range.from, range.to, className));
-      this.decorations = Decoration.set(lineDecos.sort((lhs, rhs) => lhs.from - rhs.from));
+      this.decorations = createLineDecos(update.state, className);
     }
   }, { decorations: value => value.decorations });
+}
+
+function createLineDecos(state: EditorState, className: string) {
+  const ranges = state.selection.ranges;
+  const lineDecos = ranges.flatMap(range => lineDecoRanges(range.from, range.to, className));
+  return Decoration.set(lineDecos.sort((lhs, rhs) => lhs.from - rhs.from));
 }

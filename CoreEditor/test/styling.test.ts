@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
+import { selectedLinesDecoration } from '../src/styling/nodes/selection';
 import { sleep } from './utils/helpers';
 import * as editor from './utils/editor';
 
@@ -27,5 +28,13 @@ describe('Styling module', () => {
     expect(classNames.has('cm-foldGutter')).toBeTruthy();
     expect(classNames.has('cm-line')).toBeTruthy();
     expect(classNames.has('cm-lineNumbers')).toBeTruthy();
+  });
+
+  test('decorate active line immediately for focus mode', async () => {
+    editor.setUp('line 1\nline 2', selectedLinesDecoration);
+    await sleep(200);
+
+    const selected = document.querySelectorAll('.cm-selectedLineRange');
+    expect(selected.length).toBe(1);
   });
 });
