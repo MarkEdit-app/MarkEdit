@@ -17,9 +17,18 @@ public extension NSWindow {
   //
   // In macOS Tahoe, it can also be an NSTitlebarBackgroundView for the modern style
   var toolbarEffectView: NSView? {
-    toolbarContainerView?.subviews.first {
-      ($0 is NSVisualEffectView) || ($0.className == "NSTitlebarBackgroundView")
+    guard let container = toolbarContainerView else {
+      return nil
     }
+
+    for view in container.subviews {
+      let className = view.className
+      if className == "NSVisualEffectView" || className == "NSTitlebarBackgroundView" {
+        return view
+      }
+    }
+
+    return nil
   }
 
   var toolbarTitleView: NSView? {
