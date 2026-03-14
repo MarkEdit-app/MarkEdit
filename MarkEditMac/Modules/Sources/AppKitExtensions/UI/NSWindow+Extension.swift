@@ -22,8 +22,7 @@ public extension NSWindow {
     }
 
     for view in container.subviews {
-      let className = view.className
-      if className == "NSVisualEffectView" || className == "NSTitlebarBackgroundView" {
+      if view is NSVisualEffectView || view.className == "NSTitlebarBackgroundView" {
         return view
       }
     }
