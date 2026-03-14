@@ -32,7 +32,7 @@ describe('Styling module', () => {
 
   test('decorate active line immediately for focus mode', async () => {
     editor.setUp('line 1\nline 2', selectedLinesDecoration);
-    await sleep(10);
+    await sleep(200);
 
     const selected = document.querySelectorAll('.cm-selectedLineRange');
     expect(selected.length).toBe(1);

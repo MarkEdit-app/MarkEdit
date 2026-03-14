@@ -1,6 +1,6 @@
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
-import { lineDecoRanges } from '../helper';
 import { EditorState } from '@codemirror/state';
+import { lineDecoRanges } from '../helper';
 
 /**
  * We only decorate active lines with a cm-md-activeIndicator layer,
