@@ -66,7 +66,7 @@ extension NSMenu {
 
 private extension NSMenu {
   enum AssociatedObjects {
-    static var needsHack: UInt8 = 0
+    nonisolated(unsafe) static var needsHack: UInt8 = 0
   }
 
   @objc func swizzled_isUpdatedExcludingContentTypes(_ contentTypes: Int) -> Bool {

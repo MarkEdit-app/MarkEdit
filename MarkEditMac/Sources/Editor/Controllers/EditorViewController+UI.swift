@@ -205,7 +205,7 @@ extension EditorViewController {
 
   @available(macOS 15.1, *)
   func updateWritingTools(isActive: Bool) {
-    let performUpdate = {
+    let performUpdate: @MainActor @Sendable () -> Void = {
       // Work around undo stack and selection range issues
       self.bridge.writingTools.setActive(
         isActive: isActive,
@@ -518,13 +518,15 @@ extension EditorViewController {
       object: nil,
       queue: .main
     ) { [weak self] notification in
-      Task { @MainActor in
-        if let window = notification.object as? NSWindow, window == textField.window {
-          window.makeFirstResponder(textField)
-          if let observer = self?.textBoxInputObserver {
-            self?.textBoxInputObserver = nil
-            NotificationCenter.default.removeObserver(observer)
-          }
+      // Extract a Sendable identity before crossing into the main-actor closure.
+      let notificationWindowID = (notification.object as? NSWindow).map { ObjectIdentifier($0) }
+      MainActor.assumeIsolated {
+        guard let windowID = notificationWindowID,
+              windowID == textField.window.map({ ObjectIdentifier($0) }) else { return }
+        textField.window?.makeFirstResponder(textField)
+        if let observer = self?.textBoxInputObserver {
+          self?.textBoxInputObserver = nil
+          NotificationCenter.default.removeObserver(observer)
         }
       }
     }

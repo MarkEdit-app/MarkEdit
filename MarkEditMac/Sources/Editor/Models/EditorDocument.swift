@@ -17,7 +17,7 @@ import TextBundle
 final class EditorDocument: NSDocument {
   var fileData: Data?
   var spellDocTag: Int?
-  var stringValue = ""
+  nonisolated(unsafe) var stringValue = ""
   var formatCompleted = false // The result of format content is all good
   var isOutdated = false // The content is outdated, needs an update
   var isReadOnlyMode = false
@@ -62,9 +62,9 @@ final class EditorDocument: NSDocument {
     AppRuntimeConfig.autoSaveWhenIdle && fileURL != nil
   }
 
-  private var textBundle: TextBundleWrapper?
+  nonisolated(unsafe) private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
-  private var suggestedTextEncoding: EditorTextEncoding?
+  nonisolated(unsafe) private var suggestedTextEncoding: EditorTextEncoding?
   private weak var hostViewController: EditorViewController?
 
   /**
@@ -264,15 +264,17 @@ extension EditorDocument {
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
-    // Include all markdown and plaintext types, but prioritize the configured default
-    let exportedTypes = NewFilenameExtension.allCases
-      .sorted { lhs, _ in
-        lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
-      }
-      .map { $0.exportedType }
+    MainActor.assumeIsolated {
+      // Include all markdown and plaintext types, but prioritize the configured default
+      let exportedTypes = NewFilenameExtension.allCases
+        .sorted { lhs, _ in
+          lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
+        }
+        .map { $0.exportedType }
 
-    // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
-    return textBundle == nil ? exportedTypes : ["org.textbundle.package"] + exportedTypes
+      // Enable *.textbundle only when we have the bundle, typically for a duplicated draft
+      return textBundle == nil ? exportedTypes : ["org.textbundle.package"] + exportedTypes
+    }
   }
 
   override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
@@ -314,14 +316,15 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
+    let defaultEncoding = AppPreferences.General.readDefaultTextEncoding()
+    let suggestedEncoding = AppDocumentController.suggestedTextEncoding
     DispatchQueue.global(qos: .userInitiated).async {
       let newValue = {
-        if let encoding = AppDocumentController.suggestedTextEncoding {
+        if let encoding = suggestedEncoding {
           return encoding.decode(data: data)
         }
 
-        let encoding = AppPreferences.General.defaultTextEncoding
-        return encoding.decode(data: data, guessEncoding: true)
+        return defaultEncoding.decode(data: data, guessEncoding: true)
       }()
 
       DispatchQueue.main.async {
@@ -521,8 +524,9 @@ extension EditorDocument {
       return try super.read(from: fileWrapper, ofType: typeName)
     }
 
-    textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
-    try read(from: textBundle?.data ?? Data(), ofType: typeName)
+    let bundle = try TextBundleWrapper(fileWrapper: fileWrapper)
+    textBundle = bundle
+    try read(from: bundle.data, ofType: typeName)
   }
 
   override func write(to url: URL, ofType typeName: String) throws {
@@ -530,7 +534,10 @@ extension EditorDocument {
       return try super.write(to: url, ofType: typeName)
     }
 
-    let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
+    // data(ofType:) is @MainActor; replicate its logic here using nonisolated(unsafe) properties.
+    let encoding = suggestedTextEncoding ?? AppPreferences.General.readDefaultTextEncoding()
+    let fileData = encoding.encode(string: stringValue) ?? stringValue.toData() ?? Data()
+    let fileWrapper = try? textBundle?.fileWrapper(with: fileData)
     try fileWrapper?.write(to: url, originalContentsURL: nil)
   }
 
@@ -647,12 +654,13 @@ private extension EditorDocument {
     bridge?.history.markContentClean()
   }
 
+  @MainActor
   @objc func confirmsChanges(_ document: EditorDocument, shouldClose: Bool) {
     guard shouldClose else {
       return // Cancelled
     }
 
-    let performClose = {
+    let performClose: @MainActor @Sendable () -> Void = {
       // isReleasedWhenClosed is not initially set to true to prevent crashes when deleting drafts.
       // However, we need to release the window in the confirmsChanges function;
       // otherwise, it will cause a memory leak.
@@ -670,7 +678,7 @@ private extension EditorDocument {
       // Delay this for two reasons:
       //  1. To make it clear to users that their changes are saved
       //  2. To avoid leftover .sb copies when a document is closed too quickly
-      let closeDelayed = {
+      let closeDelayed: @MainActor @Sendable () -> Void = {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: performClose)
       }
 

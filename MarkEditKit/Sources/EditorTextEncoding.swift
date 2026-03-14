@@ -10,7 +10,7 @@ import Foundation
 ///
 /// We *can*, but don't want to, include all supported encodings, which makes the UI super complicated,
 /// Markdown prefers utf-8 as mentioned here: https://daringfireball.net/linked/2011/08/05/markdown-uti.
-public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable {
+public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable, Sendable {
   // Derived from String.Encoding
   case ascii
   case nonLossyASCII

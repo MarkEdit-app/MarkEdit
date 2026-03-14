@@ -17,9 +17,14 @@ public extension NSWindow {
   //
   // In macOS Tahoe, it can also be an NSTitlebarBackgroundView for the modern style
   var toolbarEffectView: NSView? {
-    toolbarContainerView?.subviews.first {
-      ($0 is NSVisualEffectView) || ($0.className == "NSTitlebarBackgroundView")
+    guard let container = toolbarContainerView else { return nil }
+    for view in container.subviews {
+      let name = view.className
+      if name == "NSVisualEffectView" || name == "NSTitlebarBackgroundView" {
+        return view
+      }
     }
+    return nil
   }
 
   var toolbarTitleView: NSView? {
@@ -102,8 +107,9 @@ private extension NSWindow {
     }
 
     // NSToolbarFullScreenWindow is used when the app is in full-screen mode
-    return NSApp.windows.first {
-      $0.isMainWindow && $0.className.hasPrefix("NSToolbarFullScreen")
-    } ?? self
+    for window in NSApp.windows where window.isMainWindow && window.className.hasPrefix("NSToolbarFullScreen") {
+      return window
+    }
+    return self
   }
 }

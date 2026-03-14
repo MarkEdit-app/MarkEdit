@@ -96,17 +96,20 @@ extension EditorViewController {
       replacePanel.animator().alphaValue = mode == .replace ? 1 : 0
       layoutPanels(animated: true)
       layoutWebView(animated: true)
-    } completionHandler: {
-      self.hasUnfinishedAnimations = false
+    } completionHandler: { [weak self] in
+      Task { @MainActor [weak self] in
+        guard let self else { return }
+        self.hasUnfinishedAnimations = false
 
-      // Must leverage isHidden to control the visibility,
-      // because alpha = 0 still tracks mouse and visible to VoiceOver.
-      if mode == .hidden {
-        self.findPanel.isHidden = true
-      }
+        // Must leverage isHidden to control the visibility,
+        // because alpha = 0 still tracks mouse and visible to VoiceOver.
+        if mode == .hidden {
+          self.findPanel.isHidden = true
+        }
 
-      if mode != .replace {
-        self.replacePanel.isHidden = true
+        if mode != .replace {
+          self.replacePanel.isHidden = true
+        }
       }
     }
   }

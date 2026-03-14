@@ -74,11 +74,10 @@ public extension NSColor {
 
   @MainActor
   func resolvedColor(with appearance: NSAppearance = NSApp.effectiveAppearance) -> NSColor {
-    var cgColor: CGColor?
-    appearance.performAsCurrentDrawingAppearance {
-      cgColor = self.cgColor
-    }
-
-    return NSColor(cgColor: cgColor ?? self.cgColor) ?? self
+    let previous = NSAppearance.current
+    NSAppearance.current = appearance
+    let resolved = NSColor(cgColor: self.cgColor) ?? self
+    NSAppearance.current = previous
+    return resolved
   }
 }

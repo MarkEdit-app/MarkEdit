@@ -13,7 +13,7 @@ import MarkEditKit
 ///
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
-  struct Definition: Codable {
+  struct Definition: Codable, Sendable {
     enum VisualEffectType: String, Codable {
       case glass = "glass"
       case blur = "blur"

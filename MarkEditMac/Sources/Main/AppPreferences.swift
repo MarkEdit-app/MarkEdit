@@ -15,6 +15,7 @@ import FontPicker
  UserDefaults wrapper with handy getters and setters.
  */
 enum AppPreferences {
+  @MainActor
   enum General {
     @Storage(key: "general.appearance", defaultValue: .system)
     static var appearance: Appearance
@@ -56,6 +57,7 @@ enum AppPreferences {
     }
   }
 
+  @MainActor
   enum Editor {
     @Storage(key: "editor.light-theme", defaultValue: AppTheme.GitHubLight.editorTheme)
     static var lightTheme: String {
@@ -160,6 +162,7 @@ enum AppPreferences {
     }
   }
 
+  @MainActor
   enum Assistant {
     @Storage(key: "assistant.insert-final-newline", defaultValue: false)
     static var insertFinalNewline: Bool
@@ -194,6 +197,7 @@ enum AppPreferences {
     }
   }
 
+  @MainActor
   enum Search {
     @Storage(key: "search.case-sensitive", defaultValue: false)
     static var caseSensitive: Bool
@@ -211,6 +215,7 @@ enum AppPreferences {
     static var regularExpression: Bool
   }
 
+  @MainActor
   enum Window {
     @Storage(key: "window.toolbar-mode", defaultValue: .normal)
     static var toolbarMode: ToolbarMode {
@@ -243,6 +248,7 @@ enum AppPreferences {
     }
   }
 
+  @MainActor
   enum Updater {
     @Storage(key: "updater.skipped-versions", defaultValue: Set())
     static var skippedVersions: Set<String>
@@ -259,6 +265,7 @@ extension FontStyle {
 }
 
 extension AppPreferences {
+  @MainActor
   static func editorConfig(theme: String) -> EditorConfig {
     EditorConfig(
       text: "",
@@ -337,6 +344,7 @@ enum Appearance: Codable {
   case light
   case dark
 
+  @MainActor
   func resolved(with appearance: NSAppearance = NSApp.effectiveAppearance) -> NSAppearance? {
     switch self {
     case .system:
@@ -408,7 +416,8 @@ enum NewFilenameExtension: String, Codable, CaseIterable {
   }
 
   static func preferredExtension(for typeName: String) -> Self {
-    (allCases.first { $0.exportedType == typeName }) ?? AppPreferences.General.newFilenameExtension
+    let defaultExtension = MainActor.assumeIsolated { AppPreferences.General.newFilenameExtension }
+    return (allCases.first { $0.exportedType == typeName }) ?? defaultExtension
   }
 }
 
@@ -420,10 +429,24 @@ enum ToolbarMode: Codable {
 
 extension NSWindow.TabbingMode: @retroactive Codable {}
 
+// MARK: - Background-thread access
+
+extension AppPreferences.General {
+  /// Thread-safe read of `defaultTextEncoding` for use in NSDocument read/write callbacks,
+  /// which AppKit calls on a background queue. UserDefaults is documented thread-safe.
+  nonisolated static func readDefaultTextEncoding() -> EditorTextEncoding {
+    guard let data = UserDefaults.standard.object(forKey: "general.default-text-encoding") as? Data,
+          let value = try? JSONDecoder().decode(EditorTextEncoding.self, from: data) else {
+      return .utf8
+    }
+    return value
+  }
+}
+
 // MARK: - Private
 
 private extension AppPreferences {
-  static func performUpdates(action: @escaping (EditorViewController) -> Void) {
+  static func performUpdates(action: @escaping @MainActor @Sendable (EditorViewController) -> Void) {
     Task { @MainActor in
       for editor in EditorReusePool.shared.viewControllers() {
         action(editor)

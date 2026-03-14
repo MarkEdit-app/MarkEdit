@@ -64,6 +64,7 @@ enum Localized {
     static let statistics = String(localized: "Statistics", comment: "Toolbar item to show statistics")
     static let shareDocument = String(localized: "Share this document", comment: "Toolbar item to share the document")
     static let copyPandocCommand = String(localized: "Copy Pandoc Command", comment: "Toolbar item to copy pandoc command")
+    static let livePreview = String(localized: "Preview", comment: "Toolbar item to toggle live preview window")
   }
 
   enum Search {
@@ -264,6 +265,7 @@ enum Icons {
   static let textQuote = "text.quote"
   static let textformat = "textformat"
   static let wandAndSparkles = "wand.and.sparkles"
+  static let eye = "eye"
 }
 
 extension EditorLocalizable {

@@ -8,7 +8,9 @@ import AppKit
 
 public extension NSMenu {
   var superMenuItem: NSMenuItem? {
-    supermenu?.items.first { $0.submenu === self }
+    guard let items = supermenu?.items else { return nil }
+    for item in items where item.submenu === self { return item }
+    return nil
   }
 
   var copiedMenu: NSMenu? {

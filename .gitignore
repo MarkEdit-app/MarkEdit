@@ -1,3 +1,10 @@
+## Build artifacts
+build/
+MarkEditCore/build/
+MarkEditKit/build/
+MarkEditMac/Modules/build/
+MarkEditTools/build/
+
 ## System
 *.DS_Store
 

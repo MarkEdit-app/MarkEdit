@@ -41,10 +41,12 @@ final class EditorWindow: NSWindow {
 
   override func awakeFromNib() {
     super.awakeFromNib()
-    toolbar = NSToolbar() // Required for multi-tab layout
-    toolbarMode = AppPreferences.Window.toolbarMode
-    tabbingMode = AppPreferences.Window.tabbingMode
-    reduceTransparency = AppDesign.reduceTransparency
+    MainActor.assumeIsolated {
+      toolbar = NSToolbar() // Required for multi-tab layout
+      toolbarMode = AppPreferences.Window.toolbarMode
+      tabbingMode = AppPreferences.Window.tabbingMode
+      reduceTransparency = AppDesign.reduceTransparency
+    }
   }
 
   override func layoutIfNeeded() {

@@ -9,6 +9,7 @@ import AppKit
 import MarkEditKit
 
 @available(macOS 15.1, *)
+@MainActor
 enum AppWritingTools {
   enum Tool: Int {
     case panel = 0

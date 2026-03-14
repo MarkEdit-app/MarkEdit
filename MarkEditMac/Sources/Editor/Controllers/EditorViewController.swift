@@ -21,7 +21,7 @@ final class EditorViewController: NSViewController {
   var bottomPanelHeight: Double = 0
   var initialContent: String?
   var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
-  var localEventMonitor: Any?
+  nonisolated(unsafe) var localEventMonitor: Any?
   var textBoxInputObserver: Any?
   var writingToolsObservation: NSKeyValueObservation?
   var safeAreaObservation: NSKeyValueObservation?
@@ -185,9 +185,10 @@ final class EditorViewController: NSViewController {
     webView.actionDelegate = self
 
     let theme = AppTheme.current.editorTheme
+    let editorConfigHtml = AppPreferences.editorConfig(theme: theme).toHtml
     DispatchQueue.global(qos: .userInitiated).async {
       let html = [
-        AppPreferences.editorConfig(theme: theme).toHtml,
+        editorConfigHtml,
         AppCustomization.editorStyle.fileContents,
         AppCustomization.stylesDirectory.directoryContents.joined(separator: "\n"),
       ].joined(separator: "\n\n")
@@ -204,11 +205,10 @@ final class EditorViewController: NSViewController {
     // [macOS 15] Detect Writing Tools visibility to work around issues
     if #available(macOS 15.1, *) {
       writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
-        guard let self else {
-          return
+        Task { @MainActor [weak self] in
+          guard let self else { return }
+          self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
         }
-
-        self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
       }
     }
 
@@ -349,6 +349,7 @@ extension EditorViewController {
 
     hasBeenEdited = false
     setShowSelectionStatus(enabled: AppPreferences.Editor.showSelectionStatus)
+    refreshLivePreview(useDocumentValue: true)
   }
 
   func setHasModalSheet(value: Bool) {

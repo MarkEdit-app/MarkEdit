@@ -5,7 +5,7 @@
 //  Created by cyan on 12/12/23.
 //
 
-import AppKit
+@preconcurrency import AppKit
 import MarkEditKit
 
 // [macOS 14] Performance regression, there's a good chance to hang at launch
@@ -39,7 +39,7 @@ extension NSObject {
 
 private extension NSObject {
   enum States {
-    static var loaded = false
+    nonisolated(unsafe) static var loaded = false
   }
 
   @objc func swizzled_loadAXBundles() -> Bool {

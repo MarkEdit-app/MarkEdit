@@ -16,7 +16,7 @@ import Foundation
 
  FileWrapper parsing is learned from: https://github.com/shinyfrog/TextBundle.
  */
-public struct TextBundleWrapper {
+public struct TextBundleWrapper: @unchecked Sendable {
   public let data: Data
   public let textFileName: String
 

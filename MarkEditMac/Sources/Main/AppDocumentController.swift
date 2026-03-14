@@ -14,8 +14,8 @@ import MarkEditKit
  NSDocumentController.shared will be an instance of `AppDocumentController` at runtime.
  */
 final class AppDocumentController: NSDocumentController {
-  static var suggestedTextEncoding: EditorTextEncoding?
-  static var suggestedFilename: String?
+  nonisolated(unsafe) static var suggestedTextEncoding: EditorTextEncoding?
+  nonisolated(unsafe) static var suggestedFilename: String?
 
   override func beginOpenPanel(_ openPanel: NSOpenPanel, forTypes inTypes: [String]?) async -> Int {
     if let defaultDirectory = AppRuntimeConfig.defaultOpenDirectory {

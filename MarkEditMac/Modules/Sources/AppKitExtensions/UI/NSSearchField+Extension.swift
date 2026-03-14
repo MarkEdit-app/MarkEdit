@@ -9,7 +9,8 @@ import AppKit
 public extension NSSearchField {
   var clipView: NSView? {
     // _NSKeyboardFocusClipView
-    subviews.first { $0.className.hasSuffix("FocusClipView") }
+    for view in subviews where view.className.hasSuffix("FocusClipView") { return view }
+    return nil
   }
 
   var modernBezelView: NSView? {
