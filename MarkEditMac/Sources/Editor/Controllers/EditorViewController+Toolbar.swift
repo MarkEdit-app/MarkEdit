@@ -94,6 +94,7 @@ extension EditorViewController: NSToolbarDelegate {
       case .shareDocument: return shareDocumentItem
       case .copyPandocCommand: return copyPandocCommandItem
       case .writingTools: return writingToolsItem
+      case .previewDiagram: return previewDiagramItem
       default:
         if let customItem = customItem(with: itemIdentifier) {
           return .with(identifier: itemIdentifier, customItem: customItem)
@@ -267,6 +268,17 @@ private extension EditorViewController {
     } else {
       return nil
     }
+  }
+
+  var previewDiagramItem: NSToolbarItem {
+    // Use the standard factory to set label and icon, then replace the action
+    // with one that captures the item itself for popover anchoring.
+    let item = NSToolbarItem.with(identifier: .previewDiagram) {}
+    item.addAction { [weak self, weak item] in
+      guard let self, let item else { return }
+      self.previewDiagram(sender: item)
+    }
+    return item
   }
 
   func updateTableOfContentsMenu(_ menu: NSMenu) {

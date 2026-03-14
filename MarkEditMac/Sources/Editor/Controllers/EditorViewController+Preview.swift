@@ -10,6 +10,28 @@ import Previewer
 import MarkEditKit
 
 extension EditorViewController {
+  /// Preview the entire document as a Mermaid diagram; intended for .mmd files.
+  func previewDiagram(sender: NSToolbarItem) {
+    Task {
+      guard let text = await editorText, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        return
+      }
+
+      if removePresentedPopovers(contentClass: Previewer.self) {
+        return
+      }
+
+      let previewer = Previewer(code: text, type: .mermaid)
+
+      // Anchor the popover to the toolbar button if available; otherwise the top of the webView.
+      if let anchor = sender.view {
+        present(previewer, asPopoverRelativeTo: anchor.bounds, of: anchor, preferredEdge: .minY, behavior: .transient)
+      } else {
+        presentAsPopover(contentViewController: previewer, rect: CGRect(x: 0, y: webView.bounds.height, width: 1, height: 1))
+      }
+    }
+  }
+
   func showPreview(code: String, type: PreviewType, rect: CGRect) {
     if removePresentedPopovers(contentClass: Previewer.self) {
       return
