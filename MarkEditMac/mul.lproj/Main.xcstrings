@@ -457,6 +457,19 @@
         }
       }
     },
+    "6iB-Ox-Xb3.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"(settings.json)\"; ObjectID = \"6iB-Ox-Xb3\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "(settings.json)"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "7eH-ja-yIc.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"Line Endings\"; ObjectID = \"7eH-ja-yIc\";",
       "extractionState" : "extracted_with_value",
