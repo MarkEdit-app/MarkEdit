@@ -1,4 +1,4 @@
-import { Decoration, DecorationSet, ViewPlugin, ViewUpdate } from '@codemirror/view';
+import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { lineDecoRanges as createDeco } from '../helper';
 
 /**
@@ -20,8 +20,8 @@ export const selectedLinesDecoration = createViewPlugin('cm-selectedLineRange');
 function createViewPlugin(className: string) {
   return ViewPlugin.fromClass(class {
     decorations: DecorationSet;
-    constructor() {
-      this.decorations = Decoration.none;
+    constructor(view: EditorView) {
+      this.decorations = buildLineDecorations(view.state.selection.ranges, className);
     }
 
     update(update: ViewUpdate) {
@@ -30,9 +30,12 @@ function createViewPlugin(className: string) {
         return;
       }
 
-      const ranges = update.state.selection.ranges;
-      const lineDecos = ranges.flatMap(range => createDeco(range.from, range.to, className));
-      this.decorations = Decoration.set(lineDecos.sort((lhs, rhs) => lhs.from - rhs.from));
+      this.decorations = buildLineDecorations(update.state.selection.ranges, className);
     }
   }, { decorations: value => value.decorations });
+}
+
+function buildLineDecorations(ranges: readonly { from: number; to: number }[], className: string) {
+  const lineDecos = ranges.flatMap(range => createDeco(range.from, range.to, className));
+  return Decoration.set(lineDecos.sort((lhs, rhs) => lhs.from - rhs.from));
 }
