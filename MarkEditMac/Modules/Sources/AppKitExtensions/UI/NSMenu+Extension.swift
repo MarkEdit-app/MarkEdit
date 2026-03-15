@@ -8,7 +8,12 @@ import AppKit
 
 public extension NSMenu {
   var superMenuItem: NSMenuItem? {
-    supermenu?.items.first { $0.submenu === self }
+    // [macOS 26] Revisit this later (#1281)
+    for item in (supermenu?.items ?? []) where item.submenu === self {
+      return item
+    }
+
+    return nil
   }
 
   var copiedMenu: NSMenu? {
