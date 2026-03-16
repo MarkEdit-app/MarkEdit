@@ -17,13 +17,13 @@ const regexp = {
 
 declare global {
   interface Window {
-    _startLinkClickable: (_: HTMLElement) => void;
-    _stopLinkClickable: (_: HTMLElement) => void;
+    _startLinkClickable: (_: MouseEvent) => void;
+    _stopLinkClickable: (_: MouseEvent) => void;
   }
 }
 
-window._startLinkClickable = startClickable;
-window._stopLinkClickable = stopClickable;
+window._startLinkClickable = (event: MouseEvent) => startClickable(event.target as HTMLElement, event.metaKey);
+window._stopLinkClickable = (event: MouseEvent) => stopClickable(event.target as HTMLElement);
 
 /**
  * For standard links like `https://github.com` and `[markdown][link]`.
@@ -98,11 +98,11 @@ export const linkStyles: Extension = [
   referenceStyle,
 ];
 
-export function startClickable(inputElement?: HTMLElement) {
+export function startClickable(inputElement?: HTMLElement, metaKeyPressed = isMetaKeyDown()) {
   const linkElement = inputElement ?? storage.focusedElement;
   storage.focusedElement = linkElement;
 
-  if (linkElement === undefined || !isMetaKeyDown()) {
+  if (linkElement === undefined || !metaKeyPressed) {
     return;
   }
 
@@ -194,8 +194,8 @@ function createSpec(attributes?: { [key: string]: string }) {
     class: className,
     attributes: {
       title: window.config.localizable?.cmdClickToFollow ?? '',
-      onmouseenter: '_startLinkClickable(this)',
-      onmouseleave: '_stopLinkClickable(this)',
+      onmouseenter: '_startLinkClickable(event)',
+      onmouseleave: '_stopLinkClickable(event)',
       ...attributes,
     },
   };
