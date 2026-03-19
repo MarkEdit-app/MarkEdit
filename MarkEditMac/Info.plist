@@ -71,6 +71,27 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>Mermaid Diagram</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mmd</string>
+			</array>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>app.markedit.mmd</string>
+				<string>public.plain-text</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>Plain Text</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
