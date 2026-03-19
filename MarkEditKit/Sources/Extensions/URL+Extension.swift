@@ -70,6 +70,7 @@ private let textFileExtensions = Set(
     "mdtext",
     "mdtxt",
     "mmd",
+    "mermaid",
     "textbundle",
     "txt",
   ]

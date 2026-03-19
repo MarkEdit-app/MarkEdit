@@ -81,6 +81,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mmd</string>
+				<string>mermaid</string>
 			</array>
 			<key>LSItemContentTypes</key>
 			<array>
@@ -268,6 +269,7 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>mmd</string>
+					<string>mermaid</string>
 				</array>
 			</dict>
 		</dict>
