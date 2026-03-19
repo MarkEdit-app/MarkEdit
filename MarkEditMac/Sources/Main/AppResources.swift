@@ -108,10 +108,6 @@ enum Localized {
     static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
   }
 
-  enum Mermaid {
-    static let previewDiagram = String(localized: "Preview Diagram", comment: "Toolbar item to preview a Mermaid diagram")
-  }
-
   enum WritingTools {
     static let title = String(localized: "Writing Tools", comment: "Writing Tools")
   }
@@ -251,7 +247,6 @@ enum Icons {
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"
   static let chartPie = "chart.pie"
-  static let diagramBadgePlus = "diagram"
   static let curlybracesSquare = "curlybraces.square"
   static let gearshape = "gearshape"
   static let italic = "italic"
