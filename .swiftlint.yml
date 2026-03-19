@@ -1,5 +1,5 @@
 excluded:
-  - MarkEditMac/Modules/build
+  - MarkEditMac/Modules/.build
 
 disabled_rules:
 
