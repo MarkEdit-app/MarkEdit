@@ -1,3 +1,6 @@
+excluded:
+  - MarkEditMac/Modules/.build
+
 disabled_rules:
 
   # Rationale: Arbitrary restriction
