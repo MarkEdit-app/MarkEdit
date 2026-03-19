@@ -76,7 +76,10 @@ public extension NSColor {
   func resolvedColor(with appearance: NSAppearance = NSApp.effectiveAppearance) -> NSColor {
     var cgColor: CGColor?
     appearance.performAsCurrentDrawingAppearance {
-      cgColor = self.cgColor
+      // [macOS 26] Revisit this later (#1281)
+      MainActor.assumeIsolated {
+        cgColor = self.cgColor
+      }
     }
 
     return NSColor(cgColor: cgColor ?? self.cgColor) ?? self
