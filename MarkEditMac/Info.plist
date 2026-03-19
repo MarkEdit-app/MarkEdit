@@ -85,7 +85,6 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>app.markedit.mmd</string>
-				<string>public.plain-text</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).EditorDocument</string>
