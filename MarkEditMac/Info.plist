@@ -181,25 +181,6 @@
 				<string>public.plain-text</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Mermaid Diagram</string>
-			<key>UTTypeIdentifier</key>
-			<string>app.markedit.mmd</string>
-			<key>UTTypeReferenceURL</key>
-			<string>https://mermaid.js.org/</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>mmd</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.plain-text</string>
-			</array>
-			<key>UTTypeDescription</key>
 			<string>Markdown</string>
 			<key>UTTypeIdentifier</key>
 			<string>app.markedit.md</string>
@@ -248,6 +229,25 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>txt</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Mermaid Diagram</string>
+			<key>UTTypeIdentifier</key>
+			<string>app.markedit.mmd</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://mermaid.js.org/</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mmd</string>
 				</array>
 			</dict>
 		</dict>
