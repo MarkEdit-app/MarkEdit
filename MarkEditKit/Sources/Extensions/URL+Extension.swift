@@ -60,6 +60,7 @@ private extension URL {
 
 private let textFileExtensions = Set(
   [
+    // Markdown
     "md",
     "markdown",
     "mdown",
@@ -69,9 +70,16 @@ private let textFileExtensions = Set(
     "mdoc",
     "mdtext",
     "mdtxt",
+    "mdx",
+    // TextBundle
+    "textbundle",
+    // Plain Text
+    "txt",
+    "text",
+    // Structured Text
     "mmd",
     "mermaid",
-    "textbundle",
-    "txt",
+    "tex",
+    "ltx",
   ]
 )
