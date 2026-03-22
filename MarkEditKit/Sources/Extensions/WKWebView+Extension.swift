@@ -94,6 +94,41 @@ extension WKWebView {
   }
 }
 
+// MARK: - Async
+
+extension WKWebView {
+  func invoke<SuccessResult: Decodable>(path: String, message: Encodable = Message()) async throws -> SuccessResult {
+    let module = path.components(separatedBy: ".").first ?? "undefined"
+    let script = "typeof \(module) === 'object' ? \(path)(\(message.jsonEncoded)) : undefined"
+
+    let value: Any?
+    do {
+      value = try await evaluateJavaScript(script)
+    } catch {
+      Logger.log(.error, error.localizedDescription)
+      throw InvokeError.evaluateError(path: path, error: error)
+    }
+
+    guard let value, !(value is NSNull) else {
+      throw InvokeError.unexpectedNil
+    }
+
+    // Primitive types
+    if let value = value as? SuccessResult {
+      return value
+    }
+
+    do {
+      // JSON encoded types
+      let data = try JSONSerialization.data(withJSONObject: value, options: .fragmentsAllowed)
+      return try JSONDecoder().decode(SuccessResult.self, from: data)
+    } catch {
+      Logger.log(.error, error.localizedDescription)
+      throw InvokeError.decodeError
+    }
+  }
+}
+
 // MARK: - Private
 
 private extension WKWebView {

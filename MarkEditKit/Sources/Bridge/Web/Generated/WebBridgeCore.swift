@@ -35,33 +35,27 @@ public final class WebBridgeCore {
   }
 
   public func getEditorState() async throws -> WebBridgeCoreGetEditorStateReturnType {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.core.getEditorState") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.core.getEditorState")
   }
 
   public func getEditorText() async throws -> String {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.core.getEditorText") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.core.getEditorText")
   }
 
   public func getReadableContentPair() async throws -> ReadableContentPair {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.core.getReadableContentPair") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.core.getReadableContentPair")
   }
 
   public func insertText(text: String, from: Int, to: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

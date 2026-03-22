@@ -51,13 +51,11 @@ public final class WebBridgeAPI {
       id: id
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.api.getMenuItemState", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.api.getMenuItemState", message: message)
   }
 }
 
