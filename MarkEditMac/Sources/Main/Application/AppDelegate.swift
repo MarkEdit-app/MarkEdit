@@ -145,21 +145,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 extension AppDelegate {
   func application(_ application: NSApplication, open urls: [URL]) {
     for url in urls {
-      // On macOS 13+, file open events (e.g., double-clicking in Finder) are also
-      // routed through this method as file:// URLs. Forward them to NSDocumentController.
-      if url.isFileURL {
-        NSDocumentController.shared.openDocument(
-          withContentsOf: url,
-          display: true,
-          completionHandler: { _, _, error in
-            if let error {
-              Logger.log(.error, "Failed to open document: \(error.localizedDescription)")
-            }
-          }
-        )
-        continue
-      }
-
       // https://github.com/MarkEdit-app/MarkEdit/wiki/Text-Processing#using-url-schemes
       let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
       switch components?.host {
