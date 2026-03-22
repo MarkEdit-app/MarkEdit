@@ -56,13 +56,15 @@ extension WKWebView {
     case decodeError
     case evaluateError(path: String, error: Error?)
   }
-
-  typealias VoidCompletion = (Result<Void, InvokeError>) -> Void
 }
 
 extension WKWebView {
-  func invoke(path: String, message: Encodable = Message(), completion: VoidCompletion? = nil) {
-    let script = invokeScript(path: path, message: message)
+  func invoke(
+    path: String,
+    message: Encodable = Message(),
+    completion: ((Result<Void, InvokeError>) -> Void)? = nil
+  ) {
+    let script = script(for: path, message: message)
     evaluateJavaScript(script) { _, error in
       if let error {
         Logger.log(.error, error.localizedDescription)
@@ -73,10 +75,13 @@ extension WKWebView {
     }
   }
 
-  func invoke<SuccessResult: Decodable>(path: String, message: Encodable = Message()) async throws -> SuccessResult {
-    let script = invokeScript(path: path, message: message)
-
+  func invoke<SuccessResult: Decodable>(
+    path: String,
+    message: Encodable = Message()
+  ) async throws -> SuccessResult {
+    let script = script(for: path, message: message)
     let value: Any?
+
     do {
       value = try await evaluateJavaScript(script)
     } catch {
@@ -111,7 +116,7 @@ private extension WKWebView {
     // Empty message used for zero parameter functions
   }
 
-  func invokeScript(path: String, message: Encodable) -> String {
+  func script(for path: String, message: Encodable) -> String {
     let module = path.components(separatedBy: ".").first ?? "undefined"
     return "typeof \(module) === 'object' ? \(path)(\(message.jsonEncoded)) : undefined"
   }
