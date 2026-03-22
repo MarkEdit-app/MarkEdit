@@ -67,13 +67,11 @@ public final class WebBridgeSearch {
       search: search
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.findNext", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.search.findNext", message: message)
   }
 
   public func findPrevious(search: String) async throws -> Bool {
@@ -85,13 +83,11 @@ public final class WebBridgeSearch {
       search: search
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.findPrevious", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.search.findPrevious", message: message)
   }
 
   public func replaceNext(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
@@ -107,23 +103,19 @@ public final class WebBridgeSearch {
   }
 
   public func selectNextOccurrence() async throws -> Bool {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.selectNextOccurrence") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.search.selectNextOccurrence")
   }
 
   public func getCounterInfo() async throws -> SearchCounterInfo {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.search.getCounterInfo") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.search.getCounterInfo")
   }
 }
 

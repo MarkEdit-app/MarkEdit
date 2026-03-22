@@ -121,13 +121,11 @@ public final class WebBridgeFormat {
       userInitiated: userInitiated
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.format.formatContent", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.format.formatContent", message: message)
   }
 
   public func performEditCommand(command: EditCommand, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

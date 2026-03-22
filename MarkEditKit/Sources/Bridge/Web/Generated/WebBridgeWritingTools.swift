@@ -41,13 +41,11 @@ public final class WebBridgeWritingTools {
       reselect: reselect
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.writingTools.getSelectionRect", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.writingTools.getSelectionRect", message: message)
   }
 
   public func ensureSelectionRect(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

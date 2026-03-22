@@ -23,13 +23,11 @@ public final class WebBridgeSelection {
   }
 
   public func getText() async throws -> String {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.selection.getText") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.selection.getText")
   }
 
   public func getRect(pos: Int) async throws -> WebRect? {
@@ -41,13 +39,11 @@ public final class WebBridgeSelection {
       pos: pos
     )
 
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.selection.getRect", message: message) { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.selection.getRect", message: message)
   }
 
   public func scrollToSelection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

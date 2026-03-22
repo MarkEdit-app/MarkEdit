@@ -19,13 +19,11 @@ public final class WebBridgeLineEndings {
   }
 
   public func getLineEndings() async throws -> LineEndings {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.lineEndings.getLineEndings") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.lineEndings.getLineEndings")
   }
 
   public func setLineEndings(lineEndings: LineEndings, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

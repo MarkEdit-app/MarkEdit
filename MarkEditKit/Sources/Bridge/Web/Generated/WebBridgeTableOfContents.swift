@@ -19,13 +19,11 @@ public final class WebBridgeTableOfContents {
   }
 
   public func getTableOfContents() async throws -> [HeadingInfo] {
-    return try await withCheckedThrowingContinuation { continuation in
-      webView?.invoke(path: "webModules.toc.getTableOfContents") { result in
-        Task { @MainActor in
-          continuation.resume(with: result)
-        }
-      }
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
     }
+
+    return try await webView.invoke(path: "webModules.toc.getTableOfContents")
   }
 
   public func selectPreviousSection(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
