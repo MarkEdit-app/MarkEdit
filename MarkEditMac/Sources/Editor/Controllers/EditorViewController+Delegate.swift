@@ -121,7 +121,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
-  func editorCoreWindowResize(_ sender: EditorModuleCore, method: NativeModuleCoreNotifyWindowResizeMethod, size: CGSize) {
+  func editorCoreWindowResize(
+    _ sender: EditorModuleCore,
+    method: NativeModuleCoreNotifyWindowResizeMethod,
+    size: CGSize
+  ) {
     guard let window = view.window else {
       return
     }
@@ -130,12 +134,20 @@ extension EditorViewController: EditorModuleCoreDelegate {
     case .to:
       window.setFrameSize(size)
     case .by:
-      let frame = window.frame
-      window.setFrameSize(CGSize(width: frame.width + size.width, height: frame.height + size.height))
+      window.setFrameSize(
+        CGSize(
+          width: window.frame.width + size.width,
+          height: window.frame.height + size.height
+        )
+      )
     }
   }
 
-  func editorCoreWindowMove(_ sender: EditorModuleCore, method: NativeModuleCoreNotifyWindowMoveMethod, point: CGPoint) {
+  func editorCoreWindowMove(
+    _ sender: EditorModuleCore,
+    method: NativeModuleCoreNotifyWindowMoveMethod,
+    point: CGPoint
+  ) {
     guard let window = view.window else {
       return
     }
@@ -147,10 +159,19 @@ extension EditorViewController: EditorModuleCoreDelegate {
         return
       }
 
-      window.setFrameOrigin(CGPoint(x: point.x, y: screen.frame.maxY - point.y - window.frame.height))
+      window.setFrameOrigin(
+        CGPoint(
+          x: point.x,
+          y: screen.frame.maxY - point.y - window.frame.height
+        )
+      )
     case .by:
-      let origin = window.frame.origin
-      window.setFrameOrigin(CGPoint(x: origin.x + point.x, y: origin.y - point.y))
+      window.setFrameOrigin(
+        CGPoint(
+          x: window.frame.origin.x + point.x,
+          y: window.frame.origin.y - point.y
+        )
+      )
     }
   }
 
