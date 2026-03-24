@@ -9,6 +9,9 @@ import { LineColumnInfo } from '../../modules/selection/types';
 export interface NativeModuleCore extends NativeModule {
   notifyWindowDidLoad(): void;
   notifyWindowResizeTo(args: { width: number; height: number }): void;
+  notifyWindowResizeBy(args: { x: number; y: number }): void;
+  notifyWindowMoveTo(args: { x: number; y: number }): void;
+  notifyWindowMoveBy(args: { x: number; y: number }): void;
   notifyWindowClose(): void;
   notifyEditorDidBecomeIdle(): void;
   notifyBackgroundColorDidChange(args: { color: CodeGen_Int; alpha: number }): void;

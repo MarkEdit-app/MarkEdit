@@ -14,6 +14,9 @@ import MarkEditCore
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
   func notifyWindowResizeTo(width: Double, height: Double)
+  func notifyWindowResizeBy(x: Double, y: Double)
+  func notifyWindowMoveTo(x: Double, y: Double)
+  func notifyWindowMoveBy(x: Double, y: Double)
   func notifyWindowClose()
   func notifyEditorDidBecomeIdle()
   func notifyBackgroundColorDidChange(color: Int, alpha: Double)
@@ -39,6 +42,15 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyWindowResizeTo": { [weak self] in
       await self?.notifyWindowResizeTo(parameters: $0)
+    },
+    "notifyWindowResizeBy": { [weak self] in
+      await self?.notifyWindowResizeBy(parameters: $0)
+    },
+    "notifyWindowMoveTo": { [weak self] in
+      await self?.notifyWindowMoveTo(parameters: $0)
+    },
+    "notifyWindowMoveBy": { [weak self] in
+      await self?.notifyWindowMoveBy(parameters: $0)
     },
     "notifyWindowClose": { [weak self] in
       await self?.notifyWindowClose(parameters: $0)
@@ -99,6 +111,60 @@ final class NativeBridgeCore: NativeBridge {
     }
 
     module.notifyWindowResizeTo(width: message.width, height: message.height)
+    return .success(nil)
+  }
+
+  private func notifyWindowResizeBy(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var x: Double
+      var y: Double
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyWindowResizeBy(x: message.x, y: message.y)
+    return .success(nil)
+  }
+
+  private func notifyWindowMoveTo(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var x: Double
+      var y: Double
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyWindowMoveTo(x: message.x, y: message.y)
+    return .success(nil)
+  }
+
+  private func notifyWindowMoveBy(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var x: Double
+      var y: Double
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyWindowMoveBy(x: message.x, y: message.y)
     return .success(nil)
   }
 

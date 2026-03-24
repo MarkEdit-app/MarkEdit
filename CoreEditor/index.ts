@@ -86,10 +86,22 @@ window.nativeModules = {
   translation: createNativeModule<NativeModuleTranslation>('translation'),
 };
 
-// In release mode, override window.resizeTo and window.close to bridge to native
+// In release mode, override window APIs to bridge to native
 if (isReleaseMode) {
   window.resizeTo = (width: number, height: number) => {
     window.nativeModules.core.notifyWindowResizeTo({ width, height });
+  };
+
+  window.resizeBy = (x: number, y: number) => {
+    window.nativeModules.core.notifyWindowResizeBy({ x, y });
+  };
+
+  window.moveTo = (x: number, y: number) => {
+    window.nativeModules.core.notifyWindowMoveTo({ x, y });
+  };
+
+  window.moveBy = (x: number, y: number) => {
+    window.nativeModules.core.notifyWindowMoveBy({ x, y });
   };
 
   window.close = () => {
