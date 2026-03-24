@@ -126,15 +126,9 @@ extension EditorViewController: EditorModuleCoreDelegate {
     method: NativeModuleCoreNotifyWindowResizeMethod,
     size: CGSize
   ) {
-    guard let window = view.window else {
-      return
-    }
-
     switch method {
-    case .to:
-      window.setFrameSize(size)
-    case .by:
-      window.resizeBy(size)
+    case .to: view.window?.setFrameSize(size)
+    case .by: view.window?.resizeBy(size)
     }
   }
 
@@ -143,15 +137,9 @@ extension EditorViewController: EditorModuleCoreDelegate {
     method: NativeModuleCoreNotifyWindowMoveMethod,
     point: CGPoint
   ) {
-    guard let window = view.window else {
-      return
-    }
-
     switch method {
-    case .to:
-      window.moveToWebPoint(point)
-    case .by:
-      window.moveByWebPoint(point)
+    case .to: view.window?.moveToWebPoint(point)
+    case .by: view.window?.moveByWebPoint(point)
     }
   }
 
