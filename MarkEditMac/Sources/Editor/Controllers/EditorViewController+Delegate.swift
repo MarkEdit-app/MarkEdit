@@ -121,27 +121,29 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
-  func editorCoreWindowResizeTo(_ sender: EditorModuleCore, width: Double, height: Double) {
-    view.window?.setFrameSize(CGSize(width: width, height: height))
-  }
-
-  func editorCoreWindowResizeBy(_ sender: EditorModuleCore, x: Double, y: Double) {
+  func editorCoreWindowResize(_ sender: EditorModuleCore, method: WindowResizeMethod) {
     guard let window = view.window else { return }
-    let frame = window.frame
-    window.setFrameSize(CGSize(width: frame.width + x, height: frame.height + y))
+    switch method {
+    case .to(let width, let height):
+      window.setFrameSize(CGSize(width: width, height: height))
+    case .by(let x, let y):
+      let frame = window.frame
+      window.setFrameSize(CGSize(width: frame.width + x, height: frame.height + y))
+    }
   }
 
-  func editorCoreWindowMoveTo(_ sender: EditorModuleCore, x: Double, y: Double) {
-    guard let window = view.window, let screen = window.screen else { return }
-    // Web API uses top-left origin; AppKit uses bottom-left
-    view.window?.setFrameOrigin(CGPoint(x: x, y: screen.frame.maxY - y - window.frame.height))
-  }
-
-  func editorCoreWindowMoveBy(_ sender: EditorModuleCore, x: Double, y: Double) {
+  func editorCoreWindowMove(_ sender: EditorModuleCore, method: WindowMoveMethod) {
     guard let window = view.window else { return }
-    let origin = window.frame.origin
-    // Web API: positive y moves down; AppKit: positive y moves up
-    window.setFrameOrigin(CGPoint(x: origin.x + x, y: origin.y - y))
+    switch method {
+    case .to(let x, let y):
+      guard let screen = window.screen else { return }
+      // Web API uses top-left origin; AppKit uses bottom-left
+      window.setFrameOrigin(CGPoint(x: x, y: screen.frame.maxY - y - window.frame.height))
+    case .by(let x, let y):
+      let origin = window.frame.origin
+      // Web API: positive y moves down; AppKit: positive y moves up
+      window.setFrameOrigin(CGPoint(x: origin.x + x, y: origin.y - y))
+    }
   }
 
   func editorCoreWindowClose(_ sender: EditorModuleCore) {

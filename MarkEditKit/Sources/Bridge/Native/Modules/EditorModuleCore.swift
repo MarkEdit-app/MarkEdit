@@ -6,13 +6,21 @@
 
 import Foundation
 
+public enum WindowResizeMethod {
+  case to(width: Double, height: Double)
+  case by(x: Double, y: Double)
+}
+
+public enum WindowMoveMethod {
+  case to(x: Double, y: Double)
+  case by(x: Double, y: Double)
+}
+
 @MainActor
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
-  func editorCoreWindowResizeTo(_ sender: EditorModuleCore, width: Double, height: Double)
-  func editorCoreWindowResizeBy(_ sender: EditorModuleCore, x: Double, y: Double)
-  func editorCoreWindowMoveTo(_ sender: EditorModuleCore, x: Double, y: Double)
-  func editorCoreWindowMoveBy(_ sender: EditorModuleCore, x: Double, y: Double)
+  func editorCoreWindowResize(_ sender: EditorModuleCore, method: WindowResizeMethod)
+  func editorCoreWindowMove(_ sender: EditorModuleCore, method: WindowMoveMethod)
   func editorCoreWindowClose(_ sender: EditorModuleCore)
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore)
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32, alpha: Double)
@@ -43,19 +51,19 @@ public final class EditorModuleCore: NativeModuleCore {
   }
 
   public func notifyWindowResizeTo(width: Double, height: Double) {
-    delegate?.editorCoreWindowResizeTo(self, width: width, height: height)
+    delegate?.editorCoreWindowResize(self, method: .to(width: width, height: height))
   }
 
   public func notifyWindowResizeBy(x: Double, y: Double) {
-    delegate?.editorCoreWindowResizeBy(self, x: x, y: y)
+    delegate?.editorCoreWindowResize(self, method: .by(x: x, y: y))
   }
 
   public func notifyWindowMoveTo(x: Double, y: Double) {
-    delegate?.editorCoreWindowMoveTo(self, x: x, y: y)
+    delegate?.editorCoreWindowMove(self, method: .to(x: x, y: y))
   }
 
   public func notifyWindowMoveBy(x: Double, y: Double) {
-    delegate?.editorCoreWindowMoveBy(self, x: x, y: y)
+    delegate?.editorCoreWindowMove(self, method: .by(x: x, y: y))
   }
 
   public func notifyWindowClose() {
