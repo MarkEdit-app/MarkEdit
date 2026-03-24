@@ -121,6 +121,32 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
+  func editorCoreWindowResize(
+    _ sender: EditorModuleCore,
+    method: NativeModuleCoreNotifyWindowResizeMethod,
+    size: CGSize
+  ) {
+    switch method {
+    case .to: view.window?.setFrameSize(size)
+    case .by: view.window?.resizeBy(size)
+    }
+  }
+
+  func editorCoreWindowMove(
+    _ sender: EditorModuleCore,
+    method: NativeModuleCoreNotifyWindowMoveMethod,
+    point: CGPoint
+  ) {
+    switch method {
+    case .to: view.window?.moveToWebPoint(point)
+    case .by: view.window?.moveByWebPoint(point)
+    }
+  }
+
+  func editorCoreWindowClose(_ sender: EditorModuleCore) {
+    view.window?.close()
+  }
+
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore) {
     guard view.window != nil else {
       // Fail fast since the editor is not available

@@ -9,6 +9,17 @@ import Foundation
 @MainActor
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
+  func editorCoreWindowResize(
+    _ sender: EditorModuleCore,
+    method: NativeModuleCoreNotifyWindowResizeMethod,
+    size: CGSize
+  )
+  func editorCoreWindowMove(
+    _ sender: EditorModuleCore,
+    method: NativeModuleCoreNotifyWindowMoveMethod,
+    point: CGPoint
+  )
+  func editorCoreWindowClose(_ sender: EditorModuleCore)
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore)
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32, alpha: Double)
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
@@ -35,6 +46,26 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyWindowDidLoad() {
     delegate?.editorCoreWindowDidLoad(self)
+  }
+
+  public func notifyWindowResize(
+    method: NativeModuleCoreNotifyWindowResizeMethod,
+    width: Double,
+    height: Double
+  ) {
+    delegate?.editorCoreWindowResize(self, method: method, size: CGSize(width: width, height: height))
+  }
+
+  public func notifyWindowMove(
+    method: NativeModuleCoreNotifyWindowMoveMethod,
+    x: Double,
+    y: Double
+  ) {
+    delegate?.editorCoreWindowMove(self, method: method, point: CGPoint(x: x, y: y))
+  }
+
+  public func notifyWindowClose() {
+    delegate?.editorCoreWindowClose(self)
   }
 
   public func notifyEditorDidBecomeIdle() {
