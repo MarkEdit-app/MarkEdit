@@ -86,6 +86,17 @@ window.nativeModules = {
   translation: createNativeModule<NativeModuleTranslation>('translation'),
 };
 
+// In release mode, override window.resizeTo and window.close to bridge to native
+if (isReleaseMode) {
+  window.resizeTo = (width: number, height: number) => {
+    window.nativeModules.core.windowResizeTo({ width, height });
+  };
+
+  window.close = () => {
+    window.nativeModules.core.windowClose();
+  };
+}
+
 window.onload = () => {
   window.nativeModules.core.notifyWindowDidLoad();
 

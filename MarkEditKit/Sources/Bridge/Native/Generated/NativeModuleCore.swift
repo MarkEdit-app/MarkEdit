@@ -22,6 +22,8 @@ public protocol NativeModuleCore: NativeModule {
   func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
   func notifyLinkClicked(link: String)
   func notifyLightWarning()
+  func windowResizeTo(width: Double, height: Double)
+  func windowClose()
 }
 
 public extension NativeModuleCore {
@@ -61,6 +63,12 @@ final class NativeBridgeCore: NativeBridge {
     },
     "notifyLightWarning": { [weak self] in
       await self?.notifyLightWarning(parameters: $0)
+    },
+    "windowResizeTo": { [weak self] in
+      await self?.windowResizeTo(parameters: $0)
+    },
+    "windowClose": { [weak self] in
+      await self?.windowClose(parameters: $0)
     },
   ]
 
@@ -182,6 +190,29 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyLightWarning(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyLightWarning()
+    return .success(nil)
+  }
+
+  private func windowResizeTo(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var width: Double
+      var height: Double
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.windowResizeTo(width: message.width, height: message.height)
+    return .success(nil)
+  }
+
+  private func windowClose(parameters: Data) async -> Result<Any?, Error>? {
+    module.windowClose()
     return .success(nil)
   }
 }

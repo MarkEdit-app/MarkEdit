@@ -17,4 +17,6 @@ export interface NativeModuleCore extends NativeModule {
   notifyCompositionEnded({ selectedLineColumn }: { selectedLineColumn: LineColumnInfo }): void;
   notifyLinkClicked({ link }: { link: string }): void;
   notifyLightWarning(): void;
+  windowResizeTo(args: { width: number; height: number }): void;
+  windowClose(): void;
 }

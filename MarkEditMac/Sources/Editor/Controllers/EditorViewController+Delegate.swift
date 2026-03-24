@@ -228,6 +228,14 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreLightWarning(_ sender: EditorModuleCore) {
     NSSound.beep()
   }
+
+  func editorCoreWindowResizeTo(_ sender: EditorModuleCore, width: Double, height: Double) {
+    view.window?.setFrameSize(CGSize(width: width, height: height))
+  }
+
+  func editorCoreWindowClose(_ sender: EditorModuleCore) {
+    view.window?.close()
+  }
 }
 
 // MARK: - EditorModuleCompletionDelegate
