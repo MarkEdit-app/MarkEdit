@@ -124,9 +124,9 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreWindowResize(_ sender: EditorModuleCore, method: WindowResizeMethod) {
     guard let window = view.window else { return }
     switch method {
-    case .to(let width, let height):
+    case let .to(width, height):
       window.setFrameSize(CGSize(width: width, height: height))
-    case .by(let x, let y):
+    case let .by(x, y):
       let frame = window.frame
       window.setFrameSize(CGSize(width: frame.width + x, height: frame.height + y))
     }
@@ -135,11 +135,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreWindowMove(_ sender: EditorModuleCore, method: WindowMoveMethod) {
     guard let window = view.window else { return }
     switch method {
-    case .to(let x, let y):
+    case let .to(x, y):
       guard let screen = window.screen else { return }
       // Web API uses top-left origin; AppKit uses bottom-left
       window.setFrameOrigin(CGPoint(x: x, y: screen.frame.maxY - y - window.frame.height))
-    case .by(let x, let y):
+    case let .by(x, y):
       let origin = window.frame.origin
       // Web API: positive y moves down; AppKit: positive y moves up
       window.setFrameOrigin(CGPoint(x: origin.x + x, y: origin.y - y))
