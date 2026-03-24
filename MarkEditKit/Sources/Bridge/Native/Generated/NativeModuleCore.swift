@@ -13,10 +13,8 @@ import MarkEditCore
 @MainActor
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
-  func notifyWindowResizeTo(width: Double, height: Double)
-  func notifyWindowResizeBy(x: Double, y: Double)
-  func notifyWindowMoveTo(x: Double, y: Double)
-  func notifyWindowMoveBy(x: Double, y: Double)
+  func notifyWindowResize(method: NativeModuleCoreNotifyWindowResizeMethod, width: Double, height: Double)
+  func notifyWindowMove(method: NativeModuleCoreNotifyWindowMoveMethod, x: Double, y: Double)
   func notifyWindowClose()
   func notifyEditorDidBecomeIdle()
   func notifyBackgroundColorDidChange(color: Int, alpha: Double)
@@ -40,17 +38,11 @@ final class NativeBridgeCore: NativeBridge {
     "notifyWindowDidLoad": { [weak self] in
       await self?.notifyWindowDidLoad(parameters: $0)
     },
-    "notifyWindowResizeTo": { [weak self] in
-      await self?.notifyWindowResizeTo(parameters: $0)
+    "notifyWindowResize": { [weak self] in
+      await self?.notifyWindowResize(parameters: $0)
     },
-    "notifyWindowResizeBy": { [weak self] in
-      await self?.notifyWindowResizeBy(parameters: $0)
-    },
-    "notifyWindowMoveTo": { [weak self] in
-      await self?.notifyWindowMoveTo(parameters: $0)
-    },
-    "notifyWindowMoveBy": { [weak self] in
-      await self?.notifyWindowMoveBy(parameters: $0)
+    "notifyWindowMove": { [weak self] in
+      await self?.notifyWindowMove(parameters: $0)
     },
     "notifyWindowClose": { [weak self] in
       await self?.notifyWindowClose(parameters: $0)
@@ -96,8 +88,9 @@ final class NativeBridgeCore: NativeBridge {
     return .success(nil)
   }
 
-  private func notifyWindowResizeTo(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyWindowResize(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
+      var method: NativeModuleCoreNotifyWindowResizeMethod
       var width: Double
       var height: Double
     }
@@ -110,12 +103,13 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifyWindowResizeTo(width: message.width, height: message.height)
+    module.notifyWindowResize(method: message.method, width: message.width, height: message.height)
     return .success(nil)
   }
 
-  private func notifyWindowResizeBy(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyWindowMove(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
+      var method: NativeModuleCoreNotifyWindowMoveMethod
       var x: Double
       var y: Double
     }
@@ -128,43 +122,7 @@ final class NativeBridgeCore: NativeBridge {
       return .failure(error)
     }
 
-    module.notifyWindowResizeBy(x: message.x, y: message.y)
-    return .success(nil)
-  }
-
-  private func notifyWindowMoveTo(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var x: Double
-      var y: Double
-    }
-
-    let message: Message
-    do {
-      message = try decoder.decode(Message.self, from: parameters)
-    } catch {
-      Logger.assertFail("Failed to decode parameters: \(parameters)")
-      return .failure(error)
-    }
-
-    module.notifyWindowMoveTo(x: message.x, y: message.y)
-    return .success(nil)
-  }
-
-  private func notifyWindowMoveBy(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var x: Double
-      var y: Double
-    }
-
-    let message: Message
-    do {
-      message = try decoder.decode(Message.self, from: parameters)
-    } catch {
-      Logger.assertFail("Failed to decode parameters: \(parameters)")
-      return .failure(error)
-    }
-
-    module.notifyWindowMoveBy(x: message.x, y: message.y)
+    module.notifyWindowMove(method: message.method, x: message.x, y: message.y)
     return .success(nil)
   }
 
@@ -281,6 +239,16 @@ final class NativeBridgeCore: NativeBridge {
     module.notifyLightWarning()
     return .success(nil)
   }
+}
+
+public enum NativeModuleCoreNotifyWindowResizeMethod: String, Codable {
+  case to = "to"
+  case by = "by"
+}
+
+public enum NativeModuleCoreNotifyWindowMoveMethod: String, Codable {
+  case to = "to"
+  case by = "by"
 }
 
 public struct LineColumnInfo: Decodable, Equatable {

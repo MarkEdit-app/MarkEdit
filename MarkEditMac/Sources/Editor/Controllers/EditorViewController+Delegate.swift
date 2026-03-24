@@ -121,36 +121,36 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
   }
 
-  func editorCoreWindowResize(_ sender: EditorModuleCore, method: WindowResizeMethod) {
+  func editorCoreWindowResize(_ sender: EditorModuleCore, method: NativeModuleCoreNotifyWindowResizeMethod, size: CGSize) {
     guard let window = view.window else {
       return
     }
 
     switch method {
-    case let .to(size):
+    case .to:
       window.setFrameSize(size)
-    case let .by(delta):
+    case .by:
       let frame = window.frame
-      window.setFrameSize(CGSize(width: frame.width + delta.width, height: frame.height + delta.height))
+      window.setFrameSize(CGSize(width: frame.width + size.width, height: frame.height + size.height))
     }
   }
 
-  func editorCoreWindowMove(_ sender: EditorModuleCore, method: WindowMoveMethod) {
+  func editorCoreWindowMove(_ sender: EditorModuleCore, method: NativeModuleCoreNotifyWindowMoveMethod, point: CGPoint) {
     guard let window = view.window else {
       return
     }
 
     // Web API: positive y moves down; AppKit: positive y moves up
     switch method {
-    case let .to(point):
+    case .to:
       guard let screen = window.screen else {
         return
       }
 
       window.setFrameOrigin(CGPoint(x: point.x, y: screen.frame.maxY - point.y - window.frame.height))
-    case let .by(delta):
+    case .by:
       let origin = window.frame.origin
-      window.setFrameOrigin(CGPoint(x: origin.x + delta.x, y: origin.y - delta.y))
+      window.setFrameOrigin(CGPoint(x: origin.x + point.x, y: origin.y - point.y))
     }
   }
 

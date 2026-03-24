@@ -89,19 +89,19 @@ window.nativeModules = {
 // In release mode, override window APIs to bridge to native
 if (isReleaseMode) {
   window.resizeTo = (width: number, height: number) => {
-    window.nativeModules.core.notifyWindowResizeTo({ width, height });
+    window.nativeModules.core.notifyWindowResize({ method: 'to', width, height });
   };
 
   window.resizeBy = (x: number, y: number) => {
-    window.nativeModules.core.notifyWindowResizeBy({ x, y });
+    window.nativeModules.core.notifyWindowResize({ method: 'by', width: x, height: y });
   };
 
   window.moveTo = (x: number, y: number) => {
-    window.nativeModules.core.notifyWindowMoveTo({ x, y });
+    window.nativeModules.core.notifyWindowMove({ method: 'to', x, y });
   };
 
   window.moveBy = (x: number, y: number) => {
-    window.nativeModules.core.notifyWindowMoveBy({ x, y });
+    window.nativeModules.core.notifyWindowMove({ method: 'by', x, y });
   };
 
   window.close = () => {
