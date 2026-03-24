@@ -40,6 +40,25 @@ public extension NSWindow {
     setFrame(frame, display: flag, animate: animated)
   }
 
+  /// Change the frame size by a delta, treat the top-left corner as the anchor point.
+  func resizeBy(_ delta: CGSize) {
+    setFrameSize(CGSize(width: frame.width + delta.width, height: frame.height + delta.height))
+  }
+
+  /// Move the window to a web-style point, converting from top-left to bottom-left origin.
+  func moveToWebPoint(_ point: CGPoint) {
+    guard let screen else {
+      return
+    }
+
+    setFrameOrigin(CGPoint(x: point.x, y: screen.frame.maxY - point.y - frame.height))
+  }
+
+  /// Move the window by a web-style delta, where positive y goes down.
+  func moveByWebPoint(_ delta: CGPoint) {
+    setFrameOrigin(CGPoint(x: frame.origin.x + delta.x, y: frame.origin.y - delta.y))
+  }
+
   /// Move the window to the center of a screen, with an offset to look optically more centered.
   func centerOnScreen(_ screen: NSScreen? = .main, offset: Double = 20) {
     guard let visibleFrame = (screen ?? self.screen)?.visibleFrame else {
