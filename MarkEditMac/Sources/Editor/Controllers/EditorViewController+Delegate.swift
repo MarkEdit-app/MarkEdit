@@ -127,11 +127,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     }
 
     switch method {
-    case let .to(width, height):
-      window.setFrameSize(CGSize(width: width, height: height))
-    case let .by(x, y):
+    case let .to(size):
+      window.setFrameSize(size)
+    case let .by(delta):
       let frame = window.frame
-      window.setFrameSize(CGSize(width: frame.width + x, height: frame.height + y))
+      window.setFrameSize(CGSize(width: frame.width + delta.width, height: frame.height + delta.height))
     }
   }
 
@@ -142,15 +142,15 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     // Web API: positive y moves down; AppKit: positive y moves up
     switch method {
-    case let .to(x, y):
+    case let .to(point):
       guard let screen = window.screen else {
         return
       }
 
-      window.setFrameOrigin(CGPoint(x: x, y: screen.frame.maxY - y - window.frame.height))
-    case let .by(x, y):
+      window.setFrameOrigin(CGPoint(x: point.x, y: screen.frame.maxY - point.y - window.frame.height))
+    case let .by(delta):
       let origin = window.frame.origin
-      window.setFrameOrigin(CGPoint(x: origin.x + x, y: origin.y - y))
+      window.setFrameOrigin(CGPoint(x: origin.x + delta.x, y: origin.y - delta.y))
     }
   }
 

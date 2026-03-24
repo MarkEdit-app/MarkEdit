@@ -4,16 +4,17 @@
 //  Created by cyan on 12/24/22.
 //
 
+import CoreGraphics
 import Foundation
 
 public enum WindowResizeMethod {
-  case to(width: Double, height: Double)
-  case by(x: Double, y: Double)
+  case to(CGSize)
+  case by(CGSize)
 }
 
 public enum WindowMoveMethod {
-  case to(x: Double, y: Double)
-  case by(x: Double, y: Double)
+  case to(CGPoint)
+  case by(CGPoint)
 }
 
 @MainActor
@@ -51,19 +52,19 @@ public final class EditorModuleCore: NativeModuleCore {
   }
 
   public func notifyWindowResizeTo(width: Double, height: Double) {
-    delegate?.editorCoreWindowResize(self, method: .to(width: width, height: height))
+    delegate?.editorCoreWindowResize(self, method: .to(CGSize(width: width, height: height)))
   }
 
   public func notifyWindowResizeBy(x: Double, y: Double) {
-    delegate?.editorCoreWindowResize(self, method: .by(x: x, y: y))
+    delegate?.editorCoreWindowResize(self, method: .by(CGSize(width: x, height: y)))
   }
 
   public func notifyWindowMoveTo(x: Double, y: Double) {
-    delegate?.editorCoreWindowMove(self, method: .to(x: x, y: y))
+    delegate?.editorCoreWindowMove(self, method: .to(CGPoint(x: x, y: y)))
   }
 
   public func notifyWindowMoveBy(x: Double, y: Double) {
-    delegate?.editorCoreWindowMove(self, method: .by(x: x, y: y))
+    delegate?.editorCoreWindowMove(self, method: .by(CGPoint(x: x, y: y)))
   }
 
   public func notifyWindowClose() {
