@@ -9,6 +9,8 @@ import Foundation
 @MainActor
 public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore)
+  func editorCoreWindowResizeTo(_ sender: EditorModuleCore, width: Double, height: Double)
+  func editorCoreWindowClose(_ sender: EditorModuleCore)
   func editorCoreEditorDidBecomeIdle(_ sender: EditorModuleCore)
   func editorCoreBackgroundColorDidChange(_ sender: EditorModuleCore, color: UInt32, alpha: Double)
   func editorCoreViewportScaleDidChange(_ sender: EditorModuleCore)
@@ -24,8 +26,6 @@ public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo)
   func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String)
   func editorCoreLightWarning(_ sender: EditorModuleCore)
-  func editorCoreWindowResizeTo(_ sender: EditorModuleCore, width: Double, height: Double)
-  func editorCoreWindowClose(_ sender: EditorModuleCore)
 }
 
 public final class EditorModuleCore: NativeModuleCore {
@@ -37,6 +37,14 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyWindowDidLoad() {
     delegate?.editorCoreWindowDidLoad(self)
+  }
+
+  public func notifyWindowResizeTo(width: Double, height: Double) {
+    delegate?.editorCoreWindowResizeTo(self, width: width, height: height)
+  }
+
+  public func notifyWindowClose() {
+    delegate?.editorCoreWindowClose(self)
   }
 
   public func notifyEditorDidBecomeIdle() {
@@ -84,13 +92,5 @@ public final class EditorModuleCore: NativeModuleCore {
 
   public func notifyLightWarning() {
     delegate?.editorCoreLightWarning(self)
-  }
-
-  public func windowResizeTo(width: Double, height: Double) {
-    delegate?.editorCoreWindowResizeTo(self, width: width, height: height)
-  }
-
-  public func windowClose() {
-    delegate?.editorCoreWindowClose(self)
   }
 }

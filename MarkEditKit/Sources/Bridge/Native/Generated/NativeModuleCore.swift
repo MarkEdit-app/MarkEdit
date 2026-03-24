@@ -13,6 +13,8 @@ import MarkEditCore
 @MainActor
 public protocol NativeModuleCore: NativeModule {
   func notifyWindowDidLoad()
+  func notifyWindowResizeTo(width: Double, height: Double)
+  func notifyWindowClose()
   func notifyEditorDidBecomeIdle()
   func notifyBackgroundColorDidChange(color: Int, alpha: Double)
   func notifyViewportScaleDidChange()
@@ -22,8 +24,6 @@ public protocol NativeModuleCore: NativeModule {
   func notifyCompositionEnded(selectedLineColumn: LineColumnInfo)
   func notifyLinkClicked(link: String)
   func notifyLightWarning()
-  func windowResizeTo(width: Double, height: Double)
-  func windowClose()
 }
 
 public extension NativeModuleCore {
@@ -36,6 +36,12 @@ final class NativeBridgeCore: NativeBridge {
   lazy var methods: [String: NativeMethod] = [
     "notifyWindowDidLoad": { [weak self] in
       await self?.notifyWindowDidLoad(parameters: $0)
+    },
+    "notifyWindowResizeTo": { [weak self] in
+      await self?.notifyWindowResizeTo(parameters: $0)
+    },
+    "notifyWindowClose": { [weak self] in
+      await self?.notifyWindowClose(parameters: $0)
     },
     "notifyEditorDidBecomeIdle": { [weak self] in
       await self?.notifyEditorDidBecomeIdle(parameters: $0)
@@ -64,12 +70,6 @@ final class NativeBridgeCore: NativeBridge {
     "notifyLightWarning": { [weak self] in
       await self?.notifyLightWarning(parameters: $0)
     },
-    "windowResizeTo": { [weak self] in
-      await self?.windowResizeTo(parameters: $0)
-    },
-    "windowClose": { [weak self] in
-      await self?.windowClose(parameters: $0)
-    },
   ]
 
   private let module: NativeModuleCore
@@ -81,6 +81,29 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyWindowDidLoad(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
+    return .success(nil)
+  }
+
+  private func notifyWindowResizeTo(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var width: Double
+      var height: Double
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.notifyWindowResizeTo(width: message.width, height: message.height)
+    return .success(nil)
+  }
+
+  private func notifyWindowClose(parameters: Data) async -> Result<Any?, Error>? {
+    module.notifyWindowClose()
     return .success(nil)
   }
 
@@ -190,29 +213,6 @@ final class NativeBridgeCore: NativeBridge {
 
   private func notifyLightWarning(parameters: Data) async -> Result<Any?, Error>? {
     module.notifyLightWarning()
-    return .success(nil)
-  }
-
-  private func windowResizeTo(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var width: Double
-      var height: Double
-    }
-
-    let message: Message
-    do {
-      message = try decoder.decode(Message.self, from: parameters)
-    } catch {
-      Logger.assertFail("Failed to decode parameters: \(parameters)")
-      return .failure(error)
-    }
-
-    module.windowResizeTo(width: message.width, height: message.height)
-    return .success(nil)
-  }
-
-  private func windowClose(parameters: Data) async -> Result<Any?, Error>? {
-    module.windowClose()
     return .success(nil)
   }
 }

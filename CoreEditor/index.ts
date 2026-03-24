@@ -89,11 +89,11 @@ window.nativeModules = {
 // In release mode, override window.resizeTo and window.close to bridge to native
 if (isReleaseMode) {
   window.resizeTo = (width: number, height: number) => {
-    window.nativeModules.core.windowResizeTo({ width, height });
+    window.nativeModules.core.notifyWindowResizeTo({ width, height });
   };
 
   window.close = () => {
-    window.nativeModules.core.windowClose();
+    window.nativeModules.core.notifyWindowClose();
   };
 }
 

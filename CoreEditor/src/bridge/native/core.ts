@@ -8,6 +8,8 @@ import { LineColumnInfo } from '../../modules/selection/types';
  */
 export interface NativeModuleCore extends NativeModule {
   notifyWindowDidLoad(): void;
+  notifyWindowResizeTo(args: { width: number; height: number }): void;
+  notifyWindowClose(): void;
   notifyEditorDidBecomeIdle(): void;
   notifyBackgroundColorDidChange(args: { color: CodeGen_Int; alpha: number }): void;
   notifyViewportScaleDidChange(): void;
@@ -17,6 +19,4 @@ export interface NativeModuleCore extends NativeModule {
   notifyCompositionEnded({ selectedLineColumn }: { selectedLineColumn: LineColumnInfo }): void;
   notifyLinkClicked({ link }: { link: string }): void;
   notifyLightWarning(): void;
-  windowResizeTo(args: { width: number; height: number }): void;
-  windowClose(): void;
 }
