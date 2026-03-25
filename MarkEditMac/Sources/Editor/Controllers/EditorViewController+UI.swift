@@ -27,13 +27,6 @@ extension EditorViewController {
 
     wrapper.addSubview(findPanel)
     wrapper.addSubview(replacePanel)
-
-    // findPanel is added before replacePanel to ensure the key view loop,
-    // but we want findPanel visually above the replacePanel to play UI tricks.
-    if let findPanelLayer = findPanel.layer {
-      wrapper.layer?.insertSublayer(findPanelLayer, above: replacePanel.layer)
-    }
-
     wrapper.addSubview(webView)
     wrapper.addSubview(statusView)
 
@@ -88,16 +81,7 @@ extension EditorViewController {
       ])
 
       // To avoid duplicate dividers
-      if AppDesign.modernStyle {
-        modernDividerView.alphaValue = 0
-        modernDividerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-          modernDividerView.leadingAnchor.constraint(equalTo: findPanel.leadingAnchor),
-          modernDividerView.trailingAnchor.constraint(equalTo: findPanel.trailingAnchor),
-          modernDividerView.topAnchor.constraint(equalTo: findPanel.topAnchor),
-          modernDividerView.heightAnchor.constraint(equalToConstant: modernDividerView.length),
-        ])
-      }
+      modernDividerView.alphaValue = 0
     }
 
     // Initially hide panels to prevent being found by VoiceOver
@@ -227,6 +211,13 @@ extension EditorViewController {
   }
 
   func layoutPanels(animated: Bool = false) {
+    // findPanel is added before replacePanel to ensure the key view loop,
+    // but we want findPanel visually above the replacePanel to play UI tricks.
+    if let findPanelLayer = findPanel.layer, let superLayer = findPanelLayer.superlayer {
+      findPanelLayer.removeFromSuperlayer()
+      superLayer.insertSublayer(findPanelLayer, above: replacePanel.layer)
+    }
+
     findPanel.update(animated).frame = findPanelRect
     replacePanel.update(animated).frame = replacePanelRect
     panelDivider.update(animated).frame = panelDividerRect
@@ -240,6 +231,14 @@ extension EditorViewController {
       modernEffectHeight.constant = view.safeAreaInsets.top + panelDivider.frame.height
       modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : 1
     }
+
+    // The position of this divider should be fixed
+    modernDividerView.frame = CGRect(
+      x: 0,
+      y: contentHeight - modernDividerView.length,
+      width: view.frame.width,
+      height: modernDividerView.length
+    )
   }
 
   func layoutWebView(animated: Bool = false) {
