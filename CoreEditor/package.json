@@ -53,7 +53,8 @@
     "vite-plugin-singlefile": "^2.0.1"
   },
   "resolutions": {
-    "minimatch": "^10.2.4"
+    "minimatch": "^10.2.4",
+    "picomatch": "^4.0.4"
   },
   "packageManager": "yarn@4.9.2"
 }
