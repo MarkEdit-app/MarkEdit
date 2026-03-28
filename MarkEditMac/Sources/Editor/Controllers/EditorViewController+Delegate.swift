@@ -200,6 +200,11 @@ extension EditorViewController: EditorModuleCoreDelegate {
     hasBeenEdited = hasBeenEdited || contentEdited
     if contentEdited {
       document?.isOutdated = true
+
+      // Window restoration is enabled, explicit autosave to prevent data loss
+      if document?.fileURL == nil && AppPreferences.General.quitAlwaysKeepsWindows {
+        document?.autosaveDelayed()
+      }
     }
 
     // Only update the dirty state when it's edited,

@@ -159,9 +159,9 @@ extension EditorViewController: NSMenuItemValidation {
 
 extension EditorViewController {
   @IBAction func terminate(_ sender: Any?) {
-    // Window restoration is enabled, save all drafts to prevent data loss
-    if AppPreferences.General.quitAlwaysKeepsWindows, let draftDocument {
-      return draftDocument.runModalSavePanel(
+    // Window restoration is enabled, handle unsaved drafts to prevent data loss
+    if AppPreferences.General.quitAlwaysKeepsWindows, let unsavedDraft {
+      return unsavedDraft.runModalSavePanel(
         for: .saveOperation,
         delegate: self,
         didSave: #selector(handleDraftSave(_:didSave:)),
@@ -174,11 +174,10 @@ extension EditorViewController {
 
   // MARK: - Window Restoration
 
-  var draftDocument: NSDocument? {
-    EditorReusePool.shared
-      .viewControllers()
-      .compactMap(\.document)
-      .first { $0.fileURL == nil && ($0.isDocumentEdited || $0.hasUnautosavedChanges) }
+  var unsavedDraft: NSDocument? {
+    NSDocumentController.shared.editorDocuments.first {
+      $0.fileURL == nil && ($0.isOutdated || $0.hasUnautosavedChanges)
+    }
   }
 
   @objc private func handleDraftSave(_ document: NSDocument, didSave: Bool) {
@@ -186,7 +185,7 @@ extension EditorViewController {
       return
     }
 
-    if draftDocument == nil {
+    if unsavedDraft == nil {
       performTerminate(nil)
     } else {
       document.close()
@@ -194,11 +193,10 @@ extension EditorViewController {
   }
 
   private func performTerminate(_ sender: Any?) {
-    EditorReusePool.shared.viewControllers().forEach {
-      $0.document?.isTerminating = true
+    NSDocumentController.shared.editorDocuments.forEach {
+      $0.isTerminating = true
     }
 
-    document?.isTerminating = true
     NSApp.terminate(sender)
   }
 }
