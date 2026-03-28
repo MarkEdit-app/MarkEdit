@@ -9,6 +9,10 @@ import AppKit
 import MarkEditKit
 
 extension NSDocumentController {
+  var editorDocuments: [EditorDocument] {
+    documents.compactMap { $0 as? EditorDocument }
+  }
+
   var hasOutdatedDocuments: Bool {
     !outdatedDocuments.isEmpty
   }
@@ -35,12 +39,6 @@ extension NSDocumentController {
 
 private extension NSDocumentController {
   var outdatedDocuments: [EditorDocument] {
-    NSDocumentController.shared.documents.compactMap {
-      guard let document = $0 as? EditorDocument, document.isOutdated else {
-        return nil
-      }
-
-      return document
-    }
+    editorDocuments.filter { $0.isOutdated }
   }
 }
