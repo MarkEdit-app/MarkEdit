@@ -87,28 +87,6 @@ public extension NSView {
     animated ? animator() : self
   }
 
-  /// Transform the view to a scale while keeping it centered during the animation.
-  func scaleTo(_ scale: Double, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
-    wantsLayer = true
-    layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    layer?.position = CGPoint(x: frame.midX, y: frame.midY)
-
-    CATransaction.begin()
-    CATransaction.setAnimationDuration(duration)
-    CATransaction.setCompletionBlock { completion?() }
-
-    let animation = CABasicAnimation(keyPath: "transform")
-    animation.fromValue = layer?.presentation()?.transform ?? layer?.transform
-
-    let transform = CATransform3DMakeScale(scale, scale, 1)
-    animation.toValue = transform
-    animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-
-    layer?.transform = transform
-    layer?.add(animation, forKey: "scale")
-    CATransaction.commit()
-  }
-
   /// Enumerate all descendants, recursively, self first.
   func enumerateDescendants<T: NSView>(where: ((T) -> Bool)? = nil, handler: (T) -> Void) {
     if let view = self as? T, `where`?(view) ?? true {

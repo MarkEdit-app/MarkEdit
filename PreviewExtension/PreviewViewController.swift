@@ -30,8 +30,12 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       }
     }
 
-    let webView = WebView(frame: .zero, configuration: Configuration())
+    let config = Configuration()
+    config.enablePerformanceFlags()
+
+    let webView = WebView(frame: .zero, configuration: config)
     webView.allowsMagnification = true
+
     return webView
   }()
 

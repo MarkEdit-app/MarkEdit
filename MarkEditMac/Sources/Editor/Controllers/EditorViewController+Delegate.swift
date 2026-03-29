@@ -105,20 +105,6 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
-
-    loadingIndicator.scaleTo(0.9, duration: 0.1) {
-      let duration: TimeInterval = 0.3
-
-      NSAnimationContext.runAnimationGroup { context in
-        context.duration = duration
-        self.loadingIndicator.animator().alphaValue = 0
-      } completionHandler: {
-        // Destroy it since we only need the indicator for cold launch
-        self.loadingIndicator.removeFromSuperview()
-      }
-
-      self.loadingIndicator.scaleTo(2.0, duration: duration)
-    }
   }
 
   func editorCoreWindowResize(

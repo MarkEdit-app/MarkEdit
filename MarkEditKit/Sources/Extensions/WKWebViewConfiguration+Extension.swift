@@ -5,6 +5,7 @@
 //
 
 import WebKit
+import MarkEditCore
 
 public extension WKWebViewConfiguration {
   static func newConfig(disableCors: Bool = false) -> WKWebViewConfiguration {
@@ -15,6 +16,8 @@ public extension WKWebViewConfiguration {
     }
 
     let config = Configuration()
+    config.enablePerformanceFlags()
+
     if config.preferences.responds(to: sel_getUid("_developerExtrasEnabled")) {
       config.preferences.setValue(true, forKey: "developerExtrasEnabled")
     } else {

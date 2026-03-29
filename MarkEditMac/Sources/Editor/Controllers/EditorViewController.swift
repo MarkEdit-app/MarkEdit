@@ -108,18 +108,6 @@ final class EditorViewController: NSViewController {
     DividerView()
   }()
 
-  private(set) lazy var loadingIndicator: NSView = {
-    class View: NSImageView {
-      override func hitTest(_ point: NSPoint) -> NSView? { nil }
-    }
-
-    let view = View()
-    view.image = NSImage(named: "AppIcon")
-
-    Logger.assert(view.image != nil, "Missing AppIcon from the main bundle")
-    return view
-  }()
-
   private(set) lazy var statusView = {
     let view = EditorStatusView { [weak self] in
       self?.showGotoLineWindow(nil)
@@ -265,7 +253,6 @@ final class EditorViewController: NSViewController {
 
     layoutPanels()
     layoutWebView()
-    layoutLoadingIndicator()
     layoutStatusView()
   }
 
