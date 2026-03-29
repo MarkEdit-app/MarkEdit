@@ -139,7 +139,7 @@ private extension AppDelegate {
   }
 
   @IBAction func openDocumentsFolder(_ sender: Any?) {
-    NSWorkspace.shared.open(URL.documentsDirectory)
+    NSWorkspace.shared.open(.documentsDirectory)
   }
 
   @IBAction func grantFolderAccess(_ sender: Any?) {

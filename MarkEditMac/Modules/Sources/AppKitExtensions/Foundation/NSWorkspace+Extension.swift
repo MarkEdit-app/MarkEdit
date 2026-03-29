@@ -35,13 +35,22 @@ public extension NSWorkspace {
   /// The return value indicates whether it's successfully opened or revealed.
   @discardableResult
   func openOrReveal(url: URL) -> Bool {
-    // It's not a local file or we have read access, we just open it
-    guard url.scheme == "file" && !FileManager.default.isReadableFile(atPath: url.path) else {
+    guard url.scheme == "file" else {
+      // Directly open non-local URLs
       return open(url)
     }
 
-    // Otherwise, we can only reveal it in Finder
-    if FileManager.default.fileExists(atPath: url.path) {
+    // Get the standardized version of local URLs
+    let url = url.standardized
+    let path = url.path(percentEncoded: false)
+
+    if FileManager.default.isReadableFile(atPath: path) {
+      // Open when we have the read access
+      return open(url)
+    }
+
+    if FileManager.default.fileExists(atPath: path) {
+      // Reveal otherwise
       activateFileViewerSelecting([url])
       return true
     }
