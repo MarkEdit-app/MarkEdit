@@ -36,15 +36,11 @@ extension EditorViewController {
       wrapper.addSubview(modernDividerView)
     }
 
-    // Views that must be on the top
+    // The divider must be on very top
     wrapper.addSubview(panelDivider)
-    if !hasFinishedLoading {
-      wrapper.addSubview(loadingIndicator)
-    }
 
     layoutPanels()
     layoutWebView()
-    layoutLoadingIndicator()
     layoutStatusView()
 
     if AppDesign.modernTitleBar {
@@ -254,23 +250,6 @@ extension EditorViewController {
       width: view.bounds.width,
       height: height - findPanelHeight
     )
-  }
-
-  func layoutLoadingIndicator() {
-    guard !loadingIndicator.hasUnfinishedAnimations else {
-      return
-    }
-
-    let size: Double = 72
-    loadingIndicator.frame = CGRect(
-      x: (view.bounds.width - size) * 0.5,
-      y: (view.bounds.height - size) * 0.5,
-      width: size,
-      height: size
-    )
-
-    // Hide the indicator when the window is small enough
-    loadingIndicator.isHidden = view.bounds.width < 200 || view.bounds.height < 200
   }
 
   func layoutStatusView() {

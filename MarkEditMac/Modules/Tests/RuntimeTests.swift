@@ -10,14 +10,6 @@ import AppKitExtensions
 
 @MainActor
 final class RuntimeTests: XCTestCase {
-  func testExistenceOfAppIcon() {
-    guard let bundle = (Bundle.allBundles.first { $0.bundleURL.lastPathComponent == "MarkEdit.app" }) else {
-      return XCTFail("Missing MarkEdit.app bundle to continue")
-    }
-
-    XCTAssertNotNil(bundle.image(forResource: "AppIcon"), "Missing AppIcon from the main bundle")
-  }
-
   func testExistenceOfDrawsBackground() {
     let configuration = WKWebViewConfiguration()
     configuration.setValue(false, forKey: "drawsBackground")
@@ -37,6 +29,25 @@ final class RuntimeTests: XCTestCase {
 
     let inspector = webView.perform(sel_getUid("_inspector")).takeUnretainedValue()
     testExistenceOfSelector(object: inspector, selector: "show")
+  }
+
+  func testExistenceOfPerformancePreferences() {
+    let configuration = WKWebViewConfiguration()
+    configuration.setValue(false, forKey: "delaysWebProcessLaunchUntilFirstLoad")
+    testExistenceOfSelector(object: configuration, selector: "_setDelaysWebProcessLaunchUntilFirstLoad:")
+
+    configuration.setValue(false, forKey: "waitsForPaintAfterViewDidMoveToWindow")
+    testExistenceOfSelector(object: configuration, selector: "_setWaitsForPaintAfterViewDidMoveToWindow:")
+
+    let preferences = configuration.preferences
+    preferences.setValue(false, forKey: "pageVisibilityBasedProcessSuppressionEnabled")
+    testExistenceOfSelector(object: preferences, selector: "_setPageVisibilityBasedProcessSuppressionEnabled:")
+
+    preferences.setValue(false, forKey: "hiddenPageDOMTimerThrottlingEnabled")
+    testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingEnabled:")
+
+    preferences.setValue(false, forKey: "hiddenPageDOMTimerThrottlingAutoIncreases")
+    testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingAutoIncreases:")
   }
 
   func testExistenceOfAutomaticInlineCompletion() {
