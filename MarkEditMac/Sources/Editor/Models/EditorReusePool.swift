@@ -20,8 +20,11 @@ final class EditorReusePool {
     // subsequent dequeues rotate the preloaded controller.
     preloadedController = EditorViewController()
 
-    // Try if warmup can fix the empty suggestion bug
-    NSSpellChecker.shared.checkSpelling(of: "warmup", startingAt: 0)
+    // Try if warmup can fix the empty suggestion bug,
+    // defer to avoid blocking the critical launch path.
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+      NSSpellChecker.shared.checkSpelling(of: "warmup", startingAt: 0)
+    }
   }
 
   func dequeueViewController() -> EditorViewController {

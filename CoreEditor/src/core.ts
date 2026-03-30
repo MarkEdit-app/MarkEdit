@@ -96,7 +96,7 @@ export function resetEditor(initialContent: string) {
   // Ensure twice, the first one is for initial launch,
   // the latter is for a special case where the window moves to the background during launch.
   ensureLineHeight();
-  setTimeout(ensureLineHeight, 600);
+  setTimeout(ensureLineHeight, 1000);
 
   // Makes sure the content doesn't have unwanted inset
   scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
