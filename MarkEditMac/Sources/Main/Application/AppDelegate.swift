@@ -55,6 +55,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
 
+  func applicationWillFinishLaunching(_ notification: Notification) {
+    EditorReusePool.shared.warmUp()
+  }
+
   func applicationDidFinishLaunching(_ notification: Notification) {
     NSApp.appearance = AppPreferences.General.appearance.resolved()
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
@@ -82,10 +86,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       AppHotKeys.register(keyEquivalent: hotKey.key, modifiers: hotKey.modifiers) {
         self.toggleDocumentWindowVisibility()
       }
-    }
-
-    DispatchQueue.main.async {
-      EditorReusePool.shared.warmUp()
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
