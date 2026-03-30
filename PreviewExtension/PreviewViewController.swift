@@ -32,6 +32,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
 
     let config = Configuration()
     config.enablePerformanceFlags()
+    config.disableAllRichFeatures()
 
     let webView = WebView(frame: .zero, configuration: config)
     webView.allowsMagnification = true
@@ -148,6 +149,22 @@ private extension PreviewViewController {
 
     // Markdown file
     return url
+  }
+}
+
+// MARK: - Configuration
+
+private extension WKWebViewConfiguration {
+  // Disables all rich JavaScript and media playback features, which have eager initialization
+  // cost and no plausible use in a sandboxed text renderer that loads only bundled local HTML.
+  func disableAllRichFeatures() {
+    if preferences.responds(to: sel_getUid("_disableRichJavaScriptFeatures")) {
+      preferences.perform(sel_getUid("_disableRichJavaScriptFeatures"))
+    }
+
+    if preferences.responds(to: sel_getUid("_disableMediaPlaybackRelatedFeatures")) {
+      preferences.perform(sel_getUid("_disableMediaPlaybackRelatedFeatures"))
+    }
   }
 }
 

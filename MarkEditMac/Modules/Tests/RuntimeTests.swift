@@ -50,6 +50,29 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingAutoIncreases:")
   }
 
+  func testExistenceOfFeatureSPI() {
+    testExistenceOfSelector(object: WKPreferences.self, selector: "_features")
+
+    let preferences = WKPreferences()
+    testExistenceOfSelector(object: preferences, selector: "_setEnabled:forFeature:")
+
+    guard let features = (WKPreferences.self as AnyObject)
+      .perform(sel_getUid("_features"))?.takeUnretainedValue() as? [AnyObject] else {
+      return XCTFail("Failed to retrieve _features from WKPreferences")
+    }
+
+    let keys = Set(features.compactMap { $0.value(forKey: "key") as? String })
+    for key in ["ServiceWorkersEnabled", "EncryptedMediaAPIEnabled", "LegacyEncryptedMediaAPIEnabled", "WebLocksAPIEnabled"] {
+      XCTAssert(keys.contains(key), "Missing feature key: \(key)")
+    }
+  }
+
+  func testExistenceOfBulkFeatureDisabling() {
+    let preferences = WKPreferences()
+    testExistenceOfSelector(object: preferences, selector: "_disableRichJavaScriptFeatures")
+    testExistenceOfSelector(object: preferences, selector: "_disableMediaPlaybackRelatedFeatures")
+  }
+
   func testExistenceOfAutomaticInlineCompletion() {
     let checker = NSSpellChecker.self
     testExistenceOfSelector(object: checker, selector: "isAutomaticInlineCompletionEnabled")
