@@ -52,7 +52,7 @@ public extension WKWebViewConfiguration {
 
 private extension WKPreferences {
   static var allFeatures: [AnyObject] {
-    let selfClass = Self.self as AnyObject
+    let selfClass = WKPreferences.self as AnyObject
     let selector = sel_getUid("_features")
 
     guard selfClass.responds(to: selector) else {
