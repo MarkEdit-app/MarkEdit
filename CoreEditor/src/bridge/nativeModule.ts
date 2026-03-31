@@ -20,7 +20,6 @@ export function createNativeModule<T extends NativeModule>(moduleName: string): 
         return undefined;
       }
 
-      // eslint-disable-next-line compat/compat
       return args => new Promise((resolve, reject) => {
         const message = {
           moduleName,

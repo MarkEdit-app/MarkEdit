@@ -62,8 +62,8 @@ export function resetEditor(initialContent: string) {
   // Idle state change should always go first
   editingState.isIdle = false;
 
-  // eslint-disable-next-line
-  if (window.editor && window.editor.destroy) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (typeof window.editor?.destroy === 'function') {
     window.editor.destroy();
   }
 
@@ -132,7 +132,7 @@ export function resetEditor(initialContent: string) {
   observeBackgroundColorChanges(editor.dom);
   afterDomUpdate(notifyBackgroundColor);
 
-  // eslint-disable-next-line compat/compat
+  // Recalculate text metrics to update the max height of autocomplete
   requestAnimationFrame(() => recalculateTextMetrics());
 
   // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
@@ -259,7 +259,6 @@ function observeContentHeightChanges(scrollDOM: HTMLElement) {
     });
   };
 
-  // eslint-disable-next-line compat/compat
   const observer = new ResizeObserver(notifyIfChanged);
   observer.observe(scrollDOM);
   notifyIfChanged();

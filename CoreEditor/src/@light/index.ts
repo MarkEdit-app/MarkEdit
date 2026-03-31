@@ -1,6 +1,6 @@
 import { EditorView, highlightSpecialChars } from '@codemirror/view';
 import { Compartment, EditorState } from '@codemirror/state';
-import { markdown, markdownLanguage } from '../@vendor/lang-markdown';
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 
 import { Config } from '../config';
 import { setUp, setTheme } from '../styling/config';

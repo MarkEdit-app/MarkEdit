@@ -1,5 +1,5 @@
 import { yamlFrontmatter as frontMatter } from '@codemirror/lang-yaml';
-import { markdown } from '../../@vendor/lang-markdown';
+import { markdown } from '@codemirror/lang-markdown';
 import { replaceRange } from '../../common/utils';
 import { takePossibleNewline } from '../lineEndings';
 

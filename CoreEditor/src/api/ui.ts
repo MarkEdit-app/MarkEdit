@@ -1,4 +1,3 @@
-import { v4 as UUID } from 'uuid';
 import { MenuItem, MenuItemState, Alert, TextBox, SavePanelOptions } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
@@ -94,7 +93,7 @@ function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMe
       return undefined;
     }
 
-    const identifier = UUID();
+    const identifier = crypto.randomUUID();
     actions.set(identifier, action);
     return identifier;
   };

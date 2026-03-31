@@ -2405,13 +2405,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "@types/uuid@npm:10.0.0"
-  checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
-  languageName: node
-  linkType: hard
-
 "@types/yargs-parser@npm:*":
   version: 21.0.3
   resolution: "@types/yargs-parser@npm:21.0.3"
@@ -5063,7 +5056,6 @@ __metadata:
     "@stylistic/eslint-plugin": "npm:^5.5.0"
     "@types/eslint": "npm:^9.6.1"
     "@types/jest": "npm:^29.5.4"
-    "@types/uuid": "npm:^10.0.0"
     "@typescript-eslint/parser": "npm:^8.46.2"
     esbuild: "npm:^0.25.0"
     eslint: "npm:^9.39.0"
@@ -5079,7 +5071,6 @@ __metadata:
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.0.0"
     typescript-eslint: "npm:^8.46.2"
-    uuid: "npm:^10.0.0"
     vite: "npm:^7.1.11"
     vite-plugin-singlefile: "npm:^2.0.1"
   languageName: unknown
@@ -6314,15 +6305,6 @@ __metadata:
   dependencies:
     punycode: "npm:^2.1.0"
   checksum: 10c0/4ef57b45aa820d7ac6496e9208559986c665e49447cb072744c13b66925a362d96dd5a46c4530a6b8e203e5db5fe849369444440cb22ecfc26c679359e5dfa3c
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "uuid@npm:10.0.0"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
   languageName: node
   linkType: hard
 
