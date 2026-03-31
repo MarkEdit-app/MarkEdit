@@ -1,7 +1,7 @@
 import * as cmView from '@codemirror/view';
 import * as cmState from '@codemirror/state';
 import * as cmLanguage from '@codemirror/language';
-import * as cmLangMarkdown from '../@vendor/lang-markdown';
+import * as cmLangMarkdown from '@codemirror/lang-markdown';
 import * as cmCommands from '@codemirror/commands';
 import * as cmSearch from '@codemirror/search';
 import * as cmAutocomplete from '@codemirror/autocomplete';
@@ -72,7 +72,6 @@ export function initMarkEditModules() {
 
   // Override the share method to provide a clear error message
   navigator.share = (_: ShareData): Promise<void> => {
-    // eslint-disable-next-line compat/compat
     return Promise.reject(new Error(
       'Navigator.share() is not allowed in this context. Use MarkEdit.showSavePanel() instead.',
     ));

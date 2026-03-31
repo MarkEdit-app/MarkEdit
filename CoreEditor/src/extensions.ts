@@ -15,8 +15,8 @@ import { yamlFrontmatter as frontMatter } from '@codemirror/lang-yaml';
 import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
-import { markdown, markdownLanguage } from './@vendor/lang-markdown';
-import { languages } from './@vendor/language-data';
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { languages } from '@codemirror/language-data';
 import { history, historyKeymap } from './@vendor/commands/history';
 
 import { loadTheme } from './styling/themes';

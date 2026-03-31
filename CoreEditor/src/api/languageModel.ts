@@ -1,4 +1,3 @@
-import { v4 as UUID } from 'uuid';
 import { LanguageModel, LanguageModelGenerationOptions, LanguageModelResponse, LanguageModelStream } from 'markedit-api';
 import { LanguageModelGenerationOptions as SimplifiedGenerationOptions } from '../bridge/native/foundationModels';
 
@@ -26,7 +25,7 @@ export function languageModel(): LanguageModel {
           return JSON.parse(response);
         },
         streamResponseTo: (prompt, arg1, arg2) => {
-          const streamID = UUID();
+          const streamID = crypto.randomUUID();
           const options = typeof arg1 === 'function' ? undefined : arg1;
           const stream = typeof arg1 === 'function' ? arg1 : arg2;
           if (typeof stream === 'function') {

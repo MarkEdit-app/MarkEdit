@@ -3,14 +3,12 @@
     "typeRoots": ["./node_modules/@types", "./src/@types"],
     "module": "esnext",
     "target": "esnext",
-    "lib": ["es2019", "dom"],
+    "lib": ["esnext", "dom"],
     "composite": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true,
     "importHelpers": true,
     "skipLibCheck": true
   }
