@@ -7,7 +7,14 @@
 import AppKit
 
 public extension NSWorkspace {
-  func openTerminal() {
+  func openTerminal(preferredIdentifier: String? = nil) {
+    // If a preferred terminal is specified and installed, use it directly
+    if let preferred = preferredIdentifier,
+       let url = urlForApplication(withBundleIdentifier: preferred) {
+      openApplication(at: url, configuration: Self.OpenConfiguration())
+      return
+    }
+
     let identifiers = [
       "com.googlecode.iterm2",  // iTerm2
       "com.mitchellh.ghostty",  // Ghostty
