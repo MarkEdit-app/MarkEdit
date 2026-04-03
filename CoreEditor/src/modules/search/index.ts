@@ -30,6 +30,13 @@ import {
   performSelectAllInSelection,
 } from './operations';
 
+import {
+  performPreviewSearch,
+  setPreviewSearchMatchIndex,
+  clearPreviewSearch,
+  previewSearchCounterInfo,
+} from './previewSearch';
+
 type Normalizer = (x: string) => string;
 const normalizeDiacritics: Normalizer = x => x.normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
@@ -75,6 +82,7 @@ export function setState(enabled: boolean) {
     openSearchPanel(window.editor);
   } else {
     closeSearchPanel(window.editor);
+    clearPreviewSearch();
   }
 
   storage.isEnabled = enabled;
@@ -83,6 +91,7 @@ export function setState(enabled: boolean) {
 export function updateQuery(options: SearchOptions) {
   storage.options = options;
   setState(true);
+  performPreviewSearch(options);
 
   const editor = window.editor;
   const query = new SearchQuery(options);
@@ -170,6 +179,15 @@ export function selectNextOccurrence() {
 }
 
 export function searchCounterInfo(): SearchCounterInfo {
+  // In overlay mode, preview search counter info is used instead
+  const previewInfo = previewSearchCounterInfo();
+  if (previewInfo !== undefined) {
+    return {
+      numberOfItems: previewInfo.numberOfItems as CodeGen_Int,
+      currentIndex: previewInfo.currentIndex as CodeGen_Int,
+    };
+  }
+
   return {
     numberOfItems: getQueryRanges().length as CodeGen_Int,
     currentIndex: currentMatchIndex() as CodeGen_Int,
@@ -235,6 +253,10 @@ function performFindCommand(command: Command, term: string, direction: 'forward'
   if (matches.length === 0 || (index === boundary && getQueryRanges().length > 1)) {
     scrollSearchMatchToVisible();
   }
+
+  // In overlay mode the editor is hidden and the preview is the primary view;
+  // sync its current-match indicator to the match the editor just landed on.
+  setPreviewSearchMatchIndex();
 
   return result;
 }

@@ -7,6 +7,7 @@
     "composite": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
     "esModuleInterop": true,
     "strictNullChecks": true,
     "importHelpers": true,
