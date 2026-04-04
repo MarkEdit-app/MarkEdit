@@ -48,7 +48,7 @@ enum AppRuntimeConfig {
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
     let disableCorsRestrictions: Bool?
-    let terminalApp: String?
+    let preferredTerminalApp: String?
     let mainWindowHotKey: HotKey?
 
     enum CodingKeys: String, CodingKey {
@@ -70,7 +70,7 @@ enum AppRuntimeConfig {
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
       case disableCorsRestrictions = "general.disableCorsRestrictions"
-      case terminalApp = "general.terminalApp"
+      case preferredTerminalApp = "general.preferredTerminalApp"
       case mainWindowHotKey = "general.mainWindowHotKey"
     }
   }
@@ -183,9 +183,9 @@ enum AppRuntimeConfig {
     currentDefinition?.disableCorsRestrictions ?? false
   }
 
-  static var terminalApp: String? {
+  static var preferredTerminalApp: String? {
     // Use auto-detection by default
-    currentDefinition?.terminalApp
+    currentDefinition?.preferredTerminalApp
   }
 
   static var mainWindowHotKey: Definition.HotKey? {
@@ -244,7 +244,7 @@ private extension AppRuntimeConfig {
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
     disableCorsRestrictions: nil,
-    terminalApp: nil,
+    preferredTerminalApp: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
   )
 

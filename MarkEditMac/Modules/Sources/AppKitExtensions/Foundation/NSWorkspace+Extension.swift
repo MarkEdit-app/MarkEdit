@@ -8,14 +8,8 @@ import AppKit
 
 public extension NSWorkspace {
   func openTerminal(preferredIdentifier: String? = nil) {
-    // If a preferred terminal is specified and installed, use it directly
-    if let preferred = preferredIdentifier,
-       let url = urlForApplication(withBundleIdentifier: preferred) {
-      openApplication(at: url, configuration: Self.OpenConfiguration())
-      return
-    }
-
     let identifiers = [
+      preferredIdentifier,      // User configured
       "com.googlecode.iterm2",  // iTerm2
       "com.mitchellh.ghostty",  // Ghostty
       "dev.warp.Warp-Stable",   // Warp
@@ -30,7 +24,7 @@ public extension NSWorkspace {
       "com.emtec.zoc8",         // Zoc
       "org.tabby",              // Tabby
       "com.apple.Terminal",     // Terminal
-    ]
+    ].compactMap { $0 }
 
     if let url = identifiers.compactMap({ urlForApplication(withBundleIdentifier: $0) }).first {
       openApplication(at: url, configuration: Self.OpenConfiguration())

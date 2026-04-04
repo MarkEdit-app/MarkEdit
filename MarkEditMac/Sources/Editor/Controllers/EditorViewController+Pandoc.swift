@@ -29,7 +29,7 @@ extension EditorViewController {
     ].joined(separator: " ")
 
     NSPasteboard.general.overwrite(string: command)
-    NSWorkspace.shared.openTerminal(preferredIdentifier: AppRuntimeConfig.terminalApp)
+    NSWorkspace.shared.openTerminal(preferredIdentifier: AppRuntimeConfig.preferredTerminalApp)
   }
 }
 
