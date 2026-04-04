@@ -43,8 +43,8 @@ export function adjustActiveLineGutter() {
     return;
   }
 
-  const gutterElement = [...document.querySelectorAll('.cm-lineNumbers .cm-gutterElement')].find((element: HTMLElement) => {
-    return parseInt(element.innerText) === lineNumber;
+  const gutterElement = [...document.querySelectorAll('.cm-lineNumbers .cm-gutterElement')].find((element: Element) => {
+    return Number(element.textContent) === lineNumber;
   }) as HTMLElement | null;
 
   if (gutterElement !== null) {
