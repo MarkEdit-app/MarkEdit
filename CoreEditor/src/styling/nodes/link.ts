@@ -181,7 +181,7 @@ function extractLink(target: EventTarget | null) {
 
   // It's OK to have a trailing period in a valid url,
   // but generally it's the end of a sentence and we want to remove the period.
-  const link = element.dataset.linkUrl ?? element.innerText;
+  const link = element.dataset.linkUrl ?? (element.textContent as string | null) ?? '';
   if (link.endsWith('.') === true && link.endsWith('..') !== true) {
     return { element, link: link.slice(0, -1) };
   }

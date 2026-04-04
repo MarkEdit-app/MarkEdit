@@ -90,7 +90,7 @@ export function selectWholeLineIfNeeded(event: MouseEvent) {
   }) as HTMLElement | undefined;
 
   if (actualElement !== undefined) {
-    selectWholeLineAt(parseInt(actualElement.innerText));
+    selectWholeLineAt(Number(actualElement.textContent));
   }
 }
 

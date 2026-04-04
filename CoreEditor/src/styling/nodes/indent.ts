@@ -131,7 +131,7 @@ function measureTextDOM(text: string, font: string) {
   element.style.visibility = 'hidden';
   element.style.left = '-9999px';
   element.style.font = font;
-  element.innerText = text;
+  element.textContent = text;
 
   document.body.appendChild(element);
   const width = getComputedStyle(element).width; // This value is rounded
