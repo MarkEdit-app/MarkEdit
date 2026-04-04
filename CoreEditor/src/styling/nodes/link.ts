@@ -25,42 +25,41 @@ declare global {
 window._startLinkClickable = (event: MouseEvent) => startClickable(event.target as HTMLElement, event.metaKey);
 window._stopLinkClickable = (event: MouseEvent) => stopClickable(event.target as HTMLElement);
 
+// Fragile approach, but we only use it for link clicking, it should be fine.
+// The matcher is created once so it isn't reconstructed on every view update.
+const standardMatcher = new MatchDecorator({
+  regexp: regexp.standard,
+  boundary: /\S/,
+  decorate: (add, from, to, match) => {
+    const createDeco = (attributes?: { [key: string]: string }) => {
+      return Decoration.mark(createSpec(attributes));
+    };
+
+    // HTML links, only decorate the url part
+    if (match[6]) {
+      return add(from + match[6].length, to - 1, createDeco());
+    }
+
+    // Markdown links
+    if (match[4]) {
+      // Decorate the full match and add the url as an attribute
+      if (match[5]) {
+        return add(from, to, createDeco({ 'data-link-url': match[5] }));
+      }
+
+      // Usually speaking, this should not happen
+      return add(from + match[4].length, to - 1, createDeco());
+    }
+
+    // Normal links, decorate the full match
+    add(from, to, createDeco());
+  },
+});
+
 /**
  * For standard links like `https://github.com` and `[markdown][link]`.
  */
-const standardStyle = createDecoPlugin(() => {
-  const matcher = new MatchDecorator({
-    // Fragile approach, but we only use it for link clicking, it should be fine
-    regexp: regexp.standard,
-    boundary: /\S/,
-    decorate: (add, from, to, match) => {
-      const createDeco = (attributes?: { [key: string]: string }) => {
-        return Decoration.mark(createSpec(attributes));
-      };
-
-      // HTML links, only decorate the url part
-      if (match[6]) {
-        return add(from + match[6].length, to - 1, createDeco());
-      }
-
-      // Markdown links
-      if (match[4]) {
-        // Decorate the full match and add the url as an attribute
-        if (match[5]) {
-          return add(from, to, createDeco({ 'data-link-url': match[5] }));
-        }
-
-        // Usually speaking, this should not happen
-        return add(from + match[4].length, to - 1, createDeco());
-      }
-
-      // Normal links, decorate the full match
-      add(from, to, createDeco());
-    },
-  });
-
-  return matcher.createDeco(window.editor);
-});
+const standardStyle = createDecoPlugin(() => standardMatcher.createDeco(window.editor));
 
 /**
  * For `[^footnote]` and `[reference][link]`.
