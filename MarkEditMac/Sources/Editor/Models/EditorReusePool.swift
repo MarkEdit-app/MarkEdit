@@ -7,6 +7,7 @@
 
 import AppKit
 import WebKit
+import MarkEditKit
 
 /**
  Reuse pool for editors to keep WebViews in memory.
@@ -19,6 +20,7 @@ final class EditorReusePool {
     // Pre-load an instance so the first dequeue uses it,
     // subsequent dequeues rotate the preloaded controller.
     preloadedController = EditorViewController()
+    startObservingMemoryPressure()
 
     // Try if warmup can fix the empty suggestion bug,
     // defer to avoid blocking the critical launch path.
@@ -50,6 +52,20 @@ final class EditorReusePool {
   // MARK: - Private
 
   private var preloadedController: EditorViewController?
+  private var memoryPressureSource: DispatchSourceMemoryPressure?
 
   private init() {}
+
+  private func startObservingMemoryPressure() {
+    let source = DispatchSource.makeMemoryPressureSource(eventMask: .critical, queue: .main)
+    source.setEventHandler { [weak self] in
+      Task { @MainActor in
+        self?.preloadedController = nil
+        Logger.log(.info, "Releasing preloaded editor on memory pressure")
+      }
+    }
+
+    source.resume()
+    memoryPressureSource = source
+  }
 }
