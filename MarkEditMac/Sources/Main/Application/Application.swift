@@ -26,6 +26,7 @@ final class Application: NSApplication {
 
     // Must after AppCustomization.createFiles()
     Bundle.swizzleInfoDictionaryOnce
+    EditorReusePool.shared.warmUp()
 
     let application = Self.shared
     let delegate = AppDelegate()
