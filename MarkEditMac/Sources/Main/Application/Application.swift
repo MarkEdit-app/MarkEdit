@@ -10,10 +10,6 @@ import MarkEditKit
 
 @main
 final class Application: NSApplication {
-  var currentEditor: EditorViewController? {
-    keyWindow?.contentViewController as? EditorViewController
-  }
-
   static func main() {
     NSObject.swizzleAccessibilityBundlesOnce
     NSMenu.swizzleIsUpdatedExcludingContentTypesOnce
@@ -33,6 +29,7 @@ final class Application: NSApplication {
     application.delegate = delegate
     delegate.startAccessingGrantedFolder()
 
+    EditorReusePool.shared.warmUp()
     _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
   }
 
