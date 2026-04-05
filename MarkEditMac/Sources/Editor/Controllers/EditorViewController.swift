@@ -316,11 +316,11 @@ extension EditorViewController {
   }
 
   func resetEditor() {
-    guard hasFinishedLoading, let textContent = document?.stringValue else {
+    guard hasFinishedLoading else {
       return
     }
 
-    bridge.core.resetEditor(text: textContent) { _ in
+    bridge.core.resetEditor(text: document?.stringValue ?? "") { _ in
       self.webView.magnification = 1.0
       self.bridge.textChecker.update(options: TextCheckerOptions(
         spellcheck: true,
