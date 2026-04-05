@@ -17,6 +17,6 @@ extension AppIntent {
       return lhs < rhs
     }
 
-    return orderedControllers.first { $0.view.window != nil } ?? (NSApp as? Application)?.currentEditor
+    return orderedControllers.first { $0.view.window != nil } ?? NSApp.currentEditor
   }
 }
