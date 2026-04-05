@@ -164,15 +164,30 @@ export function observeChanges() {
 
       // Handle native updates.
       //
-      // It would be great if we could also provide the updated text here,
-      // but it's time-consuming for large payload,
-      // we want to be responsive for every key stroke.
-      window.nativeModules.core.notifyViewDidUpdate({
-        contentEdited: update.docChanged,
-        compositionEnded: editingState.compositionEnded,
-        isDirty: isContentDirty(),
-        selectedLineColumn: selectedLineColumn(),
-      });
+      // For large payloads (e.g., cursor far into a long line, or large selection),
+      // debounce to skip intermediate updates. sliceDoc is deferred inside getInfo()
+      // and only called when the update is actually sent. The snapshot is intentional:
+      // getInfo() is consistent with the other fields captured in this update.
+      const lineColumnState = selectedLineColumn();
+      const notifyViewDidUpdate = () => {
+        window.nativeModules.core.notifyViewDidUpdate({
+          contentEdited: update.docChanged,
+          compositionEnded: editingState.compositionEnded,
+          isDirty: isContentDirty(),
+          selectedLineColumn: lineColumnState.getInfo(),
+        });
+      };
+
+      if (storage.lineColumnUpdater !== undefined) {
+        clearTimeout(storage.lineColumnUpdater);
+        storage.lineColumnUpdater = undefined;
+      }
+
+      if (lineColumnState.isLargePayload) {
+        storage.lineColumnUpdater = setTimeout(notifyViewDidUpdate, 150);
+      } else {
+        notifyViewDidUpdate();
+      }
 
       // Fragile but simple method to clear the syntax-aware selection stack
       clearSyntaxSelections();
@@ -228,8 +243,10 @@ const storage: {
   caretOffsetY: number | undefined;
   gutterUpdater: ReturnType<typeof setTimeout> | undefined;
   contentUpdater: ReturnType<typeof setTimeout> | undefined;
+  lineColumnUpdater: ReturnType<typeof setTimeout> | undefined;
 } = {
   caretOffsetY: undefined,
   gutterUpdater: undefined,
   contentUpdater: undefined,
+  lineColumnUpdater: undefined,
 };
