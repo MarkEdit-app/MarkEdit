@@ -16,7 +16,6 @@ public struct WebModuleBridge {
   public let completion: WebBridgeCompletion
   public let history: WebBridgeHistory
   public let lineEndings: WebBridgeLineEndings
-  public let textChecker: WebBridgeTextChecker
   public let selection: WebBridgeSelection
   public let format: WebBridgeFormat
   public let search: WebBridgeSearch
@@ -31,7 +30,6 @@ public struct WebModuleBridge {
     self.completion = WebBridgeCompletion(webView: webView)
     self.history = WebBridgeHistory(webView: webView)
     self.lineEndings = WebBridgeLineEndings(webView: webView)
-    self.textChecker = WebBridgeTextChecker(webView: webView)
     self.selection = WebBridgeSelection(webView: webView)
     self.format = WebBridgeFormat(webView: webView)
     self.search = WebBridgeSearch(webView: webView)

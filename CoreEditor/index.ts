@@ -6,7 +6,6 @@ import { WebModuleCoreImpl } from './src/bridge/web/core';
 import { WebModuleCompletionImpl } from './src/bridge/web/completion';
 import { WebModuleHistoryImpl } from './src/bridge/web/history';
 import { WebModuleLineEndingsImpl } from './src/bridge/web/lineEndings';
-import { WebModuleTextCheckerImpl } from './src/bridge/web/textChecker';
 import { WebModuleSelectionImpl } from './src/bridge/web/selection';
 import { WebModuleFormatImpl } from './src/bridge/web/format';
 import { WebModuleSearchImpl } from './src/bridge/web/search';
@@ -66,7 +65,6 @@ window.webModules = {
   completion: new WebModuleCompletionImpl(),
   history: new WebModuleHistoryImpl(),
   lineEndings: new WebModuleLineEndingsImpl(),
-  textChecker: new WebModuleTextCheckerImpl(),
   selection: new WebModuleSelectionImpl(),
   format: new WebModuleFormatImpl(),
   search: new WebModuleSearchImpl(),

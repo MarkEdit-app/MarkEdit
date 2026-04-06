@@ -320,17 +320,13 @@ extension EditorViewController {
       return
     }
 
-    bridge.core.resetEditor(text: textContent) { _ in
-      self.webView.magnification = 1.0
-      self.bridge.textChecker.update(options: TextCheckerOptions(
-        spellcheck: true,
-        autocorrect: true
-      ))
+    bridge.core.resetEditor(text: textContent) { [weak self] _ in
+      self?.webView.magnification = 1.0
 
       // Initial content from scenarios like "CreateNewDocumentIntent" or "New File from Clipboard"
-      if let text = self.initialContent {
-        self.prependTextContent(text)
-        self.initialContent = nil
+      if let text = self?.initialContent {
+        self?.prependTextContent(text)
+        self?.initialContent = nil
       }
     }
 
