@@ -35,6 +35,7 @@ final class AppDocumentController: NSDocumentController {
 
     Self.suggestedTextEncoding = nil
     openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
+    openPanel.relayoutAccessoryView()
 
     return await super.beginOpenPanel(openPanel, forTypes: inTypes)
   }
@@ -66,5 +67,16 @@ final class AppDocumentController: NSDocumentController {
   override func saveAllDocuments(_ sender: Any?) {
     // The default implementation doesn't work
     documents.forEach { $0.save(sender) }
+  }
+}
+
+// MARK: - Private
+
+private extension NSOpenPanel {
+  /// Re-layouts the accessory view to work around internal AppKit bugs.
+  ///
+  /// For example, the animation of opening documents will sometimes be skipped.
+  func relayoutAccessoryView() {
+    accessoryView?.needsLayout = true
   }
 }
