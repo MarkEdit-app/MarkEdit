@@ -103,8 +103,15 @@ private extension EditorWindowController {
     // this is used for restoring the autosaved window frame.
     //
     // Unfortunately, we need to manually do the window cascading.
-    if let window, NSApp.windows.filter({ $0 is EditorWindow }).count > 1 {
-      autosavedFrame = window.cascadeRect(from: window.frame)
+    //
+    // Cascade from the frontmost existing EditorWindow's frame, not the new window's
+    // autosaved frame, to ensure the visual offset is relative to what the user sees.
+    let existingWindow = NSApp.orderedWindows.first {
+      $0 is EditorWindow && $0 !== window
+    }
+
+    if let window, let sourceFrame = existingWindow?.frame {
+      autosavedFrame = window.cascadeRect(from: sourceFrame)
     } else {
       autosavedFrame = window?.frame
     }
