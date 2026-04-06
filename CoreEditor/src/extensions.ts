@@ -160,6 +160,12 @@ export function extensions(options: { lineBreak?: string }) {
     wordTokenizer(),
     interceptInputs(),
     observeChanges(),
+
+    // Accessibility
+    EditorView.contentAttributes.of({
+      'role': 'textbox',
+      'aria-multiline': 'true',
+    }),
   ];
 }
 
