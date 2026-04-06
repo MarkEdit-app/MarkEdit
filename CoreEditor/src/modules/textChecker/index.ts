@@ -3,8 +3,7 @@ import TextCheckerOptions from './options';
 /**
  * Div level text checker settings.
  */
-export function update(options: TextCheckerOptions) {
-  const contentDOM = window.editor.contentDOM;
+export function updateTextChecker(contentDOM: HTMLElement, options: TextCheckerOptions) {
   contentDOM.setAttribute('spellcheck', options.spellcheck ? 'true' : 'false');
   contentDOM.setAttribute('autocorrect', options.autocorrect ? 'on' : 'off');
 

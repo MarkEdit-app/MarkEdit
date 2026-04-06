@@ -17,6 +17,7 @@ import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { removeFrontMatter } from './modules/frontMatter';
 import { selectedMainText, scrollIntoView } from './modules/selection';
 import { markContentClean } from './modules/history';
+import { updateTextChecker } from './modules/textChecker';
 
 import { TextEditor } from './api/editor';
 import { editorReadyListeners } from './api/methods';
@@ -103,6 +104,11 @@ export function resetEditor(initialContent: string) {
 
   const contentDOM = editor.contentDOM;
   contentDOM.addEventListener('blur', handleFocusLost);
+
+  updateTextChecker(contentDOM, {
+    spellcheck: true,
+    autocorrect: true,
+  });
 
   const scrollDOM = editor.scrollDOM;
   scrollDOM.scrollTo({ top: 0 }); // scrollIntoView doesn't work when the app is idle
