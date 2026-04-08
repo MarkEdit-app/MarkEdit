@@ -18,21 +18,15 @@ public extension WKWebViewConfiguration {
     let config = Configuration()
     config.enablePerformanceFlags()
 
-    if config.preferences.responds(to: sel_getUid("_developerExtrasEnabled")) {
-      config.preferences.setValue(true, forKey: "developerExtrasEnabled")
-    } else {
-      Logger.assertFail("Failed to overwrite developerExtrasEnabled in WKPreferences")
+    if !config.preferences.setBoolValue(true, forSelector: "_setDeveloperExtrasEnabled:") {
+      Logger.assertFail("Failed to call _setDeveloperExtrasEnabled:")
     }
 
     // Disable CORS checks entirely, allowing fetch() in user scripts to do lots of things.
     //
     // This shouldn't raise security issues, as we're not a browser that can load arbitrary URLs.
-    if disableCors {
-      if config.preferences.responds(to: sel_getUid("_webSecurityEnabled")) {
-        config.preferences.setValue(false, forKey: "webSecurityEnabled")
-      } else {
-        Logger.assertFail("Failed to overwrite webSecurityEnabled in WKPreferences")
-      }
+    if disableCors && !config.preferences.setBoolValue(false, forSelector: "_setWebSecurityEnabled:") {
+      Logger.assertFail("Failed to call _setWebSecurityEnabled:")
     }
 
     return config

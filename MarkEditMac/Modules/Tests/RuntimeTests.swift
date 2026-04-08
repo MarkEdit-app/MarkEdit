@@ -12,17 +12,13 @@ import AppKitExtensions
 final class RuntimeTests: XCTestCase {
   func testExistenceOfDrawsBackground() {
     let configuration = WKWebViewConfiguration()
-    configuration.setValue(false, forKey: "drawsBackground")
     testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
   }
 
   func testExistenceOfDeveloperPreferences() {
     let preferences = WKWebViewConfiguration().preferences
-    preferences.setValue(true, forKey: "developerExtrasEnabled")
-    testExistenceOfSelector(object: preferences, selector: "_developerExtrasEnabled")
-
-    preferences.setValue(false, forKey: "webSecurityEnabled")
-    testExistenceOfSelector(object: preferences, selector: "_webSecurityEnabled")
+    testExistenceOfSelector(object: preferences, selector: "_setDeveloperExtrasEnabled:")
+    testExistenceOfSelector(object: preferences, selector: "_setWebSecurityEnabled:")
 
     let webView = WKWebView()
     testExistenceOfSelector(object: webView, selector: "_inspector")
@@ -33,20 +29,12 @@ final class RuntimeTests: XCTestCase {
 
   func testExistenceOfPerformancePreferences() {
     let configuration = WKWebViewConfiguration()
-    configuration.setValue(false, forKey: "delaysWebProcessLaunchUntilFirstLoad")
     testExistenceOfSelector(object: configuration, selector: "_setDelaysWebProcessLaunchUntilFirstLoad:")
-
-    configuration.setValue(false, forKey: "waitsForPaintAfterViewDidMoveToWindow")
     testExistenceOfSelector(object: configuration, selector: "_setWaitsForPaintAfterViewDidMoveToWindow:")
 
     let preferences = configuration.preferences
-    preferences.setValue(false, forKey: "pageVisibilityBasedProcessSuppressionEnabled")
     testExistenceOfSelector(object: preferences, selector: "_setPageVisibilityBasedProcessSuppressionEnabled:")
-
-    preferences.setValue(false, forKey: "hiddenPageDOMTimerThrottlingEnabled")
     testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingEnabled:")
-
-    preferences.setValue(false, forKey: "hiddenPageDOMTimerThrottlingAutoIncreases")
     testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingAutoIncreases:")
   }
 
