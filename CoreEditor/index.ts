@@ -105,6 +105,10 @@ if (isReleaseMode) {
   window.close = () => {
     window.nativeModules.core.notifyWindowClose();
   };
+
+  window.print = () => {
+    throw new Error('Window.print() is not implemented in this context.');
+  };
 }
 
 window.onload = () => {
