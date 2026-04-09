@@ -161,6 +161,7 @@ enum AppRuntimeConfig {
   }
 
   static var updateBehavior: Definition.UpdateBehavior {
+    // Quiet mode (non-intrusive menu bar notification) by default
     guard currentDefinition?.checksForUpdates ?? true else {
       return .never
     }
@@ -254,12 +255,13 @@ private extension AppRuntimeConfig {
       return nil
     }
 
-    guard let definition = try? JSONDecoder().decode(Definition.self, from: fileData) else {
+    do {
+      return try JSONDecoder().decode(Definition.self, from: fileData)
+    } catch {
+      Logger.log(.error, "Failed to decode settings.json: \(error.localizedDescription)")
       Logger.assertFail("Invalid json object was found: \(fileData)")
       return nil
     }
-
-    return definition
   }()
 
   static func encode(definition: Definition) -> Data? {
