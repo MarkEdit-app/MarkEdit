@@ -161,6 +161,7 @@ enum AppRuntimeConfig {
   }
 
   static var updateBehavior: Definition.UpdateBehavior {
+    // [Backward Compatibility] checksForUpdates: false takes precedence over updateBehavior
     guard currentDefinition?.checksForUpdates ?? true else {
       return .never
     }
