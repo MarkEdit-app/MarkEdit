@@ -29,7 +29,6 @@ final class Application: NSApplication {
     application.delegate = delegate
     delegate.startAccessingGrantedFolder()
 
-    EditorReusePool.shared.warmUp()
     _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
   }
 
