@@ -226,6 +226,9 @@ extension EditorViewController {
     if AppDesign.modernTitleBar {
       modernEffectHeight.constant = view.safeAreaInsets.top + panelDivider.frame.height
       modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : 1
+    } else {
+      // To avoid duplicate dividers on legacy titlebar
+      panelDivider.isHidden = findPanel.mode == .hidden
     }
 
     // The position of this divider should be fixed
