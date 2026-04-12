@@ -31,7 +31,7 @@ final class EditorReusePool {
 
   func dequeueViewController() -> EditorViewController {
     let controller = preloadedController ?? EditorViewController()
-    preloadedController = EditorViewController()
+    preloadedController = EditorViewController(preloadDelay: 0.2)
 
     return controller
   }

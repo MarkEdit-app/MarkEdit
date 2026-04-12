@@ -226,9 +226,16 @@ final class EditorViewController: NSViewController {
     }
   }
 
-  init() {
+  init(preloadDelay: TimeInterval? = nil) {
     super.init(nibName: nil, bundle: nil)
-    _ = self.webView // Pre-load
+
+    if let preloadDelay, preloadDelay > 0 {
+      DispatchQueue.main.asyncAfter(deadline: .now() + preloadDelay) { [weak self] in
+        _ = self?.webView
+      }
+    } else {
+      _ = self.webView
+    }
   }
 
   @available(*, unavailable)
