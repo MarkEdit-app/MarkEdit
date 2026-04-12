@@ -47,6 +47,7 @@ enum AppRuntimeConfig {
     let checksForUpdates: Bool? // [Deprecated] Kept for backward compatibility
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
+    let disableOpenPanelOptions: Bool?
     let disableCorsRestrictions: Bool?
     let preferredTerminalApp: String?
     let mainWindowHotKey: HotKey?
@@ -69,6 +70,7 @@ enum AppRuntimeConfig {
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
+      case disableOpenPanelOptions = "general.disableOpenPanelOptions"
       case disableCorsRestrictions = "general.disableCorsRestrictions"
       case preferredTerminalApp = "general.preferredTerminalApp"
       case mainWindowHotKey = "general.mainWindowHotKey"
@@ -178,6 +180,10 @@ enum AppRuntimeConfig {
     currentDefinition?.defaultSaveDirectory
   }
 
+  static var disableOpenPanelOptions: Bool {
+    currentDefinition?.disableOpenPanelOptions ?? defaultDisableOpenPanelOptions
+  }
+
   static var disableCorsRestrictions: Bool {
     // Enforce CORS restrictions by default
     currentDefinition?.disableCorsRestrictions ?? false
@@ -243,6 +249,7 @@ private extension AppRuntimeConfig {
     checksForUpdates: nil,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
+    disableOpenPanelOptions: defaultDisableOpenPanelOptions,
     disableCorsRestrictions: nil,
     preferredTerminalApp: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
@@ -270,5 +277,14 @@ private extension AppRuntimeConfig {
     Logger.assert(jsonData != nil, "Failed to encode object: \(definition)")
 
     return jsonData
+  }
+
+  static var defaultDisableOpenPanelOptions: Bool {
+    // [macOS 26] Revisit this later, NSOpenPanel.accessoryView can significantly slow down the file opening process
+    if #available(macOS 26.0, *) {
+      return true
+    }
+
+    return false
   }
 }
