@@ -42,6 +42,10 @@ enum AppDesign {
     AppPreferences.Window.reduceTransparency || NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency
   }
 
+  static var reduceMotion: Bool {
+    NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+  }
+
   /**
    Returns either an `NSGlassEffectView`, or an `NSVisualEffectView` as fallback.
 

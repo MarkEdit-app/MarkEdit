@@ -87,7 +87,7 @@ extension EditorViewController {
 
     // Animate layout changes
     NSAnimationContext.runAnimationGroup { context in
-      context.duration = 0.2
+      context.duration = panelAnimationDuration
       findPanel.animator().alphaValue = mode == .hidden ? 0 : 1
       replacePanel.animator().alphaValue = mode == .replace ? 1 : 0
       layoutPanels(animated: true)
@@ -192,7 +192,7 @@ extension EditorViewController {
       }
 
       findPanel.searchField.stringValue = text
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // 0.2 is the animation duration of panel
+      DispatchQueue.main.asyncAfter(deadline: .now() + panelAnimationDuration) {
         self.updateTextFinderQuery()
       }
     }
@@ -252,6 +252,10 @@ private extension EditorViewController {
 
   var searchTerm: String {
     findPanel.searchField.stringValue
+  }
+
+  var panelAnimationDuration: TimeInterval {
+    AppDesign.reduceMotion ? 0.0 : 0.2
   }
 
   func configureFieldEditor() {

@@ -55,3 +55,7 @@ export function getViewportScale() {
 export function isMetaKey(event: KeyboardEvent) {
   return event.key === 'Meta';
 }
+
+export function isMotionReduced() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}

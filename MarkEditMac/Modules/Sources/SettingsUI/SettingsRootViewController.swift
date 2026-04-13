@@ -57,7 +57,7 @@ extension SettingsRootViewController {
       self.view.window?.setFrameSize(CGSize(
         width: 580,
         height: contentVC.contentView.frame.size.height
-      ), animated: self.animateChanges)
+      ), animated: self.animateChanges && !self.reduceMotion)
 
       // Enable animations after initial selection
       self.animateChanges = true
@@ -65,9 +65,19 @@ extension SettingsRootViewController {
 
     // Mimic the effect of some 1st-party apps, such as Calendar.app,
     // don't use isHidden, it affects the layout.
-    view.alphaValue = 0
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-      self.view.alphaValue = 1
+    if !reduceMotion {
+      view.alphaValue = 0
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        self.view.alphaValue = 1
+      }
     }
+  }
+}
+
+// MARK: - Private
+
+private extension SettingsRootViewController {
+  var reduceMotion: Bool {
+    NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
   }
 }

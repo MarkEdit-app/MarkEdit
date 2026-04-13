@@ -26,7 +26,7 @@ import { NativeModuleTranslation } from './src/bridge/native/translation';
 
 import { resetEditor } from './src/core';
 import { initThemeExtractors, initMarkEditModules } from './src/api/modules';
-import { setUp } from './src/styling/config';
+import { setUp, applyReducedMotion } from './src/styling/config';
 import { loadTheme } from './src/styling/themes';
 import { startObserving } from './src/modules/events';
 
@@ -123,3 +123,7 @@ window.onload = () => {
 
 setUp(config, loadTheme(config.theme).colors);
 startObserving();
+
+// Respond to reduced motion preference changes
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+reducedMotionQuery.addEventListener('change', event => applyReducedMotion(event.matches));
