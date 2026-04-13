@@ -2451,8 +2451,8 @@
         }
       }
     },
-    "Search Operations" : {
-      "comment" : "Search operations",
+    "Search Actions" : {
+      "comment" : "Search actions, like select all, select all in selection",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

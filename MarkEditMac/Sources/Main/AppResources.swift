@@ -74,7 +74,7 @@ enum Localized {
     static let wholeWord = String(localized: "Whole Word", comment: "Toggle whole word search")
     static let literalSearch = String(localized: "Literal Search", comment: "Toggle literal search")
     static let regularExpression = String(localized: "Regular Expression", comment: "Toggle regular expression for search")
-    static let searchOperations = String(localized: "Search Operations", comment: "Search operations")
+    static let searchActions = String(localized: "Search Actions", comment: "Search actions, like select all, select all in selection")
     static let selectAll = String(localized: "Select All", comment: "Select all occurrences")
     static let selectAllInSelection = String(localized: "Select All in Selection", comment: "Select all occurrences in selection")
     static let replaceAll = String(localized: "Replace All", comment: "Replace all occurrences")

@@ -37,8 +37,8 @@ extension EditorFindPanel {
     regexItem.setOn(AppPreferences.Search.regularExpression)
     menu.addItem(.separator())
 
-    if let operationsItem = delegate?.editorFindPanelOperationsMenuItem(self) {
-      menu.addItem(operationsItem)
+    if let actionsItem = delegate?.editorFindPanelActionsMenuItem(self) {
+      menu.addItem(actionsItem)
       menu.addItem(.separator())
     }
 
