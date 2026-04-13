@@ -12,7 +12,7 @@ import MarkEditKit
 
 extension EditorViewController {
   func setTheme(_ theme: AppTheme, animated: Bool) {
-    guard animated else {
+    guard animated && !AppDesign.reduceMotion else {
       return setTheme(theme)
     }
 

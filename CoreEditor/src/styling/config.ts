@@ -11,7 +11,7 @@ import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
 import { isMouseDown } from '../modules/events';
-import { afterDomUpdate } from '../common/utils';
+import { afterDomUpdate, isMotionReduced } from '../common/utils';
 
 /**
  * Style sheets that can be changed dynamically.
@@ -238,6 +238,23 @@ export function setGutterHovered(hovered: boolean) {
   adjustGutterPositions('gutterHover');
 }
 
+export function applyReducedMotion(reduceMotion: boolean, types: 'both' | 'cursor' | 'gutter' = 'both') {
+  if (types === 'both' || types === 'cursor') {
+    const cursorLayer = document.querySelector('.cm-cursorLayer') as HTMLElement | null;
+    if (cursorLayer !== null) {
+      cursorLayer.style.animationTimingFunction = reduceMotion ? 'steps(1)' : '';
+    }
+  }
+
+  if (types === 'both' || types === 'gutter') {
+    const foldGutter = document.querySelector('.cm-foldGutter') as HTMLElement | null;
+    if (foldGutter !== null) {
+      foldGutter.style.transition = reduceMotion ? '0s' : '0.4s';
+      foldGutter.style.transitionDelay = reduceMotion ? '0s' : '0.1s';
+    }
+  }
+}
+
 function enableGutterHoverEffects() {
   const gutterDOM = document.querySelector('.cm-gutters') as HTMLElement | null;
   if (gutterDOM === null) {
@@ -265,12 +282,9 @@ function enableGutterHoverEffects() {
   gutterDOM.addEventListener('mouseleave', storage.mouseLeaveHandler);
   gutterDOM.addEventListener('mouseenter', storage.mouseEnterHandler);
 
-  // Delay setting the transition to work around the issue mentioned in #436
-  const foldGutter = document.querySelector('.cm-foldGutter') as HTMLElement | null;
-  if (foldGutter !== null) {
-    foldGutter.style.transition = '0.4s';
-    foldGutter.style.transitionDelay = '0.1s';
-  }
+  // Apply the current reduced-motion settings so gutter transition styles
+  // match the active preference.
+  applyReducedMotion(isMotionReduced(), 'gutter');
 }
 
 function setOverscrollBehavior(enabled: boolean) {

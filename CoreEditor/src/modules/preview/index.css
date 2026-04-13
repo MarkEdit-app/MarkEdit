@@ -12,3 +12,9 @@
   background-size: 18px;
   padding-inline-end: 18px;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-md-previewWrapper {
+    transition: none;
+  }
+}

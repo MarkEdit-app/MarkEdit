@@ -2,13 +2,13 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
-import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode } from './common/utils';
+import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
 
 import hasSelection from './modules/selection/hasSelection';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './modules/events';
-import { setUp, setGutterHovered } from './styling/config';
+import { setUp, setGutterHovered, applyReducedMotion } from './styling/config';
 import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
 import { recalculateTextMetrics } from './modules/config';
@@ -135,6 +135,7 @@ export function resetEditor(initialContent: string) {
 
   // Recofigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
+  applyReducedMotion(isMotionReduced());
   observeBackgroundColorChanges(editor.dom);
   afterDomUpdate(notifyBackgroundColor);
 
