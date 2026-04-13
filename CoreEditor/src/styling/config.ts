@@ -36,6 +36,7 @@ export function setUp(config: Config, colors: EditorColors) {
   setTypewriterMode(config.typewriterMode);
   setFocusMode(config.focusMode);
   setLineHeight(config.lineHeight);
+  setOverscrollBehavior(config.lineWrapping);
 
   if (config.showLineNumbers) {
     // Delay because when the window is resizing, the mouse can enter and leave gutters rapidly
@@ -202,6 +203,8 @@ export function setLineWrapping(enabled: boolean) {
       effects: window.dynamics.lineWrapping?.reconfigure(enabled ? EditorView.lineWrapping : []),
     });
   }
+
+  setOverscrollBehavior(enabled);
 }
 
 export function setLineHeight(lineHeight: number) {
@@ -268,6 +271,12 @@ function enableGutterHoverEffects() {
     foldGutter.style.transition = '0.4s';
     foldGutter.style.transitionDelay = '0.1s';
   }
+}
+
+function setOverscrollBehavior(enabled: boolean) {
+  const behavior = enabled ? 'none' : '';
+  document.documentElement.style.overscrollBehaviorX = behavior;
+  document.body.style.overscrollBehaviorX = behavior;
 }
 
 function createStyleSheet(styleText: string, enabled = true) {
