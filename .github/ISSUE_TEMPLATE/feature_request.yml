@@ -1,0 +1,31 @@
+name: Feature request
+description: Suggest an idea for this project.
+title: '[Feature Request] '
+
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: >-
+        Suggest an idea for this project.
+      value: |
+        <!--
+
+        Before submitting, please search both the wiki:
+        https://github.com/MarkEdit-app/MarkEdit/wiki
+
+        and existing closed issues:
+        https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue+is%3Aclosed
+
+        For example, we do not plan to add a "WYSIWYG" mode.
+
+        Please open issues in English so that more people in the community can understand and contribute.
+
+        Please also check the Customization guide to see whether your request can already be achieved through user scripts or custom style sheets:
+        https://github.com/MarkEdit-app/MarkEdit/wiki/Customization
+
+        Please keep expectations modest regarding new feature requests, as we intentionally aim to keep the app simple and focused.
+
+        -->
+    validations:
+      required: true

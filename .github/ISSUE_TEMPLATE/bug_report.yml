@@ -1,0 +1,36 @@
+name: Bug report
+description: Create a report to help us improve.
+title: '[Bug] '
+
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: >-
+        Describe the issue clearly to help us investigate.
+      value: |
+        <!--
+
+        Before filing a new issue, please search the wiki at https://github.com/MarkEdit-app/MarkEdit/wiki and review closed issues at https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue+is%3Aclosed first.
+
+        Please open issues in English so that more people can understand them and contribute effectively.
+
+        Please also make sure you are using the latest build from https://github.com/MarkEdit-app/MarkEdit/releases and include your macOS version in the report.
+
+        Screenshots or screen recordings are highly helpful as well. Thank you.
+
+        -->
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: MarkEdit Version
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: macOS Version
+    validations:
+      required: true
