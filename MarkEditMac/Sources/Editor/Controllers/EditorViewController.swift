@@ -13,7 +13,13 @@ import Statistics
 import TextCompletion
 
 final class EditorViewController: NSViewController {
-  var hasFinishedLoading = false
+  var hasFinishedLoading = false {
+    didSet {
+      loadingContinuations.forEach { $0.resume() }
+      loadingContinuations.removeAll()
+    }
+  }
+
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
   var mouseExitedWindow = false
@@ -219,6 +225,9 @@ final class EditorViewController: NSViewController {
     }
   }()
 
+  // For CoreEditor preload
+  private var loadingContinuations = [CheckedContinuation<Void, Never>]()
+
   deinit {
     if let monitor = localEventMonitor {
       NSEvent.removeMonitor(monitor)
@@ -298,6 +307,16 @@ final class EditorViewController: NSViewController {
 // MARK: - Exposed Methods
 
 extension EditorViewController {
+  func waitUntilLoaded() async {
+    if hasFinishedLoading {
+      return
+    }
+
+    await withCheckedContinuation {
+      loadingContinuations.append($0)
+    }
+  }
+
   func prepareInitialContent(_ text: String) {
     if hasFinishedLoading {
       prependTextContent(text)

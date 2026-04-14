@@ -17,9 +17,11 @@ final class EditorReusePool {
   static let shared = EditorReusePool()
 
   func warmUp() {
-    // Pre-load an instance so the first dequeue uses it,
-    // subsequent dequeues rotate the preloaded controller.
-    preloadedController = EditorViewController()
+    // Start loading an editor early so prepareViewController() can return faster.
+    Task {
+      await prepareViewController()
+    }
+
     startObservingMemoryPressure()
 
     // Try if warmup can fix the empty suggestion bug,
@@ -27,6 +29,16 @@ final class EditorReusePool {
     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
       NSSpellChecker.shared.checkSpelling(of: "warmup", startingAt: 0)
     }
+  }
+
+  /// Ensure the preloaded controller has finished loading,
+  /// call this before ``dequeueViewController()`` to guarantee readiness.
+  func prepareViewController() async {
+    if preloadedController == nil {
+      preloadedController = EditorViewController()
+    }
+
+    await preloadedController?.waitUntilLoaded()
   }
 
   func dequeueViewController() -> EditorViewController {
