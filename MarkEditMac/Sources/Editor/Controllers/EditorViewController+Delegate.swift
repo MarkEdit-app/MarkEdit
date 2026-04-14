@@ -49,8 +49,8 @@ extension EditorViewController: EditorWebViewActionDelegate {
     isReadOnlyMode
   }
 
-  func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem? {
-    searchOperationsMenuItem
+  func editorWebViewSearchActionsMenuItem(_ webView: EditorWebView) -> NSMenuItem? {
+    searchActionsMenuItem
   }
 
   func editorWebViewResignFirstResponder(_ webView: EditorWebView) {
@@ -377,8 +377,8 @@ extension EditorViewController: EditorFindPanelDelegate {
     updateTextFinderQuery()
   }
 
-  func editorFindPanelOperationsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem? {
-    searchOperationsMenuItem
+  func editorFindPanelActionsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem? {
+    searchActionsMenuItem
   }
 
   func editorFindPanelDidChangeOptions(_ sender: EditorFindPanel) {

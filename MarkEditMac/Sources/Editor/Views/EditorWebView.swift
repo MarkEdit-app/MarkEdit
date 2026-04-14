@@ -23,7 +23,7 @@ enum WKContextMenuItemTag: Int {
   case copyLinkWithHighlight = 102
 
   /**
-   Customized item that shows the search operations.
+   Customized item that shows the search actions.
    */
   case searchMenu = 0xbadbabe
 }
@@ -36,7 +36,7 @@ enum EditorWebViewMenuAction {
 @MainActor
 protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewIsReadOnlyMode(_ webView: EditorWebView) -> Bool
-  func editorWebViewSearchOperationsMenuItem(_ webView: EditorWebView) -> NSMenuItem?
+  func editorWebViewSearchActionsMenuItem(_ webView: EditorWebView) -> NSMenuItem?
   func editorWebViewResignFirstResponder(_ webView: EditorWebView)
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
@@ -106,8 +106,8 @@ final class EditorWebView: WKWebView {
       return true
     }
 
-    // Operations like select all in selection, replace all in selection, etc
-    if let searchMenuItem = actionDelegate?.editorWebViewSearchOperationsMenuItem(self) {
+    // Actions like select all in selection, replace all in selection, etc
+    if let searchMenuItem = actionDelegate?.editorWebViewSearchActionsMenuItem(self) {
       menu.insertItem(searchMenuItem, at: 0)
       menu.insertItem(.separator(), at: 1)
     }
