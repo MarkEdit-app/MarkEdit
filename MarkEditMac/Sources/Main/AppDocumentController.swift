@@ -58,8 +58,13 @@ final class AppDocumentController: NSDocumentController {
       }
 
       // Ignore the default opening logic
-      completionHandler(nil, false, nil)
-    } else {
+      return completionHandler(nil, false, nil)
+    }
+
+    Task { @MainActor in
+      // Ensure the reuse pool has a fully loaded editor before opening the document
+      await EditorReusePool.shared.prepareViewController()
+
       super.openDocument(
         withContentsOf: url,
         display: displayDocument,
