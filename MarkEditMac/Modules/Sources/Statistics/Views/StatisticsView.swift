@@ -12,6 +12,8 @@ struct StatisticsView: View {
   private let modernStyle: Bool
   private let fullResult: StatisticsResult
   private let selectionResult: StatisticsResult?
+  private let fullRuleResults: [StatisticsRuleResult]
+  private let selectionRuleResults: [StatisticsRuleResult]?
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
 
@@ -22,12 +24,16 @@ struct StatisticsView: View {
     modernStyle: Bool,
     fullResult: StatisticsResult,
     selectionResult: StatisticsResult?,
+    fullRuleResults: [StatisticsRuleResult] = [],
+    selectionRuleResults: [StatisticsRuleResult]? = nil,
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
     self.modernStyle = modernStyle
     self.fullResult = fullResult
     self.selectionResult = selectionResult
+    self.fullRuleResults = fullRuleResults
+    self.selectionRuleResults = selectionRuleResults
     self.fileURL = fileURL
     self.localizable = localizable
   }
@@ -74,6 +80,14 @@ struct StatisticsView: View {
 
       ScrollView {
         VStack(spacing: 0) {
+          ForEach(Array(currentRuleResults.filter { !$0.isEmpty }.enumerated()), id: \.offset) { _, ruleResult in
+            StatisticsCell(
+              iconName: ruleResult.rule.icon,
+              titleText: ruleResult.rule.title,
+              valueText: "\(ruleResult.count)"
+            )
+          }
+
           StatisticsCell(
             iconName: Icons.characters,
             titleText: localizable.characters,
@@ -161,5 +175,13 @@ private extension StatisticsView {
     }
 
     return fullResult
+  }
+
+  var currentRuleResults: [StatisticsRuleResult] {
+    if !isViewingDocument, let selectionRuleResults {
+      return selectionRuleResults
+    }
+
+    return fullRuleResults
   }
 }

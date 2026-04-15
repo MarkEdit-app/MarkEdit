@@ -21,12 +21,13 @@ struct AppCustomization {
     case scriptsDirectory
     case debugDirectory
     case pandoc
+    case statisticsRules
     case settings
 
     var tagName: String? {
       switch self {
       case .editorStyle, .stylesDirectory: return "style"
-      case .editorScript, .scriptsDirectory, .debugDirectory, .pandoc, .settings: return nil
+      case .editorScript, .scriptsDirectory, .debugDirectory, .pandoc, .settings, .statisticsRules: return nil
       }
     }
 
@@ -38,6 +39,7 @@ struct AppCustomization {
       case .scriptsDirectory: return "scripts"
       case .debugDirectory: return "debug"
       case .pandoc: return "pandoc.yaml"
+      case .statisticsRules: return "statistics-rules.json"
       case .settings: return "settings.json"
       }
     }
@@ -56,6 +58,7 @@ struct AppCustomization {
   static let scriptsDirectory = Self(fileType: .scriptsDirectory)
   static let debugDirectory = Self(fileType: .debugDirectory)
   static let pandoc = Self(fileType: .pandoc)
+  static let statisticsRules = Self(fileType: .statisticsRules)
   static let settings = Self(fileType: .settings)
 
   static func createFiles() {
@@ -65,6 +68,7 @@ struct AppCustomization {
     scriptsDirectory.createFile()
     debugDirectory.createFile()
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
+    statisticsRules.createFile("[]")
     settings.createFile(AppRuntimeConfig.defaultContents)
   }
 

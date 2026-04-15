@@ -15,24 +15,28 @@ public final class StatisticsController: NSViewController {
   private enum Constants {
     static let contentWidth: Double = 240
     static let contentHeight: Double = 288
+    static let maxExtraRows: Int = 3
   }
 
   private let modernStyle: Bool
   private let content: ReadableContentPair
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
+  private let customRules: [StatisticsRule]
   private var contentView: NSView?
 
   public init(
     modernStyle: Bool,
     content: ReadableContentPair,
     fileURL: URL?,
-    localizable: StatisticsLocalizable
+    localizable: StatisticsLocalizable,
+    customRules: [StatisticsRule] = []
   ) {
     self.modernStyle = modernStyle
     self.content = content
     self.fileURL = fileURL
     self.localizable = localizable
+    self.customRules = customRules
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -71,15 +75,37 @@ public final class StatisticsController: NSViewController {
       let fullResult = self.content.fullText.result
       let selectionResult = self.content.selection?.result
 
+      let fullRuleResults = self.customRules.map { rule in
+        StatisticsRuleResult(rule: rule, count: rule.count(in: self.content.fullText.sourceText))
+      }
+
+      let selectionRuleResults: [StatisticsRuleResult]? = self.content.selection.map { selection in
+        self.customRules.map { rule in
+          StatisticsRuleResult(rule: rule, count: rule.count(in: selection.sourceText))
+        }
+      }
+
       // Remove the spinner and show the result view on main thread
       DispatchQueue.main.async {
         spinner.stopAnimation(nil)
         spinner.removeFromSuperview()
 
+        // Visible rules are the ones initially shown, use fullRuleResults to determine sizing
+        let visibleRuleCount = fullRuleResults.filter { !$0.isEmpty }.count
+        let extraRows = min(visibleRuleCount, Constants.maxExtraRows)
+        let contentHeight = Constants.contentHeight + Double(extraRows) * StatisticsCell.rowHeight
+
+        self.preferredContentSize = CGSize(
+          width: Constants.contentWidth,
+          height: contentHeight
+        )
+
         let contentView = NSHostingView(rootView: StatisticsView(
           modernStyle: self.modernStyle,
           fullResult: fullResult,
           selectionResult: selectionResult,
+          fullRuleResults: fullRuleResults,
+          selectionRuleResults: selectionRuleResults,
           fileURL: self.fileURL,
           localizable: self.localizable
         ))
