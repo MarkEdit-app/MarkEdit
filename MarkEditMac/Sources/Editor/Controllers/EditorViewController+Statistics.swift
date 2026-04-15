@@ -40,7 +40,8 @@ extension EditorViewController {
           comments: Localized.Statistics.comments,
           readTime: Localized.Statistics.readTime,
           fileSize: Localized.Statistics.fileSize
-        )
+        ),
+        customRules: Self.statisticsRules
       )
 
       present(
@@ -52,4 +53,21 @@ extension EditorViewController {
       )
     }
   }
+}
+
+// MARK: - Private
+
+private extension EditorViewController {
+  static let statisticsRules: [StatisticsRule] = {
+    guard let data = try? Data(contentsOf: AppCustomization.statisticsRules.fileURL) else {
+      return []
+    }
+
+    guard let rules = try? JSONDecoder().decode([StatisticsRule].self, from: data) else {
+      Logger.log(.error, "Invalid statistics-rules.json")
+      return []
+    }
+
+    return rules
+  }()
 }

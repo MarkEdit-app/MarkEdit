@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct StatisticsCell: View {
+  static let cellHeight: Double = 32
+  static let rowHeight: Double = cellHeight + 1 // 1pt divider
+
   let iconName: String
   let titleText: String
   let valueText: String
@@ -25,7 +28,7 @@ struct StatisticsCell: View {
     }
     .accessibilityElement()
     .accessibilityLabel([titleText, valueText].joined(separator: " "))
-    .frame(height: 32)
+    .frame(height: Self.cellHeight)
     Divider()
   }
 }
