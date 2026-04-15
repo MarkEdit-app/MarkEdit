@@ -12,4 +12,5 @@ struct StatisticsResult {
   let comments: Int
   let words: Int
   let sentences: Int
+  let cjkCharacters: Int
 }

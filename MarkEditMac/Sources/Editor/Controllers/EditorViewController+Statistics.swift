@@ -39,7 +39,8 @@ extension EditorViewController {
           paragraphs: Localized.Statistics.paragraphs,
           comments: Localized.Statistics.comments,
           readTime: Localized.Statistics.readTime,
-          fileSize: Localized.Statistics.fileSize
+          fileSize: Localized.Statistics.fileSize,
+          cjkCharacters: Localized.Statistics.cjkCharacters
         )
       )
 

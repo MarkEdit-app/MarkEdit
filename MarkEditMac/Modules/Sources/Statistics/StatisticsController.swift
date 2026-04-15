@@ -118,7 +118,9 @@ private extension ReadableContent {
       // Result from the NLP tokenizer
       words: Tokenizer.count(text: trimmedText, unit: .word),
       // Result from the NLP tokenizer
-      sentences: Tokenizer.count(text: trimmedText, unit: .sentence)
+      sentences: Tokenizer.count(text: trimmedText, unit: .sentence),
+      // CJK characters + CJK punctuation
+      cjkCharacters: Tokenizer.countCJK(text: trimmedText)
     )
   }
 }

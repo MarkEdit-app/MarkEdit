@@ -17,6 +17,7 @@ public struct StatisticsLocalizable {
   let comments: String
   let readTime: String
   let fileSize: String
+  let cjkCharacters: String
 
   public init(
     mainTitle: String,
@@ -28,7 +29,8 @@ public struct StatisticsLocalizable {
     paragraphs: String,
     comments: String,
     readTime: String,
-    fileSize: String
+    fileSize: String,
+    cjkCharacters: String
   ) {
     self.mainTitle = mainTitle
     self.selection = selection
@@ -40,5 +42,6 @@ public struct StatisticsLocalizable {
     self.comments = comments
     self.readTime = readTime
     self.fileSize = fileSize
+    self.cjkCharacters = cjkCharacters
   }
 }

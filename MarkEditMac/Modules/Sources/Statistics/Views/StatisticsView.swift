@@ -80,6 +80,14 @@ struct StatisticsView: View {
             valueText: "\(currentResult.characters)"
           )
 
+          if currentResult.cjkCharacters > 0 {
+            StatisticsCell(
+              iconName: Icons.cjkCharacters,
+              titleText: localizable.cjkCharacters,
+              valueText: "\(currentResult.cjkCharacters)"
+            )
+          }
+
           StatisticsCell(
             iconName: Icons.words,
             titleText: localizable.words,
@@ -142,6 +150,7 @@ private extension StatisticsView {
 
   enum Icons {
     static let characters = "textformat"
+    static let cjkCharacters = "character.textbox.zh"
     static let words = "text.bubble"
     static let sentences = "textformat.abc.dottedunderline"
     static let paragraphs = "paragraphsign"

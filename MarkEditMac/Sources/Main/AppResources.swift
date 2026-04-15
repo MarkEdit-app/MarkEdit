@@ -106,6 +106,7 @@ enum Localized {
     static let comments = String(localized: "Comments", comment: "Statistics label: count comments")
     static let readTime = String(localized: "Read Time", comment: "Statistics label: count read time")
     static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
+    static let cjkCharacters = String(localized: "CJK字数", comment: "Statistics label: count CJK characters and punctuation")
   }
 
   enum WritingTools {
