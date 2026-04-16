@@ -17,6 +17,9 @@ import TextBundle
 final class EditorDocument: NSDocument {
   var fileData: Data?
   var spellDocTag: Int?
+  var lastTabIndex: Int?
+  var lastWasStandalone = false
+  weak var lastSiblingWindow: NSWindow?
   var stringValue = ""
   var formatCompleted = false // The result of format content is all good
   var isOutdated = false // The content is outdated, needs an update
@@ -267,6 +270,7 @@ extension EditorDocument {
   }
 
   override func close() {
+    saveToClosedTabHistory()
     super.close()
 
     if let spellDocTag {
@@ -593,6 +597,48 @@ extension EditorDocument {
   }
 }
 
+// MARK: - Closed Tab History
+
+extension EditorDocument {
+  func restoreTabPosition(tabIndex: Int?, relativeTo targetWindow: NSWindow?) {
+    guard let newWindow = windowControllers.first?.window else {
+      return
+    }
+
+    guard let tabIndex,
+          let targetWindow,
+          let tabGroup = targetWindow.tabGroup else {
+      return
+    }
+
+    let tabbedWindows = targetWindow.tabbedWindows ?? []
+
+    guard tabbedWindows.count > 1,
+          let currentIndex = tabbedWindows.firstIndex(of: newWindow),
+          currentIndex != tabIndex else {
+      return
+    }
+
+    // Off-by-one: compute after removal since tab count shrinks
+    tabGroup.removeWindow(newWindow)
+    let clampedIndex = min(tabIndex, tabGroup.windows.count)
+    tabGroup.insertWindow(newWindow, at: clampedIndex)
+
+    newWindow.makeKeyAndOrderFront(nil)
+    tabGroup.selectedWindow = newWindow
+  }
+
+  func restoreCursorPosition(lineNumber: Int?) async {
+    guard let lineNumber,
+          let viewController = windowControllers.first?.contentViewController as? EditorViewController else {
+      return
+    }
+
+    await viewController.waitUntilLoaded()
+    viewController.bridge.selection.gotoLine(lineNumber: lineNumber)
+  }
+}
+
 // MARK: - Private
 
 private extension EditorDocument {
@@ -602,6 +648,23 @@ private extension EditorDocument {
 
   var closeAlwaysConfirmsChanges: Bool {
     UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges)
+  }
+
+  func saveToClosedTabHistory() {
+    guard let fileURL else {
+      return
+    }
+
+    // Fallback: capture tab info if windowShouldClose didn't run (programmatic close)
+    if lastTabIndex == nil, let window = windowControllers.first?.window {
+      let tabbedWindows = window.tabbedWindows
+      lastTabIndex = tabbedWindows?.firstIndex(of: window)
+      lastWasStandalone = tabbedWindows == nil
+      lastSiblingWindow = tabbedWindows?.first { $0 !== window }
+    }
+
+    let lineNumber = (windowControllers.first?.contentViewController as? EditorViewController)?.lastLineNumber
+    ClosedTabHistory.shared.push(fileURL, lineNumber: lineNumber, tabIndex: lastTabIndex, sourceWindow: lastSiblingWindow, wasStandalone: lastWasStandalone)
   }
 
   var hasBeenReverted: Bool {

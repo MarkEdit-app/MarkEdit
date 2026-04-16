@@ -3219,6 +3219,18 @@
         }
       }
     },
+    "rct-Cm-ShT.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Reopen Closed Tab\"; ObjectID = \"rct-Cm-ShT\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Reopen Closed Tab"
+          }
+        }
+      }
+    },
     "REb-f5-kpc.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Table of Contents\"; ObjectID = \"REb-f5-kpc\";",
       "extractionState" : "extracted_with_value",

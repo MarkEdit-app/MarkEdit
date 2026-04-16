@@ -165,6 +165,8 @@ extension EditorViewController: EditorModuleCoreDelegate {
     isDirty: Bool,
     selectedLineColumn: LineColumnInfo
   ) {
+    lastLineNumber = selectedLineColumn.lineNumber
+
     if compositionEnded {
       // Update the selection only when composition ended,
       // to avoid flickers caused by false positives of text selections,

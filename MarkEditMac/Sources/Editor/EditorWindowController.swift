@@ -80,6 +80,13 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     editorViewController?.cancelCompletion()
   }
 
+  // Capture tab state here, not in windowWillClose. By that point the window
+  // is already removed from the tab group so tabbedWindows is nil.
+  func windowShouldClose(_ sender: NSWindow) -> Bool {
+    captureTabIndex(for: sender)
+    return true
+  }
+
   func windowWillClose(_ notification: Notification) {
     editorViewController?.clearEditor()
   }
@@ -90,6 +97,17 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 private extension EditorWindowController {
   var editorViewController: EditorViewController? {
     contentViewController as? EditorViewController
+  }
+
+  func captureTabIndex(for window: NSWindow) {
+    let document = editorViewController?.document
+    let tabbedWindows = window.tabbedWindows
+    let tabIndex = tabbedWindows?.firstIndex(of: window)
+    let sibling = tabbedWindows?.first { $0 !== window }
+
+    document?.lastTabIndex = tabIndex
+    document?.lastWasStandalone = (tabbedWindows == nil)
+    document?.lastSiblingWindow = sibling
   }
 
   func saveWindowRect() {
