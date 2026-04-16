@@ -3555,6 +3555,18 @@
         }
       }
     },
+    "tsw-Tb-SwT.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Switch Document…\"; ObjectID = \"tsw-Tb-SwT\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Switch Document…"
+          }
+        }
+      }
+    },
     "Tuy-2U-frg.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"Open In…\"; ObjectID = \"Tuy-2U-frg\";",
       "extractionState" : "extracted_with_value",

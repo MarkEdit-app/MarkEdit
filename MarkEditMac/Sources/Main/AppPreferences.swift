@@ -226,6 +226,15 @@ enum AppPreferences {
       }
     }
 
+    @Storage(key: "window.always-show-tab-bar", defaultValue: false)
+    static var alwaysShowTabBar: Bool {
+      didSet {
+        performUpdates { editor in
+          (editor.view.window as? EditorWindow)?.setTabBarVisible(alwaysShowTabBar)
+        }
+      }
+    }
+
     @Storage(key: "window.reduce-transparency", defaultValue: false)
     static var reduceTransparency: Bool {
       didSet {

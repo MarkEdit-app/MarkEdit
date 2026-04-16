@@ -12,6 +12,7 @@ import SettingsUI
 struct WindowSettingsView: View {
   @State private var toolbarMode = AppPreferences.Window.toolbarMode
   @State private var tabbingMode = AppPreferences.Window.tabbingMode
+  @State private var alwaysShowTabBar = AppPreferences.Window.alwaysShowTabBar
   @State private var reduceTransparency = AppPreferences.Window.reduceTransparency
 
   var body: some View {
@@ -36,6 +37,12 @@ struct WindowSettingsView: View {
           AppPreferences.Window.tabbingMode = tabbingMode
         }
         .formMenuPicker()
+
+        Toggle(Localized.Settings.alwaysShowTabBar, isOn: $alwaysShowTabBar)
+          .onChange(of: alwaysShowTabBar) {
+            AppPreferences.Window.alwaysShowTabBar = alwaysShowTabBar
+          }
+          .disabled(tabbingMode == .disallowed)
       }
 
       Section {

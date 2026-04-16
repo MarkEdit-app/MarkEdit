@@ -210,6 +210,9 @@
         }
       }
     },
+    "Always show tab bar" : {
+      "comment" : "Option to always show the tab bar even with a single tab"
+    },
     "Appearance:" : {
       "comment" : "Appearance for the app",
       "localizations" : {
@@ -1990,6 +1993,9 @@
         }
       }
     },
+    "No Matching Documents" : {
+      "comment" : "Empty state text when tab switcher filter matches nothing"
+    },
     "No versions match the specified condition." : {
       "comment" : "Alert title for no versions found",
       "localizations" : {
@@ -2740,6 +2746,9 @@
         }
       }
     },
+    "Switch to Document..." : {
+      "comment" : "Placeholder text for tab switcher window"
+    },
     "System" : {
       "comment" : "Follow the system appearance",
       "localizations" : {
@@ -3062,6 +3071,9 @@
           }
         }
       }
+    },
+    "Type to filter open documents, use arrow keys to navigate, press Enter to switch" : {
+      "comment" : "Help text for tab switcher window"
     },
     "Unfold" : {
       "comment" : "Phrase used in CodeMirror to unfold a piece of text",

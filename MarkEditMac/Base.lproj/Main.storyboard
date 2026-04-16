@@ -422,6 +422,12 @@ Gw
                                                 <action selector="gotoLine:" target="Ady-hI-5gd" id="puP-5D-Fgc"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Switch Document…" keyEquivalent="E" id="tsw-Tb-SwT">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="showTabSwitcher:" target="Ady-hI-5gd" id="tsw-Ac-001"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Table of Contents" id="REb-f5-kpc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Table of Contents" id="BxI-nv-Xa5">

@@ -46,6 +46,19 @@ final class EditorWindow: NSWindow {
     tabbingMode = AppPreferences.Window.tabbingMode
     titlebarAppearsTransparent = AppDesign.modernTitleBar
     reduceTransparency = AppDesign.reduceTransparency
+
+    if AppPreferences.Window.alwaysShowTabBar {
+      DispatchQueue.main.async { [weak self] in
+        self?.setTabBarVisible(true)
+      }
+    }
+  }
+
+  func setTabBarVisible(_ visible: Bool) {
+    guard let tabGroup = tabGroup else { return }
+    if tabGroup.isTabBarVisible != visible {
+      toggleTabBar(nil)
+    }
   }
 
   override func layoutIfNeeded() {

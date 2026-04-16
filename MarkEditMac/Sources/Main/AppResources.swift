@@ -91,6 +91,9 @@ enum Localized {
     static let newDocument = String(localized: "New Document", comment: "Menu item: create a new document")
     static let gotoLineLabel = String(localized: "Go to Line", comment: "Placeholder text for goto line window")
     static let gotoLineHelp = String(localized: "Enter the line number and hit return", comment: "Help text for goto line window")
+    static let tabSwitcherLabel = String(localized: "Switch to Document...", comment: "Placeholder text for tab switcher window")
+    static let tabSwitcherHelp = String(localized: "Type to filter open documents, use arrow keys to navigate, press Enter to switch", comment: "Help text for tab switcher window")
+    static let tabSwitcherEmpty = String(localized: "No Matching Documents", comment: "Empty state text when tab switcher filter matches nothing")
     static let fileExtension = String(localized: "File Extension:", comment: "Label for save panel accessory view (shorter than 'Filename Extension' to avoid save panel layout issues)")
     static let textEncoding = String(localized: "Text Encoding:", comment: "Label for save panel accessory view")
     static let showHiddenFiles = String(localized: "Show Hidden Files", comment: "Label for save panel accessory view")
@@ -196,6 +199,7 @@ enum Localized {
     static let automatic = String(localized: "Automatic", comment: "Automatic window tabbing mode")
     static let preferred = String(localized: "Preferred", comment: "Preferred window tabbing mode")
     static let disallowed = String(localized: "Disallowed", comment: "Disallowed window tabbing mode")
+    static let alwaysShowTabBar = String(localized: "Always show tab bar", comment: "Option to always show the tab bar even with a single tab")
     static let reduceTransparencyLabel = String(localized: "Reduce Transparency:", comment: "Label for the option to reduce window transparency")
     static let reduceTransparencyDescription = String(localized: "Remove the toolbar blur", comment: "Explanation for the option to reduce window transparency")
   }
