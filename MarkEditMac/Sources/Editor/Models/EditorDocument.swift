@@ -628,15 +628,6 @@ extension EditorDocument {
     tabGroup.selectedWindow = newWindow
   }
 
-  func restoreCursorPosition(lineNumber: Int?) async {
-    guard let lineNumber,
-          let viewController = windowControllers.first?.contentViewController as? EditorViewController else {
-      return
-    }
-
-    await viewController.waitUntilLoaded()
-    viewController.bridge.selection.gotoLine(lineNumber: lineNumber)
-  }
 }
 
 // MARK: - Private
@@ -663,8 +654,7 @@ private extension EditorDocument {
       lastSiblingWindow = tabbedWindows?.first { $0 !== window }
     }
 
-    let lineNumber = (windowControllers.first?.contentViewController as? EditorViewController)?.lastLineNumber
-    ClosedTabHistory.shared.push(fileURL, lineNumber: lineNumber, tabIndex: lastTabIndex, sourceWindow: lastSiblingWindow, wasStandalone: lastWasStandalone)
+    ClosedTabHistory.shared.push(fileURL, tabIndex: lastTabIndex, sourceWindow: lastSiblingWindow, wasStandalone: lastWasStandalone)
   }
 
   var hasBeenReverted: Bool {

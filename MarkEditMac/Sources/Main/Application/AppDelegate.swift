@@ -55,6 +55,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
   private var reopenInFlightCount = 0
+  private var savedAllowsAutomaticWindowTabbing: Bool?
 
   func applicationWillFinishLaunching(_ notification: Notification) {
     EditorReusePool.shared.warmUp()
@@ -212,6 +213,7 @@ private extension AppDelegate {
     // Temporarily disable this so the window opens standalone, then we manually
     // addTabbedWindow to the correct target. Counter handles rapid Cmd+Shift+T.
     if reopenInFlightCount == 0 {
+      savedAllowsAutomaticWindowTabbing = NSWindow.allowsAutomaticWindowTabbing
       NSWindow.allowsAutomaticWindowTabbing = false
     }
 
@@ -225,14 +227,14 @@ private extension AppDelegate {
       self.reopenInFlightCount -= 1
 
       if self.reopenInFlightCount == 0 {
-        NSWindow.allowsAutomaticWindowTabbing = true
+        NSWindow.allowsAutomaticWindowTabbing = self.savedAllowsAutomaticWindowTabbing ?? true
+        self.savedAllowsAutomaticWindowTabbing = nil
       }
 
       if let error {
         Logger.log(.error, "Failed to reopen closed tab: \(error.localizedDescription)")
         ClosedTabHistory.shared.push(
           entry.url,
-          lineNumber: entry.lineNumber,
           tabIndex: entry.tabIndex,
           sourceWindow: entry.sourceWindow,
           wasStandalone: entry.wasStandalone
@@ -253,8 +255,6 @@ private extension AppDelegate {
           targetWindow.addTabbedWindow(newWindow, ordered: .above)
           editorDocument.restoreTabPosition(tabIndex: entry.tabIndex, relativeTo: targetWindow)
         }
-
-        await editorDocument.restoreCursorPosition(lineNumber: entry.lineNumber)
       }
     }
   }

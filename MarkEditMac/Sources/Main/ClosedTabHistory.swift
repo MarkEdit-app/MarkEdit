@@ -15,7 +15,7 @@ import AppKit
  - `EditorDocument.close()`: persists to history (after save completes, before window deallocation)
 
  Window targeting uses a two-layer approach:
- - `Entry` (persisted): stores path, cursor line, tab index, and standalone flag
+ - `ClosedTab` (persisted): stores bookmark data, tab index, and standalone flag
  - `windowRefs` (in-memory): weak references to a surviving sibling window in the same tab group
 
  On reopen, the sibling reference identifies which window group to restore into.
@@ -26,9 +26,8 @@ import AppKit
 final class ClosedTabHistory {
   static let shared = ClosedTabHistory()
 
-  struct ReopenableEntry {
+  struct RestoredTab {
     let url: URL
-    let lineNumber: Int?
     let tabIndex: Int?
     let sourceWindow: NSWindow?
     let wasStandalone: Bool
@@ -37,9 +36,9 @@ final class ClosedTabHistory {
   private let maxEntryCount = 20
 
   @Storage(key: "general.closed-tab-history", defaultValue: [])
-  private var entries: [Entry]
+  private var entries: [ClosedTab]
 
-  private var windowRefs: [String: Weak<NSWindow>] = [:]
+  private let windowRefs = NSMapTable<NSString, NSWindow>.strongToWeakObjects()
 
   private init() {}
 
@@ -48,15 +47,23 @@ final class ClosedTabHistory {
     return entries.contains { $0.isReopenable(openPaths: openPaths) }
   }
 
-  func push(_ url: URL, lineNumber: Int?, tabIndex: Int?, sourceWindow: NSWindow?, wasStandalone: Bool) {
-    var current = entries
-    current.removeAll { $0.path == url.path }
-    current.append(Entry(path: url.path, lineNumber: lineNumber, tabIndex: tabIndex, wasStandalone: wasStandalone))
+  func push(_ url: URL, tabIndex: Int?, sourceWindow: NSWindow?, wasStandalone: Bool) {
+    let path = url.path(percentEncoded: false)
 
-    windowRefs = windowRefs.filter { $0.value.value != nil }
+    guard let bookmark = try? url.bookmarkData(
+      options: .withSecurityScope,
+      includingResourceValuesForKeys: nil,
+      relativeTo: nil
+    ) else {
+      return
+    }
+
+    var current = entries
+    current.removeAll { $0.resolvedPath == path }
+    current.append(ClosedTab(bookmark: bookmark, tabIndex: tabIndex, wasStandalone: wasStandalone))
 
     if let sourceWindow {
-      windowRefs[url.path] = Weak(sourceWindow)
+      windowRefs.setObject(sourceWindow, forKey: path as NSString)
     }
 
     if current.count > maxEntryCount {
@@ -66,7 +73,7 @@ final class ClosedTabHistory {
     entries = current
   }
 
-  func pop() -> ReopenableEntry? {
+  func pop() -> RestoredTab? {
     var current = entries
     let openPaths = openDocumentPaths
 
@@ -83,14 +90,19 @@ final class ClosedTabHistory {
       current.remove(at: index)
       entries = current
 
-      let sourceWindow = windowRefs.removeValue(forKey: entry.path)?.value
+      guard let url = entry.resolvedURL else {
+        continue
+      }
 
-      return ReopenableEntry(
-        url: URL(fileURLWithPath: entry.path),
-        lineNumber: entry.lineNumber,
+      let path = url.path(percentEncoded: false) as NSString
+      let sourceWindow = windowRefs.object(forKey: path)
+      windowRefs.removeObject(forKey: path)
+
+      return RestoredTab(
+        url: url,
         tabIndex: entry.tabIndex,
         sourceWindow: sourceWindow,
-        wasStandalone: entry.wasStandalone
+        wasStandalone: entry.wasStandalone ?? false
       )
     }
 
@@ -102,44 +114,43 @@ final class ClosedTabHistory {
 // MARK: - Private
 
 private extension ClosedTabHistory {
-  struct Entry: Codable {
-    let path: String
-    let lineNumber: Int?
+  struct ClosedTab: Codable {
+    let bookmark: Data
     let tabIndex: Int?
-    let wasStandalone: Bool
+    let wasStandalone: Bool?
 
-    init(path: String, lineNumber: Int?, tabIndex: Int?, wasStandalone: Bool) {
-      self.path = path
-      self.lineNumber = lineNumber
-      self.tabIndex = tabIndex
-      self.wasStandalone = wasStandalone
+    var resolvedURL: URL? {
+      var isStale = false
+      return try? URL(
+        resolvingBookmarkData: bookmark,
+        options: .withSecurityScope,
+        relativeTo: nil,
+        bookmarkDataIsStale: &isStale
+      )
     }
 
-    // Migration: wasStandalone added after initial release, defaults to false for older data
-    init(from decoder: Decoder) throws {
-      let container = try decoder.container(keyedBy: CodingKeys.self)
-      path = try container.decode(String.self, forKey: .path)
-      lineNumber = try container.decodeIfPresent(Int.self, forKey: .lineNumber)
-      tabIndex = try container.decodeIfPresent(Int.self, forKey: .tabIndex)
-      wasStandalone = try container.decodeIfPresent(Bool.self, forKey: .wasStandalone) ?? false
+    var resolvedPath: String? {
+      resolvedURL?.path(percentEncoded: false)
     }
 
     func isReopenable(openPaths: Set<String>) -> Bool {
-      !openPaths.contains(path) && FileManager.default.fileExists(atPath: path)
+      guard let path = resolvedPath else {
+        return false
+      }
+
+      return !openPaths.contains(path) && FileManager.default.isReadableFile(atPath: path)
     }
 
     func isOrphaned(openPaths: Set<String>) -> Bool {
-      !openPaths.contains(path) && !FileManager.default.fileExists(atPath: path)
+      guard let path = resolvedPath else {
+        return true
+      }
+
+      return !openPaths.contains(path) && !FileManager.default.isReadableFile(atPath: path)
     }
   }
 
-  struct Weak<T: AnyObject> {
-    weak var value: T?
-
-    init(_ value: T) { self.value = value }
-  }
-
   var openDocumentPaths: Set<String> {
-    Set(NSDocumentController.shared.documents.compactMap { $0.fileURL?.path })
+    Set(NSDocumentController.shared.documents.compactMap { $0.fileURL?.path(percentEncoded: false) })
   }
 }

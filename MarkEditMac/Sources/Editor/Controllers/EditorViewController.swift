@@ -22,7 +22,6 @@ final class EditorViewController: NSViewController {
 
   var hasUnfinishedAnimations = false
   var hasBeenEdited = false
-  var lastLineNumber: Int?
   var mouseExitedWindow = false
   var nativeSearchQueryChanged = false
   var bottomPanelHeight: Double = 0
@@ -331,7 +330,6 @@ extension EditorViewController {
   }
 
   func clearEditor() {
-    lastLineNumber = nil
     updateTextFinderMode(.hidden, searchTerm: "")
 
     // The delay is in theory not necessary,
