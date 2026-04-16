@@ -627,7 +627,6 @@ extension EditorDocument {
     newWindow.makeKeyAndOrderFront(nil)
     tabGroup.selectedWindow = newWindow
   }
-
 }
 
 // MARK: - Private
@@ -650,7 +649,7 @@ private extension EditorDocument {
     if lastTabIndex == nil, let window = windowControllers.first?.window {
       let tabbedWindows = window.tabbedWindows
       lastTabIndex = tabbedWindows?.firstIndex(of: window)
-      lastWasStandalone = tabbedWindows == nil
+      lastWasStandalone = tabbedWindows == nil || tabbedWindows?.count == 1
       lastSiblingWindow = tabbedWindows?.first { $0 !== window }
     }
 

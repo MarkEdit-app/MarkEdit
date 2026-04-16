@@ -20,7 +20,7 @@ import AppKit
 
  On reopen, the sibling reference identifies which window group to restore into.
  After restart (or if the sibling is deallocated), falls back to the key window.
- Standalone tabs (tabbedWindows == nil at close time) always reopen as standalone.
+ Standalone tabs (no siblings at close time) always reopen as standalone.
  */
 @MainActor
 final class ClosedTabHistory {
@@ -51,7 +51,7 @@ final class ClosedTabHistory {
     let path = url.path(percentEncoded: false)
 
     guard let bookmark = try? url.bookmarkData(
-      options: .withSecurityScope,
+      options: .minimalBookmark,
       includingResourceValuesForKeys: nil,
       relativeTo: nil
     ) else {
@@ -123,7 +123,6 @@ private extension ClosedTabHistory {
       var isStale = false
       return try? URL(
         resolvingBookmarkData: bookmark,
-        options: .withSecurityScope,
         relativeTo: nil,
         bookmarkDataIsStale: &isStale
       )

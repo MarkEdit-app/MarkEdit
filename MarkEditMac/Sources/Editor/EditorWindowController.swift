@@ -105,8 +105,12 @@ private extension EditorWindowController {
     let tabIndex = tabbedWindows?.firstIndex(of: window)
     let sibling = tabbedWindows?.first { $0 !== window }
 
+    // tabbedWindows is nil for truly standalone windows, but a lone tab
+    // broken out of a group reports tabbedWindows.count == 1. Treat both as standalone.
+    let isStandalone = tabbedWindows == nil || tabbedWindows?.count == 1
+
     document?.lastTabIndex = tabIndex
-    document?.lastWasStandalone = (tabbedWindows == nil)
+    document?.lastWasStandalone = isStandalone
     document?.lastSiblingWindow = sibling
   }
 
