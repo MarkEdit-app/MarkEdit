@@ -47,7 +47,7 @@ public final class WebBridgeTableOfContents {
   }
 }
 
-public struct HeadingInfo: Codable {
+public struct HeadingInfo: Codable, Equatable {
   public var title: String
   public var level: Int
   public var from: Int

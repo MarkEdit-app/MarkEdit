@@ -113,6 +113,7 @@
 		B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */; };
 		CC000002300000000000001A /* EditorDocument+ClosedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002300000000000001B /* EditorDocument+ClosedTab.swift */; };
 		CC000003300000000000001A /* AppDelegate+ClosedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000003300000000000001B /* AppDelegate+ClosedTab.swift */; };
+		CC000004300000000000001A /* EditorSelectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000004300000000000001B /* EditorSelectionHistory.swift */; };
 		CC000006300000000000001A /* EditorClosedTabHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000006300000000000001B /* EditorClosedTabHistory.swift */; };
 /* End PBXBuildFile section */
 
@@ -257,6 +258,7 @@
 		B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = MarkEdit.sdef; sourceTree = "<group>"; };
 		CC000002300000000000001B /* EditorDocument+ClosedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorDocument+ClosedTab.swift"; sourceTree = "<group>"; };
 		CC000003300000000000001B /* AppDelegate+ClosedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+ClosedTab.swift"; sourceTree = "<group>"; };
+		CC000004300000000000001B /* EditorSelectionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionHistory.swift; sourceTree = "<group>"; };
 		CC000006300000000000001B /* EditorClosedTabHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorClosedTabHistory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -373,6 +375,7 @@
 				870A51B5294702AF0095C7EB /* EditorWindowController.swift */,
 				8763C31E2F92574900A3841D /* EditorHistoryStorage.swift */,
 				CC000006300000000000001B /* EditorClosedTabHistory.swift */,
+				CC000004300000000000001B /* EditorSelectionHistory.swift */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -825,6 +828,7 @@
 				87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */,
 				87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */,
 				87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */,
+				CC000004300000000000001A /* EditorSelectionHistory.swift in Sources */,
 				CC000006300000000000001A /* EditorClosedTabHistory.swift in Sources */,
 				8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */,
 				87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */,

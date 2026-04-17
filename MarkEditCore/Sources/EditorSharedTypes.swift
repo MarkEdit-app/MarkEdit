@@ -10,7 +10,7 @@
 import Foundation
 
 /// Font face attributes to control the font styles.
-public struct WebFontFace: Codable {
+public struct WebFontFace: Codable, Equatable {
   public var family: String
   public var weight: String?
   public var style: String?
@@ -35,8 +35,18 @@ public enum EditorIndentBehavior: String, Codable {
   case line = "line"
 }
 
+public struct SelectionRange: Codable, Equatable {
+  public var anchor: Int
+  public var head: Int
+
+  public init(anchor: Int, head: Int) {
+    self.anchor = anchor
+    self.head = head
+  }
+}
+
 /// "CGRect-fashion" rect.
-public struct WebRect: Codable {
+public struct WebRect: Codable, Equatable {
   public var x: Double
   public var y: Double
   public var width: Double
@@ -50,7 +60,7 @@ public struct WebRect: Codable {
   }
 }
 
-public struct TextTokenizeAnchor: Codable {
+public struct TextTokenizeAnchor: Codable, Equatable {
   public var text: String
   public var pos: Int
   public var offset: Int

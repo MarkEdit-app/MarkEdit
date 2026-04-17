@@ -346,7 +346,15 @@ extension EditorViewController {
       return
     }
 
-    bridge.core.resetEditor(text: textContent) { [weak self] _ in
+    let selectionRange: SelectionRange? = {
+      guard AppRuntimeConfig.restoreLastSelection, let fileURL = document?.fileURL else {
+        return nil
+      }
+
+      return EditorSelectionHistory.selectionRange(for: fileURL)
+    }()
+
+    bridge.core.resetEditor(text: textContent, selectionRange: selectionRange) { [weak self] _ in
       self?.webView.magnification = 1.0
 
       // Initial content from scenarios like "CreateNewDocumentIntent" or "New File from Clipboard"

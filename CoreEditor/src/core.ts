@@ -1,10 +1,11 @@
 import { EditorView } from '@codemirror/view';
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, EditorState } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
 import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
 
 import hasSelection from './modules/selection/hasSelection';
+import normalizeSelection from './modules/selection/normalizeSelection';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './modules/events';
@@ -16,6 +17,8 @@ import { getReadableContent } from './modules/lezer';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { removeFrontMatter } from './modules/frontMatter';
 import { selectedMainText, scrollIntoView } from './modules/selection';
+import { selectedLineColumn } from './modules/selection/selectedLineColumn';
+import { SelectionRange } from './modules/selection/types';
 import { markContentClean } from './modules/history';
 import { updateTextChecker } from './modules/textChecker';
 
@@ -59,7 +62,7 @@ export enum ReplaceGranularity {
 /**
  * Reset the editor to the initial state.
  */
-export function resetEditor(initialContent: string) {
+export function resetEditor(initialContent: string, selectionRange?: SelectionRange) {
   // Idle state change should always go first
   editingState.isIdle = false;
 
@@ -68,15 +71,17 @@ export function resetEditor(initialContent: string) {
     window.editor.destroy();
   }
 
-  const lineBreak = getLineBreak(
-    initialContent,
-    window.config.defaultLineBreak,
-  );
+  const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
+  const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
+  const selection = normalizeSelection(initialDoc.length, selectionRange);
 
   const editor = new EditorView({
-    doc: normalizeLineBreaks(initialContent, lineBreak),
+    state: EditorState.create({
+      doc: initialDoc,
+      selection,
+      extensions: extensions({ lineBreak }),
+    }),
     parent: document.querySelector('#editor') ?? document.body,
-    extensions: extensions({ lineBreak }),
   });
 
   editor.focus();
@@ -142,20 +147,25 @@ export function resetEditor(initialContent: string) {
   // Recalculate text metrics to update the max height of autocomplete
   requestAnimationFrame(() => recalculateTextMetrics());
 
-  // After calling editor.focus(), the selection is set to [Ln 1, Col 1]
+  // Notify native with the initial state
   window.nativeModules.core.notifyViewDidUpdate({
     contentEdited: false,
     compositionEnded: true,
     isDirty: false,
     selectedLineColumn: {
-      lineNumber: 1 as CodeGen_Int,
-      columnText: '',
-      selectionText: '',
+      ...selectedLineColumn().getInfo(),
+      // Intentionally undefined to avoid saving the selection during reset
+      selectionRange: undefined,
     },
   });
 
   // The content should be initially clean
   markContentClean();
+
+  // Scroll to the restored selection, or to the top for new documents
+  if (selectionRange !== undefined) {
+    scrollIntoView(editor.state.selection.main.head, 'center');
+  }
 
   // For user scripts, notify the editor is ready
   editorReadyListeners().forEach(listener => listener(editor));

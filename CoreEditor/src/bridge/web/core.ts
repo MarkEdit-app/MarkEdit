@@ -1,4 +1,6 @@
 import { WebModule } from '../webModule';
+import { SelectionRange } from '../../modules/selection/types';
+
 import {
   ReadableContentPair,
   ReplaceGranularity,
@@ -20,7 +22,7 @@ import {
  * @overrideModuleName WebBridgeCore
  */
 export interface WebModuleCore extends WebModule {
-  resetEditor({ text }: { text: string }): void;
+  resetEditor({ text, selectionRange }: { text: string; selectionRange?: SelectionRange }): void;
   clearEditor(): void;
   getEditorState(): { hasFocus: boolean; hasSelection: boolean };
   getEditorText(): string;
@@ -33,8 +35,8 @@ export interface WebModuleCore extends WebModule {
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
-  resetEditor({ text }: { text: string }): void {
-    resetEditor(text);
+  resetEditor({ text, selectionRange }: { text: string; selectionRange?: SelectionRange }): void {
+    resetEditor(text, selectionRange);
   }
 
   clearEditor(): void {

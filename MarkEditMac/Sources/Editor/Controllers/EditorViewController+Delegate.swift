@@ -214,6 +214,13 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreCompositionEnded(_ sender: EditorModuleCore, selectedLineColumn: LineColumnInfo) {
     statusView.updateLineColumn(selectedLineColumn)
     layoutStatusView()
+
+    if AppRuntimeConfig.restoreLastSelection {
+      EditorSelectionHistory.save(
+        info: selectedLineColumn,
+        for: document?.fileURL
+      )
+    }
   }
 
   func editorCoreLinkClicked(_ sender: EditorModuleCore, link: String) {
