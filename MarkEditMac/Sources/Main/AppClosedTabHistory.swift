@@ -1,5 +1,5 @@
 //
-//  ClosedTabHistory.swift
+//  AppClosedTabHistory.swift
 //  MarkEditMac
 //
 //  Created by lamchau on 4/16/26.
@@ -23,8 +23,8 @@ import AppKit
  Standalone tabs (no siblings at close time) always reopen as standalone.
  */
 @MainActor
-final class ClosedTabHistory {
-  static let shared = ClosedTabHistory()
+final class AppClosedTabHistory {
+  static let shared = AppClosedTabHistory()
 
   struct RestoredTab {
     let url: URL
@@ -33,7 +33,9 @@ final class ClosedTabHistory {
     let wasStandalone: Bool
   }
 
-  private let maxEntryCount = 20
+  private enum Constants {
+    static let maxEntryCount = 20
+  }
 
   @Storage(key: "general.closed-tab-history", defaultValue: [])
   private var entries: [ClosedTab]
@@ -42,9 +44,8 @@ final class ClosedTabHistory {
 
   private init() {}
 
-  var hasReopenableEntries: Bool {
-    let openPaths = openDocumentPaths
-    return entries.contains { $0.isReopenable(openPaths: openPaths) }
+  var hasEntries: Bool {
+    !entries.isEmpty
   }
 
   func push(_ url: URL, tabIndex: Int?, sourceWindow: NSWindow?, wasStandalone: Bool) {
@@ -59,15 +60,15 @@ final class ClosedTabHistory {
     }
 
     var current = entries
-    current.removeAll { $0.resolvedPath == path }
+    current.removeAll { $0.resolvedURL?.path(percentEncoded: false) == path }
     current.append(ClosedTab(bookmark: bookmark, tabIndex: tabIndex, wasStandalone: wasStandalone))
 
     if let sourceWindow {
       windowRefs.setObject(sourceWindow, forKey: path as NSString)
     }
 
-    if current.count > maxEntryCount {
-      current.removeFirst(current.count - maxEntryCount)
+    if current.count > Constants.maxEntryCount {
+      current.removeFirst(current.count - Constants.maxEntryCount)
     }
 
     entries = current
@@ -80,23 +81,26 @@ final class ClosedTabHistory {
     for index in current.indices.reversed() {
       let entry = current[index]
 
-      guard entry.isReopenable(openPaths: openPaths) else {
-        if entry.isOrphaned(openPaths: openPaths) {
+      guard let url = entry.resolvedURL else {
+        current.remove(at: index)
+        continue
+      }
+
+      let path = url.path(percentEncoded: false)
+
+      guard entry.isReopenable(path: path, openPaths: openPaths) else {
+        if entry.isOrphaned(path: path, openPaths: openPaths) {
           current.remove(at: index)
         }
+
         continue
       }
 
       current.remove(at: index)
       entries = current
 
-      guard let url = entry.resolvedURL else {
-        continue
-      }
-
-      let path = url.path(percentEncoded: false) as NSString
-      let sourceWindow = windowRefs.object(forKey: path)
-      windowRefs.removeObject(forKey: path)
+      let sourceWindow = windowRefs.object(forKey: path as NSString)
+      windowRefs.removeObject(forKey: path as NSString)
 
       return RestoredTab(
         url: url,
@@ -113,7 +117,7 @@ final class ClosedTabHistory {
 
 // MARK: - Private
 
-private extension ClosedTabHistory {
+private extension AppClosedTabHistory {
   struct ClosedTab: Codable {
     let bookmark: Data
     let tabIndex: Int?
@@ -128,24 +132,12 @@ private extension ClosedTabHistory {
       )
     }
 
-    var resolvedPath: String? {
-      resolvedURL?.path(percentEncoded: false)
+    func isReopenable(path: String, openPaths: Set<String>) -> Bool {
+      !openPaths.contains(path) && FileManager.default.isReadableFile(atPath: path)
     }
 
-    func isReopenable(openPaths: Set<String>) -> Bool {
-      guard let path = resolvedPath else {
-        return false
-      }
-
-      return !openPaths.contains(path) && FileManager.default.isReadableFile(atPath: path)
-    }
-
-    func isOrphaned(openPaths: Set<String>) -> Bool {
-      guard let path = resolvedPath else {
-        return true
-      }
-
-      return !openPaths.contains(path) && !FileManager.default.isReadableFile(atPath: path)
+    func isOrphaned(path: String, openPaths: Set<String>) -> Bool {
+      !openPaths.contains(path) && !FileManager.default.isReadableFile(atPath: path)
     }
   }
 

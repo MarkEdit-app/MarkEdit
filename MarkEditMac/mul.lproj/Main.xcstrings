@@ -3228,6 +3228,18 @@
             "state" : "new",
             "value" : "Reopen Closed Tab"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新打开关闭的标签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新開啟關閉的標籤"
+          }
         }
       }
     },

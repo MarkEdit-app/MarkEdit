@@ -18,6 +18,7 @@
 		870A51BA294702AF0095C7EB /* EditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870A51B5294702AF0095C7EB /* EditorWindowController.swift */; };
 		870A51BC294702AF0095C7EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870A51B7294702AF0095C7EB /* AppDelegate.swift */; };
 		870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870A51B8294702AF0095C7EB /* EditorDocument.swift */; };
+		CC000002300000000000001A /* EditorDocument+ClosedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000002300000000000001B /* EditorDocument+ClosedTab.swift */; };
 		870A51C9294752530095C7EB /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 870A51C8294752530095C7EB /* index.html */; };
 		870C59C72EC61261003882BD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 870C59C62EC61261003882BD /* Localizable.xcstrings */; };
 		870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870F17652984D2C000003DA7 /* EditorViewController+LineEndings.swift */; };
@@ -31,6 +32,7 @@
 		87152BA12EC599CA00B39F06 /* FinderExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 87152B9A2EC599CA00B39F06 /* FinderExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		87152BAC2EC599DD00B39F06 /* FinderTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87152BA92EC599DD00B39F06 /* FinderTools.swift */; };
 		871C995B2973F1E6003FF3A7 /* AppDelegate+Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */; };
+		CC000003300000000000001A /* AppDelegate+ClosedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000003300000000000001B /* AppDelegate+ClosedTab.swift */; };
 		871C995D2973F20E003FF3A7 /* AppDelegate+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */; };
 		8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8723B46829C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift */; };
 		8725E0802977EEB3006A4961 /* EditorToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8725E07F2977EEB3006A4961 /* EditorToolbarItems.swift */; };
@@ -94,7 +96,6 @@
 		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */; };
 		87B3ED8F2CBE1E12001FA6CE /* DiffKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87B3ED8E2CBE1E12001FA6CE /* DiffKit */; };
 		87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */; };
-		CC000001300000000000001A /* ClosedTabHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000001300000000000001B /* ClosedTabHistory.swift */; };
 		87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BD071129699A290053EF5F /* EditorViewController+Preview.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BE2E342DF9B5C000A51CF4 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE2E332DF9B5BB00A51CF4 /* Bundle+Extension.swift */; };
@@ -111,6 +112,7 @@
 		87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */; };
 		87FAFFD72BE0B6A300FA509D /* AppDelegate+FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */; };
 		B0E02F682D8F77A50060DEA5 /* MarkEdit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */; };
+		CC000001300000000000001A /* AppClosedTabHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC000001300000000000001B /* AppClosedTabHistory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +160,7 @@
 		870A51B5294702AF0095C7EB /* EditorWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorWindowController.swift; sourceTree = "<group>"; };
 		870A51B7294702AF0095C7EB /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		870A51B8294702AF0095C7EB /* EditorDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorDocument.swift; sourceTree = "<group>"; };
+		CC000002300000000000001B /* EditorDocument+ClosedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorDocument+ClosedTab.swift"; sourceTree = "<group>"; };
 		870A51BE294702FD0095C7EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		870A51C8294752530095C7EB /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = CoreEditor/dist/index.html; sourceTree = SOURCE_ROOT; };
 		870C59C62EC61261003882BD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -171,6 +174,7 @@
 		87152BAA2EC599DD00B39F06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		87152BD22EC59C7900B39F06 /* Info.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Info.entitlements; sourceTree = "<group>"; };
 		871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Document.swift"; sourceTree = "<group>"; };
+		CC000003300000000000001B /* AppDelegate+ClosedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+ClosedTab.swift"; sourceTree = "<group>"; };
 		871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Menu.swift"; sourceTree = "<group>"; };
 		8723B46829C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluateJavaScriptIntent.swift; sourceTree = "<group>"; };
 		8725E07F2977EEB3006A4961 /* EditorToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToolbarItems.swift; sourceTree = "<group>"; };
@@ -235,7 +239,6 @@
 		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
 		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extension.swift"; sourceTree = "<group>"; };
 		87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppExceptionCatcher.swift; sourceTree = "<group>"; };
-		CC000001300000000000001B /* ClosedTabHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedTabHistory.swift; sourceTree = "<group>"; };
 		87BD071129699A290053EF5F /* EditorViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Preview.swift"; sourceTree = "<group>"; };
 		87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+GotoLine.swift"; sourceTree = "<group>"; };
 		87BE2E332DF9B5BB00A51CF4 /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
@@ -252,6 +255,7 @@
 		87F2B61329AF2F3A0027103E /* NSSpellChecker+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSSpellChecker+Extension.swift"; sourceTree = "<group>"; };
 		87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+FileSystem.swift"; sourceTree = "<group>"; };
 		B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = MarkEdit.sdef; sourceTree = "<group>"; };
+		CC000001300000000000001B /* AppClosedTabHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClosedTabHistory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,6 +424,7 @@
 				87FAFFD62BE0B6A300FA509D /* AppDelegate+FileSystem.swift */,
 				871C995C2973F20E003FF3A7 /* AppDelegate+Menu.swift */,
 				871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */,
+				CC000003300000000000001B /* AppDelegate+ClosedTab.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -459,7 +464,7 @@
 				8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */,
 				84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */,
 				87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */,
-				CC000001300000000000001B /* ClosedTabHistory.swift */,
+				CC000001300000000000001B /* AppClosedTabHistory.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -584,6 +589,7 @@
 			isa = PBXGroup;
 			children = (
 				870A51B8294702AF0095C7EB /* EditorDocument.swift */,
+				CC000002300000000000001B /* EditorDocument+ClosedTab.swift */,
 				8772E384294AC60D00111E83 /* EditorReusePool.swift */,
 				8725E07F2977EEB3006A4961 /* EditorToolbarItems.swift */,
 				878AABE82CB111410081C5E1 /* EditorMenuItem.swift */,
@@ -804,6 +810,7 @@
 				8729C5A6294B5E6B006F262B /* EditorViewController+Menu.swift in Sources */,
 				87AAEDF7295825D800C8E61C /* EditorFindPanel+Delegate.swift in Sources */,
 				871C995B2973F1E6003FF3A7 /* AppDelegate+Document.swift in Sources */,
+				CC000003300000000000001A /* AppDelegate+ClosedTab.swift in Sources */,
 				87E2141A2DE4A8400082DDB1 /* NSMenu+Extension.swift in Sources */,
 				87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */,
 				8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */,
@@ -814,7 +821,7 @@
 				87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */,
 				87850C8629482A8600D1A952 /* NSApplication+Extension.swift in Sources */,
 				87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */,
-				CC000001300000000000001A /* ClosedTabHistory.swift in Sources */,
+				CC000001300000000000001A /* AppClosedTabHistory.swift in Sources */,
 				8767BBB1295A8C1D00BFACAE /* EditorViewController+Delegate.swift in Sources */,
 				87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */,
 				870F17682985285B00003DA7 /* EditorViewController+Config.swift in Sources */,
@@ -841,6 +848,7 @@
 				8765FD292AF291D300C645A8 /* AppVersion.swift in Sources */,
 				874BE70829BB62BA002F83BA /* CreateNewDocumentIntent.swift in Sources */,
 				870A51BD294702AF0095C7EB /* EditorDocument.swift in Sources */,
+				CC000002300000000000001A /* EditorDocument+ClosedTab.swift in Sources */,
 				8780AC182982554800065EF4 /* SettingTabs.swift in Sources */,
 				87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */,
 				87F2B61429AF2F3A0027103E /* NSSpellChecker+Extension.swift in Sources */,
