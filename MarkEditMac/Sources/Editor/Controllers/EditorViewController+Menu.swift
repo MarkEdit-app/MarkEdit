@@ -359,9 +359,11 @@ private extension EditorViewController {
     // just temporarily overwrite the mode to preferred and switch back later.
     let tabbingMode = AppPreferences.Window.tabbingMode
     AppPreferences.Window.tabbingMode = .preferred
+    view.window?.tabbingMode = .preferred
 
     NSDocumentController.shared.newDocument(sender)
     AppPreferences.Window.tabbingMode = tabbingMode
+    view.window?.tabbingMode = tabbingMode
   }
 
   @IBAction func revealInFinder(_ sender: Any?) {
