@@ -148,7 +148,7 @@
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Reopen Closed Tab" keyEquivalent="T" id="rct-Cm-ShT">
+                                        <menuItem title="Reopen Closed Tab" secondaryImage="macwindow.on.rectangle" catalog="system" keyEquivalent="T" id="rct-Cm-ShT">
                                             <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                             <connections>
                                                 <action selector="reopenClosedTab:" target="Voe-Tx-rLC" id="rct-Ac-001"/>
