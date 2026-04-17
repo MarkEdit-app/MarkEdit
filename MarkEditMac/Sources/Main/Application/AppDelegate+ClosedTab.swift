@@ -22,18 +22,25 @@ extension AppDelegate {
       return
     }
 
-    // Resolve target: standalone tabs reopen standalone, tabbed tabs prefer the
-    // original window (via sibling weak ref), falling back to the current key window.
+    // Resolve target window based on the current tabbing mode preference.
+    //
+    // .disallowed: always open standalone.
+    // .preferred: open as a tab when a suitable target window exists.
+    // .automatic: respect original state.
     let targetWindow: EditorWindow? = {
-      if entry.wasStandalone {
+      if AppPreferences.Window.tabbingMode == .disallowed {
         return nil
       }
 
-      if let source = entry.sourceWindow as? EditorWindow {
-        return source
+      if AppPreferences.Window.tabbingMode == .preferred || !entry.wasStandalone {
+        if let source = entry.sourceWindow as? EditorWindow {
+          return source
+        }
+
+        return (NSApp.keyWindow as? EditorWindow) ?? (NSApp.mainWindow as? EditorWindow)
       }
 
-      return (NSApp.keyWindow as? EditorWindow) ?? (NSApp.mainWindow as? EditorWindow)
+      return nil
     }()
 
     // openDocument(display:true) normally auto-joins the key window's tab group.
