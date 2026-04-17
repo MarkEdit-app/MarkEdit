@@ -166,7 +166,7 @@ extension AppDelegate {
 extension AppDelegate: NSMenuItemValidation {
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
     if menuItem.action == #selector(reopenClosedTab(_:)) {
-      return AppClosedTabHistory.shared.hasEntries
+      return EditorClosedTabHistory.shared.hasEntries
     }
 
     return true

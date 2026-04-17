@@ -17,7 +17,7 @@ extension AppDelegate {
   }
 
   @IBAction func reopenClosedTab(_ sender: Any?) {
-    guard let entry = AppClosedTabHistory.shared.pop() else {
+    guard let entry = EditorClosedTabHistory.shared.pop() else {
       NSSound.beep()
       return
     }
@@ -66,7 +66,7 @@ extension AppDelegate {
         NSSound.beep()
         Logger.log(.error, "Failed to reopen closed tab: \(error.localizedDescription)")
 
-        AppClosedTabHistory.shared.push(
+        EditorClosedTabHistory.shared.push(
           entry.url,
           tabIndex: entry.tabIndex,
           sourceWindow: entry.sourceWindow,
