@@ -54,6 +54,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
+  private var reopenInFlightCount = 0
+  private var savedAllowsAutomaticWindowTabbing: Bool?
 
   func applicationWillFinishLaunching(_ notification: Notification) {
     EditorReusePool.shared.warmUp()
@@ -161,6 +163,18 @@ extension AppDelegate {
   }
 }
 
+// MARK: - NSMenuItemValidation
+
+extension AppDelegate: NSMenuItemValidation {
+  func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    if menuItem.action == #selector(reopenClosedTab(_:)) {
+      return ClosedTabHistory.shared.hasReopenableEntries
+    }
+
+    return true
+  }
+}
+
 // MARK: - Private
 
 private extension AppDelegate {
@@ -172,6 +186,75 @@ private extension AppDelegate {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
       if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
         NSApp.closeOpenPanels()
+      }
+    }
+  }
+
+  @IBAction func reopenClosedTab(_ sender: Any?) {
+    guard let entry = ClosedTabHistory.shared.pop() else {
+      return
+    }
+
+    // Resolve target: standalone tabs reopen standalone, tabbed tabs prefer the
+    // original window (via sibling weak ref), falling back to the current key window.
+    let targetWindow: EditorWindow? = {
+      if entry.wasStandalone {
+        return nil
+      }
+
+      if let source = entry.sourceWindow as? EditorWindow {
+        return source
+      }
+
+      return (NSApp.keyWindow as? EditorWindow) ?? (NSApp.mainWindow as? EditorWindow)
+    }()
+
+    // openDocument(display:true) normally auto-joins the key window's tab group.
+    // Temporarily disable this so the window opens standalone, then we manually
+    // addTabbedWindow to the correct target. Counter handles rapid Cmd+Shift+T.
+    if reopenInFlightCount == 0 {
+      savedAllowsAutomaticWindowTabbing = NSWindow.allowsAutomaticWindowTabbing
+      NSWindow.allowsAutomaticWindowTabbing = false
+    }
+
+    reopenInFlightCount += 1
+
+    NSDocumentController.shared.openDocument(withContentsOf: entry.url, display: true) { [weak self] document, _, error in
+      guard let self else {
+        return
+      }
+
+      self.reopenInFlightCount -= 1
+
+      if self.reopenInFlightCount == 0 {
+        NSWindow.allowsAutomaticWindowTabbing = self.savedAllowsAutomaticWindowTabbing ?? true
+        self.savedAllowsAutomaticWindowTabbing = nil
+      }
+
+      if let error {
+        Logger.log(.error, "Failed to reopen closed tab: \(error.localizedDescription)")
+        ClosedTabHistory.shared.push(
+          entry.url,
+          tabIndex: entry.tabIndex,
+          sourceWindow: entry.sourceWindow,
+          wasStandalone: entry.wasStandalone
+        )
+        return
+      }
+
+      guard let editorDocument = document as? EditorDocument else {
+        return
+      }
+
+      Task { @MainActor in
+        guard let newWindow = editorDocument.windowControllers.first?.window else {
+          return
+        }
+
+        if let targetWindow {
+          targetWindow.addTabbedWindow(newWindow, ordered: .above)
+          editorDocument.restoreTabPosition(tabIndex: entry.tabIndex, relativeTo: targetWindow)
+        }
       }
     }
   }
