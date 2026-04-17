@@ -1,5 +1,5 @@
 //
-//  AppClosedTabHistory.swift
+//  EditorClosedTabHistory.swift
 //  MarkEditMac
 //
 //  Created by lamchau on 4/16/26.
@@ -23,8 +23,8 @@ import AppKit
  Standalone tabs (no siblings at close time) always reopen as standalone.
  */
 @MainActor
-final class AppClosedTabHistory {
-  static let shared = AppClosedTabHistory()
+final class EditorClosedTabHistory {
+  static let shared = EditorClosedTabHistory()
 
   struct RestoredTab {
     let url: URL
@@ -37,15 +37,12 @@ final class AppClosedTabHistory {
     static let maxEntryCount = 20
   }
 
-  @Storage(key: "general.closed-tab-history", defaultValue: [])
-  private var entries: [ClosedTab]
-
   private let windowRefs = NSMapTable<NSString, NSWindow>.strongToWeakObjects()
 
   private init() {}
 
   var hasEntries: Bool {
-    !entries.isEmpty
+    !EditorHistory.closedTabs.isEmpty
   }
 
   func push(_ url: URL, tabIndex: Int?, sourceWindow: NSWindow?, wasStandalone: Bool) {
@@ -59,7 +56,7 @@ final class AppClosedTabHistory {
       return
     }
 
-    var current = entries
+    var current = EditorHistory.closedTabs
     current.removeAll { $0.resolvedURL?.path(percentEncoded: false) == path }
     current.append(ClosedTab(bookmark: bookmark, tabIndex: tabIndex, wasStandalone: wasStandalone))
 
@@ -71,11 +68,11 @@ final class AppClosedTabHistory {
       current.removeFirst(current.count - Constants.maxEntryCount)
     }
 
-    entries = current
+    EditorHistory.closedTabs = current
   }
 
   func pop() -> RestoredTab? {
-    var current = entries
+    var current = EditorHistory.closedTabs
     let openPaths = openDocumentPaths
 
     for index in current.indices.reversed() {
@@ -97,7 +94,7 @@ final class AppClosedTabHistory {
       }
 
       current.remove(at: index)
-      entries = current
+      EditorHistory.closedTabs = current
 
       let sourceWindow = windowRefs.object(forKey: path as NSString)
       windowRefs.removeObject(forKey: path as NSString)
@@ -110,37 +107,35 @@ final class AppClosedTabHistory {
       )
     }
 
-    entries = current
+    EditorHistory.closedTabs = current
     return nil
   }
 }
 
 // MARK: - Private
 
-private extension AppClosedTabHistory {
-  struct ClosedTab: Codable {
-    let bookmark: Data
-    let tabIndex: Int?
-    let wasStandalone: Bool?
+private typealias ClosedTab = EditorHistory.ClosedTab
 
-    var resolvedURL: URL? {
-      var isStale = false
-      return try? URL(
-        resolvingBookmarkData: bookmark,
-        relativeTo: nil,
-        bookmarkDataIsStale: &isStale
-      )
-    }
-
-    func isReopenable(path: String, openPaths: Set<String>) -> Bool {
-      !openPaths.contains(path) && FileManager.default.isReadableFile(atPath: path)
-    }
-
-    func isOrphaned(path: String, openPaths: Set<String>) -> Bool {
-      !openPaths.contains(path) && !FileManager.default.isReadableFile(atPath: path)
-    }
+private extension ClosedTab {
+  var resolvedURL: URL? {
+    var isStale = false
+    return try? URL(
+      resolvingBookmarkData: bookmark,
+      relativeTo: nil,
+      bookmarkDataIsStale: &isStale
+    )
   }
 
+  func isReopenable(path: String, openPaths: Set<String>) -> Bool {
+    !openPaths.contains(path) && FileManager.default.isReadableFile(atPath: path)
+  }
+
+  func isOrphaned(path: String, openPaths: Set<String>) -> Bool {
+    !openPaths.contains(path) && !FileManager.default.isReadableFile(atPath: path)
+  }
+}
+
+private extension EditorClosedTabHistory {
   var openDocumentPaths: Set<String> {
     Set(NSDocumentController.shared.documents.compactMap { $0.fileURL?.path(percentEncoded: false) })
   }

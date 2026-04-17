@@ -23,7 +23,7 @@ extension EditorDocument {
       lastSiblingWindow = tabbedWindows?.first { $0 !== window }
     }
 
-    AppClosedTabHistory.shared.push(
+    EditorClosedTabHistory.shared.push(
       fileURL,
       tabIndex: lastTabIndex,
       sourceWindow: lastSiblingWindow,
