@@ -42,23 +42,39 @@ enum EditorSelectionHistory {
     return entry.selectionRange
   }
 
-  /// Removes selection entries older than the retention period
+  /// Removes selection entries older than the retention period and enforces a maximum entry limit
   static func purgeStaleEntries() {
     // Flush any pending saves before purging
     flushPendingInfo()
 
     let cutoffDate = Date(timeIntervalSinceNow: -Double(Constants.retentionDays) * 86400)
     var current = EditorHistory.selectionRanges
+    var hasChanges = false
 
     let staleEntries = current.filter {
       $0.value.lastAccessed < cutoffDate
     }
 
+    // Remove stale entries older than retention period
     for (key, _) in staleEntries {
       current.removeValue(forKey: key)
+      hasChanges = true
     }
 
-    if !staleEntries.isEmpty {
+    // Enforce max entry limit by removing oldest accessed
+    if current.count > Constants.maxEntries {
+      let sortedEntries = current.sorted {
+        $0.value.lastAccessed < $1.value.lastAccessed
+      }
+
+      for (key, _) in sortedEntries.prefix(current.count - Constants.maxEntries) {
+        current.removeValue(forKey: key)
+      }
+
+      hasChanges = true
+    }
+
+    if hasChanges {
       EditorHistory.selectionRanges = current
     }
   }
@@ -69,6 +85,7 @@ enum EditorSelectionHistory {
 private extension EditorSelectionHistory {
   enum Constants {
     static let retentionDays = 7
+    static let maxEntries = 50
   }
 
   static func flushPendingInfo() {

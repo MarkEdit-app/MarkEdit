@@ -105,10 +105,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
 
-    // Check for updates on a weekly basis, for users who never quit apps
+    // Periodic maintenance: runs weekly for users who keep the app running
     Timer.scheduledTimer(withTimeInterval: 7 * 24 * 60 * 60, repeats: true) { _ in
       Task {
         await AppUpdater.checkForUpdates(explicitly: false)
+      }
+
+      Task {
+        await EditorSelectionHistory.purgeStaleEntries()
       }
     }
 
