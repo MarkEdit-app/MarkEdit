@@ -74,6 +74,7 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
   const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
   const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
   const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
+  const selectionRestored = selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0);
 
   const editor = new EditorView({
     state: EditorState.create({
@@ -82,6 +83,10 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
       extensions: extensions({ lineBreak }),
     }),
     parent: document.querySelector('#editor') ?? document.body,
+    // Initial scroll to avoid an extra transaction
+    scrollTo: selectionRestored
+      ? EditorView.scrollIntoView(initialSelection.head, { y: 'center' })
+      : undefined,
   });
 
   editor.focus();
@@ -115,6 +120,13 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
   const scrollDOM = editor.scrollDOM;
   observeContentHeightChanges(scrollDOM);
   fixWebKitWheelIssues(scrollDOM);
+
+  if (!selectionRestored) {
+    // Makes sure the content doesn't have unwanted inset
+    scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
+    // scrollIntoView doesn't work when the app is idle
+    scrollDOM.scrollTo({ top: 0 });
+  }
 
   if ('onscrollend' in window) { // [macOS] 26.2
     scrollDOM.addEventListener('scrollend', () => {
@@ -156,16 +168,6 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
 
   // The content should be initially clean
   markContentClean();
-
-  // Scroll to the restored selection, or to the top for new documents
-  if (selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0)) {
-    scrollIntoView(editor.state.selection.main.head, 'center');
-  } else {
-    // Makes sure the content doesn't have unwanted inset
-    scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
-    // scrollIntoView doesn't work when the app is idle
-    scrollDOM.scrollTo({ top: 0 });
-  }
 
   // For user scripts, notify the editor is ready
   editorReadyListeners().forEach(listener => listener(editor));
