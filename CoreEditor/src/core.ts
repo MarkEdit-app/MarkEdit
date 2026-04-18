@@ -73,12 +73,12 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
 
   const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
   const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
-  const selection = normalizeSelection(initialDoc.length, selectionRange);
+  const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
 
   const editor = new EditorView({
     state: EditorState.create({
       doc: initialDoc,
-      selection,
+      selection: initialSelection,
       extensions: extensions({ lineBreak }),
     }),
     parent: document.querySelector('#editor') ?? document.body,
@@ -104,9 +104,6 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
   ensureLineHeight();
   setTimeout(ensureLineHeight, 1000);
 
-  // Makes sure the content doesn't have unwanted inset
-  scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
-
   const contentDOM = editor.contentDOM;
   contentDOM.addEventListener('blur', handleFocusLost);
 
@@ -116,8 +113,6 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
   });
 
   const scrollDOM = editor.scrollDOM;
-  scrollDOM.scrollTo({ top: 0 }); // scrollIntoView doesn't work when the app is idle
-
   observeContentHeightChanges(scrollDOM);
   fixWebKitWheelIssues(scrollDOM);
 
@@ -138,7 +133,7 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
     });
   }
 
-  // Recofigure, window.config might have changed
+  // Reconfigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
   applyReducedMotion(isMotionReduced());
   observeBackgroundColorChanges(editor.dom);
@@ -163,8 +158,13 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
   markContentClean();
 
   // Scroll to the restored selection, or to the top for new documents
-  if (selectionRange !== undefined) {
+  if (selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0)) {
     scrollIntoView(editor.state.selection.main.head, 'center');
+  } else {
+    // Makes sure the content doesn't have unwanted inset
+    scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
+    // scrollIntoView doesn't work when the app is idle
+    scrollDOM.scrollTo({ top: 0 });
   }
 
   // For user scripts, notify the editor is ready
