@@ -33,6 +33,7 @@ enum AppRuntimeConfig {
     let autoCharacterPairs: Bool?
     let autoSaveWhenIdle: Bool?
     let closeAlwaysConfirmsChanges: Bool?
+    let restoreLastSelection: Bool?
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
     let headerFontSizeDiffs: [Double]?
@@ -56,6 +57,7 @@ enum AppRuntimeConfig {
       case autoCharacterPairs = "editor.autoCharacterPairs"
       case autoSaveWhenIdle = "editor.autoSaveWhenIdle"
       case closeAlwaysConfirmsChanges = "editor.closeAlwaysConfirmsChanges"
+      case restoreLastSelection = "editor.restoreLastSelection"
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
@@ -94,6 +96,11 @@ enum AppRuntimeConfig {
     }
 
     return (object as? [String: Any]) ?? [:]
+  }
+
+  static var restoreLastSelection: Bool {
+    // Restore selection from previous session by default
+    currentDefinition?.restoreLastSelection ?? true
   }
 
   static var autoCharacterPairs: Bool {
@@ -235,6 +242,7 @@ private extension AppRuntimeConfig {
     autoCharacterPairs: true,
     autoSaveWhenIdle: false,
     closeAlwaysConfirmsChanges: nil,
+    restoreLastSelection: nil,
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
     headerFontSizeDiffs: nil,

@@ -18,13 +18,15 @@ public final class WebBridgeCore {
     self.webView = webView
   }
 
-  public func resetEditor(text: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func resetEditor(text: String, selectionRange: SelectionRange?, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let text: String
+      let selectionRange: SelectionRange?
     }
 
     let message = Message(
-      text: text
+      text: text,
+      selectionRange: selectionRange
     )
 
     webView?.invoke(path: "webModules.core.resetEditor", message: message, completion: completion)
@@ -119,7 +121,7 @@ public final class WebBridgeCore {
   }
 }
 
-public struct WebBridgeCoreGetEditorStateReturnType: Codable {
+public struct WebBridgeCoreGetEditorStateReturnType: Codable, Equatable {
   public var hasFocus: Bool
   public var hasSelection: Bool
 
@@ -129,7 +131,7 @@ public struct WebBridgeCoreGetEditorStateReturnType: Codable {
   }
 }
 
-public struct ReadableContentPair: Codable {
+public struct ReadableContentPair: Codable, Equatable {
   public var fullText: ReadableContent
   public var selection: ReadableContent?
 
@@ -139,7 +141,7 @@ public struct ReadableContentPair: Codable {
   }
 }
 
-public struct ReadableContent: Codable {
+public struct ReadableContent: Codable, Equatable {
   public var sourceText: String
   public var trimmedText: String
   public var paragraphCount: Int

@@ -130,6 +130,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     return .terminateNow
   }
 
+  func applicationWillTerminate(_ notification: Notification) {
+    EditorSelectionHistory.purgeStaleEntries()
+  }
+
   func shouldOpenOrCreateDocument() -> Bool {
     if let settingsWindow = settingsWindowController?.window {
       // We don't open or create documents when the settings pane is the key and visible

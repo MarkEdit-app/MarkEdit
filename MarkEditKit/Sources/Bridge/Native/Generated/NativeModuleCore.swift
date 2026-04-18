@@ -255,10 +255,12 @@ public struct LineColumnInfo: Decodable, Equatable {
   public var lineNumber: Int
   public var columnText: String
   public var selectionText: String
+  public var selectionRange: SelectionRange?
 
-  public init(lineNumber: Int, columnText: String, selectionText: String) {
+  public init(lineNumber: Int, columnText: String, selectionText: String, selectionRange: SelectionRange?) {
     self.lineNumber = lineNumber
     self.columnText = columnText
     self.selectionText = selectionText
+    self.selectionRange = selectionRange
   }
 }

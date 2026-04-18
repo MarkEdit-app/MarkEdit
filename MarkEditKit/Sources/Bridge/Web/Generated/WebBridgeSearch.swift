@@ -119,7 +119,7 @@ public final class WebBridgeSearch {
   }
 }
 
-public struct SearchOptions: Codable {
+public struct SearchOptions: Codable, Equatable {
   public var search: String
   public var caseSensitive: Bool
   public var diacriticInsensitive: Bool
@@ -149,7 +149,7 @@ public enum SearchOperation: String, Codable {
 }
 
 /// Info to show text like "1 of 3".
-public struct SearchCounterInfo: Codable {
+public struct SearchCounterInfo: Codable, Equatable {
   /// Total number of matched items
   public var numberOfItems: Int
   /// Index for the selected item, zero-based

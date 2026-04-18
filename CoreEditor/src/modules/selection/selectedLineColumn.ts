@@ -26,6 +26,10 @@ export function selectedLineColumn(): LineColumnState {
       lineNumber: line.number as CodeGen_Int,
       columnText: state.sliceDoc(line.from, selection.head),
       selectionText: state.sliceDoc(selection.from, selection.to),
+      selectionRange: {
+        anchor: selection.anchor as CodeGen_Int,
+        head: selection.head as CodeGen_Int,
+      },
     }),
     isLargePayload: (selection.head - line.from) + (selection.to - selection.from) > LARGE_PAYLOAD_THRESHOLD,
   };
