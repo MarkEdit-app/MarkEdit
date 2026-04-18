@@ -118,7 +118,7 @@ extension EditorViewController {
     }
 
     // Handle keyboard events when focus is not in the editor
-    switch event.deviceIndependentFlags {
+    switch event.userModifierFlags {
     case .command:
       updateTextFinderMode(.find)
       return true
