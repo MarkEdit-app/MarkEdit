@@ -475,7 +475,7 @@ extension EditorViewController {
     class TextField: NSTextField {
       override func performKeyEquivalent(with event: NSEvent) -> Bool {
         // The default "selectAll" is not available here
-        if event.deviceIndependentFlags == .command, event.keyCode == .kVK_ANSI_A {
+        if event.userModifierFlags == .command, event.keyCode == .kVK_ANSI_A {
           currentEditor()?.selectAll(nil)
           return true
         }
