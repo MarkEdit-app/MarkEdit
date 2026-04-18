@@ -77,6 +77,21 @@ extension EditorViewController {
         return nil
       }
 
+      // (Alternatives) Option-Command-Left/Right to switch tabs, mimicking browsers.
+      // macOS uses Control-Tab by default; provide the browser-style shortcut as well.
+      if event.userModifierFlags == [.option, .command], (window.tabbedWindows?.count ?? 0) > 1 {
+        switch event.keyCode {
+        case .kVK_LeftArrow:
+          window.selectPreviousTab(nil)
+          return nil
+        case .kVK_RightArrow:
+          window.selectNextTab(nil)
+          return nil
+        default:
+          break
+        }
+      }
+
       return event
     }
   }

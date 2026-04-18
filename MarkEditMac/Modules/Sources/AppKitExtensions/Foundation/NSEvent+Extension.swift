@@ -11,6 +11,15 @@ public extension NSEvent {
   var deviceIndependentFlags: NSEvent.ModifierFlags {
     modifierFlags.intersection(.deviceIndependentFlagsMask)
   }
+
+  /// Returns the subset of [shift, control, option, command] that are currently pressed.
+  ///
+  /// Unlike `deviceIndependentFlags`, this excludes auto-set bits such as
+  /// `.function`, `.numericPad`, and `.capsLock`, which AppKit attaches to
+  /// arrow keys, function keys, and so on. Prefer this for shortcut matching.
+  var userModifierFlags: NSEvent.ModifierFlags {
+    modifierFlags.intersection([.shift, .control, .option, .command])
+  }
 }
 
 public extension NSEvent.ModifierFlags {
