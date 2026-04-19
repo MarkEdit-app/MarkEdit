@@ -12,7 +12,7 @@ import MarkEditKit
 @MainActor
 enum EditorSelectionHistory {
   private static var saveTask: Task<Void, Never>?
-  private static var pendingInfo: (range: SelectionRange, fileURL: URL)?
+  private static var pendingInfo: (range: SelectionRange, fileURL: URL, fileSize: Int)?
 
   static func save(info: LineColumnInfo, for fileURL: URL?) {
     guard let range = info.selectionRange, let fileURL else {
@@ -20,7 +20,7 @@ enum EditorSelectionHistory {
     }
 
     // Store the latest call (last wins)
-    pendingInfo = (range, fileURL)
+    pendingInfo = (range, fileURL, info.contentLength)
 
     saveTask?.cancel()
     saveTask = Task {
@@ -29,15 +29,23 @@ enum EditorSelectionHistory {
     }
   }
 
-  static func selectionRange(for fileURL: URL) -> SelectionRange? {
+  static func selectionRange(for fileURL: URL, fileSize: Int?) -> SelectionRange? {
     let key = fileURL.cacheKey
     guard let entry = EditorHistory.selectionRanges[key] else {
       return nil
     }
 
+    // Discard if the content length changed, the file was likely externally edited
+    if let fileSize, entry.fileSize != fileSize {
+      var current = EditorHistory.selectionRanges
+      current.removeValue(forKey: key)
+      EditorHistory.selectionRanges = current
+      return nil
+    }
+
     // Update access time to keep the entry fresh
     var current = EditorHistory.selectionRanges
-    current[key] = EditorHistory.SelectionRangeEntry(entry.selectionRange)
+    current[key] = EditorHistory.SelectionRangeEntry(entry.selectionRange, fileSize: entry.fileSize)
     EditorHistory.selectionRanges = current
     return entry.selectionRange
   }
@@ -92,12 +100,12 @@ private extension EditorSelectionHistory {
     saveTask?.cancel()
     saveTask = nil
 
-    guard let (range, fileURL) = pendingInfo else {
+    guard let (range, fileURL, fileSize) = pendingInfo else {
       return
     }
 
     var current = EditorHistory.selectionRanges
-    current[fileURL.cacheKey] = EditorHistory.SelectionRangeEntry(range)
+    current[fileURL.cacheKey] = EditorHistory.SelectionRangeEntry(range, fileSize: fileSize)
     EditorHistory.selectionRanges = current
     pendingInfo = nil
   }

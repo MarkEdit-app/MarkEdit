@@ -4,6 +4,7 @@ export interface SelectionRange {
 }
 
 export interface LineColumnInfo {
+  contentLength: CodeGen_Int;
   lineNumber: CodeGen_Int;
   columnText: string;
   selectionText: string;

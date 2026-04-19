@@ -252,12 +252,14 @@ public enum NativeModuleCoreNotifyWindowMoveMethod: String, Codable {
 }
 
 public struct LineColumnInfo: Decodable, Equatable {
+  public var contentLength: Int
   public var lineNumber: Int
   public var columnText: String
   public var selectionText: String
   public var selectionRange: SelectionRange?
 
-  public init(lineNumber: Int, columnText: String, selectionText: String, selectionRange: SelectionRange?) {
+  public init(contentLength: Int, lineNumber: Int, columnText: String, selectionText: String, selectionRange: SelectionRange?) {
+    self.contentLength = contentLength
     self.lineNumber = lineNumber
     self.columnText = columnText
     self.selectionText = selectionText

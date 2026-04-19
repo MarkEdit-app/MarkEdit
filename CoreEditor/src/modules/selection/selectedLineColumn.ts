@@ -23,6 +23,7 @@ export function selectedLineColumn(): LineColumnState {
 
   return {
     getInfo: () => ({
+      contentLength: state.doc.length as CodeGen_Int,
       lineNumber: line.number as CodeGen_Int,
       columnText: state.sliceDoc(line.from, selection.head),
       selectionText: state.sliceDoc(selection.from, selection.to),

@@ -17,10 +17,12 @@ enum EditorHistory {
 
   struct SelectionRangeEntry: Codable {
     let selectionRange: SelectionRange
+    let fileSize: Int
     let lastAccessed: Date
 
-    init(_ selectionRange: SelectionRange) {
+    init(_ selectionRange: SelectionRange, fileSize: Int) {
       self.selectionRange = selectionRange
+      self.fileSize = fileSize
       self.lastAccessed = .now
     }
   }

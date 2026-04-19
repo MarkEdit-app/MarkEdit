@@ -28,6 +28,10 @@ final class EditorDocument: NSDocument {
   var lastWasStandalone: Bool = false
   weak var lastSiblingWindow: NSWindow?
 
+  var isContentReady: Bool {
+    isDraft || fileURL == nil || fileData != nil
+  }
+
   var canUndo: Bool {
     get async {
       if isReadOnlyMode {

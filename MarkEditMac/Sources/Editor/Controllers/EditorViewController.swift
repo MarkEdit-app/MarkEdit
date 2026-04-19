@@ -299,6 +299,11 @@ final class EditorViewController: NSViewController {
 
   override var representedObject: Any? {
     didSet {
+      // If there's a file on disk, its data must be in memory
+      guard document?.isContentReady == true else {
+        return
+      }
+
       resetEditor()
     }
   }
@@ -351,7 +356,9 @@ extension EditorViewController {
         return nil
       }
 
-      return EditorSelectionHistory.selectionRange(for: fileURL)
+      // Non-LF files have mismatched lengths due to CodeMirror normalization, skip the check
+      let fileSize = textContent.contains("\r") ? nil : textContent.utf16.count
+      return EditorSelectionHistory.selectionRange(for: fileURL, fileSize: fileSize)
     }()
 
     bridge.core.resetEditor(text: textContent, selectionRange: selectionRange) { [weak self] _ in
