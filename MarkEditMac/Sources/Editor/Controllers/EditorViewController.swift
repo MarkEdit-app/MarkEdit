@@ -356,6 +356,12 @@ extension EditorViewController {
         return nil
       }
 
+      // Content was reloaded from disk due to an external edit, discard stale offsets
+      if document?.hasBeenReverted == true {
+        EditorSelectionHistory.discard(for: fileURL)
+        return nil
+      }
+
       // Non-LF files have mismatched lengths due to CodeMirror normalization, skip the check
       let fileSize = textContent.contains("\r") ? nil : textContent.utf16.count
       return EditorSelectionHistory.selectionRange(for: fileURL, fileSize: fileSize)
