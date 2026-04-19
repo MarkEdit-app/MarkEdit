@@ -32,6 +32,10 @@ final class EditorDocument: NSDocument {
     isDraft || fileURL == nil || fileData != nil
   }
 
+  var hasBeenReverted: Bool {
+    Date.now.timeIntervalSince(revertedDate) < 1
+  }
+
   var canUndo: Bool {
     get async {
       if isReadOnlyMode {
@@ -612,10 +616,6 @@ private extension EditorDocument {
 
   var closeAlwaysConfirmsChanges: Bool {
     UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges)
-  }
-
-  var hasBeenReverted: Bool {
-    Date.now.timeIntervalSince(revertedDate) < 1
   }
 
   var needsFormatting: Bool {

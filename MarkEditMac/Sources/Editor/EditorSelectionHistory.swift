@@ -37,9 +37,7 @@ enum EditorSelectionHistory {
 
     // Discard if the content length changed, the file was likely externally edited
     if let fileSize, entry.fileSize != fileSize {
-      var current = EditorHistory.selectionRanges
-      current.removeValue(forKey: key)
-      EditorHistory.selectionRanges = current
+      discard(for: fileURL)
       return nil
     }
 
@@ -48,6 +46,18 @@ enum EditorSelectionHistory {
     current[key] = EditorHistory.SelectionRangeEntry(entry.selectionRange, fileSize: entry.fileSize)
     EditorHistory.selectionRanges = current
     return entry.selectionRange
+  }
+
+  static func discard(for fileURL: URL) {
+    if pendingInfo?.fileURL == fileURL {
+      saveTask?.cancel()
+      saveTask = nil
+      pendingInfo = nil
+    }
+
+    var current = EditorHistory.selectionRanges
+    current.removeValue(forKey: fileURL.cacheKey)
+    EditorHistory.selectionRanges = current
   }
 
   /// Removes selection entries older than the retention period and enforces a maximum entry limit
