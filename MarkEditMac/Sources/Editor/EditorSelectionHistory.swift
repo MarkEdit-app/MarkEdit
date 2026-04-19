@@ -42,9 +42,12 @@ enum EditorSelectionHistory {
     }
 
     // Update access time to keep the entry fresh
-    var current = EditorHistory.selectionRanges
-    current[key] = EditorHistory.SelectionRangeEntry(entry.selectionRange, fileSize: entry.fileSize)
-    EditorHistory.selectionRanges = current
+    Task {
+      var current = EditorHistory.selectionRanges
+      current[key] = EditorHistory.SelectionRangeEntry(entry.selectionRange, fileSize: entry.fileSize)
+      EditorHistory.selectionRanges = current
+    }
+
     return entry.selectionRange
   }
 
@@ -55,9 +58,11 @@ enum EditorSelectionHistory {
       pendingInfo = nil
     }
 
-    var current = EditorHistory.selectionRanges
-    current.removeValue(forKey: fileURL.cacheKey)
-    EditorHistory.selectionRanges = current
+    Task {
+      var current = EditorHistory.selectionRanges
+      current.removeValue(forKey: fileURL.cacheKey)
+      EditorHistory.selectionRanges = current
+    }
   }
 
   /// Removes selection entries older than the retention period and enforces a maximum entry limit
