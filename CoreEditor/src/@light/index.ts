@@ -1,6 +1,7 @@
 import { EditorView, highlightSpecialChars } from '@codemirror/view';
 import { Compartment, EditorState } from '@codemirror/state';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { yamlFrontmatter as frontMatter } from '@codemirror/lang-yaml';
 
 import { Config } from '../config';
 import { setUp, setTheme } from '../styling/config';
@@ -28,9 +29,11 @@ const extensions = [
   EditorView.lineWrapping,
 
   // Markdown
-  markdown({
-    base: markdownLanguage,
-    extensions: markdownExtensions,
+  frontMatter({
+    content: markdown({
+      base: markdownLanguage,
+      extensions: markdownExtensions,
+    }),
   }),
 
   // Styling
