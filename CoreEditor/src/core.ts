@@ -16,7 +16,7 @@ import { recalculateTextMetrics } from './modules/config';
 import { getReadableContent } from './modules/lezer';
 import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { removeFrontMatter } from './modules/frontMatter';
-import { selectedMainText, scrollIntoView } from './modules/selection';
+import { selectedMainText, scrollIntoView, caretScrollDefaults } from './modules/selection';
 import { selectedLineColumn } from './modules/selection/selectedLineColumn';
 import { SelectionRange } from './modules/selection/types';
 import { markContentClean } from './modules/history';
@@ -85,7 +85,7 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
     parent: document.querySelector('#editor') ?? document.body,
     // Initial scroll to avoid an extra transaction
     scrollTo: selectionRestored
-      ? EditorView.scrollIntoView(initialSelection.head, { y: 'nearest' })
+      ? EditorView.scrollIntoView(initialSelection.head, caretScrollDefaults)
       : undefined,
   });
 

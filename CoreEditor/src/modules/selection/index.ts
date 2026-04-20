@@ -17,6 +17,14 @@ import searchMatchElement from './searchMatchElement';
 type ScrollStrategy = 'nearest' | 'start' | 'end' | 'center';
 
 /**
+ * Default scroll strategy that works well for keeping the caret visible.
+ */
+export const caretScrollDefaults: { y: ScrollStrategy; yMargin: number } = {
+  y: 'end',
+  yMargin: 55,
+};
+
+/**
  * Reverse ranges for multi-selection to keep indices correct when updating.
  */
 export function reversedRanges() {
@@ -114,13 +122,13 @@ export function gotoLine(lineNumber: number) {
 }
 
 /**
- * Make sure caret is visible, with an additional margin to breath.
+ * Make sure caret is visible, with an additional margin to breathe.
  */
-export function scrollCaretToVisible(strategy: ScrollStrategy = 'end') {
+export function scrollCaretToVisible(strategy: ScrollStrategy = caretScrollDefaults.y) {
   const editor = window.editor;
   const pos = editor.state.selection.main.to;
   const coords = editor.coordsAtPos(pos);
-  const margin = 55;
+  const margin = caretScrollDefaults.yMargin;
 
   if (coords === null) {
     return scrollIntoView(pos);
@@ -132,7 +140,7 @@ export function scrollCaretToVisible(strategy: ScrollStrategy = 'end') {
 }
 
 /**
- * Make sure selected search match is visible, with an additional margin to breath.
+ * Make sure selected search match is visible, with an additional margin to breathe.
  */
 export function scrollSearchMatchToVisible(strategy: ScrollStrategy = 'center') {
   const element = searchMatchElement();
