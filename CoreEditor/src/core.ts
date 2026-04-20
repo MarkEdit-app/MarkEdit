@@ -85,7 +85,7 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
     parent: document.querySelector('#editor') ?? document.body,
     // Initial scroll to avoid an extra transaction
     scrollTo: selectionRestored
-      ? EditorView.scrollIntoView(initialSelection.head, { y: 'center' })
+      ? EditorView.scrollIntoView(initialSelection.head, { y: 'nearest' })
       : undefined,
   });
 
