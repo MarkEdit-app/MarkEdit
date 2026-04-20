@@ -142,9 +142,21 @@ final class RuntimeTests: XCTestCase {
 
   func testPrivateAppKitClasses() {
     testExistenceOfClass(named: "_NSKeyboardFocusClipView")
+    testExistenceOfClass(named: "_NSTitlebarDecorationView")
     testExistenceOfClass(named: "NSToolbarFullScreenWindow")
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
+  }
+
+  func testTitlebarDecorationViewSelector() {
+    let window = NSWindow()
+    window.makeKeyAndOrderFront(nil)
+
+    if let view = window.titlebarDecorationView {
+      testExistenceOfSelector(object: view, selector: "setDrawsBottomSeparator:")
+    } else {
+      XCTAssert(false, "Missing titlebarDecorationView")
+    }
   }
 
   func testPrivateAccessibilityBundles() {

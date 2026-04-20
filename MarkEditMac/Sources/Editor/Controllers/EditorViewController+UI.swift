@@ -143,7 +143,8 @@ extension EditorViewController {
 
     if AppDesign.modernTitleBar {
       let isMainWindow = view.window?.isMainWindow ?? false
-      let reduceTransparency = !isMainWindow || AppDesign.reduceTransparency
+      let isFullscreen = view.window?.styleMask.contains(.fullScreen) ?? false
+      let reduceTransparency = !isMainWindow || AppDesign.reduceTransparency || isFullscreen
       let baseColor = backgroundColor.withAlphaComponent(reduceTransparency ? 1.0 : 0.01)
 
       view.window?.backgroundColor = baseColor
