@@ -90,6 +90,16 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
   func windowWillClose(_ notification: Notification) {
     editorViewController?.clearEditor()
   }
+
+  // Refresh titlebar appearance after fullscreen transitions,
+  // when the final `.fullScreen` style mask bit is available.
+  func windowDidEnterFullScreen(_ notification: Notification) {
+    updateTitleBarAppearance()
+  }
+
+  func windowDidExitFullScreen(_ notification: Notification) {
+    updateTitleBarAppearance()
+  }
 }
 
 // MARK: - Private
@@ -97,6 +107,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 private extension EditorWindowController {
   var editorViewController: EditorViewController? {
     contentViewController as? EditorViewController
+  }
+
+  func updateTitleBarAppearance() {
+    (window as? EditorWindow)?.updateTitleBarAppearance()
+    editorViewController?.updateWindowColors(.current)
   }
 
   func captureTabIndex(for window: NSWindow) {

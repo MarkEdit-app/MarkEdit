@@ -33,6 +33,13 @@ public extension NSWindow {
     }
   }
 
+  /// The glassy or blurry background behind the titlebar, including the separator.
+  var titlebarDecorationView: NSView? {
+    toolbarRootView?.firstDescendant { (view: NSView) in
+      view.className == "_NSTitlebarDecorationView" && view.subviews.isEmpty
+    }
+  }
+
   /// Change the frame size, treat the top-left corner as the anchor point.
   func setFrameSize(_ target: CGSize, display flag: Bool = false, animated: Bool = false) {
     let size = frameRect(forContentRect: CGRect(origin: .zero, size: target)).size
