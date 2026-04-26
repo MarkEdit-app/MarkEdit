@@ -12,6 +12,10 @@ MarkEdit is a free and **open-source** Markdown editor, for macOS. It's just lik
 
 No bloat. Markdown editing done right in a 4 MB app that flies through million-line files.
 
+We do not claim to be the best in any single dimension. Instead, we aim to strike the right balance across **size**, **speed**, **native integration**, and **correctness**.
+
+_For perspective: at just 4 MB, MarkEdit is much smaller than Electron apps. Handling a 10 MB file with ease puts it ahead of TextKit-based editors. Performance-first editors built with Rust lack native features, while correctness alone rules out editors that rely on regex-based Markdown parsing._
+
 > [!TIP]
 > Discover our other free and open-source apps at [libremac.github.io](https://libremac.github.io/).
 >
