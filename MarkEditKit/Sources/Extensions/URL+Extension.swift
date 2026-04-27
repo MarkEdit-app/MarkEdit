@@ -37,6 +37,31 @@ public extension URL {
     return true
   }
 
+  var isImageFile: Bool {
+    guard let type = UTType(filenameExtension: pathExtension) else {
+      return false
+    }
+
+    return type.conforms(to: .image)
+  }
+
+  /// POSIX relative path from directory `base` to this URL, or `"."` if they're equal.
+  func relativePath(from base: URL) -> String {
+    let baseParts = base.standardizedFileURL.pathComponents.filter { $0 != "/" }
+    let targetParts = standardizedFileURL.pathComponents.filter { $0 != "/" }
+
+    // Skip the shared prefix, then climb out of `base` and descend into the target.
+    var common = 0
+    while common < baseParts.count, common < targetParts.count, baseParts[common] == targetParts[common] {
+      common += 1
+    }
+
+    let ups = Array(repeating: "..", count: baseParts.count - common)
+    let downs = Array(targetParts[common...])
+    let segments = ups + downs
+    return segments.isEmpty ? "." : segments.joined(separator: "/")
+  }
+
   func replacingPathExtension(_ pathExtension: String) -> URL {
     deletingPathExtension().appendingPathExtension(pathExtension)
   }

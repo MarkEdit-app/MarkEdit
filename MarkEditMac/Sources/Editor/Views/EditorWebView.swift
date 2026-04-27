@@ -6,6 +6,7 @@
 //
 
 import WebKit
+import AppKitExtensions
 import MarkEditKit
 
 /**
@@ -40,6 +41,7 @@ protocol EditorWebViewActionDelegate: AnyObject {
   func editorWebViewResignFirstResponder(_ webView: EditorWebView)
   func editorWebView(_ webView: EditorWebView, mouseDownWith event: NSEvent)
   func editorWebView(_ webView: EditorWebView, didSelect menuAction: EditorWebViewMenuAction)
+  func editorWebView(_ webView: EditorWebView, didDrop fileURLs: [URL])
 
   func editorWebView(
     _ webView: EditorWebView,
@@ -150,6 +152,20 @@ final class EditorWebView: WKWebView {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
       self.updateMenuItems(menu: menu)
     }
+  }
+
+  /**
+   Intercept Finder file drops and forward them to the delegate, suppressing WebKit's
+   default behavior (which would inline the file contents). Drops without file URLs fall
+   through to `super`.
+   */
+  override func performDragOperation(_ sender: any NSDraggingInfo) -> Bool {
+    if let fileURLs = sender.draggingPasteboard.fileURLs, !fileURLs.isEmpty {
+      actionDelegate?.editorWebView(self, didDrop: fileURLs)
+      return true
+    }
+
+    return super.performDragOperation(sender)
   }
 
   override func resignFirstResponder() -> Bool {

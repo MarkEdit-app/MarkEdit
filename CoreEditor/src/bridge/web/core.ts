@@ -11,6 +11,7 @@ import {
   getReadableContentPair,
   insertText,
   replaceText,
+  performTextDrop,
   handleFocusLost,
   handleMouseExited,
   setHasModalSheet,
@@ -29,6 +30,7 @@ export interface WebModuleCore extends WebModule {
   getReadableContentPair(): ReadableContentPair;
   insertText({ text, from, to }: { text: string; from: CodeGen_Int; to: CodeGen_Int }): void;
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void;
+  performTextDrop({ text }: { text: string }): void;
   handleFocusLost(): void;
   handleMouseExited({ clientX, clientY }: { clientX: number; clientY: number }): void;
   setHasModalSheet({ value }: { value: boolean }): void;
@@ -61,6 +63,10 @@ export class WebModuleCoreImpl implements WebModuleCore {
 
   replaceText({ text, granularity }: { text: string; granularity: ReplaceGranularity }): void {
     replaceText(text, granularity);
+  }
+
+  performTextDrop({ text }: { text: string }): void {
+    performTextDrop(text);
   }
 
   handleFocusLost(): void {

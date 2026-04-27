@@ -252,6 +252,23 @@ export function replaceText(text: string, granularity: ReplaceGranularity) {
   }
 }
 
+/**
+ * Insert text at the current drop cursor position, used by the native file-drop handler.
+ */
+export function performTextDrop(text: string) {
+  const editor = window.editor;
+  const cursor = editor.scrollDOM.querySelector('.cm-dropCursor');
+  const rect = cursor?.getBoundingClientRect();
+  const pos = rect ? editor.posAtCoords({ x: rect.left, y: rect.top + rect.height * 0.5 }) : null;
+  editor.contentDOM.dispatchEvent(new DragEvent('dragend'));
+
+  if (pos === null) {
+    replaceSelections(text);
+  } else {
+    insertText(text, pos, pos);
+  }
+}
+
 export function handleFocusLost() {
   resetKeyStates();
 }
