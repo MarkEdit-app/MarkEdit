@@ -102,6 +102,18 @@ private extension EditorModuleCompletion {
     tokenizer.string = string
 
     let range = string.startIndex..<string.endIndex
-    return tokenizer.tokens(for: range).map { String(string[$0]) }.deduplicated
+    let tokens = tokenizer.tokens(for: range)
+
+    var seen = Set<String>()
+    var results: [String] = []
+
+    for token in tokens {
+      let word = String(string[token])
+      if seen.insert(word).inserted {
+        results.append(word)
+      }
+    }
+
+    return results
   }
 }

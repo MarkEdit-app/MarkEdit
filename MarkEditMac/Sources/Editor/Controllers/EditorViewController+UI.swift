@@ -379,10 +379,8 @@ extension EditorViewController {
     }
 
     // Remove existing ones, always recreate a new item
-    (menu.items.filter {
-      $0.identifier?.rawValue.hasPrefix(EditorMenuItem.uniquePrefix) == true
-    }).forEach {
-      menu.removeItem($0)
+    for item in menu.items where item.identifier?.rawValue.hasPrefix(EditorMenuItem.uniquePrefix) == true {
+      menu.removeItem(item)
     }
 
     for spec in userDefinedMenuItems {
@@ -659,8 +657,8 @@ private extension EditorViewController {
     handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
   ) -> NSMenu {
     let menu = NSMenu()
-    items.map { createMenuItem(spec: $0, handler: handler) }.forEach {
-      menu.addItem($0)
+    for spec in items {
+      menu.addItem(createMenuItem(spec: spec, handler: handler))
     }
 
     menu.delegate = self
