@@ -732,6 +732,7 @@
 				Base,
 				"zh-Hans",
 				"zh-Hant",
+				it,
 			);
 			mainGroup = 870A5199294700DE0095C7EB;
 			productRefGroup = 870A51A3294700DE0095C7EB /* Products */;

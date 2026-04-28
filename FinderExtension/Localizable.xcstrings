@@ -1,60 +1,78 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "New “%@%@”" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "New “%1$@%2$@”"
+  "sourceLanguage": "en",
+  "strings": {
+    "New %@ File": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuovo file %@"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建“%1$@%2$@”"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建%@文件"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新增“%1$@%2$@”"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增%@檔案"
           }
         }
       }
     },
-    "New %@ File" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新建%@文件"
+    "New “%@%@”": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "New “%1$@%2$@”"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新增%@檔案"
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuovo “%@%@”"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建“%1$@%2$@”"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增“%1$@%2$@”"
           }
         }
       }
     },
-    "Untitled" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未命名"
+    "Untitled": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senza titolo"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未命名"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未命名"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未命名"
           }
         }
       }
     }
   },
-  "version" : "1.1"
+  "version": "1.1"
 }
