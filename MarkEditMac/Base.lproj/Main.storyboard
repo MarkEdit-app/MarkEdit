@@ -258,7 +258,7 @@
                                                 <action selector="revealInFinder:" target="Ady-hI-5gd" id="bfk-c8-dF4"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Open In…" hidden="YES" id="GdB-IP-6C8">
+                                        <menuItem title="Open In…" id="GdB-IP-6C8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Open In…" id="Tuy-2U-frg">
                                                 <connections>
@@ -266,7 +266,7 @@
                                                 </connections>
                                             </menu>
                                         </menuItem>
-                                        <menuItem title="Reopen with Encoding" hidden="YES" id="XQw-pS-pD7">
+                                        <menuItem title="Reopen with Encoding" id="XQw-pS-pD7">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Reopen with Encoding" id="sPG-vJ-QST">
                                                 <connections>
@@ -274,7 +274,7 @@
                                                 </connections>
                                             </menu>
                                         </menuItem>
-                                        <menuItem title="Line Endings" hidden="YES" id="EEg-eg-6lJ">
+                                        <menuItem title="Line Endings" id="EEg-eg-6lJ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Line Endings" id="7eH-ja-yIc">
                                                 <items>
