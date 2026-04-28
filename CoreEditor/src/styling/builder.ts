@@ -34,7 +34,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
     caretColor: 'transparent',
   },
   // Mimic the macOS Sonoma rounded caret
-  '.cm-cursor': {
+  '.cm-cursor, .cm-dropCursor': {
     borderLeftWidth: '2px',
     borderRadius: '1px',
   },
