@@ -91,7 +91,7 @@ public final class StatisticsController: NSViewController {
         spinner.removeFromSuperview()
 
         // Visible rules are the ones initially shown, use fullRuleResults to determine sizing
-        let visibleRuleCount = fullRuleResults.filter { !$0.isEmpty }.count
+        let visibleRuleCount = fullRuleResults.count { !$0.isEmpty }
         let extraRows = min(visibleRuleCount, Constants.maxExtraRows)
         let contentHeight = Constants.contentHeight + Double(extraRows) * StatisticsCell.rowHeight
 

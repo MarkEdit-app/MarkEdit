@@ -33,8 +33,8 @@ extension Diff.Result {
 extension [Diff.Result] {
   var counterText: NSAttributedString {
     let text = NSMutableAttributedString(string: "")
-    let addedCount = filter { $0.added }.count
-    let removedCount = filter { $0.removed }.count
+    let addedCount = count { $0.added }
+    let removedCount = count { $0.removed }
 
     if addedCount > 0 {
       text.append(NSAttributedString(
