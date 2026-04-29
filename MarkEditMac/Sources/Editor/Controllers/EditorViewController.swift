@@ -161,7 +161,7 @@ final class EditorViewController: NSViewController {
 
     let chunkLoader = EditorChunkLoader()
     let imageLoader = EditorImageLoader { [weak self] in
-      self?.document?.folderURL
+      self?.document?.baseURL
     }
 
     config.setURLSchemeHandler(chunkLoader, forURLScheme: EditorChunkLoader.scheme)
