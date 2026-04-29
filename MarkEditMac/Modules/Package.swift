@@ -22,6 +22,10 @@ let package = Package(
       targets: ["DiffKit"]
     ),
     .library(
+      name: "FileDrop",
+      targets: ["FileDrop"]
+    ),
+    .library(
       name: "FileVersion",
       targets: ["FileVersion"]
     ),
@@ -82,6 +86,17 @@ let package = Package(
       resources: [
         .process("Resources"),
       ],
+      swiftSettings: [
+        .enableExperimentalFeature("StrictConcurrency")
+      ],
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
+    .target(
+      name: "FileDrop",
+      dependencies: ["AppKitExtensions", "MarkEditKit", "TextBundle"],
+      path: "Sources/FileDrop",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
       ],

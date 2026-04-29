@@ -1,42 +1,8 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
+import { EditorSelection } from '@codemirror/state';
 import { Config } from '../src/config';
-import { resetEditor } from '../src/core';
+import { performTextDrop, resetEditor } from '../src/core';
 import normalizeSelection from '../src/modules/selection/normalizeSelection';
-
-// Polyfill ResizeObserver for jsdom
-globalThis.ResizeObserver = class {
-  observe() { /* noop */ }
-  unobserve() { /* noop */ }
-  disconnect() { /* noop */ }
-} as unknown as typeof ResizeObserver;
-
-// Polyfill Range.getClientRects for jsdom (CodeMirror uses it for coordsAtPos)
-Range.prototype.getClientRects = function () {
-  return [] as unknown as DOMRectList;
-};
-
-// Polyfill Element.scrollTo for jsdom
-Element.prototype.scrollTo = function () { /* noop */ };
-
-// Polyfill matchMedia for jsdom
-window.matchMedia = () => ({ matches: false, addEventListener() { /* noop */ }, removeEventListener() { /* noop */ } }) as unknown as MediaQueryList;
-
-// Mock MarkEdit global
-(globalThis as Record<string, unknown>).MarkEdit = {
-  editorView: null,
-  editorAPI: { setView() { /* noop */ } },
-};
-
-// Mock native modules
-window.nativeModules = {
-  core: {
-    notifyViewDidUpdate() { /* noop */ },
-    notifyContentOffsetDidChange() { /* noop */ },
-    notifyContentHeightDidChange() { /* noop */ },
-    notifyBackgroundColorDidChange() { /* noop */ },
-    notifyViewportScaleDidChange() { /* noop */ },
-  },
-} as unknown as typeof window.nativeModules;
 
 // Minimal config
 window.config = {
@@ -159,5 +125,63 @@ describe('resetEditor selection', () => {
     const content = 'Hello, MarkEdit!';
     resetEditor(content, { anchor: 0 as CodeGen_Int, head: 5 as CodeGen_Int });
     expect(window.editor.state.doc.toString()).toBe(content);
+  });
+});
+
+describe('performTextDrop', () => {
+  beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (typeof window.editor?.destroy === 'function') {
+      window.editor.destroy();
+    }
+
+    document.body.innerHTML = '';
+  });
+
+  // Inject a fake `.cm-dropCursor` element into the editor's scrollDOM so the lookup
+  // succeeds, and stub `posAtCoords` to return the desired document position (jsdom
+  // doesn't compute layout, so the real method always returns null).
+  function fakeDropCursor(pos: number | null) {
+    const cursor = document.createElement('div');
+    cursor.className = 'cm-dropCursor';
+    window.editor.scrollDOM.appendChild(cursor);
+
+    Object.defineProperty(window.editor, 'posAtCoords', {
+      configurable: true,
+      value: () => pos,
+    });
+  }
+
+  test('inserts text at the drop cursor position', () => {
+    resetEditor('Hello, World!');
+    fakeDropCursor(7);
+
+    performTextDrop('there ');
+    expect(window.editor.state.doc.toString()).toBe('Hello, there World!');
+  });
+
+  test('moves the caret to after the inserted text', () => {
+    resetEditor('Hello, World!');
+    fakeDropCursor(7);
+
+    performTextDrop('there ');
+    expect(window.editor.state.selection.main.head).toBe(13);
+  });
+
+  test('falls back to replacing the selection when no drop cursor is present', () => {
+    resetEditor('Hello, World!');
+    window.editor.dispatch({ selection: EditorSelection.range(7, 12) });
+
+    performTextDrop('Earth');
+    expect(window.editor.state.doc.toString()).toBe('Hello, Earth!');
+  });
+
+  test('falls back when posAtCoords returns null', () => {
+    resetEditor('Hello, World!');
+    fakeDropCursor(null);
+    window.editor.dispatch({ selection: EditorSelection.range(7, 12) });
+
+    performTextDrop('Earth');
+    expect(window.editor.state.doc.toString()).toBe('Hello, Earth!');
   });
 });

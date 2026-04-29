@@ -29,6 +29,14 @@ public extension NSPasteboard {
     }
   }
 
+  /// File URLs carried by this pasteboard, e.g. files dragged from Finder.
+  var fileURLs: [URL]? {
+    readObjects(
+      forClasses: [NSURL.self],
+      options: [.urlReadingFileURLsOnly: true]
+    ) as? [URL]
+  }
+
   func url() async -> String? {
     guard #available(macOS 15.4, *) else {
       guard let string else {

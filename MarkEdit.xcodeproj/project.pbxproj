@@ -100,6 +100,7 @@
 		87BE2E342DF9B5C000A51CF4 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE2E332DF9B5BB00A51CF4 /* Bundle+Extension.swift */; };
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
+		CC000020300000000000FD01 /* FileDrop in Frameworks */ = {isa = PBXBuildFile; productRef = CC000020300000000000FD02 /* FileDrop */; };
 		87D7F0212DE8725100985ABF /* EditorImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D7F0202DE8724A00985ABF /* EditorImageLoader.swift */; };
 		87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */; };
 		87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB61F2B284AAD00A3056F /* AppHacks.swift */; };
@@ -273,6 +274,7 @@
 				87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */,
 				87B3ED8F2CBE1E12001FA6CE /* DiffKit in Frameworks */,
 				8701D0A42CC12321006AF8C2 /* FileVersion in Frameworks */,
+				CC000020300000000000FD01 /* FileDrop in Frameworks */,
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
 				870F17922985775B00003DA7 /* Previewer in Frameworks */,
 				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
@@ -657,6 +659,7 @@
 				8790ABDA2A98FF610083825C /* Statistics */,
 				87B3ED8E2CBE1E12001FA6CE /* DiffKit */,
 				8701D0A32CC12321006AF8C2 /* FileVersion */,
+				CC000020300000000000FD02 /* FileDrop */,
 			);
 			productName = MarkEdit;
 			productReference = 870A51A2294700DE0095C7EB /* MarkEdit.app */;
@@ -1374,6 +1377,10 @@
 		87CC48FC29CC01E100BE1441 /* TextBundle */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TextBundle;
+		};
+		CC000020300000000000FD02 /* FileDrop */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FileDrop;
 		};
 		87EB9900295755DA00A56B97 /* MarkEditCore */ = {
 			isa = XCSwiftPackageProductDependency;

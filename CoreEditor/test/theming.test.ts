@@ -8,8 +8,6 @@ import { Config } from '../src/config';
 import { initThemeExtractors } from '../src/api/modules';
 
 describe('Test theming internals', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).MarkEdit = {};
   initThemeExtractors();
 
   test('test __extractStyleRules', () => {

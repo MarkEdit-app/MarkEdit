@@ -9,6 +9,7 @@ import AppKit
 import WebKit
 import MarkEditCore
 import MarkEditKit
+import FileDrop
 
 // MARK: - WKUIDelegate
 
@@ -72,6 +73,37 @@ extension EditorViewController: EditorWebViewActionDelegate {
       findSelection(self)
     case .selectAllOccurrences:
       selectAllOccurrences()
+    }
+  }
+
+  func editorWebView(_ webView: EditorWebView, didDrop fileURLs: [URL]) {
+    let lineBreak = document?.stringValue.getLineBreak(
+      defaultValue: AppPreferences.General.defaultLineEndings.characters
+    ) ?? "\n"
+
+    let textToDrop: String? = {
+      // Inline file contents when the user holds Shift, or when the document is an
+      // unsaved draft (no fileURL means we have no anchor to make a sensible link).
+      if document?.fileURL == nil || NSApp.shiftKeyIsPressed {
+        let contents = fileURLs.compactMap {
+          (try? Data(contentsOf: $0))?.toString()
+        }
+
+        if !contents.isEmpty {
+          return contents.joined(separator: lineBreak)
+        }
+      }
+
+      return FileDropHandler.handle(
+        fileURLs: fileURLs,
+        documentURL: document?.fileURL,
+        documentType: document?.fileType,
+        lineBreak: lineBreak
+      )
+    }()
+
+    if let textToDrop {
+      bridge.core.performTextDrop(text: textToDrop)
     }
   }
 
