@@ -105,20 +105,30 @@ export function startClickable(inputElement?: HTMLElement, metaKeyPressed = isMe
     return;
   }
 
-  linkElement.title = '';
-  linkElement.style.cursor = 'pointer';
-  linkElement.style.textDecoration = 'underline';
+  // Delay activation slightly so quickly sweeping the mouse over links
+  // (or briefly tapping cmd) doesn't flash the clickable styling.
+  clearActivationTimer();
+  storage.activationTimer = setTimeout(() => {
+    if (storage.focusedElement !== linkElement || !isMetaKeyDown()) {
+      return;
+    }
 
-  // Find the actual text node and use its color
-  const text = [...linkElement.children].find(node => (node.textContent as string | null) !== null);
-  if (text !== undefined) {
-    linkElement.style.textDecorationColor = getComputedStyle(text).color;
-  }
+    linkElement.title = '';
+    linkElement.style.cursor = 'pointer';
+    linkElement.style.textDecoration = 'underline';
+
+    // Find the actual text node and use its color
+    const text = [...linkElement.children].find(node => (node.textContent as string | null) !== null);
+    if (text !== undefined) {
+      linkElement.style.textDecorationColor = getComputedStyle(text).color;
+    }
+  }, 150);
 }
 
 export function stopClickable(inputElement?: HTMLElement) {
   const linkElement = inputElement ?? storage.focusedElement;
   storage.focusedElement = inputElement ? undefined : storage.focusedElement;
+  clearActivationTimer();
 
   if (linkElement === undefined) {
     return;
@@ -160,6 +170,13 @@ export function handleMouseUp(event: MouseEvent) {
   } else {
     // Test only branch
     window.open(link, '_blank');
+  }
+}
+
+function clearActivationTimer() {
+  if (storage.activationTimer !== undefined) {
+    clearTimeout(storage.activationTimer);
+    storage.activationTimer = undefined;
   }
 }
 
@@ -251,6 +268,8 @@ function scrollIntoTarget(target?: SyntaxNodeRef) {
 
 const storage: {
   focusedElement: HTMLElement | undefined;
+  activationTimer: ReturnType<typeof setTimeout> | undefined;
 } = {
   focusedElement: undefined,
+  activationTimer: undefined,
 };
