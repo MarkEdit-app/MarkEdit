@@ -1,5 +1,5 @@
 //
-//  EditorReusePool.swift
+//  EditorPreloader.swift
 //  MarkEditMac
 //
 //  Created by cyan on 12/15/22.
@@ -10,11 +10,11 @@ import WebKit
 import MarkEditKit
 
 /**
- Reuse pool for editors to keep WebViews in memory.
+ Preloads an `EditorViewController` so the next document can open without paying the WebView load cost.
  */
 @MainActor
-final class EditorReusePool {
-  static let shared = EditorReusePool()
+final class EditorPreloader {
+  static let shared = EditorPreloader()
 
   func warmUp() {
     // Start loading an editor early so prepareViewController() can return faster.
@@ -32,7 +32,7 @@ final class EditorReusePool {
   }
 
   /// Ensure the preloaded controller has finished loading,
-  /// call this before ``dequeueViewController()`` to guarantee readiness.
+  /// call this before ``takeViewController()`` to guarantee readiness.
   func prepareViewController() async {
     if preloadedController == nil {
       preloadedController = EditorViewController()
@@ -41,7 +41,7 @@ final class EditorReusePool {
     await preloadedController?.waitUntilLoaded()
   }
 
-  func dequeueViewController() -> EditorViewController {
+  func takeViewController() -> EditorViewController {
     let controller = preloadedController ?? EditorViewController()
     preloadedController = EditorViewController(preloadDelay: 0.2)
 

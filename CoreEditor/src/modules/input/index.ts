@@ -103,11 +103,6 @@ export function interceptInputs() {
  */
 export function observeChanges() {
   return EditorView.updateListener.of(update => {
-    // Ignore all events when the editor is idle
-    if (editingState.isIdle && update.state.doc.length === 0) {
-      return;
-    }
-
     if (update.docChanged) {
       // This should be called before updating the native view
       setHistoryExplictlyMoved(update);

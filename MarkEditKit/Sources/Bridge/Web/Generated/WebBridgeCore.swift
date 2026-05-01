@@ -32,10 +32,6 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.resetEditor", message: message, completion: completion)
   }
 
-  public func clearEditor(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    webView?.invoke(path: "webModules.core.clearEditor", completion: completion)
-  }
-
   public func getEditorState() async throws -> WebBridgeCoreGetEditorStateReturnType {
     guard let webView else {
       throw WKWebView.InvokeError.unexpectedNil

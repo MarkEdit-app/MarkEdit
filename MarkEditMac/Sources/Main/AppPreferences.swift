@@ -425,7 +425,7 @@ extension NSWindow.TabbingMode: @retroactive Codable {}
 private extension AppPreferences {
   static func performUpdates(action: @escaping (EditorViewController) -> Void) {
     Task { @MainActor in
-      for editor in EditorReusePool.shared.viewControllers() {
+      for editor in EditorPreloader.shared.viewControllers() {
         action(editor)
       }
     }
