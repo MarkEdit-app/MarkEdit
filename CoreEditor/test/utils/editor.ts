@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { Extension, EditorSelection } from '@codemirror/state';
 import { yamlFrontmatter as frontMatter } from '@codemirror/lang-yaml';
 import { markdown, markdownLanguage } from '../../src/@vendor/lang-markdown';
+import { markdownExtensions } from '../../src/styling/markdown';
 import { Config } from '../../src/config';
 
 export function setUp(doc: string, extensions: Extension = []) {
@@ -10,7 +11,7 @@ export function setUp(doc: string, extensions: Extension = []) {
     parent: document.body,
     extensions: [
       ...[extensions],
-      frontMatter({ content: markdown({ base: markdownLanguage }) }),
+      frontMatter({ content: markdown({ base: markdownLanguage, extensions: markdownExtensions }) }),
     ],
   });
 
