@@ -45,7 +45,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
     // The shared "field editor" tends to hold focus,
     // manually resign the focus to ensure cmd-f responds correctly.
-    for editor in EditorReusePool.shared.viewControllers() where editor !== editorViewController {
+    for editor in EditorPreloader.shared.viewControllers() where editor !== editorViewController {
       editor.resignFindPanelFocus()
     }
 
@@ -85,10 +85,6 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
   func windowShouldClose(_ sender: NSWindow) -> Bool {
     captureTabIndex(for: sender)
     return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
-    editorViewController?.clearEditor()
   }
 
   // Refresh titlebar appearance after fullscreen transitions,

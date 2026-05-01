@@ -334,18 +334,6 @@ extension EditorViewController {
     bridge.core.insertText(text: text, from: 0, to: 0)
   }
 
-  func clearEditor() {
-    updateTextFinderMode(.hidden, searchTerm: "")
-
-    // The delay is in theory not necessary,
-    // because autosave happens before closing the window.
-    //
-    // Just in case someone introduces race conditions.
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-      self.bridge.core.clearEditor()
-    }
-  }
-
   func resetEditor() {
     guard hasFinishedLoading, let textContent = document?.stringValue else {
       return

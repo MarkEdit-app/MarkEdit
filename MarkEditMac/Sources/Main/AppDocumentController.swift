@@ -62,8 +62,8 @@ final class AppDocumentController: NSDocumentController {
     }
 
     Task { @MainActor in
-      // Ensure the reuse pool has a fully loaded editor before opening the document
-      await EditorReusePool.shared.prepareViewController()
+      // Ensure the preloader has a fully loaded editor before opening the document
+      await EditorPreloader.shared.prepareViewController()
 
       super.openDocument(
         withContentsOf: url,

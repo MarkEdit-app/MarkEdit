@@ -100,7 +100,7 @@ final class EditorDocument: NSDocument {
     }
 
     // Note hostViewController is a weak reference, it must be strongly retained first
-    let contentVC = EditorReusePool.shared.dequeueViewController()
+    let contentVC = EditorPreloader.shared.takeViewController()
     windowController.contentViewController = contentVC
 
     // Restore the autosaved window frame, which relies on windowFrameAutosaveName

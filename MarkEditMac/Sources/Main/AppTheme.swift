@@ -32,7 +32,7 @@ struct AppTheme {
   /// Trigger theme update for all editors.
   @MainActor
   func updateAppearance(animateChanges: Bool = false) {
-    EditorReusePool.shared.viewControllers().forEach {
+    EditorPreloader.shared.viewControllers().forEach {
       $0.setTheme(self, animated: animateChanges)
     }
   }

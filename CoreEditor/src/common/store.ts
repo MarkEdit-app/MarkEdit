@@ -14,7 +14,6 @@ export const globalState: {
 };
 
 export const editingState = {
-  isIdle: false,
   hasSelection: false,
   compositionEnded: true,
 };

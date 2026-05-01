@@ -5,7 +5,6 @@ import {
   ReadableContentPair,
   ReplaceGranularity,
   resetEditor,
-  clearEditor,
   getEditorState,
   getEditorText,
   getReadableContentPair,
@@ -24,7 +23,6 @@ import {
  */
 export interface WebModuleCore extends WebModule {
   resetEditor({ text, selectionRange }: { text: string; selectionRange?: SelectionRange }): void;
-  clearEditor(): void;
   getEditorState(): { hasFocus: boolean; hasSelection: boolean };
   getEditorText(): string;
   getReadableContentPair(): ReadableContentPair;
@@ -39,10 +37,6 @@ export interface WebModuleCore extends WebModule {
 export class WebModuleCoreImpl implements WebModuleCore {
   resetEditor({ text, selectionRange }: { text: string; selectionRange?: SelectionRange }): void {
     resetEditor(text, selectionRange);
-  }
-
-  clearEditor(): void {
-    clearEditor();
   }
 
   getEditorState(): { hasFocus: boolean; hasSelection: boolean } {

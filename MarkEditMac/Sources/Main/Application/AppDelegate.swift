@@ -56,7 +56,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var settingsWindowController: NSWindowController?
 
   func applicationWillFinishLaunching(_ notification: Notification) {
-    EditorReusePool.shared.warmUp()
+    EditorPreloader.shared.warmUp()
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {

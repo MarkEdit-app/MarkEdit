@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { extensions } from './extensions';
-import { globalState, editingState } from './common/store';
+import { globalState } from './common/store';
 import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
 
 import hasSelection from './modules/selection/hasSelection';
@@ -63,9 +63,6 @@ export enum ReplaceGranularity {
  * Reset the editor to the initial state.
  */
 export function resetEditor(initialContent: string, selectionRange?: SelectionRange) {
-  // Idle state change should always go first
-  editingState.isIdle = false;
-
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (typeof window.editor?.destroy === 'function') {
     window.editor.destroy();
@@ -171,19 +168,6 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
 
   // For user scripts, notify the editor is ready
   editorReadyListeners().forEach(listener => listener(editor));
-}
-
-/**
- * Clear the editor, set the content to empty.
- */
-export function clearEditor() {
-  // Idle state change should always go first
-  editingState.isIdle = true;
-
-  const editor = window.editor;
-  editor.dispatch({
-    changes: { from: 0, to: editor.state.doc.length, insert: '' },
-  });
 }
 
 export function getEditorState() {
