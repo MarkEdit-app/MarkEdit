@@ -43,15 +43,15 @@ public extension NSWorkspace {
 
     // Get the standardized version of local URLs
     let url = url.standardized
-    let path = url.path(percentEncoded: false)
 
-    if FileManager.default.isReadableFile(atPath: path) {
-      // Open when we have the read access
-      return open(url)
+    // Try opening first; the system can route the file to the registered handler
+    // even when the current sandboxed process can't read it directly.
+    if open(url) {
+      return true
     }
 
-    if FileManager.default.fileExists(atPath: path) {
-      // Reveal otherwise
+    // Fall back to revealing in Finder if the file exists but couldn't be opened
+    if FileManager.default.fileExists(atPath: url.path(percentEncoded: false)) {
       activateFileViewerSelecting([url])
       return true
     }

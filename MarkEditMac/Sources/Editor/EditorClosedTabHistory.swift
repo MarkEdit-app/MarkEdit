@@ -127,11 +127,11 @@ private extension ClosedTab {
   }
 
   func isReopenable(path: String, openPaths: Set<String>) -> Bool {
-    !openPaths.contains(path) && FileManager.default.isReadableFile(atPath: path)
+    !openPaths.contains(path) && FileManager.default.fileExists(atPath: path)
   }
 
   func isOrphaned(path: String, openPaths: Set<String>) -> Bool {
-    !openPaths.contains(path) && !FileManager.default.isReadableFile(atPath: path)
+    !openPaths.contains(path) && !FileManager.default.fileExists(atPath: path)
   }
 }
 
