@@ -49,11 +49,10 @@ public final class EditorModuleAPI: NativeModuleAPI {
       return false
     }
 
-    if options.overwrites == true {
-      var isDirectory: ObjCBool = false
-      if FileManager.default.fileExists(atPath: fileURL.path, isDirectory: &isDirectory) && isDirectory.boolValue {
-        try? FileManager.default.removeItem(at: fileURL)
-      }
+    var (fileExists, isDirectory) = FileManager.default.fileExists(at: fileURL)
+    if fileExists && isDirectory && options.overwrites == true {
+      try? FileManager.default.removeItem(at: fileURL)
+      fileExists = false
     }
 
     do {
@@ -63,8 +62,10 @@ public final class EditorModuleAPI: NativeModuleAPI {
           withIntermediateDirectories: true
         )
       } else {
-        if !FileManager.default.fileExists(atPath: fileURL.path) || options.overwrites == true {
+        if !fileExists {
           try options.decodedData.write(to: fileURL, options: .atomic)
+        } else if options.overwrites == true {
+          try options.decodedData.overwrite(to: fileURL)
         }
       }
 
@@ -245,5 +246,25 @@ private extension WebDataTransfer {
     }
 
     return Data()
+  }
+}
+
+private extension FileManager {
+  func fileExists(at url: URL) -> (fileExists: Bool, isDirectory: Bool) {
+    var isDirectory: ObjCBool = false
+    let fileExists = fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory)
+    return (fileExists, isDirectory.boolValue)
+  }
+}
+
+private extension Data {
+  /// Overwrites the contents of the file at `url` in place,
+  /// preserving the inode, permissions, and extended attributes.
+  func overwrite(to url: URL) throws {
+    let handle = try FileHandle(forWritingTo: url)
+    defer { try? handle.close() }
+
+    try handle.truncate(atOffset: 0)
+    try handle.write(contentsOf: self)
   }
 }
