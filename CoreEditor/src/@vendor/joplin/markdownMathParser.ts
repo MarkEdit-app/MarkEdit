@@ -10,8 +10,9 @@ import { MarkdownConfig, BlockContext, Line, LeafBlock } from "@lezer/markdown";
 import { stexMath } from "@codemirror/legacy-modes/mode/stex";
 import { StreamLanguage } from "@codemirror/language";
 
-// (?:[>]\s*)?: Optionally allow block math lines to start with '> '
-const mathBlockStartRegex = /^(?:\s*[>]\s*)?\$\$/;
+// \s*: Allow leading whitespace before '$$'
+// (?:[>]\s*)?: Optionally allow block math lines to start with '>' followed by optional whitespace
+const mathBlockStartRegex = /^\s*(?:[>]\s*)?\$\$/;
 const mathBlockEndRegex = /\$\$\s*$/;
 
 const texLanguage = StreamLanguage.define(stexMath);

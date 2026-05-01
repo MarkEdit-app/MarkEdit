@@ -122,6 +122,41 @@ describe('Lezer parser', () => {
     expect(types).toContain('LinkLabel');
   });
 
+  test('test BlockMath', () => {
+    editor.setUp('$$\nx = 1\n$$');
+    expect(parseTypes(window.editor)).toContain('BlockMath');
+  });
+
+  test('test BlockMath with leading spaces', () => {
+    editor.setUp('   $$\nx = 1\n$$');
+    expect(parseTypes(window.editor)).toContain('BlockMath');
+  });
+
+  test('test BlockMath with trailing spaces', () => {
+    editor.setUp('$$   \nx = 1\n$$   ');
+    expect(parseTypes(window.editor)).toContain('BlockMath');
+  });
+
+  test('test BlockMath with leading and trailing spaces', () => {
+    editor.setUp('  $$  \nx = 1\n  $$  ');
+    expect(parseTypes(window.editor)).toContain('BlockMath');
+  });
+
+  test('test BlockMath single line', () => {
+    editor.setUp('$$x = 1$$');
+    expect(parseTypes(window.editor)).toContain('BlockMath');
+  });
+
+  test('test BlockMath in blockquote', () => {
+    editor.setUp('> $$\n> x = 1\n> $$');
+    expect(parseTypes(window.editor)).toContain('BlockMath');
+  });
+
+  test('test BlockMath not matched with non-whitespace prefix', () => {
+    editor.setUp('x $$\nx = 1\nx $$');
+    expect(parseTypes(window.editor)).not.toContain('BlockMath');
+  });
+
   test('test getNodesNamed', () => {
     editor.setUp('[^footnote]\n\n[reference][link]\n\n[standard](link)');
 
