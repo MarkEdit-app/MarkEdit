@@ -17,7 +17,7 @@ import { TextEditor } from './editor';
 import { Translator } from './translation';
 import { languageModel } from './languageModel';
 
-import { onEditorReady, addExtension, addMarkdownConfig, addCodeLanguage } from './methods';
+import { onEditorReady, saveDocument, closeDocument, addExtension, addMarkdownConfig, addCodeLanguage } from './methods';
 import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
 import { openFile, createFile, deleteFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
@@ -50,6 +50,17 @@ export function initMarkEditModules() {
   MarkEdit.lezer = lezer;
 
   MarkEdit.onEditorReady = onEditorReady;
+  MarkEdit.saveDocument = saveDocument;
+  MarkEdit.closeDocument = closeDocument;
+  MarkEdit.addExtension = addExtension;
+  MarkEdit.addMarkdownConfig = addMarkdownConfig;
+  MarkEdit.addCodeLanguage = addCodeLanguage;
+  MarkEdit.addMainMenuItem = addMainMenuItem;
+  MarkEdit.showContextMenu = showContextMenu;
+  MarkEdit.showAlert = showAlert;
+  MarkEdit.showTextBox = showTextBox;
+  MarkEdit.showSavePanel = showSavePanel;
+  MarkEdit.runService = runService;
   MarkEdit.openFile = openFile;
   MarkEdit.createFile = createFile;
   MarkEdit.deleteFile = deleteFile;
@@ -60,15 +71,6 @@ export function initMarkEditModules() {
   MarkEdit.getDirectoryPath = getDirectoryPath;
   MarkEdit.getPasteboardItems = getPasteboardItems;
   MarkEdit.getPasteboardString = getPasteboardString;
-  MarkEdit.addExtension = addExtension;
-  MarkEdit.addMarkdownConfig = addMarkdownConfig;
-  MarkEdit.addCodeLanguage = addCodeLanguage;
-  MarkEdit.addMainMenuItem = addMainMenuItem;
-  MarkEdit.showContextMenu = showContextMenu;
-  MarkEdit.showAlert = showAlert;
-  MarkEdit.showTextBox = showTextBox;
-  MarkEdit.showSavePanel = showSavePanel;
-  MarkEdit.runService = runService;
 
   // Override the share method to provide a clear error message
   navigator.share = (_: ShareData): Promise<void> => {

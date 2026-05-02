@@ -344,16 +344,22 @@ extension EditorViewController: EditorModulePreviewDelegate {
 // MARK: - EditorModuleAPIDelegate
 
 extension EditorViewController: EditorModuleAPIDelegate {
-  func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool {
-    NSWorkspace.shared.openOrReveal(url: fileURL)
-  }
-
-  func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL? {
-    guard let path else {
-      return document?.fileURL
+  func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool {
+    guard let document else {
+      return false
     }
 
-    return URL(filePath: path)
+    await document.waitUntilSaveCompleted(userInitiated: true)
+    return true
+  }
+
+  func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool {
+    guard let document else {
+      return false
+    }
+
+    document.close()
+    return true
   }
 
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {
@@ -390,6 +396,18 @@ extension EditorViewController: EditorModuleAPIDelegate {
     let result = NSPerformService(name, pboard)
     try? await Task.sleep(for: .seconds(0.5))
     return result
+  }
+
+  func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool {
+    NSWorkspace.shared.openOrReveal(url: fileURL)
+  }
+
+  func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL? {
+    guard let path else {
+      return document?.fileURL
+    }
+
+    return URL(filePath: path)
   }
 }
 

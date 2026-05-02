@@ -13,8 +13,8 @@ import UniformTypeIdentifiers
 
 @MainActor
 public protocol EditorModuleAPIDelegate: AnyObject {
-  func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool
-  func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL?
+  func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool
+  func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
   func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint)
   func editorAPI(
@@ -31,6 +31,8 @@ public protocol EditorModuleAPIDelegate: AnyObject {
   ) async -> String?
   func editorAPI(_ sender: EditorModuleAPI, showSavePanel data: Data, fileName: String?) async -> Bool
   func editorAPI(_ sender: EditorModuleAPI, runService name: String, input: String?) async -> Bool
+  func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool
+  func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL?
 }
 
 public final class EditorModuleAPI: NativeModuleAPI {
@@ -38,6 +40,40 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public init(delegate: EditorModuleAPIDelegate) {
     self.delegate = delegate
+  }
+
+  public func saveDocument() async -> Bool {
+    await delegate?.editorAPISaveDocument(self) == true
+  }
+
+  public func closeDocument() async -> Bool {
+    delegate?.editorAPICloseDocument(self) == true
+  }
+
+  public func addMainMenuItems(items: [WebMenuItem]) {
+    delegate?.editorAPI(self, addMainMenuItems: items.map { item in
+      (item.uniqueID.sha256Hash, item)
+    })
+  }
+
+  public func showContextMenu(items: [WebMenuItem], location: WebPoint) {
+    delegate?.editorAPI(self, showContextMenu: items, location: location)
+  }
+
+  public func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int {
+    await delegate?.editorAPI(self, alertWith: title, message: message, buttons: buttons) ?? 0
+  }
+
+  public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
+    await delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
+  }
+
+  public func showSavePanel(options: SavePanelOptions) async -> Bool {
+    await delegate?.editorAPI(self, showSavePanel: options.decodedData, fileName: options.fileName) == true
+  }
+
+  public func runService(name: String, input: String?) async -> Bool {
+    (await delegate?.editorAPI(self, runService: name, input: input)) == true
   }
 
   public func openFile(path: String) async -> Bool {
@@ -182,32 +218,6 @@ public final class EditorModuleAPI: NativeModuleAPI {
     Logger.assertFail("Missing implementation, consider using web api directly")
     return nil
   #endif
-  }
-
-  public func addMainMenuItems(items: [WebMenuItem]) {
-    delegate?.editorAPI(self, addMainMenuItems: items.map { item in
-      (item.uniqueID.sha256Hash, item)
-    })
-  }
-
-  public func showContextMenu(items: [WebMenuItem], location: WebPoint) {
-    delegate?.editorAPI(self, showContextMenu: items, location: location)
-  }
-
-  public func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int {
-    await delegate?.editorAPI(self, alertWith: title, message: message, buttons: buttons) ?? 0
-  }
-
-  public func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
-    await delegate?.editorAPI(self, showTextBox: title, placeholder: placeholder, defaultValue: defaultValue)
-  }
-
-  public func showSavePanel(options: SavePanelOptions) async -> Bool {
-    await delegate?.editorAPI(self, showSavePanel: options.decodedData, fileName: options.fileName) == true
-  }
-
-  public func runService(name: String, input: String?) async -> Bool {
-    (await delegate?.editorAPI(self, runService: name, input: input)) == true
   }
 }
 

@@ -1,5 +1,6 @@
 excluded:
   - MarkEditMac/Modules/.build
+  - MarkEditKit/Sources/Bridge/Native/Generated
 
 disabled_rules:
 
