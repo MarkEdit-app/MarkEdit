@@ -12,6 +12,14 @@ export function onEditorReady(listener: (editorView: EditorView) => void) {
   }
 }
 
+export async function saveDocument(): Promise<boolean> {
+  return window.nativeModules.api.saveDocument();
+}
+
+export async function closeDocument(): Promise<boolean> {
+  return window.nativeModules.api.closeDocument();
+}
+
 export function addExtension(extension: Extension) {
   storage.extensions.push(extension);
 

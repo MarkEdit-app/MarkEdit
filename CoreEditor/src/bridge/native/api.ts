@@ -9,6 +9,14 @@ import { WebPoint } from '../../@types/WebPoint';
  * @bridgeName NativeBridgeAPI
  */
 export interface NativeModuleAPI extends NativeModule {
+  saveDocument(): Promise<boolean>;
+  closeDocument(): Promise<boolean>;
+  addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
+  showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
+  showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
+  showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;
+  showSavePanel({ options }: { options: SavePanelOptions }): Promise<boolean>;
+  runService({ name, input }: { name: string; input?: string }): Promise<boolean>;
   openFile({ path }: { path: string }): Promise<boolean>;
   createFile({ options }: { options: CreateFileOptions }): Promise<boolean>;
   deleteFile({ path }: { path: string }): Promise<boolean>;
@@ -18,10 +26,4 @@ export interface NativeModuleAPI extends NativeModule {
   getFileInfo({ path }: { path: string | undefined }): Promise<string | undefined>;
   getPasteboardItems(): Promise<string | undefined>;
   getPasteboardString(): Promise<string | undefined>;
-  addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
-  showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
-  showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
-  showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;
-  showSavePanel({ options }: { options: SavePanelOptions }): Promise<boolean>;
-  runService({ name, input }: { name: string; input?: string }): Promise<boolean>;
 }
