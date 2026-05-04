@@ -1,10 +1,10 @@
 # MarkEdit-app/language-data
 
-For now, language-data is mostly copied from the [@codemirror/language-data](https://github.com/codemirror/language-data) package, only kept commonly used ones to make the bundle smaller.
+For now, language-data is mostly copied from the [@codemirror/language-data](https://code.haverbeke.berlin/codemirror/language-data) package, only kept commonly used ones to make the bundle smaller.
 
 # @codemirror/language-data [![NPM version](https://img.shields.io/npm/v/@codemirror/language-data.svg)](https://www.npmjs.org/package/@codemirror/language-data)
 
-[ [**WEBSITE**](https://codemirror.net/) | [**DOCS**](https://codemirror.net/docs/ref/#language-data) | [**ISSUES**](https://github.com/codemirror/dev/issues) | [**FORUM**](https://discuss.codemirror.net/c/next/) | [**CHANGELOG**](https://github.com/codemirror/language-data/blob/main/CHANGELOG.md) ]
+[ [**WEBSITE**](https://codemirror.net/) | [**DOCS**](https://codemirror.net/docs/ref/#language-data) | [**ISSUES**](https://code.haverbeke.berlin/codemirror/dev/issues) | [**FORUM**](https://discuss.codemirror.net/c/v6/) | [**CHANGELOG**](https://code.haverbeke.berlin/codemirror/language-data/src/branch/main/CHANGELOG.md) ]
 
 This package implements language metadata and dynamic loading for the
 [CodeMirror](https://codemirror.net/) code editor.
@@ -14,7 +14,7 @@ number of [examples](https://codemirror.net/examples/) and the
 [documentation](https://codemirror.net/docs/).
 
 This code is released under an
-[MIT license](https://github.com/codemirror/language-data/tree/main/LICENSE).
+[MIT license](https://code.haverbeke.berlin/codemirror/language-data/src/branch/main/LICENSE).
 
 We aim to be an inclusive, welcoming community. To make that explicit,
 we have a [code of

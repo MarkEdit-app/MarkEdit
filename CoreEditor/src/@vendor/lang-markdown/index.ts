@@ -35,7 +35,7 @@ export function markdown(config: {
   /// [keymap](#lang-markdown.markdownKeymap).
   addKeymap?: boolean
   /// Markdown parser
-  /// [extensions](https://github.com/lezer-parser/markdown#user-content-markdownextension)
+  /// [extensions](https://code.haverbeke.berlin/lezer/markdown#user-content-markdownextension)
   /// to add to the parser.
   extensions?: MarkdownExtension
   /// The base language to use. Defaults to
@@ -50,7 +50,7 @@ export function markdown(config: {
   /// extension unless you set this to false.
   pasteURLAsLink?: boolean
   /// By default, HTML tags in the document are handled by the [HTML
-  /// language](https://github.com/codemirror/lang-html) package with
+  /// language](https://code.haverbeke.berlin/codemirror/lang-html) package with
   /// tag matching turned off. You can pass in an alternative language
   /// configuration here if you want.
   htmlTagLanguage?: LanguageSupport

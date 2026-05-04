@@ -32,7 +32,7 @@ function isList(type: NodeType) {
   return type.name == "OrderedList" || type.name == "BulletList"
 }
 
-// [MarkEdit] We prefer empty sections to be foldable (original: https://github.com/codemirror/lang-markdown/blob/main/src/markdown.ts#L31)
+// [MarkEdit] We prefer empty sections to be foldable (original: https://code.haverbeke.berlin/codemirror/lang-markdown/src/branch/main/src/markdown.ts#L35)
 function findSectionEnd(headerNode: SyntaxNode, level: number) {
   // [MarkEdit] we also only fold ATXHeadings and leave Setext headings alone
   const nodeType = headerNode.type.name
