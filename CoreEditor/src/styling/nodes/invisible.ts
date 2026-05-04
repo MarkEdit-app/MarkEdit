@@ -192,7 +192,7 @@ function getOrCreateDeco(invisible: string, pos: number) {
   return newDeco;
 }
 
-// https://github.com/codemirror/lang-markdown/blob/main/src/markdown.ts
+// https://code.haverbeke.berlin/codemirror/lang-markdown/src/branch/main/src/markdown.ts
 function headingLevel(type: NodeType) {
   const match = /^(?:ATX|Setext)Heading(\d)$/.exec(type.name);
   return match ? +match[1] : 0;

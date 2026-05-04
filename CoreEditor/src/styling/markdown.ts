@@ -35,7 +35,7 @@ export const classHighlighters = [
   ])),
 ];
 
-// https://github.com/lezer-parser/markdown/blob/main/src/markdown.ts
+// https://code.haverbeke.berlin/lezer/markdown/src/branch/main/src/markdown.ts
 export const markdownExtensions: MarkdownConfig[] = [
   {
     props: [

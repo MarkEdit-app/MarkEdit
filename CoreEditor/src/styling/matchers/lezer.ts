@@ -63,7 +63,7 @@ export function createLineDeco(nodeName: string | string[], className: string, a
 /**
  * Build decorations by leveraging language lexers.
  *
- * https://github.com/lezer-parser/markdown/blob/main/src/markdown.ts
+ * https://code.haverbeke.berlin/lezer/markdown/src/branch/main/src/markdown.ts
  *
  * @param nodeName Node name(s), such as "ATXHeading1" for headings
  * @param builder Closure to create the Decoration(s)
