@@ -18,7 +18,6 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
   override func windowDidLoad() {
     super.windowDidLoad()
-    window?.minSize = CGSize(width: 240, height: 0)
     window?.backgroundColor = .controlBackgroundColor
 
     windowFrameAutosaveName = "Editor"
