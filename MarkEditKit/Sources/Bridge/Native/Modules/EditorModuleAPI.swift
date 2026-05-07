@@ -270,11 +270,18 @@ private extension FileManager {
 private extension Data {
   /// Overwrites the contents of the file at `url` in place,
   /// preserving the inode, permissions, and extended attributes.
+  ///
+  /// Writes the new payload from offset 0 first, then truncates any
+  /// remaining tail. This avoids ever observing an empty file: if a
+  /// crash happens between the two steps, the file still contains
+  /// the full new content (possibly followed by stale tail bytes),
+  /// rather than being truncated to zero length.
   func overwrite(to url: URL) throws {
     let handle = try FileHandle(forWritingTo: url)
     defer { try? handle.close() }
 
-    try handle.truncate(atOffset: 0)
+    try handle.seek(toOffset: 0)
     try handle.write(contentsOf: self)
+    try handle.truncate(atOffset: UInt64(count))
   }
 }
