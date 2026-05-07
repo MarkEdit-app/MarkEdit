@@ -14,8 +14,8 @@ body:
         Before submitting, please search both the wiki:
         https://github.com/MarkEdit-app/MarkEdit/wiki
 
-        and existing closed issues:
-        https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue+is%3Aclosed
+        and existing issues:
+        https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue
 
         For example, we do not plan to add a "WYSIWYG" mode.
 
