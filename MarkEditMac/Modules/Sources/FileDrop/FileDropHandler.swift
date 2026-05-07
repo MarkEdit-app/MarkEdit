@@ -9,39 +9,34 @@ import MarkEditKit
 import TextBundle
 
 public enum FileDropHandler {
-  /// Build the Markdown snippet to insert for files dropped onto the editor.
+  /// Build the Markdown snippet to insert for a single file dropped onto the editor.
   ///
-  /// For `.textbundle` documents, dropped files are copied into the bundle's `assets/`
-  /// folder as a side effect; otherwise files on disk are not touched.
+  /// For `.textbundle` documents, the dropped file is copied into the bundle's `assets/`
+  /// folder as a side effect; otherwise the file on disk is not touched.
   ///
-  /// Returns `![]()`/`[]()` links joined by `lineBreak`, or `nil` if nothing to insert.
+  /// Returns a `![]()` or `[]()` link.
   public static func handle(
-    fileURLs: [URL],
+    fileURL: URL,
     documentURL: URL?,
-    documentType: String?,
-    lineBreak: String
-  ) -> String? {
+    documentType: String?
+  ) -> String {
     let isTextBundle = documentType?.isTextBundle == true
-    let lines = fileURLs.compactMap {
-      handle(fileURL: $0, documentURL: documentURL, isTextBundle: isTextBundle)
-    }
-
-    return lines.isEmpty ? nil : lines.joined(separator: lineBreak)
+    return handle(fileURL: fileURL, documentURL: documentURL, isTextBundle: isTextBundle)
   }
 }
 
 // MARK: - Private
 
 private extension FileDropHandler {
-  static func handle(fileURL: URL, documentURL: URL?, isTextBundle: Bool) -> String? {
+  static func handle(fileURL: URL, documentURL: URL?, isTextBundle: Bool) -> String {
     // textbundle: copy into assets/. Saved doc: relative path. Untitled: absolute path.
-    let target: String? = {
+    let target: String = {
       if isTextBundle, let bundleURL = documentURL {
         do {
           return try TextBundleAssets.copy(from: fileURL, into: bundleURL)
         } catch {
           Logger.log(.error, "Failed to copy dropped file into textbundle: \(error)")
-          return nil
+          return fileURL.relativePath(from: bundleURL)
         }
       } else if let parentURL = documentURL?.deletingLastPathComponent() {
         return fileURL.relativePath(from: parentURL)
@@ -49,10 +44,6 @@ private extension FileDropHandler {
         return fileURL.path(percentEncoded: false)
       }
     }()
-
-    guard let target else {
-      return nil
-    }
 
     return MarkdownLink.formatted(
       label: fileURL.lastPathComponent,

@@ -187,8 +187,10 @@ let package = Package(
       name: "ModulesTests",
       dependencies: [
         "AppKitExtensions",
+        "FileDrop",
         "Statistics",
         "TextBundle",
+        "MarkEditKit",
       ],
       path: "Tests",
       resources: [

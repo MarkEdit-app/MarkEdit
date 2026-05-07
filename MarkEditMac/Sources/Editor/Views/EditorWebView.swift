@@ -154,18 +154,25 @@ final class EditorWebView: WKWebView {
     }
   }
 
-  /**
-   Intercept Finder file drops and forward them to the delegate, suppressing WebKit's
-   default behavior (which would inline the file contents). Drops without file URLs fall
-   through to `super`.
-   */
   override func performDragOperation(_ sender: any NSDraggingInfo) -> Bool {
-    if let fileURLs = sender.draggingPasteboard.fileURLs, !fileURLs.isEmpty {
-      actionDelegate?.editorWebView(self, didDrop: fileURLs)
-      return true
+    // Let WebKit handle internal text drags
+    guard !(sender.draggingSource is WKWebView) else {
+      return super.performDragOperation(sender)
     }
 
-    return super.performDragOperation(sender)
+    // Ignore placeholder file URLs (e.g. `file://`, unresolved promise drags) that
+    // would otherwise produce nonsensical links like `[](../../..)`.
+    let fileURLs = (sender.draggingPasteboard.fileURLs ?? []).filter { url in
+      !url.lastPathComponent.isEmpty && url.lastPathComponent != "/"
+    }
+
+    guard !fileURLs.isEmpty else {
+      return super.performDragOperation(sender)
+    }
+
+    // Forward sensible file drop requests
+    actionDelegate?.editorWebView(self, didDrop: fileURLs)
+    return true
   }
 
   override func resignFirstResponder() -> Bool {

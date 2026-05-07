@@ -45,10 +45,16 @@ public extension URL {
     return type.conforms(to: .image)
   }
 
-  /// POSIX relative path from directory `base` to this URL, or `"."` if they're equal.
+  /// POSIX relative path from directory `base` to this URL.
+  ///
+  /// Returns `"."` when the two URLs refer to the same path. Symlinks are
+  /// resolved before comparison, so paths under `/var` and `/private/var`
+  /// reduce consistently. `.` / `..` segments are normalized away.
   func relativePath(from base: URL) -> String {
-    let baseParts = base.standardizedFileURL.pathComponents.filter { $0 != "/" }
-    let targetParts = standardizedFileURL.pathComponents.filter { $0 != "/" }
+    let resolvedBase = base.resolvingSymlinksInPath().standardizedFileURL
+    let resolvedTarget = resolvingSymlinksInPath().standardizedFileURL
+    let baseParts = resolvedBase.pathComponents.filter { $0 != "/" }
+    let targetParts = resolvedTarget.pathComponents.filter { $0 != "/" }
 
     // Skip the shared prefix, then climb out of `base` and descend into the target.
     var common = 0
