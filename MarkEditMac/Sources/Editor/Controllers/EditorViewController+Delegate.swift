@@ -82,24 +82,22 @@ extension EditorViewController: EditorWebViewActionDelegate {
     ) ?? "\n"
 
     let textToDrop: String? = {
-      // Inline file contents when the user holds Shift, or when the document is an
-      // unsaved draft (no fileURL means we have no anchor to make a sensible link).
-      if document?.fileURL == nil || NSApp.shiftKeyIsPressed {
-        let contents = fileURLs.compactMap {
-          (try? Data(contentsOf: $0))?.toString()
+      // Shift-drop inlines text file contents; otherwise files become links.
+      // Single pass preserves the original drop order across the inline/link mix.
+      let preferInline = NSApp.shiftKeyIsPressed
+      let parts: [String] = fileURLs.map { fileURL in
+        if preferInline, !fileURL.isBinaryFile, let text = (try? Data(contentsOf: fileURL))?.toString() {
+          return text
         }
 
-        if !contents.isEmpty {
-          return contents.joined(separator: lineBreak)
-        }
+        return FileDropHandler.handle(
+          fileURL: fileURL,
+          documentURL: document?.fileURL,
+          documentType: document?.fileType
+        )
       }
 
-      return FileDropHandler.handle(
-        fileURLs: fileURLs,
-        documentURL: document?.fileURL,
-        documentType: document?.fileType,
-        lineBreak: lineBreak
-      )
+      return parts.isEmpty ? nil : parts.joined(separator: lineBreak)
     }()
 
     if let textToDrop {
@@ -262,8 +260,15 @@ extension EditorViewController: EditorModuleCoreDelegate {
         return (url, false)
       }
 
-      // Fallback to local files, e.g., file:///Users/cyan/...
-      return (document?.baseURL?.appending(path: link.removingPercentEncoding ?? link), true)
+      let path = link.removingPercentEncoding ?? link
+
+      // Absolute POSIX path, e.g. /Users/cyan/foo.png from an untitled-doc drop.
+      if path.hasPrefix("/") {
+        return (URL(filePath: path), true)
+      }
+
+      // Fallback to local files relative to the document, e.g., file:///Users/cyan/...
+      return (document?.baseURL?.appending(path: path), true)
     }()
 
     // Open or reveal the url
