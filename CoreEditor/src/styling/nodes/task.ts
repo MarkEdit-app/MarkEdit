@@ -4,15 +4,22 @@ import { createDecos } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
 import { setTaskMarkerStyle } from '../config';
 
-const className = 'cm-md-taskMarker';
+const baseClass = 'cm-md-taskMarker';
+const checkedClass = `${baseClass}-checked`;
+const uncheckedClass = `${baseClass}-unchecked`;
 
 export const taskMarkerStyle = createDecoPlugin(() => {
-  return createDecos('TaskMarker', ({ from, to }) => Decoration.mark({
-    attributes: {
-      class: className,
-      title: window.config.localizable?.cmdClickToToggleTodo ?? '',
-    },
-  }).range(lineAt(from).from, to));
+  return createDecos('TaskMarker', ({ from, to }) => {
+    // TaskMarker spans "[ ]", "[x]" or "[X]"; only "[ ]" is unchecked.
+    const marker = window.editor.state.doc.sliceString(from, to);
+    const stateClass = marker === '[ ]' ? uncheckedClass : checkedClass;
+    return Decoration.mark({
+      attributes: {
+        class: `${baseClass} ${stateClass}`,
+        title: window.config.localizable?.cmdClickToToggleTodo ?? '',
+      },
+    }).range(lineAt(from).from, to);
+  });
 });
 
 export function startClickable() {
@@ -25,7 +32,7 @@ export function stopClickable() {
 
 export function handleMouseDown(event: MouseEvent) {
   const element = event.target as HTMLElement | null;
-  const marker = element?.closest(`.${className}`);
+  const marker = element?.closest(`.${baseClass}`);
   if (marker === null || marker === undefined) {
     return;
   }
