@@ -107,6 +107,7 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
   setTimeout(ensureLineHeight, 1000);
 
   const contentDOM = editor.contentDOM;
+  contentDOM.dataset.language = 'markdown'; // Because of the front-matter wrapper
   contentDOM.addEventListener('blur', handleFocusLost);
 
   updateTextChecker(contentDOM, {
