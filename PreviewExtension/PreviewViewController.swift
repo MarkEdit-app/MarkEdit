@@ -36,6 +36,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
 
     let webView = WebView(frame: .zero, configuration: config)
     webView.allowsMagnification = true
+    webView.disableWindowOcclusionDetection()
 
     return webView
   }()

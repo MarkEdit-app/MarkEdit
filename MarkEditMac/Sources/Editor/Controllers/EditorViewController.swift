@@ -177,6 +177,7 @@ final class EditorViewController: NSViewController {
     webView.allowsMagnification = true
     webView.uiDelegate = self
     webView.actionDelegate = self
+    webView.disableWindowOcclusionDetection()
 
     let theme = AppTheme.current.editorTheme
     DispatchQueue.global(qos: .userInitiated).async {

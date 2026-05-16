@@ -1,10 +1,19 @@
 //
-//  WKWebViewConfiguration+Extension.swift
+//  WebKit+Extension.swift
 //
 //  Created by cyan on 3/29/26.
 //
 
 import WebKit
+
+public extension WKWebView {
+  /// Keep rendering and timers active when the window is occluded by other windows.
+  func disableWindowOcclusionDetection() {
+    if !setBoolValue(false, forSelector: "_setWindowOcclusionDetectionEnabled:") {
+      assertionFailure("Failed to call _setWindowOcclusionDetectionEnabled:")
+    }
+  }
+}
 
 public extension WKWebViewConfiguration {
   func enablePerformanceFlags() {
@@ -51,6 +60,7 @@ public extension WKWebViewConfiguration {
 // MARK: - WebKitConfigSPI
 
 public protocol WebKitConfigSPI: NSObject {}
+extension WKWebView: WebKitConfigSPI {}
 extension WKWebViewConfiguration: WebKitConfigSPI {}
 extension WKPreferences: WebKitConfigSPI {}
 
