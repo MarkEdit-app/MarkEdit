@@ -81,13 +81,18 @@ extension WKWebView {
 
   func invoke<SuccessResult: Decodable>(
     path: String,
-    message: Encodable = Message()
+    message: Encodable = Message(),
+    callAsync: Bool = false
   ) async throws -> SuccessResult {
     let script = script(for: path, message: message)
     let value: Any?
 
     do {
-      value = try await evaluateJavaScript(script)
+      if callAsync {
+        value = try await callAsyncJavaScript("return await \(script)", contentWorld: .page)
+      } else {
+        value = try await evaluateJavaScript(script)
+      }
     } catch {
       Logger.log(.error, error.localizedDescription)
       throw InvokeError.evaluateError(path: path, error: error)

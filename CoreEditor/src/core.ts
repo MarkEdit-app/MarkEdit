@@ -62,7 +62,7 @@ export enum ReplaceGranularity {
 /**
  * Reset the editor to the initial state.
  */
-export function resetEditor(initialContent: string, selectionRange?: SelectionRange) {
+export async function resetEditor(initialContent: string, selectionRange?: SelectionRange): Promise<boolean> {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (typeof window.editor?.destroy === 'function') {
     window.editor.destroy();
@@ -169,6 +169,24 @@ export function resetEditor(initialContent: string, selectionRange?: SelectionRa
 
   // For user scripts, notify the editor is ready
   editorReadyListeners().forEach(listener => listener(editor));
+
+  // Wait for the first paint: rAF when foregrounded, setTimeout as a fallback when throttled
+  await new Promise<void>(resolve => {
+    let settled = false;
+    const unblockWaiting = () => {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      resolve();
+    };
+
+    requestAnimationFrame(unblockWaiting);
+    afterDomUpdate(unblockWaiting);
+  });
+
+  return true;
 }
 
 export function getEditorState() {

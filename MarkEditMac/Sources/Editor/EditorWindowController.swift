@@ -25,6 +25,33 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     saveWindowRect()
   }
 
+  override func showWindow(_ sender: Any?) {
+    if shouldWaitResetting {
+      // Snapshot the caller's tabbing preference,
+      // it may be reset before our deferred super call.
+      let callerTabbingPreference = NSWindow.allowsAutomaticWindowTabbing
+
+      Task { @MainActor [weak self] in
+        guard let self else {
+          return
+        }
+
+        // Defer the actual show until the editor finishes its first paint
+        await self.editorViewController?.waitUntilEditorReset()
+
+        let tabbingToRestore = NSWindow.allowsAutomaticWindowTabbing
+        NSWindow.allowsAutomaticWindowTabbing = callerTabbingPreference
+
+        self.showWindowImmediately(sender)
+        NSWindow.allowsAutomaticWindowTabbing = tabbingToRestore
+      }
+
+      return
+    }
+
+    showWindowImmediately(sender)
+  }
+
   func windowDidBecomeMain(_ notification: Notification) {
     NSApplication.shared.closeOpenPanels()
   }
@@ -102,6 +129,18 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 private extension EditorWindowController {
   var editorViewController: EditorViewController? {
     contentViewController as? EditorViewController
+  }
+
+  var shouldWaitResetting: Bool {
+    guard let editor = editorViewController else {
+      return false
+    }
+
+    return editor.hasFinishedLoading && editor.pendingResetCount > 0
+  }
+
+  func showWindowImmediately(_ sender: Any?) {
+    super.showWindow(sender)
   }
 
   func updateTitleBarAppearance() {

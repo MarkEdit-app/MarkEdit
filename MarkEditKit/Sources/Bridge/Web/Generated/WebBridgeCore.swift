@@ -18,7 +18,7 @@ public final class WebBridgeCore {
     self.webView = webView
   }
 
-  public func resetEditor(text: String, selectionRange: SelectionRange?, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+  public func resetEditor(text: String, selectionRange: SelectionRange?) async throws -> Bool {
     struct Message: Encodable {
       let text: String
       let selectionRange: SelectionRange?
@@ -29,7 +29,11 @@ public final class WebBridgeCore {
       selectionRange: selectionRange
     )
 
-    webView?.invoke(path: "webModules.core.resetEditor", message: message, completion: completion)
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
+    }
+
+    return try await webView.invoke(path: "webModules.core.resetEditor", message: message, callAsync: true)
   }
 
   public func getEditorState() async throws -> WebBridgeCoreGetEditorStateReturnType {

@@ -44,7 +44,7 @@ public final class {{moduleName}} {
       throw WKWebView.InvokeError.unexpectedNil
     }
 
-    return try await webView.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}"{{#parameters.length}}, message: message{{/parameters.length}})
+    return try await webView.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}"{{#parameters.length}}, message: message{{/parameters.length}}{{#method.isAsync}}, callAsync: true{{/method.isAsync}})
     {{/returnType}}
     {{^returnType}}
     webView?.invoke(path: "webModules.{{customTags.invokePath}}.{{methodName}}", {{#parameters.length}}message: message, {{/parameters.length}}completion: completion)

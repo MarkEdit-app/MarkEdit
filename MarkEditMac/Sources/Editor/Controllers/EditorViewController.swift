@@ -25,6 +25,7 @@ final class EditorViewController: NSViewController {
   var mouseExitedWindow = false
   var nativeSearchQueryChanged = false
   var bottomPanelHeight: Double = 0
+  var pendingResetCount: Int = 0
   var initialContent: String?
   var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
   var localEventMonitor: Any?
@@ -228,6 +229,7 @@ final class EditorViewController: NSViewController {
 
   // For CoreEditor preload
   private var loadingContinuations = [CheckedContinuation<Void, Never>]()
+  private var resetContinuations = [CheckedContinuation<Void, Never>]()
 
   deinit {
     if let monitor = localEventMonitor {
@@ -323,6 +325,16 @@ extension EditorViewController {
     }
   }
 
+  func waitUntilEditorReset() async {
+    guard pendingResetCount > 0 else {
+      return
+    }
+
+    await withCheckedContinuation {
+      resetContinuations.append($0)
+    }
+  }
+
   func prepareInitialContent(_ text: String) {
     if hasFinishedLoading {
       prependTextContent(text)
@@ -356,13 +368,29 @@ extension EditorViewController {
       return EditorSelectionHistory.selectionRange(for: fileURL, fileSize: fileSize)
     }()
 
-    bridge.core.resetEditor(text: textContent, selectionRange: selectionRange) { [weak self] _ in
-      self?.webView.magnification = 1.0
+    webView.magnification = 1.0
+    pendingResetCount += 1
+
+    Task { @MainActor [weak self] in
+      guard let self else {
+        return
+      }
+
+      _ = try? await self.bridge.core.resetEditor(
+        text: textContent,
+        selectionRange: selectionRange
+      )
+
+      self.pendingResetCount -= 1
+      if self.pendingResetCount == 0 {
+        self.resetContinuations.forEach { $0.resume() }
+        self.resetContinuations.removeAll()
+      }
 
       // Initial content from scenarios like "CreateNewDocumentIntent" or "New File from Clipboard"
-      if let text = self?.initialContent {
-        self?.prependTextContent(text)
-        self?.initialContent = nil
+      if let text = self.initialContent {
+        self.prependTextContent(text)
+        self.initialContent = nil
       }
     }
 

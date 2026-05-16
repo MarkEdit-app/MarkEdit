@@ -78,52 +78,52 @@ describe('resetEditor selection', () => {
     document.body.innerHTML = '';
   });
 
-  test('without selection range, cursor is at 0', () => {
-    resetEditor('Hello, World!');
+  test('without selection range, cursor is at 0', async () => {
+    await resetEditor('Hello, World!');
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(0);
     expect(sel.head).toBe(0);
   });
 
-  test('with valid selection range', () => {
-    resetEditor('Hello, World!', { anchor: 7 as CodeGen_Int, head: 12 as CodeGen_Int });
+  test('with valid selection range', async () => {
+    await resetEditor('Hello, World!', { anchor: 7 as CodeGen_Int, head: 12 as CodeGen_Int });
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(7);
     expect(sel.head).toBe(12);
   });
 
-  test('with cursor position (anchor equals head)', () => {
-    resetEditor('Hello, World!', { anchor: 5 as CodeGen_Int, head: 5 as CodeGen_Int });
+  test('with cursor position (anchor equals head)', async () => {
+    await resetEditor('Hello, World!', { anchor: 5 as CodeGen_Int, head: 5 as CodeGen_Int });
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(5);
     expect(sel.head).toBe(5);
   });
 
-  test('selection range exceeding document length is clamped', () => {
+  test('selection range exceeding document length is clamped', async () => {
     const content = 'Short';
-    resetEditor(content, { anchor: 100 as CodeGen_Int, head: 200 as CodeGen_Int });
+    await resetEditor(content, { anchor: 100 as CodeGen_Int, head: 200 as CodeGen_Int });
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(content.length);
     expect(sel.head).toBe(content.length);
   });
 
-  test('negative selection range is clamped to 0', () => {
-    resetEditor('Hello', { anchor: -5 as CodeGen_Int, head: -1 as CodeGen_Int });
+  test('negative selection range is clamped to 0', async () => {
+    await resetEditor('Hello', { anchor: -5 as CodeGen_Int, head: -1 as CodeGen_Int });
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(0);
     expect(sel.head).toBe(0);
   });
 
-  test('empty document with selection range clamps to 0', () => {
-    resetEditor('', { anchor: 10 as CodeGen_Int, head: 20 as CodeGen_Int });
+  test('empty document with selection range clamps to 0', async () => {
+    await resetEditor('', { anchor: 10 as CodeGen_Int, head: 20 as CodeGen_Int });
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(0);
     expect(sel.head).toBe(0);
   });
 
-  test('document content is preserved', () => {
+  test('document content is preserved', async () => {
     const content = 'Hello, MarkEdit!';
-    resetEditor(content, { anchor: 0 as CodeGen_Int, head: 5 as CodeGen_Int });
+    await resetEditor(content, { anchor: 0 as CodeGen_Int, head: 5 as CodeGen_Int });
     expect(window.editor.state.doc.toString()).toBe(content);
   });
 });
@@ -152,32 +152,32 @@ describe('performTextDrop', () => {
     });
   }
 
-  test('inserts text at the drop cursor position', () => {
-    resetEditor('Hello, World!');
+  test('inserts text at the drop cursor position', async () => {
+    await resetEditor('Hello, World!');
     fakeDropCursor(7);
 
     performTextDrop('there ');
     expect(window.editor.state.doc.toString()).toBe('Hello, there World!');
   });
 
-  test('moves the caret to after the inserted text', () => {
-    resetEditor('Hello, World!');
+  test('moves the caret to after the inserted text', async () => {
+    await resetEditor('Hello, World!');
     fakeDropCursor(7);
 
     performTextDrop('there ');
     expect(window.editor.state.selection.main.head).toBe(13);
   });
 
-  test('falls back to replacing the selection when no drop cursor is present', () => {
-    resetEditor('Hello, World!');
+  test('falls back to replacing the selection when no drop cursor is present', async () => {
+    await resetEditor('Hello, World!');
     window.editor.dispatch({ selection: EditorSelection.range(7, 12) });
 
     performTextDrop('Earth');
     expect(window.editor.state.doc.toString()).toBe('Hello, Earth!');
   });
 
-  test('falls back when posAtCoords returns null', () => {
-    resetEditor('Hello, World!');
+  test('falls back when posAtCoords returns null', async () => {
+    await resetEditor('Hello, World!');
     fakeDropCursor(null);
     window.editor.dispatch({ selection: EditorSelection.range(7, 12) });
 
