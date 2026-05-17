@@ -7,10 +7,6 @@
 import WebKit
 import MarkEditCore
 
-/**
- WKWebView extension to show inspector programmatically.
- */
-
 public extension WKWebView {
   func evaluateJavaScript(
     _ script: String,

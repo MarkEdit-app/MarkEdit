@@ -23,12 +23,6 @@ final class EditorPreloader {
     }
 
     startObservingMemoryPressure()
-
-    // Try if warmup can fix the empty suggestion bug,
-    // defer to avoid blocking the critical launch path.
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-      NSSpellChecker.shared.checkSpelling(of: "warmup", startingAt: 0)
-    }
   }
 
   /// Ensure the preloaded controller has finished loading,

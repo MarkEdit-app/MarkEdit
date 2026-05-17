@@ -17,6 +17,10 @@ final class AppDocumentController: NSDocumentController {
   static var suggestedTextEncoding: EditorTextEncoding?
   static var suggestedFilename: String?
 
+  override var maximumRecentDocumentCount: Int {
+    8
+  }
+
   override func beginOpenPanel(_ openPanel: NSOpenPanel, forTypes inTypes: [String]?) async -> Int {
     if let defaultDirectory = AppRuntimeConfig.defaultOpenDirectory {
       setOpenPanelDirectory(defaultDirectory)

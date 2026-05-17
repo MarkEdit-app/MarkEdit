@@ -8,7 +8,7 @@ import WebKit
 import MarkEditCore
 
 public extension WKWebViewConfiguration {
-  static func newConfig(disableCors: Bool = false) -> WKWebViewConfiguration {
+  static func newConfig(disableCors: Bool = false, disabledFeatures: [String] = []) -> WKWebViewConfiguration {
     class Configuration: WKWebViewConfiguration {
       // To mimic settable isOpaque on iOS,
       // which is required for the background color and initial white flash in dark mode
@@ -16,7 +16,7 @@ public extension WKWebViewConfiguration {
     }
 
     let config = Configuration()
-    config.enablePerformanceFlags()
+    config.enablePerformanceFlags(disabledFeatures: disabledFeatures)
 
     if !config.preferences.setBoolValue(true, forSelector: "_setDeveloperExtrasEnabled:") {
       Logger.assertFail("Failed to call _setDeveloperExtrasEnabled:")

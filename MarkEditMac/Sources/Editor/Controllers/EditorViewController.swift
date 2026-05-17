@@ -155,7 +155,11 @@ final class EditorViewController: NSViewController {
       ))
     }
 
-    let config: WKWebViewConfiguration = .newConfig(disableCors: AppRuntimeConfig.disableCorsRestrictions)
+    let config: WKWebViewConfiguration = .newConfig(
+      disableCors: AppRuntimeConfig.disableCorsRestrictions,
+      disabledFeatures: AppRuntimeConfig.disabledWebKitFeatures
+    )
+
     config.userContentController = controller
     config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
     config.allowsInlinePredictions = NSSpellChecker.InlineCompletion.webKitEnabled
