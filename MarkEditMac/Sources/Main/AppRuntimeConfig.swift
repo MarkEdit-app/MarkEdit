@@ -50,6 +50,7 @@ enum AppRuntimeConfig {
     let defaultSaveDirectory: String?
     let disableOpenPanelOptions: Bool?
     let disableCorsRestrictions: Bool?
+    let disabledWebKitFeatures: [String]?
     let preferredTerminalApp: String?
     let mainWindowHotKey: HotKey?
 
@@ -74,6 +75,7 @@ enum AppRuntimeConfig {
       case defaultSaveDirectory = "general.defaultSaveDirectory"
       case disableOpenPanelOptions = "general.disableOpenPanelOptions"
       case disableCorsRestrictions = "general.disableCorsRestrictions"
+      case disabledWebKitFeatures = "general.disabledWebKitFeatures"
       case preferredTerminalApp = "general.preferredTerminalApp"
       case mainWindowHotKey = "general.mainWindowHotKey"
     }
@@ -196,6 +198,11 @@ enum AppRuntimeConfig {
     currentDefinition?.disableCorsRestrictions ?? false
   }
 
+  static var disabledWebKitFeatures: [String] {
+    // No extra WKPreferences feature flags disabled by default
+    currentDefinition?.disabledWebKitFeatures ?? []
+  }
+
   static var preferredTerminalApp: String? {
     // Use auto-detection by default
     currentDefinition?.preferredTerminalApp
@@ -259,6 +266,7 @@ private extension AppRuntimeConfig {
     defaultSaveDirectory: nil,
     disableOpenPanelOptions: defaultDisableOpenPanelOptions,
     disableCorsRestrictions: nil,
+    disabledWebKitFeatures: nil,
     preferredTerminalApp: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
   )

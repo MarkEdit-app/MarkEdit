@@ -77,6 +77,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
     // The main menu is a singleton, we need to update the menu items for the active editor
     editorViewController?.resetUserDefinedMenuItems()
+
+    // Try if warmup can fix the empty suggestion bug
+    NSSpellChecker.warmUp
   }
 
   func windowDidResignKey(_ notification: Notification) {
