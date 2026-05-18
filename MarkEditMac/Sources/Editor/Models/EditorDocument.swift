@@ -36,6 +36,77 @@ final class EditorDocument: NSDocument {
     Date.now.timeIntervalSince(revertedDate) < 1
   }
 
+  private struct ReadIntent {
+    let generation: Int
+    let shouldPreserveScroll: Bool
+  }
+
+  private static let externalReloadReadThreadKey = "app.cyan.markedit.externalReloadReadDocument"
+
+  private var threadReadMarker: String {
+    String(describing: ObjectIdentifier(self))
+  }
+
+  private func withExternalReloadRead<T>(_ operation: () throws -> T) rethrows -> T {
+    // AppKit synchronously calls read(from:ofType:) during this revert;
+    // scope the marker to that read.
+    let threadDictionary = Thread.current.threadDictionary
+    let oldValue = threadDictionary[Self.externalReloadReadThreadKey]
+    threadDictionary[Self.externalReloadReadThreadKey] = threadReadMarker
+    defer {
+      if let oldValue {
+        threadDictionary[Self.externalReloadReadThreadKey] = oldValue
+      } else {
+        threadDictionary.removeObject(forKey: Self.externalReloadReadThreadKey)
+      }
+    }
+
+    return try operation()
+  }
+
+  private func isExternalReloadRead() -> Bool {
+    Thread.current.threadDictionary[Self.externalReloadReadThreadKey] as? String == threadReadMarker
+  }
+
+  private func nextReadIntent(shouldPreserveScroll: Bool) -> ReadIntent {
+    externalReloadReadLock.lock()
+    defer { externalReloadReadLock.unlock() }
+
+    latestReadGeneration += 1
+
+    return ReadIntent(
+      generation: latestReadGeneration,
+      shouldPreserveScroll: shouldPreserveScroll
+    )
+  }
+
+  private func applyLatestRead(
+    intent: ReadIntent,
+    data: Data,
+    stringValue: String
+  ) {
+    externalReloadReadLock.lock()
+    let latestGeneration = latestReadGeneration
+    let shouldApplyRead = intent.generation == latestGeneration
+    guard shouldApplyRead else {
+      externalReloadReadLock.unlock()
+      let staleReadMessage = "Dropping stale document read generation \(intent.generation); " +
+        "latest=\(latestGeneration), preserveScroll=\(intent.shouldPreserveScroll)"
+      Logger.log(.debug, staleReadMessage)
+      return
+    }
+
+    self.fileData = data
+    self.stringValue = stringValue
+    externalReloadReadLock.unlock()
+
+    if intent.shouldPreserveScroll {
+      hostViewController?.resetEditor(preserveScrollPosition: true)
+    } else {
+      hostViewController?.representedObject = self
+    }
+  }
+
   var canUndo: Bool {
     get async {
       if isReadOnlyMode {
@@ -78,6 +149,8 @@ final class EditorDocument: NSDocument {
   private var autosaveDelayedTask: Task<Void, Never>?
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
+  private let externalReloadReadLock = NSLock()
+  private var latestReadGeneration = 0
   private var suggestedTextEncoding: EditorTextEncoding?
   private weak var hostViewController: EditorViewController?
 
@@ -339,6 +412,8 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
+    let readIntent = nextReadIntent(shouldPreserveScroll: isExternalReloadRead())
+
     DispatchQueue.global(qos: .userInitiated).async {
       let newValue = {
         if let encoding = AppDocumentController.suggestedTextEncoding {
@@ -350,9 +425,7 @@ extension EditorDocument {
       }()
 
       DispatchQueue.main.async {
-        self.fileData = data
-        self.stringValue = newValue
-        self.hostViewController?.representedObject = self
+        self.applyLatestRead(intent: readIntent, data: data, stringValue: newValue)
       }
     }
   }
@@ -409,7 +482,9 @@ extension EditorDocument {
 
         if let modificationDate, modificationDate > (self.fileModificationDate ?? .distantPast) {
           self.fileModificationDate = modificationDate
-          try self.revert(toContentsOf: fileURL, ofType: fileType)
+          try self.withExternalReloadRead {
+            try self.revert(toContentsOf: fileURL, ofType: fileType)
+          }
         }
       } catch {
         Logger.log(.error, error.localizedDescription)

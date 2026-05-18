@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { EditorSelection, EditorState } from '@codemirror/state';
+import { EditorSelection, EditorState, Text, Transaction, type ChangeSpec } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState } from './common/store';
 import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
@@ -19,7 +19,13 @@ import { removeFrontMatter } from './modules/frontMatter';
 import { selectedMainText, scrollIntoView, caretScrollDefaults } from './modules/selection';
 import { selectedLineColumn } from './modules/selection/selectedLineColumn';
 import { SelectionRange } from './modules/selection/types';
-import { markContentClean } from './modules/history';
+import {
+  resetContentReloadAnnotation,
+  resetCursorPlacementAnnotation,
+  resetCursorPlacementMeasureKey,
+  resetScrollRestoreMeasureKey,
+} from './modules/reset/transactionMetadata';
+import { clearHistoryEffect, markContentClean } from './modules/history';
 import { updateTextChecker } from './modules/textChecker';
 
 import { TextEditor } from './api/editor';
@@ -59,14 +65,54 @@ export enum ReplaceGranularity {
   selection = 'selection',
 }
 
+type ResetEditorOptions = {
+  /**
+   * Preserve the viewport for external reloads when no explicit selection is restored.
+   * Restored selections intentionally win over scroll preservation.
+   */
+  preserveScrollPosition?: boolean;
+};
+
+type ScrollPosition = {
+  top: number;
+  left: number;
+};
+
+type DocumentReloadChange =
+  | { kind: 'change'; changes: ChangeSpec }
+  | { kind: 'fallback' };
+
+const maxInPlaceReloadChangedCodeUnits = 20_000;
+const maxInPlaceReloadChangedDocumentRatio = 0.25;
+
 /**
  * Reset the editor to the initial state.
  */
-export async function resetEditor(initialContent: string, selectionRange?: SelectionRange): Promise<boolean> {
+export async function resetEditor(
+  initialContent: string,
+  selectionRange?: SelectionRange,
+  options: ResetEditorOptions = {},
+): Promise<boolean> {
   const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
   const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
   const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
   const selectionRestored = selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0);
+  const shouldPreserveScrollPosition = options.preserveScrollPosition === true && !selectionRestored;
+  const scrollPositionToRestore = shouldPreserveScrollPosition
+    ? currentScrollPosition(window.editor)
+    : undefined;
+  const shouldScrollToTop = !selectionRestored && scrollPositionToRestore === undefined;
+  const currentEditor = window.editor;
+  const resetGeneration = ++storage.resetGeneration;
+
+  if (
+    scrollPositionToRestore !== undefined &&
+    canResetContentInPlace(currentEditor, lineBreak)
+  ) {
+    if (resetEditorContentInPlace(currentEditor, initialDoc, lineBreak, scrollPositionToRestore)) {
+      return true;
+    }
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (typeof window.editor?.destroy === 'function') {
@@ -119,7 +165,12 @@ export async function resetEditor(initialContent: string, selectionRange?: Selec
   observeContentHeightChanges(scrollDOM);
   fixWebKitWheelIssues(scrollDOM);
 
-  if (!selectionRestored) {
+  if (scrollPositionToRestore !== undefined) {
+    restoreScrollPosition(editor, scrollPositionToRestore, resetGeneration);
+    moveCursorToVisibleScrollPosition(editor, scrollPositionToRestore, resetGeneration);
+  }
+
+  if (shouldScrollToTop) {
     // Makes sure the content doesn't have unwanted inset
     scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
     // scrollIntoView doesn't work when the app is idle
@@ -185,6 +236,13 @@ export async function resetEditor(initialContent: string, selectionRange?: Selec
     requestAnimationFrame(unblockWaiting);
     afterDomUpdate(unblockWaiting);
   });
+
+  if (scrollPositionToRestore !== undefined) {
+    scheduleMeasuredScrollRestore(editor, scrollPositionToRestore, {
+      placeCursorAfterRestore: true,
+      resetGeneration,
+    });
+  }
 
   return true;
 }
@@ -284,6 +342,221 @@ export function setHasModalSheet(value: boolean) {
   globalState.hasModalSheet = value;
 }
 
+function currentScrollPosition(editor: EditorView | null | undefined): ScrollPosition | undefined {
+  if (editor === null || editor === undefined) {
+    return undefined;
+  }
+
+  return {
+    top: editor.scrollDOM.scrollTop,
+    left: editor.scrollDOM.scrollLeft,
+  };
+}
+
+function isCurrentReset(editor: EditorView, resetGeneration: number | undefined) {
+  return window.editor === editor && (resetGeneration === undefined || storage.resetGeneration === resetGeneration);
+}
+
+function restoreScrollPosition(editor: EditorView, scrollPosition: ScrollPosition, resetGeneration?: number) {
+  if (!isCurrentReset(editor, resetGeneration)) {
+    return;
+  }
+
+  editor.scrollDOM.scrollTo({
+    top: scrollPosition.top,
+    left: scrollPosition.left,
+  });
+}
+
+function canResetContentInPlace(editor: EditorView | null | undefined, lineBreak: string | undefined): editor is EditorView {
+  if (editor === null || editor === undefined) {
+    return false;
+  }
+
+  return editor.state.lineBreak === resolvedLineBreak(lineBreak);
+}
+
+function resolvedLineBreak(lineBreak: string | undefined) {
+  return lineBreak ?? '\n';
+}
+
+function resetEditorContentInPlace(
+  editor: EditorView,
+  initialDoc: string,
+  lineBreak: string | undefined,
+  scrollPosition: ScrollPosition,
+) {
+  const reloadChange = documentReloadChanges(editor.state.doc, textFromDocumentString(initialDoc, lineBreak));
+  if (reloadChange?.kind === 'fallback') {
+    return false;
+  }
+
+  if (reloadChange !== undefined) {
+    editor.dispatch(
+      { effects: editor.scrollSnapshot() },
+      {
+        changes: reloadChange.changes,
+        effects: clearHistoryEffect.of(undefined),
+        annotations: [
+          Transaction.addToHistory.of(false),
+          Transaction.userEvent.of('@none'),
+          resetContentReloadAnnotation.of(true),
+        ],
+      },
+    );
+  } else {
+    restoreScrollPosition(editor, scrollPosition);
+  }
+
+  markContentClean();
+  return true;
+}
+
+function textFromDocumentString(doc: string, lineBreak: string | undefined) {
+  return Text.of(doc.split(lineBreak ?? /\r\n?|\n/));
+}
+
+function documentReloadChanges(currentDoc: Text, nextDoc: Text): DocumentReloadChange | undefined {
+  if (currentDoc.eq(nextDoc)) {
+    return undefined;
+  }
+
+  const currentString = currentDoc.toString();
+  const nextString = nextDoc.toString();
+  const sharedLength = Math.min(currentDoc.length, nextDoc.length);
+  let prefixLength = 0;
+  while (
+    prefixLength < sharedLength &&
+    currentString.charCodeAt(prefixLength) === nextString.charCodeAt(prefixLength)
+  ) {
+    prefixLength += 1;
+  }
+
+  let suffixLength = 0;
+  while (
+    suffixLength < sharedLength - prefixLength &&
+    currentString.charCodeAt(currentDoc.length - suffixLength - 1) ===
+      nextString.charCodeAt(nextDoc.length - suffixLength - 1)
+  ) {
+    suffixLength += 1;
+  }
+
+  const from = prefixLength;
+  const to = currentDoc.length - suffixLength;
+  const insertTo = nextDoc.length - suffixLength;
+  const changedSpanLength = Math.max(to - from, insertTo - from);
+  if (shouldFallbackForInPlaceReload(currentDoc.length, nextDoc.length, changedSpanLength)) {
+    return { kind: 'fallback' };
+  }
+
+  return {
+    kind: 'change',
+    changes: {
+      from,
+      to,
+      insert: nextDoc.slice(from, insertTo),
+    },
+  };
+}
+
+function shouldFallbackForInPlaceReload(currentLength: number, nextLength: number, changedSpanLength: number) {
+  if (changedSpanLength > maxInPlaceReloadChangedCodeUnits) {
+    return true;
+  }
+
+  const documentLength = Math.max(currentLength, nextLength);
+  return documentLength > maxInPlaceReloadChangedCodeUnits &&
+    changedSpanLength / Math.max(documentLength, 1) > maxInPlaceReloadChangedDocumentRatio;
+}
+
+function scheduleMeasuredScrollRestore(
+  editor: EditorView,
+  scrollPosition: ScrollPosition,
+  options: { placeCursorAfterRestore: boolean; resetGeneration: number },
+) {
+  if (!isCurrentReset(editor, options.resetGeneration)) {
+    return;
+  }
+
+  editor.requestMeasure({
+    key: resetScrollRestoreMeasureKey,
+    read: () => undefined,
+    write: () => {
+      restoreScrollPosition(editor, scrollPosition, options.resetGeneration);
+      if (options.placeCursorAfterRestore) {
+        schedulePostMeasuredCursorPlacement(editor, scrollPosition, options.resetGeneration);
+      }
+    },
+  });
+}
+
+function moveCursorToVisibleScrollPosition(editor: EditorView, scrollPosition: ScrollPosition, resetGeneration?: number) {
+  moveCursorToPositionAndRestoreScroll(editor, visibleCursorPosition(editor, scrollPosition), scrollPosition, resetGeneration);
+}
+
+function schedulePostMeasuredCursorPlacement(editor: EditorView, scrollPosition: ScrollPosition, resetGeneration: number) {
+  if (!isCurrentReset(editor, resetGeneration)) {
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    if (!isCurrentReset(editor, resetGeneration)) {
+      return;
+    }
+
+    editor.requestMeasure({
+      key: resetCursorPlacementMeasureKey,
+      read: () => visibleCursorPosition(editor, scrollPosition),
+      write: position => {
+        if (!isCurrentReset(editor, resetGeneration)) {
+          return;
+        }
+
+        moveCursorToPositionAndRestoreScroll(editor, position, scrollPosition, resetGeneration);
+      },
+    });
+  });
+}
+
+function moveCursorToPositionAndRestoreScroll(
+  editor: EditorView,
+  position: number,
+  scrollPosition: ScrollPosition,
+  resetGeneration?: number,
+) {
+  moveCursorToPosition(editor, position, resetGeneration);
+  restoreScrollPosition(editor, scrollPosition, resetGeneration);
+  requestAnimationFrame(() => restoreScrollPosition(editor, scrollPosition, resetGeneration));
+}
+
+function moveCursorToPosition(editor: EditorView, position: number, resetGeneration?: number) {
+  if (!isCurrentReset(editor, resetGeneration)) {
+    return;
+  }
+
+  editor.dispatch({
+    selection: EditorSelection.cursor(position),
+    annotations: [
+      Transaction.addToHistory.of(false),
+      resetCursorPlacementAnnotation.of(true),
+    ],
+  });
+}
+
+function visibleCursorPosition(editor: EditorView, scrollPosition: ScrollPosition): number {
+  const rect = editor.scrollDOM.getBoundingClientRect();
+  if (rect.width > 2 && rect.height > 2) {
+    const position = editor.posAtCoords({
+      x: rect.left + Math.max(1, Math.min(rect.width / 2, rect.width - 1)),
+      y: rect.top + Math.max(1, Math.min(rect.height / 2, rect.height - 1)),
+    }, false);
+
+    return position;
+  }
+
+  return editor.lineBlockAtHeight(scrollPosition.top).from;
+}
+
 function observeContentHeightChanges(scrollDOM: HTMLElement) {
   const notifyIfChanged = () => {
     const panel = window.editor.dom.querySelector('.cm-panels-bottom');
@@ -357,11 +630,13 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
 
 const storage: {
   scrollTimer: ReturnType<typeof setTimeout> | undefined;
+  resetGeneration: number;
   backgroundColor: string;
   viewportScale: number;
   bottomPanelHeight: number;
 } = {
   scrollTimer: undefined,
+  resetGeneration: 0,
   backgroundColor: '',
   viewportScale: 1.0,
   bottomPanelHeight: 0.0,

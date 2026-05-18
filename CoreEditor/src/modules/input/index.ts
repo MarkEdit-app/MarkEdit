@@ -14,12 +14,20 @@ import { refreshEditFocus, scrollCaretToVisible, scrollToSelection, selectedLine
 
 import hasSelection from '../selection/hasSelection';
 import redrawSelectionLayer from '../selection/redrawSelectionLayer';
+import {
+  resetContentReloadAnnotation,
+  resetCursorPlacementAnnotation,
+} from '../reset/transactionMetadata';
 import wrapBlock from './wrapBlock';
 import insertCodeBlock from './insertCodeBlock';
 
 export function filterTransaction(transaction: Transaction) {
   // Return nothing for read-only mode
-  if (window.config.readOnlyMode && transaction.docChanged) {
+  if (
+    window.config.readOnlyMode &&
+    transaction.docChanged &&
+    transaction.annotation(resetContentReloadAnnotation) !== true
+  ) {
     return [];
   }
 
@@ -103,18 +111,24 @@ export function interceptInputs() {
  */
 export function observeChanges() {
   return EditorView.updateListener.of(update => {
+    const isResetContentReload = update.transactions.some(
+      tr => tr.annotation(resetContentReloadAnnotation) === true,
+    );
+
     if (update.docChanged) {
-      // This should be called before updating the native view
-      setHistoryExplictlyMoved(update);
+      if (!isResetContentReload) {
+        // This should be called before updating the native view
+        setHistoryExplictlyMoved(update);
 
-      if (!update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
-        // We need this because we have different line height for headings,
-        // CodeMirror doesn't by default fix the offset issue.
-        scrollCaretToVisible();
+        if (!update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
+          // We need this because we have different line height for headings,
+          // CodeMirror doesn't by default fix the offset issue.
+          scrollCaretToVisible();
 
-        // Make sure the main selection is always centered for typewriter mode
-        if (window.config.typewriterMode) {
-          scrollToSelection('center');
+          // Make sure the main selection is always centered for typewriter mode
+          if (window.config.typewriterMode) {
+            scrollToSelection('center');
+          }
         }
       }
 
@@ -129,13 +143,15 @@ export function observeChanges() {
       }
 
       // Content is updated periodically
-      if (storage.contentUpdater !== undefined) {
-        clearTimeout(storage.contentUpdater);
-      }
+      if (!isResetContentReload) {
+        if (storage.contentUpdater !== undefined) {
+          clearTimeout(storage.contentUpdater);
+        }
 
-      storage.contentUpdater = setTimeout(() => {
-        window.nativeModules.core.notifyEditorDidBecomeIdle();
-      }, 1500);
+        storage.contentUpdater = setTimeout(() => {
+          window.nativeModules.core.notifyEditorDidBecomeIdle();
+        }, 1500);
+      }
     }
 
     // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
@@ -163,13 +179,22 @@ export function observeChanges() {
       // debounce to skip intermediate updates. sliceDoc is deferred inside getInfo()
       // and only called when the update is actually sent. The snapshot is intentional:
       // getInfo() is consistent with the other fields captured in this update.
+      const suppressSelectionRange = update.transactions.some(
+        tr => tr.annotation(resetCursorPlacementAnnotation) === true ||
+          tr.annotation(resetContentReloadAnnotation) === true,
+      );
       const lineColumnState = selectedLineColumn();
       const notifyViewDidUpdate = () => {
+        const lineColumnInfo = lineColumnState.getInfo();
+        if (suppressSelectionRange) {
+          lineColumnInfo.selectionRange = undefined;
+        }
+
         window.nativeModules.core.notifyViewDidUpdate({
-          contentEdited: update.docChanged,
+          contentEdited: update.docChanged && !isResetContentReload,
           compositionEnded: editingState.compositionEnded,
-          isDirty: isContentDirty(),
-          selectedLineColumn: lineColumnState.getInfo(),
+          isDirty: isResetContentReload ? false : isContentDirty(),
+          selectedLineColumn: lineColumnInfo,
         });
       };
 
@@ -204,7 +229,7 @@ export function observeChanges() {
             adjustActiveLineGutter();
 
             // Content changed without key press, could be a system event like accepting inline predictions
-            if (!hasRecentKeyPress()) {
+            if (!isResetContentReload && !hasRecentKeyPress()) {
               refreshEditFocus(); // Caret can be misplaced accepting inline predictions
             }
           });

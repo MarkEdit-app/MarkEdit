@@ -6,6 +6,8 @@ const enum BranchName { Done, Undone }
 
 const fromHistory = Annotation.define<{side: BranchName, rest: Branch, selection: EditorSelection}>()
 
+export const clearHistoryEffect = StateEffect.define<void>()
+
 /// Transaction annotation that will prevent that transaction from
 /// being combined with other transactions in the undo history. Given
 /// `"before"`, it'll prevent merging with previous transactions. With
@@ -67,6 +69,8 @@ const historyField_ = StateField.define({
       return new HistoryState(from == BranchName.Done ? fromHist.rest : other,
                               from == BranchName.Done ? other : fromHist.rest)
     }
+
+    if (tr.effects.some(effect => effect.is(clearHistoryEffect))) state = HistoryState.empty
 
     let isolate = tr.annotation(isolateHistory)
     if (isolate == "full" || isolate == "before") state = state.isolate()

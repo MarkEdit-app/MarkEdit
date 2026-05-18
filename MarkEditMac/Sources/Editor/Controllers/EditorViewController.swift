@@ -26,6 +26,7 @@ final class EditorViewController: NSViewController {
   var nativeSearchQueryChanged = false
   var bottomPanelHeight: Double = 0
   var pendingResetCount: Int = 0
+  var latestResetGeneration: Int = 0
   var initialContent: String?
   var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
   var localEventMonitor: Any?
@@ -351,19 +352,24 @@ extension EditorViewController {
     bridge.core.insertText(text: text, from: 0, to: 0)
   }
 
-  func resetEditor() {
+  func resetEditor(preserveScrollPosition: Bool = false) {
     guard hasFinishedLoading, let textContent = document?.stringValue else {
       return
     }
 
     let selectionRange: SelectionRange? = {
-      guard AppRuntimeConfig.restoreLastSelection, let fileURL = document?.fileURL else {
+      guard let fileURL = document?.fileURL else {
         return nil
       }
 
-      // Content was reloaded from disk due to an external edit, discard stale offsets
-      if document?.hasBeenReverted == true {
+      // Content was reloaded from disk, discard stale offsets
+      let shouldDiscardSelectionHistory = preserveScrollPosition || document?.hasBeenReverted == true
+      if shouldDiscardSelectionHistory {
         EditorSelectionHistory.discard(for: fileURL)
+        return nil
+      }
+
+      guard AppRuntimeConfig.restoreLastSelection else {
         return nil
       }
 
@@ -374,21 +380,44 @@ extension EditorViewController {
 
     webView.magnification = 1.0
     pendingResetCount += 1
+    latestResetGeneration += 1
+    let resetGeneration = latestResetGeneration
 
     Task { @MainActor [weak self] in
       guard let self else {
         return
       }
 
-      _ = try? await self.bridge.core.resetEditor(
-        text: textContent,
-        selectionRange: selectionRange
-      )
+      defer {
+        self.pendingResetCount -= 1
+        if self.pendingResetCount == 0 {
+          self.resetContinuations.forEach { $0.resume() }
+          self.resetContinuations.removeAll()
+        }
+      }
 
-      self.pendingResetCount -= 1
-      if self.pendingResetCount == 0 {
-        self.resetContinuations.forEach { $0.resume() }
-        self.resetContinuations.removeAll()
+      guard resetGeneration == self.latestResetGeneration else {
+        return
+      }
+
+      do {
+        _ = try await self.bridge.core.resetEditor(
+          text: textContent,
+          selectionRange: selectionRange,
+          preserveScrollPosition: preserveScrollPosition
+        )
+      } catch {
+        let failureMessage = "Failed to reset editor; preserveScrollPosition=\(preserveScrollPosition), " +
+          "hasSelectionRange=\(selectionRange != nil): \(error.localizedDescription)"
+        Logger.log(
+          .error,
+          failureMessage
+        )
+        return
+      }
+
+      guard resetGeneration == self.latestResetGeneration else {
+        return
       }
 
       // Initial content from scenarios like "CreateNewDocumentIntent" or "New File from Clipboard"

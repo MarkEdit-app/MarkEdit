@@ -22,7 +22,11 @@ import {
  * @overrideModuleName WebBridgeCore
  */
 export interface WebModuleCore extends WebModule {
-  resetEditor({ text, selectionRange }: { text: string; selectionRange?: SelectionRange }): Promise<boolean>;
+  resetEditor({ text, selectionRange, preserveScrollPosition }: {
+    text: string;
+    selectionRange?: SelectionRange;
+    preserveScrollPosition?: boolean;
+  }): Promise<boolean>;
   getEditorState(): { hasFocus: boolean; hasSelection: boolean };
   getEditorText(): string;
   getReadableContentPair(): ReadableContentPair;
@@ -35,8 +39,12 @@ export interface WebModuleCore extends WebModule {
 }
 
 export class WebModuleCoreImpl implements WebModuleCore {
-  resetEditor({ text, selectionRange }: { text: string; selectionRange?: SelectionRange }): Promise<boolean> {
-    return resetEditor(text, selectionRange);
+  resetEditor({ text, selectionRange, preserveScrollPosition }: {
+    text: string;
+    selectionRange?: SelectionRange;
+    preserveScrollPosition?: boolean;
+  }): Promise<boolean> {
+    return resetEditor(text, selectionRange, { preserveScrollPosition });
   }
 
   getEditorState(): { hasFocus: boolean; hasSelection: boolean } {
