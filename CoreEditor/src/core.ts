@@ -63,17 +63,17 @@ export enum ReplaceGranularity {
  * Reset the editor to the initial state.
  */
 export async function resetEditor(initialContent: string, selectionRange?: SelectionRange): Promise<boolean> {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (typeof window.editor?.destroy === 'function') {
-    window.editor.destroy();
-  }
-
   const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
   const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
   const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
   const selectionRestored = selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0);
 
-  const editor = new EditorView({
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (typeof window.editor?.destroy === 'function') {
+    window.editor.destroy();
+  }
+
+  window.editor = new EditorView({
     state: EditorState.create({
       doc: initialDoc,
       selection: initialSelection,
@@ -86,8 +86,8 @@ export async function resetEditor(initialContent: string, selectionRange?: Selec
       : undefined,
   });
 
+  const editor = window.editor;
   editor.focus();
-  window.editor = editor;
 
   MarkEdit.editorView = editor;
   (MarkEdit.editorAPI as TextEditor).setView(editor);
