@@ -26,11 +26,9 @@ final class EditorViewController: NSViewController {
   var nativeSearchQueryChanged = false
   var bottomPanelHeight: Double = 0
   var pendingResetCount: Int = 0
-  var initialContent: String?
   var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
   var localEventMonitor: Any?
   var textBoxInputObserver: Any?
-  var writingToolsObservation: NSKeyValueObservation?
   var safeAreaObservation: NSKeyValueObservation?
   var userDefinedMenuItems = [EditorMenuItem]()
 
@@ -231,6 +229,10 @@ final class EditorViewController: NSViewController {
     }
   }()
 
+  private var initialContent: String?
+  private var lastResetDocumentID: ObjectIdentifier?
+  private var writingToolsObservation: NSKeyValueObservation?
+
   // For CoreEditor preload
   private var loadingContinuations = [CheckedContinuation<Void, Never>]()
   private var resetContinuations = [CheckedContinuation<Void, Never>]()
@@ -352,18 +354,23 @@ extension EditorViewController {
   }
 
   func resetEditor() {
-    guard hasFinishedLoading, let textContent = document?.stringValue else {
+    guard hasFinishedLoading, let document else {
       return
     }
 
+    let textContent = document.stringValue
+    let documentID = ObjectIdentifier(document)
+
+    let documentChanged = lastResetDocumentID != documentID
+    lastResetDocumentID = documentID
+
     let selectionRange: SelectionRange? = {
-      guard AppRuntimeConfig.restoreLastSelection, let fileURL = document?.fileURL else {
+      // CoreEditor preserves selection for same-document resets
+      guard documentChanged else {
         return nil
       }
 
-      // Content was reloaded from disk due to an external edit, discard stale offsets
-      if document?.hasBeenReverted == true {
-        EditorSelectionHistory.discard(for: fileURL)
+      guard AppRuntimeConfig.restoreLastSelection, let fileURL = document.fileURL else {
         return nil
       }
 
@@ -372,9 +379,11 @@ extension EditorViewController {
       return EditorSelectionHistory.selectionRange(for: fileURL, fileSize: fileSize)
     }()
 
-    webView.magnification = 1.0
-    pendingResetCount += 1
+    if documentChanged {
+      webView.magnification = 1.0
+    }
 
+    pendingResetCount += 1
     Task { @MainActor [weak self] in
       guard let self else {
         return
@@ -382,7 +391,8 @@ extension EditorViewController {
 
       _ = try? await self.bridge.core.resetEditor(
         text: textContent,
-        selectionRange: selectionRange
+        selectionRange: selectionRange,
+        documentChanged: documentChanged
       )
 
       self.pendingResetCount -= 1
