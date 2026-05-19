@@ -69,11 +69,46 @@ final class AppDocumentController: NSDocumentController {
       // Ensure the preloader has a fully loaded editor before opening the document
       await EditorPreloader.shared.prepareViewController()
 
+      // Pick a target tab-group host: if a usable editor window is up front,
+      // we want the newly opened document to join that window's tab group
+      // instead of becoming a standalone window. nil means "open standalone".
+      let targetWindow = Self.tabTargetWindow(for: url)
+
+      guard let targetWindow else {
+        super.openDocument(
+          withContentsOf: url,
+          display: displayDocument,
+          completionHandler: completionHandler
+        )
+        return
+      }
+
+      // Same pattern as reopenClosedTab: temporarily disable auto-tabbing so
+      // the new window opens standalone, then we manually attach it to the
+      // target's tab group. EditorWindowController.showWindow snapshots this
+      // value synchronously, so it must be set before super.openDocument.
+      Self.suppressAutomaticTabbing()
       super.openDocument(
         withContentsOf: url,
-        display: displayDocument,
-        completionHandler: completionHandler
-      )
+        display: displayDocument
+      ) { document, alreadyOpen, error in
+        Self.restoreAutomaticTabbing()
+
+        if !alreadyOpen, error == nil,
+           let editorDocument = document as? EditorDocument {
+          Task { @MainActor in
+            guard let newWindow = editorDocument.windowControllers.first?.window,
+                  newWindow !== targetWindow,
+                  newWindow.tabGroup !== targetWindow.tabGroup else {
+              return
+            }
+
+            targetWindow.addTabbedWindow(newWindow, ordered: .above)
+          }
+        }
+
+        completionHandler(document, alreadyOpen, error)
+      }
     }
   }
 
@@ -83,7 +118,65 @@ final class AppDocumentController: NSDocumentController {
   }
 }
 
+// MARK: - Automatic tabbing suppression
+
+extension AppDocumentController {
+  private enum AutoTabbingStates {
+    @MainActor static var inFlightCount = 0
+    @MainActor static var savedValue: Bool?
+  }
+
+  /// Temporarily forces `NSWindow.allowsAutomaticWindowTabbing` to `false`.
+  ///
+  /// Reference-counted so overlapping callers (e.g. rapid Cmd+Shift+T, or a
+  /// batch of files opened together) don't clobber each other's saved state.
+  /// Pair every call with `restoreAutomaticTabbing()`.
+  @MainActor
+  static func suppressAutomaticTabbing() {
+    if AutoTabbingStates.inFlightCount == 0 {
+      AutoTabbingStates.savedValue = NSWindow.allowsAutomaticWindowTabbing
+      NSWindow.allowsAutomaticWindowTabbing = false
+    }
+
+    AutoTabbingStates.inFlightCount += 1
+  }
+
+  @MainActor
+  static func restoreAutomaticTabbing() {
+    AutoTabbingStates.inFlightCount -= 1
+    if AutoTabbingStates.inFlightCount == 0 {
+      NSWindow.allowsAutomaticWindowTabbing = AutoTabbingStates.savedValue ?? true
+      AutoTabbingStates.savedValue = nil
+    }
+  }
+}
+
 // MARK: - Private
+
+private extension AppDocumentController {
+  @MainActor
+  static func tabTargetWindow(for url: URL) -> EditorWindow? {
+    if AppPreferences.Window.tabbingMode == .disallowed {
+      return nil
+    }
+
+    // If the document is already open, NSDocumentController will reuse it and
+    // raise its existing window/tab — we must not inject a new tab attachment.
+    let alreadyOpen = NSDocumentController.shared.documents.contains { document in
+      guard let existing = document.fileURL else {
+        return false
+      }
+
+      return existing == url || existing.resolvingSymlinksInPath() == url.resolvingSymlinksInPath()
+    }
+
+    if alreadyOpen {
+      return nil
+    }
+
+    return (NSApp.keyWindow as? EditorWindow) ?? (NSApp.mainWindow as? EditorWindow)
+  }
+}
 
 private extension NSOpenPanel {
   /// Re-layouts the accessory view to work around internal AppKit bugs.

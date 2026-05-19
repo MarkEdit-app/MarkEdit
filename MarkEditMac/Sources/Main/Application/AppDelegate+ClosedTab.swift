@@ -11,11 +11,6 @@ import MarkEditKit
 // MARK: - Closed Tab
 
 extension AppDelegate {
-  private enum ReopenStates {
-    @MainActor static var inFlightCount = 0
-    @MainActor static var savedAllowsAutomaticWindowTabbing: Bool?
-  }
-
   @IBAction func reopenClosedTab(_ sender: Any?) {
     guard let entry = EditorClosedTabHistory.shared.pop() else {
       NSSound.beep()
@@ -45,22 +40,13 @@ extension AppDelegate {
 
     // openDocument(display:true) normally auto-joins the key window's tab group.
     // Temporarily disable this so the window opens standalone, then we manually
-    // addTabbedWindow to the correct target. Counter handles rapid Cmd+Shift+T.
-    if ReopenStates.inFlightCount == 0 {
-      ReopenStates.savedAllowsAutomaticWindowTabbing = NSWindow.allowsAutomaticWindowTabbing
-      NSWindow.allowsAutomaticWindowTabbing = false
-    }
-
-    ReopenStates.inFlightCount += 1
+    // addTabbedWindow to the correct target.
+    AppDocumentController.suppressAutomaticTabbing()
     NSDocumentController.shared.openDocument(
       withContentsOf: entry.url,
       display: true
     ) { document, _, error in
-      ReopenStates.inFlightCount -= 1
-      if ReopenStates.inFlightCount == 0 {
-        NSWindow.allowsAutomaticWindowTabbing = ReopenStates.savedAllowsAutomaticWindowTabbing ?? true
-        ReopenStates.savedAllowsAutomaticWindowTabbing = nil
-      }
+      AppDocumentController.restoreAutomaticTabbing()
 
       if let error {
         NSSound.beep()
