@@ -18,15 +18,17 @@ public final class WebBridgeCore {
     self.webView = webView
   }
 
-  public func resetEditor(text: String, selectionRange: SelectionRange?) async throws -> Bool {
+  public func resetEditor(text: String, selectionRange: SelectionRange?, documentChanged: Bool) async throws -> Bool {
     struct Message: Encodable {
       let text: String
       let selectionRange: SelectionRange?
+      let documentChanged: Bool
     }
 
     let message = Message(
       text: text,
-      selectionRange: selectionRange
+      selectionRange: selectionRange,
+      documentChanged: documentChanged
     )
 
     guard let webView else {

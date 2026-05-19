@@ -51,20 +51,6 @@ enum EditorSelectionHistory {
     return entry.selectionRange
   }
 
-  static func discard(for fileURL: URL) {
-    if pendingInfo?.fileURL == fileURL {
-      saveTask?.cancel()
-      saveTask = nil
-      pendingInfo = nil
-    }
-
-    Task {
-      var current = EditorHistory.selectionRanges
-      current.removeValue(forKey: fileURL.cacheKey)
-      EditorHistory.selectionRanges = current
-    }
-  }
-
   /// Removes selection entries older than the retention period and enforces a maximum entry limit
   static func purgeStaleEntries() {
     // Flush any pending saves before purging
@@ -123,6 +109,20 @@ private extension EditorSelectionHistory {
     current[fileURL.cacheKey] = EditorHistory.SelectionRangeEntry(range, fileSize: fileSize)
     EditorHistory.selectionRanges = current
     pendingInfo = nil
+  }
+
+  static func discard(for fileURL: URL) {
+    if pendingInfo?.fileURL == fileURL {
+      saveTask?.cancel()
+      saveTask = nil
+      pendingInfo = nil
+    }
+
+    Task {
+      var current = EditorHistory.selectionRanges
+      current.removeValue(forKey: fileURL.cacheKey)
+      EditorHistory.selectionRanges = current
+    }
   }
 }
 

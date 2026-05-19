@@ -18,7 +18,6 @@ import { getLineBreak, normalizeLineBreaks } from './modules/lineEndings';
 import { removeFrontMatter } from './modules/frontMatter';
 import { selectedMainText, scrollIntoView, caretScrollDefaults } from './modules/selection';
 import { selectedLineColumn } from './modules/selection/selectedLineColumn';
-import { SelectionRange } from './modules/selection/types';
 import { markContentClean } from './modules/history';
 import { updateTextChecker } from './modules/textChecker';
 
@@ -62,7 +61,30 @@ export enum ReplaceGranularity {
 /**
  * Reset the editor to the initial state.
  */
-export async function resetEditor(initialContent: string, selectionRange?: SelectionRange): Promise<boolean> {
+export async function resetEditor(
+  initialContent: string,
+  selectionRange?: { anchor: number; head: number },
+  documentChanged: boolean = true,
+): Promise<boolean> {
+  // Used to restore the scroll position if the document is not changed
+  const previousOffset = (() => {
+    if (documentChanged) {
+      return undefined;
+    }
+
+    const scrollDOM = (window.editor as EditorView | undefined)?.scrollDOM;
+    if (scrollDOM === undefined) {
+      return undefined;
+    }
+
+    return { top: scrollDOM.scrollTop, left: scrollDOM.scrollLeft };
+  })();
+
+  // Used to restore the selection if the document is not changed
+  if (!documentChanged && typeof window.editor === 'object') {
+    selectionRange = window.editor.state.selection.main;
+  }
+
   const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
   const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
   const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
@@ -81,7 +103,7 @@ export async function resetEditor(initialContent: string, selectionRange?: Selec
     }),
     parent: document.querySelector('#editor') ?? document.body,
     // Initial scroll to avoid an extra transaction
-    scrollTo: selectionRestored
+    scrollTo: (selectionRestored && previousOffset === undefined)
       ? EditorView.scrollIntoView(initialSelection.head, caretScrollDefaults)
       : undefined,
   });
@@ -119,7 +141,10 @@ export async function resetEditor(initialContent: string, selectionRange?: Selec
   observeContentHeightChanges(scrollDOM);
   fixWebKitWheelIssues(scrollDOM);
 
-  if (!selectionRestored) {
+  if (previousOffset !== undefined) {
+    // Apply after the next frame so the viewport has been measured
+    requestAnimationFrame(() => scrollDOM.scrollTo(previousOffset));
+  } else if (!selectionRestored) {
     // Makes sure the content doesn't have unwanted inset
     scrollIntoView(0, window.config.typewriterMode ? 'center' : undefined);
     // scrollIntoView doesn't work when the app is idle
