@@ -6,7 +6,6 @@
 //
 
 import AppKit
-import WebKit
 import MarkEditKit
 
 /**
@@ -21,8 +20,6 @@ final class EditorPreloader {
     Task {
       await prepareViewController()
     }
-
-    startObservingMemoryPressure()
   }
 
   /// Ensure the preloaded controller has finished loading,
@@ -58,20 +55,6 @@ final class EditorPreloader {
   // MARK: - Private
 
   private var preloadedController: EditorViewController?
-  private var memoryPressureSource: DispatchSourceMemoryPressure?
 
   private init() {}
-
-  private func startObservingMemoryPressure() {
-    let source = DispatchSource.makeMemoryPressureSource(eventMask: .critical, queue: .main)
-    source.setEventHandler { [weak self] in
-      Task { @MainActor in
-        self?.preloadedController = nil
-        Logger.log(.info, "Releasing preloaded editor on memory pressure")
-      }
-    }
-
-    source.resume()
-    memoryPressureSource = source
-  }
 }
