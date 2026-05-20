@@ -242,6 +242,12 @@ final class EditorViewController: NSViewController {
       NSEvent.removeMonitor(monitor)
       localEventMonitor = nil
     }
+
+    loadingContinuations.forEach { $0.resume() }
+    loadingContinuations.removeAll()
+
+    resetContinuations.forEach { $0.resume() }
+    resetContinuations.removeAll()
   }
 
   init(preloadDelay: TimeInterval? = nil) {
