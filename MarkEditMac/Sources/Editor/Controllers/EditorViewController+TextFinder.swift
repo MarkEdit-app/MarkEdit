@@ -179,22 +179,13 @@ extension EditorViewController {
   }
 
   func findSelectionInTextFinder() {
-    let reselectTerm = webView.isFirstResponder
-    updateTextFinderMode(.find, startsEditing: false)
-
     Task {
-      guard let text = try? await bridge.selection.getText() else {
+      guard let text = try? await bridge.selection.getText(), !text.isEmpty else {
         return
       }
 
-      if text.isEmpty && !reselectTerm {
-        NSSound.beep()
-      }
-
       findPanel.searchField.stringValue = text
-      DispatchQueue.main.asyncAfter(deadline: .now() + panelAnimationDuration) {
-        self.updateTextFinderQuery()
-      }
+      updateTextFinderQuery(refocus: false)
     }
   }
 
@@ -284,29 +275,18 @@ private extension EditorViewController {
   }
 
   func navigateFindResults(backwards: Bool) async {
-    guard !nativeSearchQueryChanged else {
-      return updateTextFinderQuery()
+    if nativeSearchQueryChanged {
+      updateTextFinderQuery(refocus: false)
     }
 
-    let wasPanelHidden = findPanel.mode == .hidden
-    let reselectTerm = webView.isFirstResponder && (wasPanelHidden || searchTerm.isEmpty)
-
-    if reselectTerm, let text = try? await bridge.selection.getText() {
-      findPanel.searchField.stringValue = text
-      updateTextFinderQuery()
-    }
-
-    if wasPanelHidden {
-      updateTextFinderMode(.find, startsEditing: false)
+    guard !searchTerm.isEmpty else {
+      NSSound.beep()
+      return
     }
 
     let navigate = backwards ? bridge.search.findPrevious : bridge.search.findNext
     let hadSelectedMatch = (try? await navigate(searchTerm)) ?? false
-
-    if !reselectTerm {
-      finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
-    }
-
+    finishFinderNavigation(hadSelectedMatch: hadSelectedMatch)
     updateSearchCounter()
   }
 
