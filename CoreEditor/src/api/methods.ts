@@ -2,6 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 import { LanguageDescription } from '@codemirror/language';
 import { MarkdownConfig } from '@lezer/markdown';
+import { RuntimeInfo } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
 
 export function onEditorReady(listener: (editorView: EditorView) => void) {
@@ -18,6 +19,23 @@ export async function saveDocument(): Promise<boolean> {
 
 export async function closeDocument(): Promise<boolean> {
   return window.nativeModules.api.closeDocument();
+}
+
+export function getRuntimeInfo(): RuntimeInfo {
+  const runtimeInfo = window.config.runtimeInfo;
+  if (runtimeInfo === undefined) {
+    throw new Error('MarkEdit.getRuntimeInfo() is not implemented in this context.');
+  }
+
+  return runtimeInfo;
+}
+
+export function terminateApp(): void {
+  window.nativeModules.api.terminateApp();
+}
+
+export function relaunchApp(): void {
+  window.nativeModules.api.relaunchApp();
 }
 
 export function addExtension(extension: Extension) {

@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import UniformTypeIdentifiers
 import MarkEditCore
 import MarkEditKit
@@ -285,6 +286,12 @@ extension AppPreferences {
       lineHeight: Editor.lineHeight.multiplier,
       suggestWhileTyping: Assistant.suggestWhileTyping,
       standardDirectories: URL.standardDirectories,
+      runtimeInfo: RuntimeInfo(
+        appVersion: Bundle.main.shortVersionString ?? "1.0.0",
+        appBuild: Bundle.main.bundleVersion ?? "1",
+        osVersion: ProcessInfo.processInfo.semanticOSVer,
+        webkitVersion: Bundle.webkitBundle?.bundleVersion ?? ""
+      ),
       defaultLineBreak: General.defaultLineEndings.characters,
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,
