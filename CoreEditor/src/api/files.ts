@@ -1,4 +1,4 @@
-import { CreateFileOptions, DirectoryType, FileInfo, FileObject } from 'markedit-api';
+import { CreateFileOptions, DirectoryType, FileInfo, FileObject, MoveFileOptions } from 'markedit-api';
 
 export async function openFile(path: string): Promise<boolean> {
   return window.nativeModules.api.openFile({ path });
@@ -10,6 +10,14 @@ export async function createFile(options: CreateFileOptions): Promise<boolean> {
 
 export async function deleteFile(path: string): Promise<boolean> {
   return window.nativeModules.api.deleteFile({ path });
+}
+
+export async function moveFile(options: MoveFileOptions): Promise<boolean> {
+  return window.nativeModules.api.moveFile({ options });
+}
+
+export async function revealFile(path?: string): Promise<boolean> {
+  return window.nativeModules.api.revealFile({ path });
 }
 
 export async function listFiles(path: string): Promise<string[] | undefined> {

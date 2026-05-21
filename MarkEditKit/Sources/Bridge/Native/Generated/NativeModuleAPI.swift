@@ -23,12 +23,16 @@ public protocol NativeModuleAPI: NativeModule {
   func openFile(path: String) async -> Bool
   func createFile(options: CreateFileOptions) async -> Bool
   func deleteFile(path: String) async -> Bool
+  func moveFile(options: MoveFileOptions) async -> Bool
+  func revealFile(path: String?) async -> Bool
   func listFiles(path: String) async -> [String]?
   func getFileContent(path: String?) async -> String?
   func getFileObject(path: String?) async -> String?
   func getFileInfo(path: String?) async -> String?
   func getPasteboardItems() async -> String?
   func getPasteboardString() async -> String?
+  func terminateApp()
+  func relaunchApp()
 }
 
 public extension NativeModuleAPI {
@@ -72,6 +76,12 @@ final class NativeBridgeAPI: NativeBridge {
     "deleteFile": { [weak self] in
       await self?.deleteFile(parameters: $0)
     },
+    "moveFile": { [weak self] in
+      await self?.moveFile(parameters: $0)
+    },
+    "revealFile": { [weak self] in
+      await self?.revealFile(parameters: $0)
+    },
     "listFiles": { [weak self] in
       await self?.listFiles(parameters: $0)
     },
@@ -89,6 +99,12 @@ final class NativeBridgeAPI: NativeBridge {
     },
     "getPasteboardString": { [weak self] in
       await self?.getPasteboardString(parameters: $0)
+    },
+    "terminateApp": { [weak self] in
+      await self?.terminateApp(parameters: $0)
+    },
+    "relaunchApp": { [weak self] in
+      await self?.relaunchApp(parameters: $0)
     },
   ]
 
@@ -268,6 +284,40 @@ final class NativeBridgeAPI: NativeBridge {
     return .success(result)
   }
 
+  private func moveFile(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var options: MoveFileOptions
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.moveFile(options: message.options)
+    return .success(result)
+  }
+
+  private func revealFile(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String?
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.revealFile(path: message.path)
+    return .success(result)
+  }
+
   private func listFiles(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String
@@ -345,6 +395,16 @@ final class NativeBridgeAPI: NativeBridge {
     let result = await module.getPasteboardString()
     return .success(result)
   }
+
+  private func terminateApp(parameters: Data) async -> Result<Any?, Error>? {
+    module.terminateApp()
+    return .success(nil)
+  }
+
+  private func relaunchApp(parameters: Data) async -> Result<Any?, Error>? {
+    module.relaunchApp()
+    return .success(nil)
+  }
 }
 
 /// Represents a menu item in native menus.
@@ -416,5 +476,20 @@ public struct CreateFileOptions: Decodable, Equatable {
     self.overwrites = overwrites
     self.string = string
     self.data = data
+  }
+}
+
+public struct MoveFileOptions: Decodable, Equatable {
+  /// Source file path.
+  public var source: String
+  /// Destination file path.
+  public var destination: String
+  /// If set to true, existing files at the destination will be overwritten.
+  public var overwrites: Bool?
+
+  public init(source: String, destination: String, overwrites: Bool?) {
+    self.source = source
+    self.destination = destination
+    self.overwrites = overwrites
   }
 }

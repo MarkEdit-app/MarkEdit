@@ -29,6 +29,24 @@ public enum EditorInvisiblesBehavior: String, Codable {
   case always = "always"
 }
 
+public struct RuntimeInfo: Codable, Equatable {
+  /// Application version, such as `1.0`.
+  public var appVersion: String
+  /// Application build number, such as `100`.
+  public var appBuild: String
+  /// Operating system version, such as `15.0`.
+  public var osVersion: String
+  /// WebKit version, such as `620.1.16`.
+  public var webkitVersion: String
+
+  public init(appVersion: String, appBuild: String, osVersion: String, webkitVersion: String) {
+    self.appVersion = appVersion
+    self.appBuild = appBuild
+    self.osVersion = osVersion
+    self.webkitVersion = webkitVersion
+  }
+}
+
 public enum EditorIndentBehavior: String, Codable {
   case never = "never"
   case paragraph = "paragraph"

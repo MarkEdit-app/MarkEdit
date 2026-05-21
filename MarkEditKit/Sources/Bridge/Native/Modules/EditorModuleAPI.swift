@@ -124,6 +124,49 @@ public final class EditorModuleAPI: NativeModuleAPI {
     }
   }
 
+  public func moveFile(options: MoveFileOptions) async -> Bool {
+    guard let sourceURL = delegate?.editorAPIGetFileURL(self, path: options.source) else {
+      return false
+    }
+
+    guard let destinationURL = delegate?.editorAPIGetFileURL(self, path: options.destination) else {
+      return false
+    }
+
+    do {
+      if FileManager.default.fileExists(at: destinationURL).fileExists {
+        guard options.overwrites == true else {
+          return false
+        }
+
+        try FileManager.default.removeItem(at: destinationURL)
+      }
+
+      try FileManager.default.moveItem(at: sourceURL, to: destinationURL)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  public func revealFile(path: String?) async -> Bool {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
+      return false
+    }
+
+  #if os(macOS)
+    guard FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) else {
+      return false
+    }
+
+    NSWorkspace.shared.activateFileViewerSelecting([fileURL])
+    return true
+  #else
+    Logger.assertFail("Missing implementation, revealing files requires AppKit")
+    return false
+  #endif
+  }
+
   public func listFiles(path: String) async -> [String]? {
     guard let fileURL = delegate?.editorAPIGetFileURL(self, path: path) else {
       return nil
@@ -217,6 +260,32 @@ public final class EditorModuleAPI: NativeModuleAPI {
   #else
     Logger.assertFail("Missing implementation, consider using web api directly")
     return nil
+  #endif
+  }
+
+  public func terminateApp() {
+  #if os(macOS)
+    NSApp.terminate(nil)
+  #else
+    Logger.assertFail("Missing implementation, terminating the app requires AppKit")
+  #endif
+  }
+
+  public func relaunchApp() {
+  #if os(macOS)
+    let configuration = NSWorkspace.OpenConfiguration()
+    configuration.createsNewApplicationInstance = true
+
+    NSWorkspace.shared.openApplication(
+      at: Bundle.main.bundleURL,
+      configuration: configuration
+    ) { _, _ in
+      Task { @MainActor in
+        NSApp.terminate(nil)
+      }
+    }
+  #else
+    Logger.assertFail("Missing implementation, relaunching the app requires AppKit")
   #endif
   }
 }

@@ -1,4 +1,4 @@
-import { CreateFileOptions, SavePanelOptions } from 'markedit-api';
+import { CreateFileOptions, MoveFileOptions, SavePanelOptions } from 'markedit-api';
 import { NativeModule } from '../nativeModule';
 import { WebMenuItem } from '../../@types/WebMenuItem';
 import { WebPoint } from '../../@types/WebPoint';
@@ -20,10 +20,14 @@ export interface NativeModuleAPI extends NativeModule {
   openFile({ path }: { path: string }): Promise<boolean>;
   createFile({ options }: { options: CreateFileOptions }): Promise<boolean>;
   deleteFile({ path }: { path: string }): Promise<boolean>;
+  moveFile({ options }: { options: MoveFileOptions }): Promise<boolean>;
+  revealFile({ path }: { path: string | undefined }): Promise<boolean>;
   listFiles({ path }: { path: string }): Promise<string[] | undefined>;
   getFileContent({ path }: { path: string | undefined }): Promise<string | undefined>;
   getFileObject({ path }: { path: string | undefined }): Promise<string | undefined>;
   getFileInfo({ path }: { path: string | undefined }): Promise<string | undefined>;
   getPasteboardItems(): Promise<string | undefined>;
   getPasteboardString(): Promise<string | undefined>;
+  terminateApp(): void;
+  relaunchApp(): void;
 }

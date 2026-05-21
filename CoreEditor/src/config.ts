@@ -1,3 +1,4 @@
+import { RuntimeInfo } from 'markedit-api';
 import { Compartment } from '@codemirror/state';
 import { WebFontFace } from './@types/WebFontFace';
 
@@ -60,6 +61,7 @@ export interface Config {
   lineHeight: number;
   suggestWhileTyping: boolean;
   standardDirectories: { [key: string]: string };
+  runtimeInfo?: RuntimeInfo;
   defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;

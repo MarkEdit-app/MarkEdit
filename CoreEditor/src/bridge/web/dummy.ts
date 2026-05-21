@@ -1,3 +1,4 @@
+import { RuntimeInfo } from 'markedit-api';
 import { WebModule } from '../webModule';
 import { IndentBehavior } from '../../config';
 
@@ -12,11 +13,11 @@ export interface WebModuleDummy extends WebModule {
    *
    * We use this to generate types that are not covered in exposed interfaces, as a workaround.
    */
-  __generateTypes__(_types: { arg0: IndentBehavior }): void;
+  __generateTypes__(_types: { arg0: IndentBehavior; arg1: RuntimeInfo }): void;
 }
 
 export class WebModuleDummyImpl implements WebModuleDummy {
-  __generateTypes__(_types: { arg0: IndentBehavior }): void {
+  __generateTypes__(_types: { arg0: IndentBehavior; arg1: RuntimeInfo }): void {
     // no-op
   }
 }

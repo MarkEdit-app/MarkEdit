@@ -91,6 +91,7 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
       lineHeight: 1.4,
       suggestWhileTyping: false,
       standardDirectories: URL.standardDirectories,
+      runtimeInfo: nil,
       defaultLineBreak: nil,
       tabKeyBehavior: nil,
       indentUnit: nil,
