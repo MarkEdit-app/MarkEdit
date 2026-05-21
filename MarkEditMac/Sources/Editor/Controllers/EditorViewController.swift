@@ -234,8 +234,8 @@ final class EditorViewController: NSViewController {
   private var writingToolsObservation: NSKeyValueObservation?
 
   // For CoreEditor preload
-  private var loadingContinuations = [CheckedContinuation<Void, Never>]()
-  private var resetContinuations = [CheckedContinuation<Void, Never>]()
+  private var loadingContinuations = [PreloadContinuation]()
+  private var resetContinuations = [PreloadContinuation]()
 
   deinit {
     if let monitor = localEventMonitor {
@@ -327,23 +327,33 @@ final class EditorViewController: NSViewController {
 // MARK: - Exposed Methods
 
 extension EditorViewController {
+  /**
+   Wait until the editor finishes loading, or timeout after 1.5 seconds.
+
+   Callers must tolerate returning while `hasFinishedLoading` is still false.
+   */
   func waitUntilLoaded() async {
     if hasFinishedLoading {
       return
     }
 
     await withCheckedContinuation {
-      loadingContinuations.append($0)
+      loadingContinuations.append(.init($0))
     }
   }
 
+  /**
+   Wait until the editor reset completes, or timeout after 1.5 seconds.
+
+   Callers must tolerate returning while `pendingResetCount > 0`.
+   */
   func waitUntilEditorReset() async {
     guard pendingResetCount > 0 else {
       return
     }
 
     await withCheckedContinuation {
-      resetContinuations.append($0)
+      resetContinuations.append(.init($0))
     }
   }
 
@@ -432,5 +442,28 @@ extension EditorViewController {
 
   func ensureWritingToolsSelectionRect() {
     bridge.writingTools.ensureSelectionRect()
+  }
+}
+
+/**
+ Continuation wrapper for managing the lifecycle of a preload operation.
+ */
+private final class PreloadContinuation {
+  private var continuation: CheckedContinuation<Void, Never>?
+
+  init(_ continuation: CheckedContinuation<Void, Never>, timeout: TimeInterval = 1.5) {
+    self.continuation = continuation
+
+    if timeout > 0 {
+      Task { @MainActor in
+        try? await Task.sleep(for: .seconds(timeout))
+        resume()
+      }
+    }
+  }
+
+  func resume() {
+    continuation?.resume()
+    continuation = nil
   }
 }
