@@ -1,4 +1,4 @@
-import { isMetaKey } from '../../common/utils';
+import { tryGetEditor, isMetaKey } from '../../common/utils';
 import { globalState, editingState } from '../../common/store';
 
 import * as completion from '../../modules/completion';
@@ -62,7 +62,7 @@ export function startObserving() {
     editingState.compositionEnded = true;
 
     // [macOS 15] 'compositionend' is received before the editor is initialized
-    if (typeof window.editor !== 'object') {
+    if (tryGetEditor() === null) {
       return;
     }
 

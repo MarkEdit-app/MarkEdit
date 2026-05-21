@@ -11,7 +11,7 @@ import { selectedLinesDecoration } from './nodes/selection';
 import { calculateFontSize } from './nodes/heading';
 import { shadowableTextColor, updateStyleSheet } from './helper';
 import { isMouseDown } from '../modules/events';
-import { afterDomUpdate, isMotionReduced } from '../common/utils';
+import { tryGetEditor, afterDomUpdate, isMotionReduced } from '../common/utils';
 
 /**
  * Style sheets that can be changed dynamically.
@@ -45,14 +45,9 @@ export function setUp(config: Config, colors: EditorColors) {
 }
 
 export function setTheme(theme: EditorTheme) {
-  const editor = window.editor as EditorView | null;
-
-  // Editor may have not been initialized
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.theme.reconfigure(theme.extension),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.theme.reconfigure(theme.extension),
+  });
 
   setEditorColors(theme.colors);
 }
@@ -128,12 +123,9 @@ export function setFontSize(fontSize: number) {
 }
 
 export function setShowLineNumbers(enabled: boolean) {
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.gutters?.reconfigure(enabled ? gutterExtensions : []),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.gutters?.reconfigure(enabled ? gutterExtensions : []),
+  });
 
   if (enabled) {
     enableGutterHoverEffects();
@@ -141,23 +133,16 @@ export function setShowLineNumbers(enabled: boolean) {
 }
 
 export function setShowActiveLineIndicator(enabled: boolean) {
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.activeLine?.reconfigure(enabled ? lineIndicatorLayer : []),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.activeLine?.reconfigure(enabled ? lineIndicatorLayer : []),
+  });
 }
 
 export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
-  const editor = window.editor as EditorView | null;
   const hasSelection = editingState.hasSelection;
-
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.invisibles?.reconfigure(invisiblesExtension(behavior, hasSelection)),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.invisibles?.reconfigure(invisiblesExtension(behavior, hasSelection)),
+  });
 }
 
 export function setTypewriterMode(enabled: boolean) {
@@ -173,12 +158,9 @@ export function setTypewriterMode(enabled: boolean) {
 }
 
 export function setFocusMode(enabled: boolean) {
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.selectedLines?.reconfigure(enabled ? selectedLinesDecoration : []),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.selectedLines?.reconfigure(enabled ? selectedLinesDecoration : []),
+  });
 
   if (styleSheets.focusMode === undefined) {
     styleSheets.focusMode = createStyleSheet(`
@@ -197,12 +179,9 @@ export function setFocusMode(enabled: boolean) {
 }
 
 export function setLineWrapping(enabled: boolean) {
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.lineWrapping?.reconfigure(enabled ? EditorView.lineWrapping : []),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.lineWrapping?.reconfigure(enabled ? EditorView.lineWrapping : []),
+  });
 
   setOverscrollBehavior(enabled);
 }

@@ -1,7 +1,23 @@
-import { Rect } from '@codemirror/view';
+import { EditorView, Rect } from '@codemirror/view';
 
 export const isChrome = /Chrome/.test(navigator.userAgent);
 export const isReleaseMode = typeof window.webkit?.messageHandlers === 'object';
+
+/**
+ * Try to get the current editor.
+ *
+ * Returns null when `window.editor` is either the host `<div id="editor">`
+ * (named element reference on Window, browser quirks),
+ * or before an EditorView is assigned to it.
+ */
+export function tryGetEditor(): EditorView | null {
+  const editor = window.editor as EditorView | null;
+  if (typeof editor?.dispatch === 'function') {
+    return editor;
+  }
+
+  return null;
+}
 
 export function almostEqual(a: number, b: number) {
   return Math.abs(a - b) < 0.001;
