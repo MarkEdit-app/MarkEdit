@@ -2,6 +2,7 @@ import { describe, expect, test, beforeEach } from '@jest/globals';
 import { EditorSelection } from '@codemirror/state';
 import { Config } from '../src/config';
 import { performTextDrop, resetEditor } from '../src/core';
+import { editingState } from '../src/common/store';
 import normalizeSelection from '../src/modules/selection/normalizeSelection';
 
 // Minimal config
@@ -262,5 +263,50 @@ describe('resetEditor documentChanged', () => {
     const sel = window.editor.state.selection.main;
     expect(sel.anchor).toBe(0);
     expect(sel.head).toBe(0);
+  });
+});
+
+describe('resetEditor selection-dependent state', () => {
+  beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (typeof window.editor?.destroy === 'function') {
+      window.editor.destroy();
+    }
+
+    document.body.innerHTML = '';
+    editingState.hasSelection = false;
+  });
+
+  test('editingState.hasSelection is true after restoring a non-empty selection', async () => {
+    await resetEditor('Hello, World!', { anchor: 7, head: 12 });
+    expect(editingState.hasSelection).toBe(true);
+  });
+
+  test('editingState.hasSelection is false after restoring a cursor', async () => {
+    await resetEditor('Hello, World!', { anchor: 5, head: 5 });
+    expect(editingState.hasSelection).toBe(false);
+  });
+
+  test('editingState.hasSelection is false when no selection range is provided', async () => {
+    await resetEditor('Hello, World!');
+    expect(editingState.hasSelection).toBe(false);
+  });
+
+  test('editingState.hasSelection is reset to false on a subsequent empty-selection reset', async () => {
+    await resetEditor('Hello, World!', { anchor: 7, head: 12 });
+    expect(editingState.hasSelection).toBe(true);
+
+    await resetEditor('Hello, World!');
+    expect(editingState.hasSelection).toBe(false);
+  });
+
+  test('reset with restored non-empty selection does not mutate window.config.showActiveLineIndicator', async () => {
+    window.config.showActiveLineIndicator = true;
+    try {
+      await resetEditor('Hello, World!', { anchor: 7, head: 12 });
+      expect(window.config.showActiveLineIndicator).toBe(true);
+    } finally {
+      window.config.showActiveLineIndicator = false;
+    }
   });
 });
