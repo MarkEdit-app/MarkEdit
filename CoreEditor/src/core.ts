@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { extensions } from './extensions';
-import { globalState } from './common/store';
+import { globalState, editingState } from './common/store';
 import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
 
 import hasSelection from './modules/selection/hasSelection';
@@ -9,7 +9,7 @@ import normalizeSelection from './modules/selection/normalizeSelection';
 import replaceSelections from './modules/commands/replaceSelections';
 
 import { resetKeyStates } from './modules/events';
-import { setUp, setGutterHovered, applyReducedMotion } from './styling/config';
+import { setUp, setGutterHovered, applyReducedMotion, setShowActiveLineIndicator } from './styling/config';
 import { notifyBackgroundColor } from './styling/helper';
 import { loadTheme } from './styling/themes';
 import { recalculateTextMetrics } from './modules/config';
@@ -168,8 +168,17 @@ export async function resetEditor(
     });
   }
 
+  // Honest flag: selection may be non-empty after restoration
+  editingState.hasSelection = hasSelection();
+
   // Reconfigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
+
+  // Mirror the selection-change path for restored non-empty selections
+  if (editingState.hasSelection && window.config.showActiveLineIndicator) {
+    setShowActiveLineIndicator(false);
+  }
+
   applyReducedMotion(isMotionReduced());
   observeBackgroundColorChanges(editor.dom);
   afterDomUpdate(notifyBackgroundColor);
