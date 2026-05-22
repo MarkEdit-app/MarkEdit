@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "lint": "eslint .",
-    "codegen": "ts-gyb --config ./src/@codegen/config.json",
+    "codegen": "ts-gyb --config ./src/@codegen/config.json >/dev/null",
     "test": "jest",
     "build": "yarn lint && yarn codegen && vite build && vite build -c src/@light/vite.config.mts"
   },
@@ -57,5 +57,5 @@
   "browserslist": [
     "safari >= 18"
   ],
-  "packageManager": "yarn@4.14.1"
+  "packageManager": "yarn@4.15.0"
 }
