@@ -3,6 +3,7 @@ import { EditorSelection } from '@codemirror/state';
 import { Config } from '../src/config';
 import { performTextDrop, resetEditor } from '../src/core';
 import { editingState } from '../src/common/store';
+import { tryGetEditor } from '../src/common/utils';
 import normalizeSelection from '../src/modules/selection/normalizeSelection';
 
 // Minimal config
@@ -70,12 +71,7 @@ describe('Selection clamping logic', () => {
 
 describe('resetEditor selection', () => {
   beforeEach(() => {
-    // Clean up previous editor
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (typeof window.editor?.destroy === 'function') {
-      window.editor.destroy();
-    }
-
+    tryGetEditor()?.destroy();
     document.body.innerHTML = '';
   });
 
@@ -131,11 +127,7 @@ describe('resetEditor selection', () => {
 
 describe('performTextDrop', () => {
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (typeof window.editor?.destroy === 'function') {
-      window.editor.destroy();
-    }
-
+    tryGetEditor()?.destroy();
     document.body.innerHTML = '';
   });
 
@@ -189,11 +181,7 @@ describe('performTextDrop', () => {
 
 describe('resetEditor documentChanged', () => {
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (typeof window.editor?.destroy === 'function') {
-      window.editor.destroy();
-    }
-
+    tryGetEditor()?.destroy();
     document.body.innerHTML = '';
   });
 
@@ -268,11 +256,7 @@ describe('resetEditor documentChanged', () => {
 
 describe('resetEditor selection-dependent state', () => {
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (typeof window.editor?.destroy === 'function') {
-      window.editor.destroy();
-    }
-
+    tryGetEditor()?.destroy();
     document.body.innerHTML = '';
     editingState.hasSelection = false;
   });

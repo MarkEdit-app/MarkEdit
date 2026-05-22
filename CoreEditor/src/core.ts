@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
-import { almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
+import { tryGetEditor, almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
 
 import hasSelection from './modules/selection/hasSelection';
 import normalizeSelection from './modules/selection/normalizeSelection';
@@ -25,12 +25,7 @@ import { TextEditor } from './api/editor';
 import { editorReadyListeners } from './api/methods';
 
 // Work around a WebKit bug, text jiggles back and forth when resizing the window
-window.addEventListener('resize', () => {
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.requestMeasure === 'function') {
-    editor.requestMeasure();
-  }
-});
+window.addEventListener('resize', () => tryGetEditor()?.requestMeasure());
 
 // Observe viewport scale changes, i.e., pinch to zoom
 window.visualViewport?.addEventListener('resize', () => {
@@ -72,7 +67,7 @@ export async function resetEditor(
       return undefined;
     }
 
-    const scrollDOM = (window.editor as EditorView | undefined)?.scrollDOM;
+    const scrollDOM = tryGetEditor()?.scrollDOM;
     if (scrollDOM === undefined) {
       return undefined;
     }
@@ -81,8 +76,8 @@ export async function resetEditor(
   })();
 
   // Used to restore the selection if the document is not changed
-  if (!documentChanged && typeof window.editor === 'object') {
-    selectionRange = window.editor.state.selection.main;
+  if (!documentChanged) {
+    selectionRange = tryGetEditor()?.state.selection.main;
   }
 
   const lineBreak = getLineBreak(initialContent, window.config.defaultLineBreak);
@@ -90,11 +85,7 @@ export async function resetEditor(
   const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
   const selectionRestored = selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0);
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (typeof window.editor?.destroy === 'function') {
-    window.editor.destroy();
-  }
-
+  tryGetEditor()?.destroy();
   window.editor = new EditorView({
     state: EditorState.create({
       doc: initialDoc,

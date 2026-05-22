@@ -39,10 +39,11 @@ if (typeof globalThis.DragEvent === 'undefined') {
 
 window.nativeModules = {
   core: {
-    notifyViewDidUpdate() { /* noop */ },
-    notifyContentOffsetDidChange() { /* noop */ },
-    notifyContentHeightDidChange() { /* noop */ },
     notifyBackgroundColorDidChange() { /* noop */ },
     notifyViewportScaleDidChange() { /* noop */ },
+    notifyViewDidUpdate() { /* noop */ },
+    notifyContentHeightDidChange() { /* noop */ },
+    notifyContentOffsetDidChange() { /* noop */ },
+    notifyEditorDidBecomeIdle() { /* noop */ },
   },
 } as unknown as typeof window.nativeModules;

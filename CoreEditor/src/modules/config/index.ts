@@ -6,7 +6,7 @@ import { TabKeyBehavior } from '../indentation';
 import { adjustGutterPositions } from '../lines';
 import { refreshEditFocus, scrollToSelection } from '../selection';
 import { editingState } from '../../common/store';
-import { afterDomUpdate } from '../../common/utils';
+import { tryGetEditor, afterDomUpdate } from '../../common/utils';
 import { notifyBackgroundColor } from '../../styling/helper';
 import { loadTheme } from '../../styling/themes';
 
@@ -118,12 +118,9 @@ export function setDefaultLineBreak(lineBreak?: string) {
 export function setIndentUnit(unit: string) {
   window.config.indentUnit = unit;
 
-  const editor = window.editor as EditorView | null;
-  if (typeof editor?.dispatch === 'function') {
-    editor.dispatch({
-      effects: window.dynamics.indentUnit?.reconfigure(indentUnit.of(unit)),
-    });
-  }
+  tryGetEditor()?.dispatch({
+    effects: window.dynamics.indentUnit?.reconfigure(indentUnit.of(unit)),
+  });
 }
 
 export function setTabKeyBehavior(behavior: TabKeyBehavior) {
