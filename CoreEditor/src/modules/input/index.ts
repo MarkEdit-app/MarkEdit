@@ -14,6 +14,7 @@ import { refreshEditFocus, scrollCaretToVisible, scrollToSelection, selectedLine
 
 import hasSelection from '../selection/hasSelection';
 import redrawSelectionLayer from '../selection/redrawSelectionLayer';
+import selectionChanged from '../selection/selectionChanged';
 import wrapBlock from './wrapBlock';
 import insertCodeBlock from './insertCodeBlock';
 
@@ -138,9 +139,7 @@ export function observeChanges() {
       }, 1500);
     }
 
-    // CodeMirror doesn't mark `selectionSet` true when selection is cut or replaced,
-    // always check `docChanged` too.
-    if (update.selectionSet || update.docChanged) {
+    if (selectionChanged(update) || update.docChanged) {
       const newHasSelection = hasSelection();
       const selectionStateChanged = editingState.hasSelection !== newHasSelection;
       editingState.hasSelection = newHasSelection;
