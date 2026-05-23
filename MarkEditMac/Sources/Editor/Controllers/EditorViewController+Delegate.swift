@@ -214,6 +214,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
 
     // The content is edited once contentEdited is true, it cannot go back
     hasBeenEdited = hasBeenEdited || contentEdited
+
     if contentEdited {
       document?.isOutdated = true
 
@@ -221,11 +222,10 @@ extension EditorViewController: EditorModuleCoreDelegate {
       if document?.fileURL == nil && AppPreferences.General.quitAlwaysKeepsWindows {
         document?.autosaveDelayed()
       }
-    }
 
-    // Only update the dirty state when it's edited,
-    // the app can launch with an unsaved state (e.g., force quit), it should remain dirty.
-    if hasBeenEdited {
+      // Only update the dirty state when it's edited,
+      // the app can launch with an unsaved state (e.g., force quit), it should remain dirty.
+      //
       // The content is always dirty if it was edited as a temporary document
       document?.markContentDirty(isDirty || (hasBeenEdited && document?.fileURL == nil))
     }
