@@ -14,12 +14,13 @@ public extension URL {
       "library": Self.libraryDirectory,
       "caches": Self.cachesDirectory,
       "temporary": Self.temporaryDirectory,
-    ].mapValues {
-      $0.path(percentEncoded: false)
+      "sharedContainer": Self.sharedContainerURL,
+    ].compactMapValues {
+      $0?.path(percentEncoded: false)
     }
   }
 
-  static var securityAppGroupURL: URL? {
+  static var sharedContainerURL: URL? {
     FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.app.cyan.markedit")
   }
 }
