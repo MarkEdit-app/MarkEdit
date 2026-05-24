@@ -62,8 +62,9 @@ bridge.setTheme = (name: string) => {
   setTheme(loadTheme(name));
 };
 
-bridge.startDragging = (location: number) => {
+bridge.startDragging = (original: number) => {
   // scrollbarOffset is the distance between the top of the scrollbar and the mouse location
+  const location = convertToLocal(original);
   const { scrollbarTop, scrollbarHeight } = scrollerGeometryValues();
   storage.scrollbarOffset = location - scrollbarTop;
 
@@ -77,7 +78,7 @@ bridge.startDragging = (location: number) => {
 
 bridge.updateDragging = (location: number) => {
   if (storage.scrollbarOffset !== undefined) {
-    scrollToMouseLocation(location, storage.scrollbarOffset);
+    scrollToMouseLocation(convertToLocal(location), storage.scrollbarOffset);
   }
 };
 
@@ -95,22 +96,34 @@ function loadTheme(name: string) {
   }
 }
 
+function scrollerElement(): HTMLElement | null {
+  return document.querySelector<HTMLElement>('.cm-scroller');
+}
+
 function scrollToMouseLocation(location: number, scrollbarOffset: number, behavior: ScrollBehavior = 'auto') {
   // Basically, the scrollbar needs to move with the mouse position,
   // we need to take the initial scrollbar offset into account.
   const { clientHeight, scrollHeight, scrollbarHeight } = scrollerGeometryValues();
   const percentage = (location - scrollbarOffset) / (clientHeight - scrollbarHeight);
-  window.scrollTo({
+  (scrollerElement() ?? document.documentElement).scrollTo({
     top: percentage * (scrollHeight - clientHeight),
     behavior,
   });
 }
 
+/**
+ * Convert the viewport Y coordinate to the local coordinate relative to the scroller's top.
+ */
+function convertToLocal(viewportY: number): number {
+  const scroller = scrollerElement();
+  return scroller === null ? viewportY : viewportY - scroller.getBoundingClientRect().top;
+}
+
 function scrollerGeometryValues() {
-  const container = document.documentElement;
+  const container = scrollerElement() ?? document.documentElement;
   const clientHeight = container.clientHeight;
   const scrollHeight = container.scrollHeight;
-  const scrollbarHeight = clientHeight * (clientHeight / container.offsetHeight);
+  const scrollbarHeight = clientHeight * (clientHeight / scrollHeight);
 
   const progress = container.scrollTop / (container.scrollHeight - clientHeight);
   const scrollbarTop = progress * (clientHeight - scrollbarHeight);

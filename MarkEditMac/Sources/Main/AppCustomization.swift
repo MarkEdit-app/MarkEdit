@@ -84,21 +84,8 @@ struct AppCustomization {
   }
 
   var directoryContents: [String] {
-    let files = (try? FileManager.default.contentsOfDirectory(
-      at: fileURL,
-      includingPropertiesForKeys: nil
-    )) ?? []
-
-    let sorted = files.sorted {
-      $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
-    }
-
-    return sorted.compactMap {
-      guard ["css", "js"].contains($0.pathExtension.lowercased()) else {
-        return nil
-      }
-
-      return createContents(url: $0.resolvingSymbolicLink)
+    fileURL.sortedFiles(types: ["css", "js"]).compactMap {
+      createContents(url: $0.resolvingSymbolicLink)
     }
   }
 

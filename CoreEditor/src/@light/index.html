@@ -11,8 +11,13 @@
   <script type=module src="./index.ts"></script>
   <style>
     html, body {
-      overflow: auto !important;
+      overflow: hidden !important;
+      height: 100vh;
       background-color: #ffffff; /* github-light */
+    }
+
+    body {
+      position: relative;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -21,8 +26,20 @@
       }
     }
 
+    #editor {
+      position: absolute;
+      top: var(--editor-inset-top, 0);
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
     .cm-editor {
       height: 100% !important;
+    }
+
+    .cm-scroller {
+      overscroll-behavior: contain;
     }
 
     .cm-content {
