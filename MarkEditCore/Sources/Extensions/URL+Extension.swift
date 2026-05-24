@@ -18,4 +18,8 @@ public extension URL {
       $0.path(percentEncoded: false)
     }
   }
+
+  static var securityAppGroupURL: URL? {
+    FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.app.cyan.markedit")
+  }
 }
