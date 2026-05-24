@@ -4,3 +4,4 @@
 ## User settings
 xcuserdata/
 Local.xcconfig
+*.local.entitlements

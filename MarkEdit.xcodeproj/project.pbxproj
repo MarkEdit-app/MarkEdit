@@ -634,6 +634,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 870A51B1294700E00095C7EB /* Build configuration list for PBXNativeTarget "MarkEditMac" */;
 			buildPhases = (
+				87D71F7000000000000000A1 /* Check Entitlements Drift */,
 				870A519E294700DE0095C7EB /* Sources */,
 				870A519F294700DE0095C7EB /* Frameworks */,
 				870A51A0294700DE0095C7EB /* Resources */,
@@ -688,6 +689,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 872924142951525C007156B1 /* Build configuration list for PBXNativeTarget "PreviewExtension" */;
 			buildPhases = (
+				87D71F7000000000000000A2 /* Check Entitlements Drift */,
 				872923FC2951525C007156B1 /* Sources */,
 				872923FD2951525C007156B1 /* Frameworks */,
 				872923FE2951525C007156B1 /* Resources */,
@@ -712,7 +714,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2630;
+				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					870A51A1294700DE0095C7EB = {
 						CreatedOnToolsVersion = 14.1;
@@ -782,6 +784,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		87D71F7000000000000000A1 /* Check Entitlements Drift */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/MarkEditMac/Info.entitlements",
+				"$(SRCROOT)/MarkEditMac/Info.local.entitlements",
+			);
+			name = "Check Entitlements Drift";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\nbase=\"$SCRIPT_INPUT_FILE_0\"\nlocal_file=\"$SCRIPT_INPUT_FILE_1\"\n[ -f \"$local_file\" ] || exit 0\npython3 - \"$base\" \"$local_file\" <<'EOF'\nimport plistlib, sys\n\nbase_path, local_path = sys.argv[1], sys.argv[2]\nbase = plistlib.load(open(base_path, \"rb\"))\nlocal = plistlib.load(open(local_path, \"rb\"))\n\nallowed_extras = {\"com.apple.security.application-groups\"}\nerrors = []\n\nfor k, v in base.items():\n  if k not in local:\n    errors.append(f\"Missing key in local: {k}\")\n  elif local[k] != v:\n    errors.append(f\"Value differs for {k}: base={v!r} local={local[k]!r}\")\n\nfor k in local:\n  if k not in base and k not in allowed_extras:\n    errors.append(f\"Unexpected key in local (not in base, not allow-listed): {k}\")\n\nfor e in errors:\n  print(f\"{local_path}:1: error: {e}\")\n\nsys.exit(1 if errors else 0)\nEOF\n";
+		};
+		87D71F7000000000000000A2 /* Check Entitlements Drift */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/PreviewExtension/Info.entitlements",
+				"$(SRCROOT)/PreviewExtension/Info.local.entitlements",
+			);
+			name = "Check Entitlements Drift";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\nbase=\"$SCRIPT_INPUT_FILE_0\"\nlocal_file=\"$SCRIPT_INPUT_FILE_1\"\n[ -f \"$local_file\" ] || exit 0\npython3 - \"$base\" \"$local_file\" <<'EOF'\nimport plistlib, sys\n\nbase_path, local_path = sys.argv[1], sys.argv[2]\nbase = plistlib.load(open(base_path, \"rb\"))\nlocal = plistlib.load(open(local_path, \"rb\"))\n\nallowed_extras = {\"com.apple.security.application-groups\"}\nerrors = []\n\nfor k, v in base.items():\n  if k not in local:\n    errors.append(f\"Missing key in local: {k}\")\n  elif local[k] != v:\n    errors.append(f\"Value differs for {k}: base={v!r} local={local[k]!r}\")\n\nfor k in local:\n  if k not in base and k not in allowed_extras:\n    errors.append(f\"Unexpected key in local (not in base, not allow-listed): {k}\")\n\nfor e in errors:\n  print(f\"{local_path}:1: error: {e}\")\n\nsys.exit(1 if errors else 0)\nEOF\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		870A519E294700DE0095C7EB /* Sources */ = {
@@ -1073,7 +1120,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MarkEditMac/Info.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(MARKEDITMAC_ENTITLEMENTS)";
 				CODE_SIGN_IDENTITY = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1096,6 +1143,7 @@
 				MARKETING_VERSION = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
 				PRODUCT_NAME = MarkEdit;
+				REGISTER_APP_GROUPS = "$(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1109,7 +1157,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MarkEditMac/Info.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(MARKEDITMAC_ENTITLEMENTS)";
 				CODE_SIGN_IDENTITY = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1132,6 +1180,7 @@
 				MARKETING_VERSION = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
 				PRODUCT_NAME = MarkEdit;
+				REGISTER_APP_GROUPS = "$(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -1232,7 +1281,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = PreviewExtension/Info.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PREVIEWEXTENSION_ENTITLEMENTS)";
 				CODE_SIGN_IDENTITY = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(inherited)";
@@ -1252,6 +1301,7 @@
 				MARKETING_VERSION = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).preview-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = "$(inherited)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1262,7 +1312,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = PreviewExtension/Info.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PREVIEWEXTENSION_ENTITLEMENTS)";
 				CODE_SIGN_IDENTITY = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(inherited)";
@@ -1282,6 +1332,7 @@
 				MARKETING_VERSION = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).preview-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = "$(inherited)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
