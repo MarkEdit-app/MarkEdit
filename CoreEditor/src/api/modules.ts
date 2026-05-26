@@ -17,7 +17,7 @@ import { TextEditor } from './editor';
 import { Translator } from './translation';
 import { languageModel } from './languageModel';
 
-import { onEditorReady, saveDocument, closeDocument, addExtension, addMarkdownConfig, addCodeLanguage, getRuntimeInfo, terminateApp, relaunchApp } from './methods';
+import { onEditorReady, saveDocument, closeDocument, addExtension, addMarkdownConfig, addCodeLanguage, runtimeInfo, terminateApp, relaunchApp } from './methods';
 import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
@@ -49,7 +49,7 @@ export function initMarkEditModules() {
   MarkEdit.codemirror = codemirror;
   MarkEdit.lezer = lezer;
 
-  MarkEdit.getRuntimeInfo = getRuntimeInfo;
+  MarkEdit.runtimeInfo = runtimeInfo;
   MarkEdit.terminateApp = terminateApp;
   MarkEdit.relaunchApp = relaunchApp;
   MarkEdit.onEditorReady = onEditorReady;
