@@ -21,10 +21,10 @@ export async function closeDocument(): Promise<boolean> {
   return window.nativeModules.api.closeDocument();
 }
 
-export function getRuntimeInfo(): RuntimeInfo {
+export function runtimeInfo(): RuntimeInfo {
   const runtimeInfo = window.config.runtimeInfo;
   if (runtimeInfo === undefined) {
-    throw new Error('MarkEdit.getRuntimeInfo() is not implemented in this context.');
+    throw new Error('MarkEdit.runtimeInfo() is not implemented in this context.');
   }
 
   return runtimeInfo;

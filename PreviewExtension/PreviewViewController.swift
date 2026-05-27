@@ -31,7 +31,7 @@ final class PreviewViewController: NSViewController {
     // E.g., markedit-preview.js
     let controller = WKUserContentController()
     config.userContentController = controller
-    userScripts?.forEach {
+    userScripts.forEach {
       controller.addUserScript($0)
     }
 
@@ -110,7 +110,7 @@ extension PreviewViewController: QLPreviewingController {
       theme: effectiveTheme
     )
 
-    let html = config.toHtml
+    let html = ([config.toHtml] + userStyles).joined(separator: "\n\n")
     webView.loadHTMLString(html, baseURL: URL(string: "http://localhost/"))
   }
 }

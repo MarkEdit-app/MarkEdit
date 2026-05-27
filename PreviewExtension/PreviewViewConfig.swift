@@ -23,24 +23,33 @@ extension PreviewViewController {
     return url
   }
 
-  var userScripts: [WKUserScript]? {
-    guard let scriptsURL = URL.sharedContainerURL?.appending(
-      path: "Shared/scripts",
-      directoryHint: .isDirectory
-    ) else {
-      return nil
-    }
-
-    return scriptsURL.sortedFiles(types: ["js"]).compactMap {
-      guard let source = try? String(contentsOf: $0, encoding: .utf8) else {
-        return nil
-      }
-
-      return WKUserScript(
-        source: source,
+  var userScripts: [WKUserScript] {
+    sharedAssets(directory: "Shared/scripts", types: ["js"]).map { url, contents in
+      WKUserScript(
+        source: EditorUserAsset.script(for: url, contents: contents),
         injectionTime: .atDocumentEnd,
         forMainFrameOnly: false
       )
+    }
+  }
+
+  var userStyles: [String] {
+    sharedAssets(directory: "Shared/styles", types: ["css"]).map { url, contents in
+      EditorUserAsset.style(for: url, contents: contents)
+    }
+  }
+
+  private func sharedAssets(directory: String, types: Set<String>) -> [(URL, String)] {
+    guard let baseURL = URL.sharedContainerURL?.appending(path: directory, directoryHint: .isDirectory) else {
+      return []
+    }
+
+    return baseURL.sortedFiles(types: types).compactMap { url in
+      guard let contents = (try? Data(contentsOf: url))?.toString(), !contents.isEmpty else {
+        return nil
+      }
+
+      return (url, contents)
     }
   }
 }
