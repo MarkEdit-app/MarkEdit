@@ -18,6 +18,10 @@ public final class WebBridgeAPI {
     self.webView = webView
   }
 
+  public func notifyAppReady(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.api.notifyAppReady", completion: completion)
+  }
+
   public func handleMainMenuAction(id: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     struct Message: Encodable {
       let id: String
