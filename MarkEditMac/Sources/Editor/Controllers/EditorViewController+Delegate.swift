@@ -135,6 +135,7 @@ extension EditorViewController: EditorModuleCoreDelegate {
   func editorCoreWindowDidLoad(_ sender: EditorModuleCore) {
     hasFinishedLoading = true
     resetEditor()
+    notifyAppReady()
   }
 
   func editorCoreWindowResize(
@@ -485,5 +486,21 @@ extension EditorViewController: EditorReplacePanelDelegate {
 
   func editorReplacePanelDidClickReplaceAll(_ sender: EditorReplacePanel) {
     replaceAllInTextFinder()
+  }
+}
+
+// MARK: - App ready
+
+private extension EditorViewController {
+  /// Ensures the event is sent only once during the app lifecycle.
+  static var hasAppReadyNotified = false
+
+  func notifyAppReady() {
+    guard !Self.hasAppReadyNotified else {
+      return
+    }
+
+    Self.hasAppReadyNotified = true
+    bridge.api.notifyAppReady()
   }
 }
