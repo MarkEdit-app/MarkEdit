@@ -185,11 +185,18 @@ extension AppDelegate: NSMenuItemValidation {
 
 private extension AppDelegate {
   @objc func windowDidResignKey(_ notification: Notification) {
-    // To reduce the glitches between switching windows,
-    // close openPanel once we don't have any key windows.
+    // [AppKit quirk] Leaving NSOpenPanel up across app switches causes a visible
+    // flash the next time the panel is shown (e.g. via Dock > Recent Documents).
+    // TextEdit has the same glitch. Closing it on deactivation avoids the flicker.
     //
     // Delay because there's no keyWindow during window transitions.
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+      // Skip transient resign-key events where the app stays active,
+      // such as the Dock icon's right-click menu.
+      guard !NSApp.isActive else {
+        return
+      }
+
       if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
         NSApp.closeOpenPanels()
       }
