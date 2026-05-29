@@ -21,11 +21,7 @@ final class PreviewViewController: NSViewController {
   private var appearanceObservation: NSKeyValueObservation?
 
   lazy var webView: WKWebView = {
-    class Configuration: WKWebViewConfiguration {
-      @objc func _drawsBackground() -> Bool { false }
-    }
-
-    let config = Configuration()
+    let config: WKWebViewConfiguration = .preferredConfig()
     config.enablePerformanceFlags()
     config.disableAllRichFeatures()
 

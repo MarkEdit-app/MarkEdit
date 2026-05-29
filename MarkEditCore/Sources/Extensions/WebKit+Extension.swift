@@ -16,6 +16,21 @@ public extension WKWebView {
 }
 
 public extension WKWebViewConfiguration {
+  static func preferredConfig() -> WKWebViewConfiguration {
+    class Configuration: WKWebViewConfiguration {
+      // To mimic settable isOpaque on iOS,
+      // which is required for the background color and initial white flash in dark mode
+      @objc func _drawsBackground() -> Bool { false }
+    }
+
+    let config = Configuration()
+    if !config.preferences.setBoolValue(true, forSelector: "_setDeveloperExtrasEnabled:") {
+      assertionFailure("Failed to call _setDeveloperExtrasEnabled:")
+    }
+
+    return config
+  }
+
   func enablePerformanceFlags(disabledFeatures: [String] = []) {
     // Launch the WebContent process at init time instead of deferring it to the first load.
     //
