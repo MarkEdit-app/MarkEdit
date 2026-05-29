@@ -9,18 +9,8 @@ import MarkEditCore
 
 public extension WKWebViewConfiguration {
   static func newConfig(disableCors: Bool = false, disabledFeatures: [String] = []) -> WKWebViewConfiguration {
-    class Configuration: WKWebViewConfiguration {
-      // To mimic settable isOpaque on iOS,
-      // which is required for the background color and initial white flash in dark mode
-      @objc func _drawsBackground() -> Bool { false }
-    }
-
-    let config = Configuration()
+    let config: WKWebViewConfiguration = .preferredConfig()
     config.enablePerformanceFlags(disabledFeatures: disabledFeatures)
-
-    if !config.preferences.setBoolValue(true, forSelector: "_setDeveloperExtrasEnabled:") {
-      Logger.assertFail("Failed to call _setDeveloperExtrasEnabled:")
-    }
 
     // Disable CORS checks entirely, allowing fetch() in user scripts to do lots of things.
     //
