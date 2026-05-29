@@ -13,7 +13,8 @@ import MarkEditCore
 final class PreviewViewController: NSViewController {
   var mouseDownMonitor: Any?
   var mouseDragMonitor: Any?
-  var defaultOpenTarget: Any?
+
+  weak var defaultOpenTarget: AnyObject?
   var defaultOpenAction: Selector?
 
   private var previewDirectoryURL: URL?
