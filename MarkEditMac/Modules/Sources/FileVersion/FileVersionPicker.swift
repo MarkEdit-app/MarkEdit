@@ -109,7 +109,10 @@ public final class FileVersionPicker: NSViewController {
     didSet {
       scrollView.isHidden = isDownloading
       counterView.isHidden = isDownloading
-      view.window?.ignoresMouseEvents = isDownloading
+
+      versionMenuButton.isEnabled = !isDownloading
+      modeMenuButton.isEnabled = !isDownloading
+      navigateButtons.isEnabled = !isDownloading
 
       if isDownloading {
         loadingView.startAnimation(nil)
@@ -330,6 +333,10 @@ private extension FileVersionPicker {
   }
 
   @objc func didPickVersion() {
+    guard !isDownloading else {
+      return NSSound.beep()
+    }
+
     delegate?.fileVersionPicker(self, didPickVersion: allVersions[versionMenuButton.indexOfSelectedItem])
     dismiss(self)
   }
