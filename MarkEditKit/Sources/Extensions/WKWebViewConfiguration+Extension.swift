@@ -12,11 +12,12 @@ public extension WKWebViewConfiguration {
     let config: WKWebViewConfiguration = .preferredConfig()
     config.enablePerformanceFlags(disabledFeatures: disabledFeatures)
 
-    // Disable CORS checks entirely, allowing fetch() in user scripts to do lots of things.
+    // Disable CORS for http/https requests, allowing fetch() in user scripts to read cross-origin responses.
     //
-    // This shouldn't raise security issues, as we're not a browser that can load arbitrary URLs.
-    if disableCors && !config.preferences.setBoolValue(false, forSelector: "_setWebSecurityEnabled:") {
-      Logger.assertFail("Failed to call _setWebSecurityEnabled:")
+    // This is narrower than _setWebSecurityEnabled: it only relaxes CORS for network loads, without
+    // granting universal access, so the same-origin policy still guards cross-origin DOM and file:// reads.
+    if disableCors && !config.setObjectValue(["*://*/*"] as NSArray, forSelector: "_setCORSDisablingPatterns:") {
+      Logger.assertFail("Failed to call _setCORSDisablingPatterns:")
     }
 
     return config

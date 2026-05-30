@@ -194,8 +194,8 @@ enum AppRuntimeConfig {
   }
 
   static var disableCorsRestrictions: Bool {
-    // Enforce CORS restrictions by default
-    currentDefinition?.disableCorsRestrictions ?? false
+    // CORS restrictions are disabled by default; we're a local editor, not a browser
+    currentDefinition?.disableCorsRestrictions ?? true
   }
 
   static var disabledWebKitFeatures: [String] {
@@ -265,7 +265,7 @@ private extension AppRuntimeConfig {
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
     disableOpenPanelOptions: defaultDisableOpenPanelOptions,
-    disableCorsRestrictions: nil,
+    disableCorsRestrictions: true,
     disabledWebKitFeatures: nil,
     preferredTerminalApp: nil,
     mainWindowHotKey: .init(key: "M", modifiers: ["Shift", "Command", "Option"])
@@ -296,7 +296,8 @@ private extension AppRuntimeConfig {
   }
 
   static var defaultDisableOpenPanelOptions: Bool {
-    // [macOS 26] Revisit this later, NSOpenPanel.accessoryView can significantly slow down the file opening process
+    // [macOS 26] Revisit this later,
+    // NSOpenPanel.accessoryView can significantly slow down the file opening process.
     if #available(macOS 26.0, *) {
       return true
     }

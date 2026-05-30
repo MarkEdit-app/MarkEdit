@@ -95,6 +95,17 @@ public extension WebKitConfigSPI {
     setValue(self, selector, value)
     return true
   }
+
+  @discardableResult
+  func setObjectValue(_ value: AnyObject, forSelector selectorName: String) -> Bool {
+    let selector = sel_getUid(selectorName)
+    guard responds(to: selector) else {
+      return false
+    }
+
+    perform(selector, with: value)
+    return true
+  }
 }
 
 // MARK: - Feature SPI
