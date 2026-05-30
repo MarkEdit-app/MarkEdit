@@ -16,9 +16,9 @@ final class RuntimeTests: XCTestCase {
   }
 
   func testExistenceOfDeveloperPreferences() {
-    let preferences = WKWebViewConfiguration().preferences
-    testExistenceOfSelector(object: preferences, selector: "_setDeveloperExtrasEnabled:")
-    testExistenceOfSelector(object: preferences, selector: "_setWebSecurityEnabled:")
+    let configuration = WKWebViewConfiguration()
+    testExistenceOfSelector(object: configuration, selector: "_setCORSDisablingPatterns:")
+    testExistenceOfSelector(object: configuration.preferences, selector: "_setDeveloperExtrasEnabled:")
 
     let webView = WKWebView()
     testExistenceOfSelector(object: webView, selector: "_inspector")
@@ -36,6 +36,9 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: preferences, selector: "_setPageVisibilityBasedProcessSuppressionEnabled:")
     testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingEnabled:")
     testExistenceOfSelector(object: preferences, selector: "_setHiddenPageDOMTimerThrottlingAutoIncreases:")
+
+    let webView = WKWebView()
+    testExistenceOfSelector(object: webView, selector: "_setWindowOcclusionDetectionEnabled:")
   }
 
   func testExistenceOfFeatureSPI() {
