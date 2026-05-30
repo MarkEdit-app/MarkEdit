@@ -12,7 +12,7 @@ final class PreviewViewWebView: WKWebView {
   override init(frame: CGRect, configuration: WKWebViewConfiguration) {
     super.init(frame: frame, configuration: configuration)
     disableWindowOcclusionDetection()
-    allowsMagnification = true
+    allowsMagnification = false // Rely on `enablePinchZoom()` instead
     isInspectable = true
   }
 

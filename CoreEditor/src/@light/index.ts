@@ -8,6 +8,7 @@ import { setUp, setTheme } from '../styling/config';
 import { classHighlighters, markdownExtensions, renderExtensions } from '../styling/markdown';
 import { linkStyles } from '../styling/nodes/link';
 import { scrollIntoView } from '../modules/selection';
+import { enablePinchZoom, PinchZoomBridge } from '../zoom';
 
 import GitHubLight from '../styling/themes/github-light';
 import GitHubDark from '../styling/themes/github-dark';
@@ -85,6 +86,9 @@ bridge.updateDragging = (location: number) => {
 bridge.cancelDragging = () => {
   storage.scrollbarOffset = undefined;
 };
+
+// Zoom in and out using the trackpad
+enablePinchZoom(bridge as PinchZoomBridge);
 
 // There're only two themes in the preview extension,
 // use a simplified "loadTheme" to avoid bundling unused themes.
