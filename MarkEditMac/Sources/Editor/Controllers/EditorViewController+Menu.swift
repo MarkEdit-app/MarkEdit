@@ -355,15 +355,19 @@ private extension EditorViewController {
   }
 
   @IBAction func createNewTab(_ sender: Any?) {
-    // The easiest way to always create tab regardless of the tabbing mode,
-    // just temporarily overwrite the mode to preferred and switch back later.
     let tabbingMode = AppPreferences.Window.tabbingMode
-    AppPreferences.Window.tabbingMode = .preferred
-    view.window?.tabbingMode = .preferred
+    let window = view.window
 
+    // Force "preferred" to always create a tab
+    AppPreferences.Window.tabbingMode = .preferred
+    window?.tabbingMode = .preferred
     NSDocumentController.shared.newDocument(sender)
-    AppPreferences.Window.tabbingMode = tabbingMode
-    view.window?.tabbingMode = tabbingMode
+
+    DispatchQueue.main.async {
+      // Revert to user preference on the next run loop
+      AppPreferences.Window.tabbingMode = tabbingMode
+      window?.tabbingMode = tabbingMode
+    }
   }
 
   @IBAction func revealInFinder(_ sender: Any?) {
