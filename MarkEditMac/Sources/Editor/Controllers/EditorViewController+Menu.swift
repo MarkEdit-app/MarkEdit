@@ -363,8 +363,8 @@ private extension EditorViewController {
     window?.tabbingMode = .preferred
     NSDocumentController.shared.newDocument(sender)
 
-    DispatchQueue.main.async {
-      // Revert to user preference on the next run loop
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+      // Revert to user preference after a delay
       AppPreferences.Window.tabbingMode = tabbingMode
       window?.tabbingMode = tabbingMode
     }
