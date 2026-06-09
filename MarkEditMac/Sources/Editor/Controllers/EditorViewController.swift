@@ -85,9 +85,9 @@ final class EditorViewController: NSViewController {
     return findPanel.isFirstResponder || replacePanel.isFirstResponder
   }
 
-  // Custom views to apply modern effects (either glass or blur) to the title bar
+  // Custom views to apply blur effects to the title bar
   let modernBackgroundView = NSView()
-  let modernEffectView = AppDesign.modernEffectView.init()
+  let modernEffectView = NSVisualEffectView()
   let modernTintedView = NSView()
   let modernDividerView = DividerView()
 

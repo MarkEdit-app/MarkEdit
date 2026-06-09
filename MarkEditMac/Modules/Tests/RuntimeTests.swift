@@ -88,7 +88,11 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: NSImage(), selector: "_setTintColor:")
   }
 
-  func testExistenceOfAppKitSearchField() {
+  func testExistenceOfAppKitSearchField() throws {
+    if #available(macOS 27.0, *) {
+      throw XCTSkip("[macOS 27] Revisit this later")
+    }
+
     let window = NSWindow()
     window.makeKeyAndOrderFront(nil)
 

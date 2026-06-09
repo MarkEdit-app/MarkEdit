@@ -17,25 +17,29 @@ enum AppDesign {
       return false
     }
 
-    return !AppRuntimeConfig.useClassicInterface
+    return true
   }
 
   /**
    Returns `true` to use a customized title bar for the editor.
 
-   It will be enabled as long as macOS Tahoe runs.
+   It will be enabled in macOS Tahoe and later.
    */
   static var modernTitleBar: Bool {
-    isMacOSTahoe
+    modernStyle
   }
 
   /**
    Returns `true` to gradually add icons to the menu bar.
 
-   It will be enabled as long as macOS Tahoe runs.
+   It will be enabled in macOS Tahoe and later.
    */
   static var menuIconEvolution: Bool {
-    isMacOSTahoe
+    modernStyle
+  }
+
+  static var dividerAlpha: Double {
+    modernStyle ? 0.7 : 1.0
   }
 
   static var reduceTransparency: Bool {
@@ -52,22 +56,10 @@ enum AppDesign {
    `NSGlassEffectView` is used when it is available and `modernStyle` is true.
    */
   static var modernEffectView: NSView.Type {
-    guard #available(macOS 26.0, *), modernStyle && AppRuntimeConfig.visualEffectType == .glass else {
+    guard #available(macOS 26.0, *), modernStyle else {
       return NSVisualEffectView.self
     }
 
     return NSGlassEffectView.self
-  }
-}
-
-// MARK: - Private
-
-private extension AppDesign {
-  static var isMacOSTahoe: Bool {
-    guard #available(macOS 26.0, *) else {
-      return false
-    }
-
-    return true
   }
 }
