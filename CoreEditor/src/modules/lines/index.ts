@@ -43,10 +43,7 @@ export function adjustActiveLineGutter() {
     return;
   }
 
-  const gutterElement = [...document.querySelectorAll('.cm-lineNumbers .cm-gutterElement')].find((element: Element) => {
-    return Number(element.textContent) === lineNumber;
-  }) as HTMLElement | null;
-
+  const gutterElement = findLineNumberGutter(lineNumber);
   if (gutterElement !== null) {
     const height = lineElement.getBoundingClientRect().height;
     gutterElement.style.height = `${height}px`;
@@ -73,6 +70,17 @@ export function adjustGutterPositions(className: 'lineNumbers' | 'gutterHover' =
     const lineRect = lineEl.getBoundingClientRect();
     adjustGutter(findGutter(gutterElements, lineRect), fontSize);
   });
+}
+
+/**
+ * Find the active line-number gutter for a given line.
+ *
+ * Only active-line gutters are queried, which excludes CodeMirror's hidden width spacer (its
+ * text rounds up to all-nines, e.g. "9", and would otherwise collide with single-digit line numbers).
+ */
+export function findLineNumberGutter(lineNumber: number): HTMLElement | null {
+  const elements = [...document.querySelectorAll('.cm-lineNumbers .cm-activeLineGutter')] as HTMLElement[];
+  return elements.find(element => Number(element.textContent) === lineNumber) ?? null;
 }
 
 function findGutter(elements: HTMLElement[], anchor: DOMRect) {
