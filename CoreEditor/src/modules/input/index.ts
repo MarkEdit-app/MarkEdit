@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { EditorSelection, Transaction } from '@codemirror/state';
+import { EditorSelection, Text, Transaction } from '@codemirror/state';
 import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion } from '@codemirror/autocomplete';
 import { alwaysRenderInvisibles } from '../../styling/nodes/invisible';
@@ -34,6 +34,34 @@ export function filterTransaction(transaction: Transaction) {
         effects: transaction.effects,
         selection: EditorSelection.cursor(from),
       });
+    }
+  }
+
+  // Work around a WebKit IME bug where committing a composition over-deletes
+  // text before the caret (e.g., "**??**你" becomes "**你").
+  if (
+    !editingState.compositionEnded &&
+    editingState.compositionPosition !== undefined &&
+    transaction.docChanged &&
+    transaction.effects.length === 0 &&
+    transaction.isUserEvent('input.type.compose')
+  ) {
+    const anchor = editingState.compositionPosition;
+    const changes: { from: number; to: number; insert: Text }[] = [];
+    transaction.changes.iterChanges((fromA, toA, _fromB, _toB, inserted) => {
+      changes.push({ from: fromA, to: toA, insert: inserted });
+    });
+
+    // Clamp the change so composition never modifies text before it started
+    if (changes.length === 1) {
+      const { from, to, insert } = changes[0];
+      if (from < anchor) {
+        return transaction.startState.update({
+          changes: { from: anchor, to: Math.max(anchor, to), insert },
+          selection: EditorSelection.cursor(anchor + insert.length),
+          userEvent: 'input.type.compose',
+        });
+      }
     }
   }
 

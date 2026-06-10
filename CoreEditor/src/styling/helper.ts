@@ -6,7 +6,12 @@ export function createBlockPlugin(builder: () => RangeSet<BlockWrapper>, eventHa
   return ViewPlugin.fromClass(class {}, {
     provide: () => EditorView.blockWrappers.of(editor => {
       window.editor = editor;
-      return builder();
+      try {
+        return builder();
+      } catch (error) {
+        console.error(error);
+        return RangeSet.empty;
+      }
     }),
     eventHandlers,
   });
@@ -17,7 +22,12 @@ export function createDecoPlugin(builder: () => RangeSet<Decoration>, eventHandl
   return ViewPlugin.fromClass(class {}, {
     provide: () => EditorView.decorations.of(editor => {
       window.editor = editor;
-      return builder();
+      try {
+        return builder();
+      } catch (error) {
+        console.error(error);
+        return Decoration.none;
+      }
     }),
     eventHandlers,
   });

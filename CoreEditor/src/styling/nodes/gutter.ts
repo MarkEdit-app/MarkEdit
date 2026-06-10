@@ -13,7 +13,8 @@ export function isPositionFolded(pos: number) {
 
   try {
     rangeSet = window.editor.state.field(foldState);
-  } catch {
+  } catch (error) {
+    console.error(error);
     return false;
   }
 
