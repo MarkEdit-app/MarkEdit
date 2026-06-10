@@ -56,10 +56,18 @@ export function startObserving() {
   document.addEventListener('compositionstart', () => {
     editingState.compositionEnded = false;
     storage.selectedTextBeforeCompose = editingState.hasSelection;
+
+    // Remember where an empty-cursor composition began, so the commit can be
+    // prevented from deleting committed text before it (WebKit IME over-delete).
+    const editor = tryGetEditor();
+    editingState.compositionPosition = editor?.state.selection.main.empty === true
+      ? editor.state.selection.main.head
+      : undefined;
   });
 
   document.addEventListener('compositionend', () => {
     editingState.compositionEnded = true;
+    editingState.compositionPosition = undefined;
 
     // [macOS 15] 'compositionend' is received before the editor is initialized
     if (tryGetEditor() === null) {

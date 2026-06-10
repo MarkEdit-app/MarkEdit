@@ -80,6 +80,7 @@ export function createDecos(nodeName: string | string[], builder: (node: SyntaxN
  */
 function createNodeRanges<T extends RangeValue>(nodeName: string | string[], builder: (node: SyntaxNodeRef) => Range<T> | Range<T>[] | null) {
   const editor = window.editor;
+  const docLength = editor.state.doc.length;
   const ranges: Range<T>[] = [];
   const nodeNames = Array.isArray(nodeName) ? nodeName : [nodeName];
 
@@ -87,9 +88,23 @@ function createNodeRanges<T extends RangeValue>(nodeName: string | string[], bui
     syntaxTree(editor.state).iterate({
       from, to,
       enter: node => {
-        if (nodeNames.includes(node.name)) {
+        if (!nodeNames.includes(node.name)) {
+          return;
+        }
+
+        // Skip nodes with out-of-bounds positions. A transient or partial parse
+        // can yield ranges that break the docView build (and truncate the view).
+        if (node.from < 0 || node.from > node.to || node.to > docLength) {
+          return;
+        }
+
+        try {
           const range = builder(node) ?? [];
           ranges.push(...Array.isArray(range) ? range : [range]);
+        } catch (error) {
+          // Ignore a node that can't produce a valid decoration, e.g. an empty
+          // mark decoration during composition.
+          console.error(error);
         }
       },
     });
