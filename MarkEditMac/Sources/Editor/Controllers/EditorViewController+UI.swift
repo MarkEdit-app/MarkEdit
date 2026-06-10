@@ -37,6 +37,7 @@ extension EditorViewController {
     }
 
     // The divider must be on very top
+    panelDivider.alphaValue = AppDesign.dividerAlpha
     wrapper.addSubview(panelDivider)
 
     layoutPanels()
@@ -52,13 +53,7 @@ extension EditorViewController {
         modernBackgroundView.topAnchor.constraint(equalTo: modernEffectView.bottomAnchor),
       ])
 
-      if let effectView = modernEffectView as? NSVisualEffectView {
-        effectView.material = .titlebar
-      } else if #available(macOS 26.0, *) {
-        (modernEffectView as? NSGlassEffectView)?.cornerRadius = 0
-      }
-
-      modernEffectView.clipsToBounds = true // To cut the shadows
+      modernEffectView.material = .titlebar
       modernEffectView.translatesAutoresizingMaskIntoConstraints = false
       NSLayoutConstraint.activate([
         modernEffectView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
@@ -152,30 +147,14 @@ extension EditorViewController {
 
       modernBackgroundView.layerBackgroundColor = backgroundColor
       modernEffectView.isHidden = reduceTransparency
-      modernTintedView.layerBackgroundColor = baseColor
-
-      let alphaValue = {
-        if modernEffectView is NSVisualEffectView {
-          return prefersTintedToolbar ? 0.7 : 0.3
-        }
-
-        // Glass view needs less transparent color to be tinted
-        return prefersTintedToolbar ? 0.8 : 0.5
-      }()
-
-      let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
-
-      // For NSGlassEffectView, the built-in tintColor is preferred
-      if #available(macOS 26.0, *), let glassView = modernEffectView as? NSGlassEffectView {
-        glassView.tintColor = tintColor
-        glassView.layerBackgroundColor = backgroundColor.withAlphaComponent(0.66)
-      } else {
-        modernTintedView.layerBackgroundColor = tintColor
-      }
 
       // Hide the effect view and remove the opacity of the title bar view
       if reduceTransparency {
         modernTintedView.layerBackgroundColor = backgroundColor
+      } else {
+        let alphaValue = prefersTintedToolbar ? 0.8 : 0.2
+        let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
+        modernTintedView.layerBackgroundColor = tintColor
       }
     }
 
@@ -226,7 +205,7 @@ extension EditorViewController {
 
     if AppDesign.modernTitleBar {
       modernEffectHeight.constant = view.safeAreaInsets.top + panelDivider.frame.height
-      modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : 1
+      modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : AppDesign.dividerAlpha
     } else {
       // To avoid duplicate dividers on legacy titlebar
       panelDivider.isHidden = findPanel.mode == .hidden

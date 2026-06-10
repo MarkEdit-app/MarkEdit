@@ -20,9 +20,6 @@ final class Application: NSApplication {
     UserDefaults.overwriteTextCheckerOnce()
     AppCustomization.createFiles()
 
-    // Must after AppCustomization.createFiles()
-    Bundle.swizzleInfoDictionaryOnce
-
     let application = Self.shared
     let delegate = AppDelegate()
 

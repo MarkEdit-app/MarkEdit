@@ -14,11 +14,6 @@ import MarkEditKit
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
   struct Definition: Codable {
-    enum VisualEffectType: String, Codable {
-      case glass = "glass"
-      case blur = "blur"
-    }
-
     enum UpdateBehavior: String, Codable {
       case quiet = "quiet"
       case notify = "notify"
@@ -42,8 +37,6 @@ enum AppRuntimeConfig {
     let searchNormalizers: [String: String]?
     let nativeSearchQuerySync: Bool?
     let customToolbarItems: [CustomToolbarItem]?
-    let useClassicInterface: Bool?
-    let visualEffectType: VisualEffectType?
     let updateBehavior: UpdateBehavior?
     let checksForUpdates: Bool? // [Deprecated] Kept for backward compatibility
     let defaultOpenDirectory: String?
@@ -67,8 +60,6 @@ enum AppRuntimeConfig {
       case searchNormalizers = "editor.searchNormalizers"
       case nativeSearchQuerySync = "editor.nativeSearchQuerySync"
       case customToolbarItems = "editor.customToolbarItems"
-      case useClassicInterface = "general.useClassicInterface"
-      case visualEffectType = "general.visualEffectType"
       case updateBehavior = "general.updateBehavior"
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
@@ -163,14 +154,6 @@ enum AppRuntimeConfig {
     currentDefinition?.customToolbarItems ?? []
   }
 
-  static var useClassicInterface: Bool {
-    currentDefinition?.useClassicInterface ?? false
-  }
-
-  static var visualEffectType: Definition.VisualEffectType {
-    currentDefinition?.visualEffectType ?? .glass
-  }
-
   static var updateBehavior: Definition.UpdateBehavior {
     guard currentDefinition?.checksForUpdates ?? true else {
       return .never
@@ -258,8 +241,6 @@ private extension AppRuntimeConfig {
     searchNormalizers: nil,
     nativeSearchQuerySync: false,
     customToolbarItems: [],
-    useClassicInterface: nil,
-    visualEffectType: nil,
     updateBehavior: .quiet,
     checksForUpdates: nil,
     defaultOpenDirectory: nil,
