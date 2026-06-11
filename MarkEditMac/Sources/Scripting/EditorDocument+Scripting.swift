@@ -66,8 +66,8 @@ extension EditorDocument {
       command.suspendExecution()
 
       Task {
-        let text = try await targetEditor.bridge.selection.getText()
-        command.resumeExecution(withResult: NSAppleEventDescriptor(with: text))
+        let text = try? await targetEditor.bridge.selection.getText()
+        command.resumeExecution(withResult: NSAppleEventDescriptor(with: text ?? ""))
       }
 
       return stringValue
