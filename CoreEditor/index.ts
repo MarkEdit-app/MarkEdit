@@ -23,6 +23,7 @@ import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 import { NativeModuleAPI } from './src/bridge/native/api';
 import { NativeModuleFoundationModels } from './src/bridge/native/foundationModels';
 import { NativeModuleTranslation } from './src/bridge/native/translation';
+import { NativeModulePDF } from './src/bridge/native/pdf';
 
 import { resetEditor } from './src/core';
 import { initThemeExtractors, initMarkEditModules } from './src/api/modules';
@@ -82,6 +83,7 @@ window.nativeModules = {
   api: createNativeModule<NativeModuleAPI>('api'),
   foundationModels: createNativeModule<NativeModuleFoundationModels>('foundationModels'),
   translation: createNativeModule<NativeModuleTranslation>('translation'),
+  pdf: createNativeModule<NativeModulePDF>('pdf'),
 };
 
 // In release mode, override window APIs to bridge to native

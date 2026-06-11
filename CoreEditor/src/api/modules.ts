@@ -21,6 +21,7 @@ import { onAppReady, onEditorReady, saveDocument, closeDocument, addExtension, a
 import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
+import { generatePDF } from './pdf';
 
 export function initMarkEditModules() {
   const codemirror = {
@@ -77,6 +78,7 @@ export function initMarkEditModules() {
   MarkEdit.getDirectoryPath = getDirectoryPath;
   MarkEdit.getPasteboardItems = getPasteboardItems;
   MarkEdit.getPasteboardString = getPasteboardString;
+  Object.assign(MarkEdit, { generatePDF });
 
   // Override the share method to provide a clear error message
   navigator.share = (_: ShareData): Promise<void> => {

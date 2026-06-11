@@ -489,6 +489,69 @@ extension EditorViewController: EditorReplacePanelDelegate {
   }
 }
 
+// MARK: - EditorModulePDFDelegate
+
+extension EditorViewController: EditorModulePDFDelegate {
+  func editorPDF(_ sender: EditorModulePDF, generate html: String, fileName: String?) async -> Bool {
+    guard let data = await renderPDF(from: html) else {
+      return false
+    }
+
+    return await showSavePanel(data: data, fileName: fileName ?? "Untitled.pdf")
+  }
+}
+
+// MARK: - Private
+
+private extension EditorViewController {
+  func renderPDF(from html: String) async -> Data? {
+    let pdfWaiter = PDFLoadWaiter()
+    let webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 800, height: 1000))
+    webView.navigationDelegate = pdfWaiter
+    webView.loadHTMLString(html, baseURL: nil)
+
+    await pdfWaiter.waitForLoad()
+
+    return await withCheckedContinuation { continuation in
+      webView.createPDF(configuration: WKPDFConfiguration()) { result in
+        switch result {
+        case .success(let data):
+          continuation.resume(returning: data)
+        case .failure:
+          continuation.resume(returning: nil)
+        }
+      }
+    }
+  }
+}
+
+// MARK: - PDFLoadWaiter
+
+@MainActor
+private final class PDFLoadWaiter: NSObject, WKNavigationDelegate {
+  private var continuation: CheckedContinuation<Void, Never>?
+  private var didFinish = false
+
+  func waitForLoad() async {
+    if didFinish { return }
+    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+      self.continuation = continuation
+    }
+  }
+
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { // swiftlint:disable:this implicitly_unwrapped_optional
+    didFinish = true
+    continuation?.resume()
+    continuation = nil
+  }
+
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { // swiftlint:disable:this implicitly_unwrapped_optional
+    didFinish = true
+    continuation?.resume()
+    continuation = nil
+  }
+}
+
 // MARK: - App ready
 
 private extension EditorViewController {

@@ -133,6 +133,7 @@ final class EditorViewController: NSViewController {
       EditorModulePreview(delegate: self),
       EditorModuleTokenizer(),
       EditorModuleAPI(delegate: self),
+      EditorModulePDF(delegate: self),
       EditorModuleFoundationModels(delegate: self),
       EditorModuleTranslation(),
     ])
