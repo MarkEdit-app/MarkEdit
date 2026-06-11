@@ -81,7 +81,7 @@ extension EditorViewController {
 
     // Trigger an additional layout loop to correct view (find panels) positions
     safeAreaObservation = view.observe(\.safeAreaInsets) { view, _ in
-      Task { @MainActor in
+      Thread.ensureMain {
         view.needsLayout = true
       }
     }
