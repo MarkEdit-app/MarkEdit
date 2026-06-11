@@ -362,7 +362,11 @@ private extension FileVersionPicker {
 
   func fetchNonlocalVersions() {
     Task {
-      let nonlocal = try await NSFileVersion.nonlocalVersionsOfItem(at: self.fileURL)
+      guard let nonlocal = try? await NSFileVersion.nonlocalVersionsOfItem(at: self.fileURL) else {
+        Logger.log(.error, "Failed to fetch nonlocal versions")
+        return
+      }
+
       DispatchQueue.main.async {
         self.allVersions = (self.allVersions + nonlocal).newestToOldest()
         self.resetVersionMenu()

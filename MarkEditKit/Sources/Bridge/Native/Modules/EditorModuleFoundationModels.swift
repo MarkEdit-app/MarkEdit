@@ -165,11 +165,19 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 @available(macOS 26.0, *)
 private extension GenerationOptions {
   init(_ options: LanguageModelGenerationOptions?) {
+  #if canImport(FoundationModels, _version: 2)
+    self.init(
+      samplingMode: SamplingMode(options?.sampling),
+      temperature: options?.temperature,
+      maximumResponseTokens: options?.maximumResponseTokens
+    )
+  #else
     self.init(
       sampling: SamplingMode(options?.sampling),
       temperature: options?.temperature,
       maximumResponseTokens: options?.maximumResponseTokens
     )
+  #endif
   }
 }
 
