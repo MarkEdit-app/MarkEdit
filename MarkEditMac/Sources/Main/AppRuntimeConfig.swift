@@ -173,7 +173,15 @@ enum AppRuntimeConfig {
   }
 
   static var disableOpenPanelOptions: Bool {
-    currentDefinition?.disableOpenPanelOptions ?? defaultDisableOpenPanelOptions
+    currentDefinition?.disableOpenPanelOptions ?? ({
+      // [macOS 26] Revisit this later,
+      // NSOpenPanel.accessoryView can significantly slow down the file opening process.
+      if #available(macOS 26.0, *) {
+        return true
+      }
+
+      return false
+    })()
   }
 
   static var disableCorsRestrictions: Bool {
@@ -245,7 +253,7 @@ private extension AppRuntimeConfig {
     checksForUpdates: nil,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
-    disableOpenPanelOptions: defaultDisableOpenPanelOptions,
+    disableOpenPanelOptions: nil, // [macOS 26] Future macOS with the fix can be opted out
     disableCorsRestrictions: true,
     disabledWebKitFeatures: nil,
     preferredTerminalApp: nil,
@@ -274,15 +282,5 @@ private extension AppRuntimeConfig {
     Logger.assert(jsonData != nil, "Failed to encode object: \(definition)")
 
     return jsonData
-  }
-
-  static var defaultDisableOpenPanelOptions: Bool {
-    // [macOS 26] Revisit this later,
-    // NSOpenPanel.accessoryView can significantly slow down the file opening process.
-    if #available(macOS 26.0, *) {
-      return true
-    }
-
-    return false
   }
 }
