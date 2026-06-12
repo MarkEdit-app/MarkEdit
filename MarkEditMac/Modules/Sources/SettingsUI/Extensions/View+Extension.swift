@@ -38,12 +38,8 @@ public extension View {
   }
 
   func formBreathingInset() -> some View {
-    if #available(macOS 26.0, *) {
-      // For unknown reasons, this is required to prevent extreme tight spacing
-      return padding(.top, .ulpOfOne)
-    }
-
-    return self
+    // For unknown reasons, this is required to prevent extreme tight spacing
+    padding(.top, .ulpOfOne)
   }
 }
 
@@ -61,10 +57,6 @@ private extension HorizontalAlignment {
 
 private struct FlexibleButtonSize: ViewModifier {
   func body(content: Content) -> some View {
-    if #available(macOS 26.0, *) {
-      content.buttonSizing(.flexible)
-    } else {
-      content
-    }
+    content.buttonSizing(.flexible)
   }
 }
