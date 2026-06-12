@@ -246,15 +246,13 @@ enum AppRuntimeConfig {
   }
 
   static var disableOpenPanelOptions: Bool {
-    currentDefinition?.disableOpenPanelOptions ?? ({
-      // [macOS 26] Revisit this later,
-      // NSOpenPanel.accessoryView can significantly slow down the file opening process.
-      if #available(macOS 26.0, *) {
-        return true
-      }
+    if let option = currentDefinition?.disableOpenPanelOptions {
+      return option
+    }
 
-      return false
-    })()
+    // [macOS 26] Revisit this later,
+    // NSOpenPanel.accessoryView can significantly slow down the file opening process.
+    return true
   }
 
   static var disableCorsRestrictions: Bool {

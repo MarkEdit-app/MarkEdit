@@ -11,7 +11,6 @@ import MarkEditKit
 // MARK: - NSMenuDelegate
 
 extension AppDelegate: NSMenuDelegate {
-  @available(macOS 15.1, *)
   var activeWritingToolsItem: NSMenuItem? {
     mainEditMenu?.items.first {
       $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
