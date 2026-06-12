@@ -26,7 +26,6 @@ extension EditorViewController {
       }
 
       let statisticsController = StatisticsController(
-        modernStyle: AppDesign.modernStyle,
         content: content,
         fileURL: document?.fileURL,
         tintColor: transientTintColor(for: .current),
