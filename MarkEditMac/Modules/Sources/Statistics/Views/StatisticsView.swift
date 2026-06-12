@@ -9,7 +9,6 @@ import AppKitExtensions
 import SwiftUI
 
 struct StatisticsView: View {
-  private let modernStyle: Bool
   private let fullResult: StatisticsResult
   private let selectionResult: StatisticsResult?
   private let fullRuleResults: [StatisticsRuleResult]
@@ -21,7 +20,6 @@ struct StatisticsView: View {
   @State private var localMonitor: Any?
 
   init(
-    modernStyle: Bool,
     fullResult: StatisticsResult,
     selectionResult: StatisticsResult?,
     fullRuleResults: [StatisticsRuleResult] = [],
@@ -29,7 +27,6 @@ struct StatisticsView: View {
     fileURL: URL?,
     localizable: StatisticsLocalizable
   ) {
-    self.modernStyle = modernStyle
     self.fullResult = fullResult
     self.selectionResult = selectionResult
     self.fullRuleResults = fullRuleResults
@@ -71,10 +68,10 @@ struct StatisticsView: View {
           }
         } else {
           Text(localizable.mainTitle)
-            .font(.system(size: modernStyle ? 14 : 13, weight: .semibold))
+            .font(.system(size: 14, weight: .semibold))
         }
       }
-      .frame(height: modernStyle ? 40 : 36)
+      .frame(height: 40)
 
       Divider()
 
