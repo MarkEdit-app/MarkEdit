@@ -38,14 +38,6 @@ public extension NSPasteboard {
   }
 
   func url() async -> String? {
-    guard #available(macOS 15.4, *) else {
-      guard let string else {
-        return string(forType: .URL)
-      }
-
-      return NSDataDetector.extractURL(from: string)
-    }
-
     // This alerts the user only when the pasteboard really contains links
     let values = try? await Self.general.detectedValues(for: [\.links])
     return values?.links.first?.url.absoluteString
