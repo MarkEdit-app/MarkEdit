@@ -9,25 +9,11 @@ import AppKit
 import AppKitControls
 import MarkEditKit
 
-// [macOS 26] Clean these up
-
-private protocol ButtonLabeling {
-  var labelView: LabelView { get }
-}
-
-extension TitleOnlyButton: ButtonLabeling {}
-
 /**
  To indicate the current line, column and length of selection.
  */
 final class EditorStatusView: NSView, BackgroundTheming {
-  private let button: NSButton & ButtonLabeling = {
-    if AppDesign.modernStyle {
-      return GlassButton()
-    }
-
-    return TitleOnlyButton(font: Constants.titleFont)
-  }()
+  private let button = GlassButton()
 
   init(handler: @escaping () -> Void) {
     super.init(frame: .zero)
@@ -48,16 +34,8 @@ final class EditorStatusView: NSView, BackgroundTheming {
   }
 
   override func updateLayer() {
-    if button is GlassButton {
-      // Clear this, otherwise it appears as a rectangle over text selection
-      layer?.backgroundColor = .clear
-      return
-    }
-
-    layer?.borderWidth = 1
-    layer?.cornerRadius = 3
-    layer?.cornerCurve = .continuous
-    layer?.borderColor = NSColor.plainButtonBorder.cgColor
+    // Clear this, otherwise it appears as a rectangle over text selection
+    layer?.backgroundColor = .clear
   }
 
   func updateLineColumn(_ info: LineColumnInfo) {
@@ -75,7 +53,7 @@ final class EditorStatusView: NSView, BackgroundTheming {
     label.stringValue = title
     label.sizeToFit()
 
-    self.frame = label.bounds.insetBy(dx: -4, dy: AppDesign.modernStyle ? -3 : -2)
+    self.frame = label.bounds.insetBy(dx: -4, dy: -3)
     self.needsLayout = true
   }
 }
@@ -115,11 +93,12 @@ private enum Constants {
   static let titleFont: NSFont = .monospacedDigitSystemFont(ofSize: 11, weight: .regular)
 }
 
-private class GlassButton: NSButton, ButtonLabeling {
+private class GlassButton: NSButton {
   fileprivate let labelView = LabelView()
 
   override init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
+    bezelStyle = .glass
     font = .systemFont(ofSize: 7) // To make the button smaller
     title = "" // Clear the title and bezel
 
@@ -130,10 +109,6 @@ private class GlassButton: NSButton, ButtonLabeling {
       labelView.centerXAnchor.constraint(equalTo: centerXAnchor),
       labelView.centerYAnchor.constraint(equalTo: centerYAnchor),
     ])
-
-    if #available(macOS 26.0, *) {
-      bezelStyle = .glass
-    }
   }
 
   @available(*, unavailable)

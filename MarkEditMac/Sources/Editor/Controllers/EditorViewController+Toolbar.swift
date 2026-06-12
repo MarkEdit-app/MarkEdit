@@ -23,16 +23,6 @@ extension EditorViewController {
   private enum Constants {
     static let tableOfContentsMenuIdentifier = NSUserInterfaceItemIdentifier("tableOfContentsMenu")
     static let tableOfContentsMinimumWidth: Double = 160
-
-    @MainActor static let normalizedButtonSize: Double? = {
-      if AppDesign.modernStyle {
-        // The issue seems fixed with the Liquid Glass design
-        return nil
-      }
-
-      // "bold" icon looks bigger than expected, fix it
-      return 15
-    }()
   }
 
   func updateToolbarItemMenus(_ menu: NSMenu) {
@@ -169,19 +159,19 @@ private extension EditorViewController {
   }
 
   var toggleBoldItem: NSToolbarItem {
-    .with(identifier: .toggleBold, iconSize: Constants.normalizedButtonSize) { [weak self] in
+    .with(identifier: .toggleBold) { [weak self] in
       self?.toggleBold(nil)
     }
   }
 
   var toggleItalicItem: NSToolbarItem {
-    .with(identifier: .toggleItalic, iconSize: Constants.normalizedButtonSize) { [weak self] in
+    .with(identifier: .toggleItalic) { [weak self] in
       self?.toggleItalic(nil)
     }
   }
 
   var toggleStrikethroughItem: NSToolbarItem {
-    .with(identifier: .toggleStrikethrough, iconSize: Constants.normalizedButtonSize) { [weak self] in
+    .with(identifier: .toggleStrikethrough) { [weak self] in
       self?.toggleStrikethrough(nil)
     }
   }
@@ -262,11 +252,11 @@ private extension EditorViewController {
   }
 
   var writingToolsItem: NSToolbarItem? {
-    if #available(macOS 15.1, *), let menu = systemWritingToolsMenu {
-      return .with(identifier: .writingTools, menu: menu.copiedMenu)
-    } else {
+    guard let menu = systemWritingToolsMenu else {
       return nil
     }
+
+    return .with(identifier: .writingTools, menu: menu.copiedMenu)
   }
 
   func updateTableOfContentsMenu(_ menu: NSMenu) {

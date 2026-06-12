@@ -34,10 +34,9 @@ final class EditorFindPanel: EditorPanelView {
   var mode: EditorFindMode = .hidden
   var numberOfItems: Int = 0
   var recentSearchesCursor: Int?
-  let searchField = LabeledSearchField(modernStyle: AppDesign.modernStyle)
+  let searchField = LabeledSearchField()
 
   private(set) lazy var findButtons = RoundedNavigateButtons(
-    modernStyle: AppDesign.modernStyle,
     leftAction: { [weak self] in
       guard let self else { return }
       self.delegate?.editorFindPanelDidClickPrevious(self)
@@ -51,8 +50,9 @@ final class EditorFindPanel: EditorPanelView {
   )
 
   private(set) lazy var doneButton = {
-    let button = AquaFocusRingButton()
-    button.bezelStyle = AppDesign.modernStyle ? .accessoryBar : .accessoryBarAction
+    let button = NSButton()
+    button.bezelStyle = .accessoryBar
+    button.focusRingType = .exterior
 
     button.attributedTitle = NSAttributedString(
       string: Localized.General.done,
