@@ -21,7 +21,7 @@ enum EditorFindMode {
 @MainActor
 protocol EditorFindPanelDelegate: AnyObject {
   func editorFindPanel(_ sender: EditorFindPanel, modeDidChange mode: EditorFindMode)
-  func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String)
+  func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String, addToRecents: Bool)
   func editorFindPanelActionsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem?
   func editorFindPanelDidChangeOptions(_ sender: EditorFindPanel)
   func editorFindPanelDidPressTabKey(_ sender: EditorFindPanel, isBacktab: Bool)
@@ -33,6 +33,7 @@ final class EditorFindPanel: EditorPanelView {
   weak var delegate: EditorFindPanelDelegate?
   var mode: EditorFindMode = .hidden
   var numberOfItems: Int = 0
+  var recentSearchesCursor: Int?
   let searchField = LabeledSearchField(modernStyle: AppDesign.modernStyle)
 
   private(set) lazy var findButtons = RoundedNavigateButtons(

@@ -130,7 +130,7 @@ extension EditorViewController {
     }
   }
 
-  func updateTextFinderQuery(refocus: Bool = true) {
+  func updateTextFinderQuery(refocus: Bool = true, addToRecents: Bool = true) {
     let options = SearchOptions(
       search: searchTerm,
       caseSensitive: AppPreferences.Search.caseSensitive,
@@ -142,7 +142,10 @@ extension EditorViewController {
       replace: replacePanel.textField.stringValue
     )
 
-    findPanel.searchField.addToRecents(searchTerm: searchTerm)
+    if addToRecents {
+      findPanel.searchField.addToRecents(searchTerm: searchTerm)
+    }
+
     findPanel.resetMenu()
 
     bridge.search.updateQuery(options: options)

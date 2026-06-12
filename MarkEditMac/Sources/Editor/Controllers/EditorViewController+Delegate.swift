@@ -436,8 +436,8 @@ extension EditorViewController: EditorFindPanelDelegate {
     updateTextFinderMode(mode, explicitly: true)
   }
 
-  func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String) {
-    updateTextFinderQuery()
+  func editorFindPanel(_ sender: EditorFindPanel, searchTermDidChange searchTerm: String, addToRecents: Bool) {
+    updateTextFinderQuery(addToRecents: addToRecents)
   }
 
   func editorFindPanelActionsMenuItem(_ sender: EditorFindPanel) -> NSMenuItem? {
