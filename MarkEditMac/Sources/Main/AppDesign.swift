@@ -11,35 +11,6 @@ import FoundationModels
 @MainActor
 enum AppDesign {
   /**
-    Returns `true` to adopt the new design language in macOS Tahoe.
-   */
-  static var modernStyle: Bool {
-    guard #available(macOS 26.0, *) else {
-      return false
-    }
-
-    return true
-  }
-
-  /**
-   Returns `true` to use a customized title bar for the editor.
-
-   It will be enabled in macOS Tahoe and later.
-   */
-  static var modernTitleBar: Bool {
-    modernStyle
-  }
-
-  /**
-   Returns `true` to gradually add icons to the menu bar.
-
-   It will be enabled in macOS Tahoe and later.
-   */
-  static var menuIconEvolution: Bool {
-    modernStyle
-  }
-
-  /**
    Returns `true` to always enable `Show Writing Tools` in macOS Golden Gate.
 
    [macOS 27] Apple Bug: `Ask Siri` and `Show Writing Tools` are both missing.
@@ -55,7 +26,7 @@ enum AppDesign {
   }
 
   static var dividerAlpha: Double {
-    modernStyle ? 0.7 : 1.0
+    0.7
   }
 
   static var reduceTransparency: Bool {
@@ -66,17 +37,8 @@ enum AppDesign {
     NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
   }
 
-  /**
-   Returns either an `NSGlassEffectView`, or an `NSVisualEffectView` as fallback.
-
-   `NSGlassEffectView` is used when it is available and `modernStyle` is true.
-   */
   static var modernEffectView: NSView.Type {
-    guard #available(macOS 26.0, *), modernStyle else {
-      return NSVisualEffectView.self
-    }
-
-    return NSGlassEffectView.self
+    NSGlassEffectView.self
   }
 
   static func migrateMainMenuIcons(delegate: AppDelegate) {

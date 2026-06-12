@@ -8,7 +8,6 @@
 import AppKit
 import MarkEditKit
 
-@available(macOS 15.1, *)
 enum AppWritingTools {
   // Source/WebKit/Platform/spi/Cocoa/Modules/WritingTools_SPI/WritingToolsSPI.h
   enum Tool: Int {
@@ -123,7 +122,6 @@ enum AppWritingTools {
 
 // MARK: - Private
 
-@available(macOS 15.1, *)
 private extension AppWritingTools {
   /// The action that opens `Writing Tools`.
   ///

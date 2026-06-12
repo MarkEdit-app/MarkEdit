@@ -15,7 +15,6 @@ public final class RoundedNavigateButtons: RoundedButtonGroup {
   }
 
   public init(
-    modernStyle: Bool,
     leftAction: @escaping (() -> Void),
     rightAction: @escaping (() -> Void),
     leftAccessibilityLabel: String,
@@ -27,7 +26,7 @@ public final class RoundedNavigateButtons: RoundedButtonGroup {
     let rightButton = IconOnlyButton(symbolName: Constants.chevronRight, iconWidth: Constants.iconWidth, iconHeight: Constants.iconHeight, accessibilityLabel: rightAccessibilityLabel)
     rightButton.addAction(rightAction)
 
-    super.init(modernStyle: modernStyle, leftButton: leftButton, rightButton: rightButton)
+    super.init(leftButton: leftButton, rightButton: rightButton)
     self.frame = CGRect(x: 0, y: 0, width: 72, height: 0)
   }
 }

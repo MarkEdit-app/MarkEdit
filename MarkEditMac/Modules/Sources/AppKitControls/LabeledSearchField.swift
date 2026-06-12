@@ -8,7 +8,6 @@ import AppKit
 import AppKitExtensions
 
 public final class LabeledSearchField: NSSearchField {
-  private let modernStyle: Bool
   private let bezelView = BezelView(cornerRadius: Constants.bezelCornerRadius)
 
   // To render custom icons in modern style due to the unwanted bezel added by Apple
@@ -27,8 +26,7 @@ public final class LabeledSearchField: NSSearchField {
     return label
   }()
 
-  public init(modernStyle: Bool) {
-    self.modernStyle = modernStyle
+  public init() {
     super.init(frame: .zero)
 
     usesSingleLineMode = false
@@ -64,16 +62,14 @@ public final class LabeledSearchField: NSSearchField {
       )
     }
 
-    if modernStyle {
-      // To completely remove the unnecessary capsule-style border
-      if let view = modernBezelView {
-        renderCustomIcons(modernBezel: view)
-      } else if #unavailable(macOS 27.0) {
-        // [macOS 27] Revisit this later
-        #if DEBUG
-          assertionFailure("Missing AppKitSearchField in NSSearchField")
-        #endif
-      }
+    // To completely remove the unnecessary capsule-style border
+    if let view = modernBezelView {
+      renderCustomIcons(modernBezel: view)
+    } else if #unavailable(macOS 27.0) {
+      // [macOS 27] Revisit this later
+      #if DEBUG
+        assertionFailure("Missing AppKitSearchField in NSSearchField")
+      #endif
     }
   }
 
@@ -121,10 +117,8 @@ public final class LabeledSearchField: NSSearchField {
     buttonCell?.image = nil
     buttonCell?.image = iconImage
 
-    if modernStyle {
-      searchIconView.image = nil
-      searchIconView.image = iconImage
-    }
+    searchIconView.image = nil
+    searchIconView.image = iconImage
 
     needsDisplay = true
   }
@@ -159,10 +153,6 @@ private extension LabeledSearchField {
   }
 
   func updateCustomCancelIcon() {
-    guard modernStyle else {
-      return
-    }
-
     cancelIconView.isHidden = stringValue.isEmpty
   }
 

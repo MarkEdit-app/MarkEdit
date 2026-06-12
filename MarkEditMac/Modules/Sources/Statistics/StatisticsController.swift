@@ -18,7 +18,6 @@ public final class StatisticsController: NSViewController {
     static let maxExtraRows: Int = 3
   }
 
-  private let modernStyle: Bool
   private let content: ReadableContentPair
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
@@ -26,13 +25,11 @@ public final class StatisticsController: NSViewController {
   private var contentView: NSView?
 
   public init(
-    modernStyle: Bool,
     content: ReadableContentPair,
     fileURL: URL?,
     localizable: StatisticsLocalizable,
     customRules: [StatisticsRule] = []
   ) {
-    self.modernStyle = modernStyle
     self.content = content
     self.fileURL = fileURL
     self.localizable = localizable
@@ -101,7 +98,6 @@ public final class StatisticsController: NSViewController {
         )
 
         let contentView = NSHostingView(rootView: StatisticsView(
-          modernStyle: self.modernStyle,
           fullResult: fullResult,
           selectionResult: selectionResult,
           fullRuleResults: fullRuleResults,
