@@ -152,7 +152,7 @@ extension EditorViewController {
       if reduceTransparency {
         modernTintedView.layerBackgroundColor = backgroundColor
       } else {
-        let alphaValue = prefersTintedToolbar ? 0.8 : 0.2
+        let alphaValue = prefersTintedToolbar ? 0.75 : 0.15
         let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
         modernTintedView.layerBackgroundColor = tintColor
       }
