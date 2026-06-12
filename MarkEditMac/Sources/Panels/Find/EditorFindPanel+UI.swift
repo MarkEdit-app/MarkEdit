@@ -53,7 +53,7 @@ extension EditorFindPanel {
 
 private extension EditorFindPanel {
   @objc func searchTermDidChange(_ sender: NSTextField) {
-    delegate?.editorFindPanel(self, searchTermDidChange: sender.stringValue)
+    delegate?.editorFindPanel(self, searchTermDidChange: sender.stringValue, addToRecents: true)
   }
 
   @objc func didClickDone(_ sender: NSButton) {
