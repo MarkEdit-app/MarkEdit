@@ -1,6 +1,6 @@
 import { describe, expect, test, afterEach } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
-import { filterTransaction } from '../src/modules/input';
+import { filterTransaction, observeChanges } from '../src/modules/input';
 import { editingState } from '../src/common/store';
 import wrapBlock from '../src/modules/input/wrapBlock';
 import * as editor from './utils/editor';
@@ -90,5 +90,81 @@ describe('Composition over-delete clamp', () => {
     });
 
     expect(editor.getText()).toBe('**和');
+  });
+});
+
+describe('Composition bottom pinning', () => {
+  afterEach(() => {
+    editingState.wasScrolledToBottom = false;
+    editingState.compositionEnded = true;
+  });
+
+  // jsdom has no layout, mock the scroll metrics and capture scrollTop writes.
+  // A real DOM clamps scrollTop to [0, scrollHeight - clientHeight].
+  function mockScroller(scrollHeight = 1000, clientHeight = 100) {
+    let top = 0;
+    const maxTop = scrollHeight - clientHeight;
+    const scrollDOM = window.editor.scrollDOM;
+    Object.defineProperty(scrollDOM, 'scrollHeight', { configurable: true, get: () => scrollHeight });
+    Object.defineProperty(scrollDOM, 'clientHeight', { configurable: true, get: () => clientHeight });
+    Object.defineProperty(scrollDOM, 'scrollTop', { configurable: true, get: () => top, set: (value: number) => { top = Math.max(0, Math.min(value, maxTop)); } });
+    return () => top;
+  }
+
+  function compose(insert: string) {
+    window.editor.dispatch({
+      changes: { from: window.editor.state.doc.length, insert },
+      userEvent: 'input.type.compose',
+    });
+  }
+
+  test('pins to the bottom on a composition commit', () => {
+    editor.setUp('hello', observeChanges());
+    const readTop = mockScroller();
+    editingState.wasScrolledToBottom = true;
+    editingState.compositionEnded = true;
+
+    compose('你好');
+
+    expect(readTop()).toBe(900);
+    expect(editingState.wasScrolledToBottom).toBe(false);
+  });
+
+  test('keeps pinning while composition is ongoing', () => {
+    editor.setUp('hello', observeChanges());
+    const readTop = mockScroller();
+    editingState.wasScrolledToBottom = true;
+    editingState.compositionEnded = false;
+
+    compose('ni');
+
+    expect(readTop()).toBe(900);
+    // Flag stays set until the composition commits
+    expect(editingState.wasScrolledToBottom).toBe(true);
+  });
+
+  test('does not pin when not previously at the bottom', () => {
+    editor.setUp('hello', observeChanges());
+    const readTop = mockScroller();
+    editingState.wasScrolledToBottom = false;
+
+    compose('你好');
+
+    expect(readTop()).toBe(0);
+  });
+
+  test('does not pin for non-composition edits', () => {
+    editor.setUp('hello', observeChanges());
+    const readTop = mockScroller();
+    editingState.wasScrolledToBottom = true;
+
+    window.editor.dispatch({
+      changes: { from: window.editor.state.doc.length, insert: 'x' },
+      userEvent: 'input.type',
+    });
+
+    expect(readTop()).toBe(0);
+    // Flag is untouched by unrelated edits
+    expect(editingState.wasScrolledToBottom).toBe(true);
   });
 });
