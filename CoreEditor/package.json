@@ -52,7 +52,8 @@
   },
   "resolutions": {
     "minimatch": "^10.2.5",
-    "picomatch": "^4.0.4"
+    "picomatch": "^4.0.4",
+    "esbuild": "^0.28.1"
   },
   "browserslist": [
     "safari >= 18"
