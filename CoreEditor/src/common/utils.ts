@@ -75,3 +75,7 @@ export function isMetaKey(event: KeyboardEvent) {
 export function isMotionReduced() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
+
+export function isScrolledToBottom(element: HTMLElement, epsilon = 4.0) {
+  return element.scrollHeight - element.scrollTop - element.clientHeight < epsilon;
+}

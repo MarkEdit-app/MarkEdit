@@ -147,6 +147,17 @@ export function observeChanges() {
         }
       }
 
+      // Keep the bottom pinned across an IME composition; the composing string and
+      // committed text differ in height, so CodeMirror would otherwise leave a gap.
+      if (editingState.wasScrolledToBottom && update.transactions.some(tr => tr.isUserEvent('input.type.compose'))) {
+        const scrollDOM = update.view.scrollDOM;
+        scrollDOM.scrollTop = scrollDOM.scrollHeight;
+
+        if (editingState.compositionEnded) {
+          editingState.wasScrolledToBottom = false;
+        }
+      }
+
       // Work around a composition mode bug where whitespaces are not updated,
       // we can probably remove this once EditContext is available.
       if (alwaysRenderInvisibles() && !editingState.compositionEnded) {

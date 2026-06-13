@@ -1,4 +1,4 @@
-import { tryGetEditor, isMetaKey } from '../../common/utils';
+import { tryGetEditor, isMetaKey, isScrolledToBottom } from '../../common/utils';
 import { globalState, editingState } from '../../common/store';
 
 import * as completion from '../../modules/completion';
@@ -63,6 +63,9 @@ export function startObserving() {
     editingState.compositionPosition = editor?.state.selection.main.empty === true
       ? editor.state.selection.main.head
       : undefined;
+
+    // Remember the bottom state so the commit can re-pin it, see observeChanges.
+    editingState.wasScrolledToBottom = editor !== null && isScrolledToBottom(editor.scrollDOM);
   });
 
   document.addEventListener('compositionend', () => {
