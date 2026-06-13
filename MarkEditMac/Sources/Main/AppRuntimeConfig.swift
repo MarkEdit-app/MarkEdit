@@ -14,6 +14,12 @@ import MarkEditKit
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
   struct Definition: Codable {
+    enum ToolbarTranslucency: String, Codable {
+      case light = "light"
+      case regular = "regular"
+      case heavy = "heavy"
+    }
+
     enum UpdateBehavior: String, Codable {
       case quiet = "quiet"
       case notify = "notify"
@@ -36,6 +42,7 @@ enum AppRuntimeConfig {
     let visibleLineBreakCharacter: String?
     let searchNormalizers: [String: String]?
     let nativeSearchQuerySync: Bool?
+    let toolbarTranslucency: ToolbarTranslucency?
     let customToolbarItems: [CustomToolbarItem]?
     let updateBehavior: UpdateBehavior?
     let checksForUpdates: Bool? // [Deprecated] Kept for backward compatibility
@@ -59,6 +66,7 @@ enum AppRuntimeConfig {
       case visibleLineBreakCharacter = "editor.visibleLineBreakCharacter"
       case searchNormalizers = "editor.searchNormalizers"
       case nativeSearchQuerySync = "editor.nativeSearchQuerySync"
+      case toolbarTranslucency = "editor.toolbarTranslucency"
       case customToolbarItems = "editor.customToolbarItems"
       case updateBehavior = "general.updateBehavior"
       case checksForUpdates = "general.checksForUpdates"
@@ -148,6 +156,16 @@ enum AppRuntimeConfig {
 
   static var nativeSearchQuerySync: Bool {
     currentDefinition?.nativeSearchQuerySync ?? false
+  }
+
+  /// Alpha values of the tinted toolbar overlay: (tinted window, plain window).
+  /// Heavier translucency means more transparent, i.e., smaller alpha values.
+  static var toolbarTintAlphaValues: (tinted: Double, plain: Double) {
+    switch currentDefinition?.toolbarTranslucency ?? .regular {
+    case .light: return (0.95, 0.25)
+    case .regular: return (0.75, 0.15)
+    case .heavy: return (0.55, 0.05)
+    }
   }
 
   static var customToolbarItems: [CustomToolbarItem] {
@@ -248,6 +266,7 @@ private extension AppRuntimeConfig {
     visibleLineBreakCharacter: nil,
     searchNormalizers: nil,
     nativeSearchQuerySync: false,
+    toolbarTranslucency: nil, // Keeping nil allows us to tweak defaults later
     customToolbarItems: [],
     updateBehavior: .quiet,
     checksForUpdates: nil,
