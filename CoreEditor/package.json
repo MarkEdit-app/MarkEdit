@@ -33,7 +33,7 @@
     "@types/eslint": "^9.6.1",
     "@types/jest": "^29.5.4",
     "@typescript-eslint/parser": "^8.46.2",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "eslint": "^9.39.0",
     "eslint-plugin-compat": "^6.0.2",
     "eslint-plugin-promise": "^7.2.1",
