@@ -10,8 +10,8 @@ public final class RoundedNavigateButtons: RoundedButtonGroup {
   private enum Constants {
     static let chevronLeft = "chevron.left"
     static let chevronRight = "chevron.right"
-    static let iconWidth: Double = 9
-    static let iconHeight: Double = 9
+    static let iconWidth: Double = 12
+    static let iconHeight: Double = 12
   }
 
   public init(
