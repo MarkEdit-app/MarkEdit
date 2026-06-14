@@ -80,30 +80,28 @@ final class EditorWindow: NSWindow {
     if let view = cachedToolbarEffectView {
       let needsOverlay = styleMask.contains(.fullScreen) && toolbarMode == .hidden
       view.alphaValue = needsOverlay ? 1 : (prefersTintedToolbar ? 0.3 : 0.7)
-      view.isHidden = !needsOverlay && (reduceTransparency == true || AppDesign.modernTitleBar)
+      view.isHidden = !needsOverlay
 
       // Blend the color of contents behind the window
       (view as? NSVisualEffectView)?.blendingMode = .behindWindow
     }
 
-    if AppDesign.modernTitleBar {
-      if cachedTitlebarDecorationView == nil {
-        cachedTitlebarDecorationView = titlebarDecorationView
-      }
+    if cachedTitlebarDecorationView == nil {
+      cachedTitlebarDecorationView = titlebarDecorationView
+    }
 
-      // Disable the separator instead of using `titlebarAppearsTransparent`,
-      // which breaks "Merge All Windows".
-      if let view = cachedTitlebarDecorationView {
-        let selector = sel_getUid("setDrawsBottomSeparator:")
-        if view.responds(to: selector) {
-          unsafeBitCast(
-            view.method(for: selector),
-            to: (@convention(c) (NSView, Selector, Bool) -> Void).self
-          )(view, selector, false)
-        } else {
-          Logger.assertFail("Missing setDrawsBottomSeparator: in _NSTitlebarDecorationView")
-          view.isHidden = true
-        }
+    // Disable the separator instead of using `titlebarAppearsTransparent`,
+    // which breaks "Merge All Windows".
+    if let view = cachedTitlebarDecorationView {
+      let selector = sel_getUid("setDrawsBottomSeparator:")
+      if view.responds(to: selector) {
+        unsafeBitCast(
+          view.method(for: selector),
+          to: (@convention(c) (NSView, Selector, Bool) -> Void).self
+        )(view, selector, false)
+      } else {
+        Logger.assertFail("Missing setDrawsBottomSeparator: in _NSTitlebarDecorationView")
+        view.isHidden = true
       }
     }
   }

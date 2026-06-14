@@ -173,7 +173,7 @@ private extension FontPicker {
       )
     }
 
-    let location = CGPoint(x: configuration.modernStyle ? -4 : 0, y: sourceView.frame.height - 10)
+    let location = CGPoint(x: -4, y: sourceView.frame.height - 10)
     menu.popUp(positioning: nil, at: location, in: sourceView)
   }
 }

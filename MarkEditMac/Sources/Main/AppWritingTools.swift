@@ -8,7 +8,6 @@
 import AppKit
 import MarkEditKit
 
-@available(macOS 15.1, *)
 enum AppWritingTools {
   enum Tool: Int {
     case panel = 0
@@ -81,7 +80,6 @@ enum AppWritingTools {
 
 // MARK: - Private
 
-@available(macOS 15.1, *)
 private extension AppWritingTools {
   /// Invokes a selector on a target and returns the result as `NSObject?`.
   static func invokeObject(_ target: NSObject, selector name: String) -> NSObject? {

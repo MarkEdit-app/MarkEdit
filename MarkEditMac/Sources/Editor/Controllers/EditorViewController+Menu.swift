@@ -45,7 +45,6 @@ extension EditorViewController {
     return item
   }
 
-  @available(macOS 15.1, *)
   var systemWritingToolsMenu: NSMenu? {
     NSApp.appDelegate?.mainEditMenu?.items.first {
       $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
