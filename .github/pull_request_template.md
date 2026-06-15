@@ -2,9 +2,11 @@
 
 Thanks for taking the time to contribute! Before opening this PR, please read the notes below — MarkEdit is a small project with a narrow scope, and not every PR can be accepted. Setting expectations early saves everyone time.
 
-For non-trivial changes, always open an issue to discuss with maintainers first. PRs without a prior issue discussion (especially ones that change behavior, UI, or defaults) will likely be closed without review.
+PRs that do not follow this guideline will be closed directly without explanation.
 
-You can skip this step for trivial bug fixes or performance improvements.
+For non-trivial changes, always open an issue to discuss with maintainers first. PRs without a prior issue discussion (especially ones that change behavior, UI, or defaults) will be closed without review.
+
+You can skip the issue-first step only for trivial bug fixes or performance improvements.
 
 -->
 

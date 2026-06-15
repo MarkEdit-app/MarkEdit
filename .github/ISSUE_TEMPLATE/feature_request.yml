@@ -3,6 +3,30 @@ description: Suggest an idea for this project.
 title: '[Feature Request] '
 
 body:
+  - type: markdown
+    attributes:
+      value: >-
+        ## Before you submit
+
+        Thanks for sharing your idea! A few quick steps help us review it. Please note that requests not following this guideline may be closed without further comment.
+
+        - **Search first.** Please check the [wiki](https://github.com/MarkEdit-app/MarkEdit/wiki) and [existing issues](https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue) so we can avoid duplicates.
+
+        - **Check the Customization guide first.** Your idea may already be achievable through user scripts or custom style sheets, see the [Customization guide](https://github.com/MarkEdit-app/MarkEdit/wiki/Customization).
+
+        - **Write in English** so that more people in the community can understand and contribute.
+
+        - **Keep expectations modest.** MarkEdit stays simple and focused, so some ideas (e.g. a "WYSIWYG" mode) may be out of scope.
+
+  - type: checkboxes
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have searched the wiki and existing issues, and this is not a duplicate.
+          required: true
+        - label: I have checked the Customization guide and this isn't already possible with user scripts or custom styles.
+          required: true
+
   - type: textarea
     attributes:
       label: Description
@@ -11,20 +35,7 @@ body:
       value: |
         <!--
 
-        Before submitting, please search both the wiki:
-        https://github.com/MarkEdit-app/MarkEdit/wiki
-
-        and existing issues:
-        https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue
-
-        For example, we do not plan to add a "WYSIWYG" mode.
-
-        Please open issues in English so that more people in the community can understand and contribute.
-
-        Please also check the Customization guide to see whether your request can already be achieved through user scripts or custom style sheets:
-        https://github.com/MarkEdit-app/MarkEdit/wiki/Customization
-
-        Please keep expectations modest regarding new feature requests, as we intentionally aim to keep the app simple and focused.
+        Describe the problem you are trying to solve and why it matters.
 
         -->
     validations:

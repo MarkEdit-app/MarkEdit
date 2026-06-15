@@ -3,6 +3,30 @@ description: Create a report to help us improve.
 title: '[Bug] '
 
 body:
+  - type: markdown
+    attributes:
+      value: >-
+        ## Before you file
+
+        Thanks for helping improve MarkEdit! A few quick steps make reports much easier to act on. Please note that issues not following this guideline may be closed without further comment.
+
+        - **Search first.** Please check the [wiki](https://github.com/MarkEdit-app/MarkEdit/wiki) and [existing issues](https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue) so we can avoid duplicates.
+
+        - **Use the latest build.** If possible, reproduce on the [latest release](https://github.com/MarkEdit-app/MarkEdit/releases/latest) first.
+
+        - **Write in English** so that more people can understand and contribute.
+
+        - **Be specific.** Clear steps to reproduce, version info, and screenshots or recordings go a long way in helping us investigate.
+
+  - type: checkboxes
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have searched the wiki and existing issues, and this is not a duplicate.
+          required: true
+        - label: I have reproduced this on the latest release.
+          required: true
+
   - type: textarea
     attributes:
       label: Description
@@ -11,11 +35,7 @@ body:
       value: |
         <!--
 
-        Before filing a new issue, please search the wiki at https://github.com/MarkEdit-app/MarkEdit/wiki and review existing issues at https://github.com/MarkEdit-app/MarkEdit/issues?q=is%3Aissue first.
-
-        Please open issues in English so that more people can understand them and contribute effectively.
-
-        Please make sure you are using the latest build from https://github.com/MarkEdit-app/MarkEdit/releases/latest.
+        Provide clear, step-by-step instructions to reproduce the problem.
 
         Screenshots or screen recordings are highly helpful as well.
 
