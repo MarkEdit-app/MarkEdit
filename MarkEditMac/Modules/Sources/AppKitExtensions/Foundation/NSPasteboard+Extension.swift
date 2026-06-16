@@ -69,8 +69,16 @@ public extension NSPasteboard {
       setString(url, forType: .URL)
     }
 
-    // Handle the case where the pasted content has different line endings
-    if let lineBreak, let sanitized = string?.sanitizing(lineBreak: lineBreak), sanitized != string {
+    let sanitized: String? = {
+      // Prefer pasting plain text for source code
+      let containsCode = (types ?? []).contains { $0.rawValue.hasPrefix("SourceEditor") }
+      // Normalize line endings when the pasted content uses a different style
+      let lineBreakNormalized = (lineBreak.flatMap { string?.sanitizing(lineBreak: $0) }) ?? string
+      // Paste plain text for source code, or whenever line endings were changed
+      return (containsCode || lineBreakNormalized != string) ? lineBreakNormalized : nil
+    }()
+
+    if let sanitized {
       let savedItems = getDataItems()
       declareTypes([.string], owner: nil)
       setString(sanitized, forType: .string)
