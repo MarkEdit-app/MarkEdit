@@ -6,33 +6,42 @@
 //
 
 import AppKit
+import MarkEditCore
 
 extension PreviewViewController {
+  var isRightToLeft: Bool {
+    view.userInterfaceLayoutDirection == .rightToLeft
+  }
+
+  func updateAppearance() {
+    if isDarkMode {
+      view.layer?.backgroundColor = NSColor(red: 13.0 / 255, green: 17.0 / 255, blue: 22.0 / 255, alpha: 1).cgColor
+      webView.appearance = NSAppearance(named: .darkAqua)
+    } else {
+      view.layer?.backgroundColor = NSColor.white.cgColor
+      webView.appearance = NSAppearance(named: .aqua)
+    }
+  }
+}
+
+// MARK: - Private
+
+private extension PreviewViewController {
   var isDarkMode: Bool {
+    switch UserDefaults.forcedColorScheme {
+    case .dark:
+      return true
+    case .light:
+      return false
+    case .system:
+      break
+    }
+
     switch NSApp.effectiveAppearance.name {
     case .darkAqua, .vibrantDark, .accessibilityHighContrastDarkAqua, .accessibilityHighContrastVibrantDark:
       return true
     default:
       return false
     }
-  }
-
-  var isRightToLeft: Bool {
-    view.userInterfaceLayoutDirection == .rightToLeft
-  }
-
-  var effectiveTheme: String {
-    isDarkMode ? "github-dark" : "github-light"
-  }
-
-  func updateBackgroundColor() {
-    // To hide the transparent background of the scrolling overflow
-    view.layer?.backgroundColor = (isDarkMode ? NSColor(red: 13.0 / 255, green: 17.0 / 255, blue: 22.0 / 255, alpha: 1) : NSColor.white).cgColor
-  }
-
-  func updateEditorTheme() {
-    // To keep the app size smaller, we don't have bridge here,
-    // construct script literals directly.
-    webView.evaluateJavaScript("setTheme(`\(effectiveTheme)`)")
   }
 }

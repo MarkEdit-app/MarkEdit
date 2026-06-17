@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MarkEditCore
 import MarkEditKit
 
 /**
@@ -45,6 +46,18 @@ final class AppDocumentController: NSDocumentController {
     openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
     openPanel.relayoutAccessoryView()
 
+    let appearanceObservation = NSApp.observe(\.effectiveAppearance) { [weak self] _, _ in
+      Task { @MainActor in
+        self?.appearanceDidChange()
+      }
+    }
+
+    defer {
+      appearanceObservation.invalidate()
+      UserDefaults.forcedColorScheme = .system
+    }
+
+    appearanceDidChange()
     return await super.beginOpenPanel(openPanel, forTypes: inTypes)
   }
 
@@ -84,6 +97,19 @@ final class AppDocumentController: NSDocumentController {
 }
 
 // MARK: - Private
+
+private extension AppDocumentController {
+  func appearanceDidChange() {
+    switch AppPreferences.General.appearance {
+    case .system:
+      UserDefaults.forcedColorScheme = .system
+    case .light:
+      UserDefaults.forcedColorScheme = .light
+    case .dark:
+      UserDefaults.forcedColorScheme = .dark
+    }
+  }
+}
 
 private extension NSOpenPanel {
   /// Re-layouts the accessory view to work around internal AppKit bugs.

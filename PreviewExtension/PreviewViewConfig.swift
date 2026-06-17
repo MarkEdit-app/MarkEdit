@@ -69,10 +69,10 @@ extension WKWebViewConfiguration {
 }
 
 extension EditorConfig {
-  static func previewConfig(fileData: Data, theme: String) -> Self {
+  static func previewConfig(fileData: Data) -> Self {
     .init(
       text: fileData.toString() ?? "",
-      theme: theme,
+      theme: "github-light", // Ignored by @light editor
       fontFace: WebFontFace(family: "ui-monospace", weight: nil, style: nil),
       fontSize: 12,
       showLineNumbers: false,
