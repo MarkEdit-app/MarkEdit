@@ -46,6 +46,26 @@ final class AppDocumentController: NSDocumentController {
     openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
     openPanel.relayoutAccessoryView()
 
+    let onBecomeActive = NotificationCenter.default.addObserver(
+      forName: NSApplication.didBecomeActiveNotification,
+      object: NSApp,
+      queue: .main
+    ) { [weak self] _ in
+      Task { @MainActor in
+        self?.appearanceDidChange(isAppActive: true)
+      }
+    }
+
+    let onResignActive = NotificationCenter.default.addObserver(
+      forName: NSApplication.didResignActiveNotification,
+      object: NSApp,
+      queue: .main
+    ) { [weak self] _ in
+      Task { @MainActor in
+        self?.appearanceDidChange(isAppActive: false)
+      }
+    }
+
     let appearanceObservation = NSApp.observe(\.effectiveAppearance) { [weak self] _, _ in
       Task { @MainActor in
         self?.appearanceDidChange()
@@ -53,6 +73,8 @@ final class AppDocumentController: NSDocumentController {
     }
 
     defer {
+      NotificationCenter.default.removeObserver(onBecomeActive)
+      NotificationCenter.default.removeObserver(onResignActive)
       appearanceObservation.invalidate()
       UserDefaults.forcedColorScheme = .system
     }
@@ -99,7 +121,12 @@ final class AppDocumentController: NSDocumentController {
 // MARK: - Private
 
 private extension AppDocumentController {
-  func appearanceDidChange() {
+  func appearanceDidChange(isAppActive: Bool = NSApp.isActive) {
+    guard isAppActive else {
+      UserDefaults.forcedColorScheme = .system
+      return
+    }
+
     switch AppPreferences.General.appearance {
     case .system:
       UserDefaults.forcedColorScheme = .system
