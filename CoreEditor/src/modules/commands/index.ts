@@ -21,6 +21,7 @@ import toggleLineLeadingMark from './toggleLineLeadingMark';
 import toggleListStyle from './toggleListStyle';
 import replaceSelections from './replaceSelections';
 import insertBlockWithMarks from './insertBlockWithMarks';
+import insertSnippet from '../snippets/insertSnippet';
 
 export function toggleBold() {
   toggleBlockWithMarks('**', '**', 'StrongEmphasis', 'EmphasisMark');
@@ -88,7 +89,30 @@ export function insertHorizontalRule() {
 }
 
 export function insertCodeBlock() {
-  insertBlockWithMarks('```');
+  const state = window.editor.state;
+  const { main, ranges } = state.selection;
+  const selected = state.sliceDoc(main.from, main.to);
+
+  // Snippets only handle a single, single-line selection, otherwise keep the plain wrapping behavior.
+  // Note: sliceDoc always uses LF regardless of state.lineBreak, so detect line breaks with '\n'.
+  if (ranges.length > 1 || selected.includes('\n')) {
+    insertBlockWithMarks('```');
+    return;
+  }
+
+  const doc = state.doc;
+  const lineBreak = state.lineBreak;
+  const fence = '`'.repeat(3);
+  const prefix = doc.lineAt(main.from).from === main.from ? '' : lineBreak;
+  const suffix = doc.lineAt(main.to).to === main.to ? '' : lineBreak;
+  const content = selected.replace(/[{}]/g, ch => `\\${ch}`); // Escape snippet placeholder delimiters
+
+  // Placeholders for the language and the content, on their own lines
+  insertSnippet(
+    `${prefix}${fence}#{}${lineBreak}#{${content}}${lineBreak}${fence}${suffix}`,
+    '',
+    { from: main.from, to: main.to },
+  );
 }
 
 export function insertMathBlock() {
