@@ -21,6 +21,14 @@ window.config = config;
 const theme = new Compartment;
 window.dynamics = { theme };
 
+// Drive the theme from the system color scheme; the preview extension has no other source
+const colorSchemeQuery = matchMedia('(prefers-color-scheme: dark)');
+const initialTheme = preferredTheme();
+
+colorSchemeQuery.addEventListener('change', () => {
+  setTheme(preferredTheme());
+});
+
 const extensions = [
   // Basic
   highlightSpecialChars(),
@@ -39,7 +47,7 @@ const extensions = [
 
   // Styling
   classHighlighters,
-  theme.of(loadTheme(config.theme)),
+  theme.of(initialTheme),
   renderExtensions,
   linkStyles,
 ];
@@ -48,7 +56,7 @@ const doc = config.text;
 const parent = document.querySelector('#editor') ?? document.body;
 
 window.editor = new EditorView({ doc, parent, extensions });
-setUp(config, loadTheme(config.theme).colors);
+setUp(config, initialTheme.colors);
 
 // Makes sure the content doesn't have unwanted inset
 scrollIntoView(0);
@@ -58,10 +66,6 @@ scrollIntoView(0);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const bridge = window as any;
 const storage: { scrollbarOffset?: number } = {};
-
-bridge.setTheme = (name: string) => {
-  setTheme(loadTheme(name));
-};
 
 bridge.startDragging = (original: number) => {
   // scrollbarOffset is the distance between the top of the scrollbar and the mouse location
@@ -90,14 +94,8 @@ bridge.cancelDragging = () => {
 // Zoom in and out using the trackpad
 enablePinchZoom(bridge as PinchZoomBridge);
 
-// There're only two themes in the preview extension,
-// use a simplified "loadTheme" to avoid bundling unused themes.
-function loadTheme(name: string) {
-  if (name === 'github-dark') {
-    return GitHubDark();
-  } else {
-    return GitHubLight();
-  }
+function preferredTheme() {
+  return colorSchemeQuery.matches ? GitHubDark() : GitHubLight();
 }
 
 function scrollerElement(): HTMLElement | null {

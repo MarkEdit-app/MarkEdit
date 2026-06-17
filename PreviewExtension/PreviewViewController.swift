@@ -71,7 +71,7 @@ final class PreviewViewController: NSViewController {
     view.layer?.cornerRadius = 6
 
     addEventMonitorsForDragging()
-    updateBackgroundColor()
+    updateAppearance()
 
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { [weak self] _, _ in
       guard let self else {
@@ -79,8 +79,7 @@ final class PreviewViewController: NSViewController {
       }
 
       Task { @MainActor in
-        self.updateBackgroundColor()
-        self.updateEditorTheme()
+        self.updateAppearance()
       }
     }
   }
@@ -103,8 +102,7 @@ extension PreviewViewController: QLPreviewingController {
     previewDirectoryURL = fileURL.deletingLastPathComponent()
 
     let config = EditorConfig.previewConfig(
-      fileData: try Data(contentsOf: fileURL),
-      theme: effectiveTheme
+      fileData: try Data(contentsOf: fileURL)
     )
 
     let html = ([config.toHtml] + userStyles).joined(separator: "\n\n")
