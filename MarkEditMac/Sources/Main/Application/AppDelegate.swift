@@ -56,11 +56,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var settingsWindowController: NSWindowController?
 
   func applicationWillFinishLaunching(_ notification: Notification) {
+    NSApp.appearance = AppPreferences.General.appearance.resolved()
     EditorPreloader.shared.warmUp()
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
-    NSApp.appearance = AppPreferences.General.appearance.resolved()
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
       Task { @MainActor in
         AppTheme.current.updateAppearance()
