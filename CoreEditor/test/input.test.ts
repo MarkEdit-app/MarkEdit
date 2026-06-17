@@ -3,6 +3,7 @@ import { EditorSelection, EditorState } from '@codemirror/state';
 import { filterTransaction, observeChanges } from '../src/modules/input';
 import { editingState } from '../src/common/store';
 import wrapBlock from '../src/modules/input/wrapBlock';
+import insertCodeBlock from '../src/modules/input/insertCodeBlock';
 import * as editor from './utils/editor';
 
 describe('Input module', () => {
@@ -15,6 +16,47 @@ describe('Input module', () => {
 
     wrapBlock('@', window.editor);
     expect(editor.getText()).toBe('~@Hello@~ World');
+  });
+});
+
+describe('insertCodeBlock (backtick expansion)', () => {
+  function type(doc: string, ranges: [number, number][]) {
+    editor.setUp(doc, EditorState.allowMultipleSelections.of(true));
+    window.editor.dispatch({
+      selection: EditorSelection.create(ranges.map(([a, b]) => EditorSelection.range(a, b))),
+    });
+    insertCodeBlock(window.editor);
+    return editor.getText();
+  }
+
+  test('expands two backticks and an empty cursor into a block', () => {
+    expect(type('``', [[2, 2]])).toBe('```\n\n```');
+  });
+
+  test('breaks the block onto its own lines around surrounding text', () => {
+    expect(type('foo``', [[5, 5]])).toBe('foo\n```\n\n```');
+    expect(type('``bar', [[2, 2]])).toBe('```\n\n```\nbar');
+  });
+
+  test('does not expand when the cursor is inside a fenced code block', () => {
+    expect(type('```js\n``\n```', [[8, 8]])).toBe('```js\n```\n```');
+  });
+
+  test('does not expand when the cursor is inside an existing inline code span', () => {
+    expect(type('``x``', [[5, 5]])).toBe('``x```');
+  });
+
+  test('inserts a single backtick when fewer than two precede the cursor', () => {
+    expect(type('', [[0, 0]])).toBe('`');
+    expect(type('`', [[1, 1]])).toBe('``');
+  });
+
+  test('does not expand with a non-empty selection', () => {
+    expect(type('``cd', [[2, 4]])).toBe('```');
+  });
+
+  test('does not expand with multiple cursors, so no backtick is dropped', () => {
+    expect(type('``\n``', [[2, 2], [5, 5]])).toBe('```\n```');
   });
 });
 
