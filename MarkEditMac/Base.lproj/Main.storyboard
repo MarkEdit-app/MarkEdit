@@ -610,6 +610,16 @@ Gw
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="Writing Tools (Placeholder)" hidden="YES" id="BWI-Qs-d6i">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Writing Tools (Placeholder)" id="gSc-Jf-IPB">
+                                                <items>
+                                                    <menuItem id="Mnm-0W-s1w">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem title="Spelling and Grammar" id="Dv1-io-Yv7">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Spelling" id="3IN-sU-3Bg">
@@ -1054,6 +1064,7 @@ Gw
                         <outlet property="editTableOfContentsMenu" destination="BxI-nv-Xa5" id="lTp-Xn-8tg"/>
                         <outlet property="editTypewriterItem" destination="Cvo-jv-iDg" id="1vS-bx-fNh"/>
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
+                        <outlet property="editWritingToolsItem" destination="BWI-Qs-d6i" id="yvo-s9-n7K"/>
                         <outlet property="fileFromClipboardItem" destination="0NS-5A-glR" id="hxk-Eb-8YJ"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>
                         <outlet property="formatCodeBlockItem" destination="QOM-rI-Bxj" id="4Dy-YC-z6y"/>

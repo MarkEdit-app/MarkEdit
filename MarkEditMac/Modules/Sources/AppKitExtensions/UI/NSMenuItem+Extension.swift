@@ -7,6 +7,15 @@
 import AppKit
 
 public extension NSMenuItem {
+  static var systemWritingToolsItem: Self? {
+    let selector = sel_getUid("standardWritingToolsMenuItem")
+    guard responds(to: selector) else {
+      return nil
+    }
+
+    return perform(selector)?.takeUnretainedValue() as? Self
+  }
+
   convenience init(title: String) {
     self.init(title: title, action: nil, keyEquivalent: "")
   }

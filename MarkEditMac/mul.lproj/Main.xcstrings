@@ -1022,6 +1022,19 @@
         }
       }
     },
+    "BWI-Qs-d6i.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Writing Tools (Placeholder)\"; ObjectID = \"BWI-Qs-d6i\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Writing Tools (Placeholder)"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "BxI-nv-Xa5.title" : {
       "comment" : "Class = \"NSMenu\"; title = \"Table of Contents\"; ObjectID = \"BxI-nv-Xa5\";",
       "extractionState" : "extracted_with_value",
@@ -1717,6 +1730,19 @@
           }
         }
       }
+    },
+    "gSc-Jf-IPB.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Writing Tools (Placeholder)\"; ObjectID = \"gSc-Jf-IPB\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Writing Tools (Placeholder)"
+          }
+        }
+      },
+      "shouldTranslate" : false
     },
     "gVA-U4-sdL.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Paste\"; ObjectID = \"gVA-U4-sdL\";",

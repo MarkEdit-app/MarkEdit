@@ -2638,6 +2638,23 @@
         }
       }
     },
+    "Show Writing Tools" : {
+      "comment" : "Show Writing Tools",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示写作工具"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示書寫工具"
+          }
+        }
+      }
+    },
     "Show:" : {
       "comment" : "Label for display options",
       "localizations" : {
