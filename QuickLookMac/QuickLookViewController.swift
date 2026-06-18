@@ -62,14 +62,16 @@ final class QuickLookViewController: NSViewController {
   deinit {
     NotificationCenter.default.removeObserver(self)
 
-    if let mouseDownMonitor {
-      NSEvent.removeMonitor(mouseDownMonitor)
-      self.mouseDownMonitor = nil
-    }
+    MainActor.assumeIsolated {
+      if let mouseDownMonitor {
+        NSEvent.removeMonitor(mouseDownMonitor)
+        self.mouseDownMonitor = nil
+      }
 
-    if let mouseDragMonitor {
-      NSEvent.removeMonitor(mouseDragMonitor)
-      self.mouseDragMonitor = nil
+      if let mouseDragMonitor {
+        NSEvent.removeMonitor(mouseDragMonitor)
+        self.mouseDragMonitor = nil
+      }
     }
 
     if let mouseUpMonitor {
