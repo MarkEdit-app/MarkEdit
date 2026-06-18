@@ -240,13 +240,13 @@ final class EditorViewController: NSViewController, @unchecked Sendable {
         NSEvent.removeMonitor(monitor)
         localEventMonitor = nil
       }
+
+      loadingContinuations.forEach { $0.resume() }
+      loadingContinuations.removeAll()
+
+      resetContinuations.forEach { $0.resume() }
+      resetContinuations.removeAll()
     }
-
-    loadingContinuations.forEach { $0.resume() }
-    loadingContinuations.removeAll()
-
-    resetContinuations.forEach { $0.resume() }
-    resetContinuations.removeAll()
   }
 
   init(preloadDelay: TimeInterval? = nil) {
@@ -447,6 +447,7 @@ extension EditorViewController {
 /**
  Continuation wrapper for managing the lifecycle of a preload operation.
  */
+@MainActor
 private final class PreloadContinuation {
   private var continuation: CheckedContinuation<Void, Never>?
 

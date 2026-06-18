@@ -50,14 +50,16 @@ final class PreviewViewController: NSViewController {
   }
 
   deinit {
-    if let mouseDownMonitor {
-      NSEvent.removeMonitor(mouseDownMonitor)
-      self.mouseDownMonitor = nil
-    }
+    MainActor.assumeIsolated {
+      if let mouseDownMonitor {
+        NSEvent.removeMonitor(mouseDownMonitor)
+        self.mouseDownMonitor = nil
+      }
 
-    if let mouseDragMonitor {
-      NSEvent.removeMonitor(mouseDragMonitor)
-      self.mouseDragMonitor = nil
+      if let mouseDragMonitor {
+        NSEvent.removeMonitor(mouseDragMonitor)
+        self.mouseDragMonitor = nil
+      }
     }
   }
 
@@ -120,7 +122,7 @@ extension PreviewViewController: WKNavigationDelegate {
   func webView(
     _ webView: WKWebView,
     decidePolicyFor navigationAction: WKNavigationAction,
-    decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
   ) {
     decisionHandler(navigationAction.navigationType == .linkActivated ? .cancel : .allow)
   }
