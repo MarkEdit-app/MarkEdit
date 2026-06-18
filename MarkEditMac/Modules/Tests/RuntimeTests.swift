@@ -173,6 +173,16 @@ final class RuntimeTests: XCTestCase {
     let object = type?.value(forKey: "defaultManager") as? AnyObject
     XCTAssertEqual(object?.responds(to: sel_getUid("loadAXBundles")), true, "Missing loadAXBundles")
   }
+
+  func testExistenceOfShowWritingTools() {
+    let webView = WKWebView()
+    testExistenceOfSelector(object: webView, selector: "_showWritingTools")
+  }
+
+  func testExistenceOfStandardWritingToolsMenuItem() {
+    let item = NSMenuItem.systemWritingToolsItem
+    XCTAssertNotNil(item)
+  }
 }
 
 // MARK: - Private

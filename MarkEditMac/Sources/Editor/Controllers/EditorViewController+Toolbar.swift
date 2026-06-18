@@ -262,11 +262,16 @@ private extension EditorViewController {
   }
 
   var writingToolsItem: NSToolbarItem? {
-    if #available(macOS 15.1, *), let menu = systemWritingToolsMenu {
+    if #available(macOS 15.1, *), let menu = NSApp.appDelegate?.activeWritingToolsItem?.submenu {
       return .with(identifier: .writingTools, menu: menu.copiedMenu)
-    } else {
-      return nil
     }
+
+    // [macOS 27] Always enable "Writing Tools"
+    if AppDesign.forceWritingTools, let menu = NSMenuItem.systemWritingToolsItem?.submenu {
+      return .with(identifier: .writingTools, menu: menu.copiedMenu)
+    }
+
+    return nil
   }
 
   func updateTableOfContentsMenu(_ menu: NSMenu) {

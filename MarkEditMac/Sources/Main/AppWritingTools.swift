@@ -86,6 +86,33 @@ enum AppWritingTools {
     // These tools can start without text selections
     tool != .smartReply && tool != .compose
   }
+
+  @available(macOS 27.0, *)
+  static func ensureWritingTools(menu: NSMenu) {
+    guard !(menu.items.contains { $0.identifier == .writingTools }) else {
+      return
+    }
+
+    let item = NSMenuItem(
+      title: Localized.WritingTools.menuItemTitle,
+      action: sel_getUid("_showWritingTools"),
+      keyEquivalent: ""
+    )
+
+    let index: Int = {
+      // Before "Spelling and Grammar"
+      if let target = (menu.items.first { $0.identifier == .spellingMenu }) {
+        return menu.index(of: target)
+      }
+
+      // Or as the first one
+      return 0
+    }()
+
+    item.identifier = .writingTools
+    menu.items.insert(item, at: index)
+    menu.items.insert(.separator(), at: index + 1)
+  }
 }
 
 // MARK: - Private
@@ -121,4 +148,9 @@ private extension AppWritingTools {
 
     return (selector, target.method(for: selector))
   }
+}
+
+private extension NSUserInterfaceItemIdentifier {
+  static let writingTools = Self("WKMenuItemIdentifierWritingTools")
+  static let spellingMenu = Self("WKMenuItemIdentifierSpellingMenu")
 }

@@ -9,6 +9,13 @@ import AppKit
 import MarkEditKit
 
 extension AppDelegate: NSMenuDelegate {
+  @available(macOS 15.1, *)
+  var activeWritingToolsItem: NSMenuItem? {
+    mainEditMenu?.items.first {
+      $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
+    }
+  }
+
   func menuNeedsUpdate(_ menu: NSMenu) {
     switch menu {
     case mainFileMenu:
@@ -51,6 +58,18 @@ private extension AppDelegate {
       editUndoItem?.isEnabled = await document.canUndo
       editRedoItem?.isEnabled = await document.canRedo
       editPasteItem?.isEnabled = NSPasteboard.general.hasText
+    }
+
+    // [macOS 27] Always enable "Writing Tools"
+    if #available(macOS 27.0, *), AppDesign.forceWritingTools {
+      // Prevent duplicate items
+      editWritingToolsItem?.isHidden = !(activeWritingToolsItem?.isHidden ?? true)
+
+      // Copy properties from `standardWritingToolsMenuItem`
+      let systemItem = NSMenuItem.systemWritingToolsItem
+      editWritingToolsItem?.submenu = systemItem?.submenu?.copiedMenu
+      editWritingToolsItem?.title = systemItem?.title ?? Localized.WritingTools.featureName
+      editWritingToolsItem?.image = AppWritingTools.affordanceIcon
     }
 
     editTypewriterItem?.setOn(AppPreferences.Editor.typewriterMode)
