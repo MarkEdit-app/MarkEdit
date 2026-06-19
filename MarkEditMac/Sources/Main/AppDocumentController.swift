@@ -19,7 +19,7 @@ final class AppDocumentController: NSDocumentController {
   static var suggestedFilename: String?
 
   override var maximumRecentDocumentCount: Int {
-    8
+    min(super.maximumRecentDocumentCount, 8)
   }
 
   override func beginOpenPanel(_ openPanel: NSOpenPanel, forTypes inTypes: [String]?) async -> Int {
