@@ -78,4 +78,17 @@ enum AppDesign {
 
     return NSGlassEffectView.self
   }
+
+  static func migrateMainMenuIcons(delegate: AppDelegate) {
+    guard Self.menuIconEvolution else {
+      return
+    }
+
+    delegate.fileNewTabItem?.image = NSImage(
+      systemSymbolName: Icons.interfaceWindowOnRectangle,
+      accessibilityDescription: nil
+    )
+
+    delegate.fileReopenClosedTabItem?.image = delegate.fileNewTabItem?.image
+  }
 }

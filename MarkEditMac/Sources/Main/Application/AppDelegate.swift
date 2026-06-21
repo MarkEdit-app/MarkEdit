@@ -31,6 +31,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var lineEndingsCRLFItem: NSMenuItem?
   @IBOutlet weak var lineEndingsCRItem: NSMenuItem?
   @IBOutlet weak var fileFromClipboardItem: NSMenuItem?
+  @IBOutlet weak var fileNewTabItem: NSMenuItem?
+  @IBOutlet weak var fileReopenClosedTabItem: NSMenuItem?
   @IBOutlet weak var editUndoItem: NSMenuItem?
   @IBOutlet weak var editRedoItem: NSMenuItem?
   @IBOutlet weak var editPasteItem: NSMenuItem?
@@ -62,6 +64,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    AppDesign.migrateMainMenuIcons(delegate: self)
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
       Task { @MainActor in
         AppTheme.current.updateAppearance()

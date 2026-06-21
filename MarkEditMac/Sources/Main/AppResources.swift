@@ -244,6 +244,7 @@ enum Localized {
 //
 // Note: double check availability and deployment target before adding new icons
 enum Icons {
+  static let appleTerminal = "apple.terminal"
   static let arrowUturnBackwardCircle = "arrow.uturn.backward.circle"
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"
@@ -251,17 +252,34 @@ enum Icons {
   static let curlybracesSquare = "curlybraces.square"
   static let gearshape = "gearshape"
   static let italic = "italic"
+
+  static let interfaceWindow = if #available(macOS 27.0, *) {
+    "interface.window"
+  } else {
+    "macwindow"
+  }
+
+  static let interfaceWindowOnRectangle = if #available(macOS 27.0, *) {
+    "interface.window.on.rectangle"
+  } else {
+    "macwindow.on.rectangle"
+  }
+
   static let link = "link"
   static let listBullet = "list.bullet"
   static let listBulletRectangle = "list.bullet.rectangle"
-  static let macwindow = "macwindow"
-  static let number = "number"
+
+  static let numberSign = if #available(macOS 27.0, *) {
+    "number.sign"
+  } else {
+    "number"
+  }
+
   static let photo = "photo"
   static let squareAndArrowUp = "square.and.arrow.up"
   static let squareSplit1x2 = "square.split.1x2"
   static let strikethrough = "strikethrough"
   static let tablecells = "tablecells"
-  static let terminal = "terminal"
   static let textQuote = "text.quote"
   static let textformat = "textformat"
   static let wandAndSparkles = "wand.and.sparkles"
