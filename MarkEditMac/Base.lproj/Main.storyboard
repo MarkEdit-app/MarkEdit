@@ -119,7 +119,7 @@
                                                 <action selector="newFileFromClipboard:" target="Voe-Tx-rLC" id="pJC-h1-fZk"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="New Tab" secondaryImage="macwindow.on.rectangle" catalog="system" keyEquivalent="t" id="dHZ-CH-KLC">
+                                        <menuItem title="New Tab" keyEquivalent="t" id="dHZ-CH-KLC">
                                             <connections>
                                                 <action selector="createNewTab:" target="Ady-hI-5gd" id="ybh-8g-tSk"/>
                                             </connections>
@@ -148,7 +148,7 @@
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Reopen Closed Tab" secondaryImage="macwindow.on.rectangle" catalog="system" keyEquivalent="T" id="rct-Cm-ShT">
+                                        <menuItem title="Reopen Closed Tab" keyEquivalent="T" id="rct-Cm-ShT">
                                             <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                             <connections>
                                                 <action selector="reopenClosedTab:" target="Voe-Tx-rLC" id="rct-Ac-001"/>
@@ -1066,6 +1066,8 @@ Gw
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
                         <outlet property="editWritingToolsItem" destination="BWI-Qs-d6i" id="yvo-s9-n7K"/>
                         <outlet property="fileFromClipboardItem" destination="0NS-5A-glR" id="hxk-Eb-8YJ"/>
+                        <outlet property="fileNewTabItem" destination="dHZ-CH-KLC" id="nk0-fR-sju"/>
+                        <outlet property="fileReopenClosedTabItem" destination="rct-Cm-ShT" id="q4P-gZ-qbI"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>
                         <outlet property="formatCodeBlockItem" destination="QOM-rI-Bxj" id="4Dy-YC-z6y"/>
                         <outlet property="formatCodeItem" destination="Ibb-aP-jnQ" id="4kt-Sh-zOv"/>
@@ -1146,7 +1148,6 @@ Gw
         <image name="gearshape.2" catalog="system" width="20" height="16"/>
         <image name="italic" catalog="system" width="10" height="12"/>
         <image name="list.bullet.clipboard" catalog="system" width="14" height="19"/>
-        <image name="macwindow.on.rectangle" catalog="system" width="19" height="15"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
         <image name="pin" catalog="system" width="15" height="17"/>
         <image name="smallcircle.filled.circle" catalog="system" width="15" height="15"/>
