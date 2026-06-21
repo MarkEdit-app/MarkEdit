@@ -43,10 +43,6 @@ enum AppDesign {
   }
 
   static func migrateMainMenuIcons(delegate: AppDelegate) {
-    guard Self.menuIconEvolution else {
-      return
-    }
-
     delegate.fileNewTabItem?.image = NSImage(systemSymbolName: Icons.interfaceWindowOnRectangle)
     delegate.fileReopenClosedTabItem?.image = delegate.fileNewTabItem?.image
   }
