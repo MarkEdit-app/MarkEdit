@@ -55,7 +55,7 @@ enum AppDesign {
   }
 
   static var dividerAlpha: Double {
-    modernStyle ? 0.7 : 1.0
+    modernStyle ? 0.5 : 1.0
   }
 
   static var reduceTransparency: Bool {
