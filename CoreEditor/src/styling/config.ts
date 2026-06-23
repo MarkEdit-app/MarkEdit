@@ -197,7 +197,7 @@ export function setLineHeight(lineHeight: number) {
 
 export function setTaskMarkerStyle(enabled: boolean) {
   if (styleSheets.taskMarker === undefined) {
-    styleSheets.taskMarker = createStyleSheet('.cm-md-taskMarker { cursor: pointer }');
+    styleSheets.taskMarker = createStyleSheet('.cm-md-taskMarker { cursor: default }');
   }
 
   styleSheets.taskMarker.disabled = !enabled;
