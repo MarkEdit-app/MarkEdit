@@ -7,38 +7,40 @@
 import AppKit
 
 public extension NSWindow {
-  var toolbarContainerView: NSView? {
-    toolbarRootView?.firstDescendant { (view: NSView) in
+
+  // MARK: - Hierarchy
+
+  /// Titlebar view under `NSTitlebarContainerView` that offers primary elements.
+  var titlebarView: NSView? {
+    titlebarContainerView?.firstDescendant { (view: NSView) in
       view.className == "NSTitlebarView"
     }
   }
 
-  // What we want is an NSVisualEffectView child of an NSTitlebarView
-  //
-  // In macOS Tahoe, it can also be an NSTitlebarBackgroundView for the modern style
-  var toolbarEffectView: NSView? {
-    // [macOS 26] Revisit this later (#1281)
-    for view in (toolbarContainerView?.subviews ?? []) {
-      if view is NSVisualEffectView || view.className == "NSTitlebarBackgroundView" {
-        return view
-      }
+  /// Decoration view under `NSTitlebarContainerView` that draws supplementary elements.
+  var titlebarDecorationView: NSView? {
+    titlebarContainerView?.firstDescendant { (view: NSView) in
+      view.className == "_NSTitlebarDecorationView" && view.subviews.isEmpty
     }
-
-    return nil
   }
 
-  var toolbarTitleView: NSView? {
-    toolbarContainerView?.firstDescendant { (view: NSView) in
+  /// Background effect view under `NSTitlebarContainerView` that offers blur or glassy effects.
+  ///
+  /// This can be under `NSTitlebarContainerView` or `NSTitlebarView`, depends on the system version.
+  var titlebarBackgroundView: NSView? {
+    titlebarContainerView?.firstDescendant { (view: NSView) in
+      view is NSVisualEffectView || view.className == "NSTitlebarBackgroundView"
+    }
+  }
+
+  /// Document title view under the `NSTitlebarView` that draws the document title.
+  var titlebarDocumentTitleView: NSView? {
+    titlebarView?.firstDescendant { (view: NSView) in
       view is NSTextField
     }
   }
 
-  /// The glassy or blurry background behind the titlebar, including the separator.
-  var titlebarDecorationView: NSView? {
-    toolbarRootView?.firstDescendant { (view: NSView) in
-      view.className == "_NSTitlebarDecorationView" && view.subviews.isEmpty
-    }
-  }
+  // MARK: - Convenience
 
   /// Change the frame size, treat the top-left corner as the anchor point.
   func setFrameSize(_ target: CGSize, display flag: Bool = false, animated: Bool = false) {
@@ -92,7 +94,7 @@ public extension NSWindow {
   ///
   /// There's no public API to programmatically show the menu assigned to an NSToolbarItem.
   func popUpButton(with menuIdentifier: NSUserInterfaceItemIdentifier) -> NSPopUpButton? {
-    toolbarRootView?.firstDescendant { (button: NSPopUpButton) in
+    titlebarContainerView?.firstDescendant { (button: NSPopUpButton) in
       button.menu?.identifier == menuIdentifier
     }
   }
@@ -101,7 +103,7 @@ public extension NSWindow {
   ///
   /// There's something called `NSToolbarItem.view`, it's non-nil only when we overwrite it.
   func toolbarButton(with itemIdentifier: NSToolbarItem.Identifier) -> NSButton? {
-    toolbarRootView?.firstDescendant { (button: NSButton) in
+    titlebarContainerView?.firstDescendant { (button: NSButton) in
       guard button.className == "NSToolbarButton" else {
         return false
       }
@@ -118,16 +120,18 @@ public extension NSWindow {
 // MARK: - Private
 
 private extension NSWindow {
-  var toolbarRootView: NSView? {
-    var node = toolbarHostingWindow.contentView
+  var titlebarContainerView: NSView? {
+    var node = currentHostingWindow.contentView
     while node?.superview != nil {
       node = node?.superview
     }
 
-    return node
+    return node?.firstDescendant { (view: NSView) in
+      view.className == "NSTitlebarContainerView"
+    }
   }
 
-  var toolbarHostingWindow: NSWindow {
+  var currentHostingWindow: NSWindow {
     guard NSApp.presentationOptions.contains(.fullScreen) else {
       return self
     }

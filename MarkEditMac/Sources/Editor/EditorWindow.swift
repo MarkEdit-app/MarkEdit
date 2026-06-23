@@ -44,7 +44,7 @@ final class EditorWindow: NSWindow {
   }
 
   private var cachedToolbar: NSToolbar?
-  private weak var cachedToolbarEffectView: NSView?
+  private weak var cachedTitlebarBackgroundView: NSView?
   private weak var cachedTitlebarDecorationView: NSView?
 
   override func awakeFromNib() {
@@ -65,25 +65,27 @@ final class EditorWindow: NSWindow {
   /// Safe to call repeatedly; also runs implicitly after each layout pass.
   func updateTitleBarAppearance(clearCaches: Bool = true) {
     if clearCaches {
-      cachedToolbarEffectView = nil
+      cachedTitlebarBackgroundView = nil
       cachedTitlebarDecorationView = nil
     }
 
-    // The toolbar effect view also backs the auto-hiding titlebar overlay in
+    // The titlebar background view also backs the auto-hiding titlebar overlay in
     // fullscreen. When the toolbar is hidden, nothing else backs it, so keep
     // the effect view visible and fully opaque in that specific case to avoid
     // a transparent overlay.
-    if cachedToolbarEffectView == nil {
-      cachedToolbarEffectView = toolbarEffectView
+    if cachedTitlebarBackgroundView == nil {
+      cachedTitlebarBackgroundView = titlebarBackgroundView
     }
 
-    if let view = cachedToolbarEffectView {
+    if let view = cachedTitlebarBackgroundView {
       let needsOverlay = styleMask.contains(.fullScreen) && toolbarMode == .hidden
       view.alphaValue = needsOverlay ? 1 : (prefersTintedToolbar ? 0.3 : 0.7)
       view.isHidden = !needsOverlay && (reduceTransparency == true || AppDesign.modernTitleBar)
 
       // Blend the color of contents behind the window
       (view as? NSVisualEffectView)?.blendingMode = .behindWindow
+    } else {
+      Logger.assertFail("Missing cachedTitlebarBackgroundView")
     }
 
     if AppDesign.modernTitleBar {
@@ -104,6 +106,8 @@ final class EditorWindow: NSWindow {
           Logger.assertFail("Missing setDrawsBottomSeparator: in _NSTitlebarDecorationView")
           view.isHidden = true
         }
+      } else {
+        Logger.assertFail("Missing cachedTitlebarDecorationView")
       }
     }
   }

@@ -129,9 +129,12 @@ extension EditorViewController {
   }
 
   func updateWindowColors(_ theme: AppTheme) {
+    let titlebarView = view.window?.titlebarView
+    Logger.assert(titlebarView != nil, "Missing titlebar view")
+
     let backgroundColor = webBackgroundColor ?? theme.windowBackground
     view.window?.backgroundColor = backgroundColor
-    view.window?.toolbarContainerView?.layerBackgroundColor = backgroundColor
+    titlebarView?.layerBackgroundColor = backgroundColor
 
     let prefersTintedToolbar = theme.prefersTintedToolbar || backgroundColor.isTintedColor
     (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
@@ -143,7 +146,7 @@ extension EditorViewController {
       let baseColor = backgroundColor.withAlphaComponent(reduceTransparency ? 1.0 : 0.01)
 
       view.window?.backgroundColor = baseColor
-      view.window?.toolbarContainerView?.layerBackgroundColor = baseColor
+      titlebarView?.layerBackgroundColor = baseColor
 
       modernBackgroundView.layerBackgroundColor = backgroundColor
       modernEffectView.isHidden = reduceTransparency
