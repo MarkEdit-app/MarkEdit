@@ -141,16 +141,22 @@ final class RuntimeTests: XCTestCase {
     XCTAssertNotNil(popover.value(forKey: "positioningView"))
   }
 
-  func testRetrievingToolbarEffectView() {
+  func testRetrievingTitlebarPrivateViews() {
     let window = NSWindow()
     window.makeKeyAndOrderFront(nil)
-    XCTAssertNotNil(window.toolbarEffectView)
+
+    XCTAssertNotNil(window.titlebarView)
+    XCTAssertNotNil(window.titlebarDecorationView)
+    XCTAssertNotNil(window.titlebarBackgroundView)
+    XCTAssertNotNil(window.titlebarDocumentTitleView)
   }
 
   func testPrivateAppKitClasses() {
     testExistenceOfClass(named: "_NSKeyboardFocusClipView")
     testExistenceOfClass(named: "_NSTitlebarDecorationView")
     testExistenceOfClass(named: "NSToolbarFullScreenWindow")
+    testExistenceOfClass(named: "NSTitlebarContainerView")
+    testExistenceOfClass(named: "NSTitlebarBackgroundView")
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
   }
