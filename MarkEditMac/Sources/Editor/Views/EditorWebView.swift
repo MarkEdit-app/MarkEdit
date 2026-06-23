@@ -110,7 +110,7 @@ final class EditorWebView: WKWebView {
 
     // Always enable "Show Writing Tools"
     if #available(macOS 27.0, *), AppDesign.forceWritingTools {
-      AppWritingTools.ensureWritingTools(menu: menu)
+      AppWritingTools.ensureWritingTools(menu: menu, target: self)
     }
 
     // Actions like select all in selection, replace all in selection, etc

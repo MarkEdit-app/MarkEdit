@@ -88,14 +88,19 @@ enum AppWritingTools {
   }
 
   @available(macOS 27.0, *)
-  static func ensureWritingTools(menu: NSMenu) {
+  static func ensureWritingTools(menu: NSMenu, target: AnyObject) {
     guard !(menu.items.contains { $0.identifier == .writingTools }) else {
+      return
+    }
+
+    guard target.responds(to: Self.mainMenuAction) else {
+      Logger.assertFail("\(target) does not respond to \(Self.mainMenuAction)")
       return
     }
 
     let item = NSMenuItem(
       title: Localized.WritingTools.menuItemTitle,
-      action: sel_getUid("_showWritingTools"),
+      action: Self.mainMenuAction,
       keyEquivalent: ""
     )
 
@@ -110,6 +115,7 @@ enum AppWritingTools {
     }()
 
     item.identifier = .writingTools
+    item.target = target
     menu.items.insert(item, at: index)
     menu.items.insert(.separator(), at: index + 1)
   }
@@ -119,6 +125,11 @@ enum AppWritingTools {
 
 @available(macOS 15.1, *)
 private extension AppWritingTools {
+  /// The action that opens `Writing Tools`.
+  ///
+  /// https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/API/Cocoa/WKWebViewPrivate.h
+  static let mainMenuAction = sel_getUid("_showWritingTools")
+
   /// Invokes a selector on a target and returns the result as `NSObject?`.
   static func invokeObject(_ target: NSObject, selector name: String) -> NSObject? {
     guard let (sel, impl) = invocation(of: target, selector: name) else {
