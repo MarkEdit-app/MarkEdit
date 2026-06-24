@@ -1065,7 +1065,6 @@ Gw
                         <outlet property="editTypewriterItem" destination="Cvo-jv-iDg" id="1vS-bx-fNh"/>
                         <outlet property="editUndoItem" destination="dRJ-4n-Yzg" id="Qet-C4-yT2"/>
                         <outlet property="editWritingToolsItem" destination="BWI-Qs-d6i" id="yvo-s9-n7K"/>
-                        <outlet property="fileFromClipboardItem" destination="0NS-5A-glR" id="hxk-Eb-8YJ"/>
                         <outlet property="fileNewTabItem" destination="dHZ-CH-KLC" id="nk0-fR-sju"/>
                         <outlet property="fileReopenClosedTabItem" destination="rct-Cm-ShT" id="q4P-gZ-qbI"/>
                         <outlet property="formatBulletItem" destination="ANX-uP-CA4" id="4cQ-3z-hPG"/>
