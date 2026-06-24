@@ -162,9 +162,9 @@ enum AppRuntimeConfig {
   /// Heavier translucency means more transparent, i.e., smaller alpha values.
   static var toolbarTintAlphaValues: (tinted: Double, plain: Double) {
     switch currentDefinition?.toolbarTranslucency ?? .regular {
-    case .light: return (0.95, 0.25)
-    case .regular: return (0.75, 0.15)
-    case .heavy: return (0.55, 0.05)
+    case .light: return (0.9, 0.6)
+    case .regular: return (0.7, 0.4)
+    case .heavy: return (0.5, 0.2)
     }
   }
 
