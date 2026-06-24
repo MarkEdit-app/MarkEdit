@@ -12,7 +12,7 @@ public extension NSPasteboard {
   }
 
   var hasText: Bool {
-    pasteboardItems?.contains { $0.types.contains(.string) } == true
+    canReadObject(forClasses: [NSString.self, NSAttributedString.self], options: nil)
   }
 
   var string: String? {
