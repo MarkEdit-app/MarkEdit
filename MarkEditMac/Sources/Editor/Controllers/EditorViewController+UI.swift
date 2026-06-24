@@ -130,9 +130,8 @@ extension EditorViewController {
 
   func updateWindowColors(_ theme: AppTheme) {
     let titlebarView = view.window?.titlebarView
-    Logger.assert(titlebarView != nil, "Missing titlebar view")
-
     let backgroundColor = webBackgroundColor ?? theme.windowBackground
+
     view.window?.backgroundColor = backgroundColor
     titlebarView?.layerBackgroundColor = backgroundColor
 
