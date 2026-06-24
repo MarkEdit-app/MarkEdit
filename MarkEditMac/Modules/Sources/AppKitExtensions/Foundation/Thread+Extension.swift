@@ -12,7 +12,7 @@ public extension Thread {
   /// Prefer this over `Task { @MainActor in }` for UI updates that must land in the current
   /// runloop turn (e.g. KVO/observation callbacks), to avoid a one-frame stale paint.
   static func ensureMain(_ body: @Sendable @MainActor @escaping () -> Void) {
-    if Thread.isMainThread {
+    if Self.isMainThread {
       MainActor.assumeIsolated(body)
     } else {
       DispatchQueue.main.async {

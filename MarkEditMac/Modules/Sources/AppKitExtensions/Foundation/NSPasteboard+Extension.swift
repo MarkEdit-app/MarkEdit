@@ -47,7 +47,7 @@ public extension NSPasteboard {
     }
 
     // This alerts the user only when the pasteboard really contains links
-    let values = try? await NSPasteboard.general.detectedValues(for: [\.links])
+    let values = try? await Self.general.detectedValues(for: [\.links])
     return values?.links.first?.url.absoluteString
   }
 
@@ -98,7 +98,7 @@ public extension NSPasteboard {
 
 private extension NSPasteboard {
   func getDataItems() -> [NSPasteboard.PasteboardType: Data] {
-    (types ?? []).reduce(into: [NSPasteboard.PasteboardType: Data]()) { items, type in
+    (types ?? []).reduce(into: [Self.PasteboardType: Data]()) { items, type in
       items[type] = data(forType: type)
     }
   }

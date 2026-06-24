@@ -82,7 +82,7 @@ extension NSSpellChecker {
 
   @MainActor
   func acceptWebKitInlinePrediction(view: WKWebView, bridge: WebBridgeCompletion) {
-    guard NSSpellChecker.inlineCompletionBeingPresented else {
+    guard Self.inlineCompletionBeingPresented else {
       return
     }
 

@@ -14,7 +14,7 @@ public extension NSImage {
     accessibilityLabel: String? = nil
   ) -> NSImage {
     let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: accessibilityLabel)
-    let config = NSImage.SymbolConfiguration(pointSize: pointSize, weight: weight)
+    let config = Self.SymbolConfiguration(pointSize: pointSize, weight: weight)
 
     guard let image = image?.withSymbolConfiguration(config) else {
       assertionFailure("Failed to create image with symbol \"\(symbolName)\"")
