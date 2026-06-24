@@ -14,12 +14,12 @@ public extension String {
 
   /// Overload of the String.Encoding version.
   init?(data: Data, encoding: CFStringEncodings) {
-    self.init(data: data, encoding: String.Encoding(from: encoding))
+    self.init(data: data, encoding: Self.Encoding(from: encoding))
   }
 
   /// Overload of the String.Encoding version.
   func data(using encoding: CFStringEncodings, allowLossyConversion: Bool = false) -> Data? {
-    data(using: String.Encoding(from: encoding), allowLossyConversion: allowLossyConversion)
+    data(using: Self.Encoding(from: encoding), allowLossyConversion: allowLossyConversion)
   }
 
   func toData(encoding: String.Encoding = .utf8) -> Data? {

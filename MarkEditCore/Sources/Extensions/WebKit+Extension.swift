@@ -147,7 +147,7 @@ private extension WKPreferences {
       to: (@convention(c) (NSObject, Selector, Bool, AnyObject) -> Void).self
     )
 
-    for feature in WKPreferences.allFeatures {
+    for feature in Self.allFeatures {
       guard let key = feature.value(forKey: "key") as? String, keysToDisable.contains(key) else {
         continue
       }

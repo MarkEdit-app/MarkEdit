@@ -13,7 +13,7 @@ public extension NSFont {
 
   var cssFontWeight: String? {
     guard let traits = fontDescriptor.object(forKey: .traits) as? [NSFontDescriptor.TraitKey: Any],
-          let weight = traits[.weight] as? Double, weight != NSFont.Weight.regular.rawValue,
+          let weight = traits[.weight] as? Double, weight != Self.Weight.regular.rawValue,
           let index = (Self.sortedWeights.firstIndex { $0.rawValue > weight }) else {
       return nil
     }
@@ -44,7 +44,7 @@ public extension NSFont {
   }
 
   convenience init?(name: String) {
-    self.init(name: name, size: NSFont.systemFontSize)
+    self.init(name: name, size: Self.systemFontSize)
   }
 }
 
