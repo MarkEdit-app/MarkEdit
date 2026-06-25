@@ -32,7 +32,6 @@ extension EditorViewController {
 
     if AppDesign.modernTitleBar {
       wrapper.addSubview(modernEffectView)
-      wrapper.addSubview(modernTintedView)
       wrapper.addSubview(modernDividerView)
     }
 
@@ -60,15 +59,6 @@ extension EditorViewController {
         modernEffectView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
         modernEffectView.topAnchor.constraint(equalTo: wrapper.topAnchor),
         modernEffectHeight,
-      ])
-
-      // It covers precisely to provide a tinted color
-      modernTintedView.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        modernTintedView.leadingAnchor.constraint(equalTo: modernEffectView.leadingAnchor),
-        modernTintedView.trailingAnchor.constraint(equalTo: modernEffectView.trailingAnchor),
-        modernTintedView.topAnchor.constraint(equalTo: modernEffectView.topAnchor),
-        modernTintedView.bottomAnchor.constraint(equalTo: modernEffectView.bottomAnchor),
       ])
 
       // To avoid duplicate dividers
@@ -152,12 +142,12 @@ extension EditorViewController {
 
       // Hide the effect view and remove the opacity of the title bar view
       if reduceTransparency {
-        modernTintedView.layerBackgroundColor = backgroundColor
+        modernEffectView.tintColor = backgroundColor
       } else {
         let (tintedAlpha, plainAlpha) = AppRuntimeConfig.toolbarTintAlphaValues
         let alphaValue = prefersTintedToolbar ? tintedAlpha : plainAlpha
         let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
-        modernTintedView.layerBackgroundColor = tintColor
+        modernEffectView.tintColor = tintColor
       }
     }
 
