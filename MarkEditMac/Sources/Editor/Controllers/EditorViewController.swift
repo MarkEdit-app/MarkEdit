@@ -87,8 +87,7 @@ final class EditorViewController: NSViewController {
 
   // Custom views to apply blur effects to the title bar
   let modernBackgroundView = NSView()
-  let modernEffectView = NSVisualEffectView()
-  let modernTintedView = NSView()
+  let modernEffectView = MaterialView()
   let modernDividerView = DividerView()
 
   // Height constraint of the effect view, depending on the panel state
