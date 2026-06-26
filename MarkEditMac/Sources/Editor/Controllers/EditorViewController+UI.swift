@@ -140,15 +140,12 @@ extension EditorViewController {
       modernBackgroundView.layerBackgroundColor = backgroundColor
       modernEffectView.isHidden = reduceTransparency
 
-      // Hide the effect view and remove the opacity of the title bar view
-      if reduceTransparency {
-        modernEffectView.tintColor = backgroundColor
-      } else {
-        let (tintedAlpha, plainAlpha) = AppRuntimeConfig.toolbarTintAlphaValues
-        let alphaValue = prefersTintedToolbar ? tintedAlpha : plainAlpha
-        let tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
-        modernEffectView.tintColor = tintColor
-      }
+      // The effect view is hidden when transparency is reduced, so the material only matters otherwise
+      let material = AppRuntimeConfig.toolbarMaterial
+      modernEffectView.backdropBlur = material.backdropBlur
+
+      let alphaValue = prefersTintedToolbar ? material.tintedOpacity : material.plainOpacity
+      modernEffectView.tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
     }
 
     statusView.setBackgroundColor(backgroundColor)
