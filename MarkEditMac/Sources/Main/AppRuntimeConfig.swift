@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitControls
 import MarkEditCore
 import MarkEditKit
 
@@ -158,13 +159,16 @@ enum AppRuntimeConfig {
     currentDefinition?.nativeSearchQuerySync ?? false
   }
 
-  /// Alpha values of the tinted toolbar overlay: (tinted window, plain window).
-  /// Heavier translucency means more transparent, i.e., smaller alpha values.
-  static var toolbarTintAlphaValues: (tinted: Double, plain: Double) {
+  /// Backdrop material for the modern toolbar, varying with translucency.
+  ///
+  /// light/regular/heavy step along one "reveal" axis. Tint reads linearly so it steps
+  /// arithmetically (regular = midpoint); blur reads logarithmically so it steps geometrically
+  /// (regular = geometric mean, ×2 per step). Tinted opacity = plain opacity + 0.3.
+  static var toolbarMaterial: (backdropBlur: Double?, tintedOpacity: Double, plainOpacity: Double) {
     switch currentDefinition?.toolbarTranslucency ?? .regular {
-    case .light: return (0.9, 0.6)
-    case .regular: return (0.7, 0.4)
-    case .heavy: return (0.5, 0.2)
+    case .light: return (16, 0.9, 0.6)
+    case .regular: return (8, 0.7, 0.4)
+    case .heavy: return (4, 0.5, 0.2)
     }
   }
 

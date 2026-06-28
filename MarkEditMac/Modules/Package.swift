@@ -186,6 +186,7 @@ let package = Package(
     .testTarget(
       name: "ModulesTests",
       dependencies: [
+        "AppKitControls",
         "AppKitExtensions",
         "FileDrop",
         "Statistics",

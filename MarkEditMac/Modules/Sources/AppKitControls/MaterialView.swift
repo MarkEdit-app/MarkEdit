@@ -11,8 +11,8 @@ import AppKitExtensions
  Visual effect view with a tinted layer.
  */
 public class MaterialView: NSView {
-  private let effectView = NSVisualEffectView()
-  private let tintedView = NSView()
+  package let effectView = EffectView()
+  package let tintedView = NSView()
 
   public var material: NSVisualEffectView.Material {
     get {
@@ -20,6 +20,15 @@ public class MaterialView: NSView {
     }
     set {
       effectView.material = newValue
+    }
+  }
+
+  public var backdropBlur: Double? {
+    get {
+      effectView.backdropBlur
+    }
+    set {
+      effectView.backdropBlur = newValue
     }
   }
 
