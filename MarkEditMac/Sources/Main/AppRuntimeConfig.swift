@@ -15,10 +15,61 @@ import MarkEditKit
 /// The underlying file is stored as "settings.json" in AppCustomization.
 enum AppRuntimeConfig {
   struct Definition: Codable {
-    enum ToolbarTranslucency: String, Codable {
-      case light = "light"
-      case regular = "regular"
-      case heavy = "heavy"
+    enum ToolbarTranslucency: Codable {
+      case light
+      case regular
+      case heavy
+      case custom(backdropBlur: Double, tintedOpacity: Double, plainOpacity: Double)
+
+      /// Backdrop material: backdropBlur, tintedOpacity, plainOpacity.
+      ///
+      /// For the presets, light/regular/heavy step along one "reveal" axis. Tint reads linearly so it
+      /// steps arithmetically (regular = midpoint); blur reads logarithmically so it steps geometrically
+      /// (regular = geometric mean, double per step), with tintedOpacity = plainOpacity + 0.3.
+      ///
+      /// Custom values are used as-is and need not follow these relationships.
+      var material: (backdropBlur: Double, tintedOpacity: Double, plainOpacity: Double) {
+        switch self {
+        case .light: return (16, 0.9, 0.6)
+        case .regular: return (8, 0.7, 0.4)
+        case .heavy: return (4, 0.5, 0.2)
+        case let .custom(backdropBlur, tintedOpacity, plainOpacity):
+          return (backdropBlur, tintedOpacity, plainOpacity)
+        }
+      }
+
+      init(from decoder: any Decoder) throws {
+        let value = try decoder.singleValueContainer().decode(String.self)
+        switch value {
+        case "light": self = .light
+        case "regular": self = .regular
+        case "heavy": self = .heavy
+        default:
+          // Accept a custom "blur, tinted, plain" string, e.g. "8, 0.7, 0.4"
+          let numbers = value.split(separator: ",").compactMap {
+            Double($0.trimmingCharacters(in: .whitespaces))
+          }
+
+          guard numbers.count == 3 else {
+            Logger.log(.error, "Invalid toolbarTranslucency value: \(value)")
+            self = .regular
+            return
+          }
+
+          self = .custom(backdropBlur: numbers[0], tintedOpacity: numbers[1], plainOpacity: numbers[2])
+        }
+      }
+
+      func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .light: try container.encode("light")
+        case .regular: try container.encode("regular")
+        case .heavy: try container.encode("heavy")
+        case let .custom(backdropBlur, tintedOpacity, plainOpacity):
+          try container.encode("\(backdropBlur), \(tintedOpacity), \(plainOpacity)")
+        }
+      }
     }
 
     enum UpdateBehavior: String, Codable {
@@ -159,17 +210,8 @@ enum AppRuntimeConfig {
     currentDefinition?.nativeSearchQuerySync ?? false
   }
 
-  /// Backdrop material for the modern toolbar, varying with translucency.
-  ///
-  /// light/regular/heavy step along one "reveal" axis. Tint reads linearly so it steps
-  /// arithmetically (regular = midpoint); blur reads logarithmically so it steps geometrically
-  /// (regular = geometric mean, ×2 per step). Tinted opacity = plain opacity + 0.3.
-  static var toolbarMaterial: (backdropBlur: Double?, tintedOpacity: Double, plainOpacity: Double) {
-    switch currentDefinition?.toolbarTranslucency ?? .regular {
-    case .light: return (16, 0.9, 0.6)
-    case .regular: return (8, 0.7, 0.4)
-    case .heavy: return (4, 0.5, 0.2)
-    }
+  static var toolbarTranslucency: Definition.ToolbarTranslucency {
+    currentDefinition?.toolbarTranslucency ?? .regular
   }
 
   static var customToolbarItems: [CustomToolbarItem] {

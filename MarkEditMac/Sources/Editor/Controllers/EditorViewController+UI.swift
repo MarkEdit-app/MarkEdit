@@ -141,7 +141,7 @@ extension EditorViewController {
       modernEffectView.isHidden = reduceTransparency
 
       // The effect view is hidden when transparency is reduced, so the material only matters otherwise
-      let material = AppRuntimeConfig.toolbarMaterial
+      let material = AppRuntimeConfig.toolbarTranslucency.material
       modernEffectView.backdropBlur = material.backdropBlur
 
       let alphaValue = prefersTintedToolbar ? material.tintedOpacity : material.plainOpacity
