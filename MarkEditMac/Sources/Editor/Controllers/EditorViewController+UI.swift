@@ -508,6 +508,12 @@ extension EditorViewController {
 private extension EditorViewController {
   final class UserDefinedMenuItem: NSMenuItem {
     var stateGetterID: String?
+
+    override var image: NSImage? {
+      didSet {
+        ensureImageVisibility()
+      }
+    }
   }
 
   var contentHeight: Double {
