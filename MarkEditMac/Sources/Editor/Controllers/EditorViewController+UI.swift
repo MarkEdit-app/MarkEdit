@@ -21,19 +21,15 @@ extension EditorViewController {
     let wrapper = NSView(frame: CGRect(x: 0, y: 0, width: 720, height: 480))
     self.view = wrapper
 
-    if AppDesign.modernTitleBar {
-      wrapper.addSubview(modernBackgroundView)
-    }
-
+    wrapper.addSubview(modernBackgroundView)
     wrapper.addSubview(findPanel)
     wrapper.addSubview(replacePanel)
     wrapper.addSubview(webView)
     wrapper.addSubview(statusView)
 
-    if AppDesign.modernTitleBar {
-      wrapper.addSubview(modernEffectView)
-      wrapper.addSubview(modernDividerView)
-    }
+    // View order matters
+    wrapper.addSubview(modernEffectView)
+    wrapper.addSubview(modernDividerView)
 
     // The divider must be on very top
     panelDivider.alphaValue = AppDesign.dividerAlpha
@@ -43,27 +39,26 @@ extension EditorViewController {
     layoutWebView()
     layoutStatusView()
 
-    if AppDesign.modernTitleBar {
-      modernBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        modernBackgroundView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
-        modernBackgroundView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
-        modernBackgroundView.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor),
-        modernBackgroundView.topAnchor.constraint(equalTo: modernEffectView.bottomAnchor),
-      ])
+    // Initialize the customized modern titlebar
+    modernBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      modernBackgroundView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+      modernBackgroundView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+      modernBackgroundView.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor),
+      modernBackgroundView.topAnchor.constraint(equalTo: modernEffectView.bottomAnchor),
+    ])
 
-      modernEffectView.material = .titlebar
-      modernEffectView.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        modernEffectView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
-        modernEffectView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
-        modernEffectView.topAnchor.constraint(equalTo: wrapper.topAnchor),
-        modernEffectHeight,
-      ])
+    modernEffectView.material = .titlebar
+    modernEffectView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      modernEffectView.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+      modernEffectView.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+      modernEffectView.topAnchor.constraint(equalTo: wrapper.topAnchor),
+      modernEffectHeight,
+    ])
 
-      // To avoid duplicate dividers
-      modernDividerView.alphaValue = 0
-    }
+    // To avoid duplicate dividers
+    modernDividerView.alphaValue = 0
 
     // Initially hide panels to prevent being found by VoiceOver
     findPanel.isHidden = true
@@ -128,32 +123,29 @@ extension EditorViewController {
     let prefersTintedToolbar = theme.prefersTintedToolbar || backgroundColor.isTintedColor
     (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
 
-    if AppDesign.modernTitleBar {
-      let isMainWindow = view.window?.isMainWindow ?? false
-      let isFullscreen = view.window?.styleMask.contains(.fullScreen) ?? false
-      let reduceTransparency = !isMainWindow || AppDesign.reduceTransparency || isFullscreen
-      let baseColor = backgroundColor.withAlphaComponent(reduceTransparency ? 1.0 : 0.01)
+    let isMainWindow = view.window?.isMainWindow ?? false
+    let isFullscreen = view.window?.styleMask.contains(.fullScreen) ?? false
+    let reduceTransparency = !isMainWindow || AppDesign.reduceTransparency || isFullscreen
+    let baseColor = backgroundColor.withAlphaComponent(reduceTransparency ? 1.0 : 0.01)
 
-      view.window?.backgroundColor = baseColor
-      titlebarView?.layerBackgroundColor = baseColor
+    view.window?.backgroundColor = baseColor
+    titlebarView?.layerBackgroundColor = baseColor
 
-      modernBackgroundView.layerBackgroundColor = backgroundColor
-      modernEffectView.isHidden = reduceTransparency
+    modernBackgroundView.layerBackgroundColor = backgroundColor
+    modernEffectView.isHidden = reduceTransparency
 
-      // The effect view is hidden when transparency is reduced, so the material only matters otherwise
-      let material = AppRuntimeConfig.toolbarTranslucency.material
-      modernEffectView.backdropBlur = material.backdropBlur
+    // The effect view is hidden when transparency is reduced, so the material only matters otherwise
+    let material = AppRuntimeConfig.toolbarTranslucency.material
+    modernEffectView.backdropBlur = material.backdropBlur
 
-      let alphaValue = prefersTintedToolbar ? material.tintedOpacity : material.plainOpacity
-      modernEffectView.tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
-    }
+    let alphaValue = prefersTintedToolbar ? material.tintedOpacity : material.plainOpacity
+    modernEffectView.tintColor = backgroundColor.withAlphaComponent(alphaValue).resolvedColor()
 
     statusView.setBackgroundColor(backgroundColor)
     findPanel.setBackgroundColor(backgroundColor)
     replacePanel.setBackgroundColor(backgroundColor)
   }
 
-  @available(macOS 15.1, *)
   func updateWritingTools(isActive: Bool) {
     let performUpdate = {
       // Work around undo stack and selection range issues
@@ -193,13 +185,8 @@ extension EditorViewController {
       findPanel.findButtons.frame.height
     )
 
-    if AppDesign.modernTitleBar {
-      modernEffectHeight.constant = view.safeAreaInsets.top + panelDivider.frame.height
-      modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : AppDesign.dividerAlpha
-    } else {
-      // To avoid duplicate dividers on legacy titlebar
-      panelDivider.isHidden = findPanel.mode == .hidden
-    }
+    modernEffectHeight.constant = view.safeAreaInsets.top + panelDivider.frame.height
+    modernDividerView.update(animated).alphaValue = findPanel.mode == .hidden ? 0 : AppDesign.dividerAlpha
 
     // The position of this divider should be fixed
     modernDividerView.frame = CGRect(
@@ -226,14 +213,8 @@ extension EditorViewController {
   }
 
   func layoutStatusView() {
-    let margin: Double = {
-      if AppDesign.modernStyle {
-        // To fit better for the huge corner radius
-        return 16
-      }
-
-      return 6
-    }()
+    // To fit better for the huge corner radius
+    let margin: Double = 16
 
     statusView.frame = CGRect(
       x: view.bounds.width - statusView.frame.width - margin,
@@ -568,9 +549,7 @@ private extension EditorViewController {
       return
     }
 
-    if AppDesign.modernStyle {
-      updateWindowColors(.current)
-    }
+    updateWindowColors(.current)
 
     if AppRuntimeConfig.nativeSearchQuerySync {
       updateNativeSearchQuery()
@@ -582,9 +561,7 @@ private extension EditorViewController {
       return
     }
 
-    if AppDesign.modernStyle {
-      updateWindowColors(.current)
-    }
+    updateWindowColors(.current)
   }
 
   @objc func popoverDidShow(_ notification: Notification) {

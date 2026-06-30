@@ -131,20 +131,22 @@ final class EditorWebView: WKWebView {
       action: #selector(selectAllOccurrences(_:))
     )
 
-    if AppDesign.menuIconEvolution {
-      findSelectionItem.image = NSImage(systemSymbolName: "text.page.badge.magnifyingglass", accessibilityDescription: nil)
-      selectAllOccurrencesItem.image = NSImage(systemSymbolName: "selection.pin.in.out", accessibilityDescription: nil)
-    }
+    findSelectionItem.image = NSImage(
+      systemSymbolName: "text.page.badge.magnifyingglass",
+      accessibilityDescription: nil
+    )
+
+    selectAllOccurrencesItem.image = NSImage(
+      systemSymbolName: "selection.pin.in.out",
+      accessibilityDescription: nil
+    )
 
     // Only add text format items when it's not read-only
     if !(actionDelegate?.editorWebViewIsReadOnlyMode(self) ?? false) {
       let item = NSMenuItem()
+      item.image = NSImage(systemSymbolName: "bold.italic.underline", accessibilityDescription: nil)
       item.title = Localized.Toolbar.textFormat
       item.submenu = NSApp.appDelegate?.textFormatMenu?.copiedMenu
-
-      if AppDesign.menuIconEvolution {
-        item.image = NSImage(systemSymbolName: "bold.italic.underline", accessibilityDescription: nil)
-      }
 
       menu.addItem(item)
     }
@@ -212,12 +214,9 @@ private extension EditorWebView {
         //
         // WKWebView.showInspector() in WKWebView+Extension.swift does the heavy lifting
         if item.identifier == NSUserInterfaceItemIdentifier.inspectElement {
+          item.image = NSImage(systemSymbolName: "ladybug", accessibilityDescription: nil)
           item.keyEquivalent = "i"
           item.keyEquivalentModifierMask = [.option, .command]
-
-          if AppDesign.menuIconEvolution {
-            item.image = NSImage(systemSymbolName: "ladybug", accessibilityDescription: nil)
-          }
         }
 
         // Disable copy, cut for empty selection (always enable on editor blur)
