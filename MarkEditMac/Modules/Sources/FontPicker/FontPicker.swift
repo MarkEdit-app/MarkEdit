@@ -5,6 +5,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import SwiftUI
 
 public struct FontPicker: View {
@@ -33,11 +34,19 @@ public struct FontPicker: View {
 
     HStack {
       ZStack {
-        // Just to steal the bezel UI from TextField
-        TextField(text: .constant("")) {}
-          .focusable(false)
-          .allowsHitTesting(false)
-          .accessibilityHidden(true)
+        if #available(macOS 27.0, *) {
+          // To avoid the background color in macOS Golden Gate,
+          // use a custom stroke to simulate the bezel UI instead.
+          let hairlineWidth = 1.0 / NSScreen.preferredScale
+          RoundedRectangle(cornerRadius: 6)
+            .stroke(.separator, lineWidth: hairlineWidth)
+            .padding(EdgeInsets(top: -3, leading: -hairlineWidth, bottom: -3, trailing: -hairlineWidth))
+            .interactionDisabled()
+        } else {
+          // Just to steal the bezel UI from TextField
+          TextField(text: .constant("")) {}
+            .interactionDisabled()
+        }
 
         Text(selectedFontName)
           .font(Font(selectedFontStyle.fontWith(size: 12)))
@@ -176,6 +185,14 @@ private extension FontPicker {
 
     let location = CGPoint(x: configuration.modernStyle ? -4 : 0, y: sourceView.frame.height - 10)
     menu.popUp(positioning: nil, at: location, in: sourceView)
+  }
+}
+
+private extension View {
+  func interactionDisabled() -> some View {
+    self.focusable(false)
+      .allowsHitTesting(false)
+      .accessibilityHidden(true)
   }
 }
 
