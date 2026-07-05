@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import SwiftUI
 import FontPicker
 import SettingsUI
@@ -210,7 +211,7 @@ private extension EditorSettingsView {
     Divider()
 
     HStack {
-      Image(systemName: Icons.wandAndSparkles)
+      Image.alwaysVisibleSymbol(named: Icons.wandAndSparkles)
       Text(Localized.Settings.getCustomThemes)
     }.tag(Constants.customThemesTag)
   }
