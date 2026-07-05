@@ -1,18 +1,15 @@
-import { LanguageModel, LanguageModelGenerationOptions, LanguageModelResponse, LanguageModelStream } from 'markedit-api';
+import { LanguageModel, LanguageModelGenerationOptions, LanguageModelName, LanguageModelResponse, LanguageModelStream } from 'markedit-api';
 import { LanguageModelGenerationOptions as SimplifiedGenerationOptions } from '../bridge/native/foundationModels';
 
-export function languageModel(): LanguageModel {
-  // The only supported model at this time is Apple's Foundation Models
-  //
-  // https://developer.apple.com/documentation/FoundationModels
+export function languageModel(modelName: LanguageModelName): LanguageModel {
   const nativeModule = window.nativeModules.foundationModels;
   return {
     availability: async() => {
-      const availability = await nativeModule.availability();
+      const availability = await nativeModule.availability({ modelName });
       return JSON.parse(availability);
     },
     createSession: async(options) => {
-      const sessionID = await nativeModule.createSession(options);
+      const sessionID = await nativeModule.createSession({ modelName, ...(options ?? {}) });
       return {
         isResponding: () => nativeModule.isResponding({ sessionID }),
         respondTo: async(prompt, options) => {
