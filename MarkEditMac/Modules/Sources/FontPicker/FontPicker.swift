@@ -45,6 +45,7 @@ public struct FontPicker: View {
           .truncationMode(.middle)
           .help(selectedFontName)
       }
+      .pointerStyle(.default)
       .frame(width: 190, height: 19, alignment: .center)
 
       Stepper(
