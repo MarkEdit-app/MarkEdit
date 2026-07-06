@@ -43,6 +43,27 @@ public extension NSFont {
     .systemFont(ofSize: fontSize, weight: weight).withDesign(.serif)
   }
 
+  static func recentFamilyNames(maxCount: Int) -> [String]? {
+    guard let descriptors = NSFontCollection(name: .recentlyUsed)?.matchingDescriptors else {
+      return nil
+    }
+
+    var results: [String] = []
+    for descriptor in descriptors.reversed() {
+      if results.count >= maxCount {
+        break
+      }
+
+      if let family = descriptor.object(forKey: .family) as? String {
+        if !family.hasPrefix("."), !results.contains(family) {
+          results.append(family)
+        }
+      }
+    }
+
+    return results.isEmpty ? nil : results
+  }
+
   convenience init?(name: String) {
     self.init(name: name, size: Self.systemFontSize)
   }

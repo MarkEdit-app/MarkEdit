@@ -12,8 +12,9 @@ public struct FontPickerConfiguration {
   let selectedFontStyle: FontStyle
   let selectedFontSize: Double
   let selectButtonTitle: String
+  let recentlyUsedItemTitle: String
   let moreFontsItemTitle: String
-  let openPanelButtonTitle: String
+  let openPanelItemTitle: String
   let defaultFontName: String
   let monoFontName: String
   let roundedFontName: String
@@ -24,8 +25,9 @@ public struct FontPickerConfiguration {
     selectedFontStyle: FontStyle,
     selectedFontSize: Double,
     selectButtonTitle: String,
+    recentlyUsedItemTitle: String,
     moreFontsItemTitle: String,
-    openPanelButtonTitle: String,
+    openPanelItemTitle: String,
     defaultFontName: String,
     monoFontName: String,
     roundedFontName: String,
@@ -36,8 +38,9 @@ public struct FontPickerConfiguration {
     self.selectedFontSize = selectedFontSize
     self.selectButtonTitle = selectButtonTitle
     self.moreFontsItemTitle = moreFontsItemTitle
-    self.openPanelButtonTitle = openPanelButtonTitle
+    self.openPanelItemTitle = openPanelItemTitle
     self.defaultFontName = defaultFontName
+    self.recentlyUsedItemTitle = recentlyUsedItemTitle
     self.monoFontName = monoFontName
     self.roundedFontName = roundedFontName
     self.serifFontName = serifFontName

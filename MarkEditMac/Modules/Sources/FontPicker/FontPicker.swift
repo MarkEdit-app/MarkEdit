@@ -95,13 +95,26 @@ public struct FontPicker: View {
             design: .serif
           )
 
+          if let recents = NSFont.recentFamilyNames(maxCount: 5) {
+            Divider()
+            Menu(configuration.recentlyUsedItemTitle) {
+              ForEach(recents, id: \.self) { name in
+                Button {
+                  changeFontStyle(.customFont(name: name))
+                } label: {
+                  Text(name).font(.custom(name, size: NSFont.systemFontSize))
+                }
+              }
+            }
+          }
+
           Divider()
 
           Button(configuration.moreFontsItemTitle) {
             presentFontMenu()
           }
 
-          Button(configuration.openPanelButtonTitle) {
+          Button(configuration.openPanelItemTitle) {
             FontManagerDelegate.shared.fontDidChange = { font in
               changeFontStyle(.customFont(name: font.fontName))
               changeFontSize(font.pointSize)
