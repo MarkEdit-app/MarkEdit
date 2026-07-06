@@ -12,8 +12,8 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleFoundationModels: NativeModule {
-  func availability() async -> String
-  func createSession(instructions: String?) async -> String?
+  func availability(modelName: String) async -> String
+  func createSession(modelName: String, instructions: String?) async -> String?
   func isResponding(sessionID: String?) async -> Bool
   func respondTo(sessionID: String?, prompt: String, options: LanguageModelGenerationOptions?) async -> String
   func streamResponseTo(sessionID: String?, streamID: String, prompt: String, options: LanguageModelGenerationOptions?)
@@ -52,12 +52,25 @@ final class NativeBridgeFoundationModels: NativeBridge {
   }
 
   private func availability(parameters: Data) async -> Result<Any?, Error>? {
-    let result = await module.availability()
+    struct Message: Decodable {
+      var modelName: String
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.availability(modelName: message.modelName)
     return .success(result)
   }
 
   private func createSession(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
+      var modelName: String
       var instructions: String?
     }
 
@@ -69,7 +82,7 @@ final class NativeBridgeFoundationModels: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.createSession(instructions: message.instructions)
+    let result = await module.createSession(modelName: message.modelName, instructions: message.instructions)
     return .success(result)
   }
 

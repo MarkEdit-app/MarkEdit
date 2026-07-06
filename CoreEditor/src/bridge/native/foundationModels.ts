@@ -19,8 +19,8 @@ export type LanguageModelSampling = {
  * @bridgeName NativeBridgeFoundationModels
 */
 export interface NativeModuleFoundationModels extends NativeModule {
-  availability(): Promise<string>;
-  createSession(options?: { instructions?: string }): Promise<string | undefined>;
+  availability({ modelName }: { modelName: string }): Promise<string>;
+  createSession(options: { modelName: string; instructions?: string }): Promise<string | undefined>;
   isResponding({ sessionID }: { sessionID?: string }): Promise<boolean>;
   respondTo(args: { sessionID?: string; prompt: string; options?: LanguageModelGenerationOptions }): Promise<string>;
   streamResponseTo(args: { sessionID?: string; streamID: string; prompt: string; options?: LanguageModelGenerationOptions }): void;

@@ -24,17 +24,36 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     self.delegate = delegate
   }
 
-  public func availability() async -> String {
-    defaultModelAvailability.jsonEncoded
+  public func availability(modelName: String) async -> String {
+  #if canImport(FoundationModels, _version: 2)
+    if #available(macOS 27.0, *) {
+      return availability(of: languageModel(named: modelName)).jsonEncoded
+    }
+  #endif
+
+    return defaultModelAvailability.jsonEncoded
   }
 
-  public func createSession(instructions: String?) async -> String? {
+  public func createSession(modelName: String, instructions: String?) async -> String? {
     guard #available(macOS 26.0, *) else {
       return nil
     }
 
     let identifier = UUID().uuidString
-    let session = LanguageModelSession(instructions: instructions)
+    let session: LanguageModelSession
+
+  #if canImport(FoundationModels, _version: 2)
+    if #available(macOS 27.0, *) {
+      session = LanguageModelSession(
+        model: languageModel(named: modelName),
+        instructions: instructions
+      )
+    } else {
+      session = LanguageModelSession(instructions: instructions)
+    }
+  #else
+    session = LanguageModelSession(instructions: instructions)
+  #endif
 
     sessionPool[identifier] = session
     return identifier
@@ -161,6 +180,37 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 }
 
 // MARK: - Private
+
+#if canImport(FoundationModels, _version: 2)
+
+@available(macOS 27.0, *)
+private extension EditorModuleFoundationModels {
+  func languageModel(named modelName: String) -> any LanguageModel {
+    switch modelName {
+    case "Private-Cloud-Compute": return PrivateCloudComputeLanguageModel()
+    default: return SystemLanguageModel.default
+    }
+  }
+
+  func availability(of model: some LanguageModel) -> LanguageModelAvailability {
+    if let availability = (model as? PrivateCloudComputeLanguageModel)?.availability {
+      switch availability {
+      case .available:
+        return LanguageModelAvailability(isAvailable: true, unavailableReason: nil)
+      case .unavailable(.deviceNotEligible):
+        return LanguageModelAvailability(isAvailable: false, unavailableReason: "Device Not Eligible")
+      case .unavailable(.systemNotReady):
+        return LanguageModelAvailability(isAvailable: false, unavailableReason: "System Not Ready")
+      @unknown default:
+        return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unknown")
+      }
+    }
+
+    return defaultModelAvailability
+  }
+}
+
+#endif
 
 @available(macOS 26.0, *)
 private extension GenerationOptions {
