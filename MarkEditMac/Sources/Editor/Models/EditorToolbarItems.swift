@@ -91,6 +91,9 @@ extension NSToolbarItem.Identifier {
   static let insertLink = newItem("insertLink")
   static let insertImage = newItem("insertImage")
   static let toggleList = newItem("toggleList")
+  static let toggleBullet = newItem("toggleBullet")
+  static let toggleNumbering = newItem("toggleNumbering")
+  static let toggleTodo = newItem("toggleTodo")
   static let toggleBlockquote = newItem("toggleBlockquote")
   static let horizontalRule = newItem("horizontalRule")
   static let insertTable = newItem("insertTable")
@@ -121,6 +124,9 @@ extension NSToolbarItem.Identifier {
       .insertLink,
       .insertImage,
       .toggleList,
+      .toggleBullet,
+      .toggleNumbering,
+      .toggleTodo,
       .toggleBlockquote,
       .horizontalRule,
       .insertTable,
@@ -161,6 +167,9 @@ private extension NSToolbarItem.Identifier {
     case .insertLink: return Localized.Toolbar.insertLink
     case .insertImage: return Localized.Toolbar.insertImage
     case .toggleList: return Localized.Toolbar.toggleList
+    case .toggleBullet: return Localized.Toolbar.toggleBullet
+    case .toggleNumbering: return Localized.Toolbar.toggleNumbering
+    case .toggleTodo: return Localized.Toolbar.toggleTodo
     case .toggleBlockquote: return Localized.Toolbar.toggleBlockquote
     case .horizontalRule: return Localized.Toolbar.horizontalRule
     case .insertTable: return Localized.Toolbar.insertTable
@@ -184,6 +193,9 @@ private extension NSToolbarItem.Identifier {
     case .insertLink: return Icons.link
     case .insertImage: return Icons.photo
     case .toggleList: return Icons.listBullet
+    case .toggleBullet: return Icons.listBullet
+    case .toggleNumbering: return Icons.listNumber
+    case .toggleTodo: return Icons.checklist
     case .toggleBlockquote: return Icons.textQuote
     case .horizontalRule: return Icons.squareSplit1x2
     case .insertTable: return Icons.tablecells

@@ -93,6 +93,9 @@ extension EditorViewController: NSToolbarDelegate {
       case .insertLink: return insertLinkItem
       case .insertImage: return insertImageItem
       case .toggleList: return toggleListItem
+      case .toggleBullet: return toggleBulletItem
+      case .toggleNumbering: return toggleNumberingItem
+      case .toggleTodo: return toggleTodoItem
       case .toggleBlockquote: return toggleBlockquoteItem
       case .horizontalRule: return horizontalRuleItem
       case .insertTable: return insertTableItem
@@ -215,6 +218,24 @@ private extension EditorViewController {
     ].compactMap { $0?.copiedItem }
 
     return .with(identifier: .toggleList, menu: menu)
+  }
+
+  var toggleBulletItem: NSToolbarItem {
+    .with(identifier: .toggleBullet) { [weak self] in
+      self?.toggleBullet(nil)
+    }
+  }
+
+  var toggleNumberingItem: NSToolbarItem {
+    .with(identifier: .toggleNumbering) { [weak self] in
+      self?.toggleNumbering(nil)
+    }
+  }
+
+  var toggleTodoItem: NSToolbarItem {
+    .with(identifier: .toggleTodo) { [weak self] in
+      self?.toggleTodo(nil)
+    }
   }
 
   var toggleBlockquoteItem: NSToolbarItem {

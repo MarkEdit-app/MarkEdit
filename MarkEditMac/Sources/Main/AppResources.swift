@@ -56,6 +56,9 @@ enum Localized {
     static let insertLink = String(localized: "Insert Link", comment: "Toolbar item to insert link")
     static let insertImage = String(localized: "Insert Image", comment: "Toolbar item to insert image")
     static let toggleList = String(localized: "Toggle List", comment: "Toolbar item to toggle bullet list")
+    static let toggleBullet = String(localized: "Bullet List", comment: "Toolbar item to toggle bullet list")
+    static let toggleNumbering = String(localized: "Numbered List", comment: "Toolbar item to toggle numbered list")
+    static let toggleTodo = String(localized: "Todo List", comment: "Toolbar item to toggle todo list")
     static let toggleBlockquote = String(localized: "Quote", comment: "Toolbar item to toggle blockquote")
     static let horizontalRule = String(localized: "Horizontal Rule", comment: "Toolbar item to insert horizontal rule")
     static let insertTable = String(localized: "Table", comment: "Toolbar item to insert table")
@@ -269,6 +272,8 @@ enum Icons {
   static let link = "link"
   static let listBullet = "list.bullet"
   static let listBulletRectangle = "list.bullet.rectangle"
+  static let listNumber = "list.number"
+  static let checklist = "checklist"
 
   static let numberSign = if #available(macOS 27.0, *) {
     "number.sign"
