@@ -28,6 +28,16 @@ final class PreviewViewController: NSViewController {
     // E.g., markedit-preview.js
     let controller = WKUserContentController()
     config.userContentController = controller
+
+    // If a view-mode extension (e.g. markedit-preview.js) is injected below, start it in
+    // Preview mode instead of showing raw source. This seeds the mode cache the extension
+    // reads on load; it's a harmless no-op when no such extension is present.
+    controller.addUserScript(WKUserScript(
+      source: "try { localStorage.setItem('ui.view-mode', '2') } catch {}",
+      injectionTime: .atDocumentStart,
+      forMainFrameOnly: false
+    ))
+
     userScripts.forEach {
       controller.addUserScript($0)
     }
