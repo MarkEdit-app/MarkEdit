@@ -2153,25 +2153,25 @@
       }
     },
     "J5p-F8-eb5.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Official Extensions\"; ObjectID = \"J5p-F8-eb5\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Official Website\"; ObjectID = \"J5p-F8-eb5\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Official Extensions"
+            "value" : "Official Website"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "官方扩展功能"
+            "value" : "官方网站"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "官方擴充功能"
+            "value" : "官方網站"
           }
         }
       }
