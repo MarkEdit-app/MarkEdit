@@ -912,10 +912,10 @@ Gw
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="egO-qW-gHN"/>
-                                        <menuItem title="Official Extensions" id="J5p-F8-eb5">
+                                        <menuItem title="Official Website" id="J5p-F8-eb5">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="openOfficialExtensions:" target="Voe-Tx-rLC" id="wU2-OV-AbE"/>
+                                                <action selector="openOfficialWebsite:" target="Voe-Tx-rLC" id="wU2-OV-AbE"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Customization Guide" id="jNi-CL-4bf">

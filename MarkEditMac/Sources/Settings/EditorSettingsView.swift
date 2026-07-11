@@ -173,7 +173,7 @@ struct EditorSettingsView: View {
 private extension EditorSettingsView {
   enum Constants {
     static let customThemesTag = "$customThemes"
-    static let customThemesLink = "https://github.com/MarkEdit-app/MarkEdit/wiki/Extensions#list-of-themes"
+    static let customThemesLink = "https://markedit-app.github.io/extensions/#themes"
   }
 
   var fontPickerConfiguration: FontPickerConfiguration {
