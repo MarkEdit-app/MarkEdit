@@ -83,6 +83,7 @@ enum AppRuntimeConfig {
       let modifiers: [String]
     }
 
+    let __schema: String?
     let autoCharacterPairs: Bool?
     let autoSaveWhenIdle: Bool?
     let closeAlwaysConfirmsChanges: Bool?
@@ -107,6 +108,7 @@ enum AppRuntimeConfig {
     let mainWindowHotKey: HotKey?
 
     enum CodingKeys: String, CodingKey {
+      case __schema = "$schema"
       case autoCharacterPairs = "editor.autoCharacterPairs"
       case autoSaveWhenIdle = "editor.autoSaveWhenIdle"
       case closeAlwaysConfirmsChanges = "editor.closeAlwaysConfirmsChanges"
@@ -301,6 +303,7 @@ private extension AppRuntimeConfig {
   static let fileData = try? Data(contentsOf: AppCustomization.settings.fileURL)
 
   static let defaultDefinition = Definition(
+    __schema: "https://raw.githubusercontent.com/MarkEdit-app/schemas/main/settings.json",
     autoCharacterPairs: true,
     autoSaveWhenIdle: false,
     closeAlwaysConfirmsChanges: nil,
