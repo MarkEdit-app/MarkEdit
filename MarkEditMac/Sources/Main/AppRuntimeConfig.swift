@@ -344,7 +344,7 @@ private extension AppRuntimeConfig {
 
   static func encode(definition: Definition) -> Data? {
     let encoder = JSONEncoder()
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 
     let jsonData = try? encoder.encode(definition)
     Logger.assert(jsonData != nil, "Failed to encode object: \(definition)")
