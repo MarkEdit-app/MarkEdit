@@ -303,7 +303,7 @@ private extension AppRuntimeConfig {
   static let fileData = try? Data(contentsOf: AppCustomization.settings.fileURL)
 
   static let defaultDefinition = Definition(
-    __schema: "https://github.com/MarkEdit-app/schemas/raw/refs/heads/main/settings.json",
+    __schema: "https://raw.githubusercontent.com/MarkEdit-app/schemas/main/settings.json",
     autoCharacterPairs: true,
     autoSaveWhenIdle: false,
     closeAlwaysConfirmsChanges: nil,
