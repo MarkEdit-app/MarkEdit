@@ -24,6 +24,7 @@ struct AppCustomization {
     case pandoc
     case statisticsRules
     case settings
+    case extensions
 
     var fileName: String {
       switch self {
@@ -35,6 +36,7 @@ struct AppCustomization {
       case .pandoc: return "pandoc.yaml"
       case .statisticsRules: return "statistics-rules.json"
       case .settings: return "settings.json"
+      case .extensions: return "extensions.json"
       }
     }
 
@@ -54,6 +56,7 @@ struct AppCustomization {
   static let pandoc = Self(fileType: .pandoc)
   static let statisticsRules = Self(fileType: .statisticsRules)
   static let settings = Self(fileType: .settings)
+  static let extensions = Self(fileType: .extensions)
 
   static func createFiles() {
     editorStyle.createFile()
@@ -64,6 +67,7 @@ struct AppCustomization {
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
     statisticsRules.createFile("[]")
     settings.createFile(AppRuntimeConfig.defaultContents)
+    extensions.createFile(AppExtensionConfig.defaultContents)
   }
 
   var fileURL: URL {
