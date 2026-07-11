@@ -157,6 +157,7 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.plain-text</string>
+				<string>public.utf8-plain-text</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Markdown</string>
@@ -207,6 +208,7 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.plain-text</string>
+				<string>public.utf8-plain-text</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Markdown</string>
@@ -226,6 +228,7 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.plain-text</string>
+				<string>public.utf8-plain-text</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Markdown</string>
