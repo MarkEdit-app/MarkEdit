@@ -121,7 +121,14 @@ public enum ExtensionRegistry {
 
   /// Whether a cadence-driven check is currently due.
   public static var isCheckDue: Bool {
-    shouldCheck
+  #if DEBUG
+    // A mock index makes every check fire, so the update flow is easy to trigger
+    if mockIndex != nil {
+      return true
+    }
+  #endif
+
+    return shouldCheck
   }
 
   /// Refreshes the index from the network, honoring the configured cadence.
@@ -129,6 +136,13 @@ public enum ExtensionRegistry {
   /// - Parameter force: bypass the cadence check, e.g. a manual "Refresh".
   @discardableResult
   public static func refresh(force: Bool = false) async -> ExtensionIndex? {
+  #if DEBUG
+    // Bypass the network and serve a hand-authored index when present
+    if let mockIndex {
+      return mockIndex
+    }
+  #endif
+
     guard force || shouldCheck else {
       return cachedIndex
     }
@@ -218,6 +232,18 @@ public enum ExtensionRegistry {
 // MARK: - Private
 
 private extension ExtensionRegistry {
+#if DEBUG
+  /// Reads debug/mock-index.json, if the user placed one there for testing.
+  static var mockIndex: ExtensionIndex? {
+    let url = ExtensionEnvironment.debugDirectory.appending(path: "mock-index.json", directoryHint: .notDirectory)
+    guard let data = try? Data(contentsOf: url) else {
+      return nil
+    }
+
+    return try? JSONDecoder().decode(ExtensionIndex.self, from: data)
+  }
+#endif
+
   static var shouldCheck: Bool {
     switch ExtensionConfig.updateCheck {
     case .never: return false

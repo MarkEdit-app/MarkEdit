@@ -36,4 +36,13 @@ public enum ExtensionEnvironment {
   static var indexCacheDirectory: URL {
     cachesDirectory.appending(path: "Extensions", directoryHint: .isDirectory)
   }
+
+#if DEBUG
+  /// Folder scanned for a manual `mock-index.json` when testing the update flow.
+  static var debugDirectory: URL {
+    documentsDirectory
+      .appending(path: "debug", directoryHint: .isDirectory)
+      .resolvingSymbolicLink
+  }
+#endif
 }
