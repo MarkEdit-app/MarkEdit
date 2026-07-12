@@ -1,6 +1,5 @@
 //
 //  ExtensionDownloader.swift
-//  MarkEditMac
 //
 //  Created by cyan on 7/11/26.
 //
@@ -13,8 +12,8 @@ import MarkEditKit
 ///
 /// The file name derives from the id, not the source url. The registry lane verifies the
 /// pinned sha256; the URL lane pins the hash of whatever was downloaded.
-enum ExtensionDownloader {
-  enum Failure: Error {
+public enum ExtensionDownloader {
+  public enum Failure: Error {
     case invalidURL
     case downloadFailed
     case integrityMismatch
@@ -23,11 +22,11 @@ enum ExtensionDownloader {
   }
 
   /// Downloads `entry.latest`, verifies its hash, and installs it, returning the record to persist.
-  static func install(entry: ExtensionEntry) async throws -> ExtensionConfig.Installed {
+  public static func install(entry: ExtensionEntry) async throws -> ExtensionConfig.Installed {
     try await install(id: entry.id, release: entry.latest)
   }
 
-  static func install(id: String, release: ExtensionRelease) async throws -> ExtensionConfig.Installed {
+  public static func install(id: String, release: ExtensionRelease) async throws -> ExtensionConfig.Installed {
     guard release.isCompatible else {
       throw Failure.incompatible(minAppVersion: release.minAppVersion ?? "")
     }
@@ -63,7 +62,7 @@ enum ExtensionDownloader {
   ///
   /// The id is derived from the filename, the hash is pinned from what was downloaded,
   /// and updates default to `never` (re-install to update).
-  static func install(url: URL) async throws -> ExtensionConfig.Installed {
+  public static func install(url: URL) async throws -> ExtensionConfig.Installed {
     let data = try await download(from: url)
     let id = identifier(from: url)
     let fileName = "\(id).js"
@@ -111,7 +110,7 @@ private extension ExtensionDownloader {
 
   /// Writes the file atomically, replacing any existing copy.
   static func write(data: Data, fileName: String) -> Bool {
-    let directory = AppCustomization.scriptsDirectory.fileURL
+    let directory = ExtensionEnvironment.scriptsDirectory
     try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
     do {

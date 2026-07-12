@@ -1,6 +1,5 @@
 //
 //  ExtensionConfig.swift
-//  MarkEditMac
 //
 //  Created by cyan on 7/11/26.
 //
@@ -12,7 +11,7 @@ import MarkEditKit
 /// App-side state for editor extensions, stored as "extensions.json".
 ///
 /// Mirrors `AppRuntimeConfig`, the remote catalog is fetched by `ExtensionRegistry`.
-enum ExtensionConfig {
+public enum ExtensionConfig {
   struct Definition: Codable {
     let __schema: String?
     let registryURL: String?
@@ -30,7 +29,7 @@ enum ExtensionConfig {
   }
 
   /// How often to check for updates.
-  enum UpdateCheck: String, Codable {
+  public enum UpdateCheck: String, Codable, Sendable {
     case never
     case onLaunch
     case daily
@@ -38,45 +37,65 @@ enum ExtensionConfig {
   }
 
   /// What to do once an update is found.
-  enum UpdateStrategy: String, Codable {
+  public enum UpdateStrategy: String, Codable, Sendable {
     case manual
     case prompt
     case automatic
   }
 
   /// A single installed extension, array order is injection order.
-  struct Installed: Codable, Equatable {
-    let id: String
-    let version: String?
-    let url: String?
-    let sha256: String?
-    let file: String
-    let enabled: Bool? // Absent means enabled, tolerates hand-edited files
-    let updateCheck: UpdateCheck?
-    let installDate: String?
+  public struct Installed: Codable, Equatable, Sendable {
+    public let id: String
+    public let version: String?
+    public let url: String?
+    public let sha256: String?
+    public let file: String
+    public let enabled: Bool? // Absent means enabled, tolerates hand-edited files
+    public let updateCheck: UpdateCheck?
+    public let installDate: String?
+
+    public init(
+      id: String,
+      version: String?,
+      url: String?,
+      sha256: String?,
+      file: String,
+      enabled: Bool?,
+      updateCheck: UpdateCheck?,
+      installDate: String?
+    ) {
+      self.id = id
+      self.version = version
+      self.url = url
+      self.sha256 = sha256
+      self.file = file
+      self.enabled = enabled
+      self.updateCheck = updateCheck
+      self.installDate = installDate
+    }
   }
 
   /// Registry index url, overridable to a mirror.
-  static var registryURL: URL? {
+  public static var registryURL: URL? {
     let string = currentDefinition?.registryURL ?? Constants.defaultRegistryURL
     return URL(string: string)
   }
 
-  static var updateCheck: UpdateCheck {
+  public static var updateCheck: UpdateCheck {
     currentDefinition?.updateCheck ?? .weekly
   }
 
-  static var updateStrategy: UpdateStrategy {
+  public static var updateStrategy: UpdateStrategy {
     // Never automatic by default, injected code is arbitrary JavaScript
     currentDefinition?.updateStrategy ?? .prompt
   }
 
-  static var installed: [Installed] {
+  public static var installed: [Installed] {
     currentDefinition?.installed ?? []
   }
 
   /// Filenames of enabled installed extensions, in injection order.
-  static var enabledFileNames: [String] {
+  public static var enabledFileNames: [String] {
     installed.filter { $0.enabled != false }.map(\.file)
   }
 
@@ -85,8 +104,8 @@ enum ExtensionConfig {
   /// The filesystem is the source of truth: records whose file was removed are dropped,
   /// untracked script files are adopted in discovery order, and nothing is written when
   /// already in sync.
-  static func reconcileInstalled() {
-    let onDiskFiles = AppCustomization.scriptsDirectory.fileURL
+  public static func reconcileInstalled() {
+    let onDiskFiles = ExtensionEnvironment.scriptsDirectory
       .sortedFiles(types: ["js"])
       .map(\.lastPathComponent)
 
@@ -115,7 +134,7 @@ enum ExtensionConfig {
   /// Persists an installed extension, replacing any existing entry with the same id.
   ///
   /// Reads fresh from disk (not the cached definition) so repeated installs compose.
-  static func upsertInstalled(_ entry: Installed) {
+  public static func upsertInstalled(_ entry: Installed) {
     var installed = onDiskDefinition?.installed ?? []
     installed.removeAll { $0.id == entry.id }
     installed.append(entry)
@@ -123,13 +142,13 @@ enum ExtensionConfig {
   }
 
   /// Derives a kebab-case id from a script file name, e.g. "markedit-preview.js" -> "markedit-preview".
-  static func identifier(fromFileName fileName: String) -> String {
+  public static func identifier(fromFileName fileName: String) -> String {
     let url = URL(fileURLWithPath: fileName).deletingPathExtension()
     let kebabCased = url.lastPathComponent.kebabCased
     return kebabCased.isEmpty ? "extension" : kebabCased
   }
 
-  static var defaultContents: String {
+  public static var defaultContents: String {
     encode(definition: defaultDefinition)?.toString() ?? ""
   }
 }
@@ -142,7 +161,7 @@ private extension ExtensionConfig {
     static let schemaURL = "https://raw.githubusercontent.com/MarkEdit-app/schemas/main/extensions.json"
   }
 
-  static let fileData = try? Data(contentsOf: AppCustomization.extensions.fileURL)
+  static let fileData = try? Data(contentsOf: ExtensionEnvironment.extensionsURL)
 
   static let defaultDefinition = Definition(
     __schema: Constants.schemaURL,
@@ -178,7 +197,7 @@ private extension ExtensionConfig {
 
   /// Reads the definition fresh from disk, bypassing the cached `currentDefinition`.
   static var onDiskDefinition: Definition? {
-    guard let data = try? Data(contentsOf: AppCustomization.extensions.fileURL) else {
+    guard let data = try? Data(contentsOf: ExtensionEnvironment.extensionsURL) else {
       return nil
     }
 
@@ -200,14 +219,14 @@ private extension ExtensionConfig {
     }
 
     do {
-      try data.write(to: AppCustomization.extensions.fileURL, options: .atomic)
+      try data.write(to: ExtensionEnvironment.extensionsURL, options: .atomic)
     } catch {
       Logger.log(.error, "Failed to write extensions.json")
     }
   }
 }
 
-extension ExtensionConfig.Installed {
+public extension ExtensionConfig.Installed {
   /// Adopts a local script file as an untracked extension, id derived from the file name.
   init(fileName: String) {
     self.init(

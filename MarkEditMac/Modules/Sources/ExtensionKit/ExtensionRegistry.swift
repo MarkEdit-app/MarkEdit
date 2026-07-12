@@ -1,72 +1,117 @@
 //
 //  ExtensionRegistry.swift
-//  MarkEditMac
 //
 //  Created by cyan on 7/11/26.
 //
 
 import Foundation
-import AppKitExtensions
 import MarkEditKit
 
 /// Newest compatible release for an entry.
-struct ExtensionRelease: Codable, Equatable, Sendable {
-  let version: String
-  let url: String
-  let sha256: String
-  let minAppVersion: String?
-  let notes: String?
+public struct ExtensionRelease: Codable, Equatable, Sendable {
+  public let version: String
+  public let url: String
+  public let sha256: String
+  public let minAppVersion: String?
+  public let notes: String?
+
+  public init(
+    version: String,
+    url: String,
+    sha256: String,
+    minAppVersion: String?,
+    notes: String?
+  ) {
+    self.version = version
+    self.url = url
+    self.sha256 = sha256
+    self.minAppVersion = minAppVersion
+    self.notes = notes
+  }
 }
 
-extension ExtensionRelease {
+public extension ExtensionRelease {
   /// Whether the running app meets this release's minimum version requirement.
   var isCompatible: Bool {
     guard let minAppVersion, !minAppVersion.isEmpty else {
       return true
     }
 
-    let current = Bundle.main.shortVersionString ?? "0.0.0"
+    let current = ExtensionEnvironment.appVersion
     return minAppVersion.compare(current, options: .numeric) != .orderedDescending
   }
 }
 
 /// A single extension or theme in the registry index.
-struct ExtensionEntry: Codable, Equatable, Sendable {
-  enum Category: String, Codable, Sendable {
+public struct ExtensionEntry: Codable, Equatable, Sendable {
+  public enum Category: String, Codable, Sendable {
     case `extension`
     case theme
   }
 
-  enum ColorScheme: String, Codable, Sendable {
+  public enum ColorScheme: String, Codable, Sendable {
     case light
     case dark
     case both
   }
 
-  let id: String
-  let name: String
-  let description: String
-  let author: String
-  let homepage: String
-  let category: Category
-  let colorScheme: ColorScheme?
-  let screenshots: [String]?
-  let latest: ExtensionRelease
+  public let id: String
+  public let name: String
+  public let description: String
+  public let author: String
+  public let homepage: String
+  public let category: Category
+  public let colorScheme: ColorScheme?
+  public let screenshots: [String]?
+  public let latest: ExtensionRelease
+
+  public init(
+    id: String,
+    name: String,
+    description: String,
+    author: String,
+    homepage: String,
+    category: Category,
+    colorScheme: ColorScheme?,
+    screenshots: [String]?,
+    latest: ExtensionRelease
+  ) {
+    self.id = id
+    self.name = name
+    self.description = description
+    self.author = author
+    self.homepage = homepage
+    self.category = category
+    self.colorScheme = colorScheme
+    self.screenshots = screenshots
+    self.latest = latest
+  }
 }
 
 /// The registry index the app reads, built by CI from the extensions repo.
-struct ExtensionIndex: Codable, Equatable, Sendable {
-  let schemaVersion: Int
-  let extensions: [ExtensionEntry]
+public struct ExtensionIndex: Codable, Equatable, Sendable {
+  public let schemaVersion: Int
+  public let extensions: [ExtensionEntry]
+
+  public init(schemaVersion: Int, extensions: [ExtensionEntry]) {
+    self.schemaVersion = schemaVersion
+    self.extensions = extensions
+  }
+}
+
+/// An installed extension paired with its newer registry entry.
+public struct ExtensionUpdate: Sendable {
+  public let installed: ExtensionConfig.Installed
+  public let entry: ExtensionEntry
 }
 
 /// Fetches and caches the registry index.
 ///
 /// A conditional GET revalidates the cache (304, no body), the last good index is kept
 /// on disk and returned when offline or when a check is skipped.
-enum ExtensionRegistry {
+public enum ExtensionRegistry {
   /// Most recently cached index, if any.
-  static var cachedIndex: ExtensionIndex? {
+  public static var cachedIndex: ExtensionIndex? {
     guard let data = try? Data(contentsOf: Cache.indexURL) else {
       return nil
     }
@@ -75,7 +120,7 @@ enum ExtensionRegistry {
   }
 
   /// Whether a cadence-driven check is currently due.
-  static var isCheckDue: Bool {
+  public static var isCheckDue: Bool {
     shouldCheck
   }
 
@@ -83,7 +128,7 @@ enum ExtensionRegistry {
   ///
   /// - Parameter force: bypass the cadence check, e.g. a manual "Refresh".
   @discardableResult
-  static func refresh(force: Bool = false) async -> ExtensionIndex? {
+  public static func refresh(force: Bool = false) async -> ExtensionIndex? {
     guard force || shouldCheck else {
       return cachedIndex
     }
@@ -132,6 +177,40 @@ enum ExtensionRegistry {
       Logger.log(.error, "Unexpected registry status code: \(httpResponse.statusCode)")
       Cache.touch()
       return cachedIndex
+    }
+  }
+
+  /// Installed extensions with a newer, compatible release in the registry.
+  public static func availableUpdates(
+    index: ExtensionIndex,
+    installed: [ExtensionConfig.Installed] = ExtensionConfig.installed
+  ) -> [ExtensionUpdate] {
+    installed.compactMap { installed in
+      // Only managed extensions with a pinned version participate
+      guard let version = installed.version else {
+        return nil
+      }
+
+      // Honor a per-extension "never" freeze
+      guard installed.updateCheck != .never else {
+        return nil
+      }
+
+      guard let entry = index.extensions.first(where: { $0.id == installed.id }) else {
+        return nil
+      }
+
+      // Skip releases the current app can't run
+      guard entry.latest.isCompatible else {
+        return nil
+      }
+
+      // Skip older or equal versions
+      guard entry.latest.version.compare(version, options: .numeric) == .orderedDescending else {
+        return nil
+      }
+
+      return ExtensionUpdate(installed: installed, entry: entry)
     }
   }
 }
@@ -193,7 +272,7 @@ private extension ExtensionRegistry {
     }
 
     private static var directory: URL {
-      URL.cachesDirectory.appending(path: "Extensions", directoryHint: .isDirectory)
+      ExtensionEnvironment.indexCacheDirectory
     }
 
     private static var metadataURL: URL {

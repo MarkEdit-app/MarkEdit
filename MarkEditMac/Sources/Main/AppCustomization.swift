@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ExtensionKit
 import MarkEditCore
 import MarkEditKit
 
