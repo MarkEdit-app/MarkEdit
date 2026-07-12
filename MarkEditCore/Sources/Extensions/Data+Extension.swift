@@ -5,8 +5,13 @@
 //
 
 import Foundation
+import CryptoKit
 
 public extension Data {
+  var sha256Hash: String {
+    SHA256.hash(data: self).map { String(format: "%02x", $0) }.joined()
+  }
+
   /// Handle text encoding in Cocoa apps: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/introStrings.html.
   ///
   /// Ideally, the encoding for Markdown should always be utf-8 as described in: https://daringfireball.net/linked/2011/08/05/markdown-uti.

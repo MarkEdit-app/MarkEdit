@@ -5,11 +5,10 @@
 //
 
 import Foundation
-import CryptoKit
 
 public extension String {
   var sha256Hash: String {
-    SHA256.hash(data: Data(utf8)).map { String(format: "%02x", $0) }.joined()
+    Data(utf8).sha256Hash
   }
 
   /// Overload of the String.Encoding version.
