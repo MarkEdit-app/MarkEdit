@@ -23,16 +23,24 @@ final class ExtensionKitTests: XCTestCase {
 
   // MARK: - Installed
 
-  func testInstalledFromFileNameIsUntracked() {
-    let installed = ExtensionConfig.Installed(fileName: "markedit-preview.js")
+  func testInstalledAdoptingFileCapturesLocalFields() throws {
+    let dir = FileManager.default.temporaryDirectory
+      .appending(path: "ExtensionKitTests-\(UUID().uuidString)", directoryHint: .isDirectory)
+    try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: dir) }
+
+    let fileURL = dir.appending(path: "MarkEdit-Preview.js", directoryHint: .notDirectory)
+    try Data("console.log('hi')".utf8).write(to: fileURL)
+
+    let installed = ExtensionConfig.Installed(adopting: fileURL)
     XCTAssertEqual(installed.id, "markedit-preview")
-    XCTAssertEqual(installed.file, "markedit-preview.js")
+    XCTAssertEqual(installed.file, "MarkEdit-Preview.js")
+    XCTAssertTrue(installed.enabled ?? false)
+    XCTAssertEqual(installed.sha256?.count, 64)
+    XCTAssertNotNil(installed.installDate)
+    // Not derivable locally, filled later by the registry
     XCTAssertNil(installed.version)
     XCTAssertNil(installed.url)
-    XCTAssertNil(installed.sha256)
-    XCTAssertNil(installed.enabled)
-    XCTAssertNil(installed.updateCheck)
-    XCTAssertNil(installed.installDate)
   }
 
   func testMergingPreservesUserManagedFields() {
@@ -96,11 +104,45 @@ final class ExtensionKitTests: XCTestCase {
     XCTAssertEqual(updates.first?.entry.latest.version, "2.0.0")
   }
 
-  func testAvailableUpdatesSkipsUntrackedWithoutVersion() {
+  func testAvailableUpdatesSkipsUntrackedNonOfficial() {
     let index = makeIndex([makeEntry(id: "sample", version: "2.0.0")])
     let updates = ExtensionRegistry.availableUpdates(
       index: index,
       installed: [makeInstalled(id: "sample", version: nil)]
+    )
+
+    XCTAssertTrue(updates.isEmpty)
+  }
+
+  func testAvailableUpdatesAdoptsUntrackedOfficialMatch() {
+    ExtensionEnvironment.appVersion = "1.5.0"
+    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
+    let updates = ExtensionRegistry.availableUpdates(
+      index: index,
+      installed: [makeInstalled(id: "markedit-preview", version: nil)]
+    )
+
+    XCTAssertEqual(updates.count, 1)
+    XCTAssertEqual(updates.first?.entry.latest.version, "2.0.0")
+  }
+
+  func testAvailableUpdatesAdoptsUntrackedOfficialEvenWhenFrozen() {
+    ExtensionEnvironment.appVersion = "1.5.0"
+    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
+    let updates = ExtensionRegistry.availableUpdates(
+      index: index,
+      installed: [makeInstalled(id: "markedit-preview", version: nil, updateCheck: .never)]
+    )
+
+    XCTAssertEqual(updates.count, 1)
+  }
+
+  func testAvailableUpdatesSkipsUntrackedOfficialWhenIncompatible() {
+    ExtensionEnvironment.appVersion = "1.5.0"
+    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0", minAppVersion: "9.0.0")])
+    let updates = ExtensionRegistry.availableUpdates(
+      index: index,
+      installed: [makeInstalled(id: "markedit-preview", version: nil)]
     )
 
     XCTAssertTrue(updates.isEmpty)

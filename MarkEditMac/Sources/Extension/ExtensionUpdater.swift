@@ -44,8 +44,14 @@ enum ExtensionUpdater {
 
 private extension ExtensionUpdater {
   static func presentPrompt(updates: [ExtensionUpdate]) async {
-    let lines = updates.map {
-      "• \($0.entry.name) (\($0.installed.version ?? "") → \($0.entry.latest.version))"
+    let lines = updates.map { update in
+      let latest = update.entry.latest.version
+      // A version-less install is being adopted, so there's no "from" to show
+      if let current = update.installed.version {
+        return "• \(update.entry.name) (\(current) → \(latest))"
+      } else {
+        return "• \(update.entry.name) (\(latest))"
+      }
     }
 
     let alert = NSAlert()

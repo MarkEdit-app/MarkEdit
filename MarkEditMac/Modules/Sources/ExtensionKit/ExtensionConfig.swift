@@ -105,9 +105,8 @@ public enum ExtensionConfig {
   /// untracked script files are adopted in discovery order, and nothing is written when
   /// already in sync.
   public static func reconcileInstalled() {
-    let onDiskFiles = ExtensionEnvironment.scriptsDirectory
-      .sortedFiles(types: ["js"])
-      .map(\.lastPathComponent)
+    let onDiskURLs = ExtensionEnvironment.scriptsDirectory.sortedFiles(types: ["js"])
+    let onDiskFiles = onDiskURLs.map(\.lastPathComponent)
 
     let installed = onDiskDefinition?.installed ?? []
     let tracked = Set(installed.map(\.file))
@@ -119,9 +118,9 @@ public enum ExtensionConfig {
     }
 
     // Adopt script files not yet tracked, in discovery order
-    let adopted = onDiskFiles
-      .filter { !tracked.contains($0) }
-      .map { Installed(fileName: $0) }
+    let adopted = onDiskURLs
+      .filter { !tracked.contains($0.lastPathComponent) }
+      .map { Installed(adopting: $0) }
 
     let reconciled = retained + adopted
     guard reconciled != installed else {
@@ -227,17 +226,24 @@ private extension ExtensionConfig {
 }
 
 public extension ExtensionConfig.Installed {
-  /// Adopts a local script file as an untracked extension, id derived from the file name.
-  init(fileName: String) {
+  /// Adopts a local script file as an untracked extension.
+  ///
+  /// The filesystem supplies `sha256` (hash of the current bytes) and `installDate` (file
+  /// creation date); `version` and `url` stay nil until the registry claims it.
+  init(adopting fileURL: URL) {
+    let fileName = fileURL.lastPathComponent
+    let sha256 = (try? Data(contentsOf: fileURL))?.sha256Hash
+    let created = (try? fileURL.resourceValues(forKeys: [.creationDateKey]))?.creationDate
+
     self.init(
       id: ExtensionConfig.identifier(fromFileName: fileName),
       version: nil,
       url: nil,
-      sha256: nil,
+      sha256: sha256,
       file: fileName,
-      enabled: nil,
+      enabled: true,
       updateCheck: nil,
-      installDate: nil
+      installDate: created.map { ISO8601DateFormatter().string(from: $0) }
     )
   }
 
