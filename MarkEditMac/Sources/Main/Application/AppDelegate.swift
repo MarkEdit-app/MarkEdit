@@ -156,7 +156,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 extension AppDelegate {
   func application(_ application: NSApplication, open urls: [URL]) {
     for url in urls {
-      // https://github.com/MarkEdit-app/MarkEdit/wiki/Text-Processing#using-url-schemes
+      // https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#using-url-schemes
       let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
       switch components?.host {
       case "new-file":
