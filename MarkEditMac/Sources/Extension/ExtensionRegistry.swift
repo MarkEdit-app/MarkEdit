@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKitExtensions
 import MarkEditKit
 
 /// Newest compatible release for an entry.
@@ -15,6 +16,18 @@ struct ExtensionRelease: Codable, Equatable, Sendable {
   let sha256: String
   let minAppVersion: String?
   let notes: String?
+}
+
+extension ExtensionRelease {
+  /// Whether the running app meets this release's minimum version requirement.
+  var isCompatible: Bool {
+    guard let minAppVersion, !minAppVersion.isEmpty else {
+      return true
+    }
+
+    let current = Bundle.main.shortVersionString ?? "0.0.0"
+    return minAppVersion.compare(current, options: .numeric) != .orderedDescending
+  }
 }
 
 /// A single extension or theme in the registry index.
@@ -61,6 +74,11 @@ enum ExtensionRegistry {
     return try? JSONDecoder().decode(ExtensionIndex.self, from: data)
   }
 
+  /// Whether a cadence-driven check is currently due.
+  static var isCheckDue: Bool {
+    shouldCheck
+  }
+
   /// Refreshes the index from the network, honoring the configured cadence.
   ///
   /// - Parameter force: bypass the cadence check, e.g. a manual "Refresh".
@@ -72,6 +90,11 @@ enum ExtensionRegistry {
 
     guard let url = ExtensionConfig.registryURL else {
       Logger.log(.error, "Invalid registry url in extensions.json")
+      return cachedIndex
+    }
+
+    guard url.scheme?.lowercased() == "https" else {
+      Logger.log(.error, "Registry url must be served over https")
       return cachedIndex
     }
 

@@ -1009,6 +1009,40 @@
         }
       }
     },
+    "Extension Updates Available" : {
+      "comment" : "Title for the extension updates prompt",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有可用的扩展更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有可用的擴充功能更新"
+          }
+        }
+      }
+    },
+    "Extensions Updated" : {
+      "comment" : "Title shown after extensions are updated",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩展已更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴充功能已更新"
+          }
+        }
+      }
+    },
     "Failed to get the update." : {
       "comment" : "Title for failed to get the update",
       "localizations" : {
@@ -1022,6 +1056,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法获取更新。"
+          }
+        }
+      }
+    },
+    "Failed to install the extension." : {
+      "comment" : "Title for a failed extension installation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装该扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法安裝該擴充功能。"
           }
         }
       }
@@ -1676,23 +1727,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "要安裝“%@”嗎？"
-          }
-        }
-      }
-    },
-    "Failed to install the extension." : {
-      "comment" : "Title for a failed extension installation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法安装该扩展。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "無法安裝該擴充功能。"
           }
         }
       }
@@ -2469,6 +2503,23 @@
         }
       }
     },
+    "Relaunch MarkEdit to use the updated extensions." : {
+      "comment" : "Message shown after extensions are updated",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动 MarkEdit 以使用更新后的扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動 MarkEdit 以使用更新後的擴充功能。"
+          }
+        }
+      }
+    },
     "Relaxed" : {
       "comment" : "Relaxed line spacing",
       "localizations" : {
@@ -3148,6 +3199,23 @@
         }
       }
     },
+    "This extension requires MarkEdit %@ or later." : {
+      "comment" : "Error (format) when an extension needs a newer app version",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此扩展需要 MarkEdit %@ 或更高版本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此擴充功能需要 MarkEdit %@ 或更高版本。"
+          }
+        }
+      }
+    },
     "This extension runs with full editor access." : {
       "comment" : "Disclosure shown before installing an extension",
       "localizations" : {
@@ -3301,23 +3369,6 @@
         }
       }
     },
-    "URL: %@" : {
-      "comment" : "Extension URL line (format) in the install confirmation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URL：%@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "URL：%@"
-          }
-        }
-      }
-    },
     "Unfold" : {
       "comment" : "Phrase used in CodeMirror to unfold a piece of text",
       "localizations" : {
@@ -3369,6 +3420,23 @@
         }
       }
     },
+    "Update" : {
+      "comment" : "Button title to install extension updates",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
+          }
+        }
+      }
+    },
     "Update File Content" : {
       "localizations" : {
         "zh-Hans" : {
@@ -3414,6 +3482,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
+          }
+        }
+      }
+    },
+    "URL: %@" : {
+      "comment" : "Extension URL line (format) in the install confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "链接：%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "連結：%@"
           }
         }
       }

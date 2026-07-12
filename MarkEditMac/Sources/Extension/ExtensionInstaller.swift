@@ -87,6 +87,8 @@ private extension ExtensionInstaller {
       let installed = try await download()
       ExtensionConfig.upsertInstalled(installed)
       presentInstalled(id: installed.id)
+    } catch ExtensionDownloader.Failure.incompatible(let minAppVersion) {
+      presentError(message: String(format: Localized.Extension.incompatibleFormat, minAppVersion))
     } catch {
       Logger.log(.error, "Failed to install extension: \(error)")
       presentError(message: Localized.Extension.failedMessage)
@@ -153,5 +155,10 @@ extension Localized {
     static let notFoundFormat = String(localized: "Couldn’t find the extension “%@” in the registry.", comment: "Error when a deep-link id does not resolve in the registry")
     static let failedTitle = String(localized: "Failed to install the extension.", comment: "Title for a failed extension installation")
     static let failedMessage = String(localized: "The extension couldn’t be downloaded or verified.", comment: "Message for a failed extension installation")
+    static let incompatibleFormat = String(localized: "This extension requires MarkEdit %@ or later.", comment: "Error (format) when an extension needs a newer app version")
+    static let updatesAvailableTitle = String(localized: "Extension Updates Available", comment: "Title for the extension updates prompt")
+    static let updateButton = String(localized: "Update", comment: "Button title to install extension updates")
+    static let updatedTitle = String(localized: "Extensions Updated", comment: "Title shown after extensions are updated")
+    static let updatedMessage = String(localized: "Relaunch MarkEdit to use the updated extensions.", comment: "Message shown after extensions are updated")
   }
 }

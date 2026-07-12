@@ -18,6 +18,7 @@ enum ExtensionDownloader {
     case invalidURL
     case downloadFailed
     case integrityMismatch
+    case incompatible(minAppVersion: String)
     case writeFailed
   }
 
@@ -27,6 +28,10 @@ enum ExtensionDownloader {
   }
 
   static func install(id: String, release: ExtensionRelease) async throws -> ExtensionConfig.Installed {
+    guard release.isCompatible else {
+      throw Failure.incompatible(minAppVersion: release.minAppVersion ?? "")
+    }
+
     guard let url = URL(string: release.url) else {
       throw Failure.invalidURL
     }

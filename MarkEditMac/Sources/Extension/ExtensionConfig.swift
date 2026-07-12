@@ -221,4 +221,18 @@ extension ExtensionConfig.Installed {
       installDate: nil
     )
   }
+
+  /// A freshly downloaded record that keeps user-managed fields from a previous install.
+  func merging(preserving previous: Self) -> Self {
+    Self(
+      id: id,
+      version: version,
+      url: url,
+      sha256: sha256,
+      file: file,
+      enabled: previous.enabled,
+      updateCheck: previous.updateCheck,
+      installDate: installDate
+    )
+  }
 }

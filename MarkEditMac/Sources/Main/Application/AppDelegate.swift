@@ -100,6 +100,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
 
+      Task {
+        await ExtensionUpdater.checkForUpdates()
+      }
+
       DispatchQueue.global(qos: .utility).async {
         let defaults = UserDefaults.standard.dictionaryRepresentation()
         let plist = defaults.merging(AppRuntimeConfig.jsonObject) { _, rhs in rhs }
@@ -112,6 +116,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     Timer.scheduledTimer(withTimeInterval: 7 * 24 * 60 * 60, repeats: true) { _ in
       Task {
         await AppUpdater.checkForUpdates(explicitly: false)
+      }
+
+      Task {
+        await ExtensionUpdater.checkForUpdates()
       }
 
       Task {
