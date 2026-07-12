@@ -80,25 +80,36 @@ enum ExtensionConfig {
     installed.filter { $0.enabled != false }.map(\.file)
   }
 
-  /// Adopts pre-existing scripts into installed[] so they appear alongside managed extensions.
+  /// Syncs installed[] with the scripts on disk.
   ///
-  /// The filesystem is the source of truth: script files not yet tracked are appended in
-  /// order, existing records are preserved, and nothing is written when there's nothing new.
+  /// The filesystem is the source of truth: records whose file was removed are dropped,
+  /// untracked script files are adopted in discovery order, and nothing is written when
+  /// already in sync.
   static func reconcileInstalled() {
-    var installed = onDiskDefinition?.installed ?? []
-    let tracked = Set(installed.map(\.file))
-    let adopted = AppCustomization.scriptsDirectory.fileURL
+    let onDiskFiles = AppCustomization.scriptsDirectory.fileURL
       .sortedFiles(types: ["js"])
       .map(\.lastPathComponent)
+
+    let installed = onDiskDefinition?.installed ?? []
+    let tracked = Set(installed.map(\.file))
+    let existing = Set(onDiskFiles)
+
+    // Drop records whose script file was removed, keep the rest in order
+    let retained = installed.filter {
+      existing.contains($0.file)
+    }
+
+    // Adopt script files not yet tracked, in discovery order
+    let adopted = onDiskFiles
       .filter { !tracked.contains($0) }
       .map { Installed(fileName: $0) }
 
-    guard !adopted.isEmpty else {
+    let reconciled = retained + adopted
+    guard reconciled != installed else {
       return
     }
 
-    installed.append(contentsOf: adopted)
-    persist(installed: installed)
+    persist(installed: reconciled)
   }
 
   /// Persists an installed extension, replacing any existing entry with the same id.
