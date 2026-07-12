@@ -165,6 +165,9 @@ extension AppDelegate {
       case "open":
         // markedit://open or markedit://open?path=Untitled.md
         openFile(queryDict: components?.queryDict)
+      case "install-extension":
+        // markedit://install-extension?id=markedit-preview or ?url=https://...
+        ExtensionInstaller.install(queryDict: components?.queryDict)
       default:
         break
       }

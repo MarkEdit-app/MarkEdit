@@ -86,9 +86,10 @@ struct AppCustomization {
       .compactMap { createContents(url: $0.resolvingSymbolicLink) }
   }
 
-  func scriptContents() -> [String] {
-    fileURL.sortedFiles(types: ["js"])
-      .compactMap { createContents(url: $0.resolvingSymbolicLink) }
+  func contentsFrom(fileNames: [String]) -> [String] {
+    fileNames
+      .map { fileURL.appending(path: $0, directoryHint: .notDirectory).resolvingSymbolicLink }
+      .compactMap { createContents(url: $0) }
   }
 
   // MARK: - Private

@@ -19,6 +19,7 @@ final class Application: NSApplication {
 
     UserDefaults.overwriteTextCheckerOnce()
     AppCustomization.createFiles()
+    ExtensionConfig.reconcileInstalled()
 
     let application = Self.shared
     let delegate = AppDelegate()

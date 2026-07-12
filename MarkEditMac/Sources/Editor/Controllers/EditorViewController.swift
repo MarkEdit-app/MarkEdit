@@ -142,7 +142,7 @@ final class EditorViewController: NSViewController {
 
     let scripts = [
       AppCustomization.editorScript.fileContents,
-    ] + AppCustomization.scriptsDirectory.scriptContents()
+    ] + AppCustomization.scriptsDirectory.contentsFrom(fileNames: ExtensionConfig.enabledFileNames)
 
     scripts.forEach {
       controller.addUserScript(WKUserScript(

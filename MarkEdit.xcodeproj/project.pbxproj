@@ -120,6 +120,7 @@
 		EE100002EEEE000000000002 /* ExtensionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100001EEEE000000000001 /* ExtensionConfig.swift */; };
 		EE100004EEEE000000000004 /* ExtensionRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100003EEEE000000000003 /* ExtensionRegistry.swift */; };
 		EE100006EEEE000000000006 /* ExtensionDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100005EEEE000000000005 /* ExtensionDownloader.swift */; };
+		EE100008EEEE000000000008 /* ExtensionInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100007EEEE000000000007 /* ExtensionInstaller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -269,6 +270,7 @@
 		EE100001EEEE000000000001 /* ExtensionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionConfig.swift; sourceTree = "<group>"; };
 		EE100003EEEE000000000003 /* ExtensionRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionRegistry.swift; sourceTree = "<group>"; };
 		EE100005EEEE000000000005 /* ExtensionDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDownloader.swift; sourceTree = "<group>"; };
+		EE100007EEEE000000000007 /* ExtensionInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionInstaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -609,6 +611,7 @@
 				EE100001EEEE000000000001 /* ExtensionConfig.swift */,
 				EE100003EEEE000000000003 /* ExtensionRegistry.swift */,
 				EE100005EEEE000000000005 /* ExtensionDownloader.swift */,
+				EE100007EEEE000000000007 /* ExtensionInstaller.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -907,6 +910,7 @@
 				EE100002EEEE000000000002 /* ExtensionConfig.swift in Sources */,
 				EE100004EEEE000000000004 /* ExtensionRegistry.swift in Sources */,
 				EE100006EEEE000000000006 /* ExtensionDownloader.swift in Sources */,
+				EE100008EEEE000000000008 /* ExtensionInstaller.swift in Sources */,
 				871C995D2973F20E003FF3A7 /* AppDelegate+Menu.swift in Sources */,
 				87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */,
 				87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */,
