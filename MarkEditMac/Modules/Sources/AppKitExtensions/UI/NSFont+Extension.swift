@@ -31,6 +31,11 @@ public extension NSFont {
     return nil
   }
 
+  var boldVariant: NSFont {
+    let traits = fontDescriptor.symbolicTraits.union(.bold)
+    return Self(descriptor: fontDescriptor.withSymbolicTraits(traits), size: pointSize) ?? self
+  }
+
   static func monospacedSystemFont(ofSize fontSize: Double) -> NSFont {
     monospacedSystemFont(ofSize: fontSize, weight: .regular)
   }
