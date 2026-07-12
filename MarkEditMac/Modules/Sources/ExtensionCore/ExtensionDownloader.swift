@@ -54,7 +54,7 @@ public enum ExtensionDownloader {
       file: fileName,
       enabled: true,
       updateCheck: nil,
-      installDate: ISO8601DateFormatter().string(from: .now)
+      installDate: Date.now.ISO8601Format()
     )
   }
 
@@ -64,7 +64,7 @@ public enum ExtensionDownloader {
   /// and updates default to `never` (re-install to update).
   public static func install(url: URL) async throws -> ExtensionConfig.Installed {
     let data = try await download(from: url)
-    let id = identifier(from: url)
+    let id = ExtensionConfig.identifier(fromFileName: url.lastPathComponent)
     let fileName = "\(id).js"
     guard write(data: data, fileName: fileName) else {
       throw Failure.writeFailed
@@ -78,7 +78,7 @@ public enum ExtensionDownloader {
       file: fileName,
       enabled: true,
       updateCheck: .never,
-      installDate: ISO8601DateFormatter().string(from: .now)
+      installDate: Date.now.ISO8601Format()
     )
   }
 }
@@ -101,11 +101,6 @@ private extension ExtensionDownloader {
     }
 
     return data
-  }
-
-  /// Derives a kebab-case id from the url filename, e.g. ".../markedit-preview.js" -> "markedit-preview".
-  static func identifier(from url: URL) -> String {
-    ExtensionConfig.identifier(fromFileName: url.lastPathComponent)
   }
 
   /// Writes the file atomically, replacing any existing copy.

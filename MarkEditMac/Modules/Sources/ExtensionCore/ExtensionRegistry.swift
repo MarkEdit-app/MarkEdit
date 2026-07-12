@@ -213,16 +213,17 @@ public enum ExtensionRegistry {
     }
   }
 
-  /// Installed extensions with a newer, compatible release in the registry.
-  ///
-  /// Version-less installs (adopted from disk or installed by url) can't be compared, but
-  /// official "markedit-" ids almost certainly come from the registry, so their latest release
-  /// is offered to adopt them into version tracking.
+  /// Version-tracked installs with a newer, compatible release in the registry.
   public static func availableUpdates(
     index: ExtensionIndex,
     installed: [ExtensionConfig.Installed] = ExtensionConfig.installed
   ) -> [ExtensionUpdate] {
     installed.compactMap { installed in
+      // Only version-tracked installs can be compared for updates
+      guard let version = installed.version else {
+        return nil
+      }
+
       guard let entry = index.extensions.first(where: { $0.id == installed.id }) else {
         return nil
       }
@@ -232,21 +233,14 @@ public enum ExtensionRegistry {
         return nil
       }
 
-      if let version = installed.version {
-        // Honor a per-extension "never" freeze for tracked installs
-        guard installed.updateCheck != .never else {
-          return nil
-        }
+      // Honor a per-extension "never" freeze
+      guard installed.updateCheck != .never else {
+        return nil
+      }
 
-        // Skip older or equal versions
-        guard entry.latest.version.compare(version, options: .numeric) == .orderedDescending else {
-          return nil
-        }
-      } else {
-        // Untracked: only adopt ids that are almost certainly official
-        guard installed.id.hasPrefixIgnoreCase("markedit-") else {
-          return nil
-        }
+      // Skip older or equal versions
+      guard entry.latest.version.compare(version, options: .numeric) == .orderedDescending else {
+        return nil
       }
 
       return ExtensionUpdate(installed: installed, entry: entry)

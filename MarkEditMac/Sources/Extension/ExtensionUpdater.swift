@@ -45,13 +45,7 @@ enum ExtensionUpdater {
 private extension ExtensionUpdater {
   static func presentPrompt(updates: [ExtensionUpdate]) async {
     let lines = updates.map { update in
-      let latest = update.entry.latest.version
-      // A version-less install is being adopted, so there's no "from" to show
-      if let current = update.installed.version {
-        return "• \(update.entry.name) (\(current) → \(latest))"
-      } else {
-        return "• \(update.entry.name) (\(latest))"
-      }
+      "• \(update.entry.name) (\(update.installed.version ?? "?") → \(update.entry.latest.version))"
     }
 
     let alert = NSAlert()
@@ -64,11 +58,18 @@ private extension ExtensionUpdater {
       return
     }
 
-    await apply(updates: updates, promptRelaunch: true)
+    let failures = await apply(updates: updates, promptRelaunch: true)
+    if !failures.isEmpty {
+      presentFailure(failures)
+    }
   }
 
-  static func apply(updates: [ExtensionUpdate], promptRelaunch: Bool) async {
+  /// Downloads and persists each update, returning the ones that failed.
+  @discardableResult
+  static func apply(updates: [ExtensionUpdate], promptRelaunch: Bool) async -> [(name: String, error: Error)] {
     var didUpdate = false
+    var failures: [(name: String, error: Error)] = []
+
     for update in updates {
       do {
         let record = try await ExtensionDownloader.install(
@@ -81,13 +82,34 @@ private extension ExtensionUpdater {
         ExtensionConfig.upsertInstalled(merged)
         didUpdate = true
       } catch {
-        Logger.log(.error, "Failed to update extension \(update.entry.id): \(error)")
+        failures.append((update.entry.name, error))
+        Logger.log(.error, "Failed to install extension \(update.entry.id): \(error)")
       }
     }
 
     if didUpdate && promptRelaunch {
       presentRelaunch()
     }
+
+    return failures
+  }
+
+  static func presentFailure(_ failures: [(name: String, error: Error)]) {
+    let alert = NSAlert()
+    alert.messageText = Localized.Extension.failedTitle
+    alert.informativeText = failures
+      .map { "• \($0.name) - \(failureReason($0.error))" }
+      .joined(separator: "\n")
+    alert.runModal()
+  }
+
+  /// A user-facing reason for a failed install, mirroring the single-install path.
+  static func failureReason(_ error: Error) -> String {
+    if case ExtensionDownloader.Failure.incompatible(let minAppVersion) = error {
+      return String(format: Localized.Extension.incompatibleFormat, minAppVersion)
+    }
+
+    return Localized.Extension.failedMessage
   }
 
   static func presentRelaunch() {

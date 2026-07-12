@@ -130,13 +130,18 @@ public enum ExtensionConfig {
     persist(installed: reconciled)
   }
 
-  /// Persists an installed extension, replacing any existing entry with the same id.
+  /// Persists an installed extension: updates an existing entry with the same id in place
+  /// (preserving injection order) or appends a new one.
   ///
   /// Reads fresh from disk (not the cached definition) so repeated installs compose.
   public static func upsertInstalled(_ entry: Installed) {
     var installed = onDiskDefinition?.installed ?? []
-    installed.removeAll { $0.id == entry.id }
-    installed.append(entry)
+    if let index = installed.firstIndex(where: { $0.id == entry.id }) {
+      installed[index] = entry
+    } else {
+      installed.append(entry)
+    }
+
     persist(installed: installed)
   }
 
@@ -243,7 +248,7 @@ public extension ExtensionConfig.Installed {
       file: fileName,
       enabled: true,
       updateCheck: nil,
-      installDate: created.map { ISO8601DateFormatter().string(from: $0) }
+      installDate: created.map { $0.ISO8601Format() }
     )
   }
 

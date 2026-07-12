@@ -24,9 +24,7 @@ final class ExtensionCoreTests: XCTestCase {
   // MARK: - Installed
 
   func testInstalledAdoptingFileCapturesLocalFields() throws {
-    let dir = FileManager.default.temporaryDirectory
-      .appending(path: "ExtensionCoreTests-\(UUID().uuidString)", directoryHint: .isDirectory)
-    try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    let dir = try makeTempDir()
     defer { try? FileManager.default.removeItem(at: dir) }
 
     let fileURL = dir.appending(path: "MarkEdit-Preview.js", directoryHint: .notDirectory)
@@ -114,32 +112,10 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertTrue(updates.isEmpty)
   }
 
-  func testAvailableUpdatesAdoptsUntrackedOfficialMatch() {
+  func testAvailableUpdatesSkipsVersionlessOfficial() {
     ExtensionEnvironment.appVersion = "1.5.0"
     let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
-    let updates = ExtensionRegistry.availableUpdates(
-      index: index,
-      installed: [makeInstalled(id: "markedit-preview", version: nil)]
-    )
-
-    XCTAssertEqual(updates.count, 1)
-    XCTAssertEqual(updates.first?.entry.latest.version, "2.0.0")
-  }
-
-  func testAvailableUpdatesAdoptsUntrackedOfficialEvenWhenFrozen() {
-    ExtensionEnvironment.appVersion = "1.5.0"
-    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
-    let updates = ExtensionRegistry.availableUpdates(
-      index: index,
-      installed: [makeInstalled(id: "markedit-preview", version: nil, updateCheck: .never)]
-    )
-
-    XCTAssertEqual(updates.count, 1)
-  }
-
-  func testAvailableUpdatesSkipsUntrackedOfficialWhenIncompatible() {
-    ExtensionEnvironment.appVersion = "1.5.0"
-    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0", minAppVersion: "9.0.0")])
+    // Version-less installs are not updates
     let updates = ExtensionRegistry.availableUpdates(
       index: index,
       installed: [makeInstalled(id: "markedit-preview", version: nil)]
@@ -200,6 +176,27 @@ final class ExtensionCoreTests: XCTestCase {
     // A newer schema means the app is out of date
     XCTAssertFalse(ExtensionIndex(schemaVersion: ExtensionIndex.supportedSchemaVersion + 1, extensions: []).isSupported)
   }
+
+  // MARK: - upsertInstalled
+
+  func testUpsertUpdatesInPlaceAndAppendsNew() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["a", "b", "c"], in: dir)
+
+    // Updating an existing id keeps its injection position
+    ExtensionConfig.upsertInstalled(makeInstalled(id: "b", version: "2.0.0"))
+    XCTAssertEqual(installedIds(in: dir), ["a", "b", "c"])
+
+    // A new id is appended
+    ExtensionConfig.upsertInstalled(makeInstalled(id: "d", version: "1.0.0"))
+    XCTAssertEqual(installedIds(in: dir), ["a", "b", "c", "d"])
+  }
 }
 
 // MARK: - Private
@@ -248,5 +245,29 @@ private extension ExtensionCoreTests {
       updateCheck: updateCheck,
       installDate: nil
     )
+  }
+
+  func makeTempDir() throws -> URL {
+    let dir = FileManager.default.temporaryDirectory
+      .appending(path: "ExtensionCoreTests-\(UUID().uuidString)", directoryHint: .isDirectory)
+    try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    return dir
+  }
+
+  func seedExtensions(ids: [String], in dir: URL) throws {
+    let installed = ids.map { "{ \"id\": \"\($0)\", \"file\": \"\($0).js\" }" }.joined(separator: ",\n")
+    let json = "{ \"installed\": [\n\(installed)\n] }"
+    try Data(json.utf8).write(to: dir.appending(path: "extensions.json", directoryHint: .notDirectory))
+  }
+
+  func installedIds(in dir: URL) -> [String] {
+    let url = dir.appending(path: "extensions.json", directoryHint: .notDirectory)
+    guard let data = try? Data(contentsOf: url),
+          let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let installed = object["installed"] as? [[String: Any]] else {
+      return []
+    }
+
+    return installed.compactMap { $0["id"] as? String }
   }
 }
