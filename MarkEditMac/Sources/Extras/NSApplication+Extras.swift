@@ -1,5 +1,5 @@
 //
-//  NSApplication+Extension.swift
+//  NSApplication+Extras.swift
 //  MarkEditMac
 //
 //  Created by cyan on 12/13/22.
