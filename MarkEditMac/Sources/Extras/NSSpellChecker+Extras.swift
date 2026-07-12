@@ -1,5 +1,5 @@
 //
-//  NSSpellChecker+Extension.swift
+//  NSSpellChecker+Extras.swift
 //  MarkEditMac
 //
 //  Created by cyan on 2/28/23.
@@ -93,17 +93,6 @@ extension NSSpellChecker {
     declineCorrectionIndicator(for: view)
     bridge.acceptInlinePrediction(prediction: prediction)
     view.webKitInlinePrediction = nil
-  }
-
-  func declineCorrectionIndicator(for view: NSView) {
-    // It's insane that this method is not public,
-    // "dismissCorrectionIndicatorForView:" accepts the proposal, which is not what we want.
-    let selector = sel_getUid("cancelCorrectionIndicatorForView:")
-    if responds(to: selector) {
-      perform(selector, with: view)
-    } else {
-      Logger.assertFail("Failed to call cancelCorrectionIndicatorForView, selector was changed")
-    }
   }
 }
 

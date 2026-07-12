@@ -8,7 +8,6 @@ import Foundation
 
 public let NSCloseAlwaysConfirmsChanges = "NSCloseAlwaysConfirmsChanges"
 public let NSQuitAlwaysKeepsWindows = "NSQuitAlwaysKeepsWindows"
-public let NSNavLastRootDirectory = "NSNavLastRootDirectory"
 
 public extension UserDefaults {
   static func overwriteTextCheckerOnce() {

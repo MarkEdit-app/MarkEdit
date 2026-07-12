@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import NaturalLanguage
 import MarkEditCore
 import MarkEditKit

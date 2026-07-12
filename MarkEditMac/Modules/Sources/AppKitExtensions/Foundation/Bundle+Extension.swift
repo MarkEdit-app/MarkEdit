@@ -4,7 +4,7 @@
 //  Created by cyan on 11/1/23.
 //
 
-import Foundation
+import AppKit
 
 public extension Bundle {
   static var webkitBundle: Self? {
@@ -21,5 +21,17 @@ public extension Bundle {
 
   var userAgent: String {
     "MarkEdit/\(shortVersionString ?? "0.0.0")"
+  }
+
+  func isDefaultApp(toOpen url: URL) -> Bool {
+    guard let defaultAppURL = NSWorkspace.shared.urlForApplication(toOpen: url) else {
+      return false
+    }
+
+    guard let defaultAppBundleID = Bundle(url: defaultAppURL)?.bundleIdentifier else {
+      return false
+    }
+
+    return defaultAppBundleID == bundleIdentifier
   }
 }

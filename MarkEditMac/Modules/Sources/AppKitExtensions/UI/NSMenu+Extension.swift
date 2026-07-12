@@ -56,4 +56,30 @@ public extension NSMenu {
 
     return false
   }
+
+  func firstActionNamed(_ title: String) -> NSMenuItem? {
+    firstDescendant {
+      $0.title == title && $0.action != nil
+    }
+  }
+
+  func firstMenuNamed(_ title: String) -> NSMenuItem? {
+    firstDescendant {
+      $0.title == title && $0.submenu != nil
+    }
+  }
+
+  func firstDescendant(matches predicate: (NSMenuItem) -> Bool) -> NSMenuItem? {
+    for item in items {
+      if predicate(item) {
+        return item
+      }
+
+      if let descendant = item.submenu?.firstDescendant(matches: predicate) {
+        return descendant
+      }
+    }
+
+    return nil
+  }
 }

@@ -5,6 +5,7 @@
 //  Created by cyan on 12/12/22.
 
 import AppKit
+import AppKitExtensions
 import MarkEditKit
 import FileVersion
 import TextBundle
