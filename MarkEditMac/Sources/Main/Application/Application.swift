@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import ExtensionKit
+import ExtensionCore
 import MarkEditKit
 
 @main

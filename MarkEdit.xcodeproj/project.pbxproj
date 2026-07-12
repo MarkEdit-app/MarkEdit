@@ -119,7 +119,7 @@
 		CC000020300000000000FD01 /* FileDrop in Frameworks */ = {isa = PBXBuildFile; productRef = CC000020300000000000FD02 /* FileDrop */; };
 		EE100008EEEE000000000008 /* ExtensionInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100007EEEE000000000007 /* ExtensionInstaller.swift */; };
 		EE10000AEEEE00000000000A /* ExtensionUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE100009EEEE000000000009 /* ExtensionUpdater.swift */; };
-		EE200001EEEE000000000001 /* ExtensionKit in Frameworks */ = {isa = PBXBuildFile; productRef = EE200002EEEE000000000002 /* ExtensionKit */; };
+		EE200001EEEE000000000001 /* ExtensionCore in Frameworks */ = {isa = PBXBuildFile; productRef = EE200002EEEE000000000002 /* ExtensionCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -282,7 +282,7 @@
 				87B3ED8F2CBE1E12001FA6CE /* DiffKit in Frameworks */,
 				8701D0A42CC12321006AF8C2 /* FileVersion in Frameworks */,
 				CC000020300000000000FD01 /* FileDrop in Frameworks */,
-				EE200001EEEE000000000001 /* ExtensionKit in Frameworks */,
+				EE200001EEEE000000000001 /* ExtensionCore in Frameworks */,
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
 				870F17922985775B00003DA7 /* Previewer in Frameworks */,
 				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
@@ -680,7 +680,7 @@
 				87B3ED8E2CBE1E12001FA6CE /* DiffKit */,
 				8701D0A32CC12321006AF8C2 /* FileVersion */,
 				CC000020300000000000FD02 /* FileDrop */,
-				EE200002EEEE000000000002 /* ExtensionKit */,
+				EE200002EEEE000000000002 /* ExtensionCore */,
 			);
 			productName = MarkEdit;
 			productReference = 870A51A2294700DE0095C7EB /* MarkEdit.app */;
@@ -1460,9 +1460,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = FileDrop;
 		};
-		EE200002EEEE000000000002 /* ExtensionKit */ = {
+		EE200002EEEE000000000002 /* ExtensionCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = ExtensionKit;
+			productName = ExtensionCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

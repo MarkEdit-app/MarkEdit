@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import ExtensionKit
+import ExtensionCore
 import MarkEditKit
 
 /// Checks the registry for newer extension releases and applies them per `registry.updateStrategy`.

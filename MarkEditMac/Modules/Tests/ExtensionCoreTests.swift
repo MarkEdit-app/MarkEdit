@@ -1,13 +1,13 @@
 //
-//  ExtensionKitTests.swift
+//  ExtensionCoreTests.swift
 //
 //  Created by cyan on 7/12/26.
 //
 
 import XCTest
-@testable import ExtensionKit
+@testable import ExtensionCore
 
-final class ExtensionKitTests: XCTestCase {
+final class ExtensionCoreTests: XCTestCase {
 
   // MARK: - identifier(fromFileName:)
 
@@ -25,7 +25,7 @@ final class ExtensionKitTests: XCTestCase {
 
   func testInstalledAdoptingFileCapturesLocalFields() throws {
     let dir = FileManager.default.temporaryDirectory
-      .appending(path: "ExtensionKitTests-\(UUID().uuidString)", directoryHint: .isDirectory)
+      .appending(path: "ExtensionCoreTests-\(UUID().uuidString)", directoryHint: .isDirectory)
     try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: dir) }
 
@@ -204,7 +204,7 @@ final class ExtensionKitTests: XCTestCase {
 
 // MARK: - Private
 
-private extension ExtensionKitTests {
+private extension ExtensionCoreTests {
   func makeRelease(version: String, minAppVersion: String?) -> ExtensionRelease {
     ExtensionRelease(
       version: version,

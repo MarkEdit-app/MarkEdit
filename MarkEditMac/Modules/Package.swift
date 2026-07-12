@@ -22,8 +22,8 @@ let package = Package(
       targets: ["DiffKit"]
     ),
     .library(
-      name: "ExtensionKit",
-      targets: ["ExtensionKit"]
+      name: "ExtensionCore",
+      targets: ["ExtensionCore"]
     ),
     .library(
       name: "FileDrop",
@@ -99,9 +99,9 @@ let package = Package(
       ]
     ),
     .target(
-      name: "ExtensionKit",
+      name: "ExtensionCore",
       dependencies: ["AppKitExtensions", "MarkEditCore", "MarkEditKit"],
-      path: "Sources/ExtensionKit",
+      path: "Sources/ExtensionCore",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
       ],
@@ -204,7 +204,7 @@ let package = Package(
       dependencies: [
         "AppKitControls",
         "AppKitExtensions",
-        "ExtensionKit",
+        "ExtensionCore",
         "FileDrop",
         "Statistics",
         "TextBundle",

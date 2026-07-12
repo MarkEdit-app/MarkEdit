@@ -8,7 +8,7 @@ import Foundation
 import AppKitExtensions
 import MarkEditKit
 
-/// Injectable environment for ExtensionKit: filesystem locations and the app version.
+/// Injectable environment for ExtensionCore: filesystem locations and the app version.
 ///
 /// Defaults match the sandboxed app; tests can point these at temporary directories.
 enum ExtensionEnvironment {

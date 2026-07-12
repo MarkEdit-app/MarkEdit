@@ -7,7 +7,7 @@
 import AppKit
 import AppKitControls
 import WebKit
-import ExtensionKit
+import ExtensionCore
 import MarkEditCore
 import MarkEditKit
 import Statistics
