@@ -142,7 +142,7 @@ final class EditorViewController: NSViewController {
 
     let scripts = [
       AppCustomization.editorScript.fileContents,
-    ] + AppCustomization.scriptsDirectory.directoryContents
+    ] + AppCustomization.scriptsDirectory.scriptContents()
 
     scripts.forEach {
       controller.addUserScript(WKUserScript(
@@ -186,7 +186,7 @@ final class EditorViewController: NSViewController {
       let html = [
         AppPreferences.editorConfig(theme: theme).toHtml,
         AppCustomization.editorStyle.fileContents,
-        AppCustomization.stylesDirectory.directoryContents.joined(separator: "\n"),
+        AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
       ].joined(separator: "\n\n")
 
       DispatchQueue.main.async {

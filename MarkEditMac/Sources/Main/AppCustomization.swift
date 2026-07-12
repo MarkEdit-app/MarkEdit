@@ -77,10 +77,14 @@ struct AppCustomization {
     createContents(url: fileURL) ?? ""
   }
 
-  var directoryContents: [String] {
-    fileURL.sortedFiles(types: ["css", "js"]).compactMap {
-      createContents(url: $0.resolvingSymbolicLink)
-    }
+  func styleContents() -> [String] {
+    fileURL.sortedFiles(types: ["css"])
+      .compactMap { createContents(url: $0.resolvingSymbolicLink) }
+  }
+
+  func scriptContents() -> [String] {
+    fileURL.sortedFiles(types: ["js"])
+      .compactMap { createContents(url: $0.resolvingSymbolicLink) }
   }
 
   // MARK: - Private

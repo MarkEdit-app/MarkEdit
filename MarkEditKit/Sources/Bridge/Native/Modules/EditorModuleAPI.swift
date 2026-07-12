@@ -273,17 +273,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public func relaunchApp() {
   #if os(macOS)
-    let configuration = NSWorkspace.OpenConfiguration()
-    configuration.createsNewApplicationInstance = true
-
-    NSWorkspace.shared.openApplication(
-      at: Bundle.main.bundleURL,
-      configuration: configuration
-    ) { _, _ in
-      Task { @MainActor in
-        NSApp.terminate(nil)
-      }
-    }
+    NSWorkspace.shared.relaunchApp()
   #else
     Logger.assertFail("Missing implementation, relaunching the app requires AppKit")
   #endif
