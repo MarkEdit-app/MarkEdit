@@ -11,15 +11,15 @@ import MarkEditKit
 /// Injectable environment for ExtensionKit: filesystem locations and the app version.
 ///
 /// Defaults match the sandboxed app; tests can point these at temporary directories.
-public enum ExtensionEnvironment {
+enum ExtensionEnvironment {
   /// Base directory holding extensions.json and the scripts/ folder.
-  nonisolated(unsafe) public static var documentsDirectory = URL.documentsDirectory
+  nonisolated(unsafe) static var documentsDirectory = URL.documentsDirectory
 
   /// Base directory for the cached registry index.
-  nonisolated(unsafe) public static var cachesDirectory = URL.cachesDirectory
+  nonisolated(unsafe) static var cachesDirectory = URL.cachesDirectory
 
   /// Running app version, used for minAppVersion checks.
-  nonisolated(unsafe) public static var appVersion = Bundle.main.shortVersionString ?? "0.0.0"
+  nonisolated(unsafe) static var appVersion = Bundle.main.shortVersionString ?? "0.0.0"
 
   static var extensionsURL: URL {
     documentsDirectory

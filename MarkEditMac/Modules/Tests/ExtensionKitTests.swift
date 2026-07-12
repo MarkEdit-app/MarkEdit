@@ -5,7 +5,7 @@
 //
 
 import XCTest
-import ExtensionKit
+@testable import ExtensionKit
 
 final class ExtensionKitTests: XCTestCase {
 
