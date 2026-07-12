@@ -1,5 +1,5 @@
 //
-//  AppExtensionRegistry.swift
+//  ExtensionRegistry.swift
 //  MarkEditMac
 //
 //  Created by cyan on 7/11/26.
@@ -9,7 +9,7 @@ import Foundation
 import MarkEditKit
 
 /// Newest compatible release for an entry.
-struct AppExtensionRelease: Codable, Equatable, Sendable {
+struct ExtensionRelease: Codable, Equatable, Sendable {
   let version: String
   let url: String
   let sha256: String
@@ -18,7 +18,7 @@ struct AppExtensionRelease: Codable, Equatable, Sendable {
 }
 
 /// A single extension or theme in the registry index.
-struct AppExtensionEntry: Codable, Equatable, Sendable {
+struct ExtensionEntry: Codable, Equatable, Sendable {
   enum Category: String, Codable, Sendable {
     case `extension`
     case theme
@@ -38,39 +38,39 @@ struct AppExtensionEntry: Codable, Equatable, Sendable {
   let category: Category
   let colorScheme: ColorScheme?
   let screenshots: [String]?
-  let latest: AppExtensionRelease
+  let latest: ExtensionRelease
 }
 
 /// The registry index the app reads, built by CI from the extensions repo.
-struct AppExtensionIndex: Codable, Equatable, Sendable {
+struct ExtensionIndex: Codable, Equatable, Sendable {
   let schemaVersion: Int
-  let extensions: [AppExtensionEntry]
+  let extensions: [ExtensionEntry]
 }
 
 /// Fetches and caches the registry index.
 ///
 /// A conditional GET revalidates the cache (304, no body), the last good index is kept
 /// on disk and returned when offline or when a check is skipped.
-enum AppExtensionRegistry {
+enum ExtensionRegistry {
   /// Most recently cached index, if any.
-  static var cachedIndex: AppExtensionIndex? {
+  static var cachedIndex: ExtensionIndex? {
     guard let data = try? Data(contentsOf: Cache.indexURL) else {
       return nil
     }
 
-    return try? JSONDecoder().decode(AppExtensionIndex.self, from: data)
+    return try? JSONDecoder().decode(ExtensionIndex.self, from: data)
   }
 
   /// Refreshes the index from the network, honoring the configured cadence.
   ///
   /// - Parameter force: bypass the cadence check, e.g. a manual "Refresh".
   @discardableResult
-  static func refresh(force: Bool = false) async -> AppExtensionIndex? {
+  static func refresh(force: Bool = false) async -> ExtensionIndex? {
     guard force || shouldCheck else {
       return cachedIndex
     }
 
-    guard let url = AppExtensionConfig.registryURL else {
+    guard let url = ExtensionConfig.registryURL else {
       Logger.log(.error, "Invalid registry url in extensions.json")
       return cachedIndex
     }
@@ -97,7 +97,7 @@ enum AppExtensionRegistry {
       Cache.touch()
       return cachedIndex
     case 200:
-      guard let index = try? JSONDecoder().decode(AppExtensionIndex.self, from: data) else {
+      guard let index = try? JSONDecoder().decode(ExtensionIndex.self, from: data) else {
         Logger.log(.error, "Failed to decode the registry index")
         Cache.touch()
         return cachedIndex
@@ -115,9 +115,9 @@ enum AppExtensionRegistry {
 
 // MARK: - Private
 
-private extension AppExtensionRegistry {
+private extension ExtensionRegistry {
   static var shouldCheck: Bool {
-    switch AppExtensionConfig.updateCheck {
+    switch ExtensionConfig.updateCheck {
     case .never: return false
     case .onLaunch: return true
     case .daily: return elapsedSinceLastCheck >= Constants.day

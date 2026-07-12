@@ -67,7 +67,7 @@ struct AppCustomization {
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
     statisticsRules.createFile("[]")
     settings.createFile(AppRuntimeConfig.defaultContents)
-    extensions.createFile(AppExtensionConfig.defaultContents)
+    extensions.createFile(ExtensionConfig.defaultContents)
   }
 
   var fileURL: URL {
