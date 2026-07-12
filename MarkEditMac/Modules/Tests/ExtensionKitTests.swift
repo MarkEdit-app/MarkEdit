@@ -67,12 +67,12 @@ final class ExtensionKitTests: XCTestCase {
     )
 
     let merged = fresh.merging(preserving: previous)
-    // New download wins for version/url/sha256/installDate
+    // New download wins for version/url/sha256
     XCTAssertEqual(merged.version, "2.0.0")
     XCTAssertEqual(merged.url, "https://example.com/new.js")
     XCTAssertEqual(merged.sha256, "new")
-    XCTAssertEqual(merged.installDate, "2026-07-12T00:00:00Z")
-    // Previous wins for user-managed enabled/updateCheck
+    // Previous wins for user-managed enabled/updateCheck and the original installDate
+    XCTAssertEqual(merged.installDate, "2026-01-01T00:00:00Z")
     XCTAssertFalse(merged.enabled ?? true)
     XCTAssertEqual(merged.updateCheck, .never)
   }
@@ -189,6 +189,16 @@ final class ExtensionKitTests: XCTestCase {
     )
 
     XCTAssertTrue(updates.isEmpty)
+  }
+
+  // MARK: - ExtensionIndex.isSupported
+
+  func testIndexSchemaVersionSupport() {
+    XCTAssertTrue(ExtensionIndex(schemaVersion: ExtensionIndex.supportedSchemaVersion, extensions: []).isSupported)
+    // Older schemas remain readable
+    XCTAssertTrue(ExtensionIndex(schemaVersion: ExtensionIndex.supportedSchemaVersion - 1, extensions: []).isSupported)
+    // A newer schema means the app is out of date
+    XCTAssertFalse(ExtensionIndex(schemaVersion: ExtensionIndex.supportedSchemaVersion + 1, extensions: []).isSupported)
   }
 }
 

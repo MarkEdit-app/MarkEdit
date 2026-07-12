@@ -247,7 +247,7 @@ public extension ExtensionConfig.Installed {
     )
   }
 
-  /// A freshly downloaded record that keeps user-managed fields from a previous install.
+  /// A freshly downloaded record that keeps user-managed and provenance fields from a previous install.
   func merging(preserving previous: Self) -> Self {
     Self(
       id: id,
@@ -257,7 +257,7 @@ public extension ExtensionConfig.Installed {
       file: file,
       enabled: previous.enabled,
       updateCheck: previous.updateCheck,
-      installDate: installDate
+      installDate: previous.installDate ?? installDate
     )
   }
 }

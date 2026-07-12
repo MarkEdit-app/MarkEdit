@@ -91,12 +91,20 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
 
 /// The registry index the app reads, built by CI from the extensions repo.
 public struct ExtensionIndex: Codable, Equatable, Sendable {
+  /// Highest schema version this app understands; bump when the index format changes incompatibly.
+  public static let supportedSchemaVersion = 1
+
   public let schemaVersion: Int
   public let extensions: [ExtensionEntry]
 
   public init(schemaVersion: Int, extensions: [ExtensionEntry]) {
     self.schemaVersion = schemaVersion
     self.extensions = extensions
+  }
+
+  /// Whether the app can read this index; a newer schema means the app is out of date.
+  public var isSupported: Bool {
+    schemaVersion <= Self.supportedSchemaVersion
   }
 }
 
@@ -117,7 +125,11 @@ public enum ExtensionRegistry {
       return nil
     }
 
-    return try? JSONDecoder().decode(ExtensionIndex.self, from: data)
+    guard let index = try? JSONDecoder().decode(ExtensionIndex.self, from: data) else {
+      return nil
+    }
+
+    return index.isSupported ? index : nil
   }
 
   /// Whether a cadence-driven check is currently due.
@@ -182,6 +194,12 @@ public enum ExtensionRegistry {
     case 200:
       guard let index = try? JSONDecoder().decode(ExtensionIndex.self, from: data) else {
         Logger.log(.error, "Failed to decode the registry index")
+        Cache.touch()
+        return cachedIndex
+      }
+
+      guard index.isSupported else {
+        Logger.log(.error, "Registry schemaVersion \(index.schemaVersion) is newer than supported, update MarkEdit")
         Cache.touch()
         return cachedIndex
       }
