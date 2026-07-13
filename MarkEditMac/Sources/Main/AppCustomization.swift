@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ExtensionCore
 import MarkEditCore
 import MarkEditKit
 
@@ -24,6 +25,7 @@ struct AppCustomization {
     case pandoc
     case statisticsRules
     case settings
+    case extensions
 
     var fileName: String {
       switch self {
@@ -35,6 +37,7 @@ struct AppCustomization {
       case .pandoc: return "pandoc.yaml"
       case .statisticsRules: return "statistics-rules.json"
       case .settings: return "settings.json"
+      case .extensions: return "extensions.json"
       }
     }
 
@@ -54,6 +57,7 @@ struct AppCustomization {
   static let pandoc = Self(fileType: .pandoc)
   static let statisticsRules = Self(fileType: .statisticsRules)
   static let settings = Self(fileType: .settings)
+  static let extensions = Self(fileType: .extensions)
 
   static func createFiles() {
     editorStyle.createFile()
@@ -64,6 +68,7 @@ struct AppCustomization {
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
     statisticsRules.createFile("[]")
     settings.createFile(AppRuntimeConfig.defaultContents)
+    extensions.createFile(ExtensionConfig.defaultContents)
   }
 
   var fileURL: URL {
@@ -82,9 +87,11 @@ struct AppCustomization {
       .compactMap { createContents(url: $0.resolvingSymbolicLink) }
   }
 
-  func scriptContents() -> [String] {
-    fileURL.sortedFiles(types: ["js"])
-      .compactMap { createContents(url: $0.resolvingSymbolicLink) }
+  func contentsFrom(fileNames: [String]) -> [String] {
+    fileNames
+      .filter { isSafeFileName($0) }
+      .map { fileURL.appending(path: $0, directoryHint: .notDirectory).resolvingSymbolicLink }
+      .compactMap { createContents(url: $0) }
   }
 
   // MARK: - Private
@@ -123,5 +130,11 @@ struct AppCustomization {
     default:
       return contents
     }
+  }
+
+  /// Whether `name` is a plain file name that stays inside its directory,
+  /// guarding against path traversal from hand-edited config entries.
+  private func isSafeFileName(_ name: String) -> Bool {
+    !name.isEmpty && name != "." && name != ".." && name == (name as NSString).lastPathComponent
   }
 }

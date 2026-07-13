@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "**Author:** %@" : {
+      "comment" : "Extension author line (format) in the install confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**作者：**%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**作者：**%@"
+          }
+        }
+      }
+    },
+    "**URL:** %@" : {
+      "comment" : "Extension URL line (format) in the install confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**链接：**%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**連結：**%@"
+          }
+        }
+      }
+    },
     "%d of %d" : {
       "comment" : "Index of matches, such as 1 of 3",
       "localizations" : {
@@ -588,6 +622,23 @@
         }
       }
     },
+    "Couldn’t find the extension “%@” in the registry." : {
+      "comment" : "Error when a deep-link id does not resolve in the registry",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在扩展目录中找不到“%@”。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在擴充功能目錄中找不到“%@”。"
+          }
+        }
+      }
+    },
     "Create New Document" : {
       "localizations" : {
         "zh-Hans" : {
@@ -958,6 +1009,57 @@
         }
       }
     },
+    "Extension Installed" : {
+      "comment" : "Title for the extension installed confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩展已安装"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴充功能已安裝"
+          }
+        }
+      }
+    },
+    "Extension Updates Available" : {
+      "comment" : "Title for the extension updates prompt",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有可用的扩展更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有可用的擴充功能更新"
+          }
+        }
+      }
+    },
+    "Extensions Updated" : {
+      "comment" : "Title shown after extensions are updated",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩展已更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴充功能已更新"
+          }
+        }
+      }
+    },
     "Failed to get the update." : {
       "comment" : "Title for failed to get the update",
       "localizations" : {
@@ -971,6 +1073,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法获取更新。"
+          }
+        }
+      }
+    },
+    "Failed to install the extension." : {
+      "comment" : "Title for a failed extension installation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装该扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法安裝該擴充功能。"
           }
         }
       }
@@ -1595,6 +1714,40 @@
         }
       }
     },
+    "Install" : {
+      "comment" : "Button title to confirm installing an extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安裝"
+          }
+        }
+      }
+    },
+    "Install “%@”?" : {
+      "comment" : "Title (format) for the extension install confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要安装“%@”吗？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要安裝“%@”嗎？"
+          }
+        }
+      }
+    },
     "Italic" : {
       "comment" : "Toolbar item to toggle italic",
       "localizations" : {
@@ -1682,6 +1835,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "保持游標居中"
+          }
+        }
+      }
+    },
+    "Later" : {
+      "comment" : "Button title to postpone relaunching after installing an extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍後"
           }
         }
       }
@@ -2312,6 +2482,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正規表示法"
+          }
+        }
+      }
+    },
+    "Relaunch" : {
+      "comment" : "Button title to relaunch the app after installing an extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動"
+          }
+        }
+      }
+    },
+    "Relaunch MarkEdit to start using “%@”." : {
+      "comment" : "Message (format) shown after an extension is installed",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动 MarkEdit 以开始使用“%@”。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動 MarkEdit 以開始使用“%@”。"
+          }
+        }
+      }
+    },
+    "Relaunch MarkEdit to use the updated extensions." : {
+      "comment" : "Message shown after extensions are updated",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动 MarkEdit 以使用更新后的扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動 MarkEdit 以使用更新後的擴充功能。"
           }
         }
       }
@@ -2961,6 +3182,23 @@
         }
       }
     },
+    "The extension couldn’t be downloaded or verified." : {
+      "comment" : "Message for a failed extension installation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法下载或验证该扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法下載或驗證該擴充功能。"
+          }
+        }
+      }
+    },
     "This action cannot be undone." : {
       "comment" : "Alert message for cannot undo",
       "localizations" : {
@@ -2978,6 +3216,40 @@
         }
       }
     },
+    "This extension requires MarkEdit %@ or later." : {
+      "comment" : "Error (format) when an extension needs a newer app version",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此扩展需要 MarkEdit %@ 或更高版本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此擴充功能需要 MarkEdit %@ 或更高版本。"
+          }
+        }
+      }
+    },
+    "This extension runs with full editor access." : {
+      "comment" : "Disclosure shown before installing an extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此扩展拥有对编辑器的完全访问权限。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此擴充功能擁有對編輯器的完整取用權限。"
+          }
+        }
+      }
+    },
     "This release requires macOS %@ or later and cannot be installed without upgrading your operating system." : {
       "comment" : "Message for minimum required OS version",
       "localizations" : {
@@ -2991,6 +3263,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此更新需要 macOS %@ 或更高版本，在升級您的系統版本之前無法安裝。"
+          }
+        }
+      }
+    },
+    "This source is not reviewed by MarkEdit. Only continue if you trust it." : {
+      "comment" : "Caution shown before installing an extension from a raw URL",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此来源未经 MarkEdit 审核，请仅在信任该来源时继续。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此來源未經 MarkEdit 審核，請僅在信任該來源時繼續。"
           }
         }
       }
@@ -3144,6 +3433,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "展開的行"
+          }
+        }
+      }
+    },
+    "Update" : {
+      "comment" : "Button title to install extension updates",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }

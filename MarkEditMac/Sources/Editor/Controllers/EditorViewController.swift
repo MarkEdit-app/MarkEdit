@@ -7,6 +7,7 @@
 import AppKit
 import AppKitControls
 import WebKit
+import ExtensionCore
 import MarkEditCore
 import MarkEditKit
 import Statistics
@@ -142,7 +143,7 @@ final class EditorViewController: NSViewController {
 
     let scripts = [
       AppCustomization.editorScript.fileContents,
-    ] + AppCustomization.scriptsDirectory.scriptContents()
+    ] + AppCustomization.scriptsDirectory.contentsFrom(fileNames: ExtensionConfig.enabledFileNames)
 
     scripts.forEach {
       controller.addUserScript(WKUserScript(

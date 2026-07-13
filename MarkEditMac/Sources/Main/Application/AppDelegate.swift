@@ -100,6 +100,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         await AppUpdater.checkForUpdates(explicitly: false)
       }
 
+      Task {
+        await ExtensionUpdater.checkForUpdates()
+      }
+
       DispatchQueue.global(qos: .utility).async {
         let defaults = UserDefaults.standard.dictionaryRepresentation()
         let plist = defaults.merging(AppRuntimeConfig.jsonObject) { _, rhs in rhs }
@@ -116,6 +120,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
       Task {
         await EditorSelectionHistory.purgeStaleEntries()
+      }
+    }
+
+    // Extension update checks honor registry.updateCheck (onLaunch/daily/weekly);
+    // wake daily so a daily cadence can actually be reached while the app stays open.
+    Timer.scheduledTimer(withTimeInterval: 24 * 60 * 60, repeats: true) { _ in
+      Task {
+        await ExtensionUpdater.checkForUpdates()
       }
     }
 
@@ -165,6 +177,9 @@ extension AppDelegate {
       case "open":
         // markedit://open or markedit://open?path=Untitled.md
         openFile(queryDict: components?.queryDict)
+      case "install-extension":
+        // markedit://install-extension?id=markedit-preview or ?url=https://...
+        ExtensionInstaller.install(queryDict: components?.queryDict)
       default:
         break
       }

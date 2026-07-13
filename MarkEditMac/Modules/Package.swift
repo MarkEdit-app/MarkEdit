@@ -22,6 +22,10 @@ let package = Package(
       targets: ["DiffKit"]
     ),
     .library(
+      name: "ExtensionCore",
+      targets: ["ExtensionCore"]
+    ),
+    .library(
       name: "FileDrop",
       targets: ["FileDrop"]
     ),
@@ -55,6 +59,7 @@ let package = Package(
     ),
   ],
   dependencies: [
+    .package(path: "../MarkEditCore"),
     .package(path: "../MarkEditKit"),
     .package(path: "../MarkEditTools"),
   ],
@@ -86,6 +91,17 @@ let package = Package(
       resources: [
         .process("Resources"),
       ],
+      swiftSettings: [
+        .enableExperimentalFeature("StrictConcurrency")
+      ],
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
+    .target(
+      name: "ExtensionCore",
+      dependencies: ["AppKitExtensions", "MarkEditCore", "MarkEditKit"],
+      path: "Sources/ExtensionCore",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
       ],
@@ -188,6 +204,7 @@ let package = Package(
       dependencies: [
         "AppKitControls",
         "AppKitExtensions",
+        "ExtensionCore",
         "FileDrop",
         "Statistics",
         "TextBundle",
