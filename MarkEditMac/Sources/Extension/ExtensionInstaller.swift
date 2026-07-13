@@ -102,7 +102,7 @@ private extension ExtensionInstaller {
       lines.append(String(format: Localized.Extension.authorFormat, author))
     }
 
-    lines.append(String(format: Localized.Extension.urlFormat, "[\(source.truncatedForDisplay())](\(source))"))
+    lines.append(String(format: Localized.Extension.urlFormat, "[\(source.truncatedForDisplay())](<\(source)>)"))
     lines.append("_\(Localized.Extension.fullAccessWarning)_")
 
     if unreviewed {

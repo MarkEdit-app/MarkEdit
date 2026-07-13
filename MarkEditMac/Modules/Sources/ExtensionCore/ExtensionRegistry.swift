@@ -156,8 +156,11 @@ public enum ExtensionRegistry {
     }
   #endif
 
-    guard force || shouldCheck else {
-      return cachedIndex
+    // Fetch when forced, when a cadence check is due, or when there's no usable cache to fall
+    // back on (index.json deleted or fails to decode while metadata.json still looks recent).
+    let cached = cachedIndex
+    guard force || shouldCheck || cached == nil else {
+      return cached
     }
 
     guard let url = ExtensionConfig.registryURL else {
@@ -172,7 +175,9 @@ public enum ExtensionRegistry {
 
     var request = URLRequest(url: url)
     request.cachePolicy = .reloadIgnoringLocalCacheData // We manage revalidation ourselves
-    if let etag = Cache.metadata?.etag {
+
+    // Only revalidate when there's a cached body a 304 can fall back on, otherwise force a full fetch
+    if cached != nil, let etag = Cache.metadata?.etag {
       request.setValue(etag, forHTTPHeaderField: "If-None-Match")
     }
 
