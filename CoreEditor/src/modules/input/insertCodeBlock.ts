@@ -9,7 +9,8 @@ const pair = mark.repeat(2);
 const fence = mark.repeat(3);
 
 /**
- * When backtick key is detected, try inserting a code block if we already have two backticks.
+ * Handle the backtick key: expand two preceding backticks into a code block,
+ * otherwise wrap the selection or insert a single backtick.
  */
 export default function insertCodeBlock(editor: EditorView) {
   const state = editor.state;
@@ -35,11 +36,22 @@ export default function insertCodeBlock(editor: EditorView) {
     return true;
   }
 
-  // Fallback to inserting only one backtick
-  editor.dispatch(state.changeByRange(({ from, to }) => ({
-    range: EditorSelection.cursor(from + mark.length),
-    changes: { from, to, insert: mark },
-  })));
+  // Wrap the selection, or insert a single backtick for an empty cursor
+  editor.dispatch(state.changeByRange(({ from, to }) => {
+    const anchor = from + mark.length;
+    if (from === to) {
+      return {
+        range: EditorSelection.cursor(anchor),
+        changes: { from, to, insert: mark },
+      };
+    }
+
+    const selected = state.sliceDoc(from, to);
+    return {
+      range: EditorSelection.range(anchor, anchor + selected.length),
+      changes: { from, to, insert: `${mark}${selected}${mark}` },
+    };
+  }));
 
   // Intercepted, default behavior is ignored
   return true;

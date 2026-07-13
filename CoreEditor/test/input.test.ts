@@ -51,8 +51,14 @@ describe('insertCodeBlock (backtick expansion)', () => {
     expect(type('`', [[1, 1]])).toBe('``');
   });
 
-  test('does not expand with a non-empty selection', () => {
-    expect(type('``cd', [[2, 4]])).toBe('```');
+  test('wraps a non-empty selection as inline code', () => {
+    expect(type('``cd', [[2, 4]])).toBe('```cd`');
+    expect(type('hello', [[0, 5]])).toBe('`hello`');
+  });
+
+  test('wraps a selection whose head is at the document start (#1543)', () => {
+    // Reversed selection: anchor at the end, caret (head) at position 0
+    expect(type('hello', [[5, 0]])).toBe('`hello`');
   });
 
   test('does not expand with multiple cursors, so no backtick is dropped', () => {
