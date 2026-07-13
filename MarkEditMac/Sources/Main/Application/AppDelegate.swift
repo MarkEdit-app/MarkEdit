@@ -119,11 +119,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
 
       Task {
-        await ExtensionUpdater.checkForUpdates()
-      }
-
-      Task {
         await EditorSelectionHistory.purgeStaleEntries()
+      }
+    }
+
+    // Extension update checks honor registry.updateCheck (onLaunch/daily/weekly);
+    // wake daily so a daily cadence can actually be reached while the app stays open.
+    Timer.scheduledTimer(withTimeInterval: 24 * 60 * 60, repeats: true) { _ in
+      Task {
+        await ExtensionUpdater.checkForUpdates()
       }
     }
 

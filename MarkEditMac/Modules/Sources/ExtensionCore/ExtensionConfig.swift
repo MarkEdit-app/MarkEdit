@@ -182,7 +182,7 @@ private extension ExtensionConfig {
     }
 
     guard let definition = try? JSONDecoder().decode(Definition.self, from: fileData) else {
-      Logger.log(.error, "Invalid json object was found: \(fileData)")
+      Logger.log(.error, "Failed to decode extensions.json (\(fileData.count) bytes)")
       return nil
     }
 

@@ -15,6 +15,7 @@ import MarkEditKit
 public enum ExtensionDownloader {
   public enum Failure: Error {
     case invalidURL
+    case invalidIdentifier
     case downloadFailed
     case integrityMismatch
     case incompatible(minAppVersion: String)
@@ -29,6 +30,10 @@ public enum ExtensionDownloader {
   public static func install(id: String, release: ExtensionRelease) async throws -> ExtensionConfig.Installed {
     guard release.isCompatible else {
       throw Failure.incompatible(minAppVersion: release.minAppVersion ?? "")
+    }
+
+    guard isSafeIdentifier(id) else {
+      throw Failure.invalidIdentifier
     }
 
     guard let url = URL(string: release.url) else {
@@ -86,6 +91,15 @@ public enum ExtensionDownloader {
 // MARK: - Private
 
 private extension ExtensionDownloader {
+  /// Whether `id` is safe to use as a file name component, guarding against path traversal.
+  static func isSafeIdentifier(_ id: String) -> Bool {
+    guard !id.isEmpty, !id.hasPrefix("."), !id.contains("..") else {
+      return false
+    }
+
+    return id.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" || $0 == ".") }
+  }
+
   /// Downloads over HTTPS, returning the body on a 200 response.
   static func download(from url: URL) async throws -> Data {
     guard url.scheme?.lowercased() == "https" else {
