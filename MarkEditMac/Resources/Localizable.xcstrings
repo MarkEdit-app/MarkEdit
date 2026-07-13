@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "**Author:** %@" : {
+      "comment" : "Extension author line (format) in the install confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**作者：**%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**作者：**%@"
+          }
+        }
+      }
+    },
+    "**URL:** %@" : {
+      "comment" : "Extension URL line (format) in the install confirmation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**链接：**%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**連結：**%@"
+          }
+        }
+      }
+    },
     "%d of %d" : {
       "comment" : "Index of matches, such as 1 of 3",
       "localizations" : {
@@ -257,23 +291,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "輔助"
-          }
-        }
-      }
-    },
-    "Author: %@" : {
-      "comment" : "Extension author line (format) in the install confirmation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "作者：%@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "作者：%@"
           }
         }
       }
@@ -3482,23 +3499,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新當前活躍檔案的內容，沒有開啟的編輯器時將丟擲異常。"
-          }
-        }
-      }
-    },
-    "URL: %@" : {
-      "comment" : "Extension URL line (format) in the install confirmation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "链接：%@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "連結：%@"
           }
         }
       }

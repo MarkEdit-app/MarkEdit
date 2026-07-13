@@ -89,6 +89,7 @@ struct AppCustomization {
 
   func contentsFrom(fileNames: [String]) -> [String] {
     fileNames
+      .filter { isSafeFileName($0) }
       .map { fileURL.appending(path: $0, directoryHint: .notDirectory).resolvingSymbolicLink }
       .compactMap { createContents(url: $0) }
   }
@@ -129,5 +130,11 @@ struct AppCustomization {
     default:
       return contents
     }
+  }
+
+  /// Whether `name` is a plain file name that stays inside its directory,
+  /// guarding against path traversal from hand-edited config entries.
+  private func isSafeFileName(_ name: String) -> Bool {
+    !name.isEmpty && name != "." && name != ".." && name == (name as NSString).lastPathComponent
   }
 }

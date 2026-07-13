@@ -189,27 +189,23 @@ public enum ExtensionRegistry {
     switch httpResponse.statusCode {
     case 304:
       // Not Modified, the cache is still current
-      Cache.touch()
-      return cachedIndex
+      return fallbackIndex()
     case 200:
       guard let index = try? JSONDecoder().decode(ExtensionIndex.self, from: data) else {
         Logger.log(.error, "Failed to decode the registry index")
-        Cache.touch()
-        return cachedIndex
+        return fallbackIndex()
       }
 
       guard index.isSupported else {
         Logger.log(.error, "Registry schemaVersion \(index.schemaVersion) is newer than supported, update MarkEdit")
-        Cache.touch()
-        return cachedIndex
+        return fallbackIndex()
       }
 
       Cache.save(indexData: data, etag: httpResponse.value(forHTTPHeaderField: "ETag"))
       return index
     default:
       Logger.log(.error, "Unexpected registry status code: \(httpResponse.statusCode)")
-      Cache.touch()
-      return cachedIndex
+      return fallbackIndex()
     }
   }
 
@@ -262,6 +258,20 @@ private extension ExtensionRegistry {
     return try? JSONDecoder().decode(ExtensionIndex.self, from: data)
   }
 #endif
+
+  /// The cached index to use when a refresh can't produce a new one.
+  ///
+  /// Records the check (backing off the cadence) only when a cache actually exists.
+  /// With no cache, `lastChecked` is left untouched so the next launch or timer retries
+  /// soon instead of waiting out the full cadence with no usable index.
+  static func fallbackIndex() -> ExtensionIndex? {
+    let cached = cachedIndex
+    if cached != nil {
+      Cache.touch()
+    }
+
+    return cached
+  }
 
   static var shouldCheck: Bool {
     switch ExtensionConfig.updateCheck {

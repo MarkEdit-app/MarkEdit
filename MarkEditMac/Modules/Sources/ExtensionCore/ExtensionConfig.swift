@@ -10,7 +10,8 @@ import MarkEditKit
 
 /// App-side state for editor extensions, stored as "extensions.json".
 ///
-/// Mirrors `AppRuntimeConfig`, the remote catalog is fetched by `ExtensionRegistry`.
+/// Read fresh from disk on each access, so app writes (install/update/reconcile) and manual edits
+/// both take effect without a relaunch. The remote catalog is fetched by `ExtensionRegistry`.
 public enum ExtensionConfig {
   struct Definition: Codable {
     let __schema: String?
@@ -108,7 +109,7 @@ public enum ExtensionConfig {
     let onDiskURLs = ExtensionEnvironment.scriptsDirectory.sortedFiles(types: ["js"])
     let onDiskFiles = onDiskURLs.map(\.lastPathComponent)
 
-    let installed = onDiskDefinition?.installed ?? []
+    let installed = currentDefinition?.installed ?? []
     let tracked = Set(installed.map(\.file))
     let existing = Set(onDiskFiles)
 
@@ -132,10 +133,8 @@ public enum ExtensionConfig {
 
   /// Persists an installed extension: updates an existing entry with the same id in place
   /// (preserving injection order) or appends a new one.
-  ///
-  /// Reads fresh from disk (not the cached definition) so repeated installs compose.
   public static func upsertInstalled(_ entry: Installed) {
-    var installed = onDiskDefinition?.installed ?? []
+    var installed = currentDefinition?.installed ?? []
     if let index = installed.firstIndex(where: { $0.id == entry.id }) {
       installed[index] = entry
     } else {
@@ -165,8 +164,6 @@ private extension ExtensionConfig {
     static let schemaURL = "https://raw.githubusercontent.com/MarkEdit-app/schemas/main/extensions.json"
   }
 
-  static let fileData = try? Data(contentsOf: ExtensionEnvironment.extensionsURL)
-
   static let defaultDefinition = Definition(
     __schema: Constants.schemaURL,
     registryURL: Constants.defaultRegistryURL,
@@ -175,19 +172,14 @@ private extension ExtensionConfig {
     installed: []
   )
 
-  static let currentDefinition: Definition? = {
-    guard let fileData else {
-      Logger.log(.error, "Missing extensions.json to proceed")
+  /// The definition, read fresh from disk on each access (the file is app-managed, not cached).
+  static var currentDefinition: Definition? {
+    guard let data = try? Data(contentsOf: ExtensionEnvironment.extensionsURL) else {
       return nil
     }
 
-    guard let definition = try? JSONDecoder().decode(Definition.self, from: fileData) else {
-      Logger.log(.error, "Failed to decode extensions.json (\(fileData.count) bytes)")
-      return nil
-    }
-
-    return definition
-  }()
+    return try? JSONDecoder().decode(Definition.self, from: data)
+  }
 
   static func encode(definition: Definition) -> Data? {
     let encoder = JSONEncoder()
@@ -199,17 +191,8 @@ private extension ExtensionConfig {
     return jsonData
   }
 
-  /// Reads the definition fresh from disk, bypassing the cached `currentDefinition`.
-  static var onDiskDefinition: Definition? {
-    guard let data = try? Data(contentsOf: ExtensionEnvironment.extensionsURL) else {
-      return nil
-    }
-
-    return try? JSONDecoder().decode(Definition.self, from: data)
-  }
-
   static func persist(installed: [Installed]) {
-    let base = onDiskDefinition ?? defaultDefinition
+    let base = currentDefinition ?? defaultDefinition
     let definition = Definition(
       __schema: base.__schema ?? Constants.schemaURL,
       registryURL: base.registryURL,

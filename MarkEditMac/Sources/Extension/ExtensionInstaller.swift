@@ -103,10 +103,10 @@ private extension ExtensionInstaller {
     }
 
     lines.append(String(format: Localized.Extension.urlFormat, "[\(source.truncatedForDisplay())](\(source))"))
-    lines.append("**\(Localized.Extension.fullAccessWarning)**")
+    lines.append("_\(Localized.Extension.fullAccessWarning)_")
 
     if unreviewed {
-      lines.append("**\(Localized.Extension.unreviewedWarning)**")
+      lines.append("_\(Localized.Extension.unreviewedWarning)_")
     }
 
     let alert = NSAlert()
@@ -147,8 +147,8 @@ extension Localized {
     static let installButton = String(localized: "Install", comment: "Button title to confirm installing an extension")
     static let relaunchButton = String(localized: "Relaunch", comment: "Button title to relaunch the app after installing an extension")
     static let laterButton = String(localized: "Later", comment: "Button title to postpone relaunching after installing an extension")
-    static let authorFormat = String(localized: "Author: %@", comment: "Extension author line (format) in the install confirmation")
-    static let urlFormat = String(localized: "URL: %@", comment: "Extension URL line (format) in the install confirmation")
+    static let authorFormat = String(localized: "**Author:** %@", comment: "Extension author line (format) in the install confirmation")
+    static let urlFormat = String(localized: "**URL:** %@", comment: "Extension URL line (format) in the install confirmation")
     static let fullAccessWarning = String(localized: "This extension runs with full editor access.", comment: "Disclosure shown before installing an extension")
     static let unreviewedWarning = String(localized: "This source is not reviewed by MarkEdit. Only continue if you trust it.", comment: "Caution shown before installing an extension from a raw URL")
     static let installedTitle = String(localized: "Extension Installed", comment: "Title for the extension installed confirmation")
