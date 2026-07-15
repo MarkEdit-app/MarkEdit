@@ -86,6 +86,26 @@ public enum ExtensionDownloader {
       installDate: Date.now.ISO8601Format()
     )
   }
+
+  /// Download the latest release and merge preserved user fields.
+  public static func downloadUpdate(
+    for installed: ExtensionConfig.Installed,
+    entry: ExtensionEntry
+  ) async throws -> ExtensionConfig.Installed {
+    let record = try await install(id: entry.id, release: entry.latest)
+    return record.merging(preserving: installed)
+  }
+
+  /// Delete the script file and remove its installed record.
+  public static func uninstall(_ installed: ExtensionConfig.Installed) {
+    let fileName = installed.file
+    if !fileName.isEmpty, fileName == (fileName as NSString).lastPathComponent {
+      let fileURL = ExtensionEnvironment.scriptsDirectory.appending(path: fileName, directoryHint: .notDirectory)
+      try? FileManager.default.removeItem(at: fileURL)
+    }
+
+    ExtensionConfig.remove(id: installed.id)
+  }
 }
 
 // MARK: - Private

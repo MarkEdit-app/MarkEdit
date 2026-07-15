@@ -12,15 +12,17 @@ import MarkEditKit
 /// Checks the registry for newer extension releases and applies them per `registry.updateStrategy`.
 @MainActor
 enum ExtensionUpdater {
-  /// Refreshes the index on the configured cadence and acts on any available updates.
+  /// Refreshes the index promptly and prompts about updates on the configured cadence.
   ///
-  /// - Parameter explicitly: bypass the cadence, e.g. a manual "Check for Updates".
+  /// - Parameter explicitly: force a refresh and bypass the prompt cadence.
   static func checkForUpdates(explicitly: Bool = false) async {
-    guard explicitly || ExtensionRegistry.isCheckDue else {
+    // Refresh cache first; nil means no usable index.
+    guard let index = await ExtensionRegistry.refresh(force: explicitly) else {
       return
     }
 
-    guard let index = await ExtensionRegistry.refresh(force: explicitly) else {
+    // Prompt cadence is tracked separately.
+    guard explicitly || ExtensionRegistry.shouldPromptUpdates else {
       return
     }
 
@@ -29,12 +31,15 @@ enum ExtensionUpdater {
       return
     }
 
+    // Only advance the prompt cadence when something is actually surfaced.
     switch ExtensionConfig.updateStrategy {
     case .manual:
       break // Surfaced only in the manager UI
     case .prompt:
+      ExtensionRegistry.recordUpdatePrompt()
       await presentPrompt(updates: updates)
     case .automatic:
+      ExtensionRegistry.recordUpdatePrompt()
       await apply(updates: updates, promptRelaunch: false)
     }
   }
@@ -72,13 +77,12 @@ private extension ExtensionUpdater {
 
     for update in updates {
       do {
-        let record = try await ExtensionDownloader.install(
-          id: update.entry.id,
-          release: update.entry.latest
+        // Preserve previous enabled state and cadence.
+        let merged = try await ExtensionDownloader.downloadUpdate(
+          for: update.installed,
+          entry: update.entry
         )
 
-        // Keep the previous enabled state and per-extension cadence
-        let merged = record.merging(preserving: update.installed)
         ExtensionConfig.upsertInstalled(merged)
         didUpdate = true
       } catch {
