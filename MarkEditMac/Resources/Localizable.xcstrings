@@ -177,6 +177,23 @@
         }
       }
     },
+    "Actions" : {
+      "comment" : "Toolbar menu of extension manager actions",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作"
+          }
+        }
+      }
+    },
     "Active line indicator" : {
       "comment" : "Option to show active line indicator",
       "localizations" : {
@@ -639,6 +656,23 @@
         }
       }
     },
+    "Couldn’t reach the extension registry." : {
+      "comment" : "Error shown when the registry can't be loaded",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法连接扩展目录。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法連接擴充功能目錄。"
+          }
+        }
+      }
+    },
     "Create New Document" : {
       "localizations" : {
         "zh-Hans" : {
@@ -875,6 +909,23 @@
         }
       }
     },
+    "Discover" : {
+      "comment" : "Extension manager mode: browse the registry",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发现"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "發現"
+          }
+        }
+      }
+    },
     "Document" : {
       "comment" : "Statistics mode: full document",
       "localizations" : {
@@ -939,6 +990,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "編輯器"
+          }
+        }
+      }
+    },
+    "Enabled" : {
+      "comment" : "Toggle title for enabling an installed extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已启用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已啟用"
           }
         }
       }
@@ -1494,6 +1562,23 @@
         }
       }
     },
+    "Homepage" : {
+      "comment" : "Link to an extension's homepage",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主页"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首頁"
+          }
+        }
+      }
+    },
     "Horizontal Rule" : {
       "comment" : "Toolbar item to insert horizontal rule",
       "localizations" : {
@@ -1744,6 +1829,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "要安裝“%@”嗎？"
+          }
+        }
+      }
+    },
+    "Install Extension from URL" : {
+      "comment" : "Title for the install-from-URL prompt",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从 URL 安装扩展"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從 URL 安裝擴充功能"
+          }
+        }
+      }
+    },
+    "Install from URL…" : {
+      "comment" : "Menu item to install an extension from a URL",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从 URL 安装…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從 URL 安裝…"
+          }
+        }
+      }
+    },
+    "Installed" : {
+      "comment" : "Extension manager mode: installed extensions",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已安装"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已安裝"
           }
         }
       }
@@ -2009,6 +2145,23 @@
         }
       }
     },
+    "MarkEdit Extensions" : {
+      "comment" : "Title of the extension manager window",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit 扩展功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit 擴充功能"
+          }
+        }
+      }
+    },
     "Missing active document to proceed." : {
       "localizations" : {
         "zh-Hans" : {
@@ -2160,6 +2313,40 @@
         }
       }
     },
+    "No extensions found." : {
+      "comment" : "Empty state for the Discover list",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到擴充功能。"
+          }
+        }
+      }
+    },
+    "No extensions installed." : {
+      "comment" : "Empty state for installed extensions",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未安装扩展。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未安裝擴充功能。"
+          }
+        }
+      }
+    },
     "No versions match the specified condition." : {
       "comment" : "Alert title for no versions found",
       "localizations" : {
@@ -2241,6 +2428,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打開字體面板…"
+          }
+        }
+      }
+    },
+    "Open Scripts Folder" : {
+      "comment" : "Menu item to reveal the extensions scripts folder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开脚本目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開指令碼目錄"
           }
         }
       }
@@ -2469,6 +2673,40 @@
         }
       }
     },
+    "Refresh" : {
+      "comment" : "Menu item to refetch the extension registry",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刷新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新整理"
+          }
+        }
+      }
+    },
+    "Refreshing…" : {
+      "comment" : "State shown while the extension list is being refreshed",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在刷新…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新整理中…"
+          }
+        }
+      }
+    },
     "Regular Expression" : {
       "comment" : "Toggle regular expression for search",
       "localizations" : {
@@ -2533,6 +2771,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重新啟動 MarkEdit 以使用更新後的擴充功能。"
+          }
+        }
+      }
+    },
+    "Relaunch to apply your changes." : {
+      "comment" : "Notice shown when extension changes need a relaunch",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动以应用更改。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動以套用變更。"
           }
         }
       }
@@ -2652,6 +2907,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在所選範圍中全部取代"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "comment" : "Button to retry reaching the extension registry",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重试"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重試"
+          }
+        }
+      }
+    },
+    "Reveal" : {
+      "comment" : "Button title to reveal an extension's script file in Finder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示"
           }
         }
       }
@@ -2978,6 +3267,23 @@
         }
       }
     },
+    "Submit an Extension…" : {
+      "comment" : "Menu item to open the extension contributing guide",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提交扩展…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提交擴充功能…"
+          }
+        }
+      }
+    },
     "Suggest while typing" : {
       "comment" : "Whether to suggest while typing",
       "localizations" : {
@@ -3267,6 +3573,23 @@
         }
       }
     },
+    "This removes its script from the scripts folder." : {
+      "comment" : "Message shown when confirming an extension uninstall",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这会从脚本目录中移除它的脚本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "這會從指令碼目錄中移除它的指令碼。"
+          }
+        }
+      }
+    },
     "This source is not reviewed by MarkEdit. Only continue if you trust it." : {
       "comment" : "Caution shown before installing an extension from a raw URL",
       "localizations" : {
@@ -3386,6 +3709,23 @@
         }
       }
     },
+    "Turn off to keep the extension installed but inactive" : {
+      "comment" : "Tooltip explaining the enable switch",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭后仍保留扩展，但使其不生效"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "關閉後仍保留擴充功能，但使其不啟用"
+          }
+        }
+      }
+    },
     "Unfold" : {
       "comment" : "Phrase used in CodeMirror to unfold a piece of text",
       "localizations" : {
@@ -3437,6 +3777,40 @@
         }
       }
     },
+    "Uninstall" : {
+      "comment" : "Button title to uninstall an extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卸载"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解除安裝"
+          }
+        }
+      }
+    },
+    "Uninstall “%@”?" : {
+      "comment" : "Title (format) to confirm uninstalling an extension",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要卸载“%@”吗？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要解除安裝“%@”嗎？"
+          }
+        }
+      }
+    },
     "Update" : {
       "comment" : "Button title to install extension updates",
       "localizations" : {
@@ -3450,6 +3824,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新"
+          }
+        }
+      }
+    },
+    "Update All" : {
+      "comment" : "Menu item to update all extensions with available updates",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部更新"
           }
         }
       }
@@ -3483,6 +3874,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 ${content} 更新檔案"
+          }
+        }
+      }
+    },
+    "Update to %@" : {
+      "comment" : "Button title (format) to update an extension to a version",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新到 %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新到 %@"
           }
         }
       }
