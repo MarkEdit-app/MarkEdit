@@ -161,5 +161,32 @@ extension Localized {
     static let updateButton = String(localized: "Update", comment: "Button title to install extension updates")
     static let updatedTitle = String(localized: "Extensions Updated", comment: "Title shown after extensions are updated")
     static let updatedMessage = String(localized: "Relaunch MarkEdit to use the updated extensions.", comment: "Message shown after extensions are updated")
+
+    // MARK: - Manager UI
+
+    static let managerTitle = String(localized: "MarkEdit Extensions", comment: "Title of the extension manager window")
+    static let installed = String(localized: "Installed", comment: "Extension manager mode: installed extensions")
+    static let discover = String(localized: "Discover", comment: "Extension manager mode: browse the registry")
+    static let enabled = String(localized: "Enabled", comment: "Toggle title for enabling an installed extension")
+    static let enabledTooltip = String(localized: "Turn off to keep the extension installed but inactive", comment: "Tooltip explaining the enable switch")
+    static let uninstall = String(localized: "Uninstall", comment: "Button title to uninstall an extension")
+    static let reveal = String(localized: "Reveal", comment: "Button title to reveal an extension's script file in Finder")
+    static let uninstallConfirmFormat = String(localized: "Uninstall “%@”?", comment: "Title (format) to confirm uninstalling an extension")
+    static let uninstallConfirmMessage = String(localized: "This removes its script from the scripts folder.", comment: "Message shown when confirming an extension uninstall")
+    static let updateToFormat = String(localized: "Update to %@", comment: "Button title (format) to update an extension to a version")
+    static let homepage = String(localized: "Homepage", comment: "Link to an extension's homepage")
+    static let actions = String(localized: "Actions", comment: "Toolbar menu of extension manager actions")
+    static let installFromURL = String(localized: "Install from URL…", comment: "Menu item to install an extension from a URL")
+    static let installFromURLTitle = String(localized: "Install Extension from URL", comment: "Title for the install-from-URL prompt")
+    static let openScriptsFolder = String(localized: "Open Scripts Folder", comment: "Menu item to reveal the extensions scripts folder")
+    static let refresh = String(localized: "Refresh", comment: "Menu item to refetch the extension registry")
+    static let refreshing = String(localized: "Refreshing…", comment: "State shown while the extension list is being refreshed")
+    static let updateAll = String(localized: "Update All", comment: "Menu item to update all extensions with available updates")
+    static let submitExtension = String(localized: "Submit an Extension…", comment: "Menu item to open the extension contributing guide")
+    static let relaunchNotice = String(localized: "Relaunch to apply your changes.", comment: "Notice shown when extension changes need a relaunch")
+    static let retry = String(localized: "Retry", comment: "Button to retry reaching the extension registry")
+    static let registryUnreachable = String(localized: "Couldn’t reach the extension registry.", comment: "Error shown when the registry can't be loaded")
+    static let emptyInstalled = String(localized: "No extensions installed.", comment: "Empty state for installed extensions")
+    static let emptyDiscover = String(localized: "No extensions found.", comment: "Empty state for the Discover list")
   }
 }
