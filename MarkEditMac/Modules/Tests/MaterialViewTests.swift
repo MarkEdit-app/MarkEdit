@@ -6,7 +6,7 @@
 
 import XCTest
 import AppKit
-@testable import AppKitControls
+@testable import SharedUI
 
 @MainActor
 final class MaterialViewTests: XCTestCase {

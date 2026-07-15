@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import AppKitControls
+import SharedUI
 
 final class EditorReplaceButtons: RoundedButtonGroup {
   private enum Constants {

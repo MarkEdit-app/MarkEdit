@@ -23,7 +23,7 @@
 		870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870F17652984D2C000003DA7 /* EditorViewController+LineEndings.swift */; };
 		870F17682985285B00003DA7 /* EditorViewController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870F17672985285B00003DA7 /* EditorViewController+Config.swift */; };
 		870F177D29855CA500003DA7 /* MarkEditKit in Frameworks */ = {isa = PBXBuildFile; productRef = 870F177C29855CA500003DA7 /* MarkEditKit */; };
-		870F178E2985775B00003DA7 /* AppKitControls in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178D2985775B00003DA7 /* AppKitControls */; };
+		870F178E2985775B00003DA7 /* SharedUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178D2985775B00003DA7 /* SharedUI */; };
 		870F17902985775B00003DA7 /* AppKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178F2985775B00003DA7 /* AppKitExtensions */; };
 		870F17922985775B00003DA7 /* Previewer in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17912985775B00003DA7 /* Previewer */; };
 		870F17962985775B00003DA7 /* SettingsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17952985775B00003DA7 /* SettingsUI */; };
@@ -286,7 +286,7 @@
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
 				870F17922985775B00003DA7 /* Previewer in Frameworks */,
 				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
-				870F178E2985775B00003DA7 /* AppKitControls in Frameworks */,
+				870F178E2985775B00003DA7 /* SharedUI in Frameworks */,
 				870F17962985775B00003DA7 /* SettingsUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -669,7 +669,7 @@
 			name = MarkEditMac;
 			packageProductDependencies = (
 				870F177C29855CA500003DA7 /* MarkEditKit */,
-				870F178D2985775B00003DA7 /* AppKitControls */,
+				870F178D2985775B00003DA7 /* SharedUI */,
 				870F178F2985775B00003DA7 /* AppKitExtensions */,
 				870F17912985775B00003DA7 /* Previewer */,
 				870F17952985775B00003DA7 /* SettingsUI */,
@@ -1412,9 +1412,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MarkEditKit;
 		};
-		870F178D2985775B00003DA7 /* AppKitControls */ = {
+		870F178D2985775B00003DA7 /* SharedUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = AppKitControls;
+			productName = SharedUI;
 		};
 		870F178F2985775B00003DA7 /* AppKitExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

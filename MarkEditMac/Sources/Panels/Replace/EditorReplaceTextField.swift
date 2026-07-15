@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import AppKitControls
+import SharedUI
 
 final class EditorReplaceTextField: NSTextField {
   private let bezelView = BezelView()

@@ -10,8 +10,8 @@ let package = Package(
   ],
   products: [
     .library(
-      name: "AppKitControls",
-      targets: ["AppKitControls"]
+      name: "SharedUI",
+      targets: ["SharedUI"]
     ),
     .library(
       name: "AppKitExtensions",
@@ -65,9 +65,9 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "AppKitControls",
+      name: "SharedUI",
       dependencies: ["AppKitExtensions"],
-      path: "Sources/AppKitControls",
+      path: "Sources/SharedUI",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
       ],
@@ -122,7 +122,7 @@ let package = Package(
     ),
     .target(
       name: "FileVersion",
-      dependencies: ["AppKitControls", "MarkEditKit", "DiffKit"],
+      dependencies: ["SharedUI", "MarkEditKit", "DiffKit"],
       path: "Sources/FileVersion",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
@@ -202,7 +202,7 @@ let package = Package(
     .testTarget(
       name: "ModulesTests",
       dependencies: [
-        "AppKitControls",
+        "SharedUI",
         "AppKitExtensions",
         "ExtensionCore",
         "FileDrop",
