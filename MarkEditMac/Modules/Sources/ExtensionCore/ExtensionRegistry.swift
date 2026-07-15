@@ -63,7 +63,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
   public let homepage: String
   public let category: Category
   public let colorScheme: ColorScheme?
-  public let screenshots: [String]?
+  public let colorPatterns: [String]?
   public let latest: ExtensionRelease
 
   public init(
@@ -74,7 +74,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
     homepage: String,
     category: Category,
     colorScheme: ColorScheme?,
-    screenshots: [String]?,
+    colorPatterns: [String]?,
     latest: ExtensionRelease
   ) {
     self.id = id
@@ -84,7 +84,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
     self.homepage = homepage
     self.category = category
     self.colorScheme = colorScheme
-    self.screenshots = screenshots
+    self.colorPatterns = colorPatterns
     self.latest = latest
   }
 }
@@ -132,8 +132,8 @@ public enum ExtensionRegistry {
     return index.isSupported ? index : nil
   }
 
-  /// Whether a cadence-driven check is currently due.
-  public static var isCheckDue: Bool {
+  /// Whether the user-facing update prompt is due.
+  public static var shouldPromptUpdates: Bool {
   #if DEBUG
     // A mock index makes every check fire, so the update flow is easy to trigger
     if mockIndex != nil {
@@ -141,7 +141,17 @@ public enum ExtensionRegistry {
     }
   #endif
 
-    return shouldCheck
+    switch ExtensionConfig.updateCheck {
+    case .never: return false
+    case .onLaunch: return true
+    case .daily: return elapsedSincePrompt >= Constants.day
+    case .weekly: return elapsedSincePrompt >= Constants.week
+    }
+  }
+
+  /// Record that update prompt cadence has been satisfied.
+  public static func recordUpdatePrompt() {
+    Cache.recordPrompt()
   }
 
   /// Refreshes the index from the network, honoring the configured cadence.
@@ -156,10 +166,10 @@ public enum ExtensionRegistry {
     }
   #endif
 
-    // Fetch when forced, when a cadence check is due, or when there's no usable cache to fall
-    // back on (index.json deleted or fails to decode while metadata.json still looks recent).
+    // Fetch when forced, when the index is due for revalidation, or when there's no usable cache
+    // to fall back on (index.json deleted or fails to decode while metadata.json still looks recent).
     let cached = cachedIndex
-    guard force || shouldCheck || cached == nil else {
+    guard force || shouldRefreshIndex || cached == nil else {
       return cached
     }
 
@@ -278,13 +288,13 @@ private extension ExtensionRegistry {
     return cached
   }
 
-  static var shouldCheck: Bool {
-    switch ExtensionConfig.updateCheck {
-    case .never: return false
-    case .onLaunch: return true
-    case .daily: return elapsedSinceLastCheck >= Constants.day
-    case .weekly: return elapsedSinceLastCheck >= Constants.week
+  /// Background index revalidation cadence.
+  static var shouldRefreshIndex: Bool {
+    guard ExtensionConfig.updateCheck != .never else {
+      return false
     }
+
+    return elapsedSinceLastCheck >= Constants.indexTTL
   }
 
   static var elapsedSinceLastCheck: TimeInterval {
@@ -295,9 +305,21 @@ private extension ExtensionRegistry {
     return Date.now.timeIntervalSince(lastChecked)
   }
 
+  static var elapsedSincePrompt: TimeInterval {
+    guard let lastPrompted = Cache.metadata?.lastPrompted else {
+      return .greatestFiniteMagnitude
+    }
+
+    return Date.now.timeIntervalSince(lastPrompted)
+  }
+
   enum Constants {
-    static let day: TimeInterval = 24 * 60 * 60
+    static let hour: TimeInterval = 60 * 60
+    static let day: TimeInterval = 24 * hour
     static let week: TimeInterval = 7 * day
+
+    /// Keep the catalog current without waiting out the prompt cadence.
+    static let indexTTL: TimeInterval = hour
   }
 
   /// On-disk cache of the index bytes plus revalidation metadata.
@@ -305,6 +327,7 @@ private extension ExtensionRegistry {
     struct Metadata: Codable {
       let etag: String?
       let lastChecked: Date
+      let lastPrompted: Date?
     }
 
     static var indexURL: URL {
@@ -323,12 +346,18 @@ private extension ExtensionRegistry {
       ensureDirectory()
 
       try? indexData.write(to: indexURL, options: .atomic)
-      write(metadata: Metadata(etag: etag, lastChecked: .now))
+      write(metadata: Metadata(etag: etag, lastChecked: .now, lastPrompted: metadata?.lastPrompted))
     }
 
     /// Record a check that returned no body (304), preserving the etag.
     static func touch() {
-      write(metadata: Metadata(etag: metadata?.etag, lastChecked: .now))
+      write(metadata: Metadata(etag: metadata?.etag, lastChecked: .now, lastPrompted: metadata?.lastPrompted))
+    }
+
+    /// Record that the update prompt was just shown.
+    static func recordPrompt() {
+      let current = metadata
+      write(metadata: Metadata(etag: current?.etag, lastChecked: current?.lastChecked ?? .now, lastPrompted: .now))
     }
 
     private static var directory: URL {

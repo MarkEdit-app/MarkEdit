@@ -144,6 +144,57 @@ public enum ExtensionConfig {
     persist(installed: installed)
   }
 
+  /// Set enabled for an installed id.
+  public static func setEnabled(_ enabled: Bool, forID id: String) {
+    guard var installed = currentDefinition?.installed else {
+      return
+    }
+
+    guard let index = installed.firstIndex(where: { $0.id == id }) else {
+      return
+    }
+
+    installed[index] = installed[index].settingEnabled(enabled)
+    persist(installed: installed)
+  }
+
+  /// Remove an installed record by id.
+  public static func remove(id: String) {
+    guard let installed = currentDefinition?.installed else {
+      return
+    }
+
+    let filtered = installed.filter {
+      $0.id != id
+    }
+
+    guard filtered.count != installed.count else {
+      return
+    }
+
+    persist(installed: filtered)
+  }
+
+  /// Reorder installed records by id; unmatched ids stay at the end.
+  public static func reorder(orderedIDs: [String]) {
+    guard let installed = currentDefinition?.installed else {
+      return
+    }
+
+    let recordsByID = Dictionary(installed.map { ($0.id, $0) }) { lhs, _ in lhs }
+    let coveredIDs = Set(orderedIDs)
+
+    let reordered = orderedIDs.compactMap {
+      recordsByID[$0]
+    } + installed.filter {
+      !coveredIDs.contains($0.id)
+    }
+
+    if reordered.map(\.id) != installed.map(\.id) {
+      persist(installed: reordered)
+    }
+  }
+
   /// Derives a kebab-case id from a script file name, e.g. "markedit-preview.js" -> "markedit-preview".
   public static func identifier(fromFileName fileName: String) -> String {
     let url = URL(fileURLWithPath: fileName).deletingPathExtension()
@@ -246,6 +297,20 @@ public extension ExtensionConfig.Installed {
       enabled: previous.enabled,
       updateCheck: previous.updateCheck,
       installDate: previous.installDate ?? installDate
+    )
+  }
+
+  /// A copy with the enabled flag set explicitly.
+  func settingEnabled(_ enabled: Bool) -> Self {
+    Self(
+      id: id,
+      version: version,
+      url: url,
+      sha256: sha256,
+      file: file,
+      enabled: enabled,
+      updateCheck: updateCheck,
+      installDate: installDate
     )
   }
 }

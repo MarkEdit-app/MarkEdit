@@ -197,6 +197,107 @@ final class ExtensionCoreTests: XCTestCase {
     ExtensionConfig.upsertInstalled(makeInstalled(id: "d", version: "1.0.0"))
     XCTAssertEqual(installedIds(in: dir), ["a", "b", "c", "d"])
   }
+
+  // MARK: - setEnabled
+
+  func testSetEnabledTogglesFlagInPlace() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["a", "b", "c"], in: dir)
+
+    // Absent flag means enabled
+    XCTAssertNil(installedRecord(id: "b", in: dir)?["enabled"])
+
+    ExtensionConfig.setEnabled(false, forID: "b")
+    XCTAssertEqual(installedRecord(id: "b", in: dir)?["enabled"] as? Bool, false)
+
+    // Order is preserved and siblings are untouched
+    XCTAssertEqual(installedIds(in: dir), ["a", "b", "c"])
+    XCTAssertNil(installedRecord(id: "a", in: dir)?["enabled"])
+
+    ExtensionConfig.setEnabled(true, forID: "b")
+    XCTAssertEqual(installedRecord(id: "b", in: dir)?["enabled"] as? Bool, true)
+  }
+
+  func testSetEnabledIgnoresUnknownIdentifier() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["a"], in: dir)
+
+    ExtensionConfig.setEnabled(false, forID: "missing")
+    XCTAssertEqual(installedIds(in: dir), ["a"])
+    XCTAssertNil(installedRecord(id: "a", in: dir)?["enabled"])
+  }
+
+  // MARK: - remove / uninstall
+
+  func testRemoveDropsRecordOnly() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["a", "b", "c"], in: dir)
+
+    ExtensionConfig.remove(id: "b")
+    XCTAssertEqual(installedIds(in: dir), ["a", "c"])
+
+    // Removing an unknown id is a no-op
+    ExtensionConfig.remove(id: "missing")
+    XCTAssertEqual(installedIds(in: dir), ["a", "c"])
+  }
+
+  // MARK: - reorder
+
+  func testReorderChangesInjectionOrder() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["a", "b", "c"], in: dir)
+
+    ExtensionConfig.reorder(orderedIDs: ["c", "a", "b"])
+    XCTAssertEqual(installedIds(in: dir), ["c", "a", "b"])
+
+    // Ids missing from the new order keep their relative position at the end
+    ExtensionConfig.reorder(orderedIDs: ["b"])
+    XCTAssertEqual(installedIds(in: dir), ["b", "c", "a"])
+  }
+
+  func testUninstallDeletesFileAndRecord() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["a", "b"], in: dir)
+
+    let scripts = dir.appending(path: "scripts", directoryHint: .isDirectory)
+    try FileManager.default.createDirectory(at: scripts, withIntermediateDirectories: true)
+    let fileURL = scripts.appending(path: "b.js", directoryHint: .notDirectory)
+    try Data("console.log('b')".utf8).write(to: fileURL)
+
+    ExtensionDownloader.uninstall(makeInstalled(id: "b", version: "1.0.0"))
+    XCTAssertFalse(FileManager.default.fileExists(atPath: fileURL.path))
+    XCTAssertEqual(installedIds(in: dir), ["a"])
+  }
 }
 
 // MARK: - Private
@@ -221,7 +322,7 @@ private extension ExtensionCoreTests {
       homepage: "",
       category: .extension,
       colorScheme: nil,
-      screenshots: nil,
+      colorPatterns: nil,
       latest: makeRelease(version: version, minAppVersion: minAppVersion)
     )
   }
@@ -269,5 +370,16 @@ private extension ExtensionCoreTests {
     }
 
     return installed.compactMap { $0["id"] as? String }
+  }
+
+  func installedRecord(id: String, in dir: URL) -> [String: Any]? {
+    let url = dir.appending(path: "extensions.json", directoryHint: .notDirectory)
+    guard let data = try? Data(contentsOf: url),
+          let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let installed = object["installed"] as? [[String: Any]] else {
+      return nil
+    }
+
+    return installed.first { $0["id"] as? String == id }
   }
 }
