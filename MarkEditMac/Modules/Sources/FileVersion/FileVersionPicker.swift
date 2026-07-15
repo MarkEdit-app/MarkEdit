@@ -5,7 +5,7 @@
 //
 
 import AppKit
-import AppKitControls
+import SharedUI
 import DiffKit
 import MarkEditKit
 

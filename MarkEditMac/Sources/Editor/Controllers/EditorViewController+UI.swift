@@ -7,7 +7,7 @@
 
 import AppKit
 import AppKitExtensions
-import AppKitControls
+import SharedUI
 import WebKit
 import MarkEditKit
 import Statistics

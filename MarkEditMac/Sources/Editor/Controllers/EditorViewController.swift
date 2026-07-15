@@ -5,7 +5,7 @@
 //  Created by cyan on 12/12/22.
 
 import AppKit
-import AppKitControls
+import SharedUI
 import WebKit
 import ExtensionCore
 import MarkEditCore

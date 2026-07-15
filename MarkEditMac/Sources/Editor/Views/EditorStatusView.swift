@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import AppKitControls
+import SharedUI
 import MarkEditKit
 
 // [macOS 26] Clean these up

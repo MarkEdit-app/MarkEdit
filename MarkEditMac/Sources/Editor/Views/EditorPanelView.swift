@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import AppKitControls
+import SharedUI
 
 class EditorPanelView: NSView, BackgroundTheming {
   init() {
