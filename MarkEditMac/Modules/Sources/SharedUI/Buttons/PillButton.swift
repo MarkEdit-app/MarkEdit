@@ -26,18 +26,8 @@ public struct PillButton: View {
   }
 
   public var body: some View {
-    switch style {
-    case .prominent:
-      Button(action: action) { label }
-        .buttonStyle(.borderedProminent)
-        .buttonBorderShape(.capsule)
-        .controlSize(.small)
-    case .bordered:
-      Button(action: action) { label.foregroundStyle(Color.accentColor) }
-        .buttonStyle(.bordered)
-        .buttonBorderShape(.capsule)
-        .controlSize(.small)
-    }
+    // Always active style
+    content.environment(\.controlActiveState, .active)
   }
 }
 
@@ -46,7 +36,20 @@ public struct PillButton: View {
 private extension PillButton {
   enum Constants {
     /// Shared minimum width so pills look neat; longer titles still grow to fit.
-    static let minWidth: Double = 36
+    static let minWidth: Double = 40
+  }
+
+  @ViewBuilder var content: some View {
+    switch style {
+    case .prominent:
+      Button(action: action) { label }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.capsule)
+    case .bordered:
+      Button(action: action) { label.foregroundStyle(Color.accentColor) }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.capsule)
+    }
   }
 
   var label: some View {
