@@ -34,7 +34,7 @@ enum ExtensionUpdater {
     // Only advance the prompt cadence when something is actually surfaced.
     switch ExtensionConfig.updateStrategy {
     case .manual:
-      break // Surfaced only in the manager UI
+      break // Surfaced only in the Extensions window
     case .prompt:
       ExtensionRegistry.recordUpdatePrompt()
       await presentPrompt(updates: updates)

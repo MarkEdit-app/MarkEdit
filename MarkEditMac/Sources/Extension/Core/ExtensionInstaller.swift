@@ -88,11 +88,9 @@ private extension ExtensionInstaller {
       let installed = try await download()
       ExtensionConfig.upsertInstalled(installed)
       presentInstalled(id: installed.id)
-    } catch ExtensionDownloader.Failure.incompatible(let minAppVersion) {
-      presentError(message: String(format: Localized.Extension.incompatibleFormat, minAppVersion))
     } catch {
       Logger.log(.error, "Failed to install extension: \(error)")
-      presentError(message: Localized.Extension.failedMessage)
+      presentError(message: Localized.Extension.failureMessage(for: error))
     }
   }
 
@@ -162,9 +160,9 @@ extension Localized {
     static let updatedTitle = String(localized: "Extensions Updated", comment: "Title shown after extensions are updated")
     static let updatedMessage = String(localized: "Relaunch MarkEdit to use the updated extensions.", comment: "Message shown after extensions are updated")
 
-    // MARK: - Manager UI
+    // MARK: - Extensions UI
 
-    static let managerTitle = String(localized: "MarkEdit Extensions", comment: "Title of the extension manager window")
+    static let windowTitle = String(localized: "MarkEdit Extensions", comment: "Title of the extension manager window")
     static let installed = String(localized: "Installed", comment: "Extension manager mode: installed extensions")
     static let discover = String(localized: "Discover", comment: "Extension manager mode: browse the registry")
     static let enabled = String(localized: "Enabled", comment: "Toggle title for enabling an installed extension")
@@ -188,5 +186,16 @@ extension Localized {
     static let registryUnreachable = String(localized: "Couldn’t reach the extension registry.", comment: "Error shown when the registry can't be loaded")
     static let emptyInstalled = String(localized: "No extensions installed.", comment: "Empty state for installed extensions")
     static let emptyDiscover = String(localized: "No extensions found.", comment: "Empty state for the Discover list")
+  }
+}
+
+extension Localized.Extension {
+  /// User-facing message for an install/update failure.
+  static func failureMessage(for error: Error) -> String {
+    if case ExtensionDownloader.Failure.incompatible(let minAppVersion) = error {
+      return String(format: incompatibleFormat, minAppVersion)
+    }
+
+    return failedMessage
   }
 }
