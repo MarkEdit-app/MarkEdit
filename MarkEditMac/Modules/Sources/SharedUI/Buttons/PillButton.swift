@@ -31,12 +31,10 @@ public struct PillButton: View {
       Button(action: action) { label }
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.capsule)
-        .controlSize(.small)
     case .bordered:
       Button(action: action) { label.foregroundStyle(Color.accentColor) }
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
-        .controlSize(.small)
     }
   }
 }
@@ -46,7 +44,7 @@ public struct PillButton: View {
 private extension PillButton {
   enum Constants {
     /// Shared minimum width so pills look neat; longer titles still grow to fit.
-    static let minWidth: Double = 36
+    static let minWidth: Double = 40
   }
 
   var label: some View {
