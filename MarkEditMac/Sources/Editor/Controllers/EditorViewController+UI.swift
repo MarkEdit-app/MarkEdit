@@ -462,22 +462,7 @@ extension EditorViewController {
     textField.placeholderString = placeholder
     textField.stringValue = defaultValue ?? ""
     alert.accessoryView = textField
-
-    textBoxInputObserver = NotificationCenter.default.addObserver(
-      forName: NSWindow.didBecomeKeyNotification,
-      object: nil,
-      queue: .main
-    ) { [weak self] notification in
-      Task { @MainActor in
-        if let window = notification.object as? NSWindow, window == textField.window {
-          window.makeFirstResponder(textField)
-          if let observer = self?.textBoxInputObserver {
-            self?.textBoxInputObserver = nil
-            NotificationCenter.default.removeObserver(observer)
-          }
-        }
-      }
-    }
+    alert.window.initialFirstResponder = textField
 
     let response = await presentSheetModal(alert)
     return response == .alertFirstButtonReturn ? textField.stringValue : nil
