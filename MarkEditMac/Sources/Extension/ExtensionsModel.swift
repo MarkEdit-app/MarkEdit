@@ -53,8 +53,9 @@ final class ExtensionsModel {
     let installed: ExtensionConfig.Installed?
     let entry: ExtensionEntry?
 
-    var isTheme: Bool {
-      entry?.category == .theme
+    /// The registry category (extension or theme), when known.
+    var category: ExtensionEntry.Category? {
+      entry?.category
     }
 
     /// Palette(s) driving the illustrated theme preview.
@@ -284,7 +285,7 @@ private extension ExtensionsModel {
 
   /// Extensions first, then themes, preserving each group's original order.
   func extensionsFirst(_ items: [Item]) -> [Item] {
-    items.filter { !$0.isTheme } + items.filter { $0.isTheme }
+    items.filter { $0.category == .extension } + items.filter { $0.category != .extension }
   }
 
   /// Runs a mutating action in the busy state (ignoring re-entrant calls), keeping the spinner briefly visible and reporting failures.
