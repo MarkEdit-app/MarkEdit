@@ -135,7 +135,7 @@ public enum ExtensionConfig {
   /// (preserving injection order) or appends a new one.
   public static func upsertInstalled(_ entry: Installed) {
     var installed = currentDefinition?.installed ?? []
-    if let index = installed.firstIndex(where: { $0.id == entry.id }) {
+    if let index = (installed.firstIndex { $0.id == entry.id }) {
       installed[index] = entry
     } else {
       installed.append(entry)
@@ -150,7 +150,7 @@ public enum ExtensionConfig {
       return
     }
 
-    guard let index = installed.firstIndex(where: { $0.id == id }) else {
+    guard let index = (installed.firstIndex { $0.id == id }) else {
       return
     }
 

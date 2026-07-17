@@ -75,7 +75,7 @@ private extension ExtensionInstaller {
 
   /// Looks up the id in the cached index, forcing a fresh fetch before giving up.
   static func resolveEntry(id: String) async -> ExtensionEntry? {
-    if let entry = ExtensionRegistry.cachedIndex?.extensions.first(where: { $0.id == id }) {
+    if let entry = (ExtensionRegistry.cachedIndex?.extensions.first { $0.id == id }) {
       return entry
     }
 

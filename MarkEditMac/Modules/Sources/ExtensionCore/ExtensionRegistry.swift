@@ -235,7 +235,7 @@ public enum ExtensionRegistry {
         return nil
       }
 
-      guard let entry = index.extensions.first(where: { $0.id == installed.id }) else {
+      guard let entry = (index.extensions.first { $0.id == installed.id }) else {
         return nil
       }
 
