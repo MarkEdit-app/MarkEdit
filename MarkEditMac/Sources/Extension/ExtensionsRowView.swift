@@ -21,7 +21,7 @@ struct ExtensionsRowView: View {
     HStack(spacing: 10) {
       VStack(alignment: .leading, spacing: 6) {
         HStack(spacing: 6) {
-          Image(systemName: item.isTheme ? Icons.paintpalette : Icons.puzzlepieceExtension)
+          Image(systemName: item.category == .theme ? Icons.paintpalette : Icons.puzzlepieceExtension)
             .foregroundStyle(.secondary)
             .accessibilityHidden(true)
 
@@ -45,7 +45,7 @@ struct ExtensionsRowView: View {
             .fixedSize(horizontal: false, vertical: true)
         }
 
-        if item.isTheme, let patterns = item.colorPatterns, !patterns.isEmpty {
+        if item.category == .theme, let patterns = item.colorPatterns, !patterns.isEmpty {
           ThemePreview(patterns: patterns, showsBothSchemes: item.colorScheme == .both)
             .padding(.top, 4)
         }
