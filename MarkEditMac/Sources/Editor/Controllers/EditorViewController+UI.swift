@@ -458,7 +458,7 @@ extension EditorViewController {
     alert.addButton(withTitle: Localized.General.done)
     alert.addButton(withTitle: Localized.General.cancel)
 
-    let textField = TextField(frame: CGRect(x: 0, y: 0, width: 256, height: 22))
+    let textField = TextField.alertCapableTextField
     textField.placeholderString = placeholder
     textField.stringValue = defaultValue ?? ""
     alert.accessoryView = textField
