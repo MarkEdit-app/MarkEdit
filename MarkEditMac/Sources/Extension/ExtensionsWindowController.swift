@@ -16,6 +16,8 @@ final class ExtensionsWindowController: NSWindowController {
   private let model = ExtensionsModel()
   private weak var modeControl: NSSegmentedControl?
   private weak var updateAllItem: NSMenuItem?
+  private weak var updateCheckMenu: NSMenu?
+  private weak var updateStrategyMenu: NSMenu?
 
   func present(scrollTo category: ExtensionEntry.Category? = nil) {
     if category != nil {
@@ -61,6 +63,7 @@ final class ExtensionsWindowController: NSWindowController {
 extension ExtensionsWindowController: NSMenuDelegate {
   func menuNeedsUpdate(_ menu: NSMenu) {
     updateAllItem?.isEnabled = model.hasAvailableUpdates
+    refreshUpdateSettingChecks()
   }
 }
 
@@ -186,6 +189,20 @@ private extension ExtensionsWindowController {
     }
 
     menu.addItem(.separator())
+
+    let updateCheckItem = NSMenuItem()
+    updateCheckItem.title = Localized.Extension.updateCheckFrequency
+    updateCheckItem.submenu = createUpdateCheckMenu()
+    updateCheckMenu = updateCheckItem.submenu
+    menu.addItem(updateCheckItem)
+
+    let updateStrategyItem = NSMenuItem()
+    updateStrategyItem.title = Localized.Extension.updateInstallBehavior
+    updateStrategyItem.submenu = createUpdateStrategyMenu()
+    updateStrategyMenu = updateStrategyItem.submenu
+    menu.addItem(updateStrategyItem)
+
+    menu.addItem(.separator())
     menu.addItem(withTitle: Localized.Extension.submitExtension) {
       NSWorkspace.shared.safelyOpenURL(string: Constants.contributingURL)
     }
@@ -193,8 +210,62 @@ private extension ExtensionsWindowController {
     return menu
   }
 
+  func createUpdateCheckMenu() -> NSMenu {
+    let menu = NSMenu()
+    let options: [(ExtensionConfig.UpdateCheck, String)] = [
+      (.never, Localized.Extension.checkNever),
+      (.onLaunch, Localized.Extension.checkOnLaunch),
+      (.daily, Localized.Extension.checkDaily),
+      (.weekly, Localized.Extension.checkWeekly),
+    ]
+
+    for (value, title) in options {
+      let item = menu.addItem(withTitle: title) { [weak self] in
+        ExtensionConfig.setUpdateCheck(value)
+        self?.refreshUpdateSettingChecks()
+      }
+
+      item.representedObject = value.rawValue
+    }
+
+    return menu
+  }
+
+  func createUpdateStrategyMenu() -> NSMenu {
+    let menu = NSMenu()
+    let options: [(ExtensionConfig.UpdateStrategy, String)] = [
+      (.manual, Localized.Extension.strategyManual),
+      (.prompt, Localized.Extension.strategyPrompt),
+      (.automatic, Localized.Extension.strategyAutomatic),
+    ]
+
+    for (value, title) in options {
+      let item = menu.addItem(withTitle: title) { [weak self] in
+        ExtensionConfig.setUpdateStrategy(value)
+        self?.refreshUpdateSettingChecks()
+      }
+
+      item.representedObject = value.rawValue
+    }
+
+    return menu
+  }
+
   func updateModeControl() {
     modeControl?.selectedSegment = model.mode == .discover ? 0 : 1
+  }
+
+  /// Checks the option matching the persisted value in each update-settings submenu.
+  func refreshUpdateSettingChecks() {
+    let check = ExtensionConfig.updateCheck.rawValue
+    updateCheckMenu?.items.forEach {
+      $0.state = ($0.representedObject as? String) == check ? .on : .off
+    }
+
+    let strategy = ExtensionConfig.updateStrategy.rawValue
+    updateStrategyMenu?.items.forEach {
+      $0.state = ($0.representedObject as? String) == strategy ? .on : .off
+    }
   }
 
   @objc func handleModeChange(_ sender: NSSegmentedControl) {
