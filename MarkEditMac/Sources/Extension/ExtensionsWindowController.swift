@@ -14,19 +14,22 @@ import ExtensionCore
 final class ExtensionsWindowController: NSWindowController {
   static let shared = ExtensionsWindowController.createController()
   private let model = ExtensionsModel()
+  private weak var modeControl: NSSegmentedControl?
   private weak var updateAllItem: NSMenuItem?
 
   func present(scrollTo category: ExtensionEntry.Category? = nil) {
     if category != nil {
       model.mode = .discover
+      updateModeControl()
     }
 
     showWindow(nil)
     window?.makeKeyAndOrderFront(nil)
     NSApp.activate(ignoringOtherApps: true)
 
+    var scrolledToCategory = false
     if let category {
-      extensionsVC?.scrollTo(category: category)
+      scrolledToCategory = extensionsVC?.scrollTo(category: category) ?? false
     }
 
     Task {
@@ -34,8 +37,8 @@ final class ExtensionsWindowController: NSWindowController {
       // and falls back to the cache when offline or unchanged.
       await model.load(forceRefresh: true)
 
-      // Re-request in case the item only appeared after the fetch
-      if let category {
+      // Re-request if it wasn't listed initially
+      if let category, !scrolledToCategory {
         extensionsVC?.scrollTo(category: category)
       }
     }
@@ -142,16 +145,18 @@ private extension ExtensionsWindowController {
       labels: [Localized.Extension.discover, Localized.Extension.installed],
       trackingMode: .selectOne,
       target: self,
-      action: #selector(modeChanged(_:))
+      action: #selector(handleModeChange(_:))
     )
 
     segmented.setSymbolImages([Icons.sparkles, Icons.shippingbox])
-    segmented.selectedSegment = model.mode == .discover ? 0 : 1
+    modeControl = segmented
+    updateModeControl()
 
     let item = NSToolbarItem(itemIdentifier: .mode)
     item.visibilityPriority = .high
     item.view = segmented
     item.label = Localized.Extension.windowTitle
+
     return item
   }
 
@@ -188,6 +193,14 @@ private extension ExtensionsWindowController {
     return menu
   }
 
+  func updateModeControl() {
+    modeControl?.selectedSegment = model.mode == .discover ? 0 : 1
+  }
+
+  @objc func handleModeChange(_ sender: NSSegmentedControl) {
+    model.mode = sender.selectedSegment == 0 ? .discover : .installed
+  }
+
   @objc func promptInstallFromURL() {
     let alert = NSAlert()
     alert.messageText = Localized.Extension.installFromURLTitle
@@ -214,10 +227,6 @@ private extension ExtensionsWindowController {
 
       await model.installExtension(from: url)
     }
-  }
-
-  @objc func modeChanged(_ sender: NSSegmentedControl) {
-    model.mode = sender.selectedSegment == 0 ? .discover : .installed
   }
 }
 
