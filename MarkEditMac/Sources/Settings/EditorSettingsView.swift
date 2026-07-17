@@ -10,6 +10,7 @@ import AppKitExtensions
 import SwiftUI
 import FontPicker
 import SettingsUI
+import ExtensionCore
 import MarkEditCore
 import MarkEditKit
 
@@ -173,7 +174,6 @@ struct EditorSettingsView: View {
 private extension EditorSettingsView {
   enum Constants {
     static let customThemesTag = "$customThemes"
-    static let customThemesLink = "https://markedit-app.github.io/extensions/#themes"
   }
 
   var fontPickerConfiguration: FontPickerConfiguration {
@@ -218,7 +218,12 @@ private extension EditorSettingsView {
   }
 
   func getCustomThemes(selection: Binding<String>, revertTo value: String) {
-    NSWorkspace.shared.safelyOpenURL(string: Constants.customThemesLink)
+    ExtensionsWindowController.shared.present(scrollTo: .theme)
+    NSApp.windows.forEach {
+      if $0.contentViewController is SettingsRootViewController {
+        $0.close()
+      }
+    }
 
     // In macOS Tahoe, this requires a delay to work
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {

@@ -256,10 +256,11 @@ extension ExtensionsViewController {
     }
   }
 
-  /// Scrolls to the first item of `category`, now if present, otherwise once rows load.
-  func scrollTo(category: ExtensionEntry.Category) {
+  /// Scrolls to `category`'s first item; returns whether it scrolled now (else once rows load).
+  @discardableResult
+  func scrollTo(category: ExtensionEntry.Category) -> Bool {
     pendingScrollCategory = category
-    scrollToTargetCategory()
+    return scrollToTargetCategory()
   }
 }
 
@@ -457,10 +458,11 @@ private extension ExtensionsViewController {
     stateController.view.isHidden = !displayedItems.isEmpty
   }
 
-  func scrollToTargetCategory() {
+  @discardableResult
+  func scrollToTargetCategory() -> Bool {
     guard let category = pendingScrollCategory,
           let index = (displayedItems.firstIndex { $0.category == category }) else {
-      return
+      return false
     }
 
     pendingScrollCategory = nil
@@ -476,6 +478,7 @@ private extension ExtensionsViewController {
     // Pin the theme row to the top (just below the titlebar), clamped to the scrollable range
     clip.scroll(to: CGPoint(x: 0, y: targetY))
     scrollView.reflectScrolledClipView(clip)
+    return true
   }
 
   @objc func uninstallExtension(_ sender: NSMenuItem) {
