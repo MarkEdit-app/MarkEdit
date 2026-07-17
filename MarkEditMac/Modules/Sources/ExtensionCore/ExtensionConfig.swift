@@ -91,6 +91,16 @@ public enum ExtensionConfig {
     currentDefinition?.updateStrategy ?? .prompt
   }
 
+  /// Persists how often to check for updates.
+  public static func setUpdateCheck(_ updateCheck: UpdateCheck) {
+    persist(updateCheck: updateCheck)
+  }
+
+  /// Persists what to do once an update is found.
+  public static func setUpdateStrategy(_ updateStrategy: UpdateStrategy) {
+    persist(updateStrategy: updateStrategy)
+  }
+
   public static var installed: [Installed] {
     currentDefinition?.installed ?? []
   }
@@ -242,14 +252,19 @@ private extension ExtensionConfig {
     return jsonData
   }
 
-  static func persist(installed: [Installed]) {
+  /// Rewrites extensions.json, changing only the provided fields and preserving the rest.
+  static func persist(
+    updateCheck: UpdateCheck? = nil,
+    updateStrategy: UpdateStrategy? = nil,
+    installed: [Installed]? = nil
+  ) {
     let base = currentDefinition ?? defaultDefinition
     let definition = Definition(
       __schema: base.__schema ?? Constants.schemaURL,
       registryURL: base.registryURL,
-      updateCheck: base.updateCheck,
-      updateStrategy: base.updateStrategy,
-      installed: installed
+      updateCheck: updateCheck ?? base.updateCheck,
+      updateStrategy: updateStrategy ?? base.updateStrategy,
+      installed: installed ?? base.installed
     )
 
     guard let data = encode(definition: definition) else {
