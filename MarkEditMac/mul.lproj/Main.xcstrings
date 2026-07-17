@@ -2464,6 +2464,30 @@
         }
       }
     },
+    "MgE-xt-001.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Manage Extensions…\"; ObjectID = \"MgE-xt-001\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Manage Extensions…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理扩展功能…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理擴充功能…"
+          }
+        }
+      }
+    },
     "mGH-Xd-vai.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Extensions\"; ObjectID = \"mGH-Xd-vai\";",
       "extractionState" : "extracted_with_value",
