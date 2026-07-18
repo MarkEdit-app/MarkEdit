@@ -7,6 +7,7 @@
 import XCTest
 @testable import ExtensionCore
 
+// swiftlint:disable:next type_body_length
 final class ExtensionCoreTests: XCTestCase {
 
   // MARK: - identifier(fromFileName:)
@@ -82,6 +83,38 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertTrue(makeRelease(version: "1", minAppVersion: "1.5.0").isCompatible)
     XCTAssertFalse(makeRelease(version: "1", minAppVersion: "1.6.0").isCompatible)
     XCTAssertFalse(makeRelease(version: "1", minAppVersion: "1.10.0").isCompatible)
+  }
+
+  // MARK: - ExtensionRelease.pageURL
+
+  func testPageURLFromReleaseAsset() {
+    let release = makeRelease(url: "https://github.com/owner/repo/releases/download/v1.0.0/ext.js")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/owner/repo/releases/tag/v1.0.0")
+  }
+
+  func testPageURLFromRawContent() {
+    let release = makeRelease(url: "https://raw.githubusercontent.com/owner/repo/v1.0.0/dist/ext.js")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/owner/repo/tree/v1.0.0")
+  }
+
+  func testPageURLFromOfficialRawContentUsesReleasePage() {
+    let release = makeRelease(url: "https://raw.githubusercontent.com/MarkEdit-app/MarkEdit-preview/v1.8.1/dist/ext.js")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/MarkEdit-app/MarkEdit-preview/releases/tag/v1.8.1")
+  }
+
+  func testPageURLFromBlobRawLink() {
+    let release = makeRelease(url: "https://github.com/owner/repo/blob/v1.0.0/dist/ext.js?raw=true")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/owner/repo/tree/v1.0.0")
+  }
+
+  func testPageURLFromOfficialBlobRawLinkUsesReleasePage() {
+    let release = makeRelease(url: "https://github.com/MarkEdit-app/MarkEdit-preview/blob/v1.8.1/dist/ext.js?raw=true")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/MarkEdit-app/MarkEdit-preview/releases/tag/v1.8.1")
+  }
+
+  func testPageURLFallsBackToHost() {
+    let release = makeRelease(url: "https://example.com/path/ext.js")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://example.com")
   }
 
   // MARK: - availableUpdates
@@ -353,6 +386,16 @@ private extension ExtensionCoreTests {
       url: "https://example.com/sample.js",
       sha256: "abc",
       minAppVersion: minAppVersion,
+      notes: nil
+    )
+  }
+
+  func makeRelease(url: String) -> ExtensionRelease {
+    ExtensionRelease(
+      version: "1.0.0",
+      url: url,
+      sha256: "abc",
+      minAppVersion: nil,
       notes: nil
     )
   }
