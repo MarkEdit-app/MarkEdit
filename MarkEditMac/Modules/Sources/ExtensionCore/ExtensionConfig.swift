@@ -87,8 +87,8 @@ public enum ExtensionConfig {
   }
 
   public static var updateStrategy: UpdateStrategy {
-    // Never automatic by default, injected code is arbitrary JavaScript
-    currentDefinition?.updateStrategy ?? .prompt
+    // Default to manual; the menu-bar hint surfaces updates without interrupting
+    currentDefinition?.updateStrategy ?? .manual
   }
 
   /// Persists how often to check for updates.
@@ -229,7 +229,7 @@ private extension ExtensionConfig {
     __schema: Constants.schemaURL,
     registryURL: Constants.defaultRegistryURL,
     updateCheck: .weekly,
-    updateStrategy: .prompt,
+    updateStrategy: .manual,
     installed: []
   )
 

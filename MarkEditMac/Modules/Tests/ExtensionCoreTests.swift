@@ -167,6 +167,48 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertTrue(updates.isEmpty)
   }
 
+  // MARK: - hasCachedUpdates
+
+  func testHasCachedUpdatesFalseWithoutCache() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+      ExtensionEnvironment.cachesDirectory = URL.cachesDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    ExtensionEnvironment.cachesDirectory = dir
+    try seedInstalled([makeInstalled(id: "sample", version: "1.0.0")], in: dir)
+
+    // No cached index on disk means there's nothing to compare against
+    XCTAssertFalse(ExtensionRegistry.hasCachedUpdates)
+  }
+
+  func testHasCachedUpdatesReflectsCachedIndex() throws {
+    let dir = try makeTempDir()
+    let originalAppVersion = ExtensionEnvironment.appVersion
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+      ExtensionEnvironment.cachesDirectory = URL.cachesDirectory
+      ExtensionEnvironment.appVersion = originalAppVersion
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    ExtensionEnvironment.cachesDirectory = dir
+    ExtensionEnvironment.appVersion = "1.5.0"
+    try seedInstalled([makeInstalled(id: "sample", version: "1.0.0")], in: dir)
+
+    // A newer release in the cached index surfaces an update
+    try seedCachedIndex(makeIndex([makeEntry(id: "sample", version: "2.0.0")]))
+    XCTAssertTrue(ExtensionRegistry.hasCachedUpdates)
+
+    // Only equal or older releases means nothing to update
+    try seedCachedIndex(makeIndex([makeEntry(id: "sample", version: "1.0.0")]))
+    XCTAssertFalse(ExtensionRegistry.hasCachedUpdates)
+  }
+
   // MARK: - ExtensionIndex.isSupported
 
   func testIndexSchemaVersionSupport() {
@@ -359,6 +401,26 @@ private extension ExtensionCoreTests {
     let installed = ids.map { "{ \"id\": \"\($0)\", \"file\": \"\($0).js\" }" }.joined(separator: ",\n")
     let json = "{ \"installed\": [\n\(installed)\n] }"
     try Data(json.utf8).write(to: dir.appending(path: "extensions.json", directoryHint: .notDirectory))
+  }
+
+  /// Writes extensions.json for records that carry a version, so update comparisons have something to compare.
+  func seedInstalled(_ installed: [ExtensionConfig.Installed], in dir: URL) throws {
+    let records = installed.map { item -> String in
+      let version = item.version.map { "\"version\": \"\($0)\", " } ?? ""
+      return "{ \(version)\"id\": \"\(item.id)\", \"file\": \"\(item.file)\" }"
+    }
+
+    let json = "{ \"installed\": [\n\(records.joined(separator: ",\n"))\n] }"
+    try Data(json.utf8).write(to: dir.appending(path: "extensions.json", directoryHint: .notDirectory))
+  }
+
+  /// Writes a registry index to the on-disk cache location read by `cachedIndex`.
+  func seedCachedIndex(_ index: ExtensionIndex) throws {
+    let cacheDir = ExtensionEnvironment.indexCacheDirectory
+    try FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
+
+    let data = try JSONEncoder().encode(index)
+    try data.write(to: cacheDir.appending(path: "index.json", directoryHint: .notDirectory))
   }
 
   func installedIds(in dir: URL) -> [String] {

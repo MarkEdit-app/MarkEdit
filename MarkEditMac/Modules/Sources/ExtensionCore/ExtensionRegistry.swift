@@ -257,6 +257,17 @@ public enum ExtensionRegistry {
       return ExtensionUpdate(installed: installed, entry: entry)
     }
   }
+
+  /// Whether the cached index currently surfaces any updates for installed extensions.
+  ///
+  /// Reads from disk only, never triggers a network fetch.
+  public static var hasCachedUpdates: Bool {
+    guard let index = cachedIndex else {
+      return false
+    }
+
+    return !availableUpdates(index: index).isEmpty
+  }
 }
 
 // MARK: - Private
