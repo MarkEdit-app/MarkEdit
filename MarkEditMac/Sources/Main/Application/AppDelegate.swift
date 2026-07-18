@@ -6,6 +6,7 @@
 
 import AppKit
 import AppKitExtensions
+import ExtensionCore
 import SettingsUI
 import MarkEditKit
 
@@ -74,6 +75,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       self,
       selector: #selector(windowDidResignKey(_:)),
       name: NSWindow.didResignKeyNotification,
+      object: nil
+    )
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(extensionsDidChange(_:)),
+      name: .extensionsDidChange,
       object: nil
     )
 
@@ -207,6 +215,16 @@ private extension AppDelegate {
         NSApp.closeOpenPanels()
       }
     }
+  }
+
+  @objc func extensionsDidChange(_ notification: Notification) {
+    guard let menu = mainExtensionsMenu else {
+      return Logger.assertFail("Failed to get mainExtensionsMenu")
+    }
+
+    let badge = "✨ "
+    let original = menu.title.replacingOccurrences(of: badge, with: "")
+    menu.title = "\(ExtensionRegistry.hasCachedUpdates ? badge : "")\(original)"
   }
 
   @IBAction func showPreferences(_ sender: Any?) {

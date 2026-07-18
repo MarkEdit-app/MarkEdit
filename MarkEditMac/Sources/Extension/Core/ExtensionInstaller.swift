@@ -87,6 +87,8 @@ private extension ExtensionInstaller {
     do {
       let installed = try await download()
       ExtensionConfig.upsertInstalled(installed)
+
+      NotificationCenter.default.post(name: .extensionsDidChange, object: nil)
       presentInstalled(id: installed.id)
     } catch {
       Logger.log(.error, "Failed to install extension: \(error)")

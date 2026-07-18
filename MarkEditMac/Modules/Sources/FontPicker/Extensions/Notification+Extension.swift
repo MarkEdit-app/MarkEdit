@@ -7,7 +7,8 @@
 import Foundation
 
 public extension Notification.Name {
-  static let fontSizeChanged = Self("fontSizeChanged")
+  /// Posted when the font size is changed in the app.
+  static let fontSizeChanged = Self("app.cyan.markedit.fontSizeChanged")
 }
 
 extension NotificationCenter {

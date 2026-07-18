@@ -9,6 +9,11 @@ import AppKit
 import ExtensionCore
 import MarkEditKit
 
+extension Notification.Name {
+  /// Posted when the extension registry index or installed extensions change.
+  static let extensionsDidChange = Self("app.cyan.markedit.extensionsDidChange")
+}
+
 /// Checks the registry for newer extension releases and applies them per `registry.updateStrategy`.
 @MainActor
 enum ExtensionUpdater {
@@ -20,6 +25,9 @@ enum ExtensionUpdater {
     guard let index = await ExtensionRegistry.refresh(force: explicitly) else {
       return
     }
+
+    // A refreshed index may change what's outdated, let app-level UI (the menu-bar hint) refresh.
+    NotificationCenter.default.post(name: .extensionsDidChange, object: nil)
 
     // Prompt cadence is tracked separately.
     guard explicitly || ExtensionRegistry.shouldPromptUpdates else {
