@@ -85,7 +85,7 @@
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld 个扩展"
+                  "value" : "%lld 个扩展功能"
                 }
               }
             }
@@ -709,7 +709,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在扩展目录中找不到“%@”。"
+            "value" : "在扩展功能目录中找不到“%@”。"
           }
         },
         "zh-Hant" : {
@@ -726,7 +726,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法连接扩展目录。"
+            "value" : "无法连接扩展功能目录。"
           }
         },
         "zh-Hant" : {
@@ -1164,7 +1164,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "扩展已安装"
+            "value" : "扩展功能已安装"
           }
         },
         "zh-Hant" : {
@@ -1181,7 +1181,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "有可用的扩展更新"
+            "value" : "有可用的扩展功能更新"
           }
         },
         "zh-Hant" : {
@@ -1198,7 +1198,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "扩展已更新"
+            "value" : "扩展功能已更新"
           }
         },
         "zh-Hant" : {
@@ -1221,7 +1221,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法获取更新。"
+            "value" : "無法獲取更新。"
           }
         }
       }
@@ -1232,7 +1232,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法安装该扩展。"
+            "value" : "无法安装该扩展功能。"
           }
         },
         "zh-Hant" : {
@@ -1824,7 +1824,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "插入製表符"
+            "value" : "插入制表符"
           }
         }
       }
@@ -1920,7 +1920,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "从 URL 安装扩展"
+            "value" : "从 URL 安装扩展功能"
           }
         },
         "zh-Hant" : {
@@ -2400,7 +2400,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "找不到用于文稿“%@”的编辑器。"
+            "value" : "找不到用于文档“%@”的编辑器。"
           }
         },
         "zh-Hant" : {
@@ -2417,7 +2417,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "未找到扩展。"
+            "value" : "未找到扩展功能。"
           }
         },
         "zh-Hant" : {
@@ -2434,7 +2434,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "未安装扩展。"
+            "value" : "未安装扩展功能。"
           }
         },
         "zh-Hant" : {
@@ -2879,7 +2879,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "重新启动 MarkEdit 以使用更新后的扩展。"
+            "value" : "重新启动 MarkEdit 以使用更新后的扩展功能。"
           }
         },
         "zh-Hant" : {
@@ -3388,7 +3388,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "提交扩展…"
+            "value" : "提交扩展功能…"
           }
         },
         "zh-Hant" : {
@@ -3513,7 +3513,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "製表鍵："
+            "value" : "制表鍵："
           }
         }
       }
@@ -3609,7 +3609,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "无法下载或验证该扩展。"
+            "value" : "无法下载或验证该扩展功能。"
           }
         },
         "zh-Hant" : {
@@ -3643,7 +3643,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此扩展需要 MarkEdit %@ 或更高版本。"
+            "value" : "此扩展功能需要 MarkEdit %@ 或更高版本。"
           }
         },
         "zh-Hant" : {
@@ -3660,7 +3660,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此扩展拥有对编辑器的完全访问权限。"
+            "value" : "此扩展功能拥有对编辑器的完全访问权限。"
           }
         },
         "zh-Hant" : {
@@ -3830,7 +3830,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "关闭后仍保留扩展，但使其不生效"
+            "value" : "关闭后仍保留扩展功能，但使其不生效"
           }
         },
         "zh-Hant" : {
