@@ -280,6 +280,11 @@ private extension ExtensionConfig {
 }
 
 public extension ExtensionConfig.Installed {
+  /// Whether this is a first-party extension (the "markedit-" id namespace).
+  var isOfficial: Bool {
+    id.lowercased().hasPrefix("markedit-")
+  }
+
   /// Adopts a local script file as an untracked extension.
   ///
   /// The filesystem supplies `sha256` (hash of the current bytes) and `installDate` (file

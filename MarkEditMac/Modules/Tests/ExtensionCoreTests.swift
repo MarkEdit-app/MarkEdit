@@ -7,6 +7,7 @@
 import XCTest
 @testable import ExtensionCore
 
+// swiftlint:disable:next type_body_length
 final class ExtensionCoreTests: XCTestCase {
 
   // MARK: - identifier(fromFileName:)
@@ -112,10 +113,38 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertTrue(updates.isEmpty)
   }
 
-  func testAvailableUpdatesSkipsVersionlessOfficial() {
+  func testAvailableUpdatesAdoptsVersionlessOfficial() {
     ExtensionEnvironment.appVersion = "1.5.0"
     let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
-    // Version-less installs are not updates
+    // Version-less official scripts adopt the latest registry release
+    let updates = ExtensionRegistry.availableUpdates(
+      index: index,
+      installed: [makeInstalled(id: "markedit-preview", version: nil)]
+    )
+
+    XCTAssertEqual(updates.count, 1)
+    XCTAssertEqual(updates.first?.installed.id, "markedit-preview")
+    XCTAssertEqual(updates.first?.entry.latest.version, "2.0.0")
+  }
+
+  func testAvailableUpdatesFreezesVersionlessOfficial() {
+    ExtensionEnvironment.appVersion = "1.5.0"
+
+    // A per-extension freeze wins over version-less adoption
+    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
+    let updates = ExtensionRegistry.availableUpdates(
+      index: index,
+      installed: [makeInstalled(id: "markedit-preview", version: nil, updateCheck: .never)]
+    )
+
+    XCTAssertTrue(updates.isEmpty)
+  }
+
+  func testAvailableUpdatesSkipsIncompatibleVersionlessOfficial() {
+    ExtensionEnvironment.appVersion = "1.5.0"
+
+    // An incompatible release is skipped before version-less adoption
+    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0", minAppVersion: "9.0.0")])
     let updates = ExtensionRegistry.availableUpdates(
       index: index,
       installed: [makeInstalled(id: "markedit-preview", version: nil)]
