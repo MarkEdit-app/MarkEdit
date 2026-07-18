@@ -16,32 +16,23 @@ public enum ExtensionConfig {
   struct Definition: Codable {
     let __schema: String?
     let registryURL: String?
-    let updateCheck: UpdateCheck?
-    let updateStrategy: UpdateStrategy?
+    let updateBehavior: UpdateBehavior?
     let installed: [Installed]?
 
     enum CodingKeys: String, CodingKey {
       case __schema = "$schema"
       case registryURL = "registry.url"
-      case updateCheck = "registry.updateCheck"
-      case updateStrategy = "registry.updateStrategy"
+      case updateBehavior = "registry.updateBehavior"
       case installed
     }
   }
 
-  /// How often to check for updates.
-  public enum UpdateCheck: String, Codable, Sendable {
-    case never
-    case onLaunch
-    case daily
-    case weekly
-  }
-
-  /// What to do once an update is found.
-  public enum UpdateStrategy: String, Codable, Sendable {
-    case manual
-    case prompt
-    case automatic
+  /// How the app handles extension updates, mirroring the app's own update vocabulary (never/quiet/notify) plus automatic.
+  public enum UpdateBehavior: String, Codable, Sendable {
+    case never     // Don't reach the registry in the background
+    case quiet     // Surface updates in the Extensions window only
+    case notify    // Ask before updating
+    case automatic // Update automatically
   }
 
   /// A single installed extension, array order is injection order.
@@ -52,7 +43,6 @@ public enum ExtensionConfig {
     public let sha256: String?
     public let file: String
     public let enabled: Bool? // Absent means enabled, tolerates hand-edited files
-    public let updateCheck: UpdateCheck?
     public let installDate: String?
 
     public init(
@@ -62,7 +52,6 @@ public enum ExtensionConfig {
       sha256: String?,
       file: String,
       enabled: Bool?,
-      updateCheck: UpdateCheck?,
       installDate: String?
     ) {
       self.id = id
@@ -71,7 +60,6 @@ public enum ExtensionConfig {
       self.sha256 = sha256
       self.file = file
       self.enabled = enabled
-      self.updateCheck = updateCheck
       self.installDate = installDate
     }
   }
@@ -82,23 +70,14 @@ public enum ExtensionConfig {
     return URL(string: string)
   }
 
-  public static var updateCheck: UpdateCheck {
-    currentDefinition?.updateCheck ?? .weekly
+  public static var updateBehavior: UpdateBehavior {
+    // Default to quiet: keep the catalog fresh and surface updates in the window without interrupting
+    currentDefinition?.updateBehavior ?? .quiet
   }
 
-  public static var updateStrategy: UpdateStrategy {
-    // Default to manual; the menu-bar hint surfaces updates without interrupting
-    currentDefinition?.updateStrategy ?? .manual
-  }
-
-  /// Persists how often to check for updates.
-  public static func setUpdateCheck(_ updateCheck: UpdateCheck) {
-    persist(updateCheck: updateCheck)
-  }
-
-  /// Persists what to do once an update is found.
-  public static func setUpdateStrategy(_ updateStrategy: UpdateStrategy) {
-    persist(updateStrategy: updateStrategy)
+  /// Persists how the app handles extension updates.
+  public static func setUpdateBehavior(_ updateBehavior: UpdateBehavior) {
+    persist(updateBehavior: updateBehavior)
   }
 
   public static var installed: [Installed] {
@@ -228,8 +207,7 @@ private extension ExtensionConfig {
   static let defaultDefinition = Definition(
     __schema: Constants.schemaURL,
     registryURL: Constants.defaultRegistryURL,
-    updateCheck: .weekly,
-    updateStrategy: .manual,
+    updateBehavior: .quiet,
     installed: []
   )
 
@@ -254,16 +232,14 @@ private extension ExtensionConfig {
 
   /// Rewrites extensions.json, changing only the provided fields and preserving the rest.
   static func persist(
-    updateCheck: UpdateCheck? = nil,
-    updateStrategy: UpdateStrategy? = nil,
+    updateBehavior: UpdateBehavior? = nil,
     installed: [Installed]? = nil
   ) {
     let base = currentDefinition ?? defaultDefinition
     let definition = Definition(
       __schema: base.__schema ?? Constants.schemaURL,
       registryURL: base.registryURL,
-      updateCheck: updateCheck ?? base.updateCheck,
-      updateStrategy: updateStrategy ?? base.updateStrategy,
+      updateBehavior: updateBehavior ?? base.updateBehavior,
       installed: installed ?? base.installed
     )
 
@@ -301,7 +277,6 @@ public extension ExtensionConfig.Installed {
       sha256: sha256,
       file: fileName,
       enabled: true,
-      updateCheck: nil,
       installDate: created.map { $0.ISO8601Format() }
     )
   }
@@ -315,7 +290,6 @@ public extension ExtensionConfig.Installed {
       sha256: sha256,
       file: file,
       enabled: previous.enabled,
-      updateCheck: previous.updateCheck,
       installDate: previous.installDate ?? installDate
     )
   }
@@ -329,7 +303,6 @@ public extension ExtensionConfig.Installed {
       sha256: sha256,
       file: file,
       enabled: enabled,
-      updateCheck: updateCheck,
       installDate: installDate
     )
   }

@@ -343,7 +343,7 @@
       }
     },
     "Ask Before Updating" : {
-      "comment" : "Update strategy: prompt before updating",
+      "comment" : "Update behavior: prompt before updating",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -765,23 +765,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新建一個文件，可透過可選變數來設定檔案名和初始內容。"
-          }
-        }
-      }
-    },
-    "Daily" : {
-      "comment" : "Update check cadence: daily",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每天"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每天"
           }
         }
       }
@@ -2192,23 +2175,6 @@
         }
       }
     },
-    "Manually" : {
-      "comment" : "Update strategy: only surface updates in the Extensions window",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "手动"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "手動"
-          }
-        }
-      }
-    },
     "MarkEdit %@ is available!" : {
       "comment" : "Title for new version available",
       "localizations" : {
@@ -2294,7 +2260,7 @@
       }
     },
     "Never" : {
-      "comment" : "Never show invisibles\nUpdate check cadence: never",
+      "comment" : "Never show invisibles",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2306,6 +2272,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "從不"
+          }
+        }
+      }
+    },
+    "Never Check" : {
+      "comment" : "Update behavior: never reach the registry in the background",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从不检查"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從不檢查"
           }
         }
       }
@@ -2492,23 +2475,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等下再說"
-          }
-        }
-      }
-    },
-    "On Launch" : {
-      "comment" : "Update check cadence: on every launch",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动时"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "啟動時"
           }
         }
       }
@@ -3263,6 +3229,23 @@
         }
       }
     },
+    "Show Available Updates" : {
+      "comment" : "Update behavior: only surface updates in the Extensions window",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示可用更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示可用更新"
+          }
+        }
+      }
+    },
     "Show Hidden Files" : {
       "comment" : "Label for save panel accessory view",
       "localizations" : {
@@ -3961,7 +3944,7 @@
       }
     },
     "Update Automatically" : {
-      "comment" : "Update strategy: update automatically",
+      "comment" : "Update behavior: update automatically",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -3977,19 +3960,19 @@
         }
       }
     },
-    "Update Check Frequency" : {
-      "comment" : "Submenu title for how often to check for extension updates",
+    "Update Behavior" : {
+      "comment" : "Submenu title for how the app handles extension updates, from never checking to fully automatic",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新检查频率"
+            "value" : "更新行为"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新檢查頻率"
+            "value" : "更新行為"
           }
         }
       }
@@ -4023,23 +4006,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 ${content} 更新檔案"
-          }
-        }
-      }
-    },
-    "Update Install Behavior" : {
-      "comment" : "Submenu title for what to do once an extension update is found",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新安装行为"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新安裝行為"
           }
         }
       }
@@ -4090,23 +4056,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "檢視釋出頁面"
-          }
-        }
-      }
-    },
-    "Weekly" : {
-      "comment" : "Update check cadence: weekly",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每周"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每週"
           }
         }
       }

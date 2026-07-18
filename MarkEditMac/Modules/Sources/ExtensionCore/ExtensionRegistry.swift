@@ -141,11 +141,10 @@ public enum ExtensionRegistry {
     }
   #endif
 
-    switch ExtensionConfig.updateCheck {
-    case .never: return false
-    case .onLaunch: return true
-    case .daily: return elapsedSincePrompt >= Constants.day
-    case .weekly: return elapsedSincePrompt >= Constants.week
+    // Only the interrupting behaviors prompt, and at most once per interval
+    switch ExtensionConfig.updateBehavior {
+    case .never, .quiet: return false
+    case .notify, .automatic: return elapsedSincePrompt >= Constants.promptInterval
     }
   }
 
@@ -168,8 +167,11 @@ public enum ExtensionRegistry {
 
     // Fetch when forced, when the index is due for revalidation, or when there's no usable cache
     // to fall back on (index.json deleted or fails to decode while metadata.json still looks recent).
+    // ".never" only suppresses background fetches; force still serves user-initiated refreshes.
     let cached = cachedIndex
-    guard force || shouldRefreshIndex || cached == nil else {
+    let allowsBackgroundFetch = ExtensionConfig.updateBehavior != .never
+
+    guard force || (allowsBackgroundFetch && (shouldRefreshIndex || cached == nil)) else {
       return cached
     }
 
@@ -239,11 +241,6 @@ public enum ExtensionRegistry {
         return nil
       }
 
-      // Honor a per-extension "never" freeze
-      guard installed.updateCheck != .never else {
-        return nil
-      }
-
       // Version-less official scripts (pre-registry) adopt the latest; third-party ones are left alone.
       guard let version = installed.version else {
         return installed.isOfficial ? ExtensionUpdate(installed: installed, entry: entry) : nil
@@ -301,7 +298,7 @@ private extension ExtensionRegistry {
 
   /// Background index revalidation cadence.
   static var shouldRefreshIndex: Bool {
-    guard ExtensionConfig.updateCheck != .never else {
+    guard ExtensionConfig.updateBehavior != .never else {
       return false
     }
 
@@ -327,10 +324,12 @@ private extension ExtensionRegistry {
   enum Constants {
     static let hour: TimeInterval = 60 * 60
     static let day: TimeInterval = 24 * hour
-    static let week: TimeInterval = 7 * day
 
-    /// Keep the catalog current without waiting out the prompt cadence.
+    /// Keep the catalog current, independently of prompting.
     static let indexTTL: TimeInterval = hour
+
+    /// Interrupt about updates at most once per day (notify/automatic behaviors).
+    static let promptInterval: TimeInterval = day
   }
 
   /// On-disk cache of the index bytes plus revalidation metadata.

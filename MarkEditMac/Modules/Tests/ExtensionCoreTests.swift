@@ -7,7 +7,6 @@
 import XCTest
 @testable import ExtensionCore
 
-// swiftlint:disable:next type_body_length
 final class ExtensionCoreTests: XCTestCase {
 
   // MARK: - identifier(fromFileName:)
@@ -50,7 +49,6 @@ final class ExtensionCoreTests: XCTestCase {
       sha256: "old",
       file: "sample.js",
       enabled: false,
-      updateCheck: .never,
       installDate: "2026-01-01T00:00:00Z"
     )
 
@@ -61,7 +59,6 @@ final class ExtensionCoreTests: XCTestCase {
       sha256: "new",
       file: "sample.js",
       enabled: true,
-      updateCheck: nil,
       installDate: "2026-07-12T00:00:00Z"
     )
 
@@ -70,10 +67,9 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertEqual(merged.version, "2.0.0")
     XCTAssertEqual(merged.url, "https://example.com/new.js")
     XCTAssertEqual(merged.sha256, "new")
-    // Previous wins for user-managed enabled/updateCheck and the original installDate
+    // Previous wins for the user-managed enabled flag and the original installDate
     XCTAssertEqual(merged.installDate, "2026-01-01T00:00:00Z")
     XCTAssertFalse(merged.enabled ?? true)
-    XCTAssertEqual(merged.updateCheck, .never)
   }
 
   // MARK: - ExtensionRelease.isCompatible
@@ -127,19 +123,6 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertEqual(updates.first?.entry.latest.version, "2.0.0")
   }
 
-  func testAvailableUpdatesFreezesVersionlessOfficial() {
-    ExtensionEnvironment.appVersion = "1.5.0"
-
-    // A per-extension freeze wins over version-less adoption
-    let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0")])
-    let updates = ExtensionRegistry.availableUpdates(
-      index: index,
-      installed: [makeInstalled(id: "markedit-preview", version: nil, updateCheck: .never)]
-    )
-
-    XCTAssertTrue(updates.isEmpty)
-  }
-
   func testAvailableUpdatesSkipsIncompatibleVersionlessOfficial() {
     ExtensionEnvironment.appVersion = "1.5.0"
 
@@ -148,16 +131,6 @@ final class ExtensionCoreTests: XCTestCase {
     let updates = ExtensionRegistry.availableUpdates(
       index: index,
       installed: [makeInstalled(id: "markedit-preview", version: nil)]
-    )
-
-    XCTAssertTrue(updates.isEmpty)
-  }
-
-  func testAvailableUpdatesHonorsNeverFreeze() {
-    let index = makeIndex([makeEntry(id: "sample", version: "2.0.0")])
-    let updates = ExtensionRegistry.availableUpdates(
-      index: index,
-      installed: [makeInstalled(id: "sample", version: "1.0.0", updateCheck: .never)]
     )
 
     XCTAssertTrue(updates.isEmpty)
@@ -404,8 +377,7 @@ private extension ExtensionCoreTests {
 
   func makeInstalled(
     id: String,
-    version: String?,
-    updateCheck: ExtensionConfig.UpdateCheck? = nil
+    version: String?
   ) -> ExtensionConfig.Installed {
     ExtensionConfig.Installed(
       id: id,
@@ -414,7 +386,6 @@ private extension ExtensionCoreTests {
       sha256: nil,
       file: "\(id).js",
       enabled: nil,
-      updateCheck: updateCheck,
       installDate: nil
     )
   }

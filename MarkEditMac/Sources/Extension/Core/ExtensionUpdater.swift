@@ -14,7 +14,7 @@ extension Notification.Name {
   static let extensionsDidChange = Self("app.cyan.markedit.extensionsDidChange")
 }
 
-/// Checks the registry for newer extension releases and applies them per `registry.updateStrategy`.
+/// Checks the registry for newer extension releases and applies them per `registry.updateBehavior`.
 @MainActor
 enum ExtensionUpdater {
   /// Refreshes the index promptly and prompts about updates on the configured cadence.
@@ -40,10 +40,10 @@ enum ExtensionUpdater {
     }
 
     // Only advance the prompt cadence when something is actually surfaced.
-    switch ExtensionConfig.updateStrategy {
-    case .manual:
+    switch ExtensionConfig.updateBehavior {
+    case .never, .quiet:
       break // Surfaced only in the Extensions window
-    case .prompt:
+    case .notify:
       ExtensionRegistry.recordUpdatePrompt()
       await presentPrompt(updates: updates)
     case .automatic:
@@ -85,7 +85,7 @@ private extension ExtensionUpdater {
 
     for update in updates {
       do {
-        // Preserve previous enabled state and cadence.
+        // Preserve the previous enabled state.
         let merged = try await ExtensionDownloader.downloadUpdate(
           for: update.installed,
           entry: update.entry
