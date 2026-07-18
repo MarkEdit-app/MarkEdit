@@ -230,11 +230,6 @@ public enum ExtensionRegistry {
     installed: [ExtensionConfig.Installed] = ExtensionConfig.installed
   ) -> [ExtensionUpdate] {
     installed.compactMap { installed in
-      // Only version-tracked installs can be compared for updates
-      guard let version = installed.version else {
-        return nil
-      }
-
       guard let entry = (index.extensions.first { $0.id == installed.id }) else {
         return nil
       }
@@ -247,6 +242,11 @@ public enum ExtensionRegistry {
       // Honor a per-extension "never" freeze
       guard installed.updateCheck != .never else {
         return nil
+      }
+
+      // Version-less official scripts (pre-registry) adopt the latest; third-party ones are left alone.
+      guard let version = installed.version else {
+        return installed.isOfficial ? ExtensionUpdate(installed: installed, entry: entry) : nil
       }
 
       // Skip older or equal versions
