@@ -16,7 +16,7 @@ import Observation
 /// titlebar separators, drag-to-reorder, and row animations.
 @MainActor
 final class ExtensionsViewController: NSViewController {
-  static var defaultContentRect = CGRect(x: 0, y: 0, width: 640, height: 480)
+  static var defaultContentRect = CGRect(x: 0, y: 0, width: 720, height: 540)
 
   private let model: ExtensionsModel
   private let scrollView = NSScrollView()
