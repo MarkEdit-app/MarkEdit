@@ -120,7 +120,7 @@ private extension ExtensionsWindowController {
     )
 
     window.title = Localized.Extension.windowTitle
-    window.contentMinSize = CGSize(width: 640, height: 270)
+    window.contentMinSize = CGSize(width: 480, height: 200)
     window.isReleasedWhenClosed = false
 
     let controller = Self(window: window)

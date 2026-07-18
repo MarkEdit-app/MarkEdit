@@ -32,17 +32,23 @@ struct ExtensionsRowView: View {
 
           if let updateVersion = item.updateVersion {
             Text(verbatim: "↑ \(updateVersion)")
-              .font(.caption)
+              .font(.callout)
+              .fontWeight(.medium)
               .foregroundStyle(.tint)
               .accessibilityLabel(String(format: Localized.Extension.updateToFormat, updateVersion))
+              .transition(.opacity.combined(with: .scale))
           }
         }
+        // Only animate the row being upgraded, not tab switches.
+        .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.updateVersion)
 
         if !item.details.isEmpty {
           Text(item.details)
             .font(.body)
             .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
+            // Keep the description on one line; users can widen the window to read more.
+            .lineLimit(1)
+            .truncationMode(.tail)
         }
 
         if item.category == .theme, let patterns = item.colorPatterns, !patterns.isEmpty {
@@ -56,6 +62,7 @@ struct ExtensionsRowView: View {
               Text(verbatim: "v\(version)")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
             }
 
             if !item.author.isEmpty {
@@ -79,6 +86,8 @@ struct ExtensionsRowView: View {
             }
           }
           .padding(.top, 12)
+          // Only animate the row being upgraded, not tab switches.
+          .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.version)
         }
       }
 
@@ -88,6 +97,8 @@ struct ExtensionsRowView: View {
       trailingControl(item: item)
     }
     .padding(.vertical, 8)
+    // Fresh identity per mode so tab switches swap content without animating.
+    .id(model.mode)
   }
 }
 
@@ -114,14 +125,24 @@ private extension ExtensionsRowView {
   @ViewBuilder
   func trailingControl(item: ExtensionsModel.Item) -> some View {
     buttonControls(for: item)
+      // Non-interactive while busy; only the triggering button shows the spinner.
+      .disabled(isItemBusy)
+      .animation(.easeInOut(duration: 0.25), value: isItemBusy)
+      // Intrinsic width so a narrow window truncates metadata, not the titles.
+      .fixedSize(horizontal: true, vertical: false)
+      .layoutPriority(1)
+  }
+
+  /// Spinner overlay on a single busy button, hiding its title.
+  @ViewBuilder
+  func busyControl<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+    content()
       .opacity(isItemBusy ? 0 : 1)
-      .allowsHitTesting(!isItemBusy)
       .overlay {
         SpinningRing()
           .opacity(isItemBusy ? 1 : 0)
           .allowsHitTesting(false)
       }
-      .animation(.easeInOut(duration: 0.25), value: isItemBusy)
   }
 
   @ViewBuilder
@@ -143,9 +164,11 @@ private extension ExtensionsRowView {
           .help(Localized.Extension.enabledTooltip)
       }
     } else if !item.isInstalled {
-      PillButton(Localized.Extension.installButton, style: .prominent) {
-        Task {
-          await model.installExtension(item)
+      busyControl {
+        PillButton(Localized.Extension.installButton, style: .prominent) {
+          Task {
+            await model.installExtension(item)
+          }
         }
       }
     } else if item.updateVersion != nil {
@@ -161,9 +184,11 @@ private extension ExtensionsRowView {
   @ViewBuilder
   func updateButton(for item: ExtensionsModel.Item) -> some View {
     if let updateVersion = item.updateVersion {
-      PillButton(String(format: Localized.Extension.updateToFormat, updateVersion), style: .bordered) {
-        Task {
-          await model.updateExtension(item)
+      busyControl {
+        PillButton(String(format: Localized.Extension.updateToFormat, updateVersion), style: .bordered) {
+          Task {
+            await model.updateExtension(item)
+          }
         }
       }
     }
