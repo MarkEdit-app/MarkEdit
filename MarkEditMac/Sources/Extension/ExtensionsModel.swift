@@ -67,6 +67,11 @@ final class ExtensionsModel {
     var colorScheme: ExtensionEntry.ColorScheme? {
       entry?.colorScheme
     }
+
+    /// A browsable page for the latest release (release or tag page), when known.
+    var latestReleaseURL: URL? {
+      entry?.latest.pageURL
+    }
   }
 
   var mode: Mode = .discover

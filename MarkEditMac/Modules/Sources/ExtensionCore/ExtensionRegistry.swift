@@ -41,6 +41,43 @@ public extension ExtensionRelease {
     let current = ExtensionEnvironment.appVersion
     return minAppVersion.compare(current, options: .numeric) != .orderedDescending
   }
+
+  /// A browsable page for this release: the GitHub release page for a release-asset URL.
+  var pageURL: URL? {
+    guard let components = URLComponents(string: url), let host = components.host else {
+      return nil
+    }
+
+    // github.com/{owner}/{repo}/releases/download/{tag}/{asset} -> release page
+    let parts = components.path.split(separator: "/").map(String.init)
+    if host == "github.com", parts.count >= 6, parts[2] == "releases", parts[3] == "download" {
+      return URL(string: "https://github.com/\(parts[0])/\(parts[1])/releases/tag/\(parts[4])")
+    }
+
+    // Source pinned to a ref: raw.githubusercontent.com/{owner}/{repo}/{ref}/...
+    // or github.com/{owner}/{repo}/blob/{ref}/... (e.g. a ?raw=true link).
+    let source: (owner: String, repo: String, ref: String)? = {
+      if host == "raw.githubusercontent.com", parts.count >= 4 {
+        return (parts[0], parts[1], parts[2])
+      }
+
+      if host == "github.com", parts.count >= 5, parts[2] == "blob" {
+        return (parts[0], parts[1], parts[3])
+      }
+
+      return nil
+    }()
+
+    if let source {
+      // MarkEdit-app repos always tag a release, so prefer the release page.
+      let official = source.owner.caseInsensitiveCompare("MarkEdit-app") == .orderedSame
+      let path = official ? "releases/tag" : "tree"
+      return URL(string: "https://github.com/\(source.owner)/\(source.repo)/\(path)/\(source.ref)")
+    }
+
+    // Fall back to the host root
+    return URL(string: "\(components.scheme ?? "https")://\(host)")
+  }
 }
 
 /// A single extension or theme in the registry index.

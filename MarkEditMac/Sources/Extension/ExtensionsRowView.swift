@@ -31,11 +31,7 @@ struct ExtensionsRowView: View {
             .lineLimit(1)
 
           if let updateVersion = item.updateVersion {
-            Text(verbatim: "↑ \(updateVersion)")
-              .font(.callout)
-              .fontWeight(.medium)
-              .foregroundStyle(.tint)
-              .accessibilityLabel(String(format: Localized.Extension.updateToFormat, updateVersion))
+            updateBadge(version: updateVersion, url: item.latestReleaseURL)
               .transition(.opacity.combined(with: .scale))
           }
         }
@@ -192,6 +188,23 @@ private extension ExtensionsRowView {
         }
       }
     }
+  }
+
+  /// The pending-update badge ("↑ 1.2.3"); links to a browsable page for the latest release when available.
+  func updateBadge(version: String, url: URL?) -> some View {
+    let title = Text(verbatim: "↑ \(version)")
+      .font(.callout)
+      .fontWeight(.medium)
+
+    return Group {
+      if let url {
+        // Keep the default link style so it dims on mouse down
+        Link(destination: url) { title }
+      } else {
+        title.foregroundStyle(.tint)
+      }
+    }
+    .accessibilityLabel(String(format: Localized.Extension.updateToFormat, version))
   }
 
   func revealButton(for item: ExtensionsModel.Item) -> some View {
