@@ -197,10 +197,16 @@ extension Localized {
     static let registryUnreachable = String(localized: "Couldn’t reach the extension registry.", comment: "Error shown when the registry can't be loaded")
     static let emptyInstalled = String(localized: "No extensions installed.", comment: "Empty state for installed extensions")
     static let emptyDiscover = String(localized: "No extensions found.", comment: "Empty state for the Discover list")
+    static let extensionCountFormat = String(localized: "%lld extensions", comment: "Segment tooltip showing the number of extensions")
   }
 }
 
 extension Localized.Extension {
+  /// Extension count like "12 extensions"; plural forms are varied in the string catalog.
+  static func itemCount(_ count: Int) -> String {
+    String(format: extensionCountFormat, count)
+  }
+
   /// User-facing message for an install/update failure.
   static func failureMessage(for error: Error) -> String {
     if case ExtensionDownloader.Failure.incompatible(let minAppVersion) = error {

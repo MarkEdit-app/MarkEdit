@@ -58,6 +58,53 @@
         }
       }
     },
+    "%lld extensions" : {
+      "comment" : "Segment tooltip showing the number of extensions",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld extension"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld extensions"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld 个扩展"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hant" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld 個擴充功能"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "⌘-click to follow" : {
       "comment" : "Tooltip for links",
       "localizations" : {

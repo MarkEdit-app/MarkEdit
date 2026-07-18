@@ -91,6 +91,10 @@ final class ExtensionsModel {
     mode == .installed ? installedItems : discoverItems
   }
 
+  /// Item counts per mode, surfaced as segmented-control tooltips.
+  var discoverCount: Int { discoverItems.count }
+  var installedCount: Int { installedItems.count }
+
   /// The latest item for `id`, so a cell can read live state instead of a stale snapshot.
   func liveItem(id: String) -> Item? {
     items.first { $0.id == id }

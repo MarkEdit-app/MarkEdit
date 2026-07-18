@@ -127,6 +127,13 @@ private extension ExtensionsWindowController {
     controller.model.primeFromCache()
     controller.configureToolbar()
 
+    NotificationCenter.default.addObserver(
+      controller,
+      selector: #selector(handleExtensionsChange(_:)),
+      name: .extensionsDidChange,
+      object: nil
+    )
+
     window.contentViewController = ExtensionsViewController(model: controller.model)
     window.center()
     return controller
@@ -253,6 +260,8 @@ private extension ExtensionsWindowController {
 
   func updateModeControl() {
     modeControl?.selectedSegment = model.mode == .discover ? 0 : 1
+    modeControl?.setToolTip(Localized.Extension.itemCount(model.discoverCount), forSegment: 0)
+    modeControl?.setToolTip(Localized.Extension.itemCount(model.installedCount), forSegment: 1)
   }
 
   /// Checks the option matching the persisted value in each update-settings submenu.
@@ -270,6 +279,10 @@ private extension ExtensionsWindowController {
 
   @objc func handleModeChange(_ sender: NSSegmentedControl) {
     model.mode = sender.selectedSegment == 0 ? .discover : .installed
+  }
+
+  @objc func handleExtensionsChange(_ notification: Notification) {
+    updateModeControl()
   }
 
   @objc func promptInstallFromURL() {
