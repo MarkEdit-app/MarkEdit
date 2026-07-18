@@ -187,10 +187,12 @@ final class ExtensionCoreTests: XCTestCase {
 
   func testHasCachedUpdatesReflectsCachedIndex() throws {
     let dir = try makeTempDir()
+    let originalAppVersion = ExtensionEnvironment.appVersion
     defer {
       try? FileManager.default.removeItem(at: dir)
       ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
       ExtensionEnvironment.cachesDirectory = URL.cachesDirectory
+      ExtensionEnvironment.appVersion = originalAppVersion
     }
 
     ExtensionEnvironment.documentsDirectory = dir
