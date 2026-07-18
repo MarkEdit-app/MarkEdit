@@ -100,9 +100,9 @@ final class ExtensionsModel {
     items.first { $0.id == id }
   }
 
-  /// Whether any installed extension has a newer release available.
-  var hasAvailableUpdates: Bool {
-    installedItems.contains { $0.updateVersion != nil }
+  /// Number of installed extensions with a newer release available.
+  var availableUpdateCount: Int {
+    installedItems.count { $0.updateVersion != nil }
   }
 }
 

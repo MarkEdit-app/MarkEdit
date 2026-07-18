@@ -58,15 +58,13 @@ public enum ExtensionDownloader {
       sha256: release.sha256,
       file: fileName,
       enabled: true,
-      updateCheck: nil,
       installDate: Date.now.ISO8601Format()
     )
   }
 
   /// Installs from a raw url the user provided, for extensions not in the registry.
   ///
-  /// The id is derived from the filename, the hash is pinned from what was downloaded,
-  /// and updates default to `never` (re-install to update).
+  /// The id is derived from the filename and the hash is pinned from what was downloaded.
   public static func install(url: URL) async throws -> ExtensionConfig.Installed {
     let data = try await download(from: url)
     let id = ExtensionConfig.identifier(fromFileName: url.lastPathComponent)
@@ -82,7 +80,6 @@ public enum ExtensionDownloader {
       sha256: data.sha256Hash,
       file: fileName,
       enabled: true,
-      updateCheck: .never,
       installDate: Date.now.ISO8601Format()
     )
   }
