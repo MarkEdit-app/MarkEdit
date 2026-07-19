@@ -3059,6 +3059,23 @@
         }
       }
     },
+    "Search" : {
+      "comment" : "Placeholder for the search field in the extensions window",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜尋"
+          }
+        }
+      }
+    },
     "Search Actions" : {
       "comment" : "Search actions, like select all, select all in selection",
       "localizations" : {

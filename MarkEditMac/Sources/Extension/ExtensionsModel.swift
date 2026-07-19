@@ -72,6 +72,11 @@ final class ExtensionsModel {
     var latestReleaseURL: URL? {
       entry?.latest.pageURL
     }
+
+    /// Whether the item matches a search query, by name, author, id, or details.
+    func matches(query: String) -> Bool {
+      [name, author, id, details].contains { $0.localizedCaseInsensitiveContains(query) }
+    }
   }
 
   var mode: Mode = .discover
@@ -82,6 +87,9 @@ final class ExtensionsModel {
   /// The view layer that presents alerts and owns the sheet and window.
   @ObservationIgnored weak var presenter: ExtensionsPresenting?
 
+  /// The current search query; empty shows everything.
+  var searchQuery = ""
+
   /// True during an explicit "Refresh" so the state overlay can show a refreshing message.
   var isRefreshing = false
 
@@ -91,9 +99,15 @@ final class ExtensionsModel {
   private var installedItems: [Item] = []
   private var discoverItems: [Item] = []
 
-  /// Items for the current mode.
+  /// Items for the current mode, filtered by the search query.
   var items: [Item] {
-    mode == .installed ? installedItems : discoverItems
+    let base = mode == .installed ? installedItems : discoverItems
+    let query = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !query.isEmpty else {
+      return base
+    }
+
+    return base.filter { $0.matches(query: query) }
   }
 
   /// Item counts per mode, surfaced as segmented-control tooltips.

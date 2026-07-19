@@ -16,7 +16,7 @@ import Observation
 /// titlebar separators, drag-to-reorder, and row animations.
 @MainActor
 final class ExtensionsViewController: NSViewController {
-  static var defaultContentRect = CGRect(x: 0, y: 0, width: 720, height: 540)
+  static var defaultContentRect = CGRect(x: 0, y: 0, width: 780, height: 580)
 
   private let model: ExtensionsModel
   private let scrollView = NSScrollView()
@@ -88,8 +88,8 @@ extension ExtensionsViewController: NSTableViewDataSource {
   }
 
   func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
-    // Reordering only applies to installed extensions (the injection order)
-    guard model.mode == .installed, row < displayedItems.count else {
+    // Reordering only applies to the full installed list (the injection order), not a filtered view
+    guard model.mode == .installed, model.searchQuery.isEmpty, row < displayedItems.count else {
       return nil
     }
 
