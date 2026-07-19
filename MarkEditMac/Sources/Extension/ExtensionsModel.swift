@@ -90,8 +90,8 @@ final class ExtensionsModel {
   /// The current search query; empty shows everything.
   var searchQuery = ""
 
-  /// True during an explicit "Refresh" so the state overlay can show a refreshing message.
-  var isRefreshing = false
+  /// A whole-page progress message shown over the (emptied) list during Refresh or Update All.
+  var loadingMessage: String?
 
   /// The item currently running an install/update, used to show a per-item spinner.
   var busyItemID: String?

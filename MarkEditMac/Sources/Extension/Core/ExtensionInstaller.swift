@@ -188,6 +188,7 @@ extension Localized {
     static let refresh = String(localized: "Refresh", comment: "Menu item to refetch the extension registry")
     static let refreshing = String(localized: "Refreshing…", comment: "State shown while the extension list is being refreshed")
     static let updateAll = String(localized: "Update All", comment: "Menu item to update all extensions with available updates")
+    static let updating = String(localized: "Updating…", comment: "State shown while extensions are being updated")
     static let submitExtension = String(localized: "Submit an Extension…", comment: "Menu item to open the extension contributing guide")
     static let relaunchNotice = String(localized: "Relaunch to apply your changes.", comment: "Notice shown when extension changes need a relaunch")
     static let retry = String(localized: "Retry", comment: "Button to retry reaching the extension registry")

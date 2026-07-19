@@ -4060,6 +4060,23 @@
         }
       }
     },
+    "Updating…" : {
+      "comment" : "State shown while extensions are being updated",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新中…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新中…"
+          }
+        }
+      }
+    },
     "View Release Page" : {
       "comment" : "Title for the \"View Release Page\" button",
       "localizations" : {
