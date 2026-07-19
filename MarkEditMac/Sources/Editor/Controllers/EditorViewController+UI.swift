@@ -442,14 +442,9 @@ extension EditorViewController {
 
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
     class TextField: NSTextField {
-      override func performKeyEquivalent(with event: NSEvent) -> Bool {
-        // The default "selectAll" is not available here
-        if event.userModifierFlags == .command, event.keyCode == .kVK_ANSI_A {
-          currentEditor()?.selectAll(nil)
-          return true
-        }
-
-        return super.performKeyEquivalent(with: event)
+      // The main menu binds "Select All" to `selectWholeDocument(_:)`
+      @IBAction func selectWholeDocument(_ sender: Any?) {
+        currentEditor()?.selectAll(nil)
       }
     }
 

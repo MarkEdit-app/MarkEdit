@@ -108,6 +108,15 @@ final class RuntimeTests: XCTestCase {
     XCTAssertNotNil(searchField.modernBezelView)
   }
 
+  func testExistenceOfMinimumSearchFieldWidth() {
+    let item = NSSearchToolbarItem()
+    testExistenceOfSelector(object: item, selector: "minimumWidthForSearchFieldRepresentation")
+    testExistenceOfSelector(object: item, selector: "setMinimumWidthForSearchFieldRepresentation:")
+
+    item.minimumSearchFieldWidth = 500
+    XCTAssertEqual(item.minimumSearchFieldWidth, 500)
+  }
+
   func testRetrievingPopover() {
     class ContentViewController: NSViewController {
       override func loadView() {
