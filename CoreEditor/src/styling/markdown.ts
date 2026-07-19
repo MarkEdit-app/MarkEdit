@@ -9,6 +9,7 @@ import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
 import { taskMarkerStyle } from './nodes/task';
+import { imagePreviewStyle } from './nodes/image';
 
 export const classHighlighters = [
   syntaxHighlighting(classHighlighter),
@@ -81,6 +82,7 @@ export const renderExtensions = [
   listIndentStyle,
   tableStyle,
   frontMatterStyle,
+  imagePreviewStyle,
 ];
 
 /**

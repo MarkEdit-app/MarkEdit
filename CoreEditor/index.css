@@ -55,3 +55,22 @@ html, body {
   text-indent: 0px;
   margin-inline-start: 0px;
 }
+
+.cm-md-imagePreview {
+  display: inline-block;
+  max-inline-size: min(100%, 48rem);
+  margin-inline-start: 0.75em;
+  vertical-align: middle;
+}
+
+.cm-md-imagePreview[hidden] {
+  display: none;
+}
+
+.cm-md-imagePreviewImage {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: min(60vh, 36rem);
+  border-radius: 0.4em;
+  object-fit: contain;
+}

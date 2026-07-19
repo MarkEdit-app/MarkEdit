@@ -59,6 +59,10 @@ For older macOS: [macos-12](https://github.com/MarkEdit-app/MarkEdit/releases/ta
 
 Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki/Manual) for details. Check out [MarkEdit-skill](https://github.com/MarkEdit-app/MarkEdit-skill) if you're interested in managing MarkEdit with an AI agent.
 
+### Inline image previews
+
+Markdown image references stay editable while MarkEdit displays their previews. Local image paths are resolved relative to the Markdown document, and standard inline and reference-style image syntax are supported.
+
 ## Why MarkEdit is free
 
 MarkEdit is a tool we use every day and keep improving for ourselves. We ship it openly, hoping it's useful to others with the same needs.
