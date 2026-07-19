@@ -25,8 +25,8 @@ final class ExtensionsViewController: NSViewController {
   private var displayedItems: [ExtensionsModel.Item] = []
   private var displayedMode: ExtensionsModel.Mode
 
-  /// While true, `refreshAnimated()` drives the table and the observation-driven diff steps aside.
-  private var isManualRefreshing = false
+  /// While true, a whole-page overlay task (Refresh or Update All) drives the table and the observation-driven diff steps aside.
+  private var isRunningProgressOverlay = false
 
   /// Mirrors `model.pendingRelaunch` for layout; toggled with a slide-up animation on show.
   private var displayedRelaunch = false
@@ -228,31 +228,14 @@ extension ExtensionsViewController: ExtensionsPresenting {
 extension ExtensionsViewController {
   /// Explicit "Refresh": animate every row out, reconcile and refetch, then animate the fresh rows in.
   func refreshAnimated() {
-    guard !isManualRefreshing else {
-      return
+    runWithProgressOverlay(message: Localized.Extension.refreshing) { [weak self] in
+      await self?.model.load(forceRefresh: true)
     }
+  }
 
-    isManualRefreshing = true
-    model.isRefreshing = true
-
-    let oldItems = displayedItems
-    displayedItems = []
-    tableView.animateRows(from: oldItems, to: [], removeAnimation: .effectFade)
-    updateStateController()
-
-    Task { @MainActor in
-      await model.load(forceRefresh: true)
-      try? await Task.sleep(for: .seconds(1.2)) // Keep long enough deliberately
-
-      displayedMode = model.mode
-      displayedItems = model.items
-      tableView.animateRows(from: [], to: displayedItems)
-      updateRelaunchBar()
-      updateStateController()
-      view.needsLayout = true
-
-      model.isRefreshing = false
-      isManualRefreshing = false
+  func updateAllAnimated() {
+    runWithProgressOverlay(message: Localized.Extension.updating) { [weak self] in
+      await self?.model.updateAllExtensions()
     }
   }
 
@@ -272,6 +255,7 @@ private extension ExtensionsViewController {
     static let cellIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRowCell")
     static let overScrollInset: Double = 24
     static let overlayOpticalOffset: Double = 20
+    static let minimumOverlayDuration: TimeInterval = 1.2
   }
 
   // Horizontal margin for the row content; separators use the same value so they stay aligned.
@@ -337,8 +321,8 @@ private extension ExtensionsViewController {
   }
 
   func applyModelChanges() {
-    // A manual refresh animates the table itself, ignore the intermediate model changes
-    guard !isManualRefreshing else {
+    // A whole-page overlay task animates the table itself, ignore the intermediate model changes
+    guard !isRunningProgressOverlay else {
       return
     }
 
@@ -456,6 +440,43 @@ private extension ExtensionsViewController {
   func updateStateController() {
     // The state view (loading spinner / empty message) shows only when there are no rows
     stateController.view.isHidden = !displayedItems.isEmpty
+  }
+
+  /// Empties the list to reveal the whole-page spinner, runs `action`, then animates the fresh rows in.
+  func runWithProgressOverlay(message: String, action: @escaping () async -> Void) {
+    guard !isRunningProgressOverlay else {
+      return
+    }
+
+    isRunningProgressOverlay = true
+    model.loadingMessage = message
+
+    let oldItems = displayedItems
+    displayedItems = []
+    tableView.animateRows(from: oldItems, to: [], removeAnimation: .effectFade)
+    updateStateController()
+
+    Task { @MainActor in
+      let started = Date()
+      await action()
+
+      // Keep the spinner visible long enough to read, regardless of how fast the work finished
+      let remaining = Constants.minimumOverlayDuration - Date().timeIntervalSince(started)
+      if remaining > 0 {
+        try? await Task.sleep(for: .seconds(remaining))
+      }
+
+      displayedMode = model.mode
+      displayedItems = model.items
+      tableView.animateRows(from: [], to: displayedItems)
+
+      updateRelaunchBar()
+      updateStateController()
+
+      model.loadingMessage = nil
+      isRunningProgressOverlay = false
+      view.needsLayout = true
+    }
   }
 
   @discardableResult

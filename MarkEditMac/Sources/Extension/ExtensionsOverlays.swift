@@ -13,8 +13,8 @@ struct ExtensionsStateView: View {
   let model: ExtensionsModel
 
   var body: some View {
-    if model.isRefreshing {
-      LabeledProgressView(title: Localized.Extension.refreshing)
+    if let loadingMessage = model.loadingMessage {
+      LabeledProgressView(title: loadingMessage)
     } else if model.phase == .loading {
       ProgressView()
     } else {
