@@ -30,6 +30,13 @@ struct ExtensionsRowView: View {
             .fontWeight(.semibold)
             .lineLimit(1)
 
+          if item.isOfficial {
+            Image(systemName: Icons.checkmarkSeal)
+              .foregroundStyle(.orange)
+              .help(Localized.Extension.official)
+              .accessibilityLabel(Localized.Extension.official)
+          }
+
           if let updateVersion = item.updateVersion {
             updateBadge(version: updateVersion, url: item.latestReleaseURL)
               .transition(.opacity.combined(with: .scale))
@@ -52,9 +59,13 @@ struct ExtensionsRowView: View {
             .padding(.top, 4)
         }
 
-        if !item.author.isEmpty || item.version != nil || item.homepage != nil {
+        if item.isLocal || !item.author.isEmpty || item.version != nil || item.homepage != nil {
           HStack(spacing: 5) {
-            if let version = item.version {
+            if item.isLocal {
+              Text(Localized.Extension.local)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            } else if let version = item.version {
               Text(verbatim: "v\(version)")
                 .font(.callout)
                 .foregroundStyle(.secondary)
@@ -62,7 +73,7 @@ struct ExtensionsRowView: View {
             }
 
             if !item.author.isEmpty {
-              if item.version != nil {
+              if item.version != nil || item.isLocal {
                 metadataDot
               }
 
@@ -72,7 +83,7 @@ struct ExtensionsRowView: View {
             }
 
             if let homepage = item.homepage {
-              if item.version != nil || !item.author.isEmpty {
+              if item.version != nil || item.isLocal || !item.author.isEmpty {
                 metadataDot
               }
 
