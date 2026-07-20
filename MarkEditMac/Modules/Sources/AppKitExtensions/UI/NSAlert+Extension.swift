@@ -8,6 +8,25 @@ import AppKit
 
 public extension NSAlert {
   /**
+   Optional suggested width for `markdownBody`.
+
+   Must be set before assigning the `markdownBody` property.
+   */
+  var markdownContentWidth: Double? {
+    get {
+      objc_getAssociatedObject(self, &AssociatedObjects.markdownContentWidth) as? Double
+    }
+    set {
+      objc_setAssociatedObject(
+        self,
+        &AssociatedObjects.markdownContentWidth,
+        newValue,
+        objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC
+      )
+    }
+  }
+
+  /**
    Drop-in replacement for `informativeText` with Markdown support.
    */
   var markdownBody: String? {
@@ -32,6 +51,7 @@ public extension NSAlert {
 private extension NSAlert {
   @MainActor
   private enum AssociatedObjects {
+    static var markdownContentWidth: UInt8 = 0
     static var markdownBody: UInt8 = 0
   }
 
@@ -72,7 +92,7 @@ private extension NSAlert {
     let textStorage = textView.textStorage
     textStorage?.setAttributedString(attributedText)
 
-    let contentSize = CGSize(width: Constants.contentWidth, height: 0)
+    let contentSize = CGSize(width: markdownContentWidth ?? Constants.contentWidth, height: 0)
     textView.frame = CGRect(origin: CGPoint(x: Constants.contentPadding, y: 0), size: contentSize)
     textView.sizeToFit()
 

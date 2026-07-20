@@ -153,7 +153,7 @@ extension ExtensionsModel {
     phase = index == nil ? .failed : .ready
 
     // A fresh index may surface or clear updates, let the menu-bar hint refresh.
-    NotificationCenter.default.post(name: .extensionsMenuNeedsUpdate, object: nil)
+    ExtensionUpdater.requestMenuUpdate()
   }
 }
 
@@ -361,6 +361,6 @@ private extension ExtensionsModel {
   func markChanged() {
     pendingRelaunch = true
     rebuildItems(index: ExtensionRegistry.cachedIndex)
-    NotificationCenter.default.post(name: .extensionsMenuNeedsUpdate, object: nil)
+    ExtensionUpdater.requestMenuUpdate()
   }
 }
