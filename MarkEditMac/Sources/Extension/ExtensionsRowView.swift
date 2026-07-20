@@ -13,6 +13,7 @@ import SharedUI
 struct ExtensionsRowView: View {
   let model: ExtensionsModel
   let item: ExtensionsModel.Item
+  let rowMargin: Double
 
   var body: some View {
     // Read live state so the cell animates its own updates instead of being reloaded.
@@ -105,6 +106,13 @@ struct ExtensionsRowView: View {
       trailingControl(item: item)
     }
     .padding(.vertical, 8)
+    .padding(.horizontal, rowMargin)
+    .frame(maxWidth: .infinity)
+    .background(
+      // Rounded for the drag preview; invisible at rest since it matches the window background.
+      RoundedRectangle(cornerRadius: 8)
+        .fill(Color(nsColor: .windowBackgroundColor))
+    )
     // Fresh identity per mode so tab switches swap content without animating.
     .id(model.mode)
   }

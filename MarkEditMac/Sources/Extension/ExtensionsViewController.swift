@@ -152,12 +152,12 @@ extension ExtensionsViewController: NSTableViewDelegate {
 
   func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
     let cell = tableView.makeView(withIdentifier: Constants.cellIdentifier, owner: self) as? TableCellWrapper ?? {
-      let view = TableCellWrapper(horizontalMargin: rowMargin)
+      let view = TableCellWrapper()
       view.identifier = Constants.cellIdentifier
       return view
     }()
 
-    cell.configure(ExtensionsRowView(model: model, item: displayedItems[row]))
+    cell.configure(ExtensionsRowView(model: model, item: displayedItems[row], rowMargin: rowMargin))
     return cell
   }
 

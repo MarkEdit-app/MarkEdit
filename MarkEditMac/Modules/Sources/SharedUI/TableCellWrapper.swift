@@ -7,18 +7,18 @@
 import AppKit
 import SwiftUI
 
-/// Table cell that hosts an arbitrary SwiftUI view, inset by a horizontal margin.
+/// Table cell that hosts an arbitrary SwiftUI view, filling the full cell width.
 public final class TableCellWrapper: NSTableCellView {
   private let hostingView = NSHostingView(rootView: AnyView(EmptyView()))
 
-  public init(horizontalMargin: Double) {
+  public init() {
     super.init(frame: .zero)
     hostingView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(hostingView)
 
     NSLayoutConstraint.activate([
-      hostingView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: horizontalMargin),
-      hostingView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -horizontalMargin),
+      hostingView.leadingAnchor.constraint(equalTo: leadingAnchor),
+      hostingView.trailingAnchor.constraint(equalTo: trailingAnchor),
       hostingView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
       hostingView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
     ])
