@@ -19,6 +19,11 @@ final class ExtensionsWindowController: NSWindowController {
   private weak var updateBehaviorMenu: NSMenu?
 
   func present(scrollTo category: ExtensionEntry.Category? = nil) {
+    if !AppPreferences.Extensions.windowHasBeenOpened {
+      AppPreferences.Extensions.windowHasBeenOpened = true
+      NotificationCenter.default.post(name: .extensionsMenuNeedsUpdate, object: nil)
+    }
+
     if category != nil {
       model.mode = .discover
       updateModeControl()
@@ -173,7 +178,7 @@ private extension ExtensionsWindowController {
     NotificationCenter.default.addObserver(
       controller,
       selector: #selector(handleExtensionsChange(_:)),
-      name: .extensionsDidChange,
+      name: .extensionsMenuNeedsUpdate,
       object: nil
     )
 

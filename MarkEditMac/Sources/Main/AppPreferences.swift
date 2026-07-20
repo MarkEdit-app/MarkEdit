@@ -251,6 +251,11 @@ enum AppPreferences {
     @Storage(key: "updater.completely-disabled", defaultValue: false)
     static var completelyDisabled: Bool
   }
+
+  enum Extensions {
+    @Storage(key: "extensions.window-has-been-opened", defaultValue: false)
+    static var windowHasBeenOpened: Bool
+  }
 }
 
 extension FontStyle {

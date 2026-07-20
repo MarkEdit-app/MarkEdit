@@ -80,8 +80,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     NotificationCenter.default.addObserver(
       self,
-      selector: #selector(extensionsDidChange(_:)),
-      name: .extensionsDidChange,
+      selector: #selector(extensionsMenuNeedsUpdate(_:)),
+      name: .extensionsMenuNeedsUpdate,
       object: nil
     )
 
@@ -216,14 +216,8 @@ private extension AppDelegate {
     }
   }
 
-  @objc func extensionsDidChange(_ notification: Notification) {
-    guard let menu = mainExtensionsMenu else {
-      return Logger.assertFail("Failed to get mainExtensionsMenu")
-    }
-
-    let badge = "✨ "
-    let original = menu.title.replacingOccurrences(of: badge, with: "")
-    menu.title = "\(ExtensionRegistry.hasCachedUpdates ? badge : "")\(original)"
+  @objc func extensionsMenuNeedsUpdate(_ notification: Notification) {
+    updateExtensionsMenu()
   }
 
   @IBAction func showPreferences(_ sender: Any?) {
@@ -246,5 +240,16 @@ private extension AppDelegate {
 
   @IBAction func openSettingsJSON(_ sender: Any?) {
     NSWorkspace.shared.open(AppCustomization.settings.fileURL)
+  }
+
+  func updateExtensionsMenu() {
+    guard let menu = mainExtensionsMenu else {
+      return Logger.assertFail("Failed to get mainExtensionsMenu")
+    }
+
+    let badgeText = "✨ "
+    let originalText = menu.title.replacingOccurrences(of: badgeText, with: "")
+    let showsBadge = ExtensionRegistry.hasCachedUpdates || !AppPreferences.Extensions.windowHasBeenOpened
+    menu.title = "\(showsBadge ? badgeText : "")\(originalText)"
   }
 }
