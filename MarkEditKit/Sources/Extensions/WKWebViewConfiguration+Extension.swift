@@ -12,7 +12,7 @@ public extension WKWebViewConfiguration {
     let config: WKWebViewConfiguration = .preferredConfig()
     config.enablePerformanceFlags(disabledFeatures: disabledFeatures)
 
-    // WebKit regression in macOS 26.6 that blocks url scheme tasks
+    // [macOS 26.6] WebKit regression that blocks url scheme tasks
     var corsDisablingPatterns = [
       "image-loader://*/*",
       "chunk-loader://*/*",
