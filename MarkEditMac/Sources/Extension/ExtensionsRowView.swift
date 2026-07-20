@@ -90,6 +90,7 @@ struct ExtensionsRowView: View {
               Link(Localized.Extension.homepage, destination: homepage)
                 .font(.callout)
                 .fontWeight(.medium)
+                .help(homepage.absoluteString)
             }
           }
           .padding(.top, 12)
@@ -211,6 +212,7 @@ private extension ExtensionsRowView {
       if let url {
         // Keep the default link style so it dims on mouse down
         Link(destination: url) { title }
+          .help(url.absoluteString)
       } else {
         title.foregroundStyle(.tint)
       }

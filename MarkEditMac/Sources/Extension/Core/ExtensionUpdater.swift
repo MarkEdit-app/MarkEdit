@@ -28,7 +28,7 @@ enum ExtensionUpdater {
     }
 
     // A refreshed index may change what's outdated, let app-level UI (the menu-bar hint) refresh.
-    NotificationCenter.default.post(name: .extensionsMenuNeedsUpdate, object: nil)
+    requestMenuUpdate()
 
     // Prompt cadence is tracked separately.
     guard explicitly || ExtensionRegistry.shouldPromptUpdates else {
@@ -52,6 +52,10 @@ enum ExtensionUpdater {
       await apply(updates: updates, promptRelaunch: false)
     }
   }
+
+  static func requestMenuUpdate() {
+    NotificationCenter.default.post(name: .extensionsMenuNeedsUpdate, object: nil)
+  }
 }
 
 // MARK: - Private
@@ -59,14 +63,16 @@ enum ExtensionUpdater {
 private extension ExtensionUpdater {
   static func presentPrompt(updates: [ExtensionUpdate]) async {
     let lines = updates.map { update in
-      "• \(update.entry.name) (\(update.installed.version ?? "?") → \(update.entry.latest.version))"
+      "**• \(update.entry.name)** _(\(update.installed.version ?? Localized.Extension.local.lowercased()) → \(update.entry.latest.version))_"
     }
 
     let alert = NSAlert()
     alert.messageText = Localized.Extension.updatesAvailableTitle
-    alert.informativeText = lines.joined(separator: "\n")
     alert.addButton(withTitle: Localized.Extension.updateButton)
     alert.addButton(withTitle: Localized.Extension.laterButton)
+
+    alert.markdownContentWidth = 280
+    alert.markdownBody = lines.joined(separator: "\n\n") + "\n"
 
     guard alert.runModal() == .alertFirstButtonReturn else {
       return
@@ -100,8 +106,12 @@ private extension ExtensionUpdater {
       }
     }
 
-    if didUpdate && promptRelaunch {
-      presentRelaunch()
+    if didUpdate {
+      requestMenuUpdate()
+
+      if promptRelaunch {
+        presentRelaunch()
+      }
     }
 
     return failures
@@ -112,7 +122,7 @@ private extension ExtensionUpdater {
     alert.messageText = Localized.Extension.failedTitle
     alert.informativeText = failures
       .map { "• \($0.name) - \(failureReason($0.error))" }
-      .joined(separator: "\n")
+      .joined(separator: "\n\n") + "\n"
     alert.runModal()
   }
 

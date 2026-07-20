@@ -21,7 +21,7 @@ final class ExtensionsWindowController: NSWindowController {
   func present(scrollTo category: ExtensionEntry.Category? = nil) {
     if !AppPreferences.Extensions.windowHasBeenOpened {
       AppPreferences.Extensions.windowHasBeenOpened = true
-      NotificationCenter.default.post(name: .extensionsMenuNeedsUpdate, object: nil)
+      ExtensionUpdater.requestMenuUpdate()
     }
 
     if category != nil {
