@@ -229,6 +229,8 @@ private extension ExtensionsWindowController {
 
     updateAllItem = menu.addItem(withTitle: Localized.Extension.updateAll) { [weak self] in
       self?.extensionsVC?.updateAllAnimated()
+      self?.model.mode = .installed
+      self?.updateModeControl()
     }
 
     let updateBehaviorItem = NSMenuItem()
