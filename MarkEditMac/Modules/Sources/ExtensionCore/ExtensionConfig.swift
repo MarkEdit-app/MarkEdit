@@ -256,9 +256,9 @@ private extension ExtensionConfig {
 }
 
 public extension ExtensionConfig.Installed {
-  /// Whether this is a first-party extension (the "markedit-" id namespace).
-  var isOfficial: Bool {
-    id.lowercased().hasPrefix("markedit-")
+  /// Whether this is an extension that can be migrated to the registry.
+  var shouldMigrate: Bool {
+    version == nil && id.lowercased().hasPrefix("markedit-")
   }
 
   /// Adopts a local script file as an untracked extension.

@@ -68,6 +68,16 @@ final class ExtensionsModel {
       entry?.colorScheme
     }
 
+    /// Whether the author is the MarkEdit-app organization, shown as an official badge.
+    var isOfficial: Bool {
+      author == "MarkEdit-app"
+    }
+
+    /// An installed extension with no tracked version, a local script not from the registry.
+    var isLocal: Bool {
+      isInstalled && version == nil
+    }
+
     /// A browsable page for the latest release (release or tag page), when known.
     var latestReleaseURL: URL? {
       entry?.latest.pageURL

@@ -280,7 +280,7 @@ public enum ExtensionRegistry {
 
       // Version-less official scripts (pre-registry) adopt the latest; third-party ones are left alone.
       guard let version = installed.version else {
-        return installed.isOfficial ? ExtensionUpdate(installed: installed, entry: entry) : nil
+        return installed.shouldMigrate ? ExtensionUpdate(installed: installed, entry: entry) : nil
       }
 
       // Skip older or equal versions

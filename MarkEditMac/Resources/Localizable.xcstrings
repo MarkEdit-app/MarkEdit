@@ -2158,6 +2158,23 @@
         }
       }
     },
+    "Local" : {
+      "comment" : "Label for a local extension that isn't tracked by the registry",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本機"
+          }
+        }
+      }
+    },
     "macOS / Unix (LF)" : {
       "comment" : "Line endings used on macOS and Unix",
       "localizations" : {
@@ -2475,6 +2492,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "等下再說"
+          }
+        }
+      }
+    },
+    "Official" : {
+      "comment" : "Badge shown for extensions authored by the MarkEdit-app organization",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "官方"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "官方"
           }
         }
       }
