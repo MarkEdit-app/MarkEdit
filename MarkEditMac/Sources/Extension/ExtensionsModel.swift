@@ -70,7 +70,7 @@ final class ExtensionsModel {
 
     /// Whether the author is the MarkEdit-app organization, shown as an official badge.
     var isOfficial: Bool {
-      author == "MarkEdit-app"
+      author.caseInsensitiveCompare("MarkEdit-app") == .orderedSame
     }
 
     /// An installed extension with no tracked version, a local script not from the registry.
