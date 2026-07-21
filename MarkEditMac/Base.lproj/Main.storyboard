@@ -438,13 +438,13 @@ Gw
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem title="Select Previous Section" keyEquivalent="" id="Gbu-oy-t2b">
-                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                                         <connections>
                                                             <action selector="selectPreviousSection:" target="Ady-hI-5gd" id="ItO-QD-K4H"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem title="Select Next Section" keyEquivalent="" id="ZM6-yO-uqe">
-                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                                        <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                                         <connections>
                                                             <action selector="selectNextSection:" target="Ady-hI-5gd" id="dss-gg-NFs"/>
                                                         </connections>

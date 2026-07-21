@@ -6,10 +6,10 @@ import { scrollToSelection } from '../selection';
 import { saveGoBackSelection } from '../selection/navigate';
 import selectWithRanges from '../selection/selectWithRanges';
 
-// Override the system default behavior, it was not necessary until macOS 13.3
+// Ctrl-Mod-Arrow to navigate sections, Alt-Mod-Arrow conflicts with adding carets
 export const tocKeymap: KeyBinding[] = [
   {
-    key: 'Alt-Mod-ArrowUp',
+    key: 'Ctrl-Mod-ArrowUp',
     preventDefault: true,
     run: () => {
       selectPreviousSection();
@@ -17,7 +17,7 @@ export const tocKeymap: KeyBinding[] = [
     },
   },
   {
-    key: 'Alt-Mod-ArrowDown',
+    key: 'Ctrl-Mod-ArrowDown',
     preventDefault: true,
     run: () => {
       selectNextSection();

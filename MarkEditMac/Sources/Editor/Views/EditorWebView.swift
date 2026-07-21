@@ -70,8 +70,7 @@ final class EditorWebView: WKWebView {
 
   override func performKeyEquivalent(with event: NSEvent) -> Bool {
     // Silence the incorrect "beep" in WebKit
-    if event.modifierFlags.contains([.control, .command]),
-       event.keyCode == .kVK_LeftArrow || event.keyCode == .kVK_RightArrow {
+    if event.modifierFlags.contains([.control, .command]), arrowKeyCodes.contains(event.keyCode) {
       // Event will be handled in CoreEditor instead
       return false
     }
@@ -269,3 +268,10 @@ private extension NSUserInterfaceItemIdentifier {
   static let shareMenu = Self("WKMenuItemIdentifierShareMenu")
   static let inspectElement = Self("WKMenuItemIdentifierInspectElement")
 }
+
+private let arrowKeyCodes: [UInt16] = [
+  .kVK_LeftArrow,
+  .kVK_RightArrow,
+  .kVK_DownArrow,
+  .kVK_UpArrow,
+]
