@@ -90,6 +90,7 @@ enum AppRuntimeConfig {
     let restoreLastSelection: Bool?
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
+    let undoGroupingInterval: Double?
     let headerFontSizeDiffs: [Double]?
     let visibleWhitespaceCharacter: String?
     let visibleLineBreakCharacter: String?
@@ -115,6 +116,7 @@ enum AppRuntimeConfig {
       case restoreLastSelection = "editor.restoreLastSelection"
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
+      case undoGroupingInterval = "editor.undoGroupingInterval"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
       case visibleWhitespaceCharacter = "editor.visibleWhitespaceCharacter"
       case visibleLineBreakCharacter = "editor.visibleLineBreakCharacter"
@@ -189,6 +191,11 @@ enum AppRuntimeConfig {
     case "limited": return NSWritingToolsBehavior.limited
     default: return nil
     }
+  }
+
+  static var undoGroupingInterval: Double? {
+    // Rely on CoreEditor, 300ms by default
+    currentDefinition?.undoGroupingInterval
   }
 
   static var headerFontSizeDiffs: [Double]? {
@@ -310,6 +317,7 @@ private extension AppRuntimeConfig {
     restoreLastSelection: nil,
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
+    undoGroupingInterval: nil,
     headerFontSizeDiffs: nil,
     visibleWhitespaceCharacter: nil,
     visibleLineBreakCharacter: nil,
