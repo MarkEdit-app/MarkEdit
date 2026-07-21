@@ -108,6 +108,9 @@ final class ExtensionsModel {
   /// A whole-page progress message shown over the (emptied) list during Refresh or Update All.
   var loadingMessage: String?
 
+  /// Determinate progress (completed, total) for a multi-extension "Update All"; nil shows an indeterminate spinner.
+  var updateProgress: (completed: Int, total: Int)?
+
   /// The item currently running an install/update, used to show a per-item spinner.
   var busyItemID: String?
 
@@ -225,16 +228,32 @@ extension ExtensionsModel {
       return
     }
 
+    // Show determinate progress when more than one extension is being updated.
+    let total = updatable.count
+    let tracksProgress = total > 1
+
     // Continue past per-item failures so one bad extension doesn't abort the batch.
     var failures: [Error] = []
     await runBusyAction {
-      for (installed, entry) in updatable {
+      // Set here (not before), so a re-entrant call doesn't flash a stale 0/total.
+      if tracksProgress {
+        updateProgress = (0, total)
+      }
+
+      for (index, (installed, entry)) in updatable.enumerated() {
         do {
           let merged = try await ExtensionDownloader.downloadUpdate(for: installed, entry: entry)
           ExtensionConfig.upsertInstalled(merged)
         } catch {
           Logger.log(.error, "Failed to update extension \(installed.id): \(error)")
           failures.append(error)
+        }
+
+        if tracksProgress {
+          updateProgress = (index + 1, total)
+          if total < 10 {
+            try? await Task.sleep(for: Constants.progressStepDelay)
+          }
         }
       }
     }
@@ -275,9 +294,11 @@ extension ExtensionsModel {
 private extension ExtensionsModel {
   enum Constants {
     /// Minimum time the busy spinner stays visible so a fast action doesn't flash.
-    static let minimumBusyDuration: TimeInterval = 1.5
+    static let minimumBusyDuration: TimeInterval = 1.2
     /// Brief settle so the swapped-in control renders before the spinner clears.
     static let busyRenderDelay: Duration = .milliseconds(50)
+    /// Extra dwell after each "Update All" step so the count ticks up at a readable pace.
+    static let progressStepDelay: Duration = .milliseconds(400)
   }
 
   /// Rebuilds both lists; `installed` is injectable so the mapping can be tested in isolation.
