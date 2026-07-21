@@ -454,6 +454,7 @@ private extension ExtensionsViewController {
       updateStateController()
 
       model.loadingMessage = nil
+      model.updateProgress = nil
       isRunningProgressOverlay = false
       view.needsLayout = true
     }

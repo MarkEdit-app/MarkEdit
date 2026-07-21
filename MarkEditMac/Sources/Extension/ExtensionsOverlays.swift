@@ -14,7 +14,12 @@ struct ExtensionsStateView: View {
 
   var body: some View {
     if let loadingMessage = model.loadingMessage {
-      LabeledProgressView(title: loadingMessage)
+      LabeledProgressView(
+        title: loadingMessage,
+        progress: model.updateProgress.map {
+          Double($0.completed) / Double($0.total)
+        }
+      )
     } else if model.phase == .loading {
       ProgressView()
     } else {
