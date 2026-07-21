@@ -93,6 +93,7 @@ extension EditorConfig {
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: false,
       indentBehavior: .never,
+      undoGroupingInterval: nil,
       headerFontSizeDiffs: nil,
       visibleWhitespaceCharacter: nil,
       visibleLineBreakCharacter: nil,

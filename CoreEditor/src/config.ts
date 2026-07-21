@@ -69,6 +69,7 @@ export interface Config {
   // Runtime config from settings.json, not dynamically changeable
   autoCharacterPairs: boolean;
   indentBehavior: IndentBehavior;
+  undoGroupingInterval?: number;
   headerFontSizeDiffs?: number[];
   visibleWhitespaceCharacter?: string;
   visibleLineBreakCharacter?: string;

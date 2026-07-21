@@ -76,7 +76,7 @@ export function extensions(options: { lineBreak?: string }) {
     // Basic
     highlightSpecialChars(),
     history({
-      newGroupDelay: 300,
+      newGroupDelay: window.config.undoGroupingInterval ?? 300,
       ignoreBeforeInput: () => isWritingToolsActive(),
     }),
     drawSelection({ cursorBlinkRate: 1000 }),
