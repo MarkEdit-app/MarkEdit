@@ -207,6 +207,7 @@ private extension ExtensionsRowView {
           }
         }
       }
+      .help(item.updateNotes ?? "")
     }
   }
 

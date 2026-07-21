@@ -170,7 +170,6 @@ extension ExtensionsViewController: NSTableViewDelegate {
 
     // Opaque fill so animating rows don't show each other's text through the crossfade
     rowView.backgroundColor = .windowBackgroundColor
-    rowView.showsSeparator = !(displayedRelaunch && row == displayedItems.count - 1)
     return rowView
   }
 }
@@ -349,10 +348,6 @@ private extension ExtensionsViewController {
     let oldItems = displayedItems
     displayedItems = newItems
     tableView.animateRows(from: oldItems, to: newItems)
-
-    // Surviving rows are not reloaded: their SwiftUI cells read live model state and animate
-    // in place. Reloading would recreate the cell and drop in-flight animations.
-    updateVisibleRows()
   }
 
   /// Frame-based layout so content imposes no Auto Layout fitting size, keeping the window resizable.
@@ -401,8 +396,6 @@ private extension ExtensionsViewController {
     }
 
     displayedRelaunch = true
-    updateVisibleRows()
-
     guard !AppDesign.reduceMotion else {
       layoutContents()
       return
@@ -421,19 +414,6 @@ private extension ExtensionsViewController {
       Task { @MainActor in
         self?.isAnimatingRelaunch = false
       }
-    }
-  }
-
-  func updateVisibleRows() {
-    guard !displayedItems.isEmpty else {
-      return
-    }
-
-    let lastIndex = displayedItems.count - 1
-    for index in 0...lastIndex {
-      // The last row hides its separator while the relaunch bar shows its own top divider
-      let rowView = tableView.rowView(atRow: index, makeIfNecessary: false) as? TableRowWrapper
-      rowView?.showsSeparator = !(displayedRelaunch && index == lastIndex)
     }
   }
 

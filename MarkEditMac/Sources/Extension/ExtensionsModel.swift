@@ -83,6 +83,11 @@ final class ExtensionsModel {
       entry?.latest.pageURL
     }
 
+    /// Release notes for the latest release.
+    var updateNotes: String? {
+      entry?.latest.notes
+    }
+
     /// Whether the item matches a search query, by name, author, id, or details.
     func matches(query: String) -> Bool {
       [name, author, id, details].contains { $0.localizedCaseInsensitiveContains(query) }
