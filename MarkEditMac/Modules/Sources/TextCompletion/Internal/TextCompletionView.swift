@@ -41,7 +41,7 @@ struct TextCompletionView: View {
             ForEach(0..<state.items.count, id: \.self) { index in
               ZStack(alignment: .leading) {
                 if index == state.selectedIndex {
-                  Color.accent.clipShape(RoundedRectangle(
+                  Color.accentColor.clipShape(RoundedRectangle(
                     cornerRadius: modernStyle ? 5.5 : 3.5,
                     style: .continuous
                   ))
@@ -53,14 +53,14 @@ struct TextCompletionView: View {
                     text[range].font = .system(size: Constants.fontSize, weight: .medium)
 
                     if index != state.selectedIndex {
-                      text[range].foregroundColor = .label
+                      text[range].foregroundColor = .primary
                     }
                   }
 
                   return text
                 }())
                 .font(.system(size: Constants.fontSize))
-                .foregroundColor(index == state.selectedIndex ? .white : .label.opacity(0.75))
+                .foregroundColor(index == state.selectedIndex ? .white : .primary.opacity(0.75))
                 .padding([.leading, .trailing], Constants.itemPadding + (modernStyle ? 2 : 0))
               }
               .frame(

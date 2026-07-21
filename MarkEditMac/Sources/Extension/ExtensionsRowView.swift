@@ -111,7 +111,7 @@ struct ExtensionsRowView: View {
     .background(
       // Rounded for the drag preview; invisible at rest since it matches the window background.
       RoundedRectangle(cornerRadius: 8)
-        .fill(Color(nsColor: .windowBackgroundColor))
+        .fill(.windowBackground)
     )
     // Fresh identity per mode so tab switches swap content without animating.
     .id(model.mode)
