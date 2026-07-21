@@ -46,12 +46,11 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '@keyframes cm-blink2': { '40%, 90%': { opacity: 1 }, '60%, 70%': { opacity: 0 } },
   '.cm-foldGutter': {
     padding: '0 4px',
-    opacity: '0',
-    transition: '0s', // See #436
+    // Fade with color, not opacity: on WebKit an opacity transition promotes this to a
+    // compositing layer that snaps to device pixels, leaving a seam beside the gutter (#1581)
+    color: 'transparent',
+    transition: 'color 0s', // See #436
     transitionDelay: '0s',
-  },
-  '.cm-foldGutter.cm-gutterHover': {
-    opacity: '1',
   },
   '.cm-foldGutter, .cm-foldPlaceholder': {
     // Don't use ui-monospace because ▶︎ and ••• look very big
@@ -152,7 +151,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       color: colors.text,
     },
     // Handle of code folding
-    '.cm-foldGutter, .cm-foldPlaceholder': {
+    '.cm-foldGutter.cm-gutterHover, .cm-foldPlaceholder': {
       color: `${colors.text}66`,
     },
     '.cm-foldPlaceholder': {
