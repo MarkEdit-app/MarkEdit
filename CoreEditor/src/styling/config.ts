@@ -228,7 +228,8 @@ export function applyReducedMotion(reduceMotion: boolean, types: 'both' | 'curso
   if (types === 'both' || types === 'gutter') {
     const foldGutter = document.querySelector('.cm-foldGutter') as HTMLElement | null;
     if (foldGutter !== null) {
-      foldGutter.style.transition = reduceMotion ? '0s' : '0.4s';
+      // Fade with color (not opacity) to avoid compositing the gutter, see #1581.
+      foldGutter.style.transition = reduceMotion ? 'color 0s' : 'color 0.4s';
       foldGutter.style.transitionDelay = reduceMotion ? '0s' : '0.1s';
     }
   }
