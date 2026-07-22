@@ -94,8 +94,7 @@ extension ExtensionsViewController: NSTableViewDataSource {
   }
 
   func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
-    // Reordering only applies to the full installed list (the injection order), not a filtered view
-    guard model.mode == .installed, model.searchQuery.isEmpty, row < displayedItems.count else {
+    guard model.canReorderItems, row < displayedItems.count else {
       return nil
     }
 
@@ -110,7 +109,7 @@ extension ExtensionsViewController: NSTableViewDataSource {
     proposedRow row: Int,
     proposedDropOperation dropOperation: NSTableView.DropOperation
   ) -> NSDragOperation {
-    guard model.mode == .installed,
+    guard model.canReorderItems,
           dropOperation == .above,
           info.draggingSource as? NSTableView === tableView else {
       return []
@@ -125,7 +124,7 @@ extension ExtensionsViewController: NSTableViewDataSource {
     row: Int,
     dropOperation: NSTableView.DropOperation
   ) -> Bool {
-    guard model.mode == .installed,
+    guard model.canReorderItems,
           let identifier = info.draggingPasteboard.string(forType: .string),
           let source = (displayedItems.firstIndex { $0.id == identifier })
     else {

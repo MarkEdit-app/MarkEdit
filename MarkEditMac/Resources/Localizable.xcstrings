@@ -2445,6 +2445,23 @@
         }
       }
     },
+    "No updates available." : {
+      "comment" : "Empty state when the installed list is filtered to updates only",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可用更新。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有可用更新。"
+          }
+        }
+      }
+    },
     "No versions match the specified condition." : {
       "comment" : "Alert title for no versions found",
       "localizations" : {
@@ -3314,6 +3331,23 @@
         }
       }
     },
+    "Show Updates Only" : {
+      "comment" : "Checkable menu item to filter the installed list to extensions with available updates",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅显示更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅顯示更新"
+          }
+        }
+      }
+    },
     "Show Writing Tools" : {
       "comment" : "Show Writing Tools",
       "localizations" : {
@@ -4074,6 +4108,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新到 %@"
+          }
+        }
+      }
+    },
+    "Updates" : {
+      "comment" : "Extension manager mode: installed extensions filtered to those with available updates",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
           }
         }
       }
