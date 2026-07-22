@@ -69,7 +69,7 @@ public extension ExtensionRelease {
     }()
 
     if let source {
-      // MarkEdit-app repos always tag a release, so prefer the release page.
+      // MarkEdit-app repos always tag a release, so prefer the release page
       let official = source.owner.caseInsensitiveCompare("MarkEdit-app") == .orderedSame
       let path = official ? "releases/tag" : "tree"
       return URL(string: "https://github.com/\(source.owner)/\(source.repo)/\(path)/\(source.ref)")
@@ -278,7 +278,7 @@ public enum ExtensionRegistry {
         return nil
       }
 
-      // Version-less official scripts (pre-registry) adopt the latest; third-party ones are left alone.
+      // Version-less official scripts (pre-registry) adopt the latest; third-party ones are left alone
       guard let version = installed.version else {
         return installed.shouldMigrate ? ExtensionUpdate(installed: installed, entry: entry) : nil
       }

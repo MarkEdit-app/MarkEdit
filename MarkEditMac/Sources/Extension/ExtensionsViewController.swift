@@ -262,7 +262,7 @@ private extension ExtensionsViewController {
     static let minimumOverlayDuration: TimeInterval = 1.2
   }
 
-  // Horizontal margin for the row content; separators use the same value so they stay aligned.
+  /// Horizontal margin for the row content; separators use the same value so they stay aligned.
   var rowMargin: Double {
     AppDesign.modernStyle ? 20 : 10
   }
@@ -362,11 +362,11 @@ private extension ExtensionsViewController {
     let relaunchHeight = displayedRelaunch ? relaunchBarHeight : 0
     let relaunchFrame = CGRect(x: 0, y: 0, width: bounds.width, height: relaunchHeight)
 
-    // The list fills the whole area; the translucent bar overlays its bottom edge.
+    // The list fills the whole area; the translucent bar overlays its bottom edge
     let scrollFrame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
     let topInset = view.safeAreaInsets.top
 
-    // Bottom inset gives over-scroll room and lets the last row clear the overlay bar.
+    // Bottom inset gives over-scroll room and lets the last row clear the overlay bar
     scrollView.contentInsets = NSEdgeInsets(
       top: topInset,
       left: 0,
@@ -374,7 +374,7 @@ private extension ExtensionsViewController {
       right: 0
     )
 
-    // Cancel the over-scroll breathing room.
+    // Cancel the over-scroll breathing room
     scrollView.scrollerInsets = displayedRelaunch ? NSEdgeInsets(
       top: 0,
       left: 0,
@@ -382,7 +382,7 @@ private extension ExtensionsViewController {
       right: 0
     ) : NSEdgeInsets()
 
-    // Center the state overlay in the visible area, nudged up by an optical offset.
+    // Center the state overlay in the visible area, nudged up by an optical offset
     let visibleHeight = max(0, bounds.height - topInset - relaunchHeight)
     let stateSize = stateController.view.fittingSize
     let stateFrame = CGRect(
