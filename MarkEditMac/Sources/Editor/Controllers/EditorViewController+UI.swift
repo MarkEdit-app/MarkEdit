@@ -626,7 +626,7 @@ private extension EditorViewController {
       return nil
     }
 
-    if let image = NSImage(systemSymbolName: icon, accessibilityDescription: nil) {
+    if let image = NSImage(systemSymbolName: icon) {
       return image
     }
 

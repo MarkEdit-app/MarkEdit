@@ -8,6 +8,10 @@ import AppKit
 import SwiftUI
 
 public extension NSImage {
+  convenience init?(systemSymbolName: String) {
+    self.init(systemSymbolName: systemSymbolName, accessibilityDescription: nil)
+  }
+
   static func with(
     symbolName: String,
     pointSize: Double,
@@ -53,7 +57,7 @@ public extension Image {
       return Self(systemName: symbolName)
     }
 
-    guard let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil) else {
+    guard let image = NSImage(systemSymbolName: symbolName) else {
       assertionFailure("Failed to create image with symbol \"\(symbolName)\"")
       return Self(systemName: symbolName)
     }
