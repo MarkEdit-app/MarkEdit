@@ -16,6 +16,7 @@ final class ExtensionsWindowController: NSWindowController {
   private let model = ExtensionsModel()
   private weak var modeControl: NSSegmentedControl?
   private weak var updateAllItem: NSMenuItem?
+  private weak var updatesFilterItem: NSMenuItem?
   private weak var updateBehaviorMenu: NSMenu?
 
   func present(scrollTo category: ExtensionEntry.Category? = nil) {
@@ -83,6 +84,7 @@ extension ExtensionsWindowController: NSMenuDelegate {
     let count = model.availableUpdateCount
     updateAllItem?.isEnabled = count > 0
     updateAllItem?.title = count > 0 ? "\(Localized.Extension.updateAll) (\(count))" : Localized.Extension.updateAll
+    updatesFilterItem?.setOn(model.showsUpdatesOnly)
     refreshUpdateSettingChecks()
   }
 }
@@ -230,6 +232,10 @@ private extension ExtensionsWindowController {
     refreshItem.keyEquivalent = "r"
     refreshItem.keyEquivalentModifierMask = .command
 
+    updatesFilterItem = menu.addItem(withTitle: Localized.Extension.showUpdatesOnly) { [weak self] in
+      self?.toggleUpdatesFilter()
+    }
+
     updateAllItem = menu.addItem(withTitle: Localized.Extension.updateAll) { [weak self] in
       self?.extensionsVC?.updateAllAnimated()
       self?.model.mode = .installed
@@ -284,14 +290,32 @@ private extension ExtensionsWindowController {
   func updateModeControl() {
     modeControl?.selectedSegment = model.mode == .discover ? 0 : 1
     modeControl?.setToolTip(Localized.Extension.itemCount(model.discoverCount), forSegment: 0)
-    modeControl?.setToolTip(Localized.Extension.itemCount(model.installedCount), forSegment: 1)
+
+    let localLabel = model.showsUpdatesOnly ? Localized.Extension.updates : Localized.Extension.installed
+    modeControl?.setLabel(localLabel, forSegment: 1)
+
+    let localCount = model.showsUpdatesOnly ? model.availableUpdateCount : model.installedCount
+    modeControl?.setToolTip(Localized.Extension.itemCount(localCount), forSegment: 1)
+  }
+
+  /// Toggles the updates-only filter, relabeling the Installed tab as "Updates".
+  func toggleUpdatesFilter() {
+    model.showsUpdatesOnly.toggle()
+    updatesFilterItem?.setOn(model.showsUpdatesOnly)
+
+    // The filter only affects the Installed tab, switch to it so the change is visible
+    if model.showsUpdatesOnly {
+      model.mode = .installed
+    }
+
+    updateModeControl()
   }
 
   /// Checks the option matching the persisted update behavior.
   func refreshUpdateSettingChecks() {
     let behavior = ExtensionConfig.updateBehavior.rawValue
     updateBehaviorMenu?.items.forEach {
-      $0.state = ($0.representedObject as? String) == behavior ? .on : .off
+      $0.setOn(($0.representedObject as? String) == behavior)
     }
   }
 

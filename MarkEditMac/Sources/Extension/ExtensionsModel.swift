@@ -105,6 +105,9 @@ final class ExtensionsModel {
   /// The current search query; empty shows everything.
   var searchQuery = ""
 
+  /// When true, the Installed tab is relabeled "Updates" and lists only updatable extensions.
+  var showsUpdatesOnly = false
+
   /// A whole-page progress message shown over the (emptied) list during Refresh or Update All.
   var loadingMessage: String?
 
@@ -117,9 +120,13 @@ final class ExtensionsModel {
   private var installedItems: [Item] = []
   private var discoverItems: [Item] = []
 
-  /// Items for the current mode, filtered by the search query.
+  /// Items for the current mode, filtered by the updates toggle (installed only) and the search query.
   var items: [Item] {
-    let base = mode == .installed ? installedItems : discoverItems
+    var base = mode == .installed ? installedItems : discoverItems
+    if mode == .installed, showsUpdatesOnly {
+      base = base.filter { $0.updateVersion != nil }
+    }
+
     let query = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !query.isEmpty else {
       return base
@@ -132,14 +139,19 @@ final class ExtensionsModel {
   var discoverCount: Int { discoverItems.count }
   var installedCount: Int { installedItems.count }
 
-  /// The latest item for `id`, so a cell can read live state instead of a stale snapshot.
-  func liveItem(id: String) -> Item? {
-    items.first { $0.id == id }
+  /// Reordering only applies to the full installed list (the injection order), not a filtered view.
+  var canReorderItems: Bool {
+    mode == .installed && searchQuery.isEmpty && !showsUpdatesOnly
   }
 
   /// Number of installed extensions with a newer release available.
   var availableUpdateCount: Int {
     installedItems.count { $0.updateVersion != nil }
+  }
+
+  /// The latest item for `id`, so a cell can read live state instead of a stale snapshot.
+  func liveItem(id: String) -> Item? {
+    items.first { $0.id == id }
   }
 }
 

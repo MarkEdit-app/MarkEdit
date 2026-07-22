@@ -166,6 +166,7 @@ extension Localized {
 
     static let windowTitle = String(localized: "MarkEdit Extensions", comment: "Title of the extension manager window")
     static let installed = String(localized: "Installed", comment: "Extension manager mode: installed extensions")
+    static let updates = String(localized: "Updates", comment: "Extension manager mode: installed extensions filtered to those with available updates")
     static let discover = String(localized: "Discover", comment: "Extension manager mode: browse the registry")
     static let searchPlaceholder = String(localized: "Search", comment: "Placeholder for the search field in the extensions window")
     static let enabled = String(localized: "Enabled", comment: "Toggle title for enabling an installed extension")
@@ -191,11 +192,13 @@ extension Localized {
     static let refreshing = String(localized: "Refreshing…", comment: "State shown while the extension list is being refreshed")
     static let updateAll = String(localized: "Update All", comment: "Menu item to update all extensions with available updates")
     static let updating = String(localized: "Updating…", comment: "State shown while extensions are being updated")
+    static let showUpdatesOnly = String(localized: "Show Updates Only", comment: "Checkable menu item to filter the installed list to extensions with available updates")
     static let submitExtension = String(localized: "Submit an Extension…", comment: "Menu item to open the extension contributing guide")
     static let relaunchNotice = String(localized: "Relaunch to apply your changes.", comment: "Notice shown when extension changes need a relaunch")
     static let retry = String(localized: "Retry", comment: "Button to retry reaching the extension registry")
     static let registryUnreachable = String(localized: "Couldn’t reach the extension registry.", comment: "Error shown when the registry can't be loaded")
     static let emptyInstalled = String(localized: "No extensions installed.", comment: "Empty state for installed extensions")
+    static let emptyUpdates = String(localized: "No updates available.", comment: "Empty state when the installed list is filtered to updates only")
     static let emptyDiscover = String(localized: "No extensions found.", comment: "Empty state for the Discover list")
     static let extensionCountFormat = String(localized: "%lld extensions", comment: "Segment tooltip showing the number of extensions")
   }
