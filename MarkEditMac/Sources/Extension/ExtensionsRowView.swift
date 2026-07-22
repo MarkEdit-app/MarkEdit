@@ -57,7 +57,10 @@ struct ExtensionsRowView: View {
 
         if item.category == .theme, let patterns = item.colorPatterns, !patterns.isEmpty {
           ThemePreview(patterns: patterns, showsBothSchemes: item.colorScheme == .both)
-            .padding(.top, 4)
+            // Centered vertically between subtitle and metadata
+            .padding(.top, 12)
+            // Decorative illustration; the row already conveys the theme textually.
+            .accessibilityHidden(true)
         }
 
         if item.isLocal || !item.author.isEmpty || item.version != nil || item.homepage != nil {
