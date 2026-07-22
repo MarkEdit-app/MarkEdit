@@ -24,6 +24,14 @@ public extension NSColor {
   static var modernButtonBackground: NSColor {
     .theme(light: NSColor(white: 0, alpha: 0.08), dark: NSColor(white: 1, alpha: 0.066))
   }
+
+  static var finderContentBackground: NSColor {
+    if #available(macOS 26.0, *) {
+      return .windowBackgroundColor
+    }
+
+    return .theme(light: .white, dark: .windowBackgroundColor)
+  }
 }
 
 // MARK: - Convenience Methods

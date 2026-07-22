@@ -16,7 +16,13 @@ import Observation
 /// titlebar separators, drag-to-reorder, and row animations.
 @MainActor
 final class ExtensionsViewController: NSViewController {
-  static var defaultContentRect = CGRect(x: 0, y: 0, width: 780, height: 580)
+  static let defaultContentRect = {
+    if #available(macOS 26.0, *) {
+      return CGRect(x: 0, y: 0, width: 770, height: 580)
+    }
+
+    return CGRect(x: 0, y: 0, width: 720, height: 540)
+  }()
 
   private let model: ExtensionsModel
   private let scrollView = NSScrollView()
@@ -169,7 +175,7 @@ extension ExtensionsViewController: NSTableViewDelegate {
     }()
 
     // Opaque fill so animating rows don't show each other's text through the crossfade
-    rowView.backgroundColor = .windowBackgroundColor
+    rowView.backgroundColor = .finderContentBackground
     return rowView
   }
 }
@@ -252,7 +258,7 @@ private extension ExtensionsViewController {
   enum Constants {
     static let rowIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRow")
     static let cellIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRowCell")
-    static let overScrollInset: Double = 24
+    static let overScrollInset: Double = if #available(macOS 26.0, *) { 20 } else { 0 }
     static let overlayOpticalOffset: Double = 20
     static let minimumOverlayDuration: TimeInterval = 1.2
   }
@@ -290,9 +296,10 @@ private extension ExtensionsViewController {
     tableView.menu = menu
 
     scrollView.documentView = tableView
-    scrollView.hasVerticalScroller = true
-    scrollView.drawsBackground = false
     scrollView.automaticallyAdjustsContentInsets = false
+    scrollView.hasVerticalScroller = true
+    scrollView.drawsBackground = true
+    scrollView.backgroundColor = .finderContentBackground
     view.addSubview(scrollView)
   }
 
@@ -367,6 +374,14 @@ private extension ExtensionsViewController {
       bottom: Constants.overScrollInset + relaunchHeight,
       right: 0
     )
+
+    // Cancel the over-scroll breathing room.
+    scrollView.scrollerInsets = displayedRelaunch ? NSEdgeInsets(
+      top: 0,
+      left: 0,
+      bottom: -Constants.overScrollInset,
+      right: 0
+    ) : NSEdgeInsets()
 
     // Center the state overlay in the visible area, nudged up by an optical offset.
     let visibleHeight = max(0, bounds.height - topInset - relaunchHeight)
