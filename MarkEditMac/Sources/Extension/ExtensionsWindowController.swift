@@ -223,9 +223,12 @@ private extension ExtensionsWindowController {
     menu.autoenablesItems = false
     menu.delegate = self
 
-    menu.addItem(withTitle: Localized.Extension.refresh) { [weak self] in
+    let refreshItem = menu.addItem(withTitle: Localized.Extension.refresh) { [weak self] in
       self?.extensionsVC?.refreshAnimated()
     }
+
+    refreshItem.keyEquivalent = "r"
+    refreshItem.keyEquivalentModifierMask = .command
 
     updateAllItem = menu.addItem(withTitle: Localized.Extension.updateAll) { [weak self] in
       self?.extensionsVC?.updateAllAnimated()
