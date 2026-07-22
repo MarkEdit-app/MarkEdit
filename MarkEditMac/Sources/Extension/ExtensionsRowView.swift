@@ -120,7 +120,7 @@ struct ExtensionsRowView: View {
     .background(
       // Rounded for the drag preview; invisible at rest since it matches the content background
       RoundedRectangle(cornerRadius: 8)
-        .fill(Self.contentBackgroundStyle)
+        .fill(.windowBackground)
     )
     // Fresh identity per mode so tab switches swap content without animating
     .id(model.mode)
@@ -130,14 +130,6 @@ struct ExtensionsRowView: View {
 // MARK: - Private
 
 private extension ExtensionsRowView {
-  static var contentBackgroundStyle: AnyShapeStyle {
-    if #available(macOS 26.0, *) {
-      return .init(.windowBackground)
-    }
-
-    return .init(Color(.finderContentBackground))
-  }
-
   /// Live snapshot of this item, falling back to the initial value if it's no longer listed.
   var liveItem: ExtensionsModel.Item {
     model.liveItem(id: item.id) ?? item

@@ -163,19 +163,24 @@ extension ExtensionsViewController: NSTableViewDelegate {
       return view
     }()
 
-    cell.configure(ExtensionsRowView(model: model, item: displayedItems[row], rowMargin: rowMargin))
+    cell.configure(ExtensionsRowView(
+      model: model,
+      item: displayedItems[row],
+      rowMargin: Constants.rowMargin
+    ))
+
     return cell
   }
 
   func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
     let rowView = tableView.makeView(withIdentifier: Constants.rowIdentifier, owner: self) as? TableRowWrapper ?? {
-      let view = TableRowWrapper(horizontalMargin: rowMargin)
+      let view = TableRowWrapper(horizontalMargin: Constants.rowMargin)
       view.identifier = Constants.rowIdentifier
       return view
     }()
 
     // Opaque fill so animating rows don't show each other's text through the crossfade
-    rowView.backgroundColor = .finderContentBackground
+    rowView.backgroundColor = .windowBackgroundColor
     return rowView
   }
 }
@@ -292,17 +297,13 @@ extension ExtensionsViewController {
 
 private extension ExtensionsViewController {
   enum Constants {
+    static let rowMargin: Double = 20
     static let rowIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRow")
     static let cellIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRowCell")
     static let overScrollInset: Double = if #available(macOS 26.0, *) { 20 } else { 0 }
     static let overlayOpticalOffset: Double = 20
     static let minimumOverlayDuration: TimeInterval = 1.2
     static let highlightDuration: Duration = .seconds(1.5)
-  }
-
-  /// Horizontal margin for the row content; separators use the same value so they stay aligned.
-  var rowMargin: Double {
-    AppDesign.modernStyle ? 20 : 10
   }
 
   /// Height of the relaunch bar's SwiftUI content (forces a layout pass first).
@@ -337,7 +338,7 @@ private extension ExtensionsViewController {
     scrollView.automaticallyAdjustsContentInsets = false
     scrollView.hasVerticalScroller = true
     scrollView.drawsBackground = true
-    scrollView.backgroundColor = .finderContentBackground
+    scrollView.backgroundColor = .windowBackgroundColor
     view.addSubview(scrollView)
   }
 
