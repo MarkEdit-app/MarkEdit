@@ -131,8 +131,8 @@ final class EditorWebView: WKWebView {
     )
 
     if AppDesign.menuIconEvolution {
-      findSelectionItem.image = NSImage(systemSymbolName: "text.page.badge.magnifyingglass", accessibilityDescription: nil)
-      selectAllOccurrencesItem.image = NSImage(systemSymbolName: "selection.pin.in.out", accessibilityDescription: nil)
+      findSelectionItem.image = NSImage(systemSymbolName: "text.page.badge.magnifyingglass")
+      selectAllOccurrencesItem.image = NSImage(systemSymbolName: "selection.pin.in.out")
     }
 
     // Only add text format items when it's not read-only
@@ -142,7 +142,7 @@ final class EditorWebView: WKWebView {
       item.submenu = NSApp.appDelegate?.textFormatMenu?.copiedMenu
 
       if AppDesign.menuIconEvolution {
-        item.image = NSImage(systemSymbolName: "bold.italic.underline", accessibilityDescription: nil)
+        item.image = NSImage(systemSymbolName: "bold.italic.underline")
       }
 
       menu.addItem(item)
@@ -215,7 +215,7 @@ private extension EditorWebView {
           item.keyEquivalentModifierMask = [.option, .command]
 
           if AppDesign.menuIconEvolution {
-            item.image = NSImage(systemSymbolName: "ladybug", accessibilityDescription: nil)
+            item.image = NSImage(systemSymbolName: "ladybug")
           }
         }
 

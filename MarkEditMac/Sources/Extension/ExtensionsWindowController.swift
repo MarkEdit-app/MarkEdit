@@ -117,7 +117,7 @@ extension ExtensionsWindowController: NSToolbarDelegate {
     case .actions:
       let item = NSMenuToolbarItem(itemIdentifier: .actions)
       item.visibilityPriority = .high
-      item.image = NSImage(systemSymbolName: Icons.ellipsisCircle, accessibilityDescription: nil)
+      item.image = NSImage(systemSymbolName: Icons.ellipsisCircle)
       item.label = Localized.Extension.actions
       item.toolTip = Localized.Extension.actions
       item.menu = createActionsMenu()

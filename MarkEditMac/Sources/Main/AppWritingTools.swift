@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import MarkEditKit
 
 @available(macOS 15.1, *)
@@ -55,7 +56,7 @@ enum AppWritingTools {
     )
 
     for symbolName in ["apple.writing.tools", "_gm"] {
-      if let symbolImage = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil) {
+      if let symbolImage = NSImage(systemSymbolName: symbolName) {
         return symbolImage.withSymbolConfiguration(configuration)
       }
     }

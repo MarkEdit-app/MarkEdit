@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import FoundationModels
 
 @MainActor
@@ -84,11 +85,7 @@ enum AppDesign {
       return
     }
 
-    delegate.fileNewTabItem?.image = NSImage(
-      systemSymbolName: Icons.interfaceWindowOnRectangle,
-      accessibilityDescription: nil
-    )
-
+    delegate.fileNewTabItem?.image = NSImage(systemSymbolName: Icons.interfaceWindowOnRectangle)
     delegate.fileReopenClosedTabItem?.image = delegate.fileNewTabItem?.image
   }
 }
