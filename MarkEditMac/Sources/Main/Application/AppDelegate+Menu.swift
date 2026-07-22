@@ -128,6 +128,7 @@ private extension AppDelegate {
 
       let icon = NSWorkspace.shared.icon(forFile: appURL.path)
       item?.image = icon.resized(with: CGSize(width: 16, height: 16))
+      item?.ensureImageVisibility()
     }
   }
 
