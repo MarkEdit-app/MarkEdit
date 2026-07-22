@@ -43,6 +43,7 @@ final class ExtensionsViewController: NSViewController {
   let tableView = NSTableView()
   let listInteraction = ExtensionsListInteraction()
   let rowMeasurer = TableCellWrapper.Measurer()
+  let rowMargin: Double = 20
 
   var displayedItems: [ExtensionsModel.Item] = [] {
     didSet {
@@ -210,7 +211,6 @@ extension ExtensionsViewController: NSTableViewDelegate {
 
       self.reloadRows(IndexSet(integer: row))
     })
-
     return cell
   }
 
@@ -222,7 +222,7 @@ extension ExtensionsViewController: NSTableViewDelegate {
     }()
 
     // Opaque fill so animating rows don't show each other's text through the crossfade
-    rowView.backgroundColor = .finderContentBackground
+    rowView.backgroundColor = .windowBackgroundColor
     return rowView
   }
 }
@@ -389,7 +389,7 @@ private extension ExtensionsViewController {
     scrollView.automaticallyAdjustsContentInsets = false
     scrollView.hasVerticalScroller = true
     scrollView.drawsBackground = true
-    scrollView.backgroundColor = .finderContentBackground
+    scrollView.backgroundColor = .windowBackgroundColor
     view.addSubview(scrollView)
 
     let contentView = scrollView.contentView
