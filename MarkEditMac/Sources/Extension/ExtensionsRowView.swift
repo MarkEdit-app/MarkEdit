@@ -17,7 +17,7 @@ struct ExtensionsRowView: View {
   let rowMargin: Double
 
   var body: some View {
-    // Read live state so the cell animates its own updates instead of being reloaded.
+    // Read live state so the cell animates its own updates instead of being reloaded
     let item = liveItem
 
     HStack(spacing: 10) {
@@ -44,14 +44,14 @@ struct ExtensionsRowView: View {
               .transition(.opacity.combined(with: .scale))
           }
         }
-        // Only animate the row being upgraded, not tab switches.
+        // Only animate the row being upgraded, not tab switches
         .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.updateVersion)
 
         if !item.details.isEmpty {
           Text(item.details)
             .font(.body)
             .foregroundStyle(.secondary)
-            // Keep the description on one line; users can widen the window to read more.
+            // Keep the description on one line; users can widen the window to read more
             .lineLimit(1)
             .truncationMode(.tail)
         }
@@ -60,7 +60,7 @@ struct ExtensionsRowView: View {
           ThemePreview(patterns: patterns, showsBothSchemes: item.colorScheme == .both)
             // Centered vertically between subtitle and metadata
             .padding(.top, 12)
-            // Decorative illustration; the row already conveys the theme textually.
+            // Decorative illustration; the row already conveys the theme textually
             .accessibilityHidden(true)
         }
 
@@ -99,7 +99,7 @@ struct ExtensionsRowView: View {
             }
           }
           .padding(.top, 12)
-          // Only animate the row being upgraded, not tab switches.
+          // Only animate the row being upgraded, not tab switches
           .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.version)
         }
       }
@@ -113,11 +113,11 @@ struct ExtensionsRowView: View {
     .padding(.horizontal, rowMargin)
     .frame(maxWidth: .infinity)
     .background(
-      // Rounded for the drag preview; invisible at rest since it matches the content background.
+      // Rounded for the drag preview; invisible at rest since it matches the content background
       RoundedRectangle(cornerRadius: 8)
         .fill(Self.contentBackgroundStyle)
     )
-    // Fresh identity per mode so tab switches swap content without animating.
+    // Fresh identity per mode so tab switches swap content without animating
     .id(model.mode)
   }
 }
@@ -153,10 +153,10 @@ private extension ExtensionsRowView {
   @ViewBuilder
   func trailingControl(item: ExtensionsModel.Item) -> some View {
     buttonControls(for: item)
-      // Non-interactive while busy; only the triggering button shows the spinner.
+      // Non-interactive while busy; only the triggering button shows the spinner
       .disabled(isItemBusy)
       .animation(.easeInOut(duration: 0.25), value: isItemBusy)
-      // Intrinsic width so a narrow window truncates metadata, not the titles.
+      // Intrinsic width so a narrow window truncates metadata, not the titles
       .fixedSize(horizontal: true, vertical: false)
       .layoutPriority(1)
   }

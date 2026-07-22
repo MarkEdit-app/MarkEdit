@@ -22,15 +22,15 @@ enum ExtensionUpdater {
   ///
   /// - Parameter explicitly: force a refresh and bypass the prompt cadence.
   static func checkForUpdates(explicitly: Bool = false) async {
-    // Refresh cache first; nil means no usable index.
+    // Refresh cache first; nil means no usable index
     guard let index = await ExtensionRegistry.refresh(force: explicitly) else {
       return
     }
 
-    // A refreshed index may change what's outdated, let app-level UI (the menu-bar hint) refresh.
+    // A refreshed index may change what's outdated, let app-level UI (the menu-bar hint) refresh
     requestMenuUpdate()
 
-    // Prompt cadence is tracked separately.
+    // Prompt cadence is tracked separately
     guard explicitly || ExtensionRegistry.shouldPromptUpdates else {
       return
     }
@@ -40,7 +40,7 @@ enum ExtensionUpdater {
       return
     }
 
-    // Only advance the prompt cadence when something is actually surfaced.
+    // Only advance the prompt cadence when something is actually surfaced
     switch ExtensionConfig.updateBehavior {
     case .never, .quiet:
       break // Surfaced only in the Extensions window
@@ -92,7 +92,7 @@ private extension ExtensionUpdater {
 
     for update in updates {
       do {
-        // Preserve the previous enabled state.
+        // Preserve the previous enabled state
         let merged = try await ExtensionDownloader.downloadUpdate(
           for: update.installed,
           entry: update.entry

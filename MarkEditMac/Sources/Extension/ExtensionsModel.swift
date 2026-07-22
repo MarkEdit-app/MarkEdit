@@ -172,7 +172,7 @@ extension ExtensionsModel {
     rebuildItems(index: index)
     phase = index == nil ? .failed : .ready
 
-    // A fresh index may surface or clear updates, let the menu-bar hint refresh.
+    // A fresh index may surface or clear updates, let the menu-bar hint refresh
     ExtensionUpdater.requestMenuUpdate()
   }
 }
@@ -240,14 +240,14 @@ extension ExtensionsModel {
       return
     }
 
-    // Show determinate progress when more than one extension is being updated.
+    // Show determinate progress when more than one extension is being updated
     let total = updatable.count
     let tracksProgress = total > 1
 
-    // Continue past per-item failures so one bad extension doesn't abort the batch.
+    // Continue past per-item failures so one bad extension doesn't abort the batch
     var failures: [Error] = []
     await runBusyAction {
-      // Set here (not before), so a re-entrant call doesn't flash a stale 0/total.
+      // Set here (not before), so a re-entrant call doesn't flash a stale 0/total
       if tracksProgress {
         updateProgress = (0, total)
       }
@@ -388,7 +388,7 @@ private extension ExtensionsModel {
       markChanged()
       try? await Task.sleep(for: Constants.busyRenderDelay)
     } catch is CancellationError {
-      // Cancelled (e.g. the window closed mid-action); not a user-facing failure.
+      // Cancelled (e.g. the window closed mid-action); not a user-facing failure
     } catch {
       Logger.log(.error, "Extension action failed: \(error)")
       await presenter?.reportFailure(error)
