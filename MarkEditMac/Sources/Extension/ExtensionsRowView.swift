@@ -175,7 +175,7 @@ private extension ExtensionsRowView {
 
   @ViewBuilder
   func buttonControls(for item: ExtensionsModel.Item) -> some View {
-    if model.mode == .installed {
+    if model.mode.isLocalList {
       HStack(spacing: 8) {
         updateButton(for: item)
         revealButton(for: item)

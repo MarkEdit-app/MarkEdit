@@ -3331,23 +3331,6 @@
         }
       }
     },
-    "Show Updates Only" : {
-      "comment" : "Checkable menu item to filter the installed list to extensions with available updates",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "仅显示更新"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "僅顯示更新"
-          }
-        }
-      }
-    },
     "Show Writing Tools" : {
       "comment" : "Show Writing Tools",
       "localizations" : {
