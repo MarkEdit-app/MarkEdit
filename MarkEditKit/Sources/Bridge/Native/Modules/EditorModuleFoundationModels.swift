@@ -27,7 +27,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 
   public func availability(modelName: String) async -> String {
   #if canImport(FoundationModels, _version: 2)
-    if #available(macOS 27.0, *) {
+    if #available(anyAppleOS 27.0, *) {
       return availability(of: languageModel(named: modelName)).jsonEncoded
     }
   #endif
@@ -40,7 +40,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     let session: LanguageModelSession
 
   #if canImport(FoundationModels, _version: 2)
-    if #available(macOS 27.0, *) {
+    if #available(anyAppleOS 27.0, *) {
       session = LanguageModelSession(
         model: languageModel(named: modelName),
         instructions: instructions
@@ -188,7 +188,7 @@ private extension EditorModuleFoundationModels {
 
 #if canImport(FoundationModels, _version: 2)
 
-@available(macOS 27.0, *)
+@available(anyAppleOS 27.0, *)
 private extension EditorModuleFoundationModels {
   func languageModel(named modelName: String) -> any LanguageModel {
     switch modelName {
