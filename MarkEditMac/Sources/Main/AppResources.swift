@@ -258,29 +258,24 @@ enum Icons {
   static let gearshape = "gearshape"
   static let italic = "italic"
 
-  static let interfaceWindow = if #available(macOS 27.0, *) {
+  static let interfaceWindow = if #available(anyAppleOS 27.0, *) {
     "interface.window"
   } else {
     "macwindow"
   }
 
-  static let interfaceWindowOnRectangle = if #available(macOS 27.0, *) {
+  static let interfaceWindowOnRectangle = if #available(anyAppleOS 27.0, *) {
     "interface.window.on.rectangle"
   } else {
     "macwindow.on.rectangle"
   }
 
-  static let laurel = if #available(macOS 15.1, *) {
-    "laurel.leading.laurel.trailing"
-  } else {
-    "rosette"
-  }
-
+  static let laurel = "laurel.leading.laurel.trailing"
   static let link = "link"
   static let listBullet = "list.bullet"
   static let listBulletRectangle = "list.bullet.rectangle"
 
-  static let numberSign = if #available(macOS 27.0, *) {
+  static let numberSign = if #available(anyAppleOS 27.0, *) {
     "number.sign"
   } else {
     "number"
