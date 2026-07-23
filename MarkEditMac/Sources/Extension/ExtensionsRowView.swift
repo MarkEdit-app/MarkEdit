@@ -40,29 +40,21 @@ struct ExtensionsRowView: View {
           .lineLimit(1)
 
           if item.isFeatured, model.mode == .discover {
-            if #available(macOS 15.1, *) {
-              HStack(spacing: 4) {
-                Image(systemName: Icons.laurelLeading)
-                  .bold()
-                  .foregroundStyle(LinearGradient.spectrum(direction: .leftToRight))
-                  .accessibilityHidden(true)
-
-                Text(Localized.Extension.featured)
-                  .font(.callout)
-                  .fontDesign(.serif)
-                  .foregroundStyle(.secondary)
-
-                Image(systemName: Icons.laurelTrailing)
-                  .bold()
-                  .foregroundStyle(LinearGradient.spectrum(direction: .rightToLeft))
-                  .accessibilityHidden(true)
-              }
-            } else {
-              Image(systemName: "rosette")
+            HStack(spacing: 4) {
+              Image(systemName: Icons.laurelLeading)
                 .bold()
-                .foregroundStyle(.orange)
-                .help(Localized.Extension.featured)
-                .accessibilityLabel(Localized.Extension.featured)
+                .foregroundStyle(LinearGradient.spectrum(direction: .leftToRight))
+                .accessibilityHidden(true)
+
+              Text(Localized.Extension.featured)
+                .font(.callout)
+                .fontDesign(.serif)
+                .foregroundStyle(.secondary)
+
+              Image(systemName: Icons.laurelTrailing)
+                .bold()
+                .foregroundStyle(LinearGradient.spectrum(direction: .rightToLeft))
+                .accessibilityHidden(true)
             }
           }
 
