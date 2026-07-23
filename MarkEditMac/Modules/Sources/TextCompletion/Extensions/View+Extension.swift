@@ -10,6 +10,7 @@ import SwiftUI
 extension View {
   var measuredSize: CGSize {
     let layoutWrapper = NSHostingController(rootView: self)
+    layoutWrapper.view.needsLayout = true
     layoutWrapper.view.layoutSubtreeIfNeeded()
     return layoutWrapper.view.fittingSize
   }
