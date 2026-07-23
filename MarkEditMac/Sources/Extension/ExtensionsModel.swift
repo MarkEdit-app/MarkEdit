@@ -126,6 +126,7 @@ final class ExtensionsModel {
 
   var mode: Mode = .discover
   var phase: Phase = .loading
+  var hasLoadedIndex = false
   var pendingRelaunch = false
   var isBusy = false
 
@@ -348,6 +349,10 @@ private extension ExtensionsModel {
 
   /// Rebuilds both lists; `installed` is injectable so the mapping can be tested in isolation.
   func rebuildItems(index: ExtensionIndex?, installed: [ExtensionConfig.Installed] = ExtensionConfig.installed) {
+    if index != nil {
+      hasLoadedIndex = true
+    }
+
     let entries = index?.extensions ?? []
     let entryByID = Dictionary(entries.map { ($0.id, $0) }) { lhs, _ in lhs }
 
