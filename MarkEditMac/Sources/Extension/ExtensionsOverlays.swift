@@ -20,11 +20,16 @@ struct ExtensionsStateView: View {
           Double($0.completed) / Double($0.total)
         }
       )
-    } else if model.phase == .loading {
+    } else if model.phase == .loading && !model.hasLoadedIndex {
+      // Only spin on a cold start with no catalog yet
       ProgressView()
     } else if model.items.isEmpty {
       // Gate on the live item count so a mode switch doesn't flash a stale empty message
-      emptyState
+      EmptyStateView(isRegistryError: isRegistryError, emptyMessage: emptyMessage) {
+        Task {
+          await model.load(forceRefresh: true)
+        }
+      }
     }
   }
 }
@@ -51,28 +56,41 @@ struct ExtensionsInfoBar: View {
 // MARK: - Private
 
 private extension ExtensionsStateView {
-  var isRegistryError: Bool {
-    model.mode == .discover && model.phase == .failed
-  }
+  struct EmptyStateView: View {
+    @Environment(\.accessibilityReduceMotion)
+    private var reduceMotion
+    @State private var visible = false
 
-  var emptyState: some View {
-    VStack(spacing: 10) {
-      Image(systemName: isRegistryError ? Icons.wifiSlash : Icons.puzzlepieceExtension)
-        .font(.largeTitle)
-        .foregroundStyle(.secondary)
+    let isRegistryError: Bool
+    let emptyMessage: String
+    let retryAction: () -> Void
 
-      Text(emptyMessage)
-        .foregroundStyle(.secondary)
+    var body: some View {
+      VStack(spacing: 10) {
+        Image(systemName: isRegistryError ? Icons.wifiSlash : Icons.puzzlepieceExtension)
+          .font(.largeTitle)
+          .foregroundStyle(.secondary)
+          .accessibilityHidden(true)
 
-      if isRegistryError {
-        Button(Localized.Extension.retry) {
-          Task {
-            await model.load(forceRefresh: true)
-          }
+        Text(emptyMessage)
+          .foregroundStyle(.secondary)
+
+        if isRegistryError {
+          Button(Localized.Extension.retry, action: retryAction)
+        }
+      }
+      .padding()
+      .opacity(visible ? 1 : 0)
+      .onAppear {
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.25)) {
+          visible = true
         }
       }
     }
-    .padding()
+  }
+
+  var isRegistryError: Bool {
+    model.mode == .discover && model.phase == .failed
   }
 
   var emptyMessage: String {

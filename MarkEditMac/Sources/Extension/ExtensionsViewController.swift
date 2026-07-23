@@ -311,6 +311,7 @@ private extension ExtensionsViewController {
       _ = model.mode
       _ = model.items
       _ = model.phase
+      _ = model.hasLoadedIndex
       _ = model.pendingRelaunch
     } onChange: { [weak self] in
       Task { @MainActor in

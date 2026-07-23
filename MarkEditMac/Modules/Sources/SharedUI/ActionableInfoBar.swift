@@ -33,6 +33,7 @@ public struct ActionableInfoBar<Action: View>: View {
         if let systemImage {
           Image(systemName: systemImage)
             .foregroundStyle(iconColor)
+            .accessibilityHidden(true)
         }
 
         Text(message)
