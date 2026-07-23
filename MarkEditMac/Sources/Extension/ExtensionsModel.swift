@@ -22,13 +22,43 @@ protocol ExtensionsPresenting: AnyObject {
 /// Backing state for the Extensions window.
 ///
 /// The filesystem (via `ExtensionConfig`) and the registry (via `ExtensionRegistry`) are the
-/// source of truth; this model flattens both into view-ready `Item` values for the two modes.
+/// source of truth; this model flattens both into view-ready `Item` values for its modes.
 @MainActor
 @Observable
 final class ExtensionsModel {
-  enum Mode: Hashable {
-    case installed
-    case discover
+  enum Mode: Int, CaseIterable {
+    case discover = 0
+    case installed = 1
+    case updates = 2
+
+    /// Both installed and updates are backed by the local extensions list, not the Discover registry.
+    var isLocalList: Bool {
+      self == .installed || self == .updates
+    }
+
+    var title: String {
+      switch self {
+      case .discover: return Localized.Extension.discover
+      case .installed: return Localized.Extension.installed
+      case .updates: return Localized.Extension.updates
+      }
+    }
+
+    var icon: String {
+      switch self {
+      case .discover: return Icons.sparkles
+      case .installed: return Icons.shippingbox
+      case .updates: return Icons.arrowDownCircle
+      }
+    }
+
+    var emptyMessage: String {
+      switch self {
+      case .discover: return Localized.Extension.emptyDiscover
+      case .installed: return Localized.Extension.emptyInstalled
+      case .updates: return Localized.Extension.emptyUpdates
+      }
+    }
   }
 
   enum Phase: Equatable {
@@ -37,7 +67,7 @@ final class ExtensionsModel {
     case failed
   }
 
-  /// A flattened, view-ready extension for either mode.
+  /// A flattened, view-ready extension for any mode.
   struct Item: Identifiable, Equatable {
     let id: String
     let name: String
@@ -105,9 +135,6 @@ final class ExtensionsModel {
   /// The current search query; empty shows everything.
   var searchQuery = ""
 
-  /// When true, the Installed tab is relabeled "Updates" and lists only updatable extensions.
-  var showsUpdatesOnly = false
-
   /// A whole-page progress message shown over the (emptied) list during Refresh or Update All.
   var loadingMessage: String?
 
@@ -117,13 +144,13 @@ final class ExtensionsModel {
   /// The item currently running an install/update, used to show a per-item spinner.
   var busyItemID: String?
 
-  private var installedItems: [Item] = []
   private var discoverItems: [Item] = []
+  private var installedItems: [Item] = []
 
-  /// Items for the current mode, filtered by the updates toggle (installed only) and the search query.
+  /// Items for the current mode, filtered to updatable extensions in the Updates mode and by the search query.
   var items: [Item] {
-    var base = mode == .installed ? installedItems : discoverItems
-    if mode == .installed, showsUpdatesOnly {
+    var base = mode.isLocalList ? installedItems : discoverItems
+    if mode == .updates {
       base = base.filter { $0.updateVersion != nil }
     }
 
@@ -135,13 +162,10 @@ final class ExtensionsModel {
     return base.filter { $0.matches(query: query) }
   }
 
-  /// Item counts per mode, surfaced as segmented-control tooltips.
-  var discoverCount: Int { discoverItems.count }
-  var installedCount: Int { installedItems.count }
-
-  /// Reordering only applies to the full installed list (the injection order), not a filtered view.
+  /// Reordering applies only to the full installed list (the injection order), not filtered
+  /// subsets like Updates or search, where a drag would persist a partial order.
   var canReorderItems: Bool {
-    mode == .installed && searchQuery.isEmpty && !showsUpdatesOnly
+    mode == .installed && searchQuery.isEmpty
   }
 
   /// Number of installed extensions with a newer release available.
@@ -152,6 +176,15 @@ final class ExtensionsModel {
   /// The latest item for `id`, so a cell can read live state instead of a stale snapshot.
   func liveItem(id: String) -> Item? {
     items.first { $0.id == id }
+  }
+
+  /// Item count for `mode`, surfaced as the segment tooltip.
+  func count(for mode: Mode) -> Int {
+    switch mode {
+    case .discover: return discoverItems.count
+    case .installed: return installedItems.count
+    case .updates: return availableUpdateCount
+    }
   }
 }
 

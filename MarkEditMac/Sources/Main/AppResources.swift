@@ -246,6 +246,7 @@ enum Localized {
 // Note: double check availability and deployment target before adding new icons
 enum Icons {
   static let appleTerminal = "apple.terminal"
+  static let arrowDownCircle = "arrow.down.circle"
   static let arrowUturnBackwardCircle = "arrow.uturn.backward.circle"
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"

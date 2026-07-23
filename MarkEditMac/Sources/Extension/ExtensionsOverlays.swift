@@ -79,10 +79,6 @@ private extension ExtensionsStateView {
       return Localized.Extension.registryUnreachable
     }
 
-    if model.mode == .installed {
-      return model.showsUpdatesOnly ? Localized.Extension.emptyUpdates : Localized.Extension.emptyInstalled
-    }
-
-    return Localized.Extension.emptyDiscover
+    return model.mode.emptyMessage
   }
 }

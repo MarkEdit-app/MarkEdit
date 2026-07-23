@@ -8,15 +8,15 @@
 import AppKit
 import AppKitExtensions
 import ExtensionCore
+import MarkEditKit
 
 /// Hosts the Extension Manager: an AppKit window and toolbar wrapping the extension list.
 @MainActor
 final class ExtensionsWindowController: NSWindowController {
   static let shared = ExtensionsWindowController.createController()
   private let model = ExtensionsModel()
-  private weak var modeControl: NSSegmentedControl?
+  private weak var modeControl: NSToolbarItemGroup?
   private weak var updateAllItem: NSMenuItem?
-  private weak var updatesFilterItem: NSMenuItem?
   private weak var updateBehaviorMenu: NSMenu?
 
   func present(scrollTo category: ExtensionEntry.Category? = nil) {
@@ -84,7 +84,6 @@ extension ExtensionsWindowController: NSMenuDelegate {
     let count = model.availableUpdateCount
     updateAllItem?.isEnabled = count > 0
     updateAllItem?.title = count > 0 ? "\(Localized.Extension.updateAll) (\(count))" : Localized.Extension.updateAll
-    updatesFilterItem?.setOn(model.showsUpdatesOnly)
     refreshUpdateSettingChecks()
   }
 }
@@ -201,23 +200,35 @@ private extension ExtensionsWindowController {
   }
 
   func createModeItem() -> NSToolbarItem {
-    let segmented = NSSegmentedControl(
-      labels: [Localized.Extension.discover, Localized.Extension.installed],
-      trackingMode: .selectOne,
+    let group = NSToolbarItemGroup(
+      itemIdentifier: .mode,
+      titles: ExtensionsModel.Mode.allCases.map(\.title),
+      selectionMode: .selectOne,
+      labels: nil,
       target: self,
       action: #selector(handleModeChange(_:))
     )
 
-    segmented.setSymbolImages([Icons.sparkles, Icons.shippingbox])
-    modeControl = segmented
+    let icons = ExtensionsModel.Mode.allCases.map(\.icon)
+    for (index, icon) in icons.enumerated() where index < group.subitems.count {
+      group.subitems[index].image = NSImage(systemSymbolName: icon, accessibilityDescription: nil)
+    }
+
+    group.controlRepresentation = .automatic
+    group.label = Localized.Extension.windowTitle
+
+    // [macOS 27] Use "tabs" role, the default style has vertical dividers
+    if #available(macOS 27.0, *), group.responds(to: sel_getUid("setRole:")) {
+    #if canImport(FoundationModels, _version: 2)
+      group.role = .tabs
+    #else
+      group.setValue(1, forKey: "role") // .tabs
+    #endif
+    }
+
+    modeControl = group
     updateModeControl()
-
-    let item = NSToolbarItem(itemIdentifier: .mode)
-    item.visibilityPriority = .high
-    item.view = segmented
-    item.label = Localized.Extension.windowTitle
-
-    return item
+    return group
   }
 
   func createActionsMenu() -> NSMenu {
@@ -232,14 +243,21 @@ private extension ExtensionsWindowController {
     refreshItem.keyEquivalent = "r"
     refreshItem.keyEquivalentModifierMask = .command
 
-    updatesFilterItem = menu.addItem(withTitle: Localized.Extension.showUpdatesOnly) { [weak self] in
-      self?.toggleUpdatesFilter()
-    }
-
     updateAllItem = menu.addItem(withTitle: Localized.Extension.updateAll) { [weak self] in
-      self?.extensionsVC?.updateAllAnimated()
-      self?.model.mode = .installed
-      self?.updateModeControl()
+      guard let self else {
+        return
+      }
+
+      // Switch to the Updates tab first, then let its row animation settle before the
+      // overlay empties the list, so the two animations don't overlap and busy the eye.
+      let modeChanged = self.model.mode != .updates
+      self.model.mode = .updates
+      self.updateModeControl()
+
+      let delay: TimeInterval = (modeChanged && !AppDesign.reduceMotion) ? 1.0 : 0
+      DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+        self?.extensionsVC?.updateAllAnimated()
+      }
     }
 
     let updateBehaviorItem = NSMenuItem()
@@ -288,27 +306,24 @@ private extension ExtensionsWindowController {
   }
 
   func updateModeControl() {
-    modeControl?.selectedSegment = model.mode == .discover ? 0 : 1
-    modeControl?.setToolTip(Localized.Extension.itemCount(model.discoverCount), forSegment: 0)
-
-    let localLabel = model.showsUpdatesOnly ? Localized.Extension.updates : Localized.Extension.installed
-    modeControl?.setLabel(localLabel, forSegment: 1)
-
-    let localCount = model.showsUpdatesOnly ? model.availableUpdateCount : model.installedCount
-    modeControl?.setToolTip(Localized.Extension.itemCount(localCount), forSegment: 1)
-  }
-
-  /// Toggles the updates-only filter, relabeling the Installed tab as "Updates".
-  func toggleUpdatesFilter() {
-    model.showsUpdatesOnly.toggle()
-    updatesFilterItem?.setOn(model.showsUpdatesOnly)
-
-    // The filter only affects the Installed tab, switch to it so the change is visible
-    if model.showsUpdatesOnly {
-      model.mode = .installed
+    guard let group = modeControl else {
+      return Logger.log(.debug, "Missing mode control")
     }
 
-    updateModeControl()
+    let selectedIndex = model.mode.rawValue
+    modeControl?.selectedIndex = selectedIndex
+
+    let counts = ExtensionsModel.Mode.allCases.map { model.count(for: $0) }
+    for (index, subitem) in group.subitems.enumerated() where index < counts.count {
+      subitem.toolTip = Localized.Extension.itemCount(counts[index])
+    }
+
+    // Surface the update count in the Updates segment title, e.g. "Updates (3)"
+    let updatesIndex = ExtensionsModel.Mode.updates.rawValue
+    if updatesIndex < group.subitems.count {
+      let count = model.availableUpdateCount
+      group.subitems[updatesIndex].title = count > 0 ? "\(Localized.Extension.updates) (\(count))" : Localized.Extension.updates
+    }
   }
 
   /// Checks the option matching the persisted update behavior.
@@ -319,8 +334,10 @@ private extension ExtensionsWindowController {
     }
   }
 
-  @objc func handleModeChange(_ sender: NSSegmentedControl) {
-    model.mode = sender.selectedSegment == 0 ? .discover : .installed
+  @objc func handleModeChange(_ sender: Any?) {
+    if let index = modeControl?.selectedIndex, let mode = ExtensionsModel.Mode(rawValue: index) {
+      model.mode = mode
+    }
   }
 
   @objc func handleSearchChange(_ sender: NSSearchField) {

@@ -16,13 +16,7 @@ import Observation
 /// titlebar separators, drag-to-reorder, and row animations.
 @MainActor
 final class ExtensionsViewController: NSViewController {
-  static let defaultContentRect = {
-    if #available(macOS 26.0, *) {
-      return CGRect(x: 0, y: 0, width: 770, height: 580)
-    }
-
-    return CGRect(x: 0, y: 0, width: 720, height: 540)
-  }()
+  static let defaultContentRect = CGRect(x: 0, y: 0, width: 780, height: 580)
 
   private let model: ExtensionsModel
   private let scrollView = NSScrollView()
@@ -382,14 +376,15 @@ private extension ExtensionsViewController {
       right: 0
     ) : NSEdgeInsets()
 
-    // Center the state overlay in the visible area, nudged up by an optical offset
+    // Center the state overlay, nudged up by an optical offset. It spans the full width
+    // (SwiftUI centers the box) so long messages aren't clipped by a stale, narrower frame.
     let visibleHeight = max(0, bounds.height - topInset - relaunchHeight)
-    let stateSize = stateController.view.fittingSize
+    let stateHeight = stateController.view.fittingSize.height
     let stateFrame = CGRect(
-      x: ((bounds.width - stateSize.width) / 2).rounded(),
-      y: (relaunchHeight + (visibleHeight - stateSize.height) / 2 + Constants.overlayOpticalOffset).rounded(),
-      width: stateSize.width,
-      height: stateSize.height
+      x: 0,
+      y: (relaunchHeight + (visibleHeight - stateHeight) / 2 + Constants.overlayOpticalOffset).rounded(),
+      width: bounds.width,
+      height: stateHeight
     )
 
     if animated {
