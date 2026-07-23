@@ -352,7 +352,7 @@ private extension ExtensionsViewController {
   enum Constants {
     static let rowIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRow")
     static let cellIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRowCell")
-    static let overScrollInset: Double = if #available(macOS 26.0, *) { 20 } else { 0 }
+    static let overScrollInset: Double = 20
     static let overlayOpticalOffset: Double = 20
     static let minimumOverlayDuration: TimeInterval = 1.2
     static let highlightDuration: Duration = .seconds(1.5)
