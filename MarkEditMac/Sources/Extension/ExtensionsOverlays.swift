@@ -22,7 +22,8 @@ struct ExtensionsStateView: View {
       )
     } else if model.phase == .loading {
       ProgressView()
-    } else {
+    } else if model.items.isEmpty {
+      // Gate on the live item count so a mode switch doesn't flash a stale empty message
       emptyState
     }
   }
