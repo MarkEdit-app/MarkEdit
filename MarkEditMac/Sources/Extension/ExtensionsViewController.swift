@@ -263,6 +263,7 @@ private extension ExtensionsViewController {
 
   /// Height of the relaunch bar's SwiftUI content (forces a layout pass first).
   var relaunchBarHeight: Double {
+    relaunchController.view.needsLayout = true
     relaunchController.view.layoutSubtreeIfNeeded()
     return relaunchController.view.fittingSize.height
   }
@@ -477,6 +478,7 @@ private extension ExtensionsViewController {
     }
 
     pendingScrollCategory = nil
+    tableView.needsLayout = true
     tableView.layoutSubtreeIfNeeded()
 
     let clip = scrollView.contentView
