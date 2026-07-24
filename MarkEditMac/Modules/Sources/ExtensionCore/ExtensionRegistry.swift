@@ -101,6 +101,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
   public let category: Category
   public let colorScheme: ColorScheme?
   public let colorPatterns: [String]?
+  public let featured: Bool?
   public let latest: ExtensionRelease
 
   public init(
@@ -112,6 +113,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
     category: Category,
     colorScheme: ColorScheme?,
     colorPatterns: [String]?,
+    featured: Bool?,
     latest: ExtensionRelease
   ) {
     self.id = id
@@ -122,6 +124,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
     self.category = category
     self.colorScheme = colorScheme
     self.colorPatterns = colorPatterns
+    self.featured = featured
     self.latest = latest
   }
 }

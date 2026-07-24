@@ -244,6 +244,41 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertFalse(ExtensionRegistry.hasCachedUpdates)
   }
 
+  // MARK: - ExtensionEntry.featured
+
+  func testFeaturedDefaultsToNilWhenAbsent() throws {
+    let json = """
+    {
+      "id": "a",
+      "name": "A",
+      "description": "",
+      "author": "",
+      "homepage": "",
+      "category": "extension",
+      "latest": { "version": "1.0.0", "url": "https://example.com/a.js", "sha256": "abc" }
+    }
+    """
+    let entry = try JSONDecoder().decode(ExtensionEntry.self, from: Data(json.utf8))
+    XCTAssertNil(entry.featured)
+  }
+
+  func testFeaturedDecodesWhenPresent() throws {
+    let json = """
+    {
+      "id": "a",
+      "name": "A",
+      "description": "",
+      "author": "",
+      "homepage": "",
+      "category": "extension",
+      "featured": true,
+      "latest": { "version": "1.0.0", "url": "https://example.com/a.js", "sha256": "abc" }
+    }
+    """
+    let entry = try JSONDecoder().decode(ExtensionEntry.self, from: Data(json.utf8))
+    XCTAssertTrue(try XCTUnwrap(entry.featured))
+  }
+
   // MARK: - ExtensionIndex.isSupported
 
   func testIndexSchemaVersionSupport() {
@@ -410,6 +445,7 @@ private extension ExtensionCoreTests {
       category: .extension,
       colorScheme: nil,
       colorPatterns: nil,
+      featured: nil,
       latest: makeRelease(version: version, minAppVersion: minAppVersion)
     )
   }

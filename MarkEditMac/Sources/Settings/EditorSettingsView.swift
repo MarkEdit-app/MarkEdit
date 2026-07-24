@@ -6,10 +6,10 @@
 //
 
 import AppKit
-import AppKitExtensions
 import SwiftUI
 import FontPicker
 import SettingsUI
+import SharedUI
 import ExtensionCore
 import MarkEditCore
 import MarkEditKit

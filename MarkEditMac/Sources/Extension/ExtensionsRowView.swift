@@ -32,11 +32,12 @@ struct ExtensionsRowView: View {
             .fontWeight(.semibold)
             .lineLimit(1)
 
-          if item.isOfficial {
-            Image(systemName: Icons.checkmarkSeal)
-              .foregroundStyle(.orange)
-              .help(Localized.Extension.official)
-              .accessibilityLabel(Localized.Extension.official)
+          if item.isFeatured, model.mode == .discover {
+            Image(systemName: Icons.laurel)
+              .bold()
+              .foregroundStyle(.spectrum)
+              .help(Localized.Extension.featured)
+              .accessibilityLabel(Localized.Extension.featured)
           }
 
           if let updateVersion = item.updateVersion {
@@ -80,6 +81,15 @@ struct ExtensionsRowView: View {
             if !item.author.isEmpty {
               if item.version != nil || item.isLocal {
                 metadataDot
+              }
+
+              if item.isOfficial {
+                Image(systemName: Icons.checkmarkSeal)
+                  .font(.callout)
+                  .imageScale(.small)
+                  .foregroundStyle(.secondary)
+                  .help(Localized.Extension.official)
+                  .accessibilityLabel(Localized.Extension.official)
               }
 
               Text(item.author)

@@ -174,6 +174,7 @@ extension Localized {
     static let uninstall = String(localized: "Uninstall", comment: "Button title to uninstall an extension")
     static let reveal = String(localized: "Reveal", comment: "Button title to reveal an extension's script file in Finder")
     static let official = String(localized: "Official", comment: "Badge shown for extensions authored by the MarkEdit-app organization")
+    static let featured = String(localized: "Featured", comment: "Badge shown for featured extensions recommended by MarkEdit")
     static let local = String(localized: "Local", comment: "Label for a local extension that isn't tracked by the registry")
     static let uninstallConfirmFormat = String(localized: "Uninstall “%@”?", comment: "Title (format) to confirm uninstalling an extension")
     static let uninstallConfirmMessage = String(localized: "This removes its script from the scripts folder.", comment: "Message shown when confirming an extension uninstall")
