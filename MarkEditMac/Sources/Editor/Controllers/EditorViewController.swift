@@ -170,7 +170,7 @@ final class EditorViewController: NSViewController {
     config.setURLSchemeHandler(imageLoader, forURLScheme: EditorImageLoader.scheme)
 
     // Respect user settings for Writing Tools behavior
-    if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
+    if let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
       config.writingToolsBehavior = writingToolsBehavior
     }
 
@@ -199,14 +199,12 @@ final class EditorViewController: NSViewController {
     }
 
     // [macOS 15] Detect Writing Tools visibility to work around issues
-    if #available(macOS 15.1, *) {
-      writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
-        guard let self else {
-          return
-        }
-
-        self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
+    writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
+      guard let self else {
+        return
       }
+
+      self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
     }
 
     return webView
@@ -214,7 +212,6 @@ final class EditorViewController: NSViewController {
 
   private(set) lazy var completionContext = {
     TextCompletionContext(
-      modernStyle: AppDesign.modernStyle,
       effectViewType: AppDesign.modernEffectView,
       localizable: TextCompletionLocalizable(selectedHint: Localized.General.selected)
     ) { [weak self] in

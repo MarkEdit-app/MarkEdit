@@ -16,7 +16,7 @@ extension NSToolbarItem {
     item.image = NSImage(systemSymbolName: identifier.itemIcon, accessibilityDescription: item.label)
 
     // Special icon for Writing Tools
-    if #available(macOS 15.1, *), identifier == .writingTools {
+    if identifier == .writingTools {
       item.image = AppWritingTools.affordanceIcon ?? item.image
     }
 
@@ -30,19 +30,10 @@ extension NSToolbarItem {
     return item
   }
 
-  static func with(identifier: NSToolbarItem.Identifier, iconSize: Double? = nil, action: @escaping () -> Void) -> NSToolbarItem {
+  static func with(identifier: NSToolbarItem.Identifier, action: @escaping () -> Void) -> NSToolbarItem {
     let item = NSToolbarItem(itemIdentifier: identifier)
     item.label = identifier.itemLabel
-
-    if let iconSize {
-      item.image = .with(
-        symbolName: identifier.itemIcon,
-        pointSize: iconSize,
-        accessibilityLabel: item.label
-      )
-    } else {
-      item.image = NSImage(systemSymbolName: identifier.itemIcon, accessibilityDescription: item.label)
-    }
+    item.image = NSImage(systemSymbolName: identifier.itemIcon, accessibilityDescription: item.label)
 
     item.addAction(action)
     return item
@@ -130,15 +121,7 @@ extension NSToolbarItem.Identifier {
       .statistics,
       .shareDocument,
       .copyPandocCommand,
-    ]
-    + {
-      if #available(macOS 15.1, *) {
-        return [.writingTools]
-      }
-
-      return []
-    }()
-    + [
+      .writingTools,
       .space,
       .flexibleSpace,
     ]

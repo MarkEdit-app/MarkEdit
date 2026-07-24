@@ -516,7 +516,6 @@ extension EditorDocument: FileVersionPickerDelegate {
     }
 
     let picker = FileVersionPicker(
-      modernStyle: AppDesign.modernStyle,
       fileURL: fileURL,
       currentText: stringValue,
       localVersions: localVersions,
