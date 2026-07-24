@@ -2547,6 +2547,23 @@
         }
       }
     },
+    "Official Website" : {
+      "comment" : "Menu item to open the extensions official website",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "官方网站"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "官方網站"
+          }
+        }
+      }
+    },
     "Open Document" : {
       "comment" : "Menu item: open an existing document",
       "localizations" : {

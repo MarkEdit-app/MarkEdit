@@ -200,10 +200,6 @@ private extension AppDelegate {
     ExtensionsWindowController.shared.present()
   }
 
-  @IBAction func openOfficialWebsite(_ sender: Any?) {
-    NSWorkspace.shared.safelyOpenURL(string: "https://markedit-app.github.io/extensions/")
-  }
-
   @IBAction func openCustomizationGuide(_ sender: Any?) {
     NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Customization")
   }

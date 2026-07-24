@@ -905,23 +905,17 @@ Gw
                                 <menu key="submenu" title="Extensions" autoenablesItems="NO" id="nkD-z6-yjV">
                                     <items>
                                         <menuItem isSeparatorItem="YES" identifier="extensionsMenuDivider" id="Jat-X6-g2Q"/>
-                                        <menuItem title="Manage Extensions…" id="MgE-xt-001">
+                                        <menuItem title="Manage Extensions…" image="puzzlepiece.extension" catalog="system" id="MgE-xt-001">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="manageExtensions:" target="Voe-Tx-rLC" id="MgE-xt-002"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="egO-qW-gHN"/>
                                         <menuItem title="Open Documents Folder" id="fyH-S9-f9N">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cGC-yM-BaF"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="egO-qW-gHN"/>
-                                        <menuItem title="Official Website" id="J5p-F8-eb5">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="openOfficialWebsite:" target="Voe-Tx-rLC" id="wU2-OV-AbE"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Customization Guide" id="jNi-CL-4bf">
@@ -1155,6 +1149,7 @@ Gw
         <image name="list.bullet.clipboard" catalog="system" width="14" height="19"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
         <image name="pin" catalog="system" width="15" height="17"/>
+        <image name="puzzlepiece.extension" catalog="system" width="19" height="15"/>
         <image name="smallcircle.filled.circle" catalog="system" width="15" height="15"/>
         <image name="square.and.arrow.down.on.square" catalog="system" width="17" height="20"/>
         <image name="strikethrough" catalog="system" width="14" height="12"/>
