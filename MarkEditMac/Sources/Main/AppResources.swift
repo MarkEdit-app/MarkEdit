@@ -270,6 +270,12 @@ enum Icons {
     "macwindow.on.rectangle"
   }
 
+  static let laurel = if #available(macOS 15.1, *) {
+    "laurel.leading.laurel.trailing"
+  } else {
+    "rosette"
+  }
+
   static let link = "link"
   static let listBullet = "list.bullet"
   static let listBulletRectangle = "list.bullet.rectangle"

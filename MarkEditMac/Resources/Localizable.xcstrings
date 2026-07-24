@@ -1226,6 +1226,23 @@
         }
       }
     },
+    "Featured" : {
+      "comment" : "Badge shown for featured extensions recommended by MarkEdit",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精選"
+          }
+        }
+      }
+    },
     "File Extension:" : {
       "comment" : "Label for save panel accessory view (shorter than 'Filename Extension' to avoid save panel layout issues)",
       "localizations" : {
