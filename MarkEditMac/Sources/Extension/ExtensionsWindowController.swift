@@ -149,6 +149,7 @@ extension ExtensionsWindowController: NSSearchFieldDelegate {
 
 private extension ExtensionsWindowController {
   enum Constants {
+    static let officialWebsiteURL = "https://markedit-app.github.io/extensions/"
     static let contributingURL = "https://github.com/MarkEdit-app/extensions#contributing"
   }
 
@@ -211,7 +212,7 @@ private extension ExtensionsWindowController {
 
     let icons = ExtensionsModel.Mode.allCases.map(\.icon)
     for (index, icon) in icons.enumerated() where index < group.subitems.count {
-      group.subitems[index].image = NSImage(systemSymbolName: icon, accessibilityDescription: nil)
+      group.subitems[index].image = NSImage(systemSymbolName: icon)
     }
 
     group.controlRepresentation = .automatic
@@ -277,6 +278,10 @@ private extension ExtensionsWindowController {
     }
 
     menu.addItem(.separator())
+    menu.addItem(withTitle: Localized.Extension.officialWebsite) {
+      NSWorkspace.shared.safelyOpenURL(string: Constants.officialWebsiteURL)
+    }
+
     menu.addItem(withTitle: Localized.Extension.submitExtension) {
       NSWorkspace.shared.safelyOpenURL(string: Constants.contributingURL)
     }
