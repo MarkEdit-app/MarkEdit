@@ -119,10 +119,6 @@ extension PreviewViewController: QLPreviewingController {
 // MARK: - WKNavigationDelegate
 
 extension PreviewViewController: WKNavigationDelegate {
-  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
-    webView.window?.makeFirstResponder(webView)
-  }
-
   func webView(
     _ webView: WKWebView,
     decidePolicyFor navigationAction: WKNavigationAction,
