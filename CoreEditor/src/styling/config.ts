@@ -52,19 +52,6 @@ export function setTheme(theme: EditorTheme) {
   setEditorColors(theme.colors);
 }
 
-export function setEditorColors(colors: EditorColors) {
-  if (styleSheets.accentColor === undefined) {
-    styleSheets.accentColor = createStyleSheet('.cm-md-header:not(.cm-md-quote) {}');
-  }
-
-  updateStyleSheet(styleSheets.accentColor, style => {
-    const cssColor = shadowableTextColor(colors.accent);
-    Object.keys(cssColor).forEach(key => style.setProperty(key, cssColor[key] as string));
-  });
-
-  globalState.colors = colors;
-}
-
 export function setFontFace(fontFace: WebFontFace) {
   if (styleSheets.fontFace === undefined) {
     styleSheets.fontFace = createStyleSheet('.cm-content, .cm-tooltip-autocomplete * {}');
@@ -233,6 +220,19 @@ export function applyReducedMotion(reduceMotion: boolean, types: 'both' | 'curso
       foldGutter.style.transitionDelay = reduceMotion ? '0s' : '0.1s';
     }
   }
+}
+
+function setEditorColors(colors: EditorColors) {
+  if (styleSheets.accentColor === undefined) {
+    styleSheets.accentColor = createStyleSheet('.cm-md-header:not(.cm-md-quote) {}');
+  }
+
+  updateStyleSheet(styleSheets.accentColor, style => {
+    const cssColor = shadowableTextColor(colors.accent);
+    Object.keys(cssColor).forEach(key => style.setProperty(key, cssColor[key] as string));
+  });
+
+  globalState.colors = colors;
 }
 
 function enableGutterHoverEffects() {

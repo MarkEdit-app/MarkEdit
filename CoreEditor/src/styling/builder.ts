@@ -273,4 +273,4 @@ function buildInnerBorder(width: number, color?: string) {
   return color !== undefined ? `inset 0px 0px 0px ${width}px ${color}` : 'none';
 }
 
-export { buildTheme, buildHighlight, buildInnerBorder, tags };
+export { buildTheme, buildHighlight, tags };
