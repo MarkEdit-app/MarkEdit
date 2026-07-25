@@ -36,11 +36,29 @@ struct ExtensionsRowView: View {
             .lineLimit(1)
 
           if item.isFeatured, model.mode == .discover {
-            Image(systemName: Icons.laurel)
-              .bold()
-              .foregroundStyle(.spectrum)
-              .help(Localized.Extension.featured)
-              .accessibilityLabel(Localized.Extension.featured)
+            if #available(macOS 15.1, *) {
+              HStack(spacing: 4) {
+                Image(systemName: Icons.laurelLeading)
+                  .bold()
+                  .foregroundStyle(LinearGradient.spectrum(direction: .leftToRight))
+                  .accessibilityHidden(true)
+
+                Text(Localized.Extension.featured)
+                  .font(.callout)
+                  .foregroundStyle(.secondary)
+
+                Image(systemName: Icons.laurelTrailing)
+                  .bold()
+                  .foregroundStyle(LinearGradient.spectrum(direction: .rightToLeft))
+                  .accessibilityHidden(true)
+              }
+            } else {
+              Image(systemName: "rosette")
+                .bold()
+                .foregroundStyle(.orange)
+                .help(Localized.Extension.featured)
+                .accessibilityLabel(Localized.Extension.featured)
+            }
           }
 
           if let updateVersion = item.updateVersion {
