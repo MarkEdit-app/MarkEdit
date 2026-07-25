@@ -36,7 +36,7 @@ public struct PillButton: View {
 private extension PillButton {
   enum Constants {
     /// Shared minimum width so pills look neat; longer titles still grow to fit.
-    static let minWidth: Double = 40
+    static let minWidth: Double = 45
   }
 
   @ViewBuilder var content: some View {
