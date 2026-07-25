@@ -61,7 +61,8 @@ struct ExtensionsRowView: View {
             }
           }
 
-          if let updateVersion = item.updateVersion {
+          // Skip in Discover, where many rows repeat the same version and it's noisy
+          if let updateVersion = item.updateVersion, model.mode != .discover {
             updateBadge(version: updateVersion, url: item.latestReleaseURL)
               .transition(.opacity.combined(with: .scale))
           }
@@ -143,10 +144,15 @@ struct ExtensionsRowView: View {
                 metadataDot
               }
 
-              Link(Localized.Extension.homepage, destination: homepage)
-                .font(.callout)
-                .fontWeight(.medium)
-                .help(homepage.absoluteString)
+              Button(Localized.Extension.homepage) {
+                NSWorkspace.shared.open(homepage)
+              }
+              .buttonStyle(.plain)
+              .font(.callout)
+              .fontWeight(.medium)
+              .foregroundStyle(.tint)
+              .help(homepage.absoluteString)
+              .accessibilityAddTraits(.isLink)
             }
           }
           .padding(.top, 12)
@@ -244,7 +250,7 @@ private extension ExtensionsRowView {
       }
     } else if !item.isInstalled {
       busyControl {
-        PillButton(Localized.Extension.installButton, style: .prominent) {
+        PillButton(Localized.Extension.installButton, style: .bordered) {
           Task {
             await model.installExtension(item)
           }
@@ -264,28 +270,35 @@ private extension ExtensionsRowView {
   func updateButton(for item: ExtensionsModel.Item) -> some View {
     if let updateVersion = item.updateVersion {
       busyControl {
-        PillButton(String(format: Localized.Extension.updateToFormat, updateVersion), style: .bordered) {
+        PillButton(Localized.Extension.updateButton, style: .prominent) {
           Task {
             await model.updateExtension(item)
           }
         }
+        .help(String(format: Localized.Extension.updateToFormat, updateVersion))
       }
     }
   }
 
-  /// The pending-update badge ("↑ 1.2.3"); links to a browsable page for the latest release when available.
+  /// The pending-update badge ("↑ 1.2.3"); opens a browsable page for the latest release when available.
   func updateBadge(version: String, url: URL?) -> some View {
     let title = Text(verbatim: "↑ \(version)")
       .font(.callout)
       .fontWeight(.medium)
+      .foregroundStyle(.tint)
 
     return Group {
       if let url {
-        // Keep the default link style so it dims on mouse down
-        Link(destination: url) { title }
-          .help(url.absoluteString)
+        Button {
+          NSWorkspace.shared.open(url)
+        } label: {
+          title
+        }
+        .buttonStyle(.plain)
+        .help(url.absoluteString)
+        .accessibilityAddTraits(.isLink)
       } else {
-        title.foregroundStyle(.tint)
+        title
       }
     }
     .accessibilityLabel(String(format: Localized.Extension.updateToFormat, version))
