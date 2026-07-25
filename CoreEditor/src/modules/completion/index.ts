@@ -205,14 +205,6 @@ export function hasTooltipCompletion() {
   return tooltipCompletionStatus(window.editor.state) === 'active';
 }
 
-export function toggleTooltipCompletion() {
-  if (hasTooltipCompletion()) {
-    closeTooltipCompletion(window.editor);
-  } else {
-    startTooltipCompletion(window.editor);
-  }
-}
-
 export function invalidateCache() {
   storage.cachedPosition = -1;
 }
@@ -240,6 +232,14 @@ export function acceptInlinePrediction(prediction: string) {
         selection: EditorSelection.cursor(from + prediction.length),
       });
     }
+  }
+}
+
+function toggleTooltipCompletion() {
+  if (hasTooltipCompletion()) {
+    closeTooltipCompletion(window.editor);
+  } else {
+    startTooltipCompletion(window.editor);
   }
 }
 
