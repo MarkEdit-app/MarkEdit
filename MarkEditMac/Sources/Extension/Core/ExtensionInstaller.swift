@@ -179,6 +179,7 @@ extension Localized {
     static let uninstallConfirmFormat = String(localized: "Uninstall “%@”?", comment: "Title (format) to confirm uninstalling an extension")
     static let uninstallConfirmMessage = String(localized: "This removes its script from the scripts folder.", comment: "Message shown when confirming an extension uninstall")
     static let updateToFormat = String(localized: "Update to %@", comment: "Button title (format) to update an extension to a version")
+    static let whatsNew = String(localized: "What’s New", comment: "Button revealing an extension's latest release notes in a popover")
     static let homepage = String(localized: "Homepage", comment: "Link to an extension's homepage")
     static let actions = String(localized: "Actions", comment: "Toolbar menu of extension manager actions")
     static let installFromURL = String(localized: "Install from URL…", comment: "Menu item to install an extension from a URL")

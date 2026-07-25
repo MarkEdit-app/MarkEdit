@@ -16,6 +16,9 @@ struct ExtensionsRowView: View {
   let item: ExtensionsModel.Item
   let rowMargin: Double
 
+  // State for update notes popover
+  @State private var showingUpdateNotes = false
+
   var body: some View {
     // Read live state so the cell animates its own updates instead of being reloaded
     let item = liveItem
@@ -65,7 +68,7 @@ struct ExtensionsRowView: View {
             .accessibilityHidden(true)
         }
 
-        if item.isLocal || !item.author.isEmpty || item.version != nil || item.homepage != nil {
+        if item.isLocal || !item.author.isEmpty || item.version != nil || item.homepage != nil || item.updateNotes != nil {
           HStack(spacing: 5) {
             if item.isLocal {
               Text(Localized.Extension.local)
@@ -78,8 +81,28 @@ struct ExtensionsRowView: View {
                 .contentTransition(.numericText())
             }
 
-            if !item.author.isEmpty {
+            if let notes = item.updateNotes {
               if item.version != nil || item.isLocal {
+                metadataDot
+              }
+
+              Button(Localized.Extension.whatsNew) {
+                showingUpdateNotes = true
+              }
+              .buttonStyle(.plain)
+              .font(.callout)
+              .fontWeight(.medium)
+              .foregroundStyle(.tint)
+              .popover(isPresented: $showingUpdateNotes, arrowEdge: .bottom) {
+                updateNotesPopover(notes)
+              }
+              .onDisappear {
+                showingUpdateNotes = false
+              }
+            }
+
+            if !item.author.isEmpty {
+              if item.version != nil || item.isLocal || item.updateNotes != nil {
                 metadataDot
               }
 
@@ -98,7 +121,7 @@ struct ExtensionsRowView: View {
             }
 
             if let homepage = item.homepage {
-              if item.version != nil || item.isLocal || !item.author.isEmpty {
+              if item.version != nil || item.isLocal || item.updateNotes != nil || !item.author.isEmpty {
                 metadataDot
               }
 
@@ -229,7 +252,6 @@ private extension ExtensionsRowView {
           }
         }
       }
-      .help(item.updateNotes ?? "")
     }
   }
 
@@ -255,6 +277,15 @@ private extension ExtensionsRowView {
     PillButton(Localized.Extension.reveal, style: .bordered) {
       model.revealScriptFile(item)
     }
+  }
+
+  func updateNotesPopover(_ notes: String) -> some View {
+    Text(notes)
+      .font(.body)
+      .textSelection(.enabled)
+      .frame(maxWidth: 300, alignment: .leading)
+      .fixedSize(horizontal: false, vertical: true)
+      .padding()
   }
 
   var metadataDot: some View {
