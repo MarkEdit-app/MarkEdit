@@ -256,7 +256,7 @@ export const deleteMarkupBackward: StateCommand = ({state, dispatch}) => {
             // Only apply this if we're on the line that has the
             // construct's syntax, or there's only indentation in the
             // target range
-            (!inner.item || line.from <= inner.item.from || !/\S/.test(line.text.slice(0, inner.to)))) {
+            ((inner.item && line.from <= inner.item.from) || /^[\s>]*$/.test(line.text.slice(0, inner.to)))) {
           let start = line.from + inner.from
           // Replace a list item marker with blank space
           if (inner.item && inner.node.from < inner.item.from && /\S/.test(line.text.slice(inner.from, inner.to))) {
