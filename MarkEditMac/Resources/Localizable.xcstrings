@@ -4196,6 +4196,23 @@
         }
       }
     },
+    "What’s New" : {
+      "comment" : "Button revealing an extension's latest release notes in a popover",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新功能"
+          }
+        }
+      }
+    },
     "Whole Document" : {
       "localizations" : {
         "zh-Hans" : {
