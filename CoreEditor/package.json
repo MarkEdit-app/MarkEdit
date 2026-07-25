@@ -28,16 +28,14 @@
     "@lezer/markdown": "^1.0.0"
   },
   "devDependencies": {
-    "@eslint/plugin-kit": "^0.3.5",
+    "@eslint/js": "^9.39.0",
     "@stylistic/eslint-plugin": "^5.5.0",
-    "@types/eslint": "^9.6.1",
     "@types/jest": "^29.5.4",
     "@typescript-eslint/parser": "^8.46.2",
-    "esbuild": "^0.28.1",
     "eslint": "^9.39.0",
     "eslint-plugin-compat": "^6.0.2",
     "eslint-plugin-promise": "^7.2.1",
-    "glob": "^12.0.0",
+    "globals": "^15.15.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "markedit-api": "https://github.com/MarkEdit-app/MarkEdit-api#v0.28.0",
@@ -59,5 +57,5 @@
   "browserslist": [
     "safari >= 18"
   ],
-  "packageManager": "yarn@4.15.0"
+  "packageManager": "yarn@4.17.1"
 }

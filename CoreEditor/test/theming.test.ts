@@ -1,5 +1,4 @@
 import { EditorView } from '@codemirror/view';
-import { Extension } from '@codemirror/state';
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
 import { describe, expect, test } from '@jest/globals';
@@ -11,12 +10,12 @@ describe('Test theming internals', () => {
   initThemeExtractors();
 
   test('test __extractStyleRules', () => {
-    const sample = flattenThemes(EditorView.theme({ '&': { color: 'cyan' } }));
+    const sample = window.__flattenThemeExtensions__(EditorView.theme({ '&': { color: 'cyan' } }));
     expect(sample.some(o => typeof window.__extractStyleRules__(o) === 'object')).toBeTruthy();
   });
 
   test('test __extractHighlightSpecs', () => {
-    const sample = flattenThemes(syntaxHighlighting(HighlightStyle.define([{ tag: tags.heading, color: 'cyan' }])));
+    const sample = window.__flattenThemeExtensions__(syntaxHighlighting(HighlightStyle.define([{ tag: tags.heading, color: 'cyan' }])));
     expect(sample.some(o => typeof window.__extractHighlightSpecs__(o) === 'object')).toBeTruthy();
   });
 
@@ -26,13 +25,3 @@ describe('Test theming internals', () => {
     expect(hasTheme).toBeTruthy();
   });
 });
-
-function flattenThemes(node: Extension): Extension[] {
-  if (Array.isArray(node)) {
-    return node.flatMap(flattenThemes);
-  } else if ('extension' in node) {
-    return flattenThemes(node.extension);
-  } else {
-    return [node];
-  }
-}

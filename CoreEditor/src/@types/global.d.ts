@@ -52,6 +52,7 @@ declare global {
     };
     __extractStyleRules__: (theme: Extension) => string[] | undefined;
     __extractHighlightSpecs__: (theme: Extension) => TagStyle[] | undefined;
+    __flattenThemeExtensions__: (theme: Extension) => Extension[];
   }
 
   interface ImportMetaEnv {
