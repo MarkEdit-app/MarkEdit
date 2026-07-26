@@ -255,7 +255,7 @@ private extension ExtensionsWindowController {
       self.model.mode = .updates
       self.updateModeControl()
 
-      let delay: TimeInterval = (modeChanged && !AppDesign.reduceMotion) ? 1.0 : 0
+      let delay: TimeInterval = (modeChanged && !AppDesign.reduceMotion) ? 0.8 : 0
       DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
         self?.extensionsVC?.updateAllAnimated()
       }

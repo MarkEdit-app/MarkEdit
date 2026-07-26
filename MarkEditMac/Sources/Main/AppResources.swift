@@ -252,9 +252,9 @@ enum Icons {
   static let characterCursorIbeam = "character.cursor.ibeam"
   static let chartPie = "chart.pie"
   static let checkmarkSeal = "checkmark.seal.fill"
+  static let cupAndHeatWaves = "cup.and.heat.waves"
   static let curlybracesSquare = "curlybraces.square"
   static let ellipsisCircle = "ellipsis.circle"
-  static let exclamationmarkBubbleFill = "exclamationmark.bubble.fill"
   static let gearshape = "gearshape"
   static let italic = "italic"
 
@@ -272,6 +272,7 @@ enum Icons {
 
   static let laurelLeading = "laurel.leading"
   static let laurelTrailing = "laurel.trailing"
+  static let lightbulbMaxFill = "lightbulb.max.fill"
   static let link = "link"
   static let listBullet = "list.bullet"
   static let listBulletRectangle = "list.bullet.rectangle"
@@ -294,7 +295,6 @@ enum Icons {
   static let textQuote = "text.quote"
   static let textformat = "textformat"
   static let wandAndSparkles = "wand.and.sparkles"
-  static let wifiSlash = "wifi.slash"
 }
 
 extension EditorLocalizable {

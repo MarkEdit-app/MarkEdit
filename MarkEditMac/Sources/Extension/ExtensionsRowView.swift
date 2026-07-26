@@ -45,6 +45,7 @@ struct ExtensionsRowView: View {
 
                 Text(Localized.Extension.featured)
                   .font(.callout)
+                  .fontDesign(.serif)
                   .foregroundStyle(.secondary)
 
                 Image(systemName: Icons.laurelTrailing)
