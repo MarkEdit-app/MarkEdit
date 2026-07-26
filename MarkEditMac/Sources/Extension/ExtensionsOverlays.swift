@@ -42,7 +42,7 @@ struct ExtensionsInfoBar: View {
     if model.pendingRelaunch {
       ActionableInfoBar(
         message: Localized.Extension.relaunchNotice,
-        systemImage: Icons.exclamationmarkBubbleFill,
+        systemImage: Icons.lightbulbMaxFill,
         iconColor: .yellow
       ) {
         Button(Localized.Extension.relaunchButton) {
@@ -67,8 +67,11 @@ private extension ExtensionsStateView {
 
     var body: some View {
       VStack(spacing: 10) {
-        Image(systemName: isRegistryError ? Icons.wifiSlash : Icons.puzzlepieceExtension)
-          .font(.largeTitle)
+        Image(systemName: isRegistryError ? Icons.cupAndHeatWaves : Icons.puzzlepieceExtension)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(width: 72)
+          .fontWeight(.light)
           .foregroundStyle(.secondary)
           .accessibilityHidden(true)
 
