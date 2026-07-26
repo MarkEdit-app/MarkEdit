@@ -109,8 +109,13 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-md-monospace, .cm-md-monospace *, .cm-md-codeBlock *, .cm-md-table *': {
     fontFamily: 'SF Mono, ui-monospace, monospace',
   },
-  '.cm-md-inlineCode': {
-    borderRadius: '3px',
+  '.cm-md-inlineCodeStart': {
+    borderTopLeftRadius: '3px',
+    borderBottomLeftRadius: '3px',
+  },
+  '.cm-md-inlineCodeEnd': {
+    borderTopRightRadius: '3px',
+    borderBottomRightRadius: '3px',
   },
 };
 
