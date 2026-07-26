@@ -40,6 +40,13 @@ public extension NSWindow {
     }
   }
 
+  /// Draggable button that draws the document type.
+  var titlebarDocumentButton: NSView? {
+    titlebarView?.firstDescendant { (view: NSView) in
+      view.className == "NSThemeDocumentButton"
+    }
+  }
+
   // MARK: - Convenience
 
   /// Change the frame size, treat the top-left corner as the anchor point.
