@@ -21,6 +21,8 @@ enum WKContextMenuItemTag: Int {
   case showFonts = 41
   case defaultDirection = 52
   case textDirectionDefault = 59
+  case playAllAnimations = 84
+  case pauseAllAnimations = 85
   case copyLinkWithHighlight = 102
 
   /**
@@ -84,18 +86,7 @@ final class EditorWebView: WKWebView {
     }
 
     menu.items = menu.items.filter { item in
-      // Remove "Download Image"
-      if item.tag == WKContextMenuItemTag.downloadImage.rawValue {
-        return false
-      }
-
-      // Remove "Reload"
-      if item.tag == WKContextMenuItemTag.reload.rawValue {
-        return false
-      }
-
-      // Remove "Copy Link with Highlight"
-      if item.tag == WKContextMenuItemTag.copyLinkWithHighlight.rawValue {
+      if hiddenMenuTags.contains(item.tag) {
         return false
       }
 
@@ -275,3 +266,15 @@ private let arrowKeyCodes: [UInt16] = [
   .kVK_DownArrow,
   .kVK_UpArrow,
 ]
+
+private let hiddenMenuTags: Set<Int> = {
+  let tags: [WKContextMenuItemTag] = [
+    .downloadImage,
+    .reload,
+    .playAllAnimations,
+    .pauseAllAnimations,
+    .copyLinkWithHighlight,
+  ]
+
+  return Set(tags.map(\.rawValue))
+}()
