@@ -1,13 +1,34 @@
-import { createBlockWrappers, createMarkDeco, createWidgetDeco, createLineDeco } from '../matchers/lezer';
+import { Decoration } from '@codemirror/view';
+import { createBlockWrappers, createDecos, createWidgetDeco, createLineDeco } from '../matchers/lezer';
 import { createBlockPlugin, createDecoPlugin } from '../helper';
 import { PreviewWidget } from '../views';
 import { cancelDefaultEvent, PreviewType, showPreview } from '../../modules/preview';
 
 /**
- * Always use monospace font for InlineCode.
+ * Decorations for InlineCode.
  */
 export const inlineCodeStyle = createDecoPlugin(() => {
-  return createMarkDeco('InlineCode', 'cm-md-monospace cm-md-inlineCode');
+  return createDecos('InlineCode', node => {
+    const { from, to } = node;
+    if (to - from < 2) {
+      // Skip degenerate spans from partial parses
+      return null;
+    }
+
+    // Tile the range with non-overlapping marks so the boundary class lands on the
+    // background element itself, visible spaces only ever split the middle tile
+    const base = 'cm-md-monospace cm-md-inlineCode';
+    const ranges = [
+      Decoration.mark({ class: `${base} cm-md-inlineCodeStart` }).range(from, from + 1),
+      Decoration.mark({ class: `${base} cm-md-inlineCodeEnd` }).range(to - 1, to),
+    ];
+
+    if (from + 1 < to - 1) {
+      ranges.push(Decoration.mark({ class: base }).range(from + 1, to - 1));
+    }
+
+    return ranges;
+  });
 });
 
 /**
