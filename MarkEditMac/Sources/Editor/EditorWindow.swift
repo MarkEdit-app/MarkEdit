@@ -110,5 +110,8 @@ final class EditorWindow: NSWindow {
         Logger.assertFail("Missing cachedTitlebarDecorationView")
       }
     }
+
+    // Deliberately dim the icon to get on well with tinted style
+    titlebarDocumentButton?.alphaValue = prefersTintedToolbar ? 0.8 : 1.0
   }
 }

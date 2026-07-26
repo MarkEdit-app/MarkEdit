@@ -168,6 +168,7 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfClass(named: "NSTitlebarBackgroundView")
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
+    testExistenceOfClass(named: "NSThemeDocumentButton")
   }
 
   func testTitlebarDecorationViewSelector() {
