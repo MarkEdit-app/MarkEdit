@@ -43,5 +43,7 @@ private let hiddenMenuTags: Set<Int> = [
   12,  // Reload
   21,  // SearchWeb
   33,  // OpenLink
+  84,  // PlayAllAnimations
+  85,  // PauseAllAnimations
   102, // CopyLinkWithHighlight
 ]
