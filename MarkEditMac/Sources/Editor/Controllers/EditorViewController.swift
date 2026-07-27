@@ -161,13 +161,14 @@ final class EditorViewController: NSViewController {
     config.applicationNameForUserAgent = "\(ProcessInfo.processInfo.userAgent) \(Bundle.main.userAgent)"
     config.allowsInlinePredictions = NSSpellChecker.InlineCompletion.webKitEnabled
 
-    let chunkLoader = EditorChunkLoader()
     let imageLoader = EditorImageLoader { [weak self] in
       self?.document?.baseURL
     }
 
-    config.setURLSchemeHandler(chunkLoader, forURLScheme: EditorChunkLoader.scheme)
-    config.setURLSchemeHandler(imageLoader, forURLScheme: EditorImageLoader.scheme)
+    config.setURLSchemeHandler(
+      imageLoader,
+      forURLScheme: EditorImageLoader.scheme
+    )
 
     // Respect user settings for Writing Tools behavior
     if #available(macOS 15.1, *), let writingToolsBehavior = AppRuntimeConfig.writingToolsBehavior {
@@ -187,14 +188,14 @@ final class EditorViewController: NSViewController {
         AppPreferences.editorConfig(theme: theme).toHtml,
         AppCustomization.editorStyle.fileContents,
         AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
-      ].joined(separator: "\n\n")
+      ].joined(separator: "\n\n").replacingOccurrences(
+        of: "\"{{USER_SETTINGS}}\"",
+        with: AppRuntimeConfig.jsonLiteral
+      )
 
       DispatchQueue.main.async {
         // Non-nil baseURL is required by scenarios like opening local files
-        webView.loadHTMLString(
-          html.replacingOccurrences(of: "\"{{USER_SETTINGS}}\"", with: AppRuntimeConfig.jsonLiteral),
-          baseURL: EditorWebView.baseURL
-        )
+        webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
       }
     }
 
