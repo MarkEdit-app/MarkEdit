@@ -113,6 +113,20 @@ final class ExtensionsModel {
       isInstalled && version == nil
     }
 
+    /// A local script with no registry entry and no source url, only its file name is meaningful.
+    var isUntracked: Bool {
+      isLocal && entry == nil && installed?.url == nil
+    }
+
+    /// Row title, the registry name or the local file path for untracked scripts.
+    var displayName: String {
+      if isUntracked, let file = installed?.file, !file.isEmpty {
+        return "Documents ‣ scripts ‣ \(file)"
+      }
+
+      return name
+    }
+
     /// A browsable page for the latest release (release or tag page), when known.
     var latestReleaseURL: URL? {
       entry?.latest.pageURL
