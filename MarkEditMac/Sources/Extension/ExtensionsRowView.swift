@@ -30,7 +30,7 @@ struct ExtensionsRowView: View {
             .foregroundStyle(.secondary)
             .accessibilityHidden(true)
 
-          Text(item.name)
+          Text(item.displayName)
             .font(.title3)
             .fontWeight(.semibold)
             .lineLimit(1)
@@ -88,7 +88,7 @@ struct ExtensionsRowView: View {
             .accessibilityHidden(true)
         }
 
-        if item.isLocal || !item.author.isEmpty || item.version != nil || item.homepage != nil || item.updateNotes != nil {
+        if (item.isLocal && !item.isUntracked) || !item.author.isEmpty || item.version != nil || item.homepage != nil || item.updateNotes != nil {
           HStack(spacing: 5) {
             if item.isLocal {
               Text(Localized.Extension.local)
