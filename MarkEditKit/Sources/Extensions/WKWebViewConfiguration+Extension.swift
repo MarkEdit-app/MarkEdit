@@ -15,7 +15,6 @@ public extension WKWebViewConfiguration {
     // [macOS 26.6] WebKit regression that blocks url scheme tasks
     var corsDisablingPatterns = [
       "image-loader://*/*",
-      "chunk-loader://*/*",
     ]
 
     // Disable CORS for http/https requests, allowing fetch() in user scripts to read cross-origin responses.

@@ -9,7 +9,6 @@ import Foundation
 public extension EditorConfig {
   var toHtml: String {
     Self.indexHtml?
-      .replacingOccurrences(of: "/chunk-loader/", with: "chunk-loader://")
       .replacingOccurrences(of: "\"{{EDITOR_CONFIG}}\"", with: jsonEncoded) ?? ""
   }
 }
