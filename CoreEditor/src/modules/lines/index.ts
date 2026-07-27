@@ -31,6 +31,31 @@ export function getLineElement(pos: number): HTMLElement | null {
   return node;
 }
 
+/**
+ * Round the `.cm-gutters` to a whole pixel, its intrinsic width is otherwise sub-pixel.
+ *
+ * This is to avoid rendering issues like visible whitespaces partially hiding letters.
+ */
+export function observeGuttersWidth(gutters: HTMLElement) {
+  const requestMeasure = (element: HTMLElement) => {
+    // Drop our own padding first, the base must come from style sheets only
+    element.style.paddingRight = '';
+    const base = parseFloat(getComputedStyle(element).paddingRight) || 0;
+    const width = element.getBoundingClientRect().width;
+    if (width > 0) {
+      element.style.paddingRight = `${base + Math.ceil(width) - width}px`;
+    }
+  };
+
+  storage.gutterObserver ??= new ResizeObserver(entries => {
+    entries.forEach(entry => requestMeasure(entry.target as HTMLElement));
+  });
+
+  storage.gutterObserver.disconnect();
+  storage.gutterObserver.observe(gutters);
+  requestMeasure(gutters);
+}
+
 export function adjustActiveLineGutter() {
   if (!window.config.showLineNumbers) {
     return;
@@ -134,6 +159,8 @@ const canvas = document.createElement('canvas');
 
 const storage: {
   cachedHeights: { [key: string]: number };
+  gutterObserver: ResizeObserver | undefined;
 } = {
   cachedHeights: {},
+  gutterObserver: undefined,
 };
