@@ -57,13 +57,23 @@ export function addExtension(extension: Extension) {
   }
 }
 
-export function addMarkdownConfig(config: MarkdownConfig) {
-  storage.markdownConfigs.push(config);
+export function addMarkdownConfig(config: MarkdownConfig | MarkdownConfig[]) {
+  if (Array.isArray(config)) {
+    storage.markdownConfigs.push(...config);
+  } else {
+    storage.markdownConfigs.push(config);
+  }
+
   reconfigureMarkdown();
 }
 
-export function addCodeLanguage(language: LanguageDescription) {
-  storage.codeLanguages.push(language);
+export function addCodeLanguage(language: LanguageDescription | LanguageDescription[]) {
+  if (Array.isArray(language)) {
+    storage.codeLanguages.push(...language);
+  } else {
+    storage.codeLanguages.push(language);
+  }
+
   reconfigureMarkdown();
 }
 
