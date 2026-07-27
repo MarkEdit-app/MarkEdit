@@ -1,7 +1,7 @@
-import { afterEach, describe, expect, jest, test } from '@jest/globals';
+import { afterEach, beforeAll, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { lineNumbers, highlightActiveLineGutter } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
-import { adjustActiveLineGutter, findLineNumberGutter } from '../src/modules/lines';
+import { observeGuttersWidth, adjustActiveLineGutter, findLineNumberGutter } from '../src/modules/lines';
 import { Config } from '../src/config';
 import * as editor from './utils/editor';
 
@@ -75,6 +75,116 @@ describe('adjustActiveLineGutter', () => {
     expect(resized).toEqual([active]); // exactly one resized, and it is the active line
   });
 });
+
+describe('observeGuttersWidth', () => {
+  // What style sheets contribute; our inline padding is added on top of it
+  let basePadding = '0px';
+
+  beforeAll(() => {
+    globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+  });
+
+  beforeEach(() => {
+    basePadding = '0px';
+    // jsdom doesn't cascade style sheets, mimic inline padding winning over them
+    jest.spyOn(window, 'getComputedStyle').mockImplementation(element => {
+      const inline = (element as HTMLElement).style.paddingRight;
+      return { paddingRight: inline === '' ? basePadding : inline } as CSSStyleDeclaration;
+    });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    document.body.innerHTML = '';
+  });
+
+  test('rounds a sub-pixel width up to a whole pixel', () => {
+    const gutters = buildGuttersWithWidth(30.4);
+    observeGuttersWidth(gutters);
+    expect(parseFloat(gutters.style.paddingRight)).toBeCloseTo(0.6);
+  });
+
+  test('adds the remainder on top of padding coming from style sheets', () => {
+    basePadding = '12px';
+    const gutters = buildGuttersWithWidth(30.4);
+    observeGuttersWidth(gutters);
+    expect(parseFloat(gutters.style.paddingRight)).toBeCloseTo(12.6);
+  });
+
+  // Regression: reading the base before dropping our own padding made it compound on every resize
+  test('does not accumulate padding when measured repeatedly', () => {
+    const gutters = buildGuttersWithWidth(30.4);
+    observeGuttersWidth(gutters);
+
+    const rounded = gutters.style.paddingRight;
+    const observer = observerFor(gutters);
+
+    observer.resize();
+    observer.resize();
+    expect(gutters.style.paddingRight).toBe(rounded);
+  });
+
+  test('leaves padding untouched for a zero-width element', () => {
+    const gutters = buildGuttersWithWidth(0);
+    observeGuttersWidth(gutters);
+    expect(gutters.style.paddingRight).toBe('');
+  });
+
+  // Toggling line numbers recreates .cm-gutters, the observer must follow the new element
+  test('re-targets the observer when gutters are recreated', () => {
+    observeGuttersWidth(buildGuttersWithWidth(30.4));
+
+    const gutters = buildGuttersWithWidth(20.25);
+    observeGuttersWidth(gutters);
+
+    expect(observerFor(gutters).targets).toEqual([gutters]);
+    expect(parseFloat(gutters.style.paddingRight)).toBeCloseTo(0.75);
+  });
+});
+
+const observerInstances: MockResizeObserver[] = [];
+
+// Stand-in for the ResizeObserver jsdom lacks, resizes are driven manually
+class MockResizeObserver {
+  targets: Element[] = [];
+
+  constructor(private readonly callback: ResizeObserverCallback) {
+    observerInstances.push(this);
+  }
+
+  observe(target: Element) {
+    this.targets.push(target);
+  }
+
+  unobserve() { /* noop */ }
+
+  disconnect() {
+    this.targets = [];
+  }
+
+  resize() {
+    const entries = this.targets.map(target => ({ target }) as ResizeObserverEntry);
+    this.callback(entries, this as unknown as ResizeObserver);
+  }
+}
+
+function observerFor(element: Element) {
+  const observer = observerInstances.find(instance => instance.targets.includes(element));
+  if (observer === undefined) {
+    throw new Error('No ResizeObserver is observing the element');
+  }
+
+  return observer;
+}
+
+function buildGuttersWithWidth(width: number): HTMLElement {
+  const element = document.createElement('div');
+  element.className = 'cm-gutters';
+  element.getBoundingClientRect = () => ({ width }) as DOMRect;
+
+  document.body.appendChild(element);
+  return element;
+}
 
 function buildGutters(...activeLineNumbers: string[]): HTMLElement[] {
   const container = document.createElement('div');

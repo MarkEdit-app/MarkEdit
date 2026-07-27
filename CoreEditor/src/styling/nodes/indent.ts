@@ -143,7 +143,6 @@ function measureTextDOM(text: string, font: string) {
 function useCanvas(text: string, font: string) {
   // context.measureText doesn't work well with some fonts (like Iosevka), or when the content has tabs
   return [
-    'SF Mono',
     'monospace',
     'system-ui',
     'ui-monospace',

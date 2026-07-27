@@ -38,7 +38,7 @@ initThemeExtractors();
 const config = import.meta.env.PROD ? window.config : {
   text: pseudoDocument,
   theme: 'github-light',
-  fontFace: { family: 'SF Mono, ui-monospace' },
+  fontFace: { family: 'ui-monospace' },
   fontSize: 17,
   showLineNumbers: true,
   showActiveLineIndicator: true,
