@@ -78,7 +78,7 @@ extension EditorConfig {
       fontSize: 12,
       showLineNumbers: false,
       showActiveLineIndicator: false,
-      invisiblesBehavior: .always,
+      invisiblesBehavior: .never,
       readOnlyMode: true,
       typewriterMode: false,
       focusMode: false,
