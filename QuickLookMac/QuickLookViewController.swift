@@ -1,6 +1,6 @@
 //
-//  PreviewViewController.swift
-//  PreviewExtension
+//  QuickLookViewController.swift
+//  QuickLookMac
 //
 //  Created by cyan on 12/20/22.
 //
@@ -10,7 +10,7 @@ import QuickLookUI
 import WebKit
 import MarkEditCore
 
-final class PreviewViewController: NSViewController {
+final class QuickLookViewController: NSViewController {
   var guidanceView: NSView?
   var mouseDownMonitor: Any?
   var mouseDragMonitor: Any?
@@ -47,7 +47,7 @@ final class PreviewViewController: NSViewController {
       forURLScheme: EditorImageLoader.scheme
     )
 
-    let webView = PreviewViewWebView(frame: .zero, configuration: config)
+    let webView = QuickLookWebView(frame: .zero, configuration: config)
     webView.navigationDelegate = self
     return webView
   }()
@@ -104,7 +104,7 @@ final class PreviewViewController: NSViewController {
 
 // MARK: - QLPreviewingController
 
-extension PreviewViewController: QLPreviewingController {
+extension QuickLookViewController: QLPreviewingController {
   func preparePreviewOfFile(at url: URL) async throws {
     guard EditorIndexHtml.sharedFileExists else {
       return showSetUpGuidance()
@@ -113,7 +113,7 @@ extension PreviewViewController: QLPreviewingController {
     let fileURL = textFileURL(of: url)
     previewDirectoryURL = fileURL.deletingLastPathComponent()
 
-    let config = EditorConfig.previewConfig(
+    let config = EditorConfig.quicklookConfig(
       fileData: try Data(contentsOf: fileURL)
     )
 
@@ -125,7 +125,7 @@ extension PreviewViewController: QLPreviewingController {
 
 // MARK: - WKNavigationDelegate
 
-extension PreviewViewController: WKNavigationDelegate {
+extension QuickLookViewController: WKNavigationDelegate {
   func webView(
     _ webView: WKWebView,
     decidePolicyFor navigationAction: WKNavigationAction,
