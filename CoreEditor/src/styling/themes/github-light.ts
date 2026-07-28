@@ -29,7 +29,7 @@ function highlight() {
     { tag: [tags.keyword, tags.modifier, tags.operator, tags.operatorKeyword], color: '#cf222e' },
     { tag: [tags.literal, tags.inserted, tags.tagName], color: base.green },
     { tag: [tags.deleted, tags.macroName], color: base.red },
-    { tag: [tags.className, tags.definition(tags.propertyName), tags.definition(tags.typeName), tags.listMark], color: '#953800' },
+    { tag: [tags.className, tags.definition(tags.propertyName), tags.definition(tags.typeName), tags.listMark, tags.codeInfo], color: '#953800' },
     { tag: [tags.function(tags.variableName), tags.function(tags.propertyName)], color: '#8250df' },
     { tag: [tags.meta, tags.comment], color: colors.comment, fontStyle: 'italic' },
     { tag: [tags.link, tags.escape, tags.string, tags.regexp, tags.special(tags.string)], color: '#0a3069' },
