@@ -24,20 +24,16 @@ export function setFontFace(fontFace: WebFontFace) {
   window.config.fontFace = fontFace;
   window.editor.requestMeasure();
 
+  refreshEditFocus();
   recalculateTextMetrics();
 }
 
 export function setFontSize(fontSize: number) {
-  const wasBigChange = Math.abs(fontSize - window.config.fontSize) > 3;
   styling.setFontSize(fontSize);
-
   window.config.fontSize = fontSize;
   window.editor.requestMeasure();
 
-  if (wasBigChange) {
-    setTimeout(refreshEditFocus, 300);
-  }
-
+  refreshEditFocus();
   recalculateTextMetrics();
 }
 
