@@ -69,6 +69,13 @@ export function setUpQuickLook(config: Config) {
       theme.of(initialTheme),
       renderExtensions,
       linkStyles,
+
+      // Accessibility
+      EditorView.contentAttributes.of({
+        'role': 'textbox',
+        'aria-multiline': 'true',
+        'aria-readonly': 'true',
+      }),
     ],
   });
 
