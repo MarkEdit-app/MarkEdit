@@ -1,5 +1,4 @@
 import { EditorSelection } from '@codemirror/state';
-import { getClientRect } from '../../common/utils';
 
 export function setActive(isActive: boolean, reselect: boolean) {
   storage.isActive = isActive;
@@ -33,31 +32,6 @@ export function setActive(isActive: boolean, reselect: boolean) {
 
 export function isActive() {
   return storage.isActive;
-}
-
-export function getSelectionRect(reselect: boolean) {
-  if (reselect) {
-    ensureSelectionRect();
-  }
-
-  const selection = window.getSelection();
-  if (selection === null) {
-    return undefined;
-  }
-
-  const state = window.editor.state;
-  const line = state.doc.lineAt(state.selection.main.from);
-
-  // getBoundingClientRect is returning invalid rect for empty lines
-  if (line.from === line.to) {
-    const coords = window.editor.coordsAtPos(line.from);
-    if (coords !== null) {
-      return getClientRect(coords);
-    }
-  }
-
-  const range = selection.getRangeAt(0);
-  return getClientRect(range.getBoundingClientRect());
 }
 
 export function ensureSelectionRect() {

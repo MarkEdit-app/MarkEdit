@@ -22,11 +22,6 @@ public extension NativeModuleTranslation {
 @MainActor
 final class NativeBridgeTranslation: NativeBridge {
   static let name = "translation"
-  lazy var methods: [String: NativeMethod] = [
-    "translate": { [weak self] in
-      await self?.translate(parameters: $0)
-    },
-  ]
 
   private let module: NativeModuleTranslation
   private lazy var decoder = JSONDecoder()
@@ -35,11 +30,27 @@ final class NativeBridgeTranslation: NativeBridge {
     self.module = module
   }
 
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "translate":
+      return await translate(parameters: parameters)
+    default:
+      return nil
+    }
+  }
+
   private func translate(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var text: String
       var from: String?
       var to: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        text = try container.value("text")
+        from = try container.value("from")
+        to = try container.value("to")
+      }
     }
 
     let message: Message

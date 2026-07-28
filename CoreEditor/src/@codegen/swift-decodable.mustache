@@ -1,0 +1,10 @@
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    {{#members}}
+    {{name}} = try container.value("{{name}}")
+    {{/members}}
+    {{#staticMembers}}
+    {{name}} = try container.value("{{name}}")
+    {{/staticMembers}}
+  }

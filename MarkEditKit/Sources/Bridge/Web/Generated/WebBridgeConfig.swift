@@ -19,180 +19,120 @@ public final class WebBridgeConfig {
   }
 
   public func setTheme(name: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let name: String
-    }
-
-    let message = Message(
-      name: name
+    let message = BridgeMessage(
+      ("name", name)
     )
 
     webView?.invoke(path: "webModules.config.setTheme", message: message, completion: completion)
   }
 
   public func setFontFace(fontFace: WebFontFace, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let fontFace: WebFontFace
-    }
-
-    let message = Message(
-      fontFace: fontFace
+    let message = BridgeMessage(
+      ("fontFace", fontFace)
     )
 
     webView?.invoke(path: "webModules.config.setFontFace", message: message, completion: completion)
   }
 
   public func setFontSize(fontSize: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let fontSize: Double
-    }
-
-    let message = Message(
-      fontSize: fontSize
+    let message = BridgeMessage(
+      ("fontSize", fontSize)
     )
 
     webView?.invoke(path: "webModules.config.setFontSize", message: message, completion: completion)
   }
 
   public func setShowLineNumbers(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setShowLineNumbers", message: message, completion: completion)
   }
 
   public func setShowActiveLineIndicator(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setShowActiveLineIndicator", message: message, completion: completion)
   }
 
   public func setInvisiblesBehavior(behavior: EditorInvisiblesBehavior, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let behavior: EditorInvisiblesBehavior
-    }
-
-    let message = Message(
-      behavior: behavior
+    let message = BridgeMessage(
+      ("behavior", behavior)
     )
 
     webView?.invoke(path: "webModules.config.setInvisiblesBehavior", message: message, completion: completion)
   }
 
   public func setReadOnlyMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setReadOnlyMode", message: message, completion: completion)
   }
 
   public func setTypewriterMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setTypewriterMode", message: message, completion: completion)
   }
 
   public func setFocusMode(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setFocusMode", message: message, completion: completion)
   }
 
   public func setLineWrapping(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setLineWrapping", message: message, completion: completion)
   }
 
   public func setLineHeight(lineHeight: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let lineHeight: Double
-    }
-
-    let message = Message(
-      lineHeight: lineHeight
+    let message = BridgeMessage(
+      ("lineHeight", lineHeight)
     )
 
     webView?.invoke(path: "webModules.config.setLineHeight", message: message, completion: completion)
   }
 
   public func setDefaultLineBreak(lineBreak: String?, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let lineBreak: String?
-    }
-
-    let message = Message(
-      lineBreak: lineBreak
+    let message = BridgeMessage(
+      ("lineBreak", lineBreak)
     )
 
     webView?.invoke(path: "webModules.config.setDefaultLineBreak", message: message, completion: completion)
   }
 
   public func setTabKeyBehavior(behavior: TabKeyBehavior, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let behavior: TabKeyBehavior
-    }
-
-    let message = Message(
-      behavior: behavior
+    let message = BridgeMessage(
+      ("behavior", behavior)
     )
 
     webView?.invoke(path: "webModules.config.setTabKeyBehavior", message: message, completion: completion)
   }
 
   public func setIndentUnit(unit: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let unit: String
-    }
-
-    let message = Message(
-      unit: unit
+    let message = BridgeMessage(
+      ("unit", unit)
     )
 
     webView?.invoke(path: "webModules.config.setIndentUnit", message: message, completion: completion)
   }
 
   public func setSuggestWhileTyping(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.config.setSuggestWhileTyping", message: message, completion: completion)

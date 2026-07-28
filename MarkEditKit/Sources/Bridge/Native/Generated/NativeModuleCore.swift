@@ -34,53 +34,45 @@ public extension NativeModuleCore {
 @MainActor
 final class NativeBridgeCore: NativeBridge {
   static let name = "core"
-  lazy var methods: [String: NativeMethod] = [
-    "notifyWindowDidLoad": { [weak self] in
-      await self?.notifyWindowDidLoad(parameters: $0)
-    },
-    "notifyWindowResize": { [weak self] in
-      await self?.notifyWindowResize(parameters: $0)
-    },
-    "notifyWindowMove": { [weak self] in
-      await self?.notifyWindowMove(parameters: $0)
-    },
-    "notifyWindowClose": { [weak self] in
-      await self?.notifyWindowClose(parameters: $0)
-    },
-    "notifyEditorDidBecomeIdle": { [weak self] in
-      await self?.notifyEditorDidBecomeIdle(parameters: $0)
-    },
-    "notifyBackgroundColorDidChange": { [weak self] in
-      await self?.notifyBackgroundColorDidChange(parameters: $0)
-    },
-    "notifyViewportScaleDidChange": { [weak self] in
-      await self?.notifyViewportScaleDidChange(parameters: $0)
-    },
-    "notifyViewDidUpdate": { [weak self] in
-      await self?.notifyViewDidUpdate(parameters: $0)
-    },
-    "notifyContentHeightDidChange": { [weak self] in
-      await self?.notifyContentHeightDidChange(parameters: $0)
-    },
-    "notifyContentOffsetDidChange": { [weak self] in
-      await self?.notifyContentOffsetDidChange(parameters: $0)
-    },
-    "notifyCompositionEnded": { [weak self] in
-      await self?.notifyCompositionEnded(parameters: $0)
-    },
-    "notifyLinkClicked": { [weak self] in
-      await self?.notifyLinkClicked(parameters: $0)
-    },
-    "notifyLightWarning": { [weak self] in
-      await self?.notifyLightWarning(parameters: $0)
-    },
-  ]
 
   private let module: NativeModuleCore
   private lazy var decoder = JSONDecoder()
 
   init(_ module: NativeModuleCore) {
     self.module = module
+  }
+
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "notifyWindowDidLoad":
+      return await notifyWindowDidLoad(parameters: parameters)
+    case "notifyWindowResize":
+      return await notifyWindowResize(parameters: parameters)
+    case "notifyWindowMove":
+      return await notifyWindowMove(parameters: parameters)
+    case "notifyWindowClose":
+      return await notifyWindowClose(parameters: parameters)
+    case "notifyEditorDidBecomeIdle":
+      return await notifyEditorDidBecomeIdle(parameters: parameters)
+    case "notifyBackgroundColorDidChange":
+      return await notifyBackgroundColorDidChange(parameters: parameters)
+    case "notifyViewportScaleDidChange":
+      return await notifyViewportScaleDidChange(parameters: parameters)
+    case "notifyViewDidUpdate":
+      return await notifyViewDidUpdate(parameters: parameters)
+    case "notifyContentHeightDidChange":
+      return await notifyContentHeightDidChange(parameters: parameters)
+    case "notifyContentOffsetDidChange":
+      return await notifyContentOffsetDidChange(parameters: parameters)
+    case "notifyCompositionEnded":
+      return await notifyCompositionEnded(parameters: parameters)
+    case "notifyLinkClicked":
+      return await notifyLinkClicked(parameters: parameters)
+    case "notifyLightWarning":
+      return await notifyLightWarning(parameters: parameters)
+    default:
+      return nil
+    }
   }
 
   private func notifyWindowDidLoad(parameters: Data) async -> Result<Any?, Error>? {
@@ -93,6 +85,13 @@ final class NativeBridgeCore: NativeBridge {
       var method: NativeModuleCoreNotifyWindowResizeMethod
       var width: Double
       var height: Double
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        method = try container.value("method")
+        width = try container.value("width")
+        height = try container.value("height")
+      }
     }
 
     let message: Message
@@ -112,6 +111,13 @@ final class NativeBridgeCore: NativeBridge {
       var method: NativeModuleCoreNotifyWindowMoveMethod
       var x: Double
       var y: Double
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        method = try container.value("method")
+        x = try container.value("x")
+        y = try container.value("y")
+      }
     }
 
     let message: Message
@@ -140,6 +146,12 @@ final class NativeBridgeCore: NativeBridge {
     struct Message: Decodable {
       var color: Int
       var alpha: Double
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        color = try container.value("color")
+        alpha = try container.value("alpha")
+      }
     }
 
     let message: Message
@@ -165,6 +177,14 @@ final class NativeBridgeCore: NativeBridge {
       var compositionEnded: Bool
       var isDirty: Bool
       var selectedLineColumn: LineColumnInfo
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        contentEdited = try container.value("contentEdited")
+        compositionEnded = try container.value("compositionEnded")
+        isDirty = try container.value("isDirty")
+        selectedLineColumn = try container.value("selectedLineColumn")
+      }
     }
 
     let message: Message
@@ -182,6 +202,11 @@ final class NativeBridgeCore: NativeBridge {
   private func notifyContentHeightDidChange(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var bottomPanelHeight: Double
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        bottomPanelHeight = try container.value("bottomPanelHeight")
+      }
     }
 
     let message: Message
@@ -204,6 +229,11 @@ final class NativeBridgeCore: NativeBridge {
   private func notifyCompositionEnded(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var selectedLineColumn: LineColumnInfo
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        selectedLineColumn = try container.value("selectedLineColumn")
+      }
     }
 
     let message: Message
@@ -221,6 +251,11 @@ final class NativeBridgeCore: NativeBridge {
   private func notifyLinkClicked(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var link: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        link = try container.value("link")
+      }
     }
 
     let message: Message
@@ -251,7 +286,7 @@ public enum NativeModuleCoreNotifyWindowMoveMethod: String, Codable {
   case by = "by"
 }
 
-public struct LineColumnInfo: Decodable, Equatable {
+public struct LineColumnInfo: Decodable {
   public var contentLength: Int
   public var lineNumber: Int
   public var columnText: String
@@ -264,5 +299,14 @@ public struct LineColumnInfo: Decodable, Equatable {
     self.columnText = columnText
     self.selectionText = selectionText
     self.selectionRange = selectionRange
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    contentLength = try container.value("contentLength")
+    lineNumber = try container.value("lineNumber")
+    columnText = try container.value("columnText")
+    selectionText = try container.value("selectionText")
+    selectionRange = try container.value("selectionRange")
   }
 }

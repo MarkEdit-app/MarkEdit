@@ -19,33 +19,12 @@ public final class WebBridgeWritingTools {
   }
 
   public func setActive(isActive: Bool, reselect: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let isActive: Bool
-      let reselect: Bool
-    }
-
-    let message = Message(
-      isActive: isActive,
-      reselect: reselect
+    let message = BridgeMessage(
+      ("isActive", isActive),
+      ("reselect", reselect)
     )
 
     webView?.invoke(path: "webModules.writingTools.setActive", message: message, completion: completion)
-  }
-
-  public func getSelectionRect(reselect: Bool) async throws -> WebRect? {
-    struct Message: Encodable {
-      let reselect: Bool
-    }
-
-    let message = Message(
-      reselect: reselect
-    )
-
-    guard let webView else {
-      throw WKWebView.InvokeError.unexpectedNil
-    }
-
-    return try await webView.invoke(path: "webModules.writingTools.getSelectionRect", message: message)
   }
 
   public func ensureSelectionRect(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

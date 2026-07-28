@@ -44,4 +44,18 @@ public struct EditorLocalizable: Encodable {
     self.cmdClickToFollow = cmdClickToFollow
     self.cmdClickToToggleTodo = cmdClickToToggleTodo
   }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(controlCharacter, forKey: "controlCharacter")
+    try container.encode(foldedLines, forKey: "foldedLines")
+    try container.encode(unfoldedLines, forKey: "unfoldedLines")
+    try container.encode(foldedCode, forKey: "foldedCode")
+    try container.encode(unfold, forKey: "unfold")
+    try container.encode(foldLine, forKey: "foldLine")
+    try container.encode(unfoldLine, forKey: "unfoldLine")
+    try container.encode(previewButtonTitle, forKey: "previewButtonTitle")
+    try container.encode(cmdClickToFollow, forKey: "cmdClickToFollow")
+    try container.encode(cmdClickToToggleTodo, forKey: "cmdClickToToggleTodo")
+  }
 }

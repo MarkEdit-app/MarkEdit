@@ -162,15 +162,11 @@ private extension Color {
       value = value.reduce(into: "") { $0 += String(repeating: $1, count: 2) }
     }
 
-    guard value.count == 6, let code = UInt32(value, radix: 16) else {
+    guard value.count == 6, let code = Int(value, radix: 16) else {
       self = Color(white: 0.5)
       return
     }
 
-    self = Color(
-      red: Double((code >> 16) & 0xFF) / 255.0,
-      green: Double((code >> 8) & 0xFF) / 255.0,
-      blue: Double(code & 0xFF) / 255.0
-    )
+    self = Color(hex: code)
   }
 }

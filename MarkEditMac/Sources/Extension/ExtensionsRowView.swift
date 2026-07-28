@@ -88,72 +88,15 @@ struct ExtensionsRowView: View {
             .accessibilityHidden(true)
         }
 
-        if (item.isLocal && !item.isUntracked) || !item.author.isEmpty || item.version != nil || item.homepage != nil || item.updateNotes != nil {
+        let segments = metadataSegments(for: item)
+        if !segments.isEmpty {
           HStack(spacing: 5) {
-            if item.isLocal {
-              Text(Localized.Extension.local)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-            } else if let version = item.version {
-              Text(verbatim: "v\(version)")
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .contentTransition(.numericText())
-            }
-
-            if let notes = item.updateNotes {
-              if item.version != nil || item.isLocal {
+            ForEach(segments.indices, id: \.self) { index in
+              if index > 0 {
                 metadataDot
               }
 
-              Button(Localized.Extension.whatsNew) {
-                showingUpdateNotes = true
-              }
-              .buttonStyle(.plain)
-              .font(.callout)
-              .fontWeight(.medium)
-              .foregroundStyle(.tint)
-              .popover(isPresented: $showingUpdateNotes, arrowEdge: .bottom) {
-                updateNotesPopover(notes)
-              }
-              .onDisappear {
-                showingUpdateNotes = false
-              }
-            }
-
-            if !item.author.isEmpty {
-              if item.version != nil || item.isLocal || item.updateNotes != nil {
-                metadataDot
-              }
-
-              if item.isOfficial {
-                Image(systemName: Icons.checkmarkSeal)
-                  .font(.callout)
-                  .imageScale(.small)
-                  .foregroundStyle(.secondary)
-                  .help(Localized.Extension.official)
-                  .accessibilityLabel(Localized.Extension.official)
-              }
-
-              Text(item.author)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-            }
-
-            if let homepage = item.homepage {
-              if item.version != nil || item.isLocal || item.updateNotes != nil || !item.author.isEmpty {
-                metadataDot
-              }
-
-              Button(Localized.Extension.homepage) {
-                NSWorkspace.shared.open(homepage)
-              }
-              .buttonStyle(.plain)
-              .font(.callout)
-              .fontWeight(.medium)
-              .foregroundStyle(.tint)
-              .help(homepage.absoluteString)
-              .accessibilityAddTraits(.isLink)
+              segments[index]
             }
           }
           .padding(.top, 12)
@@ -325,5 +268,82 @@ private extension ExtensionsRowView {
       .bold()
       .foregroundStyle(.secondary)
       .accessibilityHidden(true)
+  }
+
+  /// Metadata line segments (version/local, what's new, author, homepage), type-erased so they
+  /// can be interleaved with dots via a single `ForEach` instead of a chain of conditionals.
+  func metadataSegments(for item: ExtensionsModel.Item) -> [AnyView] {
+    guard (item.isLocal && !item.isUntracked) || !item.author.isEmpty || item.version != nil || item.homepage != nil || item.updateNotes != nil else {
+      return []
+    }
+
+    var segments: [AnyView] = []
+    if item.isLocal {
+      segments.append(AnyView(
+        Text(Localized.Extension.local)
+          .font(.callout)
+          .foregroundStyle(.secondary)
+      ))
+    } else if let version = item.version {
+      segments.append(AnyView(
+        Text(verbatim: "v\(version)")
+          .font(.callout)
+          .foregroundStyle(.secondary)
+          .contentTransition(.numericText())
+      ))
+    }
+
+    if let notes = item.updateNotes {
+      segments.append(AnyView(
+        Button(Localized.Extension.whatsNew) {
+          showingUpdateNotes = true
+        }
+        .buttonStyle(.plain)
+        .font(.callout)
+        .fontWeight(.medium)
+        .foregroundStyle(.tint)
+        .popover(isPresented: $showingUpdateNotes, arrowEdge: .bottom) {
+          updateNotesPopover(notes)
+        }
+        .onDisappear {
+          showingUpdateNotes = false
+        }
+      ))
+    }
+
+    if !item.author.isEmpty {
+      segments.append(AnyView(
+        HStack(spacing: 5) {
+          if item.isOfficial {
+            Image(systemName: Icons.checkmarkSeal)
+              .font(.callout)
+              .imageScale(.small)
+              .foregroundStyle(.secondary)
+              .help(Localized.Extension.official)
+              .accessibilityLabel(Localized.Extension.official)
+          }
+
+          Text(item.author)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+        }
+      ))
+    }
+
+    if let homepage = item.homepage {
+      segments.append(AnyView(
+        Button(Localized.Extension.homepage) {
+          NSWorkspace.shared.open(homepage)
+        }
+        .buttonStyle(.plain)
+        .font(.callout)
+        .fontWeight(.medium)
+        .foregroundStyle(.tint)
+        .help(homepage.absoluteString)
+        .accessibilityAddTraits(.isLink)
+      ))
+    }
+
+    return segments
   }
 }

@@ -19,16 +19,10 @@ public final class WebBridgeCore {
   }
 
   public func resetEditor(text: String, selectionRange: SelectionRange?, documentChanged: Bool) async throws -> Bool {
-    struct Message: Encodable {
-      let text: String
-      let selectionRange: SelectionRange?
-      let documentChanged: Bool
-    }
-
-    let message = Message(
-      text: text,
-      selectionRange: selectionRange,
-      documentChanged: documentChanged
+    let message = BridgeMessage(
+      ("text", text),
+      ("selectionRange", selectionRange),
+      ("documentChanged", documentChanged)
     )
 
     guard let webView else {
@@ -63,42 +57,27 @@ public final class WebBridgeCore {
   }
 
   public func insertText(text: String, from: Int, to: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let text: String
-      let from: Int
-      let to: Int
-    }
-
-    let message = Message(
-      text: text,
-      from: from,
-      to: to
+    let message = BridgeMessage(
+      ("text", text),
+      ("from", from),
+      ("to", to)
     )
 
     webView?.invoke(path: "webModules.core.insertText", message: message, completion: completion)
   }
 
   public func replaceText(text: String, granularity: ReplaceGranularity, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let text: String
-      let granularity: ReplaceGranularity
-    }
-
-    let message = Message(
-      text: text,
-      granularity: granularity
+    let message = BridgeMessage(
+      ("text", text),
+      ("granularity", granularity)
     )
 
     webView?.invoke(path: "webModules.core.replaceText", message: message, completion: completion)
   }
 
   public func performTextDrop(text: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let text: String
-    }
-
-    let message = Message(
-      text: text
+    let message = BridgeMessage(
+      ("text", text)
     )
 
     webView?.invoke(path: "webModules.core.performTextDrop", message: message, completion: completion)
@@ -109,33 +88,24 @@ public final class WebBridgeCore {
   }
 
   public func handleMouseExited(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let clientX: Double
-      let clientY: Double
-    }
-
-    let message = Message(
-      clientX: clientX,
-      clientY: clientY
+    let message = BridgeMessage(
+      ("clientX", clientX),
+      ("clientY", clientY)
     )
 
     webView?.invoke(path: "webModules.core.handleMouseExited", message: message, completion: completion)
   }
 
   public func setHasModalSheet(value: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let value: Bool
-    }
-
-    let message = Message(
-      value: value
+    let message = BridgeMessage(
+      ("value", value)
     )
 
     webView?.invoke(path: "webModules.core.setHasModalSheet", message: message, completion: completion)
   }
 }
 
-public struct WebBridgeCoreGetEditorStateReturnType: Codable, Equatable {
+public struct WebBridgeCoreGetEditorStateReturnType: Codable {
   public var hasFocus: Bool
   public var hasSelection: Bool
 
@@ -143,9 +113,21 @@ public struct WebBridgeCoreGetEditorStateReturnType: Codable, Equatable {
     self.hasFocus = hasFocus
     self.hasSelection = hasSelection
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    hasFocus = try container.value("hasFocus")
+    hasSelection = try container.value("hasSelection")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(hasFocus, forKey: "hasFocus")
+    try container.encode(hasSelection, forKey: "hasSelection")
+  }
 }
 
-public struct ReadableContentPair: Codable, Equatable {
+public struct ReadableContentPair: Codable {
   public var fullText: ReadableContent
   public var selection: ReadableContent?
 
@@ -153,9 +135,21 @@ public struct ReadableContentPair: Codable, Equatable {
     self.fullText = fullText
     self.selection = selection
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    fullText = try container.value("fullText")
+    selection = try container.value("selection")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(fullText, forKey: "fullText")
+    try container.encode(selection, forKey: "selection")
+  }
 }
 
-public struct ReadableContent: Codable, Equatable {
+public struct ReadableContent: Codable {
   public var sourceText: String
   public var trimmedText: String
   public var paragraphCount: Int
@@ -166,6 +160,22 @@ public struct ReadableContent: Codable, Equatable {
     self.trimmedText = trimmedText
     self.paragraphCount = paragraphCount
     self.commentCount = commentCount
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    sourceText = try container.value("sourceText")
+    trimmedText = try container.value("trimmedText")
+    paragraphCount = try container.value("paragraphCount")
+    commentCount = try container.value("commentCount")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(sourceText, forKey: "sourceText")
+    try container.encode(trimmedText, forKey: "trimmedText")
+    try container.encode(paragraphCount, forKey: "paragraphCount")
+    try container.encode(commentCount, forKey: "commentCount")
   }
 }
 

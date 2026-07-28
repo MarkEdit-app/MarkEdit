@@ -28,29 +28,6 @@ public extension NativeModuleCompletion {
 @MainActor
 final class NativeBridgeCompletion: NativeBridge {
   static let name = "completion"
-  lazy var methods: [String: NativeMethod] = [
-    "requestCompletions": { [weak self] in
-      await self?.requestCompletions(parameters: $0)
-    },
-    "commitCompletion": { [weak self] in
-      await self?.commitCompletion(parameters: $0)
-    },
-    "cancelCompletion": { [weak self] in
-      await self?.cancelCompletion(parameters: $0)
-    },
-    "selectPrevious": { [weak self] in
-      await self?.selectPrevious(parameters: $0)
-    },
-    "selectNext": { [weak self] in
-      await self?.selectNext(parameters: $0)
-    },
-    "selectTop": { [weak self] in
-      await self?.selectTop(parameters: $0)
-    },
-    "selectBottom": { [weak self] in
-      await self?.selectBottom(parameters: $0)
-    },
-  ]
 
   private let module: NativeModuleCompletion
   private lazy var decoder = JSONDecoder()
@@ -59,10 +36,37 @@ final class NativeBridgeCompletion: NativeBridge {
     self.module = module
   }
 
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "requestCompletions":
+      return await requestCompletions(parameters: parameters)
+    case "commitCompletion":
+      return await commitCompletion(parameters: parameters)
+    case "cancelCompletion":
+      return await cancelCompletion(parameters: parameters)
+    case "selectPrevious":
+      return await selectPrevious(parameters: parameters)
+    case "selectNext":
+      return await selectNext(parameters: parameters)
+    case "selectTop":
+      return await selectTop(parameters: parameters)
+    case "selectBottom":
+      return await selectBottom(parameters: parameters)
+    default:
+      return nil
+    }
+  }
+
   private func requestCompletions(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
       var fullText: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        anchor = try container.value("anchor")
+        fullText = try container.value("fullText")
+      }
     }
 
     let message: Message
@@ -80,6 +84,11 @@ final class NativeBridgeCompletion: NativeBridge {
   private func commitCompletion(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var insert: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        insert = try container.value("insert")
+      }
     }
 
     let message: Message

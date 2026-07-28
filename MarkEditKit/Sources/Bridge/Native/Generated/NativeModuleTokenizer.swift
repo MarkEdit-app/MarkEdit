@@ -24,17 +24,6 @@ public extension NativeModuleTokenizer {
 @MainActor
 final class NativeBridgeTokenizer: NativeBridge {
   static let name = "tokenizer"
-  lazy var methods: [String: NativeMethod] = [
-    "tokenize": { [weak self] in
-      await self?.tokenize(parameters: $0)
-    },
-    "moveWordBackward": { [weak self] in
-      await self?.moveWordBackward(parameters: $0)
-    },
-    "moveWordForward": { [weak self] in
-      await self?.moveWordForward(parameters: $0)
-    },
-  ]
 
   private let module: NativeModuleTokenizer
   private lazy var decoder = JSONDecoder()
@@ -43,9 +32,27 @@ final class NativeBridgeTokenizer: NativeBridge {
     self.module = module
   }
 
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "tokenize":
+      return await tokenize(parameters: parameters)
+    case "moveWordBackward":
+      return await moveWordBackward(parameters: parameters)
+    case "moveWordForward":
+      return await moveWordForward(parameters: parameters)
+    default:
+      return nil
+    }
+  }
+
   private func tokenize(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        anchor = try container.value("anchor")
+      }
     }
 
     let message: Message
@@ -63,6 +70,11 @@ final class NativeBridgeTokenizer: NativeBridge {
   private func moveWordBackward(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        anchor = try container.value("anchor")
+      }
     }
 
     let message: Message
@@ -80,6 +92,11 @@ final class NativeBridgeTokenizer: NativeBridge {
   private func moveWordForward(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        anchor = try container.value("anchor")
+      }
     }
 
     let message: Message

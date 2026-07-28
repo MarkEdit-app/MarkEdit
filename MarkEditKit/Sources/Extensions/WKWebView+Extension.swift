@@ -57,7 +57,7 @@ extension WKWebView {
 extension WKWebView {
   func invoke(
     path: String,
-    message: Encodable = Message(),
+    message: Encodable = BridgeMessage(),
     completion: ((Result<Void, InvokeError>) -> Void)? = nil
   ) {
     let script = script(for: path, message: message)
@@ -77,26 +77,10 @@ extension WKWebView {
 
   func invoke<SuccessResult: Decodable>(
     path: String,
-    message: Encodable = Message(),
+    message: Encodable = BridgeMessage(),
     callAsync: Bool = false
   ) async throws -> SuccessResult {
-    let script = script(for: path, message: message)
-    let value: Any?
-
-    do {
-      if callAsync {
-        value = try await callAsyncJavaScript("return await \(script)", contentWorld: .page)
-      } else {
-        value = try await evaluateJavaScript(script)
-      }
-    } catch {
-      Logger.log(.error, error.localizedDescription)
-      throw InvokeError.evaluateError(path: path, error: error)
-    }
-
-    guard let value, !(value is NSNull) else {
-      throw InvokeError.unexpectedNil
-    }
+    let value = try await evaluate(path: path, message: message, callAsync: callAsync)
 
     // Primitive types
     if let value = value as? SuccessResult {
@@ -117,12 +101,31 @@ extension WKWebView {
 // MARK: - Private
 
 private extension WKWebView {
-  struct Message: Encodable {
-    // Empty message used for zero parameter functions
-  }
-
   func script(for path: String, message: Encodable) -> String {
     let module = path.components(separatedBy: ".").first ?? "undefined"
     return "typeof \(module) === 'object' ? \(path)(\(message.jsonEncoded)) : undefined"
+  }
+
+  /// Non-generic counterpart of `invoke`, keeping the async machinery to a single instantiation.
+  func evaluate(path: String, message: Encodable, callAsync: Bool) async throws -> Any {
+    let script = script(for: path, message: message)
+    let value: Any?
+
+    do {
+      if callAsync {
+        value = try await callAsyncJavaScript("return await \(script)", contentWorld: .page)
+      } else {
+        value = try await evaluateJavaScript(script)
+      }
+    } catch {
+      Logger.log(.error, error.localizedDescription)
+      throw InvokeError.evaluateError(path: path, error: error)
+    }
+
+    guard let value, !(value is NSNull) else {
+      throw InvokeError.unexpectedNil
+    }
+
+    return value
   }
 }

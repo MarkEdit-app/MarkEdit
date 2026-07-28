@@ -1,0 +1,10 @@
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    {{#members}}
+    try container.encode({{name}}, forKey: "{{name}}")
+    {{/members}}
+    {{#staticMembers}}
+    try container.encode({{name}}, forKey: "{{name}}")
+    {{/staticMembers}}
+  }

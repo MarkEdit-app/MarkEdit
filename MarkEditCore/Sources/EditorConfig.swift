@@ -95,4 +95,35 @@ public struct EditorConfig: Encodable {
     self.visibleLineBreakCharacter = visibleLineBreakCharacter
     self.searchNormalizers = searchNormalizers
   }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(host, forKey: "host")
+    try container.encode(text, forKey: "text")
+    try container.encode(theme, forKey: "theme")
+    try container.encode(fontFace, forKey: "fontFace")
+    try container.encode(fontSize, forKey: "fontSize")
+    try container.encode(showLineNumbers, forKey: "showLineNumbers")
+    try container.encode(showActiveLineIndicator, forKey: "showActiveLineIndicator")
+    try container.encode(invisiblesBehavior, forKey: "invisiblesBehavior")
+    try container.encode(readOnlyMode, forKey: "readOnlyMode")
+    try container.encode(typewriterMode, forKey: "typewriterMode")
+    try container.encode(focusMode, forKey: "focusMode")
+    try container.encode(lineWrapping, forKey: "lineWrapping")
+    try container.encode(lineHeight, forKey: "lineHeight")
+    try container.encode(suggestWhileTyping, forKey: "suggestWhileTyping")
+    try container.encode(standardDirectories, forKey: "standardDirectories")
+    try container.encode(runtimeInfo, forKey: "runtimeInfo")
+    try container.encode(defaultLineBreak, forKey: "defaultLineBreak")
+    try container.encode(tabKeyBehavior, forKey: "tabKeyBehavior")
+    try container.encode(indentUnit, forKey: "indentUnit")
+    try container.encode(localizable, forKey: "localizable")
+    try container.encode(autoCharacterPairs, forKey: "autoCharacterPairs")
+    try container.encode(indentBehavior, forKey: "indentBehavior")
+    try container.encode(undoGroupingInterval, forKey: "undoGroupingInterval")
+    try container.encode(headerFontSizeDiffs, forKey: "headerFontSizeDiffs")
+    try container.encode(visibleWhitespaceCharacter, forKey: "visibleWhitespaceCharacter")
+    try container.encode(visibleLineBreakCharacter, forKey: "visibleLineBreakCharacter")
+    try container.encode(searchNormalizers, forKey: "searchNormalizers")
+  }
 }

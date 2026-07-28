@@ -37,15 +37,15 @@ public final class EditorMessageHandler: NSObject, Sendable, WKScriptMessageHand
     let moduleMethodPath = "\(moduleName).\(methodName)"
     Logger.log(.debug, "Invoking native method: \(moduleMethodPath)")
 
-    guard let invokeNative = modules[moduleName]?[methodName] else {
-      return reportError("Invalid native method path: \(moduleMethodPath)")
+    guard let bridge = modules[moduleName] else {
+      return reportError("Invalid native module name: \(moduleName)")
     }
 
     guard let parameters = (body["parameters"] as? String)?.toData() else {
       return reportError("Invalid parameters from native method: \(moduleMethodPath)")
     }
 
-    guard let result = await invokeNative(parameters) else {
+    guard let result = await bridge.invoke(method: methodName, parameters: parameters) else {
       return reportError("Missing result from native method: \(moduleMethodPath)")
     }
 

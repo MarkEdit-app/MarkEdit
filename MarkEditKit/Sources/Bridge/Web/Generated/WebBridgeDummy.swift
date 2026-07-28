@@ -22,16 +22,10 @@ public final class WebBridgeDummy {
   ///
   /// We use this to generate types that are not covered in exposed interfaces, as a workaround.
   public func __generateTypes__(arg0: RuntimeInfo, arg1: EditorHost, arg2: EditorIndentBehavior, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let arg0: RuntimeInfo
-      let arg1: EditorHost
-      let arg2: EditorIndentBehavior
-    }
-
-    let message = Message(
-      arg0: arg0,
-      arg1: arg1,
-      arg2: arg2
+    let message = BridgeMessage(
+      ("arg0", arg0),
+      ("arg1", arg1),
+      ("arg2", arg2)
     )
 
     webView?.invoke(path: "webModules.dummy.__generateTypes__", message: message, completion: completion)

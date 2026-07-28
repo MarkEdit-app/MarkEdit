@@ -31,7 +31,7 @@ public struct ExtensionRelease: Codable, Equatable, Sendable {
   }
 }
 
-public extension ExtensionRelease {
+extension ExtensionRelease {
   /// Whether the running app meets this release's minimum version requirement.
   var isCompatible: Bool {
     guard let minAppVersion, !minAppVersion.isEmpty else {
@@ -43,7 +43,7 @@ public extension ExtensionRelease {
   }
 
   /// A browsable page for this release: the GitHub release page for a release-asset URL.
-  var pageURL: URL? {
+  public var pageURL: URL? {
     guard let components = URLComponents(string: url), let host = components.host else {
       return nil
     }

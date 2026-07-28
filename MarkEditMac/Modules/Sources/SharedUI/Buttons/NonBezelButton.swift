@@ -8,11 +8,11 @@ import AppKit
 import AppKitExtensions
 
 public class NonBezelButton: NSButton {
-  public var focusRingRadius: Double?
-  public var focusRingCorners: NSBezierPath.Corners?
+  var focusRingRadius: Double?
+  var focusRingCorners: NSBezierPath.Corners?
   public var modernStyle = false
-  public var modernCornerRadius: Double = 0
-  public var modernStateChanged: ((_ isHighlighted: Bool) -> Void)?
+  var modernCornerRadius: Double = 0
+  var modernStateChanged: ((_ isHighlighted: Bool) -> Void)?
 
   override init(frame: CGRect) {
     super.init(frame: frame)

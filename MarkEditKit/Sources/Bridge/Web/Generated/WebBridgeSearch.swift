@@ -19,24 +19,16 @@ public final class WebBridgeSearch {
   }
 
   public func setState(enabled: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let enabled: Bool
-    }
-
-    let message = Message(
-      enabled: enabled
+    let message = BridgeMessage(
+      ("enabled", enabled)
     )
 
     webView?.invoke(path: "webModules.search.setState", message: message, completion: completion)
   }
 
   public func updateQuery(options: SearchOptions, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let options: SearchOptions
-    }
-
-    let message = Message(
-      options: options
+    let message = BridgeMessage(
+      ("options", options)
     )
 
     webView?.invoke(path: "webModules.search.updateQuery", message: message, completion: completion)
@@ -47,24 +39,16 @@ public final class WebBridgeSearch {
   }
 
   public func performOperation(operation: SearchOperation, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let operation: SearchOperation
-    }
-
-    let message = Message(
-      operation: operation
+    let message = BridgeMessage(
+      ("operation", operation)
     )
 
     webView?.invoke(path: "webModules.search.performOperation", message: message, completion: completion)
   }
 
   public func findNext(search: String) async throws -> Bool {
-    struct Message: Encodable {
-      let search: String
-    }
-
-    let message = Message(
-      search: search
+    let message = BridgeMessage(
+      ("search", search)
     )
 
     guard let webView else {
@@ -75,12 +59,8 @@ public final class WebBridgeSearch {
   }
 
   public func findPrevious(search: String) async throws -> Bool {
-    struct Message: Encodable {
-      let search: String
-    }
-
-    let message = Message(
-      search: search
+    let message = BridgeMessage(
+      ("search", search)
     )
 
     guard let webView else {
@@ -119,7 +99,7 @@ public final class WebBridgeSearch {
   }
 }
 
-public struct SearchOptions: Codable, Equatable {
+public struct SearchOptions: Codable {
   public var search: String
   public var caseSensitive: Bool
   public var diacriticInsensitive: Bool
@@ -139,6 +119,30 @@ public struct SearchOptions: Codable, Equatable {
     self.refocus = refocus
     self.replace = replace
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    search = try container.value("search")
+    caseSensitive = try container.value("caseSensitive")
+    diacriticInsensitive = try container.value("diacriticInsensitive")
+    wholeWord = try container.value("wholeWord")
+    literal = try container.value("literal")
+    regexp = try container.value("regexp")
+    refocus = try container.value("refocus")
+    replace = try container.value("replace")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(search, forKey: "search")
+    try container.encode(caseSensitive, forKey: "caseSensitive")
+    try container.encode(diacriticInsensitive, forKey: "diacriticInsensitive")
+    try container.encode(wholeWord, forKey: "wholeWord")
+    try container.encode(literal, forKey: "literal")
+    try container.encode(regexp, forKey: "regexp")
+    try container.encode(refocus, forKey: "refocus")
+    try container.encode(replace, forKey: "replace")
+  }
 }
 
 public enum SearchOperation: String, Codable {
@@ -149,7 +153,7 @@ public enum SearchOperation: String, Codable {
 }
 
 /// Info to show text like "1 of 3".
-public struct SearchCounterInfo: Codable, Equatable {
+public struct SearchCounterInfo: Codable {
   /// Total number of matched items
   public var numberOfItems: Int
   /// Index for the selected item, zero-based
@@ -158,5 +162,17 @@ public struct SearchCounterInfo: Codable, Equatable {
   public init(numberOfItems: Int, currentIndex: Int) {
     self.numberOfItems = numberOfItems
     self.currentIndex = currentIndex
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    numberOfItems = try container.value("numberOfItems")
+    currentIndex = try container.value("currentIndex")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(numberOfItems, forKey: "numberOfItems")
+    try container.encode(currentIndex, forKey: "currentIndex")
   }
 }
