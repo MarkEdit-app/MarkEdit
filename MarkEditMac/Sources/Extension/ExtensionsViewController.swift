@@ -21,7 +21,7 @@ enum ExtensionsScrollTarget: Equatable {
 /// Hosts the extension list in an AppKit `NSTableView` (SwiftUI cells) for native
 /// titlebar separators, drag-to-reorder, and row animations.
 @MainActor
-final class ExtensionsViewController: NSViewController {
+final class ExtensionsViewController: NSViewController, @unchecked Sendable {
   static let defaultContentRect = CGRect(x: 0, y: 0, width: 780, height: 580)
 
   private let model: ExtensionsModel
