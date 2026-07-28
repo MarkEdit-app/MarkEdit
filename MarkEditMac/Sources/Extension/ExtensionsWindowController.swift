@@ -12,7 +12,7 @@ import MarkEditKit
 
 /// Hosts the Extension Manager: an AppKit window and toolbar wrapping the extension list.
 @MainActor
-final class ExtensionsWindowController: NSWindowController {
+final class ExtensionsWindowController: NSWindowController, @unchecked Sendable {
   static let shared = ExtensionsWindowController.createController()
   private let model = ExtensionsModel()
   private weak var modeControl: NSToolbarItemGroup?
