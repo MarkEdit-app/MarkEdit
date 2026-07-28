@@ -1,6 +1,6 @@
 //
-//  PreviewViewController+UI.swift
-//  PreviewExtension
+//  QuickLookViewController+UI.swift
+//  QuickLookMac
 //
 //  Created by cyan on 5/26/26.
 //
@@ -9,7 +9,7 @@ import AppKit
 import SwiftUI
 import MarkEditCore
 
-extension PreviewViewController {
+extension QuickLookViewController {
   var isRightToLeft: Bool {
     view.userInterfaceLayoutDirection == .rightToLeft
   }
@@ -53,7 +53,7 @@ extension PreviewViewController {
 
 // MARK: - Private
 
-private extension PreviewViewController {
+private extension QuickLookViewController {
   enum Constants {
     static let guidanceIcon = "exclamationmark.bubble"
     static let guidanceMessage = String(

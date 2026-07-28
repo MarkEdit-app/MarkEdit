@@ -1,16 +1,16 @@
 //
-//  PreviewViewController+Dragging.swift
-//  PreviewExtension
+//  QuickLookViewController+Dragging.swift
+//  QuickLookMac
 //
 //  Created by cyan on 5/26/26.
 //
 
 import AppKit
 
-/// Dragging behavior in preview extension is wacky.
+/// Dragging behavior in the QuickLook extension is wacky.
 ///
 /// Override the event handling and make a homemade scrolling strategy.
-extension PreviewViewController {
+extension QuickLookViewController {
   func disableDefaultOpen() {
     var node: NSView? = view
     while let current = node {

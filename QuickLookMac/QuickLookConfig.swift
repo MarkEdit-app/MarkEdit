@@ -1,6 +1,6 @@
 //
-//  PreviewViewConfig.swift
-//  PreviewExtension
+//  QuickLookConfig.swift
+//  QuickLookMac
 //
 //  Created by cyan on 5/26/26.
 //
@@ -9,7 +9,7 @@ import Foundation
 import WebKit
 import MarkEditCore
 
-extension PreviewViewController {
+extension QuickLookViewController {
   func textFileURL(of url: URL) -> URL {
     // The text.* file inside a text bundle
     if url.pathExtension.lowercased() == "textbundle", let contents = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) {
@@ -69,7 +69,7 @@ extension WKWebViewConfiguration {
 }
 
 extension EditorConfig {
-  static func previewConfig(fileData: Data) -> Self {
+  static func quicklookConfig(fileData: Data) -> Self {
     .init(
       host: .quicklook,
       text: fileData.toString() ?? "",

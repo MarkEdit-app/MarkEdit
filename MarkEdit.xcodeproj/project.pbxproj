@@ -32,9 +32,9 @@
 		8723B46929C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8723B46829C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift */; };
 		8725E0802977EEB3006A4961 /* EditorToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8725E07F2977EEB3006A4961 /* EditorToolbarItems.swift */; };
 		8725E0822977EF46006A4961 /* EditorViewController+Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8725E0812977EF46006A4961 /* EditorViewController+Toolbar.swift */; };
-		872924062951525C007156B1 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 872924052951525C007156B1 /* PreviewViewController.swift */; };
+		872924062951525C007156B1 /* QuickLookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 872924052951525C007156B1 /* QuickLookViewController.swift */; };
 		8729240B2951525C007156B1 /* Main.xib in Resources */ = {isa = PBXBuildFile; fileRef = 872924092951525C007156B1 /* Main.xib */; };
-		872924102951525C007156B1 /* PreviewExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 872924002951525C007156B1 /* PreviewExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		872924102951525C007156B1 /* QuickLookExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 872924002951525C007156B1 /* QuickLookExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8729C5A6294B5E6B006F262B /* EditorViewController+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8729C5A5294B5E6B006F262B /* EditorViewController+Menu.swift */; };
 		872E5FC0300918FA00D34792 /* ExtensionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 872E5FBF300918FA00D34792 /* ExtensionsViewController.swift */; };
 		873126E4297BAC9C001521A0 /* EditorViewController+Pandoc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873126E3297BAC9C001521A0 /* EditorViewController+Pandoc.swift */; };
@@ -76,10 +76,10 @@
 		8790ABD42A98F5F40083825C /* EditorViewController+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */; };
 		8790ABDB2A98FF610083825C /* Statistics in Frameworks */ = {isa = PBXBuildFile; productRef = 8790ABDA2A98FF610083825C /* Statistics */; };
 		8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790B6EB297036B2000DFC1A /* EditorWindow.swift */; };
-		8794A0632FC52551005CCC73 /* PreviewViewWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A0612FC5254E005CCC73 /* PreviewViewWebView.swift */; };
-		8794A06C2FC525E2005CCC73 /* PreviewViewConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A06A2FC525DF005CCC73 /* PreviewViewConfig.swift */; };
-		8794A0832FC53BCC005CCC73 /* PreviewViewController+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A0822FC53BCB005CCC73 /* PreviewViewController+UI.swift */; };
-		8794A08C2FC53C28005CCC73 /* PreviewViewController+Dragging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A08A2FC53C26005CCC73 /* PreviewViewController+Dragging.swift */; };
+		8794A0632FC52551005CCC73 /* QuickLookWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A0612FC5254E005CCC73 /* QuickLookWebView.swift */; };
+		8794A06C2FC525E2005CCC73 /* QuickLookConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A06A2FC525DF005CCC73 /* QuickLookConfig.swift */; };
+		8794A0832FC53BCC005CCC73 /* QuickLookViewController+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A0822FC53BCB005CCC73 /* QuickLookViewController+UI.swift */; };
+		8794A08C2FC53C28005CCC73 /* QuickLookViewController+Dragging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8794A08A2FC53C26005CCC73 /* QuickLookViewController+Dragging.swift */; };
 		879715C92D11548C0069964D /* EditorSaveOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879715C82D11547F0069964D /* EditorSaveOptionsView.swift */; };
 		87A73AB3294C4B27006A710E /* EditorWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A73AB2294C4B27006A710E /* EditorWebView.swift */; };
 		87A73AB5294C4B48006A710E /* EditorFindPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A73AB4294C4B48006A710E /* EditorFindPanel.swift */; };
@@ -128,7 +128,7 @@
 			containerPortal = 870A519A294700DE0095C7EB /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 872923FF2951525C007156B1;
-			remoteInfo = PreviewExtension;
+			remoteInfo = QuickLookMac;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -139,7 +139,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				872924102951525C007156B1 /* PreviewExtension.appex in Embed Foundation Extensions */,
+				872924102951525C007156B1 /* QuickLookExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,8 +171,8 @@
 		8723B46829C0A6EA0013D5D5 /* EvaluateJavaScriptIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluateJavaScriptIntent.swift; sourceTree = "<group>"; };
 		8725E07F2977EEB3006A4961 /* EditorToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToolbarItems.swift; sourceTree = "<group>"; };
 		8725E0812977EF46006A4961 /* EditorViewController+Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Toolbar.swift"; sourceTree = "<group>"; };
-		872924002951525C007156B1 /* PreviewExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PreviewExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		872924052951525C007156B1 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		872924002951525C007156B1 /* QuickLookExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		872924052951525C007156B1 /* QuickLookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookViewController.swift; sourceTree = "<group>"; };
 		8729240A2951525C007156B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Main.xib; sourceTree = "<group>"; };
 		8729240C2951525C007156B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8729240D2951525C007156B1 /* Info.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Info.entitlements; sourceTree = "<group>"; };
@@ -217,10 +217,10 @@
 		878B7B992CE0DA7D00220F39 /* EditorViewController+FileVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+FileVersion.swift"; sourceTree = "<group>"; };
 		8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Statistics.swift"; sourceTree = "<group>"; };
 		8790B6EB297036B2000DFC1A /* EditorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWindow.swift; sourceTree = "<group>"; };
-		8794A0612FC5254E005CCC73 /* PreviewViewWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewWebView.swift; sourceTree = "<group>"; };
-		8794A06A2FC525DF005CCC73 /* PreviewViewConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewConfig.swift; sourceTree = "<group>"; };
-		8794A0822FC53BCB005CCC73 /* PreviewViewController+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewViewController+UI.swift"; sourceTree = "<group>"; };
-		8794A08A2FC53C26005CCC73 /* PreviewViewController+Dragging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewViewController+Dragging.swift"; sourceTree = "<group>"; };
+		8794A0612FC5254E005CCC73 /* QuickLookWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookWebView.swift; sourceTree = "<group>"; };
+		8794A06A2FC525DF005CCC73 /* QuickLookConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookConfig.swift; sourceTree = "<group>"; };
+		8794A0822FC53BCB005CCC73 /* QuickLookViewController+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuickLookViewController+UI.swift"; sourceTree = "<group>"; };
+		8794A08A2FC53C26005CCC73 /* QuickLookViewController+Dragging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuickLookViewController+Dragging.swift"; sourceTree = "<group>"; };
 		879715C82D11547F0069964D /* EditorSaveOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSaveOptionsView.swift; sourceTree = "<group>"; };
 		87A73AB2294C4B27006A710E /* EditorWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWebView.swift; sourceTree = "<group>"; };
 		87A73AB4294C4B48006A710E /* EditorFindPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindPanel.swift; sourceTree = "<group>"; };
@@ -299,7 +299,7 @@
 				87C3CBFA29545944002A3436 /* MarkEditKit */,
 				87BFF238298AAC75006C31E4 /* MarkEditTools */,
 				870A51A4294700DE0095C7EB /* MarkEditMac */,
-				872924042951525C007156B1 /* PreviewExtension */,
+				872924042951525C007156B1 /* QuickLookMac */,
 				870A51A3294700DE0095C7EB /* Products */,
 				874823CC29B0BD980067EC49 /* Frameworks */,
 				8743B26229593B2000F83DAE /* Build.xcconfig */,
@@ -314,7 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				870A51A2294700DE0095C7EB /* MarkEdit.app */,
-				872924002951525C007156B1 /* PreviewExtension.appex */,
+				872924002951525C007156B1 /* QuickLookExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -406,17 +406,17 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		872924042951525C007156B1 /* PreviewExtension */ = {
+		872924042951525C007156B1 /* QuickLookMac */ = {
 			isa = PBXGroup;
 			children = (
-				872924052951525C007156B1 /* PreviewViewController.swift */,
-				8794A0822FC53BCB005CCC73 /* PreviewViewController+UI.swift */,
-				8794A08A2FC53C26005CCC73 /* PreviewViewController+Dragging.swift */,
-				8794A06A2FC525DF005CCC73 /* PreviewViewConfig.swift */,
-				8794A0612FC5254E005CCC73 /* PreviewViewWebView.swift */,
+				872924052951525C007156B1 /* QuickLookViewController.swift */,
+				8794A0822FC53BCB005CCC73 /* QuickLookViewController+UI.swift */,
+				8794A08A2FC53C26005CCC73 /* QuickLookViewController+Dragging.swift */,
+				8794A06A2FC525DF005CCC73 /* QuickLookConfig.swift */,
+				8794A0612FC5254E005CCC73 /* QuickLookWebView.swift */,
 				872924262951A134007156B1 /* Supporting Files */,
 			);
-			path = PreviewExtension;
+			path = QuickLookMac;
 			sourceTree = "<group>";
 		};
 		872924262951A134007156B1 /* Supporting Files */ = {
@@ -658,9 +658,9 @@
 			productReference = 870A51A2294700DE0095C7EB /* MarkEdit.app */;
 			productType = "com.apple.product-type.application";
 		};
-		872923FF2951525C007156B1 /* PreviewExtension */ = {
+		872923FF2951525C007156B1 /* QuickLookMac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 872924142951525C007156B1 /* Build configuration list for PBXNativeTarget "PreviewExtension" */;
+			buildConfigurationList = 872924142951525C007156B1 /* Build configuration list for PBXNativeTarget "QuickLookMac" */;
 			buildPhases = (
 				87D71F7000000000000000A2 /* Check Entitlements Drift */,
 				872923FC2951525C007156B1 /* Sources */,
@@ -671,12 +671,12 @@
 			);
 			dependencies = (
 			);
-			name = PreviewExtension;
+			name = QuickLookMac;
 			packageProductDependencies = (
 				87EB9900295755DA00A56B97 /* MarkEditCore */,
 			);
-			productName = PreviewExtension;
-			productReference = 872924002951525C007156B1 /* PreviewExtension.appex */;
+			productName = QuickLookMac;
+			productReference = 872924002951525C007156B1 /* QuickLookExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -714,7 +714,7 @@
 			projectRoot = "";
 			targets = (
 				870A51A1294700DE0095C7EB /* MarkEditMac */,
-				872923FF2951525C007156B1 /* PreviewExtension */,
+				872923FF2951525C007156B1 /* QuickLookMac */,
 			);
 		};
 /* End PBXProject section */
@@ -776,8 +776,8 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/PreviewExtension/Info.entitlements",
-				"$(SRCROOT)/PreviewExtension/Info.local.entitlements",
+				"$(SRCROOT)/QuickLookMac/Info.entitlements",
+				"$(SRCROOT)/QuickLookMac/Info.local.entitlements",
 			);
 			name = "Check Entitlements Drift";
 			outputFileListPaths = (
@@ -886,11 +886,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				872924062951525C007156B1 /* PreviewViewController.swift in Sources */,
-				8794A0632FC52551005CCC73 /* PreviewViewWebView.swift in Sources */,
-				8794A08C2FC53C28005CCC73 /* PreviewViewController+Dragging.swift in Sources */,
-				8794A0832FC53BCC005CCC73 /* PreviewViewController+UI.swift in Sources */,
-				8794A06C2FC525E2005CCC73 /* PreviewViewConfig.swift in Sources */,
+				872924062951525C007156B1 /* QuickLookViewController.swift in Sources */,
+				8794A0632FC52551005CCC73 /* QuickLookWebView.swift in Sources */,
+				8794A08C2FC53C28005CCC73 /* QuickLookViewController+Dragging.swift in Sources */,
+				8794A0832FC53BCC005CCC73 /* QuickLookViewController+UI.swift in Sources */,
+				8794A06C2FC525E2005CCC73 /* QuickLookConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -899,7 +899,7 @@
 /* Begin PBXTargetDependency section */
 		8729240F2951525C007156B1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 872923FF2951525C007156B1 /* PreviewExtension */;
+			target = 872923FF2951525C007156B1 /* QuickLookMac */;
 			targetProxy = 8729240E2951525C007156B1 /* PBXContainerItemProxy */;
 		};
 		87BFF24E298AB754006C31E4 /* PBXTargetDependency */ = {
@@ -1144,7 +1144,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "$(PREVIEWEXTENSION_ENTITLEMENTS)";
+				CODE_SIGN_ENTITLEMENTS = "$(QUICKLOOKMAC_ENTITLEMENTS)";
 				CODE_SIGN_IDENTITY = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(inherited)";
@@ -1152,7 +1152,7 @@
 				DEVELOPMENT_TEAM = "$(inherited)";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PreviewExtension/Info.plist;
+				INFOPLIST_FILE = QuickLookMac/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MarkEdit;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1162,8 +1162,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).preview-extension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).quicklook-extension";
+				PRODUCT_NAME = QuickLookExtension;
 				REGISTER_APP_GROUPS = "$(inherited)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1175,7 +1175,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "$(PREVIEWEXTENSION_ENTITLEMENTS)";
+				CODE_SIGN_ENTITLEMENTS = "$(QUICKLOOKMAC_ENTITLEMENTS)";
 				CODE_SIGN_IDENTITY = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(inherited)";
@@ -1183,7 +1183,7 @@
 				DEVELOPMENT_TEAM = "$(inherited)";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PreviewExtension/Info.plist;
+				INFOPLIST_FILE = QuickLookMac/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MarkEdit;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1193,8 +1193,8 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).preview-extension";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).quicklook-extension";
+				PRODUCT_NAME = QuickLookExtension;
 				REGISTER_APP_GROUPS = "$(inherited)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1223,7 +1223,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		872924142951525C007156B1 /* Build configuration list for PBXNativeTarget "PreviewExtension" */ = {
+		872924142951525C007156B1 /* Build configuration list for PBXNativeTarget "QuickLookMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				872924122951525C007156B1 /* Debug */,

@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "872923FF2951525C007156B1"
-               BuildableName = "PreviewExtension.appex"
-               BlueprintName = "PreviewExtension"
+               BuildableName = "QuickLookExtension.appex"
+               BlueprintName = "QuickLookMac"
                ReferencedContainer = "container:MarkEdit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

@@ -1,6 +1,6 @@
 //
-//  PreviewViewWebView.swift
-//  PreviewExtension
+//  QuickLookWebView.swift
+//  QuickLookMac
 //
 //  Created by cyan on 5/26/26.
 //
@@ -8,7 +8,7 @@
 import WebKit
 import MarkEditCore
 
-final class PreviewViewWebView: WKWebView {
+final class QuickLookWebView: WKWebView {
   override init(frame: CGRect, configuration: WKWebViewConfiguration) {
     super.init(frame: frame, configuration: configuration)
     disableWindowOcclusionDetection()
