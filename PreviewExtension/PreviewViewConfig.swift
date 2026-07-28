@@ -71,14 +71,15 @@ extension WKWebViewConfiguration {
 extension EditorConfig {
   static func previewConfig(fileData: Data) -> Self {
     .init(
+      host: .quicklook,
       text: fileData.toString() ?? "",
-      theme: "github-light", // Ignored by @light editor
+      theme: "github-light", // Ignored (follow the system color scheme)
       fontFace: WebFontFace(family: "ui-monospace", weight: nil, style: nil),
       fontSize: 12,
       showLineNumbers: false,
       showActiveLineIndicator: false,
       invisiblesBehavior: .always,
-      readOnlyMode: false,
+      readOnlyMode: true,
       typewriterMode: false,
       focusMode: false,
       lineWrapping: true,

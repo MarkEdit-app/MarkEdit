@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { enablePinchZoom, PinchZoomBridge } from '../src/zoom';
+import { enablePinchZoom, PinchZoomBridge } from '../src/@quicklook/zoom';
 
 // jsdom has no GestureEvent and does no layout: getBoundingClientRect() is all
 // zeros, getComputedStyle().zoom is undefined, but style.zoom and scrollLeft/Top

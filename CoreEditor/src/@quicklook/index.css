@@ -1,0 +1,35 @@
+.markedit-quicklook, .markedit-quicklook body {
+  height: 100vh;
+  background-color: #ffffff; /* github-light */
+}
+
+.markedit-quicklook body {
+  position: relative;
+}
+
+@media (prefers-color-scheme: dark) {
+  .markedit-quicklook, .markedit-quicklook body {
+    background-color: #0d1116; /* github-dark */
+  }
+}
+
+.markedit-quicklook #editor {
+  position: absolute;
+  top: var(--editor-inset-top, 0);
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.markedit-quicklook .cm-editor {
+  height: 100% !important;
+}
+
+.markedit-quicklook .cm-scroller {
+  overscroll-behavior: contain;
+}
+
+.markedit-quicklook .cm-content {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}

@@ -1,4 +1,4 @@
-import { Config, IndentBehavior, InvisiblesBehavior } from './src/config';
+import { Config, Host, IndentBehavior, InvisiblesBehavior } from './src/config';
 import { isReleaseMode } from './src/common/utils';
 
 import { WebModuleConfigImpl } from './src/bridge/web/config';
@@ -29,13 +29,11 @@ import { initThemeExtractors, initMarkEditModules } from './src/api/modules';
 import { setUp, applyReducedMotion } from './src/styling/config';
 import { loadTheme } from './src/styling/themes';
 import { startObserving } from './src/modules/events';
-
-// Initialize and inject modules to the global MarkEdit object
-initMarkEditModules();
-initThemeExtractors();
+import { setUpQuickLook } from './src/@quicklook';
 
 // In release mode, window.config = "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
 const config = import.meta.env.PROD ? window.config : {
+  host: Host.mainApp,
   text: pseudoDocument,
   theme: 'github-light',
   fontFace: { family: 'ui-monospace' },
@@ -59,21 +57,7 @@ const config = import.meta.env.PROD ? window.config : {
   },
 } as Config;
 
-window.webModules = {
-  config: new WebModuleConfigImpl(),
-  core: new WebModuleCoreImpl(),
-  completion: new WebModuleCompletionImpl(),
-  history: new WebModuleHistoryImpl(),
-  lineEndings: new WebModuleLineEndingsImpl(),
-  selection: new WebModuleSelectionImpl(),
-  format: new WebModuleFormatImpl(),
-  search: new WebModuleSearchImpl(),
-  toc: new WebModuleTableOfContentsImpl(),
-  api: new WebModuleAPIImpl(),
-  writingTools: new WebModuleWritingToolsImpl(),
-  foundationModels: new WebModuleFoundationModelsImpl(),
-};
-
+// Shared by both hosts, messages are no-ops when there's no native bridge
 window.nativeModules = {
   core: createNativeModule<NativeModuleCore>('core'),
   completion: createNativeModule<NativeModuleCompletion>('completion'),
@@ -84,46 +68,73 @@ window.nativeModules = {
   translation: createNativeModule<NativeModuleTranslation>('translation'),
 };
 
-// In release mode, override window APIs to bridge to native
-if (isReleaseMode) {
-  window.resizeTo = (width: number, height: number) => {
-    window.nativeModules.core.notifyWindowResize({ method: 'to', width, height });
-  };
-
-  window.resizeBy = (x: number, y: number) => {
-    window.nativeModules.core.notifyWindowResize({ method: 'by', width: x, height: y });
-  };
-
-  window.moveTo = (x: number, y: number) => {
-    window.nativeModules.core.notifyWindowMove({ method: 'to', x, y });
-  };
-
-  window.moveBy = (x: number, y: number) => {
-    window.nativeModules.core.notifyWindowMove({ method: 'by', x, y });
-  };
-
-  window.close = () => {
-    window.nativeModules.core.notifyWindowClose();
-  };
-
-  window.print = () => {
-    throw new Error('Window.print() is not implemented in this context.');
-  };
+switch (config.host) {
+  case Host.mainApp: setUpMainApp(config); break;
+  case Host.quicklook: setUpQuickLook(config); break;
+  default: throw new Error(`Unknown host: ${config.host}`);
 }
 
-window.onload = () => {
-  window.nativeModules.core.notifyWindowDidLoad();
+function setUpMainApp(config: Config) {
+  // Initialize and inject modules to the global MarkEdit object
+  initMarkEditModules();
+  initThemeExtractors();
 
-  // On Prod, text is reset by the native code
-  if (!isReleaseMode) {
-    window.config = config;
-    resetEditor(config.text);
+  window.webModules = {
+    config: new WebModuleConfigImpl(),
+    core: new WebModuleCoreImpl(),
+    completion: new WebModuleCompletionImpl(),
+    history: new WebModuleHistoryImpl(),
+    lineEndings: new WebModuleLineEndingsImpl(),
+    selection: new WebModuleSelectionImpl(),
+    format: new WebModuleFormatImpl(),
+    search: new WebModuleSearchImpl(),
+    toc: new WebModuleTableOfContentsImpl(),
+    api: new WebModuleAPIImpl(),
+    writingTools: new WebModuleWritingToolsImpl(),
+    foundationModels: new WebModuleFoundationModelsImpl(),
+  };
+
+  // In release mode, override window APIs to bridge to native
+  if (isReleaseMode) {
+    window.resizeTo = (width: number, height: number) => {
+      window.nativeModules.core.notifyWindowResize({ method: 'to', width, height });
+    };
+
+    window.resizeBy = (x: number, y: number) => {
+      window.nativeModules.core.notifyWindowResize({ method: 'by', width: x, height: y });
+    };
+
+    window.moveTo = (x: number, y: number) => {
+      window.nativeModules.core.notifyWindowMove({ method: 'to', x, y });
+    };
+
+    window.moveBy = (x: number, y: number) => {
+      window.nativeModules.core.notifyWindowMove({ method: 'by', x, y });
+    };
+
+    window.close = () => {
+      window.nativeModules.core.notifyWindowClose();
+    };
+
+    window.print = () => {
+      throw new Error('Window.print() is not implemented in this context.');
+    };
   }
-};
 
-setUp(config, loadTheme(config.theme).colors);
-startObserving();
+  window.onload = () => {
+    window.nativeModules.core.notifyWindowDidLoad();
 
-// Respond to reduced motion preference changes
-const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-reducedMotionQuery.addEventListener('change', event => applyReducedMotion(event.matches));
+    // On Prod, text is reset by the native code
+    if (!isReleaseMode) {
+      window.config = config;
+      resetEditor(config.text);
+    }
+  };
+
+  setUp(config, loadTheme(config.theme).colors);
+  startObserving();
+
+  // Respond to reduced motion preference changes
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  reducedMotionQuery.addEventListener('change', event => applyReducedMotion(event.matches));
+}

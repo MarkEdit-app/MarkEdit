@@ -267,6 +267,7 @@ extension FontStyle {
 extension AppPreferences {
   static func editorConfig(theme: String) -> EditorConfig {
     EditorConfig(
+      host: .mainApp,
       text: "",
       theme: theme,
       fontFace: Editor.fontStyle.webFontFace,
