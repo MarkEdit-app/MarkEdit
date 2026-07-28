@@ -31,12 +31,8 @@ public final class WebBridgeSelection {
   }
 
   public func getRect(pos: Int) async throws -> WebRect? {
-    struct Message: Encodable {
-      let pos: Int
-    }
-
-    let message = Message(
-      pos: pos
+    let message = BridgeMessage(
+      ("pos", pos)
     )
 
     guard let webView else {
@@ -51,12 +47,8 @@ public final class WebBridgeSelection {
   }
 
   public func gotoLine(lineNumber: Int, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let lineNumber: Int
-    }
-
-    let message = Message(
-      lineNumber: lineNumber
+    let message = BridgeMessage(
+      ("lineNumber", lineNumber)
     )
 
     webView?.invoke(path: "webModules.selection.gotoLine", message: message, completion: completion)

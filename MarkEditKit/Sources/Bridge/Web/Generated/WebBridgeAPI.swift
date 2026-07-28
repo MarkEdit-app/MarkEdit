@@ -23,36 +23,24 @@ public final class WebBridgeAPI {
   }
 
   public func handleMainMenuAction(id: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let id: String
-    }
-
-    let message = Message(
-      id: id
+    let message = BridgeMessage(
+      ("id", id)
     )
 
     webView?.invoke(path: "webModules.api.handleMainMenuAction", message: message, completion: completion)
   }
 
   public func handleContextMenuAction(id: String, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let id: String
-    }
-
-    let message = Message(
-      id: id
+    let message = BridgeMessage(
+      ("id", id)
     )
 
     webView?.invoke(path: "webModules.api.handleContextMenuAction", message: message, completion: completion)
   }
 
   public func getMenuItemState(id: String) async throws -> MenuItemState {
-    struct Message: Encodable {
-      let id: String
-    }
-
-    let message = Message(
-      id: id
+    let message = BridgeMessage(
+      ("id", id)
     )
 
     guard let webView else {
@@ -63,7 +51,7 @@ public final class WebBridgeAPI {
   }
 }
 
-public struct MenuItemState: Codable, Equatable {
+public struct MenuItemState: Codable {
   /// Whether enabled; defaults to true.
   public var isEnabled: Bool?
   /// Whether selected; defaults to false.
@@ -72,5 +60,17 @@ public struct MenuItemState: Codable, Equatable {
   public init(isEnabled: Bool?, isSelected: Bool?) {
     self.isEnabled = isEnabled
     self.isSelected = isSelected
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    isEnabled = try container.value("isEnabled")
+    isSelected = try container.value("isSelected")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(isEnabled, forKey: "isEnabled")
+    try container.encode(isSelected, forKey: "isSelected")
   }
 }

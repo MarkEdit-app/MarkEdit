@@ -22,11 +22,6 @@ public extension NativeModulePreview {
 @MainActor
 final class NativeBridgePreview: NativeBridge {
   static let name = "preview"
-  lazy var methods: [String: NativeMethod] = [
-    "show": { [weak self] in
-      await self?.show(parameters: $0)
-    },
-  ]
 
   private let module: NativeModulePreview
   private lazy var decoder = JSONDecoder()
@@ -35,11 +30,27 @@ final class NativeBridgePreview: NativeBridge {
     self.module = module
   }
 
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "show":
+      return await show(parameters: parameters)
+    default:
+      return nil
+    }
+  }
+
   private func show(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var code: String
       var type: PreviewType
       var rect: WebRect
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        code = try container.value("code")
+        type = try container.value("type")
+        rect = try container.value("rect")
+      }
     }
 
     let message: Message

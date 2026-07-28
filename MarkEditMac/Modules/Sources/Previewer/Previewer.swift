@@ -7,6 +7,7 @@
 import AppKit
 import AppKitExtensions
 import WebKit
+import MarkEditCore
 import MarkEditKit
 
 /**
@@ -56,11 +57,7 @@ public final class Previewer: NSViewController {
   override public func viewDidLoad() {
     super.viewDidLoad()
 
-    struct Wrapper: Encodable {
-      let code: String
-    }
-
-    let data = Wrapper(code: code).jsonEncoded
+    let data = BridgeMessage(("code", code)).jsonEncoded
     let html = indexHtml?.replacingOccurrences(of: "\"{{DATA}}\"", with: data)
 
     webView.loadHTMLString(html ?? "", baseURL: nil)

@@ -24,17 +24,9 @@ public final class {{moduleName}} {
   {{/documentationLines}}
   public func {{methodName}}({{parametersDeclaration}}{{#parametersDeclaration.length}}{{^returnType}}, {{/returnType}}{{/parametersDeclaration.length}}{{^returnType}}completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil{{/returnType}}) {{#returnType}}async throws -> {{returnType}} {{/returnType}}{
     {{#parameters.length}}
-    struct Message: Encodable {
+    let message = BridgeMessage(
       {{#parameters}}
-      let {{name}}: {{type}}
-      {{/parameters}}
-    }
-
-    {{/parameters.length}}
-    {{#parameters.length}}
-    let message = Message(
-      {{#parameters}}
-      {{name}}: {{name}}{{^last}},{{/last}}
+      ("{{name}}", {{name}}){{^last}},{{/last}}
       {{/parameters}}
     )
 

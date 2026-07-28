@@ -6,13 +6,11 @@
 
 import Foundation
 
-/// Native method that will be invoked by JavaScript.
-public typealias NativeMethod = (_ parameters: Data) async -> Result<Any?, Error>?
-
 @MainActor
 public protocol NativeBridge: AnyObject {
   static var name: String { get }
-  var methods: [String: NativeMethod] { get }
+
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>?
 }
 
 /**
@@ -38,12 +36,6 @@ public struct NativeModules {
 }
 
 // MARK: - Internal
-
-extension NativeBridge {
-  subscript(name: String) -> NativeMethod? {
-    methods[name]
-  }
-}
 
 extension NativeModules {
   subscript(name: String) -> NativeBridge? {

@@ -2,7 +2,7 @@
 {{#documentationLines}}
 ///{{{.}}}
 {{/documentationLines}}
-public struct {{typeName}}: Codable, Equatable {
+public struct {{typeName}}: Codable {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}
@@ -21,6 +21,8 @@ public struct {{typeName}}: Codable, Equatable {
     self.{{name}} = {{name}}
     {{/members}}
   }
+{{> swift-decodable}}
+{{> swift-encodable}}
 }
 {{/custom}}
 {{#enum}}

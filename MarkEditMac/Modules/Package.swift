@@ -144,7 +144,7 @@ let package = Package(
     ),
     .target(
       name: "Previewer",
-      dependencies: ["AppKitExtensions", "MarkEditKit"],
+      dependencies: ["AppKitExtensions", "MarkEditCore", "MarkEditKit"],
       path: "Sources/Previewer",
       resources: [
         .process("Resources"),

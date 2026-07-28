@@ -65,7 +65,7 @@ public enum ExtensionConfig {
   }
 
   /// Registry index url, overridable to a mirror.
-  public static var registryURL: URL? {
+  static var registryURL: URL? {
     let string = currentDefinition?.registryURL ?? Constants.defaultRegistryURL
     return URL(string: string)
   }
@@ -185,7 +185,7 @@ public enum ExtensionConfig {
   }
 
   /// Derives a kebab-case id from a script file name, e.g. "markedit-preview.js" -> "markedit-preview".
-  public static func identifier(fromFileName fileName: String) -> String {
+  static func identifier(fromFileName fileName: String) -> String {
     let url = URL(fileURLWithPath: fileName).deletingPathExtension()
     let kebabCased = url.lastPathComponent.kebabCased
     return kebabCased.isEmpty ? "extension" : kebabCased

@@ -26,23 +26,6 @@ public extension NativeModuleFoundationModels {
 @MainActor
 final class NativeBridgeFoundationModels: NativeBridge {
   static let name = "foundationModels"
-  lazy var methods: [String: NativeMethod] = [
-    "availability": { [weak self] in
-      await self?.availability(parameters: $0)
-    },
-    "createSession": { [weak self] in
-      await self?.createSession(parameters: $0)
-    },
-    "isResponding": { [weak self] in
-      await self?.isResponding(parameters: $0)
-    },
-    "respondTo": { [weak self] in
-      await self?.respondTo(parameters: $0)
-    },
-    "streamResponseTo": { [weak self] in
-      await self?.streamResponseTo(parameters: $0)
-    },
-  ]
 
   private let module: NativeModuleFoundationModels
   private lazy var decoder = JSONDecoder()
@@ -51,9 +34,31 @@ final class NativeBridgeFoundationModels: NativeBridge {
     self.module = module
   }
 
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "availability":
+      return await availability(parameters: parameters)
+    case "createSession":
+      return await createSession(parameters: parameters)
+    case "isResponding":
+      return await isResponding(parameters: parameters)
+    case "respondTo":
+      return await respondTo(parameters: parameters)
+    case "streamResponseTo":
+      return await streamResponseTo(parameters: parameters)
+    default:
+      return nil
+    }
+  }
+
   private func availability(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var modelName: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        modelName = try container.value("modelName")
+      }
     }
 
     let message: Message
@@ -72,6 +77,12 @@ final class NativeBridgeFoundationModels: NativeBridge {
     struct Message: Decodable {
       var modelName: String
       var instructions: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        modelName = try container.value("modelName")
+        instructions = try container.value("instructions")
+      }
     }
 
     let message: Message
@@ -89,6 +100,11 @@ final class NativeBridgeFoundationModels: NativeBridge {
   private func isResponding(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var sessionID: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        sessionID = try container.value("sessionID")
+      }
     }
 
     let message: Message
@@ -108,6 +124,13 @@ final class NativeBridgeFoundationModels: NativeBridge {
       var sessionID: String?
       var prompt: String
       var options: LanguageModelGenerationOptions?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        sessionID = try container.value("sessionID")
+        prompt = try container.value("prompt")
+        options = try container.value("options")
+      }
     }
 
     let message: Message
@@ -128,6 +151,14 @@ final class NativeBridgeFoundationModels: NativeBridge {
       var streamID: String
       var prompt: String
       var options: LanguageModelGenerationOptions?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        sessionID = try container.value("sessionID")
+        streamID = try container.value("streamID")
+        prompt = try container.value("prompt")
+        options = try container.value("options")
+      }
     }
 
     let message: Message
@@ -143,7 +174,7 @@ final class NativeBridgeFoundationModels: NativeBridge {
   }
 }
 
-public struct LanguageModelGenerationOptions: Decodable, Equatable {
+public struct LanguageModelGenerationOptions: Decodable {
   public var sampling: LanguageModelSampling?
   public var temperature: Double?
   public var maximumResponseTokens: Int?
@@ -153,9 +184,16 @@ public struct LanguageModelGenerationOptions: Decodable, Equatable {
     self.temperature = temperature
     self.maximumResponseTokens = maximumResponseTokens
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    sampling = try container.value("sampling")
+    temperature = try container.value("temperature")
+    maximumResponseTokens = try container.value("maximumResponseTokens")
+  }
 }
 
-public struct LanguageModelSampling: Decodable, Equatable {
+public struct LanguageModelSampling: Decodable {
   public var greedy: Bool?
   public var top_k: Int?
   public var top_p: Double?
@@ -166,5 +204,13 @@ public struct LanguageModelSampling: Decodable, Equatable {
     self.top_k = top_k
     self.top_p = top_p
     self.seed = seed
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    greedy = try container.value("greedy")
+    top_k = try container.value("top_k")
+    top_p = try container.value("top_p")
+    seed = try container.value("seed")
   }
 }

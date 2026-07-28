@@ -6,8 +6,8 @@
 
 import AppKit
 
-public final class IconOnlyButton: NonBezelButton {
-  public init(
+final class IconOnlyButton: NonBezelButton {
+  init(
     symbolName: String,
     iconWidth: Double? = nil,
     iconHeight: Double? = nil,
@@ -31,7 +31,7 @@ public final class IconOnlyButton: NonBezelButton {
     }
   }
 
-  override public func accessibilityLabel() -> String? {
+  override func accessibilityLabel() -> String? {
     toolTip
   }
 }

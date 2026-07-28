@@ -5,12 +5,13 @@
 //
 
 import Foundation
+import MarkEditCore
 
 /// https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/Articles/readingFiles.html#//apple_ref/doc/uid/TP40003459-SW4.
 ///
 /// We *can*, but don't want to, include all supported encodings, which makes the UI super complicated,
 /// Markdown prefers utf-8 as mentioned here: https://daringfireball.net/linked/2011/08/05/markdown-uti.
-public enum EditorTextEncoding: CaseIterable, CustomStringConvertible, Codable {
+public enum EditorTextEncoding: String, CaseIterable, CustomStringConvertible, CompactCodableEnum {
   // Derived from String.Encoding
   case ascii
   case nonLossyASCII

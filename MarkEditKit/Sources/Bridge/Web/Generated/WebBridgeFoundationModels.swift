@@ -20,33 +20,24 @@ public final class WebBridgeFoundationModels {
 
   /// Don't call this directly, it does nothing.
   public func __generateTypes__(arg0: LanguageModelAvailability, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let arg0: LanguageModelAvailability
-    }
-
-    let message = Message(
-      arg0: arg0
+    let message = BridgeMessage(
+      ("arg0", arg0)
     )
 
     webView?.invoke(path: "webModules.foundationModels.__generateTypes__", message: message, completion: completion)
   }
 
   public func applyStreamUpdate(streamID: String, response: LanguageModelResponse, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let streamID: String
-      let response: LanguageModelResponse
-    }
-
-    let message = Message(
-      streamID: streamID,
-      response: response
+    let message = BridgeMessage(
+      ("streamID", streamID),
+      ("response", response)
     )
 
     webView?.invoke(path: "webModules.foundationModels.applyStreamUpdate", message: message, completion: completion)
   }
 }
 
-public struct LanguageModelAvailability: Codable, Equatable {
+public struct LanguageModelAvailability: Codable {
   public var isAvailable: Bool
   public var unavailableReason: String?
 
@@ -54,9 +45,21 @@ public struct LanguageModelAvailability: Codable, Equatable {
     self.isAvailable = isAvailable
     self.unavailableReason = unavailableReason
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    isAvailable = try container.value("isAvailable")
+    unavailableReason = try container.value("unavailableReason")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(isAvailable, forKey: "isAvailable")
+    try container.encode(unavailableReason, forKey: "unavailableReason")
+  }
 }
 
-public struct LanguageModelResponse: Codable, Equatable {
+public struct LanguageModelResponse: Codable {
   public var content: String?
   public var error: String?
   public var done: Bool
@@ -65,5 +68,19 @@ public struct LanguageModelResponse: Codable, Equatable {
     self.content = content
     self.error = error
     self.done = done
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    content = try container.value("content")
+    error = try container.value("error")
+    done = try container.value("done")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(content, forKey: "content")
+    try container.encode(error, forKey: "error")
+    try container.encode(done, forKey: "done")
   }
 }

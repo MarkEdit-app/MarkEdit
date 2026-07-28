@@ -42,77 +42,61 @@ public extension NativeModuleAPI {
 @MainActor
 final class NativeBridgeAPI: NativeBridge {
   static let name = "api"
-  lazy var methods: [String: NativeMethod] = [
-    "saveDocument": { [weak self] in
-      await self?.saveDocument(parameters: $0)
-    },
-    "closeDocument": { [weak self] in
-      await self?.closeDocument(parameters: $0)
-    },
-    "addMainMenuItems": { [weak self] in
-      await self?.addMainMenuItems(parameters: $0)
-    },
-    "showContextMenu": { [weak self] in
-      await self?.showContextMenu(parameters: $0)
-    },
-    "showAlert": { [weak self] in
-      await self?.showAlert(parameters: $0)
-    },
-    "showTextBox": { [weak self] in
-      await self?.showTextBox(parameters: $0)
-    },
-    "showSavePanel": { [weak self] in
-      await self?.showSavePanel(parameters: $0)
-    },
-    "runService": { [weak self] in
-      await self?.runService(parameters: $0)
-    },
-    "openFile": { [weak self] in
-      await self?.openFile(parameters: $0)
-    },
-    "createFile": { [weak self] in
-      await self?.createFile(parameters: $0)
-    },
-    "deleteFile": { [weak self] in
-      await self?.deleteFile(parameters: $0)
-    },
-    "moveFile": { [weak self] in
-      await self?.moveFile(parameters: $0)
-    },
-    "revealFile": { [weak self] in
-      await self?.revealFile(parameters: $0)
-    },
-    "listFiles": { [weak self] in
-      await self?.listFiles(parameters: $0)
-    },
-    "getFileContent": { [weak self] in
-      await self?.getFileContent(parameters: $0)
-    },
-    "getFileObject": { [weak self] in
-      await self?.getFileObject(parameters: $0)
-    },
-    "getFileInfo": { [weak self] in
-      await self?.getFileInfo(parameters: $0)
-    },
-    "getPasteboardItems": { [weak self] in
-      await self?.getPasteboardItems(parameters: $0)
-    },
-    "getPasteboardString": { [weak self] in
-      await self?.getPasteboardString(parameters: $0)
-    },
-    "terminateApp": { [weak self] in
-      await self?.terminateApp(parameters: $0)
-    },
-    "relaunchApp": { [weak self] in
-      await self?.relaunchApp(parameters: $0)
-    },
-  ]
 
   private let module: NativeModuleAPI
   private lazy var decoder = JSONDecoder()
 
   init(_ module: NativeModuleAPI) {
     self.module = module
+  }
+
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    case "saveDocument":
+      return await saveDocument(parameters: parameters)
+    case "closeDocument":
+      return await closeDocument(parameters: parameters)
+    case "addMainMenuItems":
+      return await addMainMenuItems(parameters: parameters)
+    case "showContextMenu":
+      return await showContextMenu(parameters: parameters)
+    case "showAlert":
+      return await showAlert(parameters: parameters)
+    case "showTextBox":
+      return await showTextBox(parameters: parameters)
+    case "showSavePanel":
+      return await showSavePanel(parameters: parameters)
+    case "runService":
+      return await runService(parameters: parameters)
+    case "openFile":
+      return await openFile(parameters: parameters)
+    case "createFile":
+      return await createFile(parameters: parameters)
+    case "deleteFile":
+      return await deleteFile(parameters: parameters)
+    case "moveFile":
+      return await moveFile(parameters: parameters)
+    case "revealFile":
+      return await revealFile(parameters: parameters)
+    case "listFiles":
+      return await listFiles(parameters: parameters)
+    case "getFileContent":
+      return await getFileContent(parameters: parameters)
+    case "getFileObject":
+      return await getFileObject(parameters: parameters)
+    case "getFileInfo":
+      return await getFileInfo(parameters: parameters)
+    case "getPasteboardItems":
+      return await getPasteboardItems(parameters: parameters)
+    case "getPasteboardString":
+      return await getPasteboardString(parameters: parameters)
+    case "terminateApp":
+      return await terminateApp(parameters: parameters)
+    case "relaunchApp":
+      return await relaunchApp(parameters: parameters)
+    default:
+      return nil
+    }
   }
 
   private func saveDocument(parameters: Data) async -> Result<Any?, Error>? {
@@ -128,6 +112,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func addMainMenuItems(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var items: [WebMenuItem]
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        items = try container.value("items")
+      }
     }
 
     let message: Message
@@ -146,6 +135,12 @@ final class NativeBridgeAPI: NativeBridge {
     struct Message: Decodable {
       var items: [WebMenuItem]
       var location: WebPoint
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        items = try container.value("items")
+        location = try container.value("location")
+      }
     }
 
     let message: Message
@@ -165,6 +160,13 @@ final class NativeBridgeAPI: NativeBridge {
       var title: String?
       var message: String?
       var buttons: [String]?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        title = try container.value("title")
+        message = try container.value("message")
+        buttons = try container.value("buttons")
+      }
     }
 
     let message: Message
@@ -184,6 +186,13 @@ final class NativeBridgeAPI: NativeBridge {
       var title: String?
       var placeholder: String?
       var defaultValue: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        title = try container.value("title")
+        placeholder = try container.value("placeholder")
+        defaultValue = try container.value("defaultValue")
+      }
     }
 
     let message: Message
@@ -201,6 +210,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func showSavePanel(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var options: SavePanelOptions
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        options = try container.value("options")
+      }
     }
 
     let message: Message
@@ -219,6 +233,12 @@ final class NativeBridgeAPI: NativeBridge {
     struct Message: Decodable {
       var name: String
       var input: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        name = try container.value("name")
+        input = try container.value("input")
+      }
     }
 
     let message: Message
@@ -236,6 +256,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func openFile(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -253,6 +278,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func createFile(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var options: CreateFileOptions
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        options = try container.value("options")
+      }
     }
 
     let message: Message
@@ -270,6 +300,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func deleteFile(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -287,6 +322,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func moveFile(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var options: MoveFileOptions
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        options = try container.value("options")
+      }
     }
 
     let message: Message
@@ -304,6 +344,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func revealFile(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -321,6 +366,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func listFiles(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -338,6 +388,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func getFileContent(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -355,6 +410,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func getFileObject(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -372,6 +432,11 @@ final class NativeBridgeAPI: NativeBridge {
   private func getFileInfo(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var path: String?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+      }
     }
 
     let message: Message
@@ -408,7 +473,7 @@ final class NativeBridgeAPI: NativeBridge {
 }
 
 /// Represents a menu item in native menus.
-public struct WebMenuItem: Decodable, Equatable {
+public struct WebMenuItem: Decodable {
   public var separator: Bool
   public var title: String?
   public var icon: String?
@@ -428,10 +493,22 @@ public struct WebMenuItem: Decodable, Equatable {
     self.modifiers = modifiers
     self.children = children
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    separator = try container.value("separator")
+    title = try container.value("title")
+    icon = try container.value("icon")
+    actionID = try container.value("actionID")
+    stateGetterID = try container.value("stateGetterID")
+    key = try container.value("key")
+    modifiers = try container.value("modifiers")
+    children = try container.value("children")
+  }
 }
 
 /// "CGPoint-fashion" point.
-public struct WebPoint: Decodable, Equatable {
+public struct WebPoint: Decodable {
   public var x: Double
   public var y: Double
 
@@ -439,9 +516,15 @@ public struct WebPoint: Decodable, Equatable {
     self.x = x
     self.y = y
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    x = try container.value("x")
+    y = try container.value("y")
+  }
 }
 
-public struct SavePanelOptions: Decodable, Equatable {
+public struct SavePanelOptions: Decodable {
   /// String representation of the file, if applicable.
   public var string: String?
   /// Base64 representation of the file, if applicable.
@@ -454,9 +537,16 @@ public struct SavePanelOptions: Decodable, Equatable {
     self.data = data
     self.fileName = fileName
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    string = try container.value("string")
+    data = try container.value("data")
+    fileName = try container.value("fileName")
+  }
 }
 
-public struct CreateFileOptions: Decodable, Equatable {
+public struct CreateFileOptions: Decodable {
   /// File path.
   ///
   /// It must be one that the app can access. See the [wiki](https://github.com/MarkEdit-app/MarkEdit/wiki/Customization#grant-folder-access) for more details.
@@ -477,9 +567,18 @@ public struct CreateFileOptions: Decodable, Equatable {
     self.string = string
     self.data = data
   }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    path = try container.value("path")
+    isDirectory = try container.value("isDirectory")
+    overwrites = try container.value("overwrites")
+    string = try container.value("string")
+    data = try container.value("data")
+  }
 }
 
-public struct MoveFileOptions: Decodable, Equatable {
+public struct MoveFileOptions: Decodable {
   /// Source file path.
   public var source: String
   /// Destination file path.
@@ -491,5 +590,12 @@ public struct MoveFileOptions: Decodable, Equatable {
     self.source = source
     self.destination = destination
     self.overwrites = overwrites
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    source = try container.value("source")
+    destination = try container.value("destination")
+    overwrites = try container.value("overwrites")
   }
 }

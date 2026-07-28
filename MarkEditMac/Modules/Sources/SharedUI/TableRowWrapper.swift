@@ -8,12 +8,6 @@ import AppKit
 
 /// Table row view that draws a bottom hairline separator, inset by a horizontal margin.
 public final class TableRowWrapper: NSTableRowView {
-  public var showsSeparator = true {
-    didSet {
-      separator.isHidden = !showsSeparator
-    }
-  }
-
   private let horizontalMargin: Double
   private let separator = DividerView(hairlineWidth: true)
 

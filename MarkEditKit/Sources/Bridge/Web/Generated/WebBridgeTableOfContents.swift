@@ -35,19 +35,15 @@ public final class WebBridgeTableOfContents {
   }
 
   public func gotoHeader(headingInfo: HeadingInfo, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    struct Message: Encodable {
-      let headingInfo: HeadingInfo
-    }
-
-    let message = Message(
-      headingInfo: headingInfo
+    let message = BridgeMessage(
+      ("headingInfo", headingInfo)
     )
 
     webView?.invoke(path: "webModules.toc.gotoHeader", message: message, completion: completion)
   }
 }
 
-public struct HeadingInfo: Codable, Equatable {
+public struct HeadingInfo: Codable {
   public var title: String
   public var level: Int
   public var from: Int
@@ -60,5 +56,23 @@ public struct HeadingInfo: Codable, Equatable {
     self.from = from
     self.to = to
     self.selected = selected
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    title = try container.value("title")
+    level = try container.value("level")
+    from = try container.value("from")
+    to = try container.value("to")
+    selected = try container.value("selected")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(title, forKey: "title")
+    try container.encode(level, forKey: "level")
+    try container.encode(from, forKey: "from")
+    try container.encode(to, forKey: "to")
+    try container.encode(selected, forKey: "selected")
   }
 }

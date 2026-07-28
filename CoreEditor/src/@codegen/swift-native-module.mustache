@@ -24,19 +24,23 @@ public extension {{moduleName}} {
 @MainActor
 final class {{customTags.bridgeName}}: NativeBridge {
   static let name = "{{customTags.invokePath}}"
-  lazy var methods: [String: NativeMethod] = [
-    {{#methods}}
-    "{{methodName}}": { [weak self] in
-      await self?.{{methodName}}(parameters: $0)
-    },
-    {{/methods}}
-  ]
 
   private let module: {{moduleName}}
   private lazy var decoder = JSONDecoder()
 
   init(_ module: {{moduleName}}) {
     self.module = module
+  }
+
+  func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
+    switch method {
+    {{#methods}}
+    case "{{methodName}}":
+      return await {{methodName}}(parameters: parameters)
+    {{/methods}}
+    default:
+      return nil
+    }
   }
   {{#methods}}
 
@@ -46,6 +50,13 @@ final class {{customTags.bridgeName}}: NativeBridge {
       {{#parameters}}
       var {{name}}: {{type}}
       {{/parameters}}
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        {{#parameters}}
+        {{name}} = try container.value("{{name}}")
+        {{/parameters}}
+      }
     }
 
     let message: Message
@@ -68,7 +79,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
 {{#documentationLines}}
 ///{{{.}}}
 {{/documentationLines}}
-public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFromReturn}}{{^isFromReturn}}Decodable{{/isFromReturn}}{{/isFromParameter}}{{^isFromParameter}}{{#isFromReturn}}Encodable{{/isFromReturn}}{{/isFromParameter}}, Equatable {
+public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFromReturn}}{{^isFromReturn}}Decodable{{/isFromReturn}}{{/isFromParameter}}{{^isFromParameter}}{{#isFromReturn}}Encodable{{/isFromReturn}}{{/isFromParameter}} {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}
@@ -87,6 +98,8 @@ public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFro
     self.{{name}} = {{name}}
     {{/members}}
   }
+{{#isFromParameter}}{{> swift-decodable}}{{/isFromParameter}}
+{{#isFromReturn}}{{> swift-encodable}}{{/isFromReturn}}
 }
 {{/custom}}
 {{#enum}}

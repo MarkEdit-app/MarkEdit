@@ -14,7 +14,7 @@ public final class EditorModuleTranslation: NativeModuleTranslation {
 
   public func translate(text: String, from: String?, to: String?) async -> String {
     guard #available(macOS 26.0, *) else {
-      return TranslationResponse(error: "Unsupported OS Version").jsonEncoded
+      return BridgeMessage(("error", "Unsupported OS Version")).jsonEncoded
     }
 
     do {
@@ -22,24 +22,14 @@ public final class EditorModuleTranslation: NativeModuleTranslation {
       let session = TranslationSession(from: from, to: to)
       try? await session.prepareTranslation()
       let response = try await session.translate(text)
-      return TranslationResponse(text: response.targetText).jsonEncoded
+      return BridgeMessage(("text", response.targetText)).jsonEncoded
     } catch {
-      return TranslationResponse(error: error.localizedDescription).jsonEncoded
+      return BridgeMessage(("error", error.localizedDescription)).jsonEncoded
     }
   }
 }
 
 // MARK: - Private
-
-private struct TranslationResponse: Encodable {
-  let text: String?
-  let error: String?
-
-  init(text: String? = nil, error: String? = nil) {
-    self.text = text
-    self.error = error
-  }
-}
 
 @available(macOS 26.0, *)
 private extension TranslationSession {
