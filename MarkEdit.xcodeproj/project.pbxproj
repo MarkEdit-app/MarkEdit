@@ -55,7 +55,6 @@
 		87585FE32DA3EC7A0053069E /* NSColor+Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87585FDF2DA3EC7A0053069E /* NSColor+Scripting.swift */; };
 		87585FE42DA3EC7A0053069E /* Error+Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87585FE02DA3EC7A0053069E /* Error+Scripting.swift */; };
 		8763C3202F92574D00A3841D /* EditorHistoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8763C31E2F92574900A3841D /* EditorHistoryStorage.swift */; };
-		876578FA2993853500A1388A /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 876578F92993853500A1388A /* index.html */; };
 		8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8765FD242AF28F1000C645A8 /* AppUpdater.swift */; };
 		8765FD292AF291D300C645A8 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8765FD282AF291D300C645A8 /* AppVersion.swift */; };
 		8767BBAF295A8BA500BFACAE /* EditorViewController+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */; };
@@ -90,6 +89,7 @@
 		87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */; };
 		87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEE0129585ADC00C8E61C /* AppPreferences.swift */; };
 		87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACB6932BD8CA8400CE6F9E /* Application.swift */; };
+		87B0D1022F1A4C0100B0D101 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */; };
 		87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */; };
 		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */; };
 		87B3ED8F2CBE1E12001FA6CE /* DiffKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87B3ED8E2CBE1E12001FA6CE /* DiffKit */; };
@@ -198,7 +198,6 @@
 		87585FDF2DA3EC7A0053069E /* NSColor+Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSColor+Scripting.swift"; sourceTree = "<group>"; };
 		87585FE02DA3EC7A0053069E /* Error+Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Scripting.swift"; sourceTree = "<group>"; };
 		8763C31E2F92574900A3841D /* EditorHistoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHistoryStorage.swift; sourceTree = "<group>"; };
-		876578F92993853500A1388A /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = "CoreEditor/src/@light/dist/index.html"; sourceTree = SOURCE_ROOT; };
 		8765FD242AF28F1000C645A8 /* AppUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdater.swift; sourceTree = "<group>"; };
 		8765FD282AF291D300C645A8 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		8767BBAE295A8BA500BFACAE /* EditorViewController+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+UI.swift"; sourceTree = "<group>"; };
@@ -231,6 +230,7 @@
 		87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorFindPanel+Menu.swift"; sourceTree = "<group>"; };
 		87AAEE0129585ADC00C8E61C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		87ACB6932BD8CA8400CE6F9E /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
 		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extras.swift"; sourceTree = "<group>"; };
 		87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppExceptionCatcher.swift; sourceTree = "<group>"; };
@@ -425,7 +425,7 @@
 				8729240C2951525C007156B1 /* Info.plist */,
 				8729240D2951525C007156B1 /* Info.entitlements */,
 				872924092951525C007156B1 /* Main.xib */,
-				876578F92993853500A1388A /* index.html */,
+				87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -739,7 +739,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8729240B2951525C007156B1 /* Main.xib in Resources */,
-				876578FA2993853500A1388A /* index.html in Resources */,
+				87B0D1022F1A4C0100B0D101 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

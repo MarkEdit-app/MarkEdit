@@ -10,6 +10,7 @@
 import Foundation
 
 public struct EditorConfig: Encodable {
+  let host: EditorHost
   let text: String
   let theme: String
   let fontFace: WebFontFace
@@ -38,6 +39,7 @@ public struct EditorConfig: Encodable {
   let searchNormalizers: [String: String]?
 
   public init(
+    host: EditorHost,
     text: String,
     theme: String,
     fontFace: WebFontFace,
@@ -65,6 +67,7 @@ public struct EditorConfig: Encodable {
     visibleLineBreakCharacter: String?,
     searchNormalizers: [String: String]?
   ) {
+    self.host = host
     self.text = text
     self.theme = theme
     self.fontFace = fontFace

@@ -1,0 +1,23 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Open MarkEdit to complete the setup." : {
+      "comment" : "Message of the QuickLook setup guidance",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 MarkEdit 以完成设置。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開 MarkEdit 以完成設定。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

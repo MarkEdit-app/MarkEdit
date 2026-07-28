@@ -9,6 +9,11 @@
 
 import Foundation
 
+public enum EditorHost: String, Codable {
+  case mainApp = "mainApp"
+  case quicklook = "quicklook"
+}
+
 /// Font face attributes to control the font styles.
 public struct WebFontFace: Codable, Equatable {
   public var family: String

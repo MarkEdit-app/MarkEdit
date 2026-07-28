@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "codegen": "ts-gyb --config ./src/@codegen/config.json >/dev/null",
     "test": "jest",
-    "build": "yarn lint && yarn codegen && vite build && vite build -c src/@light/vite.config.mts"
+    "build": "yarn lint && yarn codegen && vite build"
   },
   "keywords": [],
   "author": "",

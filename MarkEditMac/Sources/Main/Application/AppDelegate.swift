@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 import ExtensionCore
 import SettingsUI
+import MarkEditCore
 import MarkEditKit
 
 @MainActor
@@ -97,6 +98,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       AppHotKeys.register(keyEquivalent: hotKey.key, modifiers: hotKey.modifiers) {
         self.toggleDocumentWindowVisibility()
       }
+    }
+
+    DispatchQueue.global(qos: .utility).async {
+      EditorIndexHtml.copyToSharedContainer()
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {

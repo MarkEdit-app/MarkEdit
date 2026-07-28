@@ -11,6 +11,7 @@ import WebKit
 import MarkEditCore
 
 final class PreviewViewController: NSViewController {
+  var guidanceView: NSView?
   var mouseDownMonitor: Any?
   var mouseDragMonitor: Any?
 
@@ -93,6 +94,7 @@ final class PreviewViewController: NSViewController {
   override func viewDidLayout() {
     super.viewDidLayout()
     webView.frame = view.bounds
+    guidanceView?.frame = view.bounds
 
     if view.window != nil {
       disableDefaultOpen()
@@ -104,6 +106,10 @@ final class PreviewViewController: NSViewController {
 
 extension PreviewViewController: QLPreviewingController {
   func preparePreviewOfFile(at url: URL) async throws {
+    guard EditorIndexHtml.sharedFileExists else {
+      return showSetUpGuidance()
+    }
+
     let fileURL = textFileURL(of: url)
     previewDirectoryURL = fileURL.deletingLastPathComponent()
 
@@ -111,7 +117,8 @@ extension PreviewViewController: QLPreviewingController {
       fileData: try Data(contentsOf: fileURL)
     )
 
-    let html = ([config.toHtml] + userStyles).joined(separator: "\n\n")
+    let index = [EditorIndexHtml.fromSharedContainer(config: config)]
+    let html = (index + userStyles).joined(separator: "\n\n")
     webView.loadHTMLString(html, baseURL: URL(string: "http://localhost/"))
   }
 }
