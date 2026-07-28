@@ -409,11 +409,10 @@
 		872924042951525C007156B1 /* QuickLookMac */ = {
 			isa = PBXGroup;
 			children = (
-				872924052951525C007156B1 /* QuickLookViewController.swift */,
-				8794A0822FC53BCB005CCC73 /* QuickLookViewController+UI.swift */,
-				8794A08A2FC53C26005CCC73 /* QuickLookViewController+Dragging.swift */,
-				8794A06A2FC525DF005CCC73 /* QuickLookConfig.swift */,
+				879FCC6E30184C1A00B46145 /* Extensions */,
 				8794A0612FC5254E005CCC73 /* QuickLookWebView.swift */,
+				872924052951525C007156B1 /* QuickLookViewController.swift */,
+				8794A06A2FC525DF005CCC73 /* QuickLookConfig.swift */,
 				872924262951A134007156B1 /* Supporting Files */,
 			);
 			path = QuickLookMac;
@@ -570,6 +569,15 @@
 				87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */,
 			);
 			path = Extras;
+			sourceTree = "<group>";
+		};
+		879FCC6E30184C1A00B46145 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8794A0822FC53BCB005CCC73 /* QuickLookViewController+UI.swift */,
+				8794A08A2FC53C26005CCC73 /* QuickLookViewController+Dragging.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		87A35DF830026B720079CF08 /* Extension */ = {
