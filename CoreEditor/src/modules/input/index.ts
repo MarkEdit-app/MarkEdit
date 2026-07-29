@@ -3,7 +3,7 @@ import { EditorSelection, Text, Transaction } from '@codemirror/state';
 import { foldEffect, unfoldEffect } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion } from '@codemirror/autocomplete';
 import { alwaysRenderInvisibles } from '../../styling/nodes/invisible';
-import { globalState, editingState } from '../../common/store';
+import { globalState, editingState, isComposing } from '../../common/store';
 import { clearSyntaxSelections } from '../commands';
 import { startCompletion, isPanelVisible } from '../completion';
 import { hasRecentKeyPress } from '../events';
@@ -98,7 +98,7 @@ export function interceptInputs() {
   return EditorView.inputHandler.of((editor, from, to, insert) => {
     // Enable auto character pairs only after composition ends,
     // some characters act as marked text in certain languages, e.g., typing '`' followed by 'a' to input 'à'.
-    const autoCharacterPairs = window.config.autoCharacterPairs && editingState.compositionEnded;
+    const autoCharacterPairs = window.config.autoCharacterPairs && !isComposing();
 
     // E.g., wrap "selection" as "*selection*"
     if (autoCharacterPairs && marksToWrap.includes(insert)) {
@@ -154,14 +154,14 @@ export function observeChanges() {
         const scrollDOM = update.view.scrollDOM;
         scrollDOM.scrollTop = scrollDOM.scrollHeight;
 
-        if (editingState.compositionEnded) {
+        if (!isComposing()) {
           editingState.wasScrolledToBottom = false;
         }
       }
 
       // Work around a composition mode bug where whitespaces are not updated,
       // we can probably remove this once EditContext is available.
-      if (alwaysRenderInvisibles() && !editingState.compositionEnded) {
+      if (alwaysRenderInvisibles() && isComposing()) {
         const caretPos = update.startState.selection.main.from;
         const enclosingText = update.startState.sliceDoc(caretPos - 1, caretPos + 1);
         if (enclosingText === '  ') {
@@ -187,7 +187,7 @@ export function observeChanges() {
       // We don't update active lines when composition is still ongoing.
       //
       // Instead, we will make an extra update after composition ended.
-      if (editingState.compositionEnded && selectionStateChanged) {
+      if (!isComposing() && selectionStateChanged) {
         updateActiveLine(newHasSelection);
       }
 
@@ -234,7 +234,7 @@ export function observeChanges() {
           clearTimeout(storage.gutterUpdater);
         }
 
-        if (editingState.compositionEnded && update.docChanged) {
+        if (!isComposing() && update.docChanged) {
           // To handle a case where line number rects are not correctly updated
           update.view.requestMeasure();
 
