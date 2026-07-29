@@ -42,6 +42,7 @@ export function filterTransaction(transaction: Transaction) {
   if (
     !editingState.compositionEnded &&
     editingState.compositionPosition !== undefined &&
+    editingState.compositionPosition <= transaction.startState.doc.length &&
     transaction.docChanged &&
     transaction.effects.length === 0 &&
     transaction.isUserEvent('input.type.compose')
@@ -164,7 +165,7 @@ export function observeChanges() {
         const caretPos = update.startState.selection.main.from;
         const enclosingText = update.startState.sliceDoc(caretPos - 1, caretPos + 1);
         if (enclosingText === '  ') {
-          refreshEditFocus();
+          refreshEditFocus(true);
         }
       }
 

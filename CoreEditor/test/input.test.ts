@@ -129,6 +129,13 @@ describe('Composition over-delete clamp', () => {
     expect(editor.getText()).toBe('**和');
   });
 
+  test('does not clamp with a stale anchor beyond the document length', () => {
+    // E.g., 'compositionend' was never received before the editor was reset
+    setUpComposing('**?**', 100);
+    dispatchCompose(2, 5, '和');
+    expect(editor.getText()).toBe('**和');
+  });
+
   test('does not clamp non-composition edits', () => {
     setUpComposing('**?**', 5);
 

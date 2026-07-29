@@ -7,6 +7,7 @@ import { createDecoPlugin } from '../helper';
 import { isPositionFolded } from './gutter';
 import { selectedVisiblesDecoration } from './selection';
 import { refreshEditFocus } from '../../modules/selection';
+import { editingState } from '../../common/store';
 import { getVisibleLines } from '../../modules/lines';
 import { LineBreakWidget } from '../views';
 
@@ -48,6 +49,11 @@ export function alwaysRenderInvisibles() {
 // with some delay can make sure autocorrect work.
 export function renderWhitespaceBeforeCaret() {
   if (!alwaysRenderInvisibles()) {
+    return;
+  }
+
+  // Space is the conversion key for input methods like Japanese, don't break composition
+  if (!editingState.compositionEnded) {
     return;
   }
 

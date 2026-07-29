@@ -1,6 +1,9 @@
-import { describe, expect, test } from '@jest/globals';
+import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
+import { renderWhitespaceBeforeCaret } from '../src/styling/nodes/invisible';
 import { selectedLinesDecoration } from '../src/styling/nodes/selection';
+import { InvisiblesBehavior } from '../src/config';
+import { editingState } from '../src/common/store';
 import { sleep } from './utils/helpers';
 import * as editor from './utils/editor';
 
@@ -36,5 +39,32 @@ describe('Styling module', () => {
 
     const selected = document.querySelectorAll('.cm-selectedLineRange');
     expect(selected.length).toBe(1);
+  });
+});
+
+describe('renderWhitespaceBeforeCaret', () => {
+  afterEach(() => {
+    editingState.compositionEnded = true;
+  });
+
+  async function render() {
+    editor.setUp('Hello');
+    window.config.invisiblesBehavior = InvisiblesBehavior.always;
+
+    const dispatch = jest.spyOn(window.editor, 'dispatch');
+    renderWhitespaceBeforeCaret();
+    await sleep(100);
+
+    return dispatch;
+  }
+
+  test('refreshes the focus when no composition is active', async () => {
+    expect(await render()).toHaveBeenCalled();
+  });
+
+  // Space is the conversion key for input methods like Japanese
+  test('does not refresh the focus during a composition', async () => {
+    editingState.compositionEnded = false;
+    expect(await render()).not.toHaveBeenCalled();
   });
 });

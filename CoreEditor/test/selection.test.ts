@@ -1,6 +1,8 @@
-import { afterEach, describe, expect, test } from '@jest/globals';
+import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
+import { editingState } from '../src/common/store';
+import { refreshEditFocus } from '../src/modules/selection';
 
 import * as editor from './utils/editor';
 import selectionChanged from '../src/modules/selection/selectionChanged';
@@ -35,6 +37,37 @@ describe('selectionChanged', () => {
     });
     expect(update.selectionSet).toBe(false);
     expect(selectionChanged(update)).toBe(false);
+  });
+});
+
+describe('refreshEditFocus', () => {
+  afterEach(() => {
+    window.editor.destroy();
+    document.body.innerHTML = '';
+    editingState.compositionEnded = true;
+  });
+
+  function refresh(allowWhileComposing?: boolean) {
+    editor.setUp('Hello');
+    const dispatch = jest.spyOn(window.editor, 'dispatch');
+    refreshEditFocus(allowWhileComposing);
+    return dispatch;
+  }
+
+  test('refreshes when no composition is active', () => {
+    expect(refresh()).toHaveBeenCalled();
+  });
+
+  // E.g., the window becomes key again while marked text is still uncommitted
+  test('does not refresh during a composition', () => {
+    editingState.compositionEnded = false;
+    expect(refresh()).not.toHaveBeenCalled();
+  });
+
+  // The invisibles workaround in the input module depends on this
+  test('refreshes during a composition when explicitly allowed', () => {
+    editingState.compositionEnded = false;
+    expect(refresh(true)).toHaveBeenCalled();
   });
 });
 
