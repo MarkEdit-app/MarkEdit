@@ -1,5 +1,5 @@
 import { ChangeSpec, Transaction } from '@codemirror/state';
-import { editingState } from '../../common/store';
+import { isComposing } from '../../common/store';
 import { getEditorText } from '../../core';
 
 /**
@@ -15,7 +15,7 @@ export default function formatContent(
   userInitiated: boolean,
 ) {
   // Editing the document during a composition breaks the composing text
-  if (!editingState.compositionEnded) {
+  if (isComposing()) {
     return false;
   }
 

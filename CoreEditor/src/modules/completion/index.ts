@@ -2,7 +2,7 @@ import { EditorView, keymap } from '@codemirror/view';
 import { EditorSelection, EditorState, Prec } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { startCompletion as startTooltipCompletion, closeCompletion as closeTooltipCompletion, completionStatus as tooltipCompletionStatus, CompletionContext, CompletionResult, insertCompletionText, pickedCompletion, Completion, autocompletion, completionKeymap } from '@codemirror/autocomplete';
-import { editingState } from '../../common/store';
+import { isComposing } from '../../common/store';
 import { anchorAtPos } from '../tokenizer/anchorAtPos';
 import { getFootnoteLabels, getReferenceLinkLabels } from '../link';
 import { getLinkAnchor, getTableOfContents } from '../toc';
@@ -153,7 +153,7 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
   storage.cancellable = setTimeout(() => {
     // We don't want to trigger completion when composition is still ongoing,
     // marked text in input methods like Pinyin is not meaningful until composition is ended.
-    if (!editingState.compositionEnded) {
+    if (isComposing()) {
       return;
     }
 

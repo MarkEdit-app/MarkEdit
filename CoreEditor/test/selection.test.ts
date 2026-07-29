@@ -69,6 +69,18 @@ describe('refreshEditFocus', () => {
     editingState.compositionEnded = false;
     expect(refresh(true)).toHaveBeenCalled();
   });
+
+  // CodeMirror also observes 'compositionupdate', so it sees compositions our flag misses
+  test('does not refresh when only CodeMirror knows about the composition', () => {
+    editor.setUp('Hello');
+    window.editor.contentDOM.dispatchEvent(new CompositionEvent('compositionstart'));
+
+    const dispatch = jest.spyOn(window.editor, 'dispatch');
+    refreshEditFocus();
+
+    expect(window.editor.compositionStarted).toBe(true);
+    expect(dispatch).not.toHaveBeenCalled();
+  });
 });
 
 function captureUpdate(action: () => void): ViewUpdate {

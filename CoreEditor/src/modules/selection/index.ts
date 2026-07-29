@@ -1,7 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
 import { selectAll as selectAllCommand } from '@codemirror/commands';
-import { editingState } from '../../common/store';
+import { isComposing } from '../../common/store';
 import { isReleaseMode } from '../../common/utils';
 import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
@@ -204,7 +204,7 @@ export function updateActiveLine(hasSelection: boolean) {
  * Skipped during composition because dispatching a selection aborts it, unless explicitly allowed.
  */
 export function refreshEditFocus(allowWhileComposing = false) {
-  if (!allowWhileComposing && !editingState.compositionEnded) {
+  if (!allowWhileComposing && isComposing()) {
     return;
   }
 

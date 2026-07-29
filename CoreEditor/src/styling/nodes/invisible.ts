@@ -7,7 +7,7 @@ import { createDecoPlugin } from '../helper';
 import { isPositionFolded } from './gutter';
 import { selectedVisiblesDecoration } from './selection';
 import { refreshEditFocus } from '../../modules/selection';
-import { editingState } from '../../common/store';
+import { isComposing } from '../../common/store';
 import { getVisibleLines } from '../../modules/lines';
 import { LineBreakWidget } from '../views';
 
@@ -53,7 +53,7 @@ export function renderWhitespaceBeforeCaret() {
   }
 
   // Space is the conversion key for input methods like Japanese, don't break composition
-  if (!editingState.compositionEnded) {
+  if (isComposing()) {
     return;
   }
 
