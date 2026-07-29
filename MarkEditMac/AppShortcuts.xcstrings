@@ -27,6 +27,12 @@
               "在 ${applicationName} 中建立新文件"
             ]
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で新規書類を作成"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
             "values" : [
               "在 ${applicationName} 中執行 JavaScript"
             ]
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でJavaScriptを評価"
           }
         }
       }
@@ -85,6 +97,12 @@
               "在 ${applicationName} 中獲取檔案內容"
             ]
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でファイルの内容を取得"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
             "values" : [
               "在 ${applicationName} 中更新檔案內容"
             ]
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でファイルの内容を更新"
           }
         }
       }

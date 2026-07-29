@@ -15,6 +15,12 @@
             "state" : "translated",
             "value" : "打開 MarkEdit 以完成設定。"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定を完了するにはMarkEditを開いてください。"
+          }
         }
       }
     }
