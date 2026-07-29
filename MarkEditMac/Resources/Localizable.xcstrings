@@ -19,7 +19,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "**作者:** %@"
+            "value" : "**作成者:** %@"
           }
         }
       }
@@ -337,7 +337,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アクティブ行インジケータ"
+            "value" : "現在の行を強調表示"
           }
         }
       }
@@ -1510,7 +1510,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "${content}を使用してJavaScriptを評価"
+            "value" : "${content}を使ってJavaScriptを評価"
           }
         }
       }
@@ -1693,7 +1693,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ファイル拡張子:"
+            "value" : "拡張子:"
           }
         }
       }
@@ -1784,7 +1784,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "選択部分を検索"
+            "value" : "選択部分を検索に使用"
           }
         }
       }
@@ -2139,7 +2139,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "適用範囲"
+            "value" : "更新範囲"
           }
         }
       }
@@ -2995,7 +2995,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MarkEdit %@を利用できます!"
+            "value" : "MarkEdit %@が利用可能です!"
           }
         }
       }
@@ -3063,7 +3063,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "続行するためのアクティブな書類がありません。"
+            "value" : "続行するには、アクティブな書類が必要です。"
           }
         }
       }
@@ -3177,7 +3177,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "${initialContent}を使用して${fileName}という名前の新規書類を作成"
+            "value" : "${fileName}という名前で新規書類を作成し、内容を${initialContent}に設定"
           }
         }
       }
@@ -3594,7 +3594,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "優先するインデント:"
+            "value" : "インデント単位:"
           }
         }
       }
@@ -3916,7 +3916,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "再度開く"
+            "value" : "再起動"
           }
         }
       }
@@ -3939,7 +3939,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“%@”の使用を開始するにはMarkEditを再度開いてください。"
+            "value" : "“%@”の使用を開始するにはMarkEditを再起動してください。"
           }
         }
       }
@@ -3962,7 +3962,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アップデートした機能拡張を使用するにはMarkEditを再度開いてください。"
+            "value" : "アップデートした機能拡張を使用するにはMarkEditを再起動してください。"
           }
         }
       }
@@ -3985,7 +3985,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "変更を適用するにはアプリを再度開いてください。"
+            "value" : "変更を適用するにはMarkEditを再起動してください。"
           }
         }
       }
@@ -4444,7 +4444,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "選択状況"
+            "value" : "選択範囲の情報"
           }
         }
       }
@@ -4536,7 +4536,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不可視ファイルを表示"
+            "value" : "隠しファイルを表示"
           }
         }
       }
@@ -4697,7 +4697,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "機能拡張を提出…"
+            "value" : "機能拡張を登録…"
           }
         }
       }
@@ -4766,7 +4766,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "システムデフォルト"
+            "value" : "システム標準"
           }
         }
       }
@@ -5111,7 +5111,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "スクリプトフォルダからこの機能拡張のスクリプトが削除されます。"
+            "value" : "この機能拡張のスクリプトがスクリプトフォルダから削除されます。"
           }
         }
       }
@@ -5502,7 +5502,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アップデート動作"
+            "value" : "アップデート方法"
           }
         }
       }
@@ -5547,7 +5547,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "${content}でファイルを更新"
+            "value" : "ファイルの内容を${content}に更新"
           }
         }
       }
@@ -5942,7 +5942,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最新です!"
+            "value" : "最新の状態です!"
           }
         }
       }

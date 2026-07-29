@@ -86,7 +86,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "クリップボードから新規ファイル"
+            "value" : "クリップボードから新規作成"
           }
         }
       }
@@ -1882,7 +1882,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "読み出し専用モード"
+            "value" : "読み取り専用モード"
           }
         }
       }
@@ -2615,7 +2615,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HTMLに書き出す"
+            "value" : "HTMLとして書き出す"
           }
         }
       }
@@ -3348,7 +3348,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "PDFに書き出す"
+            "value" : "PDFとして書き出す"
           }
         }
       }
@@ -3408,7 +3408,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EPUBに書き出す"
+            "value" : "EPUBとして書き出す"
           }
         }
       }
@@ -3918,7 +3918,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "RTFに書き出す"
+            "value" : "RTFとして書き出す"
           }
         }
       }
@@ -4068,7 +4068,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "閉じたタブを再度開く"
+            "value" : "最後に閉じたタブを開く"
           }
         }
       }
@@ -4158,7 +4158,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "履歴バージョンを消去"
+            "value" : "バージョン履歴を消去"
           }
         }
       }
@@ -4668,7 +4668,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Word（DOCX）に書き出す"
+            "value" : "Word（DOCX）として書き出す"
           }
         }
       }
@@ -4698,7 +4698,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "問題トラッカー"
+            "value" : "問題を報告"
           }
         }
       }
@@ -5148,7 +5148,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "要素を調査"
+            "value" : "要素の詳細を表示"
           }
         }
       }
@@ -5448,7 +5448,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "履歴バージョンを消去"
+            "value" : "バージョン履歴を消去"
           }
         }
       }
