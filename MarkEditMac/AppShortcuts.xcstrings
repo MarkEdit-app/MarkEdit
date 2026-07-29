@@ -29,9 +29,11 @@
           }
         },
         "ja" : {
-          "stringUnit" : {
+          "stringSet" : {
             "state" : "translated",
-            "value" : "${applicationName}で新規書類を作成"
+            "values" : [
+              "${applicationName}で新規書類を作成"
+            ]
           }
         }
       }
@@ -64,9 +66,11 @@
           }
         },
         "ja" : {
-          "stringUnit" : {
+          "stringSet" : {
             "state" : "translated",
-            "value" : "${applicationName}でJavaScriptを評価"
+            "values" : [
+              "${applicationName}でJavaScriptを評価"
+            ]
           }
         }
       }
@@ -99,9 +103,11 @@
           }
         },
         "ja" : {
-          "stringUnit" : {
+          "stringSet" : {
             "state" : "translated",
-            "value" : "${applicationName}でファイルの内容を取得"
+            "values" : [
+              "${applicationName}でファイルの内容を取得"
+            ]
           }
         }
       }
@@ -134,9 +140,11 @@
           }
         },
         "ja" : {
-          "stringUnit" : {
+          "stringSet" : {
             "state" : "translated",
-            "value" : "${applicationName}でファイルの内容を更新"
+            "values" : [
+              "${applicationName}でファイルの内容を更新"
+            ]
           }
         }
       }
