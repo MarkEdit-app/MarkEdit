@@ -10,6 +10,11 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "importHelpers": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@codemirror/lang-html": ["./src/@vendor/lang-html"],
+      "@codemirror/lang-markdown": ["./src/@vendor/lang-markdown"],
+      "@codemirror/language-data": ["./src/@vendor/language-data"]
+    }
   }
 }

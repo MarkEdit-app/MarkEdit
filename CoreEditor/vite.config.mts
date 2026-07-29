@@ -5,6 +5,7 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 export default defineConfig({
   resolve: {
     alias: {
+      '@codemirror/lang-html': fileURLToPath(new URL('./src/@vendor/lang-html', import.meta.url)),
       '@codemirror/lang-markdown': fileURLToPath(new URL('./src/@vendor/lang-markdown', import.meta.url)),
       '@codemirror/language-data': fileURLToPath(new URL('./src/@vendor/language-data', import.meta.url)),
     },
