@@ -1,4 +1,4 @@
-import { ChangeSpec } from '@codemirror/state';
+import { ChangeSpec, Transaction } from '@codemirror/state';
 import { getEditorText } from '../../core';
 
 /**
@@ -20,6 +20,7 @@ export default function formatContent(
     editor.dispatch({
       changes,
       userEvent: '@none', // Ignore automatic scrolling
+      annotations: Transaction.addToHistory.of(userInitiated),
     });
   };
 
