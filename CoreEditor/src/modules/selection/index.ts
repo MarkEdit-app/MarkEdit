@@ -1,6 +1,7 @@
 import { EditorView } from '@codemirror/view';
 import { EditorSelection, Line, SelectionRange } from '@codemirror/state';
 import { selectAll as selectAllCommand } from '@codemirror/commands';
+import { editingState } from '../../common/store';
 import { isReleaseMode } from '../../common/utils';
 import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
@@ -199,8 +200,14 @@ export function updateActiveLine(hasSelection: boolean) {
 
 /**
  * Refresh the current focus to force a render pass.
+ *
+ * Skipped during composition because dispatching a selection aborts it, unless explicitly allowed.
  */
-export function refreshEditFocus() {
+export function refreshEditFocus(allowWhileComposing = false) {
+  if (!allowWhileComposing && !editingState.compositionEnded) {
+    return;
+  }
+
   const editor = window.editor;
   editor.dispatch({
     selection: editor.state.selection,

@@ -1,5 +1,6 @@
-import { describe, expect, test } from '@jest/globals';
+import { afterEach, describe, expect, test } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
+import { editingState } from '../src/common/store';
 
 import * as editor from './utils/editor';
 import * as commands from '../src/modules/commands';
@@ -149,5 +150,25 @@ describe('insertCodeBlock command', () => {
     const out = run('ab', [[0, 0], [2, 2]]);
     expect(out).not.toContain('#{');
     expect((out.match(/```/g) ?? []).length).toBe(4);
+  });
+});
+
+describe('formatContent', () => {
+  afterEach(() => {
+    editingState.compositionEnded = true;
+  });
+
+  test('formats when no composition is active', () => {
+    editor.setUp('Hello  ');
+    expect(commands.formatContent(true, true, false)).toBe(true);
+    expect(editor.getText()).toBe('Hello\n');
+  });
+
+  test('leaves the document untouched during a composition', () => {
+    editor.setUp('Hello  ');
+    editingState.compositionEnded = false;
+
+    expect(commands.formatContent(true, true, false)).toBe(false);
+    expect(editor.getText()).toBe('Hello  ');
   });
 });

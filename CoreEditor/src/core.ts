@@ -159,6 +159,10 @@ export async function resetEditor(
     });
   }
 
+  // A brand-new view can never be mid-composition, drop the state left by the old one
+  editingState.compositionEnded = true;
+  editingState.compositionPosition = undefined;
+
   // Honest flag: selection may be non-empty after restoration
   editingState.hasSelection = hasSelection();
 
