@@ -32,9 +32,8 @@ export function setUp(config: Config, colors: EditorColors) {
   setEditorColors(colors);
   setFontFace(config.fontFace);
   setFontSize(config.fontSize);
-  setInvisiblesBehavior(config.invisiblesBehavior);
   setTypewriterMode(config.typewriterMode);
-  setFocusMode(config.focusMode);
+  updateFocusModeStyle(config.focusMode);
   setLineHeight(config.lineHeight);
   setOverscrollBehavior(config.lineWrapping);
 
@@ -151,20 +150,7 @@ export function setFocusMode(enabled: boolean) {
     effects: window.dynamics.selectedLines?.reconfigure(enabled ? selectedLinesDecoration : []),
   });
 
-  if (styleSheets.focusMode === undefined) {
-    styleSheets.focusMode = createStyleSheet(`
-      .cm-line:not(.cm-selectedLineRange), .cm-gutterElement:not(.cm-activeLineGutter) {
-        opacity: 0.25;
-      }
-    `, false);
-
-    // The state is not initially correct without a focus refresh
-    if (enabled) {
-      afterDomUpdate(refreshEditFocus);
-    }
-  }
-
-  styleSheets.focusMode.disabled = !enabled;
+  updateFocusModeStyle(enabled);
 }
 
 export function setLineWrapping(enabled: boolean) {
@@ -276,6 +262,23 @@ function enableGuttersObserver() {
   }
 
   observeGuttersWidth(gutters);
+}
+
+function updateFocusModeStyle(enabled: boolean) {
+  if (styleSheets.focusMode === undefined) {
+    styleSheets.focusMode = createStyleSheet(`
+      .cm-line:not(.cm-selectedLineRange), .cm-gutterElement:not(.cm-activeLineGutter) {
+        opacity: 0.25;
+      }
+    `, false);
+
+    // The state is not initially correct without a focus refresh
+    if (enabled) {
+      afterDomUpdate(refreshEditFocus);
+    }
+  }
+
+  styleSheets.focusMode.disabled = !enabled;
 }
 
 function setOverscrollBehavior(enabled: boolean) {
