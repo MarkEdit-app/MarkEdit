@@ -16,7 +16,7 @@ import { defaultKeymap } from '@codemirror/commands';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
-import { languages } from '@codemirror/language-data';
+import { html as bundledHTML } from '@codemirror/lang-html';
 import { history, historyKeymap } from './@vendor/commands/history';
 
 import { loadTheme } from './styling/themes';
@@ -28,6 +28,7 @@ import { invisiblesExtension } from './styling/nodes/invisible';
 import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
 import { IndentBehavior } from './config';
+import { bundledLanguages } from './languages';
 import { editingState } from './common/store';
 
 import { isActive as isWritingToolsActive } from './modules/writingTools';
@@ -37,7 +38,7 @@ import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } fro
 import { customizedCommandsKeymap } from './modules/commands';
 import { autocompleteExtensions, standardLinkCompletion, referenceLinkCompletion } from './modules/completion';
 import { tocKeymap } from './modules/toc';
-import { userExtensions, userMarkdownConfigs, userCodeLanguages } from './api/methods';
+import { userExtensions, userMarkdownConfigs, userCodeLanguages, userHTMLLanguage } from './api/methods';
 
 const theme = new Compartment;
 const readOnly = new Compartment;
@@ -173,10 +174,12 @@ export function extensions(options: { lineBreak?: string }) {
 }
 
 export function markdownConfigurations() {
+  // Both instances come from one module, they share the language data that drives completion
+  const html = userHTMLLanguage() ?? bundledHTML;
   const content = markdown({
     base: markdownLanguage,
     codeLanguages: [
-      ...languages,
+      ...bundledLanguages(html()),
       ...userCodeLanguages(),
     ],
     extensions: [
@@ -184,6 +187,7 @@ export function markdownConfigurations() {
       ...userMarkdownConfigs(),
     ],
     completeHTMLTags: false,
+    htmlTagLanguage: html({ matchClosingTags: false }),
   });
 
   return frontMatter({ content });

@@ -1,9 +1,12 @@
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
-import { LanguageDescription } from '@codemirror/language';
+import { LanguageDescription, LanguageSupport } from '@codemirror/language';
 import { MarkdownConfig } from '@lezer/markdown';
 import { RuntimeInfo } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
+
+type HTMLConfig = { matchClosingTags?: boolean };
+type HTMLLanguage = (config?: HTMLConfig) => LanguageSupport;
 
 export function onAppReady(listener: () => void) {
   storage.appReadyListeners.push(listener);
@@ -77,6 +80,11 @@ export function addCodeLanguage(language: LanguageDescription | LanguageDescript
   reconfigureMarkdown();
 }
 
+export function overrideHTMLLanguage(html: HTMLLanguage) {
+  storage.htmlLanguage = html;
+  reconfigureMarkdown();
+}
+
 export function editorReadyListeners() {
   return storage.editorReadyListeners;
 }
@@ -91,6 +99,10 @@ export function userMarkdownConfigs(): MarkdownConfig[] {
 
 export function userCodeLanguages(): LanguageDescription[] {
   return storage.codeLanguages;
+}
+
+export function userHTMLLanguage(): HTMLLanguage | undefined {
+  return storage.htmlLanguage;
 }
 
 function reconfigureMarkdown() {
@@ -111,6 +123,7 @@ const storage: {
   extensions: Extension[];
   markdownConfigs: MarkdownConfig[];
   codeLanguages: LanguageDescription[];
+  htmlLanguage?: HTMLLanguage;
 } = {
   appReadyListeners: [],
   editorReadyListeners: [],
