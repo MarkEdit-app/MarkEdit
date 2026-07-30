@@ -1175,6 +1175,23 @@
         }
       }
     },
+    "Extensions" : {
+      "comment" : "Title of the extension manager window",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "扩展功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "擴充功能"
+          }
+        }
+      }
+    },
     "Extensions Updated" : {
       "comment" : "Title shown after extensions are updated",
       "localizations" : {
@@ -2239,23 +2256,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "MarkEdit %@ 是目前的最新版本。"
-          }
-        }
-      }
-    },
-    "MarkEdit Extensions" : {
-      "comment" : "Title of the extension manager window",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MarkEdit 扩展功能"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MarkEdit 擴充功能"
           }
         }
       }
