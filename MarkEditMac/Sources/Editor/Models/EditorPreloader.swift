@@ -16,19 +16,16 @@ final class EditorPreloader {
   static let shared = EditorPreloader()
 
   func warmUp() {
-    // Start loading an editor early so prepareViewController() can return faster.
-    Task {
-      await prepareViewController()
+    // Deliberately synchronous, AppKit doesn't drain the main queue until the app finishes launching
+    if preloadedController == nil {
+      preloadedController = EditorViewController()
     }
   }
 
   /// Ensure the preloaded controller has finished loading,
   /// call this before ``takeViewController()`` to guarantee readiness.
   func prepareViewController() async {
-    if preloadedController == nil {
-      preloadedController = EditorViewController()
-    }
-
+    warmUp()
     await preloadedController?.waitUntilLoaded()
   }
 

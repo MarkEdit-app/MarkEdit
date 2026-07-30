@@ -20,7 +20,15 @@ final class Application: NSApplication {
 
     UserDefaults.overwriteTextCheckerOnce()
     AppCustomization.createFiles()
-    ExtensionConfig.reconcileInstalled()
+
+    // Scanning the scripts folder is slow, overlap it with AppKit initialization
+    let reconciled = DispatchGroup()
+    reconciled.enter()
+
+    DispatchQueue.global(qos: .userInitiated).async {
+      ExtensionConfig.reconcileInstalled()
+      reconciled.leave()
+    }
 
     let application = Self.shared
     let delegate = AppDelegate()
@@ -28,6 +36,7 @@ final class Application: NSApplication {
     application.delegate = delegate
     delegate.startAccessingGrantedFolder()
 
+    reconciled.wait()
     _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)
   }
 
