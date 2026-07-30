@@ -8,6 +8,5 @@ module.exports = {
   moduleNameMapper: {
     '^@codemirror/lang-html$': '<rootDir>/src/@vendor/lang-html',
     '^@codemirror/lang-markdown$': '<rootDir>/src/@vendor/lang-markdown',
-    '^@codemirror/language-data$': '<rootDir>/src/@vendor/language-data',
   },
 };
