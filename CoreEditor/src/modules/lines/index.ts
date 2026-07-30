@@ -85,15 +85,26 @@ export function adjustGutterPositions(className: 'lineNumbers' | 'gutterHover' =
     return;
   }
 
-  const lineElements = document.querySelectorAll('.cm-line:has(.cm-md-header)');
-  lineElements.forEach(lineEl => {
+  // Batch the measurements, interleaving them with style writes forces a re-layout per read
+  const gutterRects = gutterElements.map(element => element.getBoundingClientRect());
+  const updates: { element: HTMLElement; paddingTop: number }[] = [];
+  document.querySelectorAll('.cm-line:has(.cm-md-header)').forEach(lineEl => {
     const { fontSize } = getComputedStyle(lineEl);
     if (almostEqual(getFontSizeValue(fontSize), window.config.fontSize)) {
       return;
     }
 
-    const lineRect = lineEl.getBoundingClientRect();
-    adjustGutter(findGutter(gutterElements, lineRect), fontSize);
+    const element = findGutter(gutterElements, gutterRects, lineEl.getBoundingClientRect());
+    if (element !== undefined) {
+      updates.push({
+        element,
+        paddingTop: getGutterPadding(element, fontSize),
+      });
+    }
+  });
+
+  updates.forEach(({ element, paddingTop }) => {
+    element.style.paddingTop = `${paddingTop}px`;
   });
 }
 
@@ -108,34 +119,28 @@ export function findLineNumberGutter(lineNumber: number): HTMLElement | null {
   return elements.find(element => Number(element.textContent) === lineNumber) ?? null;
 }
 
-function findGutter(elements: HTMLElement[], anchor: DOMRect) {
+function findGutter(elements: HTMLElement[], rects: DOMRect[], anchor: DOMRect) {
   const middle = (anchor.bottom + anchor.top) * 0.5;
-  return elements.find(element => {
-    const rect = element.getBoundingClientRect();
-    return rect.top < middle && rect.bottom > middle;
-  });
+  const index = rects.findIndex(rect => rect.top < middle && rect.bottom > middle);
+  return index < 0 ? undefined : elements[index];
 }
 
 function queryGutters(selector: string) {
   const elements = [...document.querySelectorAll(selector)] as HTMLElement[];
-  elements.forEach(element => element.style.paddingTop = '');
+  elements.forEach(element => {
+    // Guarded, an unconditional write would invalidate the layout even when nothing was set
+    if (element.style.paddingTop !== '') {
+      element.style.paddingTop = '';
+    }
+  });
+
   return elements;
 }
 
-function adjustGutter(element: HTMLElement | undefined, targetFontSize: string) {
-  if (element === undefined) {
-    return;
-  }
-
+function getGutterPadding(element: HTMLElement, targetFontSize: string) {
   const { fontSize, fontFamily } = getComputedStyle(element);
-  const paddingTop = getHeightDiff((element.textContent as string | null) ?? '', targetFontSize, fontSize, fontFamily);
-  element.style.paddingTop = `${paddingTop}px`;
-}
-
-function getHeightDiff(text: string, targetFontSize: string, baseFontSize: string, fontFamily: string) {
-  const targetHeight = measureHeight(text, `${targetFontSize} ${fontFamily}`);
-  const baseHeight = measureHeight(text, `${baseFontSize} ${fontFamily}`);
-  return targetHeight - baseHeight;
+  const text = element.textContent;
+  return measureHeight(text, `${targetFontSize} ${fontFamily}`) - measureHeight(text, `${fontSize} ${fontFamily}`);
 }
 
 function measureHeight(text: string, font: string) {

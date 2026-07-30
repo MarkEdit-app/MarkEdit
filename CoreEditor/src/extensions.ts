@@ -23,9 +23,12 @@ import { loadTheme } from './styling/themes';
 import { classHighlighters, markdownExtensions, markdownExtendedData, renderExtensions, actionExtensions } from './styling/markdown';
 import { lineIndicatorLayer } from './styling/nodes/line';
 import { linkStyles } from './styling/nodes/link';
+import { selectedLinesDecoration } from './styling/nodes/selection';
+import { invisiblesExtension } from './styling/nodes/invisible';
 import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
 import { IndentBehavior } from './config';
+import { editingState } from './common/store';
 
 import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
@@ -88,7 +91,7 @@ export function extensions(options: { lineBreak?: string }) {
     window.config.autoCharacterPairs ? closeBrackets() : [],
     rectangularSelection(),
     crosshairCursor(),
-    activeLine.of(window.config.showActiveLineIndicator ? lineIndicatorLayer : []),
+    activeLine.of(window.config.showActiveLineIndicator && !editingState.hasSelection ? lineIndicatorLayer : []),
     highlightActiveLineGutter(),
     selectionHighlight.of(highlightSelectionMatches()),
     localizePhrases(),
@@ -152,9 +155,9 @@ export function extensions(options: { lineBreak?: string }) {
     theme.of(loadTheme(window.config.theme)),
     renderExtensions,
     actionExtensions,
-    invisibles.of([]), // Must after actionExtensions to have line breaks at the end
+    invisibles.of(invisiblesExtension(window.config.invisiblesBehavior, editingState.hasSelection)), // Must after actionExtensions to have line breaks at the end
     linkStyles, // Must after invisibles because whitespaces can break this
-    selectedLines.of([]),
+    selectedLines.of(window.config.focusMode ? selectedLinesDecoration : []),
 
     // Input handling
     wordTokenizer(),
