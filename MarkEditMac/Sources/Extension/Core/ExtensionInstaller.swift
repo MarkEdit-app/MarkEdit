@@ -164,7 +164,7 @@ extension Localized {
 
     // MARK: - Extensions UI
 
-    static let windowTitle = String(localized: "MarkEdit Extensions", comment: "Title of the extension manager window")
+    static let windowTitle = String(localized: "Extensions", comment: "Title of the extension manager window")
     static let discover = String(localized: "Discover", comment: "Extension manager mode: browse the registry")
     static let installed = String(localized: "Installed", comment: "Extension manager mode: installed extensions")
     static let updates = String(localized: "Updates", comment: "Extension manager mode: installed extensions filtered to those with available updates")
