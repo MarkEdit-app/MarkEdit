@@ -4180,7 +4180,7 @@
       }
     },
     "View Release Page" : {
-      "comment" : "Title for the \"View Release Page\" button",
+      "comment" : "Button in the release notes popover to open the release page\nTitle for the \"View Release Page\" button",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
