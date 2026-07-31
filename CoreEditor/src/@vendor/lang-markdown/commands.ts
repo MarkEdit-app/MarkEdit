@@ -116,6 +116,8 @@ export const insertNewlineContinueMarkupCommand = (config: {
     let emptyLine = pos >= (inner.to - inner.spaceAfter.length) && !/\S/.test(line.text.slice(inner.to))
     // Empty line in list
     if (inner.item && emptyLine) {
+      if (inner.item.from < line.from && !/^[\s>]*$/.test(line.text.slice(0, inner.to)))
+        return dont = {range}
       let first = inner.node.firstChild!, second = inner.node.getChild("ListItem", "ListItem")
       // Not second item or blank line before: delete a level of markup
       if (first.to >= pos || second && second.to < pos ||
