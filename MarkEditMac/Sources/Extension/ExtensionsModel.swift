@@ -137,6 +137,15 @@ final class ExtensionsModel {
       entry?.latest.notes
     }
 
+    /// The latest release url, only when it points to a GitHub release page.
+    var releasePageURL: URL? {
+      guard let url = latestReleaseURL, url.host() == "github.com", url.path().contains("/releases/tag/") else {
+        return nil
+      }
+
+      return url
+    }
+
     /// Whether the item matches a search query, by name, author, id, or details.
     func matches(query: String) -> Bool {
       [name, author, id, details].contains { $0.localizedCaseInsensitiveContains(query) }

@@ -254,13 +254,23 @@ private extension ExtensionsRowView {
     }
   }
 
-  func updateNotesPopover(_ notes: String) -> some View {
-    Text(notes)
-      .font(.body)
-      .textSelection(.enabled)
-      .frame(maxWidth: 300, alignment: .leading)
-      .fixedSize(horizontal: false, vertical: true)
-      .padding()
+  func updateNotesPopover(_ notes: String, releaseURL: URL?) -> some View {
+    VStack(alignment: .center, spacing: 12) {
+      Text(notes)
+        .font(.body)
+        .textSelection(.enabled)
+        .fixedSize(horizontal: false, vertical: true)
+
+      if let releaseURL {
+        Button(Localized.Extension.viewRelease) {
+          showingUpdateNotes = false
+          NSWorkspace.shared.open(releaseURL)
+        }
+        .help(releaseURL.absoluteString)
+      }
+    }
+    .frame(maxWidth: 300)
+    .padding()
   }
 
   var metadataDot: some View {
@@ -303,7 +313,7 @@ private extension ExtensionsRowView {
         .fontWeight(.medium)
         .foregroundStyle(.tint)
         .popover(isPresented: $showingUpdateNotes, arrowEdge: .bottom) {
-          updateNotesPopover(notes)
+          updateNotesPopover(notes, releaseURL: item.releasePageURL)
         }
         .onDisappear {
           showingUpdateNotes = false
