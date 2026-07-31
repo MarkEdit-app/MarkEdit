@@ -166,7 +166,7 @@ export const insertNewlineContinueMarkupCommand = (config: {
     let from = pos
     while (from > line.from && /\s/.test(line.text.charAt(from - line.from - 1))) from--
     insert = normalizeIndent(insert, state)
-    if (nonTightList(inner.node, state.doc)) insert = blankLine(context, state, line) + state.lineBreak + insert
+    if (config.nonTightLists !== false && nonTightList(inner.node, state.doc)) insert = blankLine(context, state, line) + state.lineBreak + insert
     changes.push({from, to: pos, insert: state.lineBreak + insert})
     return {range: EditorSelection.cursor(from + insert.length + 1), changes}
   })
