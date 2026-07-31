@@ -111,7 +111,6 @@ extension ExtensionsWindowController: NSToolbarDelegate {
       let item = NSSearchToolbarItem(itemIdentifier: .search)
       item.minimumSearchFieldWidth = 220 // Easier to collapse by default
       item.visibilityPriority = .low
-      item.searchField.placeholderString = Localized.Extension.searchPlaceholder
       item.searchField.target = self
       item.searchField.action = #selector(handleSearchChange(_:))
       item.searchField.delegate = self
