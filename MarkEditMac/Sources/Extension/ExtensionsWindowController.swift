@@ -110,6 +110,7 @@ extension ExtensionsWindowController: NSToolbarDelegate {
     case .search:
       let item = NSSearchToolbarItem(itemIdentifier: .search)
       item.minimumSearchFieldWidth = 220 // Easier to collapse by default
+      item.visibilityPriority = .low
       item.searchField.placeholderString = Localized.Extension.searchPlaceholder
       item.searchField.target = self
       item.searchField.action = #selector(handleSearchChange(_:))
@@ -117,7 +118,6 @@ extension ExtensionsWindowController: NSToolbarDelegate {
       return item
     case .actions:
       let item = NSMenuToolbarItem(itemIdentifier: .actions)
-      item.visibilityPriority = .high
       item.image = NSImage(systemSymbolName: Icons.ellipsisCircle)
       item.label = Localized.Extension.actions
       item.toolTip = Localized.Extension.actions
@@ -216,6 +216,7 @@ private extension ExtensionsWindowController {
     }
 
     group.controlRepresentation = .automatic
+    group.visibilityPriority = .high
     group.label = Localized.Extension.windowTitle
 
     // [macOS 27] Use "tabs" role, the default style has vertical dividers
