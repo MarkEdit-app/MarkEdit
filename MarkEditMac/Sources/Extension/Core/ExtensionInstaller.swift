@@ -11,15 +11,15 @@ import MarkEditKit
 
 /// Handles `markedit://install-extension` deep links.
 ///
-/// `?id=` resolves against the reviewed registry, `?url=` is an unreviewed manual install.
-/// Both always confirm with the user, verify or pin the sha256, and offer a relaunch so the
-/// newly installed script is injected. Never a silent install.
+/// `?id=` only reveals the entry in the Extensions window, leaving the install to the user.
+/// `?url=` is an unreviewed manual install, confirmed with an alert, pinning the sha256 and
+/// offering a relaunch so the newly installed script is injected. Never a silent install.
 @MainActor
 enum ExtensionInstaller {
   static func install(queryDict: [String: String]?) {
     if let id = queryDict?["id"], !id.isEmpty {
       Task {
-        await installFromRegistry(id: id)
+        await revealInRegistry(id: id)
       }
     } else if let string = queryDict?["url"], let url = URL(string: string) {
       installFromURL(url)
@@ -32,34 +32,20 @@ enum ExtensionInstaller {
 // MARK: - Private
 
 private extension ExtensionInstaller {
-  static func installFromRegistry(id: String) async {
-    guard let entry = await resolveEntry(id: id) else {
+  /// Locates the entry in the Extensions window, where its full details back the decision.
+  static func revealInRegistry(id: String) async {
+    guard await resolveEntry(id: id) != nil else {
       presentError(message: String(format: Localized.Extension.notFoundFormat, id))
       return
     }
 
-    let confirmed = confirm(
-      name: entry.name,
-      author: entry.author,
-      source: entry.latest.url,
-      unreviewed: false
-    )
-
-    guard confirmed else {
-      return
-    }
-
-    await completeInstall {
-      try await ExtensionDownloader.install(entry: entry)
-    }
+    ExtensionsWindowController.shared.present(scrollTo: .item(id: id))
   }
 
   static func installFromURL(_ url: URL) {
     let confirmed = confirm(
       name: url.deletingPathExtension().lastPathComponent,
-      author: nil,
-      source: url.absoluteString,
-      unreviewed: true
+      source: url.absoluteString
     )
 
     guard confirmed else {
@@ -96,18 +82,11 @@ private extension ExtensionInstaller {
     }
   }
 
-  static func confirm(name: String, author: String?, source: String, unreviewed: Bool) -> Bool {
-    var lines = [String]()
-    if let author {
-      lines.append(String(format: Localized.Extension.authorFormat, author))
-    }
-
-    lines.append(String(format: Localized.Extension.urlFormat, "[\(source.truncatedForDisplay())](<\(source)>)"))
-    lines.append("_\(Localized.Extension.fullAccessWarning)_")
-
-    if unreviewed {
-      lines.append("_\(Localized.Extension.unreviewedWarning)_")
-    }
+  static func confirm(name: String, source: String) -> Bool {
+    let lines = [
+      String(format: Localized.Extension.urlFormat, "[\(source.truncatedForDisplay())](<\(source)>)"),
+      Localized.Extension.unreviewedWarning,
+    ]
 
     let alert = NSAlert()
     alert.messageText = String(format: Localized.Extension.confirmTitleFormat, name)
@@ -147,10 +126,8 @@ extension Localized {
     static let installButton = String(localized: "Install", comment: "Button title to confirm installing an extension")
     static let relaunchButton = String(localized: "Relaunch", comment: "Button title to relaunch the app after installing an extension")
     static let laterButton = String(localized: "Later", comment: "Button title to postpone relaunching after installing an extension")
-    static let authorFormat = String(localized: "**Author:** %@", comment: "Extension author line (format) in the install confirmation")
     static let urlFormat = String(localized: "**URL:** %@", comment: "Extension URL line (format) in the install confirmation")
-    static let fullAccessWarning = String(localized: "This extension runs with full editor access.", comment: "Disclosure shown before installing an extension")
-    static let unreviewedWarning = String(localized: "This source is not reviewed by MarkEdit. Only continue if you trust it.", comment: "Caution shown before installing an extension from a raw URL")
+    static let unreviewedWarning = String(localized: "⚠️ This source is not reviewed by MarkEdit. Only continue if you trust it.", comment: "Caution shown before installing an extension from a raw URL")
     static let installedTitle = String(localized: "Extension Installed", comment: "Title for the extension installed confirmation")
     static let installedMessageFormat = String(localized: "Relaunch MarkEdit to start using “%@”.", comment: "Message (format) shown after an extension is installed")
     static let notFoundFormat = String(localized: "Couldn’t find the extension “%@” in the registry.", comment: "Error when a deep-link id does not resolve in the registry")

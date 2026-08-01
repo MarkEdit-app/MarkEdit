@@ -173,6 +173,9 @@ final class ExtensionsModel {
   /// The item currently running an install/update, used to show a per-item spinner.
   var busyItemID: String?
 
+  /// The item to flash, typically after revealing it from a deep link.
+  var highlightedItemID: String?
+
   private var discoverItems: [Item] = []
   private var installedItems: [Item] = []
 

@@ -19,14 +19,17 @@ final class ExtensionsWindowController: NSWindowController {
   private weak var updateAllItem: NSMenuItem?
   private weak var updateBehaviorMenu: NSMenu?
 
-  func present(scrollTo category: ExtensionEntry.Category? = nil) {
+  func present(scrollTo target: ExtensionsScrollTarget? = nil) {
     if !AppPreferences.Extensions.windowHasBeenOpened {
       AppPreferences.Extensions.windowHasBeenOpened = true
       ExtensionUpdater.requestMenuUpdate()
     }
 
-    if category != nil {
+    if target != nil {
+      // Discover lists every entry, and a leftover query would filter out the target
       model.mode = .discover
+      model.searchQuery = ""
+      searchToolbarItem?.searchField.stringValue = ""
       updateModeControl()
     }
 
@@ -34,9 +37,8 @@ final class ExtensionsWindowController: NSWindowController {
     window?.makeKeyAndOrderFront(nil)
     NSApp.activate(ignoringOtherApps: true)
 
-    var scrolledToCategory = false
-    if let category {
-      scrolledToCategory = extensionsVC?.scrollTo(category: category) ?? false
+    if let target {
+      extensionsVC?.scrollTo(target)
     }
 
     Task {
@@ -44,10 +46,8 @@ final class ExtensionsWindowController: NSWindowController {
       // and falls back to the cache when offline or unchanged.
       await model.load(forceRefresh: true)
 
-      // Re-request if it wasn't listed initially
-      if let category, !scrolledToCategory {
-        extensionsVC?.scrollTo(category: category)
-      }
+      // Retry only if the target wasn't already reached while rows loaded
+      extensionsVC?.scrollToPendingTarget()
     }
   }
 
@@ -356,6 +356,7 @@ private extension ExtensionsWindowController {
   @objc func promptInstallFromURL() {
     let alert = NSAlert()
     alert.messageText = Localized.Extension.installFromURLTitle
+    alert.informativeText = Localized.Extension.unreviewedWarning
     alert.addButton(withTitle: Localized.Extension.installButton)
     alert.addButton(withTitle: Localized.General.cancel)
 
