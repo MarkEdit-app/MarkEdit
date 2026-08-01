@@ -302,7 +302,11 @@ extension EditorViewController {
       cancelCompletion()
     }
 
-    NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
+    // Checked first because this is called on every scroll end, the spell checker is out of process
+    if NSSpellChecker.hasVisibleCorrectionPanel {
+      NSSpellChecker.shared.declineCorrectionIndicator(for: webView)
+    }
+
     presentedPopover?.close()
   }
 

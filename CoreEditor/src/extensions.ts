@@ -124,7 +124,7 @@ export function extensions(options: { lineBreak?: string }) {
         }
 
         // We use customizedCommandsKeymap instead
-        if (keymap.key === 'Home' || keymap.key === 'End' || keymap.key === 'Mod-/') {
+        if (['Home', 'End', 'Mod-/', 'PageUp', 'PageDown'].includes(keymap.key ?? '')) {
           return false;
         }
 
