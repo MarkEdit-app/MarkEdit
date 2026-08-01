@@ -51,13 +51,6 @@ class Layer extends RectangleMarker {
 
     // The rect is wider than lineRect, it fills the entire contentDOM
     const rectToDraw = (() => {
-      const range = EditorSelection.range(lineBlock.from, lineBlock.to);
-      const rects = RectangleMarker.forRange(window.editor, 'cm-md-rectMerger', range);
-      if (rects.length === 0) {
-        // Invalid RectangleMarker length, might be scrolling
-        return new DOMRect(0, 0, 0, 0);
-      }
-
       const scale = getViewportScale();
       const width = contentRect.width * scale;
 
@@ -82,6 +75,14 @@ class Layer extends RectangleMarker {
         const scroller = window.editor.scrollDOM;
         const offset = scroller.scrollTop - scroller.getBoundingClientRect().top;
         return new DOMRect(left, lineRect.top + offset, width, lineRect.height);
+      }
+
+      // Only reached when the line isn't rendered, forRange hit-tests the DOM and is expensive
+      const range = EditorSelection.range(lineBlock.from, lineBlock.to);
+      const rects = RectangleMarker.forRange(window.editor, 'cm-md-rectMerger', range);
+      if (rects.length === 0) {
+        // Invalid RectangleMarker length, might be scrolling
+        return new DOMRect(0, 0, 0, 0);
       }
 
       // The rect that is slightly taller than the caret, centered vertically

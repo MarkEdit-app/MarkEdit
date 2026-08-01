@@ -85,10 +85,16 @@ export function adjustGutterPositions(className: 'lineNumbers' | 'gutterHover' =
     return;
   }
 
+  // Checked before reading any rect, headings are the only reason to realign gutters
+  const headingLines = [...document.querySelectorAll('.cm-line:has(.cm-md-header)')];
+  if (headingLines.length === 0) {
+    return;
+  }
+
   // Batch the measurements, interleaving them with style writes forces a re-layout per read
   const gutterRects = gutterElements.map(element => element.getBoundingClientRect());
   const updates: { element: HTMLElement; paddingTop: number }[] = [];
-  document.querySelectorAll('.cm-line:has(.cm-md-header)').forEach(lineEl => {
+  headingLines.forEach(lineEl => {
     const { fontSize } = getComputedStyle(lineEl);
     if (almostEqual(getFontSizeValue(fontSize), window.config.fontSize)) {
       return;

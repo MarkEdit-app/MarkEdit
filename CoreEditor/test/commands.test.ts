@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
+import { KeyBinding } from '@codemirror/view';
 import { editingState } from '../src/common/store';
 
 import * as editor from './utils/editor';
@@ -170,5 +171,52 @@ describe('formatContent', () => {
 
     expect(commands.formatContent(true, true, false)).toBe(false);
     expect(editor.getText()).toBe('Hello  ');
+  });
+});
+
+describe('page scrolling', () => {
+  const runBinding = (key: string) => {
+    const binding = commands.customizedCommandsKeymap.find(item => item.key === key) as KeyBinding | undefined;
+    return binding?.run?.(window.editor);
+  };
+
+  const mockScroller = (clientHeight: number) => {
+    editor.setUp('Hello');
+    const scroller = window.editor.scrollDOM;
+    const calls: ScrollToOptions[] = [];
+
+    // defineProperty to bypass the read-only clientHeight and the overloaded scrollBy signature
+    Object.defineProperty(scroller, 'clientHeight', { value: clientHeight, configurable: true });
+    Object.defineProperty(scroller, 'scrollBy', {
+      value: (options: ScrollToOptions) => calls.push(options),
+      configurable: true,
+    });
+
+    return calls;
+  };
+
+  test('scrolls one page down, leaving the selection untouched', () => {
+    const calls = mockScroller(500);
+    editor.selectRange(0, 0);
+
+    expect(runBinding('PageDown')).toBe(true);
+    expect(calls).toEqual([{ top: 500 - window.editor.defaultLineHeight }]);
+    expect(window.editor.state.selection.main.head).toBe(0);
+  });
+
+  test('scrolls one page up, leaving the selection untouched', () => {
+    const calls = mockScroller(500);
+    editor.selectRange(3, 3);
+
+    expect(runBinding('PageUp')).toBe(true);
+    expect(calls).toEqual([{ top: -(500 - window.editor.defaultLineHeight) }]);
+    expect(window.editor.state.selection.main.head).toBe(3);
+  });
+
+  test('scrolls at least one line when the viewport is too short', () => {
+    const calls = mockScroller(0);
+
+    expect(runBinding('PageDown')).toBe(true);
+    expect(calls).toEqual([{ top: window.editor.defaultLineHeight }]);
   });
 });

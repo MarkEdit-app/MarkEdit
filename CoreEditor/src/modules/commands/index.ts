@@ -3,11 +3,15 @@ import { EditorSelection } from '@codemirror/state';
 import {
   copyLineDown,
   copyLineUp,
+  cursorPageDown,
+  cursorPageUp,
   indentLess,
   indentMore,
   moveLineDown,
   moveLineUp,
   selectLine,
+  selectPageDown,
+  selectPageUp,
   selectParentSyntax,
   toggleBlockComment,
   toggleComment,
@@ -169,10 +173,41 @@ export const customizedCommandsKeymap: KeyBinding[] = [
     key: 'Mod-/',
     run: toggleLineComment,
   },
+  // Page keys scroll without moving the caret, moving it requires option
+  {
+    key: 'PageUp',
+    run: editor => scrollByPage(editor, false),
+    shift: selectPageUp,
+  },
+  {
+    key: 'PageDown',
+    run: editor => scrollByPage(editor, true),
+    shift: selectPageDown,
+  },
+  {
+    key: 'Alt-PageUp',
+    run: cursorPageUp,
+    shift: selectPageUp,
+  },
+  {
+    key: 'Alt-PageDown',
+    run: cursorPageDown,
+    shift: selectPageDown,
+  },
 ];
 
 export { formatContent };
 export type { EditCommand };
+
+/**
+ * Scroll one page, leaving the selection untouched.
+ */
+function scrollByPage(editor: EditorView, forward: boolean) {
+  const scroller = editor.scrollDOM;
+  const distance = Math.max(editor.defaultLineHeight, scroller.clientHeight - editor.defaultLineHeight);
+  scroller.scrollBy({ top: forward ? distance : -distance });
+  return true;
+}
 
 function expandSelection(editor: EditorView) {
   storage.historyChangedTime = Date.now();

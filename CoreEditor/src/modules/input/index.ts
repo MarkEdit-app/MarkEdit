@@ -249,8 +249,9 @@ export function observeChanges() {
           });
         }
 
+        // Document coordinates from the height map, coordsAtPos would force a synchronous layout
         const caretOffsetY = storage.caretOffsetY;
-        storage.caretOffsetY = update.view.coordsAtPos(update.state.selection.main.to)?.bottom;
+        storage.caretOffsetY = update.view.lineBlockAt(update.state.selection.main.to).bottom;
 
         if (caretOffsetY !== undefined && caretOffsetY !== storage.caretOffsetY) {
           // Re-layout immediately when the y-axis of the caret position changes
