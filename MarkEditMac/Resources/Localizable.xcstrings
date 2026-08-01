@@ -1,23 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "**Author:** %@" : {
-      "comment" : "Extension author line (format) in the install confirmation",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**作者：**%@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**作者：**%@"
-          }
-        }
-      }
-    },
     "**URL:** %@" : {
       "comment" : "Extension URL line (format) in the install confirmation",
       "localizations" : {
@@ -135,6 +118,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "⌘ 點選切換完成狀態"
+          }
+        }
+      }
+    },
+    "⚠️ This source is not reviewed by MarkEdit. Only continue if you trust it." : {
+      "comment" : "Caution shown before installing an extension from a raw URL",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️ 此来源未经 MarkEdit 审核，请仅在信任该来源时继续。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️ 此來源未經 MarkEdit 審核，請僅在信任該來源時繼續。"
           }
         }
       }
@@ -3722,23 +3722,6 @@
         }
       }
     },
-    "This extension runs with full editor access." : {
-      "comment" : "Disclosure shown before installing an extension",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此扩展功能拥有对编辑器的完全访问权限。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此擴充功能擁有對編輯器的完整取用權限。"
-          }
-        }
-      }
-    },
     "This release requires macOS %@ or later and cannot be installed without upgrading your operating system." : {
       "comment" : "Message for minimum required OS version",
       "localizations" : {
@@ -3769,23 +3752,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這會從指令碼目錄中移除它的指令碼。"
-          }
-        }
-      }
-    },
-    "This source is not reviewed by MarkEdit. Only continue if you trust it." : {
-      "comment" : "Caution shown before installing an extension from a raw URL",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此来源未经 MarkEdit 审核，请仅在信任该来源时继续。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此來源未經 MarkEdit 審核，請僅在信任該來源時繼續。"
           }
         }
       }

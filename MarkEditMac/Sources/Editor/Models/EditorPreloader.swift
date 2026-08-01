@@ -23,7 +23,7 @@ final class EditorPreloader {
   }
 
   /// Ensure the preloaded controller has finished loading,
-  /// call this before ``takeViewController()`` to guarantee readiness.
+  /// call this before `takeViewController()` to guarantee readiness.
   func prepareViewController() async {
     warmUp()
     await preloadedController?.waitUntilLoaded()

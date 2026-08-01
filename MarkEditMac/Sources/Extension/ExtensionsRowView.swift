@@ -30,10 +30,14 @@ struct ExtensionsRowView: View {
             .foregroundStyle(.secondary)
             .accessibilityHidden(true)
 
-          Text(item.displayName, highlighting: searchQuery)
-            .font(.title3)
-            .fontWeight(.semibold)
-            .lineLimit(1)
+          HighlightedText(
+            item.displayName,
+            query: searchQuery,
+            isRevealed: model.highlightedItemID == item.id
+          )
+          .font(.title3)
+          .fontWeight(.semibold)
+          .lineLimit(1)
 
           if item.isFeatured, model.mode == .discover {
             if #available(macOS 15.1, *) {
