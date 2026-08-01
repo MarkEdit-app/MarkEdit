@@ -81,7 +81,7 @@ extension ExtensionsWindowController {
 
 extension ExtensionsWindowController: NSMenuDelegate {
   func menuNeedsUpdate(_ menu: NSMenu) {
-    let count = model.availableUpdateCount
+    let count = model.installableUpdateCount
     updateAllItem?.isEnabled = count > 0
     updateAllItem?.title = count > 0 ? "\(Localized.Extension.updateAll) (\(count))" : Localized.Extension.updateAll
     refreshUpdateSettingChecks()

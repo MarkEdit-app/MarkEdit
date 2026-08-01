@@ -222,13 +222,18 @@ private extension ExtensionsRowView {
   @ViewBuilder
   func updateButton(for item: ExtensionsModel.Item) -> some View {
     if let updateVersion = item.updateVersion {
+      // Stays enabled, clicking it explains the requirement
+      let requirement = item.unmetAppVersion.map {
+        String(format: Localized.Extension.incompatibleFormat, $0)
+      }
+
       busyControl {
-        PillButton(Localized.Extension.updateButton, style: .prominent) {
+        PillButton(Localized.Extension.updateButton, style: requirement == nil ? .prominent : .bordered) {
           Task {
             await model.updateExtension(item)
           }
         }
-        .help(String(format: Localized.Extension.updateToFormat, updateVersion))
+        .help(requirement ?? String(format: Localized.Extension.updateToFormat, updateVersion))
       }
     }
   }

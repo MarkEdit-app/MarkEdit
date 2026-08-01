@@ -156,20 +156,21 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertEqual(updates.first?.entry.latest.version, "2.0.0")
   }
 
-  func testAvailableUpdatesSkipsIncompatibleVersionlessOfficial() {
+  func testAvailableUpdatesFlagsIncompatibleVersionlessOfficial() {
     ExtensionEnvironment.appVersion = "1.5.0"
 
-    // An incompatible release is skipped before version-less adoption
+    // Adopted and flagged, not skipped
     let index = makeIndex([makeEntry(id: "markedit-preview", version: "2.0.0", minAppVersion: "9.0.0")])
     let updates = ExtensionRegistry.availableUpdates(
       index: index,
       installed: [makeInstalled(id: "markedit-preview", version: nil)]
     )
 
-    XCTAssertTrue(updates.isEmpty)
+    XCTAssertEqual(updates.count, 1)
+    XCTAssertEqual(updates.first?.unmetAppVersion, "9.0.0")
   }
 
-  func testAvailableUpdatesSkipsIncompatibleRelease() {
+  func testAvailableUpdatesFlagsIncompatibleRelease() {
     ExtensionEnvironment.appVersion = "1.5.0"
     let index = makeIndex([makeEntry(id: "sample", version: "2.0.0", minAppVersion: "9.0.0")])
     let updates = ExtensionRegistry.availableUpdates(
@@ -177,7 +178,20 @@ final class ExtensionCoreTests: XCTestCase {
       installed: [makeInstalled(id: "sample", version: "1.0.0")]
     )
 
-    XCTAssertTrue(updates.isEmpty)
+    XCTAssertEqual(updates.count, 1)
+    XCTAssertEqual(updates.first?.unmetAppVersion, "9.0.0")
+  }
+
+  func testAvailableUpdatesLeavesCompatibleReleaseUnflagged() {
+    ExtensionEnvironment.appVersion = "1.5.0"
+    let index = makeIndex([makeEntry(id: "sample", version: "2.0.0", minAppVersion: "1.4.0")])
+    let updates = ExtensionRegistry.availableUpdates(
+      index: index,
+      installed: [makeInstalled(id: "sample", version: "1.0.0")]
+    )
+
+    XCTAssertEqual(updates.count, 1)
+    XCTAssertNil(updates.first?.unmetAppVersion)
   }
 
   func testAvailableUpdatesSkipsEqualOrOlder() {
