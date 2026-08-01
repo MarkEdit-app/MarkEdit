@@ -35,7 +35,11 @@ enum ExtensionUpdater {
       return
     }
 
-    let updates = ExtensionRegistry.availableUpdates(index: index)
+    // Updates needing a newer app are surfaced in the window only
+    let updates = ExtensionRegistry.availableUpdates(index: index).filter {
+      $0.unmetAppVersion == nil
+    }
+
     guard !updates.isEmpty else {
       return
     }

@@ -152,6 +152,11 @@ public struct ExtensionIndex: Codable, Equatable, Sendable {
 public struct ExtensionUpdate: Sendable {
   public let installed: ExtensionConfig.Installed
   public let entry: ExtensionEntry
+
+  /// The app version needed, set only when the running app is too old.
+  public var unmetAppVersion: String? {
+    entry.latest.isCompatible ? nil : entry.latest.minAppVersion
+  }
 }
 
 /// Fetches and caches the registry index.
@@ -266,18 +271,13 @@ public enum ExtensionRegistry {
     }
   }
 
-  /// Version-tracked installs with a newer, compatible release in the registry.
+  /// Version-tracked installs with a newer release, incompatible ones flagged by `unmetAppVersion`.
   public static func availableUpdates(
     index: ExtensionIndex,
     installed: [ExtensionConfig.Installed] = ExtensionConfig.installed
   ) -> [ExtensionUpdate] {
     installed.compactMap { installed in
       guard let entry = (index.extensions.first { $0.id == installed.id }) else {
-        return nil
-      }
-
-      // Skip releases the current app can't run
-      guard entry.latest.isCompatible else {
         return nil
       }
 
@@ -295,7 +295,7 @@ public enum ExtensionRegistry {
     }
   }
 
-  /// Whether the cached index currently surfaces any updates for installed extensions.
+  /// Whether the cached index offers any update the running app can install.
   ///
   /// Reads from disk only, never triggers a network fetch.
   public static var hasCachedUpdates: Bool {
@@ -303,7 +303,7 @@ public enum ExtensionRegistry {
       return false
     }
 
-    return !availableUpdates(index: index).isEmpty
+    return availableUpdates(index: index).contains { $0.unmetAppVersion == nil }
   }
 }
 

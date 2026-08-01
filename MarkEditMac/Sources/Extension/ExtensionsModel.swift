@@ -79,6 +79,9 @@ final class ExtensionsModel {
     let isInstalled: Bool
     let updateVersion: String?
 
+    /// The app version needed, set only when this app is too old for the update.
+    let unmetAppVersion: String?
+
     // Backing values used to perform actions
     let installed: ExtensionConfig.Installed?
     let entry: ExtensionEntry?
@@ -205,6 +208,11 @@ final class ExtensionsModel {
     installedItems.count { $0.updateVersion != nil }
   }
 
+  /// Updates this app version can actually install.
+  var installableUpdateCount: Int {
+    installedItems.count { $0.updateVersion != nil && $0.unmetAppVersion == nil }
+  }
+
   /// The latest item for `id`, so a cell can read live state instead of a stale snapshot.
   func liveItem(id: String) -> Item? {
     items.first { $0.id == id }
@@ -294,7 +302,8 @@ extension ExtensionsModel {
   /// Updates every installed extension that has a newer release.
   func updateAllExtensions() async {
     let updatable = installedItems.compactMap { item -> (ExtensionConfig.Installed, ExtensionEntry)? in
-      guard let installed = item.installed, let entry = item.entry, item.updateVersion != nil else {
+      guard let installed = item.installed, let entry = item.entry,
+            item.updateVersion != nil, item.unmetAppVersion == nil else {
         return nil
       }
 
@@ -388,7 +397,7 @@ private extension ExtensionsModel {
     let entryByID = Dictionary(entries.map { ($0.id, $0) }) { lhs, _ in lhs }
 
     let updates = index.map { ExtensionRegistry.availableUpdates(index: $0, installed: installed) } ?? []
-    let updateByID = Dictionary(updates.map { ($0.installed.id, $0.entry.latest.version) }) { lhs, _ in lhs }
+    let updateByID = Dictionary(updates.map { ($0.installed.id, $0) }) { lhs, _ in lhs }
 
     installedItems = extensionsFirst(installed.map { installed in
       let entry = entryByID[installed.id]
@@ -401,7 +410,8 @@ private extension ExtensionsModel {
         version: installed.version,
         isEnabled: installed.enabled != false,
         isInstalled: true,
-        updateVersion: updateByID[installed.id],
+        updateVersion: updateByID[installed.id]?.entry.latest.version,
+        unmetAppVersion: updateByID[installed.id]?.unmetAppVersion,
         installed: installed,
         entry: entry
       )
@@ -419,7 +429,8 @@ private extension ExtensionsModel {
         version: entry.latest.version,
         isEnabled: installed?.enabled != false,
         isInstalled: installed != nil,
-        updateVersion: updateByID[entry.id],
+        updateVersion: updateByID[entry.id]?.entry.latest.version,
+        unmetAppVersion: updateByID[entry.id]?.unmetAppVersion,
         installed: installed,
         entry: entry
       )
