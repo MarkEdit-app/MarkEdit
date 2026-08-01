@@ -30,7 +30,7 @@ struct ExtensionsRowView: View {
             .foregroundStyle(.secondary)
             .accessibilityHidden(true)
 
-          Text(item.displayName)
+          Text(item.displayName, highlighting: searchQuery)
             .font(.title3)
             .fontWeight(.semibold)
             .lineLimit(1)
@@ -72,7 +72,7 @@ struct ExtensionsRowView: View {
         .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.updateVersion)
 
         if !item.details.isEmpty {
-          Text(item.details)
+          Text(item.details, highlighting: searchQuery)
             .font(.body)
             .foregroundStyle(.secondary)
             // Keep the description on one line; users can widen the window to read more
@@ -142,6 +142,11 @@ private extension ExtensionsRowView {
   /// Whether this item is running an install/update, so it shows a spinner instead of a button.
   var isItemBusy: Bool {
     model.busyItemID == item.id
+  }
+
+  /// Trimmed search query, tinted in rows to show why an item matched.
+  var searchQuery: String {
+    model.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
   }
 
   func enabledBinding(for item: ExtensionsModel.Item) -> Binding<Bool> {
@@ -333,7 +338,7 @@ private extension ExtensionsRowView {
               .accessibilityLabel(Localized.Extension.official)
           }
 
-          Text(item.author)
+          Text(item.author, highlighting: searchQuery)
             .font(.callout)
             .foregroundStyle(.secondary)
         }
