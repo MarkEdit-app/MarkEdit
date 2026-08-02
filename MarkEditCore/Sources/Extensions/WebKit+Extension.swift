@@ -15,6 +15,24 @@ public extension WKWebView {
   }
 }
 
+public extension WKWebsiteDataStore {
+  func launchNetworkProcess() {
+    let selector = sel_getUid("_networkProcessIdentifier")
+    guard responds(to: selector) else {
+      assertionFailure("Failed to call _networkProcessIdentifier")
+      return
+    }
+
+    // Reading the identifier is what creates the process
+    let getValue = unsafeBitCast(
+      method(for: selector),
+      to: (@convention(c) (NSObject, Selector) -> pid_t).self
+    )
+
+    _ = getValue(self, selector)
+  }
+}
+
 public extension WKWebViewConfiguration {
   static func preferredConfig() -> WKWebViewConfiguration {
     class Configuration: WKWebViewConfiguration {

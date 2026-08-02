@@ -6,7 +6,9 @@
 //
 
 import AppKit
+import MarkEditCore
 import MarkEditKit
+import WebKit
 
 /**
  Preloads an `EditorViewController` so the next document can open without paying the WebView load cost.
@@ -16,6 +18,9 @@ final class EditorPreloader {
   static let shared = EditorPreloader()
 
   func warmUp() {
+    // Launch the Networking process now, it otherwise starts lazily
+    WKWebsiteDataStore.default().launchNetworkProcess()
+
     // Deliberately synchronous, AppKit doesn't drain the main queue until the app finishes launching
     if preloadedController == nil {
       preloadedController = EditorViewController()
