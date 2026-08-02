@@ -41,6 +41,12 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: webView, selector: "_setWindowOcclusionDetectionEnabled:")
   }
 
+  func testExistenceOfNetworkProcessIdentifier() {
+    let dataStore = WKWebsiteDataStore.default()
+    dataStore.launchNetworkProcess()
+    XCTAssertTrue(dataStore.responds(to: sel_getUid("_networkProcessIdentifier")))
+  }
+
   func testExistenceOfFeatureSPI() {
     testExistenceOfSelector(object: WKPreferences.self, selector: "_features")
 
