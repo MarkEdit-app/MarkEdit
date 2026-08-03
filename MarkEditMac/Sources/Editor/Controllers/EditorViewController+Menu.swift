@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import MarkEditKit
 import FontPicker
 
@@ -175,10 +176,16 @@ extension EditorViewController {
 
   @objc private func handleDraftSave(_ document: NSDocument, didSave: Bool) {
     guard didSave else {
+      // Termination was cancelled, a later quit must not relaunch
+      AppUpdater.relaunchAfterUpdate = false
       return
     }
 
-    if unsavedDraft == nil {
+    if AppUpdater.relaunchAfterUpdate {
+      RunLoop.performOnMain { [weak self] in
+        self?.terminate(nil)
+      }
+    } else if unsavedDraft == nil {
       performTerminate(nil)
     } else {
       document.close()

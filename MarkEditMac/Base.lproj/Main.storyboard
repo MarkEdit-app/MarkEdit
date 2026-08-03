@@ -1031,10 +1031,13 @@ Gw
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" id="bfk-LV-yGQ">
                                     <items>
-                                        <menuItem secondaryImage="arrow.up.right.square" catalog="system" id="CtF-Ha-tmF">
+                                        <menuItem secondaryImage="info.circle" catalog="system" id="Jc8-2v-hRb">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="lCr-84-fJd"/>
+                                        <menuItem secondaryImage="restart" catalog="system" hidden="YES" id="CtF-Ha-tmF">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
                                         <menuItem secondaryImage="bell" catalog="system" id="r3b-uF-Yy9">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
@@ -1087,8 +1090,9 @@ Gw
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
                         <outlet property="postponeUpdateItem" destination="r3b-uF-Yy9" id="8kS-ni-Kae"/>
-                        <outlet property="presentUpdateItem" destination="CtF-Ha-tmF" id="2Nf-Yp-0T9"/>
+                        <outlet property="presentUpdateItem" destination="Jc8-2v-hRb" id="Ywd-5S-qLn"/>
                         <outlet property="reopenFileMenu" destination="sPG-vJ-QST" id="6e4-Zg-kFp"/>
+                        <outlet property="restartUpdateItem" destination="CtF-Ha-tmF" id="2Nf-Yp-0T9"/>
                         <outlet property="textFormatMenu" destination="yy7-cF-JbT" id="FfG-yi-NE6"/>
                         <outlet property="windowFloatingItem" destination="0C5-FE-fvI" id="hM7-gl-t1f"/>
                     </connections>
@@ -1135,7 +1139,6 @@ Gw
     </scenes>
     <resources>
         <image name="arrow.trianglehead.2.clockwise.rotate.90.circle" catalog="system" width="15" height="15"/>
-        <image name="arrow.up.right.square" catalog="system" width="15" height="14"/>
         <image name="bell" catalog="system" width="15" height="16"/>
         <image name="bell.slash" catalog="system" width="15" height="17"/>
         <image name="bold" catalog="system" width="11" height="12"/>
@@ -1145,11 +1148,13 @@ Gw
         <image name="equal" catalog="system" width="12" height="8"/>
         <image name="gear" catalog="system" width="17" height="16"/>
         <image name="gearshape.2" catalog="system" width="20" height="16"/>
+        <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="italic" catalog="system" width="10" height="12"/>
         <image name="list.bullet.clipboard" catalog="system" width="14" height="19"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
         <image name="pin" catalog="system" width="15" height="17"/>
         <image name="puzzlepiece.extension" catalog="system" width="19" height="15"/>
+        <image name="restart" catalog="system" width="12" height="13"/>
         <image name="smallcircle.filled.circle" catalog="system" width="15" height="15"/>
         <image name="square.and.arrow.down.on.square" catalog="system" width="17" height="20"/>
         <image name="strikethrough" catalog="system" width="14" height="12"/>

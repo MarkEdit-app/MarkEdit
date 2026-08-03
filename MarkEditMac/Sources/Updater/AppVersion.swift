@@ -5,12 +5,16 @@
 //  Created by cyan on 11/1/23.
 //
 
+import AppKitExtensions
 import Foundation
 
 /**
  [GitHub Releases API](https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest)
  */
 struct AppVersion: Decodable {
+  private static let universalArchive = "UpdateArchive.zip"
+  private static let appleSiliconArchive = "UpdateArchive-arm64.zip"
+
   struct Asset: Decodable {
     let name: String
     let browserDownloadUrl: String
@@ -30,6 +34,26 @@ struct AppVersion: Decodable {
    */
   var releasedToMAS: Bool {
     name.isEmpty
+  }
+
+  /**
+    Whether this release is newer than the running app.
+   */
+  var isCompatible: Bool {
+    name.compare(Bundle.main.shortVersionString, options: .numeric) == .orderedDescending
+  }
+
+  /**
+    Returns the in-app update archive for the installed architecture.
+   */
+  var updateArchive: Asset? {
+    let universal = assets?.first { $0.name == Self.universalArchive }
+
+    guard Bundle.main.isAppleSiliconOnly else {
+      return universal
+    }
+
+    return assets?.first { $0.name == Self.appleSiliconArchive } ?? universal
   }
 }
 

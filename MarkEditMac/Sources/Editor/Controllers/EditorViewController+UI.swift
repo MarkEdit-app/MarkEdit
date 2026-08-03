@@ -312,7 +312,7 @@ extension EditorViewController {
 
   @discardableResult
   func removePresentedPopovers(contentClass: AnyClass) -> Bool {
-    guard let presented = presentedViewControllers?.filter({ $0.isKind(of: contentClass) }) else {
+    guard let presented = (presentedViewControllers?.filter { $0.isKind(of: contentClass) }) else {
       return false
     }
 

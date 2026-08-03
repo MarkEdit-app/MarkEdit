@@ -139,19 +139,36 @@
         }
       }
     },
-    "🎉 %@ is out" : {
-      "comment" : "Title format for new version is out",
+    "🎉 %@ is ready" : {
+      "comment" : "Menu title format for a downloaded update waiting to be installed",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🎉 %@ 已发布"
+            "value" : "🎉 %@ 已就绪"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🎉 %@ 已釋出"
+            "value" : "🎉 %@ 已就緒"
+          }
+        }
+      }
+    },
+    "🎉 Update to %@" : {
+      "comment" : "Menu title format for a new version available",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉 更新到 %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🎉 更新至 %@"
           }
         }
       }
@@ -1024,6 +1041,23 @@
         }
       }
     },
+    "Downloading%@" : {
+      "comment" : "Menu title format for the update download, the placeholder is an animated ellipsis",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下载%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在下載%@"
+          }
+        }
+      }
+    },
     "Edit Behavior:" : {
       "comment" : "Editor behavior like focus mode and typewriter mode",
       "localizations" : {
@@ -1239,6 +1273,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法安裝該擴充功能。"
+          }
+        }
+      }
+    },
+    "Failed to install the update." : {
+      "comment" : "Title for failed to install the update",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法安装更新。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法安裝更新。"
           }
         }
       }
@@ -1965,6 +2016,23 @@
         }
       }
     },
+    "Install on Quit" : {
+      "comment" : "Title for declining an immediate restart, the staged update is applied on quit",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出时安装"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結束時安裝"
+          }
+        }
+      }
+    },
     "Installed" : {
       "comment" : "Extension manager mode: installed extensions",
       "localizations" : {
@@ -2256,6 +2324,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "MarkEdit %@ 是目前的最新版本。"
+          }
+        }
+      }
+    },
+    "MarkEdit %@ is ready to install!" : {
+      "comment" : "Title for a downloaded update waiting to be installed",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit %@ 已准备好安装！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit %@ 已準備好安裝！"
           }
         }
       }
@@ -2648,6 +2733,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "請檢查您的網路連線，或從版本記錄中獲取最新版本。"
+          }
+        }
+      }
+    },
+    "Please try again later or get the latest release from the version history." : {
+      "comment" : "Message for failed to install the update",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请稍后重试，或从版本记录中获取最新版本。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請稍後重試，或從版本記錄中獲取最新版本。"
           }
         }
       }
@@ -3073,6 +3175,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在所選範圍中全部取代"
+          }
+        }
+      }
+    },
+    "Restart Now" : {
+      "comment" : "Title for the \"Restart Now\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即重新启动"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即重新啟動"
           }
         }
       }
@@ -3688,6 +3807,23 @@
         }
       }
     },
+    "The update will be applied the next time MarkEdit launches." : {
+      "comment" : "Message for a downloaded update waiting to be installed",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新将在 MarkEdit 下次启动时应用。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新將在 MarkEdit 下次啟動時套用。"
+          }
+        }
+      }
+    },
     "This action cannot be undone." : {
       "comment" : "Alert message for cannot undo",
       "localizations" : {
@@ -4061,6 +4197,23 @@
         }
       }
     },
+    "Update Now" : {
+      "comment" : "Title for the \"Update Now\" button",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即更新"
+          }
+        }
+      }
+    },
     "Update to %@" : {
       "comment" : "Button title (format) to update an extension to a version",
       "localizations" : {
@@ -4128,6 +4281,23 @@
         }
       }
     },
+    "View Release Details…" : {
+      "comment" : "Menu title that brings up the update dialog, where the release notes and actions live",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看发布详情…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檢視釋出詳情…"
+          }
+        }
+      }
+    },
     "View Release Page" : {
       "comment" : "Button in the release notes popover to open the release page\nTitle for the \"View Release Page\" button",
       "localizations" : {
@@ -4158,6 +4328,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新功能"
+          }
+        }
+      }
+    },
+    "What’s new in %@" : {
+      "comment" : "Title for the release notes of an installed or staged update",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的新功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的新功能"
           }
         }
       }

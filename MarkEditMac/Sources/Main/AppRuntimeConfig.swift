@@ -73,9 +73,10 @@ enum AppRuntimeConfig {
     }
 
     enum UpdateBehavior: String, Codable {
-      case quiet = "quiet"
-      case notify = "notify"
-      case never = "never"
+      case never = "never"         // Don't check for updates
+      case quiet = "quiet"         // Only reveal the update menu
+      case notify = "notify"       // Always ask with an alert
+      case automatic = "automatic" // Download silently and install on quit
     }
 
     struct HotKey: Codable {

@@ -227,11 +227,22 @@ enum Localized {
   enum Updater {
     static let upToDateTitle = String(localized: "You’re up-to-date!", comment: "Title for the up-to-date info")
     static let upToDateMessage = String(localized: "MarkEdit %@ is currently the latest version.", comment: "Message for the up-to-date info")
-    static let newVersionAvailable = String(localized: "MarkEdit %@ is available!", comment: "Title for new version available")
+    static let updateAvailableTitle = String(localized: "MarkEdit %@ is available!", comment: "Title for new version available")
     static let updateFailedTitle = String(localized: "Failed to get the update.", comment: "Title for failed to get the update")
     static let updateFailedMessage = String(localized: "Please check your network connection or get the latest release from the version history.", comment: "Message for failed to get the update")
     static let needsOSUpdateMessage = String(localized: "This release requires macOS %@ or later and cannot be installed without upgrading your operating system.", comment: "Message for minimum required OS version")
-    static let newVersionOut = String(localized: "🎉 %@ is out", comment: "Title format for new version is out")
+    static let updateToMenuTitle = String(localized: "🎉 Update to %@", comment: "Menu title format for a new version available")
+    static let downloadingMenuTitle = String(localized: "Downloading%@", comment: "Menu title format for the update download, the placeholder is an animated ellipsis")
+    static let updateReadyTitle = String(localized: "MarkEdit %@ is ready to install!", comment: "Title for a downloaded update waiting to be installed")
+    static let updateReadyMessage = String(localized: "The update will be applied the next time MarkEdit launches.", comment: "Message for a downloaded update waiting to be installed")
+    static let updateReadyMenuTitle = String(localized: "🎉 %@ is ready", comment: "Menu title format for a downloaded update waiting to be installed")
+    static let releaseNotesTitle = String(localized: "What’s new in %@", comment: "Title for the release notes of an installed or staged update")
+    static let installFailedTitle = String(localized: "Failed to install the update.", comment: "Title for failed to install the update")
+    static let installFailedMessage = String(localized: "Please try again later or get the latest release from the version history.", comment: "Message for failed to install the update")
+    static let updateNow = String(localized: "Update Now", comment: "Title for the \"Update Now\" button")
+    static let restartNow = String(localized: "Restart Now", comment: "Title for the \"Restart Now\" button")
+    static let installOnQuit = String(localized: "Install on Quit", comment: "Title for declining an immediate restart, the staged update is applied on quit")
+    static let viewReleaseDetails = String(localized: "View Release Details…", comment: "Menu title that brings up the update dialog, where the release notes and actions live")
     static let viewReleasePage = String(localized: "View Release Page", comment: "Title for the \"View Release Page\" button")
     static let notNow = String(localized: "Not Now", comment: "Title for the \"Not Now\" button")
     static let remindMeLater = String(localized: "Remind Me Later", comment: "Title for the \"Remind Me Later\" button")
@@ -248,10 +259,12 @@ enum Icons {
   static let appleTerminal = "apple.terminal"
   static let arrowDownCircle = "arrow.down.circle"
   static let arrowUturnBackwardCircle = "arrow.uturn.backward.circle"
+  static let bell = "bell"
   static let bold = "bold"
   static let characterCursorIbeam = "character.cursor.ibeam"
   static let chartPie = "chart.pie"
   static let checkmarkSeal = "checkmark.seal.fill"
+  static let clock = "clock"
   static let cupAndHeatWaves = "cup.and.heat.waves"
   static let curlybracesSquare = "curlybraces.square"
   static let ellipsisCircle = "ellipsis.circle"
@@ -286,6 +299,7 @@ enum Icons {
   static let paintpalette = "paintpalette"
   static let photo = "photo"
   static let puzzlepieceExtension = "puzzlepiece.extension"
+  static let restart = "restart"
   static let shippingbox = "shippingbox"
   static let sparkles = "sparkles"
   static let squareAndArrowUp = "square.and.arrow.up"

@@ -95,7 +95,7 @@ extension AppDelegate {
       // Ensure one editor window is key and ordered front, if exists, called after NSApp.activate
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
         let windows = NSApp.windows.filter { $0 is EditorWindow }
-        if windows.allSatisfy({ !$0.isKeyWindow }) {
+        if (windows.allSatisfy { !$0.isKeyWindow }) {
           windows.first?.makeKeyAndOrderFront(nil)
         }
       }

@@ -13,6 +13,7 @@ enum AppUpdater {
   private enum Constants {
     static let defaultOSVer = "1.0.0"
     static let endpoint = "https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest"
+    static let minimumDownloadDuration: TimeInterval = 2.5
     static let decoder = {
       let decoder = JSONDecoder()
       decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -36,7 +37,7 @@ enum AppUpdater {
     guard let status = (response as? HTTPURLResponse)?.statusCode, status == 200 else {
       if explicitly {
         DispatchQueue.main.async {
-          presentError()
+          presentInstallError(Failure.downloadFailed)
         }
       }
 
@@ -52,9 +53,9 @@ enum AppUpdater {
       return
     }
 
-    // Check if the version is different and wasn't released to MAS
-    let currentVersion = Bundle.main.shortVersionString ?? "0.0.0"
-    Logger.assert(currentVersion != "0.0.0", "Invalid current version string")
+    // A removed bad release may require returning to an older version
+    let currentVersion = Bundle.main.shortVersionString
+    Logger.assert(currentVersion != "1.0.0", "Invalid current version string")
 
     guard version.name != currentVersion && !version.releasedToMAS else {
       return {
@@ -78,13 +79,41 @@ enum AppUpdater {
       presentUpdate(newVersion: version, releaseInfo: releaseInfo, explicitly: explicitly)
     }
   }
+
+  /// Shows release notes for an automatically staged update.
+  @MainActor
+  static func presentStagedUpdateNotes() {
+    let version = AppPreferences.Updater.stagedUpdateVersion
+    let notes = AppPreferences.Updater.stagedUpdateNotes
+    AppPreferences.Updater.stagedUpdateVersion = nil
+    AppPreferences.Updater.stagedUpdateNotes = nil
+
+    let currentVersion = Bundle.main.shortVersionString
+    if AppPreferences.Updater.unappliedUpdateVersion == currentVersion {
+      AppPreferences.Updater.unappliedUpdateVersion = nil
+    }
+
+    guard let version else {
+      return
+    }
+
+    guard version == currentVersion else {
+      AppPreferences.Updater.unappliedUpdateVersion = version
+      return
+    }
+
+    guard let notes else {
+      return
+    }
+
+    presentReleaseNotes(version: version, body: notes)
+  }
 }
 
 // MARK: - Private
 
 private extension AppUpdater {
   static var automatically: Bool {
-    // Can be disabled through either settings.json or an incompatible update
     AppRuntimeConfig.updateBehavior != .never && !AppPreferences.Updater.completelyDisabled
   }
 
@@ -115,16 +144,24 @@ private extension AppUpdater {
 
 @MainActor
 private extension AppUpdater {
-  static func presentError() {
-    let alert = NSAlert()
-    alert.messageText = Localized.Updater.updateFailedTitle
-    alert.informativeText = Localized.Updater.updateFailedMessage
-    alert.addButton(withTitle: Localized.Updater.checkVersionHistory)
-    alert.addButton(withTitle: Localized.Updater.notNow)
+  static func animatedDots(_ step: Int) -> String {
+    // U+2008 is exactly as wide as a period
+    let count = (step % 3) + 1
+    return String(repeating: ".", count: count) + String(repeating: "\u{2008}", count: 3 - count)
+  }
 
-    if alert.runModal() == .alertFirstButtonReturn {
-      NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/releases")
-    }
+  static func menuItemImage(_ symbolName: String) -> NSImage? {
+    AppDesign.menuIconEvolution ? NSImage(systemSymbolName: symbolName) : nil
+  }
+
+  static func makeUpdateAlert(newVersion: AppVersion, showingDetails: Bool = false) -> NSAlert {
+    let alert = NSAlert()
+    alert.messageText = String(
+      format: showingDetails ? Localized.Updater.releaseNotesTitle : Localized.Updater.updateAvailableTitle,
+      newVersion.name
+    )
+
+    return alert
   }
 
   static func presentUpdate(newVersion: AppVersion, releaseInfo: ReleaseInfo?, explicitly: Bool) {
@@ -133,24 +170,18 @@ private extension AppUpdater {
     let minOSVer = releaseInfo?.minOSVer ?? Constants.defaultOSVer
     let needsOSUpdate = minOSVer.compare(currentOSVer, options: .numeric) == .orderedDescending
 
-    let alert = NSAlert()
-    alert.messageText = String(format: Localized.Updater.newVersionAvailable, newVersion.name)
-    alert.addButton(withTitle: Localized.Updater.viewReleasePage)
-
     if needsOSUpdate {
-      presentOSUpdateAlert(alert, newVersion: newVersion, minOSVer: minOSVer, explicitly: explicitly)
+      presentOSUpdateAlert(newVersion: newVersion, minOSVer: minOSVer, explicitly: explicitly)
     } else {
-      presentAppUpdateAlert(alert, newVersion: newVersion, explicitly: explicitly)
+      presentAppUpdateAlert(newVersion: newVersion, explicitly: explicitly)
     }
   }
 
-  static func presentOSUpdateAlert(
-    _ alert: NSAlert,
-    newVersion: AppVersion,
-    minOSVer: String,
-    explicitly: Bool
-  ) {
+  static func presentOSUpdateAlert(newVersion: AppVersion, minOSVer: String, explicitly: Bool) {
+    let alert = makeUpdateAlert(newVersion: newVersion)
     alert.markdownBody = String(format: Localized.Updater.needsOSUpdateMessage, minOSVer)
+    alert.addButton(withTitle: Localized.Updater.viewReleasePage)
+
     if explicitly {
       alert.addButton(withTitle: Localized.Updater.notNow)
     } else {
@@ -175,37 +206,70 @@ private extension AppUpdater {
     }
   }
 
-  @MainActor
-  static func presentAppUpdateAlert(_ alert: NSAlert, newVersion: AppVersion, explicitly: Bool) {
-    alert.markdownBody = newVersion.body
-    if explicitly {
-      alert.addButton(withTitle: Localized.Updater.notNow)
-    } else {
-      alert.addButton(withTitle: Localized.Updater.remindMeLater)
-      alert.addButton(withTitle: Localized.Updater.skipThisVersion)
+  static func presentAppUpdateAlert(
+    newVersion: AppVersion,
+    explicitly: Bool,
+    showingDetails: Bool = false
+  ) {
+    let canSelfUpdate = newVersion.isCompatible && newVersion.updateArchive != nil && canInstallInPlace
+
+    // Avoid downloading an unapplied version again
+    let wasUnapplied = AppPreferences.Updater.unappliedUpdateVersion == newVersion.name
+
+    if !explicitly && AppRuntimeConfig.updateBehavior == .automatic && canSelfUpdate && !wasUnapplied {
+      return stageAutomatically(newVersion: newVersion)
     }
+
+    var actions = [(title: String, handler: () -> Void)]()
+    if canSelfUpdate {
+      actions.append((Localized.Updater.updateNow, { startUpdate(newVersion: newVersion) }))
+    }
+
+    actions.append((Localized.Updater.viewReleasePage, {
+      NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
+    }))
+
+    if explicitly {
+      actions.append((Localized.Updater.notNow, {}))
+    } else {
+      actions.append((Localized.Updater.remindMeLater, {}))
+      actions.append((Localized.Updater.skipThisVersion, {
+        AppPreferences.Updater.skippedVersions.insert(newVersion.name)
+      }))
+    }
+
+    let alert = makeUpdateAlert(newVersion: newVersion, showingDetails: showingDetails)
+    alert.markdownBody = newVersion.body
 
     let showAlert = {
-      switch alert.runModal() {
-      case .alertFirstButtonReturn: // View Release Page
-        NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
-      case .alertThirdButtonReturn: // Skip This Version
-        AppPreferences.Updater.skippedVersions.insert(newVersion.name)
-      default:
-        break
+      actions.forEach {
+        alert.addButton(withTitle: $0.title)
       }
+
+      let index = alert.runModal().rawValue - NSApplication.ModalResponse.alertFirstButtonReturn.rawValue
+      if actions.indices.contains(index) {
+        actions[index].handler()
+      }
+
+      clearStagedUpdateNotes(version: newVersion.name)
     }
 
-    guard !explicitly && AppRuntimeConfig.updateBehavior == .quiet, let delegate = NSApp.appDelegate else {
+    guard !explicitly && AppRuntimeConfig.updateBehavior != .notify, let delegate = NSApp.appDelegate else {
       return showAlert()
     }
 
     let mainUpdateItem = delegate.mainUpdateItem
-    mainUpdateItem?.title = String(format: Localized.Updater.newVersionOut, newVersion.name)
+    mainUpdateItem?.title = String(format: Localized.Updater.updateToMenuTitle, newVersion.name)
     mainUpdateItem?.isHidden = false
 
-    delegate.presentUpdateItem?.addAction("app.markedit.present-update") {
-      NSWorkspace.shared.safelyOpenURL(string: newVersion.htmlUrl)
+    // Reset controls repurposed for a staged update
+    delegate.postponeUpdateItem?.title = Localized.Updater.remindMeLater
+    delegate.postponeUpdateItem?.image = menuItemImage(Icons.bell)
+    delegate.restartUpdateItem?.isHidden = true
+    delegate.ignoreUpdateItem?.isHidden = false
+
+    delegate.presentUpdateItem?.addAction("app.markedit.update-details") {
+      presentAppUpdateAlert(newVersion: newVersion, explicitly: true, showingDetails: true)
     }
 
     delegate.postponeUpdateItem?.addAction("app.markedit.postpone-update") {
@@ -215,6 +279,140 @@ private extension AppUpdater {
     delegate.ignoreUpdateItem?.addAction("app.markedit.ignore-update") {
       mainUpdateItem?.isHidden = true
       AppPreferences.Updater.skippedVersions.insert(newVersion.name)
+    }
+  }
+
+  static func presentReleaseNotes(version: String, body: String) {
+    let alert = NSAlert()
+    alert.messageText = String(format: Localized.Updater.releaseNotesTitle, version)
+    alert.markdownBody = body
+    alert.runModal()
+    clearStagedUpdateNotes(version: version)
+  }
+
+  /// Stages an update silently for installation on quit.
+  static func stageAutomatically(newVersion: AppVersion) {
+    guard !isStaging && AppPreferences.Updater.stagedUpdateVersion != newVersion.name else {
+      return
+    }
+
+    Task {
+      do {
+        try await stageUpdate(newVersion: newVersion)
+        AppPreferences.Updater.stagedUpdateVersion = newVersion.name
+        AppPreferences.Updater.stagedUpdateNotes = newVersion.body
+        revealStagedUpdate(newVersion: newVersion)
+      } catch {
+        Logger.log(.error, "Failed to stage the update: \(error.localizedDescription)")
+      }
+    }
+  }
+
+  static func startUpdate(newVersion: AppVersion) {
+    guard !isStaging else {
+      return
+    }
+
+    let updateItem = NSApp.appDelegate?.mainUpdateItem
+    let wasVisible = updateItem?.isHidden == false
+    updateItem?.isHidden = false
+
+    let animation = Task {
+      var step = 0
+      while !Task.isCancelled {
+        updateItem?.title = String(format: Localized.Updater.downloadingMenuTitle, animatedDots(step))
+        step += 1
+        try? await Task.sleep(for: .milliseconds(300))
+      }
+    }
+
+    Task {
+      let started = Date()
+
+      do {
+        try await stageUpdate(newVersion: newVersion)
+
+        // Keep progress visible briefly
+        let remaining = Constants.minimumDownloadDuration - Date().timeIntervalSince(started)
+        if remaining > 0 {
+          try? await Task.sleep(for: .seconds(remaining))
+        }
+
+        // Prevent the alert from racing the animation
+        animation.cancel()
+        presentRestartAlert(newVersion: newVersion)
+      } catch {
+        animation.cancel()
+        updateItem?.isHidden = !wasVisible
+        updateItem?.title = String(format: Localized.Updater.updateToMenuTitle, newVersion.name)
+        presentInstallError(error, releaseURL: newVersion.htmlUrl)
+      }
+    }
+  }
+
+  /// Shows a staged update in the update menu.
+  static func revealStagedUpdate(newVersion: AppVersion) {
+    guard let delegate = NSApp.appDelegate else {
+      return
+    }
+
+    let mainUpdateItem = delegate.mainUpdateItem
+    mainUpdateItem?.title = String(format: Localized.Updater.updateReadyMenuTitle, newVersion.name)
+    mainUpdateItem?.isHidden = false
+
+    delegate.restartUpdateItem?.title = Localized.Updater.restartNow
+    delegate.restartUpdateItem?.image = menuItemImage(Icons.restart)
+    delegate.restartUpdateItem?.isHidden = false
+    delegate.restartUpdateItem?.addAction("app.markedit.restart-update") {
+      restartToUpdate()
+    }
+
+    // Keep release notes available after dismissing the alert
+    delegate.presentUpdateItem?.addAction("app.markedit.update-details") {
+      presentReleaseNotes(version: newVersion.name, body: newVersion.body)
+    }
+
+    // A staged update installs on quit regardless
+    delegate.ignoreUpdateItem?.isHidden = true
+
+    // Hiding the menu doesn't cancel installation
+    delegate.postponeUpdateItem?.title = Localized.Updater.installOnQuit
+    delegate.postponeUpdateItem?.image = menuItemImage(Icons.clock)
+    delegate.postponeUpdateItem?.addAction("app.markedit.postpone-update") {
+      mainUpdateItem?.isHidden = true
+    }
+  }
+
+  static func presentRestartAlert(newVersion: AppVersion) {
+    // Keep the staged update accessible if restart is declined
+    revealStagedUpdate(newVersion: newVersion)
+
+    let alert = NSAlert()
+    alert.messageText = String(format: Localized.Updater.updateReadyTitle, newVersion.name)
+    alert.informativeText = Localized.Updater.updateReadyMessage
+    alert.addButton(withTitle: Localized.Updater.restartNow)
+    alert.addButton(withTitle: Localized.Updater.installOnQuit)
+
+    if alert.runModal() == .alertFirstButtonReturn {
+      restartToUpdate()
+    }
+  }
+
+  static func restartToUpdate() {
+    relaunchAfterUpdate = true
+
+    RunLoop.performOnMain {
+      NSApp.sendAction(
+        #selector(EditorViewController.terminate(_:)),
+        to: nil,
+        from: nil
+      )
+    }
+  }
+
+  static func clearStagedUpdateNotes(version: String) {
+    if AppPreferences.Updater.stagedUpdateVersion == version {
+      AppPreferences.Updater.stagedUpdateNotes = nil
     }
   }
 }

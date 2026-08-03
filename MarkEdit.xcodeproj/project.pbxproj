@@ -99,6 +99,15 @@
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
 		87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */; };
+		87DA0000000000000000E00B /* UpdateInstaller.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E000 /* UpdateInstaller.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		87DA0000000000000000E020 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E010 /* main.swift */; };
+		87DA0000000000000000E021 /* UpdateInstalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E011 /* UpdateInstalling.swift */; };
+		87DA0000000000000000E022 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E012 /* UpdateService.swift */; };
+		87DA0000000000000000E023 /* UpdateRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E013 /* UpdateRunner.swift */; };
+		87DA0000000000000000E030 /* UpdateInstalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E011 /* UpdateInstalling.swift */; };
+		87DA0000000000000000E032 /* AppUpdater+Install.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E031 /* AppUpdater+Install.swift */; };
+		87DA0000000000000000E034 /* AppUpdater+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E033 /* AppUpdater+Download.swift */; };
+		87DA0000000000000000E041 /* UpdaterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 87DA0000000000000000E040 /* UpdaterCore */; };
 		87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB61F2B284AAD00A3056F /* AppHacks.swift */; };
 		87DE081B294DDA49004AD33A /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE081A294DDA49004AD33A /* AppTheme.swift */; };
 		87DE084B294E22C5004AD33A /* EditorViewController+TextFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */; };
@@ -130,6 +139,13 @@
 			remoteGlobalIDString = 872923FF2951525C007156B1;
 			remoteInfo = QuickLookMac;
 		};
+		87DA0000000000000000E00A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 870A519A294700DE0095C7EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 87DA0000000000000000E002;
+			remoteInfo = UpdateInstaller;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -142,6 +158,17 @@
 				872924102951525C007156B1 /* QuickLookExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87DA0000000000000000E008 /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				87DA0000000000000000E00B /* UpdateInstaller.xpc in Embed XPC Services */,
+			);
+			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -240,6 +267,15 @@
 		87BFF238298AAC75006C31E4 /* MarkEditTools */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditTools; sourceTree = "<group>"; };
 		87C3CBFA29545944002A3436 /* MarkEditKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditKit; sourceTree = "<group>"; };
 		87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceTextField.swift; sourceTree = "<group>"; };
+		87DA0000000000000000E000 /* UpdateInstaller.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = UpdateInstaller.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		87DA0000000000000000E010 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		87DA0000000000000000E011 /* UpdateInstalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInstalling.swift; sourceTree = "<group>"; };
+		87DA0000000000000000E012 /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
+		87DA0000000000000000E013 /* UpdateRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRunner.swift; sourceTree = "<group>"; };
+		87DA0000000000000000E015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		87DA0000000000000000E031 /* AppUpdater+Install.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppUpdater+Install.swift"; sourceTree = "<group>"; };
+		87DA0000000000000000E033 /* AppUpdater+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppUpdater+Download.swift"; sourceTree = "<group>"; };
+		87DA0000000000000000E042 /* UpdaterCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UpdaterCore; sourceTree = "<group>"; };
 		87DCB61F2B284AAD00A3056F /* AppHacks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHacks.swift; sourceTree = "<group>"; };
 		87DE081A294DDA49004AD33A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		87DE084A294E22C5004AD33A /* EditorViewController+TextFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextFinder.swift"; sourceTree = "<group>"; };
@@ -289,6 +325,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		87DA0000000000000000E007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DA0000000000000000E041 /* UpdaterCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -300,6 +344,7 @@
 				87BFF238298AAC75006C31E4 /* MarkEditTools */,
 				870A51A4294700DE0095C7EB /* MarkEditMac */,
 				872924042951525C007156B1 /* QuickLookMac */,
+				87DA0000000000000000E001 /* UpdateInstaller */,
 				870A51A3294700DE0095C7EB /* Products */,
 				874823CC29B0BD980067EC49 /* Frameworks */,
 				8743B26229593B2000F83DAE /* Build.xcconfig */,
@@ -315,6 +360,7 @@
 			children = (
 				870A51A2294700DE0095C7EB /* MarkEdit.app */,
 				872924002951525C007156B1 /* QuickLookExtension.appex */,
+				87DA0000000000000000E000 /* UpdateInstaller.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -509,6 +555,8 @@
 			children = (
 				8765FD282AF291D300C645A8 /* AppVersion.swift */,
 				8765FD242AF28F1000C645A8 /* AppUpdater.swift */,
+				87DA0000000000000000E033 /* AppUpdater+Download.swift */,
+				87DA0000000000000000E031 /* AppUpdater+Install.swift */,
 			);
 			path = Updater;
 			sourceTree = "<group>";
@@ -627,6 +675,27 @@
 			path = Replace;
 			sourceTree = "<group>";
 		};
+		87BADAC3301F863F00DCF4C7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				87DA0000000000000000E015 /* Info.plist */,
+				87DA0000000000000000E010 /* main.swift */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		87DA0000000000000000E001 /* UpdateInstaller */ = {
+			isa = PBXGroup;
+			children = (
+				87DA0000000000000000E042 /* UpdaterCore */,
+				87DA0000000000000000E011 /* UpdateInstalling.swift */,
+				87DA0000000000000000E013 /* UpdateRunner.swift */,
+				87DA0000000000000000E012 /* UpdateService.swift */,
+				87BADAC3301F863F00DCF4C7 /* Supporting Files */,
+			);
+			path = UpdateInstaller;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -639,12 +708,14 @@
 				870A519F294700DE0095C7EB /* Frameworks */,
 				870A51A0294700DE0095C7EB /* Resources */,
 				872924112951525C007156B1 /* Embed Foundation Extensions */,
+				87DA0000000000000000E008 /* Embed XPC Services */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				87BFF24E298AB754006C31E4 /* PBXTargetDependency */,
 				8729240F2951525C007156B1 /* PBXTargetDependency */,
+				87DA0000000000000000E009 /* PBXTargetDependency */,
 			);
 			name = MarkEditMac;
 			packageProductDependencies = (
@@ -687,6 +758,25 @@
 			productReference = 872924002951525C007156B1 /* QuickLookExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		87DA0000000000000000E002 /* UpdateInstaller */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87DA0000000000000000E003 /* Build configuration list for PBXNativeTarget "UpdateInstaller" */;
+			buildPhases = (
+				87DA0000000000000000E006 /* Sources */,
+				87DA0000000000000000E007 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UpdateInstaller;
+			packageProductDependencies = (
+				87DA0000000000000000E040 /* UpdaterCore */,
+			);
+			productName = UpdateInstaller;
+			productReference = 87DA0000000000000000E000 /* UpdateInstaller.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -703,6 +793,9 @@
 					};
 					872923FF2951525C007156B1 = {
 						CreatedOnToolsVersion = 14.1;
+					};
+					87DA0000000000000000E002 = {
+						CreatedOnToolsVersion = 26.4;
 					};
 				};
 			};
@@ -723,6 +816,7 @@
 			targets = (
 				870A51A1294700DE0095C7EB /* MarkEditMac */,
 				872923FF2951525C007156B1 /* QuickLookMac */,
+				87DA0000000000000000E002 /* UpdateInstaller */,
 			);
 		};
 /* End PBXProject section */
@@ -826,6 +920,9 @@
 				870F17662984D2C000003DA7 /* EditorViewController+LineEndings.swift in Sources */,
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
 				8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */,
+				87DA0000000000000000E032 /* AppUpdater+Install.swift in Sources */,
+				87DA0000000000000000E034 /* AppUpdater+Download.swift in Sources */,
+				87DA0000000000000000E030 /* UpdateInstalling.swift in Sources */,
 				EE100014EEEE000000000014 /* ExtensionsOverlays.swift in Sources */,
 				87DCB6202B284AAD00A3056F /* AppHacks.swift in Sources */,
 				874BE6F729BB57AC002F83BA /* IntentError.swift in Sources */,
@@ -902,6 +999,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		87DA0000000000000000E006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87DA0000000000000000E020 /* main.swift in Sources */,
+				87DA0000000000000000E021 /* UpdateInstalling.swift in Sources */,
+				87DA0000000000000000E022 /* UpdateService.swift in Sources */,
+				87DA0000000000000000E023 /* UpdateRunner.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -913,6 +1021,11 @@
 		87BFF24E298AB754006C31E4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 87BFF24D298AB754006C31E4 /* SwiftLint */;
+		};
+		87DA0000000000000000E009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 87DA0000000000000000E002 /* UpdateInstaller */;
+			targetProxy = 87DA0000000000000000E00A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1210,6 +1323,52 @@
 			};
 			name = Release;
 		};
+		87DA0000000000000000E004 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(inherited)";
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "$(inherited)";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UpdateInstaller/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MarkEdit;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).installer";
+				PRODUCT_NAME = UpdateInstaller;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		87DA0000000000000000E005 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "$(inherited)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(inherited)";
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "$(inherited)";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UpdateInstaller/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MarkEdit;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).installer";
+				PRODUCT_NAME = UpdateInstaller;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1236,6 +1395,15 @@
 			buildConfigurations = (
 				872924122951525C007156B1 /* Debug */,
 				872924132951525C007156B1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87DA0000000000000000E003 /* Build configuration list for PBXNativeTarget "UpdateInstaller" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87DA0000000000000000E004 /* Debug */,
+				87DA0000000000000000E005 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1290,6 +1458,10 @@
 		87CC48FC29CC01E100BE1441 /* TextBundle */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TextBundle;
+		};
+		87DA0000000000000000E040 /* UpdaterCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UpdaterCore;
 		};
 		87EB9900295755DA00A56B97 /* MarkEditCore */ = {
 			isa = XCSwiftPackageProductDependency;
