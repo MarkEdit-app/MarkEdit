@@ -13,9 +13,6 @@ import MarkEditKit
  */
 @MainActor
 extension AppUpdater {
-  /// Set when the user asks to restart right away, read once during termination.
-  static var relaunchAfterUpdate = false
-
   private(set) static var isStaging = false
 
   static var canInstallInPlace: Bool {
@@ -50,16 +47,17 @@ extension AppUpdater {
   /// Hands the staged update to the installer during termination.
   static func commitStagedUpdate() {
     guard let stagedPath = AppPreferences.Updater.stagedUpdatePath else {
+      AppRelauncher.scheduleIfRequested()
       return
     }
 
     let connection = makeConnection()
     defer { connection.invalidate() }
 
-    let shouldRelaunch = relaunchAfterUpdate
+    let shouldRelaunch = AppRelauncher.isRequested
     let recoverFromFailure = {
       if shouldRelaunch {
-        NSWorkspace.shared.relaunchApp()
+        AppRelauncher.scheduleIfRequested()
       }
     }
 

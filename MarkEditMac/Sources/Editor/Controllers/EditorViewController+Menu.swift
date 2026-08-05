@@ -153,51 +153,7 @@ extension EditorViewController: NSMenuItemValidation {
 
 extension EditorViewController {
   @IBAction func terminate(_ sender: Any?) {
-    // Window restoration is enabled, handle unsaved drafts to prevent data loss
-    if AppPreferences.General.quitAlwaysKeepsWindows, let unsavedDraft {
-      return unsavedDraft.runModalSavePanel(
-        for: .saveOperation,
-        delegate: self,
-        didSave: #selector(handleDraftSave(_:didSave:)),
-        contextInfo: nil
-      )
-    }
-
-    performTerminate(sender)
-  }
-
-  // MARK: - Window Restoration
-
-  var unsavedDraft: NSDocument? {
-    NSDocumentController.shared.editorDocuments.first {
-      $0.fileURL == nil && ($0.isOutdated || $0.hasUnautosavedChanges)
-    }
-  }
-
-  @objc private func handleDraftSave(_ document: NSDocument, didSave: Bool) {
-    guard didSave else {
-      // Termination was cancelled, a later quit must not relaunch
-      AppUpdater.relaunchAfterUpdate = false
-      return
-    }
-
-    if AppUpdater.relaunchAfterUpdate {
-      RunLoop.performOnMain { [weak self] in
-        self?.terminate(nil)
-      }
-    } else if unsavedDraft == nil {
-      performTerminate(nil)
-    } else {
-      document.close()
-    }
-  }
-
-  private func performTerminate(_ sender: Any?) {
-    NSDocumentController.shared.editorDocuments.forEach {
-      $0.isTerminating = true
-    }
-
-    NSApp.terminate(sender)
+    NSApp.terminateSafely(sender)
   }
 }
 

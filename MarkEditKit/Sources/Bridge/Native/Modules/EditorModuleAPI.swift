@@ -33,6 +33,8 @@ public protocol EditorModuleAPIDelegate: AnyObject {
   func editorAPI(_ sender: EditorModuleAPI, runService name: String, input: String?) async -> Bool
   func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool
   func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL?
+  func editorAPITerminateApp(_ sender: EditorModuleAPI)
+  func editorAPIRelaunchApp(_ sender: EditorModuleAPI)
 }
 
 public final class EditorModuleAPI: NativeModuleAPI {
@@ -264,19 +266,11 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 
   public func terminateApp() {
-  #if os(macOS)
-    NSApp.terminate(nil)
-  #else
-    Logger.assertFail("Missing implementation, terminating the app requires AppKit")
-  #endif
+    delegate?.editorAPITerminateApp(self)
   }
 
   public func relaunchApp() {
-  #if os(macOS)
-    NSWorkspace.shared.relaunchApp()
-  #else
-    Logger.assertFail("Missing implementation, relaunching the app requires AppKit")
-  #endif
+    delegate?.editorAPIRelaunchApp(self)
   }
 }
 

@@ -371,7 +371,7 @@ extension ExtensionsModel {
   }
 
   func relaunch() {
-    NSWorkspace.shared.relaunchApp()
+    NSApp.relaunchSafely()
   }
 }
 
