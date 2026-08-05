@@ -11,16 +11,20 @@ public extension Bundle {
     Self(identifier: "com.apple.WebKit")
   }
 
-  var shortVersionString: String? {
-    infoDictionary?["CFBundleShortVersionString"] as? String
+  var shortVersionString: String {
+    (infoDictionary?["CFBundleShortVersionString"] as? String) ?? "1.0.0"
   }
 
   var bundleVersion: String? {
     infoDictionary?["CFBundleVersion"] as? String
   }
 
+  var isAppleSiliconOnly: Bool {
+    executableArchitectures?.map { $0.intValue } == [NSBundleExecutableArchitectureARM64]
+  }
+
   var userAgent: String {
-    "MarkEdit/\(shortVersionString ?? "0.0.0")"
+    "MarkEdit/\(shortVersionString)"
   }
 
   func isDefaultApp(toOpen url: URL) -> Bool {

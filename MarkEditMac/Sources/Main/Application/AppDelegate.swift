@@ -53,6 +53,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   @IBOutlet weak var mainUpdateItem: NSMenuItem?
   @IBOutlet weak var presentUpdateItem: NSMenuItem?
+  @IBOutlet weak var restartUpdateItem: NSMenuItem?
   @IBOutlet weak var postponeUpdateItem: NSMenuItem?
   @IBOutlet weak var ignoreUpdateItem: NSMenuItem?
 
@@ -105,11 +106,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-      self.presentUpdateItem?.title = Localized.Updater.viewReleasePage
+      self.presentUpdateItem?.title = Localized.Updater.viewReleaseDetails
       self.postponeUpdateItem?.title = Localized.Updater.remindMeLater
       self.ignoreUpdateItem?.title = Localized.Updater.skipThisVersion
+      AppUpdater.presentStagedUpdateNotes()
 
       Task {
+        await AppUpdater.discardStagedUpdate()
         await AppUpdater.checkForUpdates(explicitly: false)
       }
 
@@ -162,6 +165,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationWillTerminate(_ notification: Notification) {
+    AppUpdater.commitStagedUpdate()
     EditorSelectionHistory.purgeStaleEntries()
   }
 
@@ -215,7 +219,7 @@ private extension AppDelegate {
         return
       }
 
-      if NSApp.windows.allSatisfy({ !$0.isKeyWindow }) {
+      if (NSApp.windows.allSatisfy { !$0.isKeyWindow }) {
         NSApp.closeOpenPanels()
       }
     }

@@ -19,7 +19,7 @@ enum ExtensionEnvironment {
   nonisolated(unsafe) static var cachesDirectory = URL.cachesDirectory
 
   /// Running app version, used for minAppVersion checks.
-  nonisolated(unsafe) static var appVersion = Bundle.main.shortVersionString ?? "0.0.0"
+  nonisolated(unsafe) static var appVersion = Bundle.main.shortVersionString
 
   static var extensionsURL: URL {
     documentsDirectory

@@ -250,6 +250,18 @@ enum AppPreferences {
 
     @Storage(key: "updater.completely-disabled", defaultValue: false)
     static var completelyDisabled: Bool
+
+    @Storage(key: "updater.staged-update-path", defaultValue: nil)
+    static var stagedUpdatePath: String?
+
+    @Storage(key: "updater.staged-update-version", defaultValue: nil)
+    static var stagedUpdateVersion: String?
+
+    @Storage(key: "updater.staged-update-notes", defaultValue: nil)
+    static var stagedUpdateNotes: String?
+
+    @Storage(key: "updater.unapplied-update-version", defaultValue: nil)
+    static var unappliedUpdateVersion: String?
   }
 
   enum Extensions {
@@ -293,7 +305,7 @@ extension AppPreferences {
       suggestWhileTyping: Assistant.suggestWhileTyping,
       standardDirectories: URL.standardDirectories,
       runtimeInfo: RuntimeInfo(
-        appVersion: Bundle.main.shortVersionString ?? "1.0.0",
+        appVersion: Bundle.main.shortVersionString,
         appBuild: Bundle.main.bundleVersion ?? "1",
         osVersion: ProcessInfo.processInfo.semanticOSVer,
         webkitVersion: Bundle.webkitBundle?.bundleVersion ?? ""

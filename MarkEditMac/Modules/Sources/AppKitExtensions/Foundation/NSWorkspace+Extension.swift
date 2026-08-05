@@ -26,7 +26,7 @@ public extension NSWorkspace {
       "com.apple.Terminal",     // Terminal
     ].compactMap { $0 }
 
-    if let url = identifiers.compactMap({ urlForApplication(withBundleIdentifier: $0) }).first {
+    if let url = (identifiers.compactMap { urlForApplication(withBundleIdentifier: $0) }).first {
       openApplication(at: url, configuration: Self.OpenConfiguration())
     }
   }
