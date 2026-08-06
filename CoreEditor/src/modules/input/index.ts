@@ -112,7 +112,7 @@ export function interceptInputs() {
 
     if ((window.config.suggestWhileTyping || isPanelVisible()) && insert.trim().length > 0) {
       // Typing suggestions for non-space insertions
-      startCompletion({ afterDelay: 300 });
+      startCompletion({ afterDelay: 300, userInitiated: false });
     } else if (isPanelVisible()) {
       // Cancel the completion for whitespace insertions
       window.nativeModules.completion.cancelCompletion();

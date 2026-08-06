@@ -37,7 +37,7 @@ struct TextCompletionView: View {
     VStack {
       ScrollViewReader { scrollView in
         ScrollView(showsIndicators: false) {
-          LazyVStack(spacing: 0) {
+          VStack(spacing: 0) {
             ForEach(0..<state.items.count, id: \.self) { index in
               ZStack(alignment: .leading) {
                 if index == state.selectedIndex {

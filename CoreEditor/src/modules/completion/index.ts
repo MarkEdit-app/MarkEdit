@@ -143,7 +143,7 @@ export const referenceLinkCompletion = {
  *
  * Note that, "afterDelay" is used typically for "suggest while typing" scenario.
  */
-export function startCompletion({ afterDelay }: { afterDelay: number }) {
+export function startCompletion({ afterDelay, userInitiated } = { afterDelay: 0, userInitiated: true }) {
   if (storage.cancellable !== undefined) {
     clearTimeout(storage.cancellable);
   }
@@ -189,7 +189,7 @@ export function startCompletion({ afterDelay }: { afterDelay: number }) {
       }
     })();
 
-    window.nativeModules.completion.requestCompletions({ anchor, fullText });
+    window.nativeModules.completion.requestCompletions({ anchor, fullText, userInitiated });
   }, afterDelay);
 }
 

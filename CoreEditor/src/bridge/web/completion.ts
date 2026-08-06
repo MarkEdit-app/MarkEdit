@@ -7,14 +7,14 @@ import { startCompletion, setPanelVisible, acceptInlinePrediction } from '../../
  * @overrideModuleName WebBridgeCompletion
  */
 export interface WebModuleCompletion extends WebModule {
-  startCompletion({ afterDelay }: { afterDelay: number }): void;
+  startCompletion(): void;
   setState({ panelVisible }: { panelVisible: boolean }): void;
   acceptInlinePrediction({ prediction }: { prediction: string }): void;
 }
 
 export class WebModuleCompletionImpl implements WebModuleCompletion {
-  startCompletion({ afterDelay }: { afterDelay: number }): void {
-    startCompletion({ afterDelay });
+  startCompletion(): void {
+    startCompletion();
   }
 
   setState({ panelVisible }: { panelVisible: boolean }): void {
