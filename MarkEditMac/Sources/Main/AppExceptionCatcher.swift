@@ -1,6 +1,6 @@
 //
 //  AppExceptionCatcher.swift
-//  MarkEdit
+//  MarkEditMac
 //
 //  Created by cyan on 10/5/25.
 //

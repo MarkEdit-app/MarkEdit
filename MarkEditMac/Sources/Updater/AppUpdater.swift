@@ -399,15 +399,7 @@ private extension AppUpdater {
   }
 
   static func restartToUpdate() {
-    relaunchAfterUpdate = true
-
-    RunLoop.performOnMain {
-      NSApp.sendAction(
-        #selector(EditorViewController.terminate(_:)),
-        to: nil,
-        from: nil
-      )
-    }
+    NSApp.relaunchSafely()
   }
 
   static func clearStagedUpdateNotes(version: String) {

@@ -415,6 +415,14 @@ extension EditorViewController: EditorModuleAPIDelegate {
 
     return URL(filePath: path)
   }
+
+  func editorAPITerminateApp(_ sender: EditorModuleAPI) {
+    NSApp.terminateSafely()
+  }
+
+  func editorAPIRelaunchApp(_ sender: EditorModuleAPI) {
+    NSApp.relaunchSafely()
+  }
 }
 
 // MARK: - EditorModuleFoundationModelsDelegate

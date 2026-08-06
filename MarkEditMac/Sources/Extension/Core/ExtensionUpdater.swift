@@ -138,7 +138,7 @@ private extension ExtensionUpdater {
     alert.addButton(withTitle: Localized.Extension.laterButton)
 
     if alert.runModal() == .alertFirstButtonReturn {
-      NSWorkspace.shared.relaunchApp()
+      NSApp.relaunchSafely()
     }
   }
 }

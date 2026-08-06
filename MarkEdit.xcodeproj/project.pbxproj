@@ -89,6 +89,7 @@
 		87AAEDF929582C2700C8E61C /* EditorFindPanel+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */; };
 		87AAEE0229585ADC00C8E61C /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AAEE0129585ADC00C8E61C /* AppPreferences.swift */; };
 		87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ACB6932BD8CA8400CE6F9E /* Application.swift */; };
+		87AF5957302379C4006E8C6A /* AppRelauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AF5956302379C3006E8C6A /* AppRelauncher.swift */; };
 		87B0D1022F1A4C0100B0D101 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */; };
 		87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */; };
 		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */; };
@@ -257,6 +258,7 @@
 		87AAEDF829582C2700C8E61C /* EditorFindPanel+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorFindPanel+Menu.swift"; sourceTree = "<group>"; };
 		87AAEE0129585ADC00C8E61C /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		87ACB6932BD8CA8400CE6F9E /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		87AF5956302379C3006E8C6A /* AppRelauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRelauncher.swift; sourceTree = "<group>"; };
 		87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
 		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extras.swift"; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 				8769BABD2C65F9D400EDA0A6 /* AppRuntimeConfig.swift */,
 				84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */,
 				87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */,
+				87AF5956302379C3006E8C6A /* AppRelauncher.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -921,6 +924,7 @@
 				8790B6EC297036B2000DFC1A /* EditorWindow.swift in Sources */,
 				8765FD252AF28F1000C645A8 /* AppUpdater.swift in Sources */,
 				87DA0000000000000000E032 /* AppUpdater+Install.swift in Sources */,
+				87AF5957302379C4006E8C6A /* AppRelauncher.swift in Sources */,
 				87DA0000000000000000E034 /* AppUpdater+Download.swift in Sources */,
 				87DA0000000000000000E030 /* UpdateInstalling.swift in Sources */,
 				EE100014EEEE000000000014 /* ExtensionsOverlays.swift in Sources */,
