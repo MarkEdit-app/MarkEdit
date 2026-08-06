@@ -16,7 +16,8 @@ extension EditorViewController {
     prefix: String,
     anchor: TextTokenizeAnchor,
     partialRange: NSRange,
-    tokenizedWords: [String]
+    tokenizedWords: [String],
+    userInitiated: Bool
   ) {
     guard !prefix.isEmpty || anchor.afterSpace else {
       return cancelCompletion()
@@ -74,7 +75,7 @@ extension EditorViewController {
     updateCompletionPanel(isVisible: !completions.isEmpty)
     updateCompletionPanel(completions: completions.deduplicated, query: prefix)
 
-    if completions.isEmpty {
+    if userInitiated && completions.isEmpty {
       NSSound.beep()
     }
   }

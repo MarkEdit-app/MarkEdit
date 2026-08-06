@@ -61,7 +61,7 @@ public final class TextCompletionContext {
     }
 
     // Don't make the list absurdly long
-    panel.updateCompletions(Array(completions.prefix(50)), query: query)
+    panel.updateCompletions(Array(completions.prefix(25)), query: query)
     panel.selectTop()
 
     let panelPadding: Double = 10

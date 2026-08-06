@@ -18,12 +18,8 @@ public final class WebBridgeCompletion {
     self.webView = webView
   }
 
-  public func startCompletion(afterDelay: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
-    let message = BridgeMessage(
-      ("afterDelay", afterDelay)
-    )
-
-    webView?.invoke(path: "webModules.completion.startCompletion", message: message, completion: completion)
+  public func startCompletion(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.completion.startCompletion", completion: completion)
   }
 
   public func setState(panelVisible: Bool, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {

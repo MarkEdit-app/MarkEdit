@@ -12,7 +12,7 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleCompletion: NativeModule {
-  func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?)
+  func requestCompletions(anchor: TextTokenizeAnchor, fullText: String?, userInitiated: Bool)
   func commitCompletion(insert: String?)
   func cancelCompletion()
   func selectPrevious()
@@ -61,11 +61,13 @@ final class NativeBridgeCompletion: NativeBridge {
     struct Message: Decodable {
       var anchor: TextTokenizeAnchor
       var fullText: String?
+      var userInitiated: Bool
 
       init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: BridgeFieldKey.self)
         anchor = try container.value("anchor")
         fullText = try container.value("fullText")
+        userInitiated = try container.value("userInitiated")
       }
     }
 
@@ -77,7 +79,7 @@ final class NativeBridgeCompletion: NativeBridge {
       return .failure(error)
     }
 
-    module.requestCompletions(anchor: message.anchor, fullText: message.fullText)
+    module.requestCompletions(anchor: message.anchor, fullText: message.fullText, userInitiated: message.userInitiated)
     return .success(nil)
   }
 
