@@ -165,6 +165,7 @@ enum AppPreferences {
       return UserDefaults.standard.bool(forKey: WKAutomaticQuoteSubstitutionEnabled)
     }
 
+    @MainActor
     static func smartQuotesOptionToggled() {
       performUpdates { $0.setSmartQuotesEnabled(enabled: smartQuotesEnabled) }
     }
