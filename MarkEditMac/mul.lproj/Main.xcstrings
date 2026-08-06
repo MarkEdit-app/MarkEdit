@@ -2224,6 +2224,30 @@
         }
       }
     },
+    "Jxm-Gq-txn.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Update Behavior…\"; ObjectID = \"Jxm-Gq-txn\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Update Behavior…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新行为…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新行為…"
+          }
+        }
+      }
+    },
     "k8z-Oj-5dp.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Move Line Up\"; ObjectID = \"k8z-Oj-5dp\";",
       "extractionState" : "extracted_with_value",
