@@ -292,7 +292,7 @@ private extension AppUpdater {
 
   /// Stages an update silently for installation on quit.
   static func stageAutomatically(newVersion: AppVersion) {
-    guard !isStaging && AppPreferences.Updater.stagedUpdateVersion != newVersion.name else {
+    guard AppPreferences.Updater.stagedUpdateVersion != newVersion.name, reserveStaging() else {
       return
     }
 
@@ -309,7 +309,7 @@ private extension AppUpdater {
   }
 
   static func startUpdate(newVersion: AppVersion) {
-    guard !isStaging else {
+    guard reserveStaging() else {
       return
     }
 

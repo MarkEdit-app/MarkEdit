@@ -15,6 +15,15 @@ import MarkEditKit
 extension AppUpdater {
   private(set) static var isStaging = false
 
+  static func reserveStaging() -> Bool {
+    guard !isStaging else {
+      return false
+    }
+
+    isStaging = true
+    return true
+  }
+
   static var canInstallInPlace: Bool {
     let bundleURL = Bundle.main.bundleURL
     guard !bundleURL.path(percentEncoded: false).contains("/AppTranslocation/") else {
@@ -27,12 +36,13 @@ extension AppUpdater {
 
   /// Downloads, extracts, and verifies an update.
   static func stageUpdate(newVersion: AppVersion) async throws {
+    defer {
+      isStaging = false
+    }
+
     guard let asset = newVersion.updateArchive else {
       throw Failure.missingAsset
     }
-
-    isStaging = true
-    defer { isStaging = false }
 
     // Replace any previously staged update
     await discardStagedUpdate()
