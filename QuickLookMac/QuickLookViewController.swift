@@ -69,11 +69,11 @@ final class QuickLookViewController: NSViewController {
         NSEvent.removeMonitor(mouseDragMonitor)
         self.mouseDragMonitor = nil
       }
-    }
 
-    if let mouseUpMonitor {
-      NSEvent.removeMonitor(mouseUpMonitor)
-      self.mouseUpMonitor = nil
+      if let mouseUpMonitor {
+        NSEvent.removeMonitor(mouseUpMonitor)
+        self.mouseUpMonitor = nil
+      }
     }
   }
 

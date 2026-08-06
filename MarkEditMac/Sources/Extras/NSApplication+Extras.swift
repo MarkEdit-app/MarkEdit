@@ -42,7 +42,7 @@ extension NSApplication {
 // MARK: - Terminator
 
 @MainActor
-private final class Terminator: NSObject {
+private final class Terminator: NSObject, @unchecked Sendable {
   static let shared = Terminator()
 
   func terminateApp(_ sender: Any?) {
