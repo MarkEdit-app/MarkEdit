@@ -10,7 +10,7 @@ import Foundation
 /**
  XPC interface between the sandboxed app and its updater service.
  */
-@objc protocol UpdateInstalling {
+@objc protocol UpdateInstalling: Sendable {
   /// Extracts `archivePath` into a staging directory and verifies it against the app to replace.
   func prepareUpdate(archivePath: String) async throws -> String
 

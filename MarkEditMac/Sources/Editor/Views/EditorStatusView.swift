@@ -12,7 +12,7 @@ import MarkEditKit
 // [macOS 26] Clean these up
 
 private protocol ButtonLabeling {
-  var labelView: LabelView { get }
+  @MainActor var labelView: LabelView { get }
 }
 
 extension TitleOnlyButton: ButtonLabeling {}
