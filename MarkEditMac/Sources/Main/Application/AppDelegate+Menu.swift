@@ -215,4 +215,8 @@ private extension AppDelegate {
   @IBAction func openVersionHistory(_ sender: Any?) {
     NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/releases")
   }
+
+  @IBAction func openUpdateBehavior(_ sender: Any?) {
+    NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Customization#generalupdatebehavior")
+  }
 }

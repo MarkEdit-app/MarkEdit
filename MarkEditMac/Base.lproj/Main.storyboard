@@ -1044,6 +1044,13 @@ Gw
                                         <menuItem secondaryImage="bell.slash" catalog="system" id="he5-WD-tCA">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="baQ-7g-DLL"/>
+                                        <menuItem title="Update Behavior…" secondaryImage="arrow.up.right.square" catalog="system" id="Jxm-Gq-txn">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openUpdateBehavior:" target="Voe-Tx-rLC" id="QjM-Oj-9Xp"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -1139,6 +1146,7 @@ Gw
     </scenes>
     <resources>
         <image name="arrow.trianglehead.2.clockwise.rotate.90.circle" catalog="system" width="15" height="15"/>
+        <image name="arrow.up.right.square" catalog="system" width="15" height="14"/>
         <image name="bell" catalog="system" width="15" height="16"/>
         <image name="bell.slash" catalog="system" width="15" height="17"/>
         <image name="bold" catalog="system" width="11" height="12"/>
