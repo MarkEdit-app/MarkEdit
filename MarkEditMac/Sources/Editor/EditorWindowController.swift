@@ -77,6 +77,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
 
     // The main menu is a singleton, we need to update the menu items for the active editor
     editorViewController?.resetUserDefinedMenuItems()
+    NSApp.appDelegate?.reconfigureMainWindowMenu(window: window)
 
     // Try if warmup can fix the empty suggestion bug
     NSSpellChecker.warmUp
