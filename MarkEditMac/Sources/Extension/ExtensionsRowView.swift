@@ -26,7 +26,7 @@ struct ExtensionsRowView: View {
     HStack(spacing: 10) {
       VStack(alignment: .leading, spacing: 6) {
         HStack(spacing: 6) {
-          Image(systemName: item.category == .theme ? Icons.paintpalette : Icons.puzzlepieceExtension)
+          Image(systemName: systemSymbol(for: item))
             .foregroundStyle(.secondary)
             .accessibilityHidden(true)
 
@@ -151,6 +151,14 @@ private extension ExtensionsRowView {
   /// Trimmed search query, tinted in rows to show why an item matched.
   var searchQuery: String {
     model.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+
+  func systemSymbol(for item: ExtensionsModel.Item) -> String {
+    if item.isLocal {
+      return Icons.wrenchAndScrewdriver
+    }
+
+    return item.category == .theme ? Icons.paintpalette : Icons.puzzlepieceExtension
   }
 
   func enabledBinding(for item: ExtensionsModel.Item) -> Binding<Bool> {
