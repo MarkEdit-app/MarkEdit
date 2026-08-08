@@ -231,11 +231,11 @@ enum Localized {
     static let updateFailedTitle = String(localized: "Failed to get the update.", comment: "Title for failed to get the update")
     static let updateFailedMessage = String(localized: "Please check your network connection or get the latest release from the version history.", comment: "Message for failed to get the update")
     static let needsOSUpdateMessage = String(localized: "This release requires macOS %@ or later and cannot be installed without upgrading your operating system.", comment: "Message for minimum required OS version")
-    static let updateToMenuTitle = String(localized: "🎉 Update to %@", comment: "Menu title format for a new version available")
+    static let updateToMenuTitle = String(localized: "✨ Update to %@", comment: "Menu title format for a new version available")
     static let downloadingMenuTitle = String(localized: "Downloading%@", comment: "Menu title format for the update download, the placeholder is an animated ellipsis")
     static let updateReadyTitle = String(localized: "MarkEdit %@ is ready to install!", comment: "Title for a downloaded update waiting to be installed")
     static let updateReadyMessage = String(localized: "The update will be applied the next time MarkEdit launches.", comment: "Message for a downloaded update waiting to be installed")
-    static let updateReadyMenuTitle = String(localized: "🎉 %@ is ready", comment: "Menu title format for a downloaded update waiting to be installed")
+    static let updateReadyMenuTitle = String(localized: "✨ %@ is ready", comment: "Menu title format for a downloaded update waiting to be installed")
     static let releaseNotesTitle = String(localized: "What’s new in %@", comment: "Title for the release notes of an installed or staged update")
     static let installFailedTitle = String(localized: "Failed to install the update.", comment: "Title for failed to install the update")
     static let installFailedMessage = String(localized: "Please try again later or get the latest release from the version history.", comment: "Message for failed to install the update")
@@ -309,6 +309,7 @@ enum Icons {
   static let textQuote = "text.quote"
   static let textformat = "textformat"
   static let wandAndSparkles = "wand.and.sparkles"
+  static let wrenchAndScrewdriver = "wrench.and.screwdriver"
 }
 
 extension EditorLocalizable {

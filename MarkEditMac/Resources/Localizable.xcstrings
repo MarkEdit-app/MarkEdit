@@ -139,36 +139,36 @@
         }
       }
     },
-    "🎉 %@ is ready" : {
+    "✨ %@ is ready" : {
       "comment" : "Menu title format for a downloaded update waiting to be installed",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🎉 %@ 已就绪"
+            "value" : "✨ %@ 已就绪"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🎉 %@ 已就緒"
+            "value" : "✨ %@ 已就緒"
           }
         }
       }
     },
-    "🎉 Update to %@" : {
+    "✨ Update to %@" : {
       "comment" : "Menu title format for a new version available",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🎉 更新到 %@"
+            "value" : "✨ 更新到 %@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "🎉 更新至 %@"
+            "value" : "✨ 更新至 %@"
           }
         }
       }
