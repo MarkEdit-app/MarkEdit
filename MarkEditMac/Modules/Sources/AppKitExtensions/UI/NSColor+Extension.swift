@@ -13,24 +13,12 @@ public extension NSColor {
     .theme(light: NSColor(white: 0, alpha: 0.3), dark: NSColor(white: 1, alpha: 0.3))
   }
 
-  static var plainButtonHighlighted: NSColor {
-    .theme(light: NSColor(white: 0, alpha: 0.1), dark: NSColor(white: 1, alpha: 0.1))
-  }
-
   static var pushButtonBackground: NSColor {
     .theme(light: .white, dark: NSColor(hexCode: 0x565a61))
   }
 
   static var modernButtonBackground: NSColor {
     .theme(light: NSColor(white: 0, alpha: 0.08), dark: NSColor(white: 1, alpha: 0.066))
-  }
-
-  static var finderContentBackground: NSColor {
-    if #available(macOS 26.0, *) {
-      return .windowBackgroundColor
-    }
-
-    return .theme(light: .white, dark: .windowBackgroundColor)
   }
 }
 

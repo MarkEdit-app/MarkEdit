@@ -19,7 +19,6 @@ public protocol FileVersionPickerDelegate: AnyObject {
  A custom file version picker to replace Time Machine due to its performance issues.
  */
 public final class FileVersionPicker: NSViewController {
-  private let modernStyle: Bool
   private let fileURL: URL
   private let currentText: String
   private let localizable: FileVersionLocalizable
@@ -95,7 +94,6 @@ public final class FileVersionPicker: NSViewController {
   }()
 
   private lazy var navigateButtons = RoundedNavigateButtons(
-    modernStyle: modernStyle,
     leftAction: { [weak self] in
       self?.goBack()
     },
@@ -128,14 +126,12 @@ public final class FileVersionPicker: NSViewController {
   private weak var delegate: FileVersionPickerDelegate?
 
   public init(
-    modernStyle: Bool,
     fileURL: URL,
     currentText: String,
     localVersions: [NSFileVersion],
     localizable: FileVersionLocalizable,
     delegate: FileVersionPickerDelegate
   ) {
-    self.modernStyle = modernStyle
     self.fileURL = fileURL
     self.currentText = currentText
     self.allVersions = localVersions
@@ -281,7 +277,7 @@ private extension FileVersionPicker {
       navigateButtons.trailingAnchor.constraint(equalTo: topGuide.trailingAnchor, constant: -Constants.layoutPadding),
       navigateButtons.centerYAnchor.constraint(equalTo: topGuide.centerYAnchor),
       navigateButtons.widthAnchor.constraint(equalToConstant: navigateButtons.frame.width),
-      navigateButtons.heightAnchor.constraint(equalTo: versionMenuButton.heightAnchor, constant: modernStyle ? 0 : -2),
+      navigateButtons.heightAnchor.constraint(equalTo: versionMenuButton.heightAnchor),
 
       modeMenuButton.trailingAnchor.constraint(equalTo: navigateButtons.leadingAnchor, constant: -Constants.layoutPadding),
       modeMenuButton.centerYAnchor.constraint(equalTo: topGuide.centerYAnchor),
