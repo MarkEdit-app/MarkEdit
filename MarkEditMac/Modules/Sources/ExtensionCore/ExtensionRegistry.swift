@@ -58,7 +58,8 @@ extension ExtensionRelease {
     // or github.com/{owner}/{repo}/blob/{ref}/... (e.g. a ?raw=true link).
     let source: (owner: String, repo: String, ref: String)? = {
       if host == "raw.githubusercontent.com", parts.count >= 4 {
-        return (parts[0], parts[1], parts[2])
+        let ref = parts.count >= 6 && parts[2] == "refs" && parts[3] == "tags" ? parts[4] : parts[2]
+        return (parts[0], parts[1], ref)
       }
 
       if host == "github.com", parts.count >= 5, parts[2] == "blob" {

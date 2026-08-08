@@ -97,8 +97,18 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/owner/repo/tree/v1.0.0")
   }
 
+  func testPageURLFromRawTagRef() {
+    let release = makeRelease(url: "https://raw.githubusercontent.com/owner/repo/refs/tags/v1.0.0/dist/ext.js")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/owner/repo/tree/v1.0.0")
+  }
+
   func testPageURLFromOfficialRawContentUsesReleasePage() {
     let release = makeRelease(url: "https://raw.githubusercontent.com/MarkEdit-app/MarkEdit-preview/v1.8.1/dist/ext.js")
+    XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/MarkEdit-app/MarkEdit-preview/releases/tag/v1.8.1")
+  }
+
+  func testPageURLFromOfficialRawTagRefUsesReleasePage() {
+    let release = makeRelease(url: "https://raw.githubusercontent.com/MarkEdit-app/MarkEdit-preview/refs/tags/v1.8.1/dist/ext.js")
     XCTAssertEqual(release.pageURL?.absoluteString, "https://github.com/MarkEdit-app/MarkEdit-preview/releases/tag/v1.8.1")
   }
 
