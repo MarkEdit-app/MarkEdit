@@ -344,7 +344,7 @@ extension EditorViewController {
   }
 
   func resetUserDefinedMenuItems() {
-    guard view.window?.isKeyWindow == true else {
+    guard isViewLoaded, view.window?.isKeyWindow == true else {
       return Logger.log(.debug, "Menu items are for the key window")
     }
 
