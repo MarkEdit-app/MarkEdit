@@ -14,6 +14,8 @@ final class QuickLookViewController: NSViewController {
   var guidanceView: NSView?
   var mouseDownMonitor: Any?
   var mouseDragMonitor: Any?
+  var mouseUpMonitor: Any?
+  var isDraggingScroller = false
 
   weak var defaultOpenTarget: AnyObject?
   var defaultOpenAction: Selector?
@@ -65,6 +67,11 @@ final class QuickLookViewController: NSViewController {
     if let mouseDragMonitor {
       NSEvent.removeMonitor(mouseDragMonitor)
       self.mouseDragMonitor = nil
+    }
+
+    if let mouseUpMonitor {
+      NSEvent.removeMonitor(mouseUpMonitor)
+      self.mouseUpMonitor = nil
     }
   }
 
