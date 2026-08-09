@@ -35,21 +35,33 @@ extension QuickLookViewController {
         return event
       }
 
-      // Dispatch the default open behavior
+      self.isDraggingScroller = false
       if event.clickCount >= 2, let target = self.defaultOpenTarget, let action = self.defaultOpenAction {
+        // Dispatch the default open behavior
         NSApp.sendAction(action, to: target, from: nil)
         return nil
       }
 
-      return self.startDragging(event: event) ? nil : event
+      self.isDraggingScroller = self.startDragging(event: event)
+      return self.isDraggingScroller ? nil : event
     }
 
     mouseDragMonitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseDragged) { [weak self] event in
-      guard let self, self.overrideDragging(event: event) else {
+      guard let self, self.overrideDragging(event: event), self.isDraggingScroller else {
         return event
       }
 
       self.updateDragging(event: event)
+      return nil
+    }
+
+    mouseUpMonitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseUp) { [weak self] event in
+      guard let self, self.isDraggingScroller else {
+        return event
+      }
+
+      self.isDraggingScroller = false
+      self.cancelDragging()
       return nil
     }
   }
@@ -69,7 +81,7 @@ extension QuickLookViewController {
       webView.evaluateJavaScript("startDragging(\(location.y))")
       return true
     } else {
-      webView.evaluateJavaScript("cancelDragging()")
+      cancelDragging()
       return false
     }
   }
@@ -77,5 +89,9 @@ extension QuickLookViewController {
   func updateDragging(event: NSEvent) {
     let location = webView.convert(event.locationInWindow, from: nil)
     webView.evaluateJavaScript("updateDragging(\(location.y))")
+  }
+
+  func cancelDragging() {
+    webView.evaluateJavaScript("cancelDragging()")
   }
 }
