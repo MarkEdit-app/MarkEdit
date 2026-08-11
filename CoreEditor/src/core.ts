@@ -22,7 +22,7 @@ import { markContentClean } from './modules/history';
 import { updateTextChecker } from './modules/textChecker';
 
 import { TextEditor } from './api/editor';
-import { editorReadyListeners } from './api/methods';
+import { notifyEditorReady } from './api/methods';
 
 // Work around a WebKit bug, text jiggles back and forth when resizing the window
 window.addEventListener('resize', () => tryGetEditor()?.requestMeasure());
@@ -192,7 +192,7 @@ export async function resetEditor(
   markContentClean();
 
   // For user scripts, notify the editor is ready
-  editorReadyListeners().forEach(listener => listener(editor));
+  notifyEditorReady(editor);
 
   // Wait for the first paint: rAF when foregrounded, setTimeout as a fallback when throttled
   await new Promise<void>(resolve => {

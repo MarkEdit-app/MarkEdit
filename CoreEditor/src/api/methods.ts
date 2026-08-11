@@ -5,6 +5,7 @@ import { MarkdownConfig } from '@lezer/markdown';
 import { RuntimeInfo } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
 
+type EditorReadyListener = (editor: EditorView) => void;
 type HTMLConfig = { matchClosingTags?: boolean };
 type HTMLLanguage = (config?: HTMLConfig) => LanguageSupport;
 
@@ -12,11 +13,11 @@ export function onAppReady(listener: () => void) {
   storage.appReadyListeners.push(listener);
 }
 
-export function onEditorReady(listener: (editorView: EditorView) => void) {
+export function onEditorReady(listener: EditorReadyListener) {
   storage.editorReadyListeners.push(listener);
 
   if (isEditorReady()) {
-    listener(window.editor);
+    notifyEditorReadySafely(listener, window.editor);
   }
 }
 
@@ -85,8 +86,9 @@ export function overrideHTMLLanguage(html: HTMLLanguage) {
   reconfigureMarkdown();
 }
 
-export function editorReadyListeners() {
-  return storage.editorReadyListeners;
+export function notifyEditorReady(editorView: EditorView) {
+  const listeners = storage.editorReadyListeners;
+  listeners.forEach(listener => notifyEditorReadySafely(listener, editorView));
 }
 
 export function userExtensions(): Extension[] {
@@ -117,9 +119,17 @@ function isEditorReady() {
   return typeof window.editor.dispatch === 'function';
 }
 
+function notifyEditorReadySafely(listener: EditorReadyListener, editorView: EditorView) {
+  try {
+    listener(editorView);
+  } catch (error) {
+    console.error('Failed to notify an editor-ready listener:', error);
+  }
+}
+
 const storage: {
   appReadyListeners: (() => void)[];
-  editorReadyListeners: ((editorView: EditorView) => void)[];
+  editorReadyListeners: EditorReadyListener[];
   extensions: Extension[];
   markdownConfigs: MarkdownConfig[];
   codeLanguages: LanguageDescription[];
@@ -130,4 +140,5 @@ const storage: {
   extensions: [],
   markdownConfigs: [],
   codeLanguages: [],
+  htmlLanguage: undefined,
 };
