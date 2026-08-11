@@ -100,6 +100,10 @@ private extension AppDelegate {
       let isEnabled = $0.target === NSApp.appDelegate || document != nil
       $0.setEnabledRecursively(isEnabled: isEnabled)
     }
+
+    if let menu = mainExtensionsMenu {
+      currentEditor?.updateUserDefinedMenus(menu)
+    }
   }
 
   @MainActor
