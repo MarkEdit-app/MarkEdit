@@ -281,7 +281,7 @@ private extension ExtensionsRowView {
       Text(notes)
         .font(.body)
         .textSelection(.enabled)
-        .fixedSize(horizontal: false, vertical: true)
+        .frame(width: 300, alignment: .center)
 
       if let releaseURL {
         Button(Localized.Extension.viewRelease) {
@@ -291,7 +291,6 @@ private extension ExtensionsRowView {
         .help(releaseURL.absoluteString)
       }
     }
-    .frame(maxWidth: 300)
     .padding()
   }
 
