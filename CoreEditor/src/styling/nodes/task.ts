@@ -3,6 +3,7 @@ import { Line } from '@codemirror/state';
 import { createDecos } from '../matchers/lezer';
 import { createDecoPlugin } from '../helper';
 import { setTaskMarkerStyle } from '../config';
+import { applyChangesNoScroll } from '../../modules/selection';
 
 const baseClass = 'cm-md-taskMarker';
 const checkedClass = `${baseClass}-checked`;
@@ -52,15 +53,10 @@ export function handleMouseDown(event: MouseEvent) {
     }
   })();
 
-  editor.dispatch({
-    changes: {
-      from: line.from,
-      to: line.to,
-      insert: toggled,
-    },
-    selection, // Preserve selections
-    userEvent: '@none', // Ignore automatic scrolling
-  });
+  applyChangesNoScroll(
+    { from: line.from, to: line.to, insert: toggled },
+    { selection },
+  );
 
   event.preventDefault();
   event.stopPropagation();

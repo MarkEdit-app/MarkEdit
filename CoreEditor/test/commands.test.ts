@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from '@jest/globals';
+import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { KeyBinding } from '@codemirror/view';
 import { editingState } from '../src/common/store';
@@ -156,6 +156,7 @@ describe('insertCodeBlock command', () => {
 
 describe('formatContent', () => {
   afterEach(() => {
+    jest.restoreAllMocks();
     editingState.compositionEnded = true;
   });
 
@@ -163,6 +164,16 @@ describe('formatContent', () => {
     editor.setUp('Hello  ');
     expect(commands.formatContent(true, true, false)).toBe(true);
     expect(editor.getText()).toBe('Hello\n');
+  });
+
+  test('preserves the viewport while formatting', () => {
+    editor.setUp('Hello');
+    const scrollSnapshot = jest.spyOn(window.editor, 'scrollSnapshot');
+    const dispatch = jest.spyOn(window.editor, 'dispatch');
+
+    expect(commands.formatContent(true, false, false)).toBe(true);
+    expect(scrollSnapshot).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ effects: expect.anything() }));
   });
 
   test('leaves the document untouched during a composition', () => {

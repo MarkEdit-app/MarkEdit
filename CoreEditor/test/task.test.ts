@@ -1,5 +1,5 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
-import { taskMarkerStyle } from '../src/styling/nodes/task';
+import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { handleMouseDown, taskMarkerStyle } from '../src/styling/nodes/task';
 import { sleep } from './utils/helpers';
 import { Config } from '../src/config';
 import * as editor from './utils/editor';
@@ -11,6 +11,10 @@ describe('Task marker decoration', () => {
     window.config = {} as Config;
     // setUp() appends a new editor to document.body each time; clear stale ones.
     document.body.innerHTML = '';
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   test('decorates unchecked tasks with cm-md-taskMarker-unchecked', async () => {
@@ -50,5 +54,26 @@ describe('Task marker decoration', () => {
     expect(markers[0].classList.contains('cm-md-taskMarker-unchecked')).toBe(true);
     expect(markers[1].classList.contains('cm-md-taskMarker-checked')).toBe(true);
     expect(markers[2].classList.contains('cm-md-taskMarker-checked')).toBe(true);
+  });
+
+  test('preserves the viewport when toggling a task', async () => {
+    editor.setUp('- [ ] todo', taskMarkerStyle);
+    await sleep(200);
+
+    const marker = document.querySelector<HTMLElement>('.cm-md-taskMarker');
+    if (marker === null) {
+      throw new Error('Missing task marker');
+    }
+
+    const event = new MouseEvent('mousedown', { cancelable: true });
+    Object.defineProperty(event, 'target', { value: marker });
+
+    const scrollSnapshot = jest.spyOn(window.editor, 'scrollSnapshot');
+    const dispatch = jest.spyOn(window.editor, 'dispatch');
+    handleMouseDown(event);
+
+    expect(editor.getText()).toBe('- [x] todo');
+    expect(scrollSnapshot).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ effects: expect.anything() }));
   });
 });
