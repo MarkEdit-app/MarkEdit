@@ -14,6 +14,7 @@ public struct ExtensionRelease: Codable, Equatable, Sendable {
   public let url: String
   public let sha256: String
   public let minAppVersion: String?
+  public let date: String?
   public let notes: String?
 
   public init(
@@ -21,25 +22,22 @@ public struct ExtensionRelease: Codable, Equatable, Sendable {
     url: String,
     sha256: String,
     minAppVersion: String?,
+    date: String? = nil,
     notes: String?
   ) {
     self.version = version
     self.url = url
     self.sha256 = sha256
     self.minAppVersion = minAppVersion
+    self.date = date
     self.notes = notes
   }
 }
 
 extension ExtensionRelease {
-  /// Whether the running app meets this release's minimum version requirement.
-  var isCompatible: Bool {
-    guard let minAppVersion, !minAppVersion.isEmpty else {
-      return true
-    }
-
-    let current = ExtensionEnvironment.appVersion
-    return minAppVersion.compare(current, options: .numeric) != .orderedDescending
+  /// The registry check-in date, when present and valid.
+  public var registryDate: Date? {
+    date.flatMap { ISO8601DateFormatter().date(from: $0) }
   }
 
   /// A browsable page for this release: the GitHub release page for a release-asset URL.
@@ -78,6 +76,16 @@ extension ExtensionRelease {
 
     // Fall back to the host root
     return URL(string: "\(components.scheme ?? "https")://\(host)")
+  }
+
+  /// Whether the running app meets this release's minimum version requirement.
+  var isCompatible: Bool {
+    guard let minAppVersion, !minAppVersion.isEmpty else {
+      return true
+    }
+
+    let current = ExtensionEnvironment.appVersion
+    return minAppVersion.compare(current, options: .numeric) != .orderedDescending
   }
 }
 
