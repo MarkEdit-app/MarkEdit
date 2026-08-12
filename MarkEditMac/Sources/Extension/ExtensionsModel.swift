@@ -223,6 +223,11 @@ final class ExtensionsModel {
     items.first { $0.id == id }
   }
 
+  /// Whether the unfiltered Discover list already contains the reveal target.
+  func hasDiscoverItem(matching target: ExtensionsScrollTarget) -> Bool {
+    discoverItems.contains(where: target.matches)
+  }
+
   /// Item count for `mode`, surfaced as the segment tooltip.
   func count(for mode: Mode) -> Int {
     switch mode {
