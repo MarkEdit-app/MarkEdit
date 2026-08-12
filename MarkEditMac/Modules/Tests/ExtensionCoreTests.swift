@@ -303,6 +303,25 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertTrue(try XCTUnwrap(entry.featured))
   }
 
+  // MARK: - ExtensionRelease.registryDate
+
+  func testReleaseDateDecodingIsBackwardCompatible() throws {
+    let dated = try JSONDecoder().decode(
+      ExtensionRelease.self,
+      from: Data(#"{"version":"1.1.0","date":"2026-08-12T02:00:00Z","url":"https://example.com/a.js","sha256":"abc"}"#.utf8)
+    )
+
+    let undated = try JSONDecoder().decode(
+      ExtensionRelease.self,
+      from: Data(#"{"version":"1.0.0","url":"https://example.com/a.js","sha256":"abc"}"#.utf8)
+    )
+
+    XCTAssertEqual(dated.date, "2026-08-12T02:00:00Z")
+    XCTAssertNotNil(dated.registryDate)
+    XCTAssertNil(undated.date)
+    XCTAssertNil(undated.registryDate)
+  }
+
   // MARK: - ExtensionIndex.isSupported
 
   func testIndexSchemaVersionSupport() {

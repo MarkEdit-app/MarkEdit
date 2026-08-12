@@ -18,6 +18,12 @@ enum ExtensionsScrollTarget: Equatable {
   case item(id: String)
 }
 
+@Observable
+@MainActor
+final class ExtensionsListInteraction {
+  var scrollGeneration = 0
+}
+
 /// Hosts the extension list in an AppKit `NSTableView` (SwiftUI cells) for native
 /// titlebar separators, drag-to-reorder, and row animations.
 @MainActor
@@ -27,6 +33,7 @@ final class ExtensionsViewController: NSViewController {
   private let model: ExtensionsModel
   private let scrollView = NSScrollView()
   private let tableView = NSTableView()
+  private let listInteraction = ExtensionsListInteraction()
 
   private var displayedItems: [ExtensionsModel.Item] = []
   private var displayedMode: ExtensionsModel.Mode
@@ -57,6 +64,10 @@ final class ExtensionsViewController: NSViewController {
   @available(*, unavailable)
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   override func loadView() {
@@ -163,7 +174,13 @@ extension ExtensionsViewController: NSTableViewDelegate {
       return view
     }()
 
-    cell.configure(ExtensionsRowView(model: model, item: displayedItems[row], rowMargin: rowMargin))
+    cell.configure(ExtensionsRowView(
+      model: model,
+      item: displayedItems[row],
+      listInteraction: listInteraction,
+      rowMargin: rowMargin
+    ))
+
     return cell
   }
 
@@ -339,6 +356,19 @@ private extension ExtensionsViewController {
     scrollView.drawsBackground = true
     scrollView.backgroundColor = .finderContentBackground
     view.addSubview(scrollView)
+
+    let contentView = scrollView.contentView
+    contentView.postsBoundsChangedNotifications = true
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(scrollViewBoundsDidChange),
+      name: NSView.boundsDidChangeNotification,
+      object: contentView
+    )
+  }
+
+  @objc func scrollViewBoundsDidChange(_ notification: Notification) {
+    listInteraction.scrollGeneration &+= 1
   }
 
   func configureAccessoryViews() {

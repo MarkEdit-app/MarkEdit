@@ -14,6 +14,7 @@ import SharedUI
 struct ExtensionsRowView: View {
   let model: ExtensionsModel
   let item: ExtensionsModel.Item
+  let listInteraction: ExtensionsListInteraction
   let rowMargin: Double
 
   // State for update notes popover
@@ -124,6 +125,9 @@ struct ExtensionsRowView: View {
     )
     // Fresh identity per mode so tab switches swap content without animating
     .id(model.mode)
+    .onChange(of: listInteraction.scrollGeneration) {
+      showingUpdateNotes = false
+    }
   }
 }
 
@@ -276,22 +280,49 @@ private extension ExtensionsRowView {
     }
   }
 
-  func updateNotesPopover(_ notes: String, releaseURL: URL?) -> some View {
-    VStack(alignment: .center, spacing: 12) {
+  func updateNotesPopover(_ notes: String, releaseDate: Date?, releaseURL: URL?) -> some View {
+    VStack(alignment: .leading, spacing: 0) {
+      Text(Localized.Extension.whatsNew)
+        .font(.title3)
+        .fontWeight(.semibold)
+        .padding(.bottom, 8)
+
       Text(notes)
         .font(.body)
         .textSelection(.enabled)
-        .frame(width: 300, alignment: .center)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.bottom, 16)
 
-      if let releaseURL {
-        Button(Localized.Extension.viewRelease) {
-          showingUpdateNotes = false
-          NSWorkspace.shared.open(releaseURL)
+      if releaseDate != nil || releaseURL != nil {
+        Divider()
+
+        HStack(spacing: 12) {
+          if let releaseDate {
+            HStack(spacing: 4) {
+              Image(systemName: "calendar")
+                .accessibilityHidden(true)
+              Text(formattedReleaseDate(releaseDate))
+            }
+            .font(.body)
+            .foregroundStyle(.secondary)
+          }
+
+          Spacer()
+
+          if let releaseURL {
+            Button(Localized.Extension.viewRelease) {
+              showingUpdateNotes = false
+              NSWorkspace.shared.open(releaseURL)
+            }
+            .help(releaseURL.absoluteString)
+          }
         }
-        .help(releaseURL.absoluteString)
+        .padding(.top, 16)
       }
     }
-    .padding()
+    .frame(width: 320, alignment: .leading)
+    .padding(16)
+    .background(Color(.windowBackgroundColor).opacity(0.3))
   }
 
   var metadataDot: some View {
@@ -334,7 +365,7 @@ private extension ExtensionsRowView {
         .fontWeight(.medium)
         .foregroundStyle(.tint)
         .popover(isPresented: $showingUpdateNotes, arrowEdge: .bottom) {
-          updateNotesPopover(notes, releaseURL: item.releasePageURL)
+          updateNotesPopover(notes, releaseDate: item.releaseDate, releaseURL: item.releasePageURL)
         }
         .onDisappear {
           showingUpdateNotes = false
@@ -376,5 +407,16 @@ private extension ExtensionsRowView {
     }
 
     return segments
+  }
+
+  func formattedReleaseDate(_ date: Date, relativeTo referenceDate: Date = .now) -> String {
+    let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: referenceDate) ?? referenceDate
+    if date < oneWeekAgo {
+      return date.formatted(date: .abbreviated, time: .omitted)
+    }
+
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .full
+    return formatter.localizedString(for: date, relativeTo: referenceDate)
   }
 }

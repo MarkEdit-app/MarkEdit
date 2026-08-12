@@ -140,6 +140,11 @@ final class ExtensionsModel {
       entry?.latest.notes
     }
 
+    /// When the latest release was checked into the registry.
+    var releaseDate: Date? {
+      entry?.latest.registryDate
+    }
+
     /// The latest release url, only when it points to a GitHub release page.
     var releasePageURL: URL? {
       guard let url = latestReleaseURL, url.host() == "github.com", url.path().contains("/releases/tag/") else {
