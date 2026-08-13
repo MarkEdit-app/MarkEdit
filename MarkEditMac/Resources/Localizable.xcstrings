@@ -686,6 +686,23 @@
         }
       }
     },
+    "Copy Install Link" : {
+      "comment" : "Menu item to copy an extension's MarkEdit install deep link",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷贝安装链接"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷貝安裝連結"
+          }
+        }
+      }
+    },
     "Copy Pandoc Command" : {
       "comment" : "Toolbar item to copy pandoc command",
       "localizations" : {
@@ -699,6 +716,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拷貝 Pandoc 指令"
+          }
+        }
+      }
+    },
+    "Copy Registry Link" : {
+      "comment" : "Menu item to copy an extension's public registry page link",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷贝目录链接"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷貝目錄連結"
           }
         }
       }

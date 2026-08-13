@@ -148,6 +148,8 @@ extension Localized {
     static let enabled = String(localized: "Enabled", comment: "Toggle title for enabling an installed extension")
     static let enabledTooltip = String(localized: "Turn off to keep the extension installed but inactive", comment: "Tooltip explaining the enable switch")
     static let uninstall = String(localized: "Uninstall", comment: "Button title to uninstall an extension")
+    static let copyRegistryLink = String(localized: "Copy Registry Link", comment: "Menu item to copy an extension's public registry page link")
+    static let copyInstallLink = String(localized: "Copy Install Link", comment: "Menu item to copy an extension's MarkEdit install deep link")
     static let reveal = String(localized: "Reveal", comment: "Button title to reveal an extension's script file in Finder")
     static let official = String(localized: "Official", comment: "Badge shown for extensions authored by the MarkEdit-app organization")
     static let featured = String(localized: "Featured", comment: "Badge shown for featured extensions recommended by MarkEdit")
