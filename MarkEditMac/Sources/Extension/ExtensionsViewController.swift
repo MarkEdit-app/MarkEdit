@@ -215,12 +215,26 @@ extension ExtensionsViewController: NSMenuDelegate {
       return
     }
 
-    // In Discover, offer a quick uninstall for extensions that are already installed
     let clickedItem = displayedItems[clickedRow]
-    guard model.mode == .discover, clickedItem.installed != nil else {
+    guard model.mode == .discover else {
       return
     }
 
+    let registryLink = "https://markedit-app.github.io/extensions/#\(clickedItem.id)"
+    menu.addItem(withTitle: Localized.Extension.copyRegistryLink) {
+      NSPasteboard.general.overwrite(string: registryLink)
+    }.toolTip = registryLink
+
+    let installLink = "markedit://install-extension?id=\(clickedItem.id)"
+    menu.addItem(withTitle: Localized.Extension.copyInstallLink) {
+      NSPasteboard.general.overwrite(string: installLink)
+    }.toolTip = installLink
+
+    guard clickedItem.installed != nil else {
+      return
+    }
+
+    menu.addItem(.separator())
     let item = menu.addItem(
       withTitle: Localized.Extension.uninstall,
       action: #selector(uninstallExtension(_:)),
