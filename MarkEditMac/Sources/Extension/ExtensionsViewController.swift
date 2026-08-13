@@ -16,6 +16,13 @@ import Observation
 enum ExtensionsScrollTarget: Equatable {
   case category(ExtensionEntry.Category)
   case item(id: String)
+
+  func matches(_ item: ExtensionsModel.Item) -> Bool {
+    switch self {
+    case .category(let category): return item.category == category
+    case .item(let id): return item.id == id
+    }
+  }
 }
 
 @Observable
@@ -261,25 +268,28 @@ extension ExtensionsViewController {
     }
   }
 
-  /// Scrolls to `target`'s row, deferred until the row is listed.
-  func scrollTo(_ target: ExtensionsScrollTarget) {
+  /// Adopts the current model snapshot without row animations, then scrolls to `target`.
+  func reveal(_ target: ExtensionsScrollTarget) {
+    let items = model.items
+    let shouldReload = displayedMode != model.mode || displayedItems != items
+
+    if shouldReload {
+      displayedMode = model.mode
+      displayedItems = items
+      tableView.reloadData()
+    }
+
     pendingScrollTarget = target
     scrollToPendingTarget()
   }
 
-  /// Scrolls to the target armed by `scrollTo(_:)`, a no-op once it has been handled.
+  /// Reveals the pending target, a no-op once it has been handled.
   func scrollToPendingTarget() {
     guard let target = pendingScrollTarget else {
       return
     }
 
-    let index = displayedItems.firstIndex { item in
-      switch target {
-      case .category(let category): return item.category == category
-      case .item(let id): return item.id == id
-      }
-    }
-
+    let index = displayedItems.firstIndex(where: target.matches)
     guard let index else {
       return
     }
@@ -288,16 +298,10 @@ extension ExtensionsViewController {
     tableView.needsLayout = true
     tableView.layoutSubtreeIfNeeded()
 
-    let clip = scrollView.contentView
-    let topInset = clip.contentInsets.top
-    let bottomInset = clip.contentInsets.bottom
-    let minY = -topInset
-    let maxY = max(minY, tableView.bounds.height + bottomInset - clip.bounds.height)
-    let targetY = min(max(tableView.rect(ofRow: index).minY - topInset, minY), maxY)
-
-    // Pin the target row to the top (just below the titlebar), clamped to the scrollable range
-    clip.scroll(to: CGPoint(x: 0, y: targetY))
-    scrollView.reflectScrolledClipView(clip)
+    let rowRect = tableView.rect(ofRow: index)
+    let boundsOrigin = CGPoint(x: 0, y: rowRect.origin.y - view.safeAreaInsets.top)
+    scrollView.contentView.setBoundsOrigin(boundsOrigin)
+    scrollView.reflectScrolledClipView(scrollView.contentView)
 
     if case .item(let id) = target {
       flashHighlight(itemID: id)
@@ -339,7 +343,6 @@ private extension ExtensionsViewController {
     tableView.backgroundColor = .clear
     tableView.selectionHighlightStyle = .none
     tableView.usesAutomaticRowHeights = true
-    tableView.rowHeight = 68
     tableView.intercellSpacing = .zero
     tableView.dataSource = self
     tableView.delegate = self

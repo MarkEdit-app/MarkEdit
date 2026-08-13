@@ -25,20 +25,18 @@ final class ExtensionsWindowController: NSWindowController {
       ExtensionUpdater.requestMenuUpdate()
     }
 
-    if target != nil {
-      // Discover lists every entry, and a leftover query would filter out the target
-      model.mode = .discover
-      model.searchQuery = ""
-      searchToolbarItem?.searchField.stringValue = ""
-      updateModeControl()
+    let canRevealImmediately = target.map(model.hasDiscoverItem) ?? false
+    if canRevealImmediately {
+      prepareToRevealTarget()
     }
 
     showWindow(nil)
     window?.makeKeyAndOrderFront(nil)
     NSApp.activate(ignoringOtherApps: true)
 
-    if let target {
-      extensionsVC?.scrollTo(target)
+    if let target, canRevealImmediately {
+      extensionsVC?.reveal(target)
+      return
     }
 
     Task {
@@ -46,8 +44,10 @@ final class ExtensionsWindowController: NSWindowController {
       // and falls back to the cache when offline or unchanged.
       await model.load(forceRefresh: true)
 
-      // Retry only if the target wasn't already reached while rows loaded
-      extensionsVC?.scrollToPendingTarget()
+      if let target {
+        prepareToRevealTarget()
+        extensionsVC?.reveal(target)
+      }
     }
   }
 
@@ -160,6 +160,20 @@ private extension ExtensionsWindowController {
 
   var searchToolbarItem: NSSearchToolbarItem? {
     window?.toolbar?.items.first { $0.itemIdentifier == .search } as? NSSearchToolbarItem
+  }
+
+  /// Clears filtering and selects Discover before a programmatic reveal.
+  func prepareToRevealTarget() {
+    if model.mode != .discover {
+      model.mode = .discover
+    }
+
+    if !model.searchQuery.isEmpty {
+      model.searchQuery = ""
+    }
+
+    searchToolbarItem?.searchField.stringValue = ""
+    updateModeControl()
   }
 
   static func createController() -> ExtensionsWindowController {
