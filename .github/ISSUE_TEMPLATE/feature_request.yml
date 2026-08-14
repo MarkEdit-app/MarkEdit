@@ -16,7 +16,7 @@ body:
 
         - **Write in English** so that more people in the community can understand and contribute.
 
-        - **Keep expectations modest.** MarkEdit stays simple and focused, so some ideas (e.g. a "WYSIWYG" mode) may be out of scope.
+        - **Keep expectations modest.** MarkEdit stays simple and focused, some ideas may be out of scope or can be done via [extensions](https://markedit-app.github.io/extensions/).
 
   - type: checkboxes
     attributes:
