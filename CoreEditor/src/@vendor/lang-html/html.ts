@@ -1,6 +1,7 @@
 import {parser} from "@lezer/html"
+import type {SyntaxNode} from "@lezer/common"
 import {EditorView} from "@codemirror/view"
-import {EditorSelection} from "@codemirror/state"
+import {EditorSelection, type Text} from "@codemirror/state"
 import {LRLanguage, indentNodeProp, foldNodeProp, LanguageSupport, syntaxTree,
         bracketMatchingHandle} from "@codemirror/language"
 import {elementName, htmlCompletionSourceWith, type TagSpec} from "./complete"
@@ -90,6 +91,15 @@ export function html(config: {
 const selfClosers = new Set(
   "area base br col command embed frame hr img input keygen link meta param source track wbr menuitem".split(" "))
 
+function isClosed(doc: Text, elt: SyntaxNode, name: string) {
+  for (;;) {
+    if (elt.lastChild?.name != "CloseTag") return false
+    let next = elt.parent
+    if (!next || elementName(doc, next) != name) return true
+    elt = next
+  }
+}
+
 /// Extension that will automatically insert close tags when a `>` or
 /// `/` is typed.
 export const autoCloseTags = EditorView.inputHandler.of((view, from, to, text, insertTransaction) => {
@@ -101,9 +111,8 @@ export const autoCloseTags = EditorView.inputHandler.of((view, from, to, text, i
     let {head} = range, after = syntaxTree(state).resolveInner(head, -1), name
     if (didType && text == ">" && after.name == "EndTag") {
       let tag = after.parent!
-      if (tag.parent?.lastChild?.name != "CloseTag" &&
-          (name = elementName(state.doc, tag.parent, head)) &&
-          !selfClosers.has(name)) {
+      if ((name = elementName(state.doc, tag.parent, head)) &&
+          !selfClosers.has(name) && !isClosed(state.doc, tag.parent!, name)) {
         let to = head + (state.doc.sliceString(head, head + 1) === ">" ? 1 : 0)
         let insert = `</${name}>`
         return {range, changes: {from: head, to, insert}}
