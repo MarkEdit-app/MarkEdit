@@ -154,6 +154,15 @@ final class ExtensionsModel {
       return url
     }
 
+    /// The latest release notes and date.
+    var updateSummary: (notes: String, date: Date)? {
+      guard let notes = updateNotes, !notes.isEmpty, let date = releaseDate else {
+        return nil
+      }
+
+      return (notes, date)
+    }
+
     /// Whether the item matches a search query, by name, author, id, or details.
     func matches(query: String) -> Bool {
       [name, author, id, details].contains { $0.localizedCaseInsensitiveContains(query) }
