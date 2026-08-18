@@ -17,8 +17,8 @@ struct ExtensionsRowView: View {
   let listInteraction: ExtensionsListInteraction
   let rowMargin: Double
 
-  // State for update notes popover
-  @State private var showingUpdateNotes = false
+  @State private var showingUpdateInline = false
+  @State private var showingUpdatePopover = false
 
   var body: some View {
     // Read live state so the cell animates its own updates instead of being reloaded
@@ -76,13 +76,15 @@ struct ExtensionsRowView: View {
         // Only animate the row being upgraded, not tab switches
         .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.updateVersion)
 
-        if !item.details.isEmpty {
-          Text(item.details, highlighting: searchQuery)
-            .font(.body)
-            .foregroundStyle(.secondary)
-            // Keep the description on one line; users can widen the window to read more
-            .lineLimit(1)
-            .truncationMode(.tail)
+        if let summary = updateSummary(for: item) {
+          Button {
+            showingUpdateInline.toggle()
+          } label: {
+            subtitle(showingUpdateInline ? item.details : summary.notes)
+          }
+          .buttonStyle(.plain)
+        } else if !item.details.isEmpty {
+          subtitle(item.details)
         }
 
         if item.category == .theme, let patterns = item.colorPatterns, !patterns.isEmpty {
@@ -123,10 +125,11 @@ struct ExtensionsRowView: View {
       RoundedRectangle(cornerRadius: 8)
         .fill(Self.contentBackgroundStyle)
     )
-    // Fresh identity per mode so tab switches swap content without animating
-    .id(model.mode)
+    // Fresh identity per mode and item so tab switches and cell reuse reset row state
+    .id("\(model.mode):\(item.id)")
     .onChange(of: listInteraction.scrollGeneration) {
-      showingUpdateNotes = false
+      showingUpdateInline = false
+      showingUpdatePopover = false
     }
   }
 }
@@ -155,6 +158,15 @@ private extension ExtensionsRowView {
   /// Trimmed search query, tinted in rows to show why an item matched.
   var searchQuery: String {
     model.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+
+  func subtitle(_ text: String) -> some View {
+    Text(text, highlighting: searchQuery)
+      .font(.body)
+      .foregroundStyle(.secondary)
+      // Keep the subtitle on one line; users can widen the window to read more
+      .lineLimit(1)
+      .truncationMode(.tail)
   }
 
   func systemSymbol(for item: ExtensionsModel.Item) -> String {
@@ -311,7 +323,7 @@ private extension ExtensionsRowView {
 
           if let releaseURL {
             Button(Localized.Extension.viewRelease) {
-              showingUpdateNotes = false
+              showingUpdatePopover = false
               NSWorkspace.shared.open(releaseURL)
             }
             .help(releaseURL.absoluteString)
@@ -355,20 +367,26 @@ private extension ExtensionsRowView {
       ))
     }
 
-    if let notes = item.updateNotes {
+    if let summary = updateSummary(for: item) {
+      segments.append(AnyView(
+        Text(summary.date.formatted(date: .abbreviated, time: .omitted))
+          .font(.callout)
+          .foregroundStyle(.secondary)
+      ))
+    } else if let notes = item.updateNotes {
       segments.append(AnyView(
         Button(Localized.Extension.whatsNew) {
-          showingUpdateNotes = true
+          showingUpdatePopover = true
         }
         .buttonStyle(.plain)
         .font(.callout)
         .fontWeight(.medium)
         .foregroundStyle(.tint)
-        .popover(isPresented: $showingUpdateNotes, arrowEdge: .bottom) {
+        .popover(isPresented: $showingUpdatePopover, arrowEdge: .bottom) {
           updateNotesPopover(notes, releaseDate: item.releaseDate, releaseURL: item.releasePageURL)
         }
         .onDisappear {
-          showingUpdateNotes = false
+          showingUpdatePopover = false
         }
       ))
     }
@@ -407,6 +425,10 @@ private extension ExtensionsRowView {
     }
 
     return segments
+  }
+
+  func updateSummary(for item: ExtensionsModel.Item) -> (notes: String, date: Date)? {
+    model.mode == .updates ? item.updateSummary : nil
   }
 
   func formattedReleaseDate(_ date: Date, relativeTo referenceDate: Date = .now) -> String {
