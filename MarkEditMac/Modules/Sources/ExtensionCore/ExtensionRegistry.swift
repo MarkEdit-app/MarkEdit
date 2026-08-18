@@ -14,7 +14,7 @@ public struct ExtensionRelease: Codable, Equatable, Sendable {
   public let url: String
   public let sha256: String
   public let minAppVersion: String?
-  public let date: String?
+  public let date: Date?
   public let notes: String?
 
   public init(
@@ -22,7 +22,7 @@ public struct ExtensionRelease: Codable, Equatable, Sendable {
     url: String,
     sha256: String,
     minAppVersion: String?,
-    date: String? = nil,
+    date: Date? = nil,
     notes: String?
   ) {
     self.version = version
@@ -35,11 +35,6 @@ public struct ExtensionRelease: Codable, Equatable, Sendable {
 }
 
 extension ExtensionRelease {
-  /// The registry check-in date, when present and valid.
-  public var registryDate: Date? {
-    date.flatMap { ISO8601DateFormatter().date(from: $0) }
-  }
-
   /// A browsable page for this release: the GitHub release page for a release-asset URL.
   public var pageURL: URL? {
     guard let components = URLComponents(string: url), let host = components.host else {
@@ -107,6 +102,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
   public let description: String
   public let author: String
   public let homepage: String
+  public let addedDate: Date?
   public let category: Category
   public let colorScheme: ColorScheme?
   public let colorPatterns: [String]?
@@ -119,6 +115,7 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
     description: String,
     author: String,
     homepage: String,
+    addedDate: Date? = nil,
     category: Category,
     colorScheme: ColorScheme?,
     colorPatterns: [String]?,
@@ -130,11 +127,37 @@ public struct ExtensionEntry: Codable, Equatable, Sendable {
     self.description = description
     self.author = author
     self.homepage = homepage
+    self.addedDate = addedDate
     self.category = category
     self.colorScheme = colorScheme
     self.colorPatterns = colorPatterns
     self.featured = featured
     self.latest = latest
+  }
+}
+
+extension ExtensionEntry {
+  public static func discoverOrder(_ entries: [Self]) -> [Self] {
+    entries.sorted { lhs, rhs in
+      if lhs.category != rhs.category {
+        return lhs.category == .extension
+      }
+
+      let lhsFeatured = lhs.featured == true
+      let rhsFeatured = rhs.featured == true
+      if lhsFeatured != rhsFeatured {
+        return lhsFeatured
+      }
+
+      let lhsDate = lhs.latest.date ?? lhs.addedDate
+      let rhsDate = rhs.latest.date ?? rhs.addedDate
+      if lhsDate != rhsDate {
+        return lhsDate ?? .distantPast > rhsDate ?? .distantPast
+      }
+
+      let nameOrder = lhs.name.localizedStandardCompare(rhs.name)
+      return nameOrder == .orderedSame ? lhs.id < rhs.id : nameOrder == .orderedAscending
+    }
   }
 }
 
@@ -179,7 +202,7 @@ public enum ExtensionRegistry {
       return nil
     }
 
-    guard let index = try? JSONDecoder().decode(ExtensionIndex.self, from: data) else {
+    guard let index = decodeIndex(from: data) else {
       return nil
     }
 
@@ -262,7 +285,7 @@ public enum ExtensionRegistry {
       // Not Modified, the cache is still current
       return fallbackIndex()
     case 200:
-      guard let index = try? JSONDecoder().decode(ExtensionIndex.self, from: data) else {
+      guard let index = decodeIndex(from: data) else {
         Logger.log(.error, "Failed to decode the registry index")
         return fallbackIndex()
       }
@@ -327,9 +350,15 @@ private extension ExtensionRegistry {
       return nil
     }
 
-    return try? JSONDecoder().decode(ExtensionIndex.self, from: data)
+    return decodeIndex(from: data)
   }
 #endif
+
+  static func decodeIndex(from data: Data) -> ExtensionIndex? {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return try? decoder.decode(ExtensionIndex.self, from: data)
+  }
 
   /// The cached index to use when a refresh can't produce a new one.
   ///
