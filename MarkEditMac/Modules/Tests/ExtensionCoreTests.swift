@@ -127,6 +127,50 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertEqual(release.pageURL?.absoluteString, "https://example.com")
   }
 
+  // MARK: - ExtensionEntry.discoverOrder
+
+  func testDiscoverOrderPrioritizesCategoryBeforeFeatured() {
+    let featuredTheme = makeEntry(id: "theme", category: .theme, featured: true)
+    let extensionEntry = makeEntry(id: "extension", category: .extension)
+
+    XCTAssertEqual(ExtensionEntry.discoverOrder([featuredTheme, extensionEntry]).map(\.id), ["extension", "theme"])
+  }
+
+  func testDiscoverOrderPrioritizesFeaturedBeforeDate() {
+    let newer = makeEntry(id: "newer", addedDate: "2026-08-18T02:00:00Z")
+    let featured = makeEntry(id: "featured", addedDate: "2026-08-01T00:00:00Z", featured: true)
+
+    XCTAssertEqual(ExtensionEntry.discoverOrder([newer, featured]).map(\.id), ["featured", "newer"])
+  }
+
+  func testDiscoverOrderTreatsFalseAndNilFeaturedEqually() {
+    let older = makeEntry(id: "older", addedDate: "2026-08-01T00:00:00Z", featured: false)
+    let newer = makeEntry(id: "newer", addedDate: "2026-08-18T02:00:00Z")
+
+    XCTAssertEqual(ExtensionEntry.discoverOrder([older, newer]).map(\.id), ["newer", "older"])
+  }
+
+  func testDiscoverOrderUsesReleaseDateThenAddedDate() {
+    let updated = makeEntry(
+      id: "updated",
+      addedDate: "2026-07-01T00:00:00Z",
+      releaseDate: "2026-08-18T02:00:00Z"
+    )
+
+    let added = makeEntry(id: "added", addedDate: "2026-08-10T00:00:00Z")
+    XCTAssertEqual(ExtensionEntry.discoverOrder([added, updated]).map(\.id), ["updated", "added"])
+  }
+
+  func testDiscoverOrderFallsBackToFinderStyleName() {
+    let beta = makeEntry(id: "first-id", name: "Beta")
+    let alpha = makeEntry(id: "last-id", name: "Alpha")
+    let theme10 = makeEntry(id: "theme-10", name: "Theme 10")
+    let theme2 = makeEntry(id: "theme-2", name: "Theme 2")
+
+    let entries = ExtensionEntry.discoverOrder([theme10, beta, theme2, alpha])
+    XCTAssertEqual(entries.map(\.id), ["last-id", "first-id", "theme-2", "theme-10"])
+  }
+
   // MARK: - availableUpdates
 
   func testAvailableUpdatesFindsNewerRelease() {
@@ -268,6 +312,32 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertFalse(ExtensionRegistry.hasCachedUpdates)
   }
 
+  // MARK: - Registry dates
+
+  func testRegistryDatesDecodeAsISO8601() throws {
+    let json = """
+    {
+      "id": "a",
+      "name": "A",
+      "description": "",
+      "author": "",
+      "homepage": "",
+      "addedDate": "2026-08-01T00:00:00Z",
+      "category": "extension",
+      "latest": {
+        "version": "1.0.0",
+        "date": "2026-08-12T02:00:00Z",
+        "url": "https://example.com/a.js",
+        "sha256": "abc"
+      }
+    }
+    """
+
+    let entry = try decodeRegistry(ExtensionEntry.self, from: Data(json.utf8))
+    XCTAssertEqual(entry.addedDate, iso8601Date("2026-08-01T00:00:00Z"))
+    XCTAssertEqual(entry.latest.date, iso8601Date("2026-08-12T02:00:00Z"))
+  }
+
   // MARK: - ExtensionEntry.featured
 
   func testFeaturedDefaultsToNilWhenAbsent() throws {
@@ -303,23 +373,21 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertTrue(try XCTUnwrap(entry.featured))
   }
 
-  // MARK: - ExtensionRelease.registryDate
+  // MARK: - ExtensionRelease.date
 
   func testReleaseDateDecodingIsBackwardCompatible() throws {
-    let dated = try JSONDecoder().decode(
+    let dated = try decodeRegistry(
       ExtensionRelease.self,
       from: Data(#"{"version":"1.1.0","date":"2026-08-12T02:00:00Z","url":"https://example.com/a.js","sha256":"abc"}"#.utf8)
     )
 
-    let undated = try JSONDecoder().decode(
+    let undated = try decodeRegistry(
       ExtensionRelease.self,
       from: Data(#"{"version":"1.0.0","url":"https://example.com/a.js","sha256":"abc"}"#.utf8)
     )
 
-    XCTAssertEqual(dated.date, "2026-08-12T02:00:00Z")
-    XCTAssertNotNil(dated.registryDate)
+    XCTAssertEqual(dated.date, iso8601Date("2026-08-12T02:00:00Z"))
     XCTAssertNil(undated.date)
-    XCTAssertNil(undated.registryDate)
   }
 
   // MARK: - ExtensionIndex.isSupported
@@ -478,18 +546,35 @@ private extension ExtensionCoreTests {
     )
   }
 
-  func makeEntry(id: String, version: String, minAppVersion: String? = nil) -> ExtensionEntry {
+  func makeEntry(
+    id: String,
+    name: String? = nil,
+    version: String = "1.0.0",
+    minAppVersion: String? = nil,
+    category: ExtensionEntry.Category = .extension,
+    addedDate: String? = nil,
+    releaseDate: String? = nil,
+    featured: Bool? = nil
+  ) -> ExtensionEntry {
     ExtensionEntry(
       id: id,
-      name: id,
+      name: name ?? id,
       description: "",
       author: "",
       homepage: "",
-      category: .extension,
+      addedDate: addedDate.map(iso8601Date),
+      category: category,
       colorScheme: nil,
       colorPatterns: nil,
-      featured: nil,
-      latest: makeRelease(version: version, minAppVersion: minAppVersion)
+      featured: featured,
+      latest: ExtensionRelease(
+        version: version,
+        url: "https://example.com/sample.js",
+        sha256: "abc",
+        minAppVersion: minAppVersion,
+        date: releaseDate.map(iso8601Date),
+        notes: nil
+      )
     )
   }
 
@@ -541,8 +626,20 @@ private extension ExtensionCoreTests {
     let cacheDir = ExtensionEnvironment.indexCacheDirectory
     try FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
 
-    let data = try JSONEncoder().encode(index)
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .iso8601
+    let data = try encoder.encode(index)
     try data.write(to: cacheDir.appending(path: "index.json", directoryHint: .notDirectory))
+  }
+
+  func decodeRegistry<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return try decoder.decode(type, from: data)
+  }
+
+  func iso8601Date(_ value: String) -> Date {
+    ISO8601DateFormatter().date(from: value) ?? .distantPast
   }
 
   func installedIds(in dir: URL) -> [String] {

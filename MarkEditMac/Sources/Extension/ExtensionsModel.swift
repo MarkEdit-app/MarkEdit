@@ -142,7 +142,7 @@ final class ExtensionsModel {
 
     /// When the latest release was checked into the registry.
     var releaseDate: Date? {
-      entry?.latest.registryDate
+      entry?.latest.date
     }
 
     /// The latest release url, only when it points to a GitHub release page.
@@ -437,7 +437,7 @@ private extension ExtensionsModel {
     })
 
     let installedByID = Dictionary(installed.map { ($0.id, $0) }) { lhs, _ in lhs }
-    discoverItems = discoverOrder(entries.map { entry in
+    discoverItems = ExtensionEntry.discoverOrder(entries).map { entry in
       let installed = installedByID[entry.id]
       return Item(
         id: entry.id,
@@ -453,21 +453,12 @@ private extension ExtensionsModel {
         installed: installed,
         entry: entry
       )
-    })
+    }
   }
 
   /// Extensions first, then themes, preserving each group's original order.
   func extensionsFirst(_ items: [Item]) -> [Item] {
     items.filter { $0.category == .extension } + items.filter { $0.category != .extension }
-  }
-
-  /// Discover order: extensions before themes, featured floated to the top of each group.
-  func discoverOrder(_ items: [Item]) -> [Item] {
-    let featuredFirst: ([Item]) -> [Item] = { items in
-      items.filter { $0.isFeatured } + items.filter { !$0.isFeatured }
-    }
-
-    return extensionsFirst(featuredFirst(items))
   }
 
   /// Runs a mutating action in the busy state (ignoring re-entrant calls), keeping the spinner briefly visible and reporting failures.
