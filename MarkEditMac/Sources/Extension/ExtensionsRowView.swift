@@ -16,8 +16,8 @@ struct ExtensionsRowView: View {
   let item: ExtensionsModel.Item
   let listInteraction: ExtensionsListInteraction
   let rowMargin: Double
+  let rowHeightChanged: () -> Void
 
-  @State private var showingUpdateInline = false
   @State private var showingUpdatePopover = false
 
   var body: some View {
@@ -78,7 +78,13 @@ struct ExtensionsRowView: View {
 
         if let summary = updateSummary(for: item) {
           Button {
-            showingUpdateInline.toggle()
+            if showingUpdateInline {
+              listInteraction.inlineUpdateItemIDs.remove(item.id)
+            } else {
+              listInteraction.inlineUpdateItemIDs.insert(item.id)
+            }
+
+            rowHeightChanged()
           } label: {
             subtitle(showingUpdateInline ? item.details : summary.notes)
           }
@@ -89,9 +95,9 @@ struct ExtensionsRowView: View {
 
         if item.category == .theme, let patterns = item.colorPatterns, !patterns.isEmpty {
           ThemePreview(patterns: patterns, showsBothSchemes: item.colorScheme == .both)
-            // Centered vertically between subtitle and metadata
+          // Centered vertically between subtitle and metadata
             .padding(.top, 12)
-            // Decorative illustration; the row already conveys the theme textually
+          // Decorative illustration; the row already conveys the theme textually
             .accessibilityHidden(true)
         }
 
@@ -106,13 +112,14 @@ struct ExtensionsRowView: View {
               segments[index]
             }
           }
+          .lineLimit(1)
+          .truncationMode(.tail)
           .padding(.top, 12)
           // Only animate the row being upgraded, not tab switches
           .animation(isItemBusy ? .easeInOut(duration: 0.25) : nil, value: item.version)
         }
       }
-
-      Spacer()
+      .frame(maxWidth: .infinity, alignment: .leading)
 
       // Centered vertically on the cell
       trailingControl(item: item)
@@ -128,9 +135,25 @@ struct ExtensionsRowView: View {
     // Fresh identity per mode and item so tab switches and cell reuse reset row state
     .id("\(model.mode):\(item.id)")
     .onChange(of: listInteraction.scrollGeneration) {
-      showingUpdateInline = false
       showingUpdatePopover = false
     }
+  }
+
+  var sizingSubtitleText: String? {
+    let item = liveItem
+    if let summary = updateSummary(for: item) {
+      return showingUpdateInline ? item.details : summary.notes
+    }
+
+    return item.details.isEmpty ? nil : item.details
+  }
+
+  func sizingSubtitle(_ text: String) -> some View {
+    subtitle(text)
+  }
+
+  var sizingTrailingControl: some View {
+    trailingControl(item: liveItem)
   }
 }
 
@@ -160,12 +183,15 @@ private extension ExtensionsRowView {
     model.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
   }
 
+  var showingUpdateInline: Bool {
+    listInteraction.inlineUpdateItemIDs.contains(item.id)
+  }
+
   func subtitle(_ text: String) -> some View {
     Text(text, highlighting: searchQuery)
       .font(.body)
       .foregroundStyle(.secondary)
-      // Keep the subtitle on one line; users can widen the window to read more
-      .lineLimit(1)
+      .lineLimit(3)
       .truncationMode(.tail)
   }
 
@@ -187,10 +213,10 @@ private extension ExtensionsRowView {
   @ViewBuilder
   func trailingControl(item: ExtensionsModel.Item) -> some View {
     buttonControls(for: item)
-      // Non-interactive while busy; only the triggering button shows the spinner
+    // Non-interactive while busy; only the triggering button shows the spinner
       .disabled(isItemBusy)
       .animation(.easeInOut(duration: 0.25), value: isItemBusy)
-      // Intrinsic width so a narrow window truncates metadata, not the titles
+    // Intrinsic width so a narrow window truncates metadata, not the titles
       .fixedSize(horizontal: true, vertical: false)
       .layoutPriority(1)
   }
@@ -378,16 +404,16 @@ private extension ExtensionsRowView {
         Button(Localized.Extension.whatsNew) {
           showingUpdatePopover = true
         }
-        .buttonStyle(.plain)
-        .font(.callout)
-        .fontWeight(.medium)
-        .foregroundStyle(.tint)
-        .popover(isPresented: $showingUpdatePopover, arrowEdge: .bottom) {
-          updateNotesPopover(notes, releaseDate: item.releaseDate, releaseURL: item.releasePageURL)
-        }
-        .onDisappear {
-          showingUpdatePopover = false
-        }
+          .buttonStyle(.plain)
+          .font(.callout)
+          .fontWeight(.medium)
+          .foregroundStyle(.tint)
+          .popover(isPresented: $showingUpdatePopover, arrowEdge: .bottom) {
+            updateNotesPopover(notes, releaseDate: item.releaseDate, releaseURL: item.releasePageURL)
+          }
+          .onDisappear {
+            showingUpdatePopover = false
+          }
       ))
     }
 
@@ -415,12 +441,12 @@ private extension ExtensionsRowView {
         Button(Localized.Extension.homepage) {
           NSWorkspace.shared.open(homepage)
         }
-        .buttonStyle(.plain)
-        .font(.callout)
-        .fontWeight(.medium)
-        .foregroundStyle(.tint)
-        .help(homepage.absoluteString)
-        .accessibilityAddTraits(.isLink)
+          .buttonStyle(.plain)
+          .font(.callout)
+          .fontWeight(.medium)
+          .foregroundStyle(.tint)
+          .help(homepage.absoluteString)
+          .accessibilityAddTraits(.isLink)
       ))
     }
 
