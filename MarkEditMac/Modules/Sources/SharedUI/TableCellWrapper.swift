@@ -9,6 +9,24 @@ import SwiftUI
 
 /// Table cell that hosts an arbitrary SwiftUI view, filling the full cell width.
 public final class TableCellWrapper: NSTableCellView {
+  @MainActor
+  public final class Measurer {
+    public init() {}
+
+    public func size(for rootView: some View, width: Double) -> CGSize {
+      controller.rootView = AnyView(rootView)
+      return controller.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
+    }
+
+    public func fittingHeight(for rootView: some View, width: Double) -> Double {
+      let contentSize = size(for: rootView, width: width)
+      return ceil(contentSize.height + verticalInset * 2)
+    }
+
+    private let controller = NSHostingController(rootView: AnyView(EmptyView()))
+  }
+
+  private static let verticalInset: Double = 2
   private let hostingView = NSHostingView(rootView: AnyView(EmptyView()))
 
   public init() {
@@ -19,8 +37,8 @@ public final class TableCellWrapper: NSTableCellView {
     NSLayoutConstraint.activate([
       hostingView.leadingAnchor.constraint(equalTo: leadingAnchor),
       hostingView.trailingAnchor.constraint(equalTo: trailingAnchor),
-      hostingView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-      hostingView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+      hostingView.topAnchor.constraint(equalTo: topAnchor, constant: Self.verticalInset),
+      hostingView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Self.verticalInset),
     ])
   }
 

@@ -29,6 +29,7 @@ enum ExtensionsScrollTarget: Equatable {
 @MainActor
 final class ExtensionsListInteraction {
   var scrollGeneration = 0
+  var inlineUpdateItemIDs: Set<String> = []
 }
 
 /// Hosts the extension list in an AppKit `NSTableView` (SwiftUI cells) for native
@@ -37,18 +38,25 @@ final class ExtensionsListInteraction {
 final class ExtensionsViewController: NSViewController {
   static let defaultContentRect = CGRect(x: 0, y: 0, width: 780, height: 580)
 
-  private let model: ExtensionsModel
-  private let scrollView = NSScrollView()
-  private let tableView = NSTableView()
-  private let listInteraction = ExtensionsListInteraction()
+  let model: ExtensionsModel
+  let scrollView = NSScrollView()
+  let tableView = NSTableView()
+  let listInteraction = ExtensionsListInteraction()
+  let rowMeasurer = TableCellWrapper.Measurer()
 
-  private var displayedItems: [ExtensionsModel.Item] = []
+  var displayedItems: [ExtensionsModel.Item] = [] {
+    didSet {
+      let displayedIDs = Set(displayedItems.map(\.id))
+      rowMetrics = rowMetrics.filter { displayedIDs.contains($0.key) }
+    }
+  }
+
+  var rowMetrics: [String: RowMetrics] = [:]
+  var rowLayoutWidth: Double = 0
+  var trailingControlWidths: [TrailingControlKey: Double] = [:]
+
   private var displayedMode: ExtensionsModel.Mode
-
-  /// While true, a whole-page overlay task (Refresh or Update All) drives the table and the observation-driven diff steps aside.
   private var isRunningProgressOverlay = false
-
-  /// Mirrors `model.pendingRelaunch` for layout; toggled with a slide-up animation on show.
   private var displayedRelaunch = false
   private var isAnimatingRelaunch = false
   private var pendingScrollTarget: ExtensionsScrollTarget?
@@ -89,6 +97,10 @@ final class ExtensionsViewController: NSViewController {
 
     displayedItems = model.items
     displayedRelaunch = model.pendingRelaunch
+    layoutContents()
+
+    scrollView.layoutSubtreeIfNeeded()
+    rowLayoutWidth = rowContentWidth
     tableView.reloadData()
 
     updateStateController()
@@ -102,6 +114,7 @@ final class ExtensionsViewController: NSViewController {
     }
 
     layoutContents()
+    updateRowLayout()
   }
 }
 
@@ -174,6 +187,14 @@ extension ExtensionsViewController: NSTableViewDelegate {
     false
   }
 
+  func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+    guard displayedItems.indices.contains(row) else {
+      return tableView.rowHeight
+    }
+
+    return fittingHeight(for: displayedItems[row])
+  }
+
   func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
     let cell = tableView.makeView(withIdentifier: Constants.cellIdentifier, owner: self) as? TableCellWrapper ?? {
       let view = TableCellWrapper()
@@ -181,12 +202,14 @@ extension ExtensionsViewController: NSTableViewDelegate {
       return view
     }()
 
-    cell.configure(ExtensionsRowView(
-      model: model,
-      item: displayedItems[row],
-      listInteraction: listInteraction,
-      rowMargin: rowMargin
-    ))
+    let item = displayedItems[row]
+    cell.configure(rowContent(for: item) { [weak self] in
+      guard let self, let row = self.displayedItems.firstIndex(where: { $0.id == item.id }) else {
+        return
+      }
+
+      self.reloadRows(IndexSet(integer: row))
+    })
 
     return cell
   }
@@ -335,11 +358,6 @@ private extension ExtensionsViewController {
     static let highlightDuration: Duration = .seconds(1.5)
   }
 
-  /// Horizontal margin for the row content; separators use the same value so they stay aligned.
-  var rowMargin: Double {
-    AppDesign.modernStyle ? 20 : 10
-  }
-
   /// Height of the relaunch bar's SwiftUI content (forces a layout pass first).
   var relaunchBarHeight: Double {
     relaunchController.view.needsLayout = true
@@ -356,7 +374,7 @@ private extension ExtensionsViewController {
     tableView.style = .plain
     tableView.backgroundColor = .clear
     tableView.selectionHighlightStyle = .none
-    tableView.usesAutomaticRowHeights = true
+    tableView.usesAutomaticRowHeights = false
     tableView.intercellSpacing = .zero
     tableView.dataSource = self
     tableView.delegate = self
@@ -385,7 +403,16 @@ private extension ExtensionsViewController {
   }
 
   @objc func scrollViewBoundsDidChange(_ notification: Notification) {
+    let inlineRows = IndexSet(listInteraction.inlineUpdateItemIDs.compactMap { id in
+      displayedItems.firstIndex { $0.id == id }
+    })
+
+    listInteraction.inlineUpdateItemIDs.removeAll()
     listInteraction.scrollGeneration &+= 1
+
+    if !inlineRows.isEmpty {
+      reloadRows(inlineRows)
+    }
   }
 
   func configureAccessoryViews() {
@@ -421,6 +448,7 @@ private extension ExtensionsViewController {
     let modeChanged = model.mode != displayedMode
     if modeChanged {
       displayedMode = model.mode
+      listInteraction.inlineUpdateItemIDs.removeAll()
     }
 
     animateDifference(to: model.items)
@@ -439,8 +467,15 @@ private extension ExtensionsViewController {
   /// Animates row insertions and removals; surviving rows update themselves in place.
   func animateDifference(to newItems: [ExtensionsModel.Item]) {
     let oldItems = displayedItems
+    let oldIDs = Set(oldItems.map(\.id))
     displayedItems = newItems
     tableView.animateRows(from: oldItems, to: newItems)
+
+    let resizedRows = IndexSet(newItems.indices.filter { index in
+      oldIDs.contains(newItems[index].id) && needResizeRow(at: index, for: newItems[index])
+    })
+
+    reloadRows(resizedRows)
   }
 
   /// Frame-based layout so content imposes no Auto Layout fitting size, keeping the window resizable.
