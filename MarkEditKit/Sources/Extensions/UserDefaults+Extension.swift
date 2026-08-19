@@ -8,6 +8,7 @@ import Foundation
 
 public let NSCloseAlwaysConfirmsChanges = "NSCloseAlwaysConfirmsChanges"
 public let NSQuitAlwaysKeepsWindows = "NSQuitAlwaysKeepsWindows"
+public let WKAutomaticQuoteSubstitutionEnabled = "WebAutomaticQuoteSubstitutionEnabled"
 
 public extension UserDefaults {
   static func overwriteTextCheckerOnce() {

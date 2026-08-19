@@ -159,6 +159,18 @@ enum AppPreferences {
         performUpdates { $0.setIndentUnit(indentUnit) }
       }
     }
+
+    static var smartQuotesEnabled: Bool {
+      guard UserDefaults.standard.object(forKey: WKAutomaticQuoteSubstitutionEnabled) != nil else {
+        return NSSpellChecker.isAutomaticQuoteSubstitutionEnabled
+      }
+
+      return UserDefaults.standard.bool(forKey: WKAutomaticQuoteSubstitutionEnabled)
+    }
+
+    static func smartQuotesOptionToggled() {
+      performUpdates { $0.setSmartQuotesEnabled(enabled: smartQuotesEnabled) }
+    }
   }
 
   enum Assistant {
@@ -314,6 +326,7 @@ extension AppPreferences {
       tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,
       localizable: EditorLocalizable.main,
+      smartQuotesEnabled: Editor.smartQuotesEnabled,
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
       indentBehavior: AppRuntimeConfig.indentBehavior,

@@ -61,7 +61,12 @@ final class Application: NSApplication {
       return true
     }
 
-    return super.sendAction(action, to: target, from: sender)
+    let handled = super.sendAction(action, to: target, from: sender)
+    if handled && action == sel_getUid("toggleAutomaticQuoteSubstitution:") {
+      AppPreferences.Editor.smartQuotesOptionToggled()
+    }
+
+    return handled
   }
 }
 

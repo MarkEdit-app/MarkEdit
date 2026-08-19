@@ -35,6 +35,7 @@ import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
+import { smartQuotesHandler } from './modules/smartQuotes';
 import { customizedCommandsKeymap } from './modules/commands';
 import { autocompleteExtensions, standardLinkCompletion, referenceLinkCompletion } from './modules/completion';
 import { tocKeymap } from './modules/toc';
@@ -164,6 +165,7 @@ export function extensions(options: { lineBreak?: string }) {
     wordTokenizer(),
     interceptInputs(),
     observeChanges(),
+    smartQuotesHandler,
 
     // Accessibility
     EditorView.contentAttributes.of({

@@ -47,6 +47,7 @@ const config = import.meta.env.PROD ? window.config : {
   lineWrapping: true,
   lineHeight: 1.5,
   suggestWhileTyping: false,
+  smartQuotesEnabled: true,
   autoCharacterPairs: true,
   indentBehavior: IndentBehavior.paragraph,
   standardDirectories: {},

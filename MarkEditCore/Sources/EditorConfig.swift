@@ -30,6 +30,7 @@ public struct EditorConfig: Encodable {
   let tabKeyBehavior: Int?
   let indentUnit: String?
   let localizable: EditorLocalizable?
+  let smartQuotesEnabled: Bool
   let autoCharacterPairs: Bool
   let indentBehavior: EditorIndentBehavior
   let undoGroupingInterval: Double?
@@ -59,6 +60,7 @@ public struct EditorConfig: Encodable {
     tabKeyBehavior: Int?,
     indentUnit: String?,
     localizable: EditorLocalizable?,
+    smartQuotesEnabled: Bool,
     autoCharacterPairs: Bool,
     indentBehavior: EditorIndentBehavior,
     undoGroupingInterval: Double?,
@@ -87,6 +89,7 @@ public struct EditorConfig: Encodable {
     self.tabKeyBehavior = tabKeyBehavior
     self.indentUnit = indentUnit
     self.localizable = localizable
+    self.smartQuotesEnabled = smartQuotesEnabled
     self.autoCharacterPairs = autoCharacterPairs
     self.indentBehavior = indentBehavior
     self.undoGroupingInterval = undoGroupingInterval
@@ -118,6 +121,7 @@ public struct EditorConfig: Encodable {
     try container.encode(tabKeyBehavior, forKey: "tabKeyBehavior")
     try container.encode(indentUnit, forKey: "indentUnit")
     try container.encode(localizable, forKey: "localizable")
+    try container.encode(smartQuotesEnabled, forKey: "smartQuotesEnabled")
     try container.encode(autoCharacterPairs, forKey: "autoCharacterPairs")
     try container.encode(indentBehavior, forKey: "indentBehavior")
     try container.encode(undoGroupingInterval, forKey: "undoGroupingInterval")
