@@ -1,4 +1,4 @@
-import { RuntimeInfo } from 'markedit-api';
+import { EditorConfig } from 'markedit-api';
 import { Compartment } from '@codemirror/state';
 import { WebFontFace } from './@types/WebFontFace';
 
@@ -55,28 +55,13 @@ export enum IndentBehavior {
  * @shouldExport true
  * @overrideModuleName EditorConfig
  */
-export interface Config {
+export interface Config extends EditorConfig {
   host: Host;
   text: string;
-  theme: string; // MarkEdit-theming relies on this, add a fallback if renaming becomes necessary
   fontFace: WebFontFace;
-  fontSize: number;
-  showLineNumbers: boolean;
-  showActiveLineIndicator: boolean;
   invisiblesBehavior: InvisiblesBehavior;
-  readOnlyMode: boolean;
-  typewriterMode: boolean;
-  focusMode: boolean;
-  lineWrapping: boolean;
-  lineHeight: number;
-  suggestWhileTyping: boolean;
-  standardDirectories: { [key: string]: string };
-  runtimeInfo?: RuntimeInfo;
-  defaultLineBreak?: string;
   tabKeyBehavior?: CodeGen_Int;
-  indentUnit?: string;
   localizable?: Localizable;
-  smartQuotesEnabled: boolean;
   // Runtime config from settings.json, not dynamically changeable
   autoCharacterPairs: boolean;
   indentBehavior: IndentBehavior;

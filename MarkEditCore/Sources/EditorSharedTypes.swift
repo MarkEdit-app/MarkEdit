@@ -48,6 +48,13 @@ public enum EditorInvisiblesBehavior: String, Codable {
   case always = "always"
 }
 
+public enum EditorIndentBehavior: String, Codable {
+  case never = "never"
+  case paragraph = "paragraph"
+  case line = "line"
+}
+
+/// Information about the runtime.
 public struct RuntimeInfo: Codable {
   /// Application version, such as `1.0`.
   public var appVersion: String
@@ -80,12 +87,6 @@ public struct RuntimeInfo: Codable {
     try container.encode(osVersion, forKey: "osVersion")
     try container.encode(webkitVersion, forKey: "webkitVersion")
   }
-}
-
-public enum EditorIndentBehavior: String, Codable {
-  case never = "never"
-  case paragraph = "paragraph"
-  case line = "line"
 }
 
 public struct SelectionRange: Codable {

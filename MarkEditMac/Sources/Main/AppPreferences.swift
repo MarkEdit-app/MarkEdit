@@ -293,11 +293,7 @@ extension AppPreferences {
     EditorConfig(
       host: .mainApp,
       text: "",
-      theme: theme,
       fontFace: Editor.fontStyle.webFontFace,
-      fontSize: Editor.fontSize,
-      showLineNumbers: Editor.showLineNumbers,
-      showActiveLineIndicator: Editor.showActiveLineIndicator,
       invisiblesBehavior: {
       #if DEBUG
         if ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] == "YES" {
@@ -309,6 +305,19 @@ extension AppPreferences {
         return Editor.invisiblesBehavior
       #endif
       }(),
+      tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
+      localizable: EditorLocalizable.main,
+      autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
+      indentBehavior: AppRuntimeConfig.indentBehavior,
+      undoGroupingInterval: AppRuntimeConfig.undoGroupingInterval,
+      headerFontSizeDiffs: AppRuntimeConfig.headerFontSizeDiffs,
+      visibleWhitespaceCharacter: AppRuntimeConfig.visibleWhitespaceCharacter,
+      visibleLineBreakCharacter: AppRuntimeConfig.visibleLineBreakCharacter,
+      searchNormalizers: AppRuntimeConfig.searchNormalizers,
+      theme: theme,
+      fontSize: Editor.fontSize,
+      showLineNumbers: Editor.showLineNumbers,
+      showActiveLineIndicator: Editor.showActiveLineIndicator,
       readOnlyMode: false,
       typewriterMode: Editor.typewriterMode,
       focusMode: Editor.focusMode,
@@ -323,18 +332,8 @@ extension AppPreferences {
         webkitVersion: Bundle.webkitBundle?.bundleVersion ?? ""
       ),
       defaultLineBreak: General.defaultLineEndings.characters,
-      tabKeyBehavior: Editor.tabKeyBehavior.rawValue,
       indentUnit: Editor.indentUnit.characters,
-      localizable: EditorLocalizable.main,
-      smartQuotesEnabled: Editor.smartQuotesEnabled,
-      // Runtime config from settings.json, not dynamically changeable
-      autoCharacterPairs: AppRuntimeConfig.autoCharacterPairs,
-      indentBehavior: AppRuntimeConfig.indentBehavior,
-      undoGroupingInterval: AppRuntimeConfig.undoGroupingInterval,
-      headerFontSizeDiffs: AppRuntimeConfig.headerFontSizeDiffs,
-      visibleWhitespaceCharacter: AppRuntimeConfig.visibleWhitespaceCharacter,
-      visibleLineBreakCharacter: AppRuntimeConfig.visibleLineBreakCharacter,
-      searchNormalizers: AppRuntimeConfig.searchNormalizers
+      smartQuotesEnabled: Editor.smartQuotesEnabled
     )
   }
 }

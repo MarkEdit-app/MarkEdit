@@ -73,12 +73,21 @@ extension EditorConfig {
     .init(
       host: .quicklook,
       text: fileData.toString() ?? "",
-      theme: "github-light", // Ignored (follow the system color scheme)
       fontFace: WebFontFace(family: "ui-monospace", weight: nil, style: nil),
+      invisiblesBehavior: .never,
+      tabKeyBehavior: nil,
+      localizable: nil,
+      autoCharacterPairs: false,
+      indentBehavior: .never,
+      undoGroupingInterval: nil,
+      headerFontSizeDiffs: nil,
+      visibleWhitespaceCharacter: nil,
+      visibleLineBreakCharacter: nil,
+      searchNormalizers: nil,
+      theme: "github-light", // Ignored (follow the system color scheme)
       fontSize: 12,
       showLineNumbers: false,
       showActiveLineIndicator: false,
-      invisiblesBehavior: .never,
       readOnlyMode: true,
       typewriterMode: false,
       focusMode: false,
@@ -88,18 +97,8 @@ extension EditorConfig {
       standardDirectories: URL.standardDirectories,
       runtimeInfo: nil,
       defaultLineBreak: nil,
-      tabKeyBehavior: nil,
       indentUnit: nil,
-      localizable: nil,
-      smartQuotesEnabled: false,
-      // Runtime config from settings.json, not dynamically changeable
-      autoCharacterPairs: false,
-      indentBehavior: .never,
-      undoGroupingInterval: nil,
-      headerFontSizeDiffs: nil,
-      visibleWhitespaceCharacter: nil,
-      visibleLineBreakCharacter: nil,
-      searchNormalizers: nil
+      smartQuotesEnabled: false
     )
   }
 }

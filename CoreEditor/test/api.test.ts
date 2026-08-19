@@ -1,6 +1,10 @@
-import { describe, expect, jest, test } from '@jest/globals';
+import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { EditorView } from '@codemirror/view';
-import { notifyEditorReady, onEditorReady } from '../src/api/methods';
+import { notifyEditorConfigChange, notifyEditorReady, onEditorConfigChange, onEditorReady } from '../src/api/methods';
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe('onEditorReady', () => {
   test('notifies later listeners when one throws', () => {
@@ -26,5 +30,20 @@ describe('onEditorReady', () => {
 
     expect(() => onEditorReady(() => { throw error; })).not.toThrow();
     expect(consoleError).toHaveBeenCalledWith('Failed to notify an editor-ready listener:', error);
+  });
+});
+
+describe('onEditorConfigChange', () => {
+  test('notifies listeners with the changed key and value', () => {
+    const error = new Error('Failed listener');
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const listener = jest.fn();
+
+    onEditorConfigChange(() => { throw error; });
+    onEditorConfigChange(listener);
+    notifyEditorConfigChange('fontSize', 18);
+
+    expect(consoleError).toHaveBeenCalledWith('Failed to notify an editor-config-change listener:', error);
+    expect(listener).toHaveBeenCalledWith('fontSize', 18);
   });
 });
