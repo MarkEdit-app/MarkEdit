@@ -76,6 +76,7 @@ export interface Config {
   tabKeyBehavior?: CodeGen_Int;
   indentUnit?: string;
   localizable?: Localizable;
+  smartQuotesEnabled: boolean;
   // Runtime config from settings.json, not dynamically changeable
   autoCharacterPairs: boolean;
   indentBehavior: IndentBehavior;

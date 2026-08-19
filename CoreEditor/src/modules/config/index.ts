@@ -128,6 +128,10 @@ export function setSuggestWhileTyping(enabled: boolean) {
   completion.invalidateCache();
 }
 
+export function setSmartQuotesEnabled(enabled: boolean) {
+  window.config.smartQuotesEnabled = enabled;
+}
+
 export function recalculateTextMetrics() {
   adjustGutterPositions();
 

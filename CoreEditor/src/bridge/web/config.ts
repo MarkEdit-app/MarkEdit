@@ -18,6 +18,7 @@ import {
   setTabKeyBehavior,
   setIndentUnit,
   setSuggestWhileTyping,
+  setSmartQuotesEnabled,
 } from '../../modules/config';
 
 /**
@@ -41,6 +42,7 @@ export interface WebModuleConfig extends WebModule {
   setTabKeyBehavior({ behavior }: { behavior: TabKeyBehavior }): void;
   setIndentUnit({ unit }: { unit: string }): void;
   setSuggestWhileTyping({ enabled }: { enabled: boolean }): void;
+  setSmartQuotesEnabled({ enabled }: { enabled: boolean }): void;
 }
 
 export class WebModuleConfigImpl implements WebModuleConfig {
@@ -102,5 +104,9 @@ export class WebModuleConfigImpl implements WebModuleConfig {
 
   setSuggestWhileTyping({ enabled }: { enabled: boolean }): void {
     setSuggestWhileTyping(enabled);
+  }
+
+  setSmartQuotesEnabled({ enabled }: { enabled: boolean }): void {
+    setSmartQuotesEnabled(enabled);
   }
 }

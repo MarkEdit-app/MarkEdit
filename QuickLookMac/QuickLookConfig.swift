@@ -91,6 +91,7 @@ extension EditorConfig {
       tabKeyBehavior: nil,
       indentUnit: nil,
       localizable: nil,
+      smartQuotesEnabled: false,
       // Runtime config from settings.json, not dynamically changeable
       autoCharacterPairs: false,
       indentBehavior: .never,
