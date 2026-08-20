@@ -2,10 +2,11 @@ import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 import { LanguageDescription, LanguageSupport } from '@codemirror/language';
 import { MarkdownConfig } from '@lezer/markdown';
-import { RuntimeInfo } from 'markedit-api';
+import { EditorConfigChange, RuntimeInfo } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
 
 type EditorReadyListener = (editor: EditorView) => void;
+type EditorConfigChangeListener = (...change: EditorConfigChange) => void;
 type HTMLConfig = { matchClosingTags?: boolean };
 type HTMLLanguage = (config?: HTMLConfig) => LanguageSupport;
 
@@ -19,6 +20,10 @@ export function onEditorReady(listener: EditorReadyListener) {
   if (isEditorReady()) {
     notifyEditorReadySafely(listener, window.editor);
   }
+}
+
+export function onEditorConfigChange(listener: EditorConfigChangeListener) {
+  storage.editorConfigChangeListeners.push(listener);
 }
 
 export function notifyAppReady() {
@@ -91,6 +96,16 @@ export function notifyEditorReady(editorView: EditorView) {
   listeners.forEach(listener => notifyEditorReadySafely(listener, editorView));
 }
 
+export function notifyEditorConfigChange(...change: EditorConfigChange) {
+  storage.editorConfigChangeListeners.forEach(listener => {
+    try {
+      listener(...change);
+    } catch (error) {
+      console.error('Failed to notify an editor-config-change listener:', error);
+    }
+  });
+}
+
 export function userExtensions(): Extension[] {
   return storage.extensions;
 }
@@ -130,6 +145,7 @@ function notifyEditorReadySafely(listener: EditorReadyListener, editorView: Edit
 const storage: {
   appReadyListeners: (() => void)[];
   editorReadyListeners: EditorReadyListener[];
+  editorConfigChangeListeners: EditorConfigChangeListener[];
   extensions: Extension[];
   markdownConfigs: MarkdownConfig[];
   codeLanguages: LanguageDescription[];
@@ -137,6 +153,7 @@ const storage: {
 } = {
   appReadyListeners: [],
   editorReadyListeners: [],
+  editorConfigChangeListeners: [],
   extensions: [],
   markdownConfigs: [],
   codeLanguages: [],
