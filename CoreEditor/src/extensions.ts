@@ -36,7 +36,7 @@ import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
 import { smartQuotesHandler } from './modules/smartQuotes';
-import { customizedCommandsKeymap } from './modules/commands';
+import { customizedCommandsKeymap, emojiDeletionKeymap } from './modules/commands';
 import { autocompleteExtensions, standardLinkCompletion, referenceLinkCompletion } from './modules/completion';
 import { tocKeymap } from './modules/toc';
 import { userExtensions, userMarkdownConfigs, userCodeLanguages, userHTMLLanguage } from './api/methods';
@@ -118,6 +118,7 @@ export function extensions(options: { lineBreak?: string }) {
       //
       // Order matters
       ...closeBracketsKeymap,
+      ...emojiDeletionKeymap,
       ...defaultKeymap.filter(keymap => {
         // We use cmd-i to toggle italic
         if (keymap.key === 'Mod-i') {
