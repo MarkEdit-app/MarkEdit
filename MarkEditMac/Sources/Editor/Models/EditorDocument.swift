@@ -243,9 +243,12 @@ extension EditorDocument {
 
   override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
     let isNewFile = fileURL == nil
+    let confirmsChanges = #selector(confirmsChanges(_:shouldClose:contextInfo:))
+    let canHandleConfirmation = (delegate as? NSObject)?.responds(to: confirmsChanges) == true
+
     let shouldClose: Selector? = {
-      if !isNewFile && !isTerminating && closeAlwaysConfirmsChanges {
-        return #selector(confirmsChanges(_:shouldClose:))
+      if !isNewFile && !isTerminating && closeAlwaysConfirmsChanges && canHandleConfirmation {
+        return confirmsChanges
       }
 
       return shouldCloseSelector
@@ -275,9 +278,7 @@ extension EditorDocument {
     }
 
     // General cases
-    Task { @MainActor in
-      canClose()
-    }
+    canClose()
   }
 
   override func close() {
@@ -381,17 +382,12 @@ extension EditorDocument {
     //
     // To work around this, check a flag to save the document manually.
     if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
-      try? writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
+      try writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
       fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
+      return
     }
 
-    Task { @MainActor in
-      do {
-        try await super.autosave(withImplicitCancellability: implicitlyCancellable)
-      } catch {
-        Logger.log(.error, "Failed to autosave: \(error)")
-      }
-    }
+    try await super.autosave(withImplicitCancellability: implicitlyCancellable)
   }
 
   override func data(ofType typeName: String) throws -> Data {
@@ -678,7 +674,11 @@ private extension EditorDocument {
     bridge?.history.markContentClean()
   }
 
-  @objc func confirmsChanges(_ document: EditorDocument, shouldClose: Bool) {
+  @objc func confirmsChanges(
+    _ document: EditorDocument,
+    shouldClose: Bool,
+    contextInfo: UnsafeMutableRawPointer?
+  ) {
     guard shouldClose else {
       return // Cancelled
     }
