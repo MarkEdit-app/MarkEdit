@@ -211,6 +211,7 @@ extension ExtensionsViewController: NSTableViewDelegate {
 
       self.reloadRows(IndexSet(integer: row))
     })
+
     return cell
   }
 

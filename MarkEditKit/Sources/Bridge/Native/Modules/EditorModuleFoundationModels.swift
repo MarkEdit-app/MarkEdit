@@ -170,14 +170,14 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 
 // MARK: - Private
 
-@available(macOS 26.0, *)
+@available(anyAppleOS 26.0, *)
 private extension EditorModuleFoundationModels {
   @PromptBuilder
   func buildPrompt(_ promptText: String, attachments: [String]?) -> Prompt {
     promptText
 
   #if canImport(FoundationModels, _version: 2)
-    if #available(macOS 27.0, *) {
+    if #available(anyAppleOS 27.0, *) {
       for image in (attachments ?? []).compactMap(CIImage.init(base64Encoded:)) {
         Attachment(image)
       }
