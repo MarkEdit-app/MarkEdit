@@ -15,7 +15,7 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(path: "../MarkEditTools"),
+    .package(path: "../../MarkEditTools"),
   ],
   targets: [
     .target(
