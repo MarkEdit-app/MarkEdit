@@ -1,12 +1,18 @@
 import { EditorSelection } from '@codemirror/state';
+import { deleteGroupBackward, deleteGroupForward } from '@codemirror/commands';
 import { TextTokenizeAnchor } from './types';
 import { anchorAtPos } from './anchorAtPos';
+import { isReleaseMode } from '../../common/utils';
 import selectWithRanges from '../selection/selectWithRanges';
 
 /**
  * For double-click, leverage native methods to tokenize the selection.
  */
 export async function handleDoubleClick(event: MouseEvent) {
+  if (!hasNativeTokenizer()) {
+    return;
+  }
+
   const editor = window.editor;
   const pos = tokenizePosition(event);
   if (pos === null) {
@@ -40,6 +46,10 @@ export async function handleDoubleClick(event: MouseEvent) {
  * Handle option-arrow keys, leverage native methods to move by word.
  */
 export async function handleKeyDown(event: KeyboardEvent) {
+  if (!hasNativeTokenizer()) {
+    return;
+  }
+
   const editor = window.editor;
   const state = editor.state;
 
@@ -64,6 +74,40 @@ export async function handleKeyDown(event: KeyboardEvent) {
     });
   };
 
+  const deleteWord = async(
+    moveFn: ({ anchor }: { anchor: TextTokenizeAnchor }) => Promise<CodeGen_Int>,
+    direction: 'backward' | 'forward',
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const contextChanged = () => {
+      return window.editor !== editor || editor.state !== state;
+    };
+
+    try {
+      const newPos = await moveFn({ anchor: anchorAtPos(head) });
+      if (contextChanged()) {
+        return;
+      }
+
+      const from = Math.min(head, newPos);
+      editor.dispatch({
+        changes: { from, to: Math.max(head, newPos) },
+        selection: EditorSelection.cursor(from),
+        scrollIntoView: true,
+        userEvent: `delete.${direction}`,
+      });
+    } catch (error) {
+      if (!contextChanged()) {
+        const fallback = direction === 'backward' ? deleteGroupBackward : deleteGroupForward;
+        fallback(editor);
+      }
+
+      console.error('Native word deletion failed:', error);
+    }
+  };
+
   // We don't leverage the tokenizer if it's at the start of a line
   if (event.key === 'ArrowLeft' && line.from !== anchor && !useBuiltIn(anchor - 1)) {
     return moveWord(window.nativeModules.tokenizer.moveWordBackward);
@@ -72,6 +116,14 @@ export async function handleKeyDown(event: KeyboardEvent) {
   // We don't leverage the tokenizer if it's at the end of a line
   if (event.key === 'ArrowRight' && line.to !== head && !useBuiltIn(anchor)) {
     return moveWord(window.nativeModules.tokenizer.moveWordForward);
+  }
+
+  if (state.selection.main.empty && event.key === 'Backspace' && line.from !== head && !useBuiltIn(head - 1)) {
+    return deleteWord(window.nativeModules.tokenizer.moveWordBackward, 'backward');
+  }
+
+  if (state.selection.main.empty && event.key === 'Delete' && line.to !== head && !useBuiltIn(head)) {
+    return deleteWord(window.nativeModules.tokenizer.moveWordForward, 'forward');
   }
 }
 
@@ -105,4 +157,9 @@ function useBuiltIn(pos: number) {
   // We don't care about ascii characters, tokenization is more meaningful for languages like Chinese and Japanese.
   const character = window.editor.state.sliceDoc(pos, pos + 1);
   return /[ -~]/.test(character);
+}
+
+function hasNativeTokenizer() {
+  const nativeModules = Reflect.get(window, 'nativeModules') as typeof window.nativeModules | undefined;
+  return isReleaseMode && nativeModules?.tokenizer != null;
 }
