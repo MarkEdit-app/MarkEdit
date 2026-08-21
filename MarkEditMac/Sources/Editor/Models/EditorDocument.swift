@@ -561,8 +561,15 @@ extension EditorDocument {
       return try super.write(to: url, ofType: typeName)
     }
 
-    let fileWrapper = try? textBundle?.fileWrapper(with: try data(ofType: typeName))
-    try fileWrapper?.write(to: url, originalContentsURL: nil)
+    guard let textBundle else {
+      Logger.assertFail("Missing textBundle for document: \(self)")
+      throw CocoaError(.fileWriteUnknown, userInfo: [
+        NSLocalizedDescriptionKey: "Unable to save as TextBundle, file wrapper is missing."
+      ])
+    }
+
+    let fileWrapper = try textBundle.fileWrapper(with: try data(ofType: typeName))
+    try fileWrapper.write(to: url, originalContentsURL: nil)
   }
 
   override func duplicate() throws -> NSDocument {
