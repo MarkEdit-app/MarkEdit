@@ -1360,7 +1360,7 @@
 				INFOPLIST_FILE = UpdateInstaller/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MarkEdit;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).installer";
 				PRODUCT_NAME = UpdateInstaller;
@@ -1383,7 +1383,7 @@
 				INFOPLIST_FILE = UpdateInstaller/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MarkEdit;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited).installer";
 				PRODUCT_NAME = UpdateInstaller;

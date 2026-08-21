@@ -151,7 +151,7 @@ private extension AppUpdater {
   }
 
   static func menuItemImage(_ symbolName: String) -> NSImage? {
-    AppDesign.menuIconEvolution ? NSImage(systemSymbolName: symbolName) : nil
+    NSImage(systemSymbolName: symbolName)
   }
 
   static func makeUpdateAlert(newVersion: AppVersion, showingDetails: Bool = false) -> NSAlert {
