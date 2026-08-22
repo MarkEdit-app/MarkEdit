@@ -278,7 +278,9 @@ extension EditorDocument {
     }
 
     // General cases
-    canClose()
+    Task { @MainActor in
+      canClose()
+    }
   }
 
   override func close() {
