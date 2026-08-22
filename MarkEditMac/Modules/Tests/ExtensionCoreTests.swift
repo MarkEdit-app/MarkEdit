@@ -421,6 +421,75 @@ final class ExtensionCoreTests: XCTestCase {
     XCTAssertEqual(installedIds(in: dir), ["a", "b", "c", "d"])
   }
 
+  func testUpsertInsertsNewEntryBeforeBoundary() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["extension-a", "theme-a", "local-a"], in: dir)
+
+    ExtensionConfig.upsertInstalled(
+      makeInstalled(id: "extension-b", version: "1.0.0"),
+      afterID: "extension-a",
+      beforeIDs: ["theme-a", "local-a"]
+    )
+
+    ExtensionConfig.upsertInstalled(
+      makeInstalled(id: "theme-b", version: "1.0.0"),
+      afterID: "theme-a",
+      beforeIDs: ["local-a"]
+    )
+
+    XCTAssertEqual(
+      installedIds(in: dir),
+      ["extension-a", "extension-b", "theme-a", "theme-b", "local-a"]
+    )
+  }
+
+  func testUpsertUsesBoundaryWhenCategoryIsEmpty() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["theme-a", "local-a"], in: dir)
+
+    ExtensionConfig.upsertInstalled(
+      makeInstalled(id: "extension-a", version: "1.0.0"),
+      beforeIDs: ["theme-a", "local-a"]
+    )
+
+    XCTAssertEqual(installedIds(in: dir), ["extension-a", "theme-a", "local-a"])
+  }
+
+  // MARK: - reconcileInstalled
+
+  func testReconcileAppendsNewLocalFilesAfterManagedEntries() throws {
+    let dir = try makeTempDir()
+    defer {
+      try? FileManager.default.removeItem(at: dir)
+      ExtensionEnvironment.documentsDirectory = URL.documentsDirectory
+    }
+
+    ExtensionEnvironment.documentsDirectory = dir
+    try seedExtensions(ids: ["extension-a", "theme-a"], in: dir)
+
+    let scripts = dir.appending(path: "scripts", directoryHint: .isDirectory)
+    try FileManager.default.createDirectory(at: scripts, withIntermediateDirectories: true)
+
+    for id in ["extension-a", "theme-a", "local-b", "local-a"] {
+      try Data(id.utf8).write(to: scripts.appending(path: "\(id).js", directoryHint: .notDirectory))
+    }
+
+    ExtensionConfig.reconcileInstalled()
+    XCTAssertEqual(installedIds(in: dir), ["extension-a", "theme-a", "local-a", "local-b"])
+  }
+
   // MARK: - setEnabled
 
   func testSetEnabledTogglesFlagInPlace() throws {
