@@ -1,5 +1,5 @@
 import { EditorView, KeyBinding } from '@codemirror/view';
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, findClusterBreak } from '@codemirror/state';
 import {
   copyLineDown,
   copyLineUp,
@@ -132,6 +132,48 @@ export function clearSyntaxSelections() {
   storage.selectionHistory = [];
 }
 
+export function deleteEmojiBackward(editor: EditorView) {
+  const state = editor.state;
+  if (state.readOnly) {
+    return false;
+  }
+
+  const starts = state.selection.ranges.map(range => {
+    if (!range.empty) {
+      return undefined;
+    }
+
+    const line = state.doc.lineAt(range.from);
+    const pos = range.from - line.from;
+    const from = findClusterBreak(line.text, pos, false);
+    return isEmojiSplitByBackwardDeletion(line.text.slice(from, pos)) ? from + line.from : undefined;
+  });
+
+  if (starts.some(from => from === undefined)) {
+    return false;
+  }
+
+  let index = 0;
+  const updates = state.changeByRange(range => {
+    const from = starts[index++] as number;
+    return {
+      changes: { from, to: range.from },
+      range: EditorSelection.cursor(from),
+    };
+  });
+
+  editor.dispatch(state.update(updates, {
+    scrollIntoView: true,
+    userEvent: 'delete.backward',
+  }));
+
+  return true;
+}
+
+export const emojiDeletionKeymap: KeyBinding[] = [
+  { key: 'Backspace', run: deleteEmojiBackward, shift: deleteEmojiBackward },
+];
+
 /**
  * Wrapper to a series of commands in CodeMirror,
  * we need this because we want to show them in the application.
@@ -254,6 +296,12 @@ function toggleLineComment(editor: EditorView): boolean {
 
   // Works more reliably than toggleLineComment in @codemirror/commands
   return toggleComment(editor);
+}
+
+function isEmojiSplitByBackwardDeletion(cluster: string) {
+  return /^[#*0-9]\uFE0F?\u20E3$/u.test(cluster)
+    || /(?:^|\u200D)\p{Emoji_Modifier_Base}\uFE0F?\p{Emoji_Modifier}$/u.test(cluster)
+    || /^\u{1F3F4}[\u{E0020}-\u{E007E}]+\u{E007F}$/u.test(cluster);
 }
 
 const storage: {

@@ -110,6 +110,36 @@ describe('Commands module', () => {
   });
 });
 
+describe('emoji backward deletion', () => {
+  const deleteBackward = (text: string) => {
+    editor.setUp(text);
+    editor.selectRange(text.length, text.length);
+    return {
+      handled: commands.deleteEmojiBackward(window.editor),
+      text: editor.getText(),
+    };
+  };
+
+  test.each(['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '#️⃣', '*️⃣'])(
+    'deletes the complete keycap %s',
+    emoji => expect(deleteBackward(emoji)).toEqual({ handled: true, text: '' }),
+  );
+
+  test.each(['👍🏽', '👩🏽', '☝️🏽', '🧑🏽‍🤝‍🧑🏻', '👩‍❤️‍👨🏽'])(
+    'deletes the complete skin-tone emoji %s',
+    emoji => expect(deleteBackward(emoji)).toEqual({ handled: true, text: '' }),
+  );
+
+  test('deletes the complete subdivision flag', () => {
+    expect(deleteBackward('🏴󠁧󠁢󠁥󠁮󠁧󠁿')).toEqual({ handled: true, text: '' });
+  });
+
+  test.each(['👨‍👩‍👧‍👦', '❤️', '🇺🇸', 'é', 'a'])(
+    'leaves unaffected input %s to CodeMirror',
+    text => expect(deleteBackward(text)).toEqual({ handled: false, text }),
+  );
+});
+
 describe('insertCodeBlock command', () => {
   function run(doc: string, ranges: [number, number][]) {
     editor.setUp(doc, EditorState.allowMultipleSelections.of(true));
