@@ -1,19 +1,20 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/@types"],
-    "module": "esnext",
-    "target": "esnext",
-    "lib": ["esnext", "dom"],
-    "composite": true,
-    "noImplicitAny": true,
+    "target": "es2024",
+    "lib": ["es2024", "dom"],
+    "module": "preserve",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
-    "strictNullChecks": true,
-    "importHelpers": true,
-    "skipLibCheck": true,
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@codemirror/lang-html": ["./src/@vendor/lang-html"],
       "@codemirror/lang-markdown": ["./src/@vendor/lang-markdown"]
     }
-  }
+  },
+  "include": ["index.ts", "src/**/*.ts", "test/**/*.ts", "vite.config.mts"]
 }
