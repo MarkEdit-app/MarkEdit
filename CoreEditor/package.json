@@ -40,23 +40,24 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "markedit-api": "https://github.com/MarkEdit-app/MarkEdit-api#v0.31.0",
-    "rollup": "^4.59.0",
     "ts-gyb": "^0.12.0",
     "ts-jest": "^29.4.5",
     "tslib": "^2.6.2",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.46.2",
-    "vite": "^7.3.2",
-    "vite-plugin-singlefile": "^2.0.1"
+    "vite": "^8.0.0",
+    "vite-plugin-singlefile": "^2.3.3"
   },
   "resolutions": {
     "js-yaml": "^4.3.1",
     "minimatch": "^10.2.5",
-    "picomatch": "^4.0.4",
-    "esbuild": "^0.28.1"
+    "picomatch": "^4.0.4"
   },
   "browserslist": [
     "safari >= 18"
   ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "packageManager": "yarn@4.17.1"
 }
