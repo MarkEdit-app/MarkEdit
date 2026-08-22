@@ -9,7 +9,6 @@ import AppKit
 import AppKitExtensions
 import MarkEditKit
 
-@available(macOS 15.1, *)
 @MainActor
 enum AppWritingTools {
   // Source/WebKit/Platform/spi/Cocoa/Modules/WritingTools_SPI/WritingToolsSPI.h
@@ -125,7 +124,6 @@ enum AppWritingTools {
 
 // MARK: - Private
 
-@available(macOS 15.1, *)
 private extension AppWritingTools {
   /// The action that opens `Writing Tools`.
   ///

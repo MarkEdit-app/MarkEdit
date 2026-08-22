@@ -10,11 +10,11 @@ on:
 jobs:
   markedit-mac:
     name: MarkEditMac
-    runs-on: macos-26
+    runs-on: macos-27
     if: github.event.pull_request.draft == false
     env:
       node-version: '22.x'
-      DEVELOPER_DIR: /Applications/Xcode_26.5.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
 
     defaults:
       run:

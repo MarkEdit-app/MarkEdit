@@ -13,7 +13,6 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
   private var mainView: NSHostingView<TextCompletionView>?
 
   init(
-    modernStyle: Bool,
     effectViewType: NSView.Type,
     localizable: TextCompletionLocalizable,
     commitCompletion: @escaping () -> Void
@@ -26,13 +25,12 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
     )
 
     let mainView = NSHostingView(rootView: TextCompletionView(
-      modernStyle: modernStyle,
       state: state,
       localizable: localizable,
       commitCompletion: commitCompletion
     ))
 
-    let contentView = ContentView(modernStyle: modernStyle, effectViewType: effectViewType, frame: .zero)
+    let contentView = ContentView(effectViewType: effectViewType, frame: .zero)
     contentView.addSubview(mainView)
 
     self.mainView = mainView
@@ -95,11 +93,11 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
 // MARK: - Private
 
 private final class ContentView: NSView {
-  init(modernStyle: Bool, effectViewType: NSView.Type, frame: CGRect) {
+  init(effectViewType: NSView.Type, frame: CGRect) {
     super.init(frame: frame)
     wantsLayer = true
     layer?.cornerCurve = .continuous
-    layer?.cornerRadius = modernStyle ? 8 : 5
+    layer?.cornerRadius = 8
 
     let effectView = effectViewType.init()
     effectView.translatesAutoresizingMaskIntoConstraints = false

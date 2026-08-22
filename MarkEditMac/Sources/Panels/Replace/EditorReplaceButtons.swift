@@ -20,6 +20,6 @@ final class EditorReplaceButtons: RoundedButtonGroup {
     let rightButton = TitleOnlyButton(title: Localized.General.all, font: Constants.font)
     rightButton.addAction(rightAction)
 
-    super.init(modernStyle: AppDesign.modernStyle, leftButton: leftButton, rightButton: rightButton)
+    super.init(leftButton: leftButton, rightButton: rightButton)
   }
 }

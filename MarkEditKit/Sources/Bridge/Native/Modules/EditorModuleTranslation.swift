@@ -13,10 +13,6 @@ public final class EditorModuleTranslation: NativeModuleTranslation {
   public init() {}
 
   public func translate(text: String, from: String?, to: String?) async -> String {
-    guard #available(macOS 26.0, *) else {
-      return BridgeMessage(("error", "Unsupported OS Version")).jsonEncoded
-    }
-
     do {
       let from = from ?? NLLanguageRecognizer.dominantLanguage(for: text)?.rawValue ?? "en-US"
       let session = TranslationSession(from: from, to: to)
@@ -31,7 +27,6 @@ public final class EditorModuleTranslation: NativeModuleTranslation {
 
 // MARK: - Private
 
-@available(macOS 26.0, *)
 private extension TranslationSession {
   convenience init(from: String, to: String?) {
     self.init(

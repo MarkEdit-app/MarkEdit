@@ -26,7 +26,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 
   public func availability(modelName: String) async -> String {
   #if canImport(FoundationModels, _version: 2)
-    if #available(macOS 27.0, *) {
+    if #available(anyAppleOS 27.0, *) {
       return availability(of: languageModel(named: modelName)).jsonEncoded
     }
   #endif
@@ -35,15 +35,11 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
   }
 
   public func createSession(modelName: String, instructions: String?) async -> String? {
-    guard #available(macOS 26.0, *) else {
-      return nil
-    }
-
     let identifier = UUID().uuidString
     let session: LanguageModelSession
 
   #if canImport(FoundationModels, _version: 2)
-    if #available(macOS 27.0, *) {
+    if #available(anyAppleOS 27.0, *) {
       session = LanguageModelSession(
         model: languageModel(named: modelName),
         instructions: instructions
@@ -60,7 +56,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
   }
 
   public func isResponding(sessionID: String?) async -> Bool {
-    guard #available(macOS 26.0, *), let session = session(with: sessionID) else {
+    guard let session = session(with: sessionID) else {
       return false
     }
 
@@ -80,7 +76,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
       ).jsonEncoded
     }
 
-    guard #available(macOS 26.0, *), let session = session(with: sessionID) else {
+    guard let session = session(with: sessionID) else {
       return encode(nil, "Model Unavailable", true)
     }
 
@@ -122,7 +118,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
       }
     }
 
-    guard #available(macOS 26.0, *), let session = session(with: sessionID) else {
+    guard let session = session(with: sessionID) else {
       return didReceive(nil, "Model Unavailable", true)
     }
 
@@ -148,10 +144,6 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
   // MARK: - Private
 
   private var defaultModelAvailability: LanguageModelAvailability {
-    guard #available(macOS 26.0, *) else {
-      return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unsupported OS Version")
-    }
-
     switch SystemLanguageModel.default.availability {
     case .available:
       return LanguageModelAvailability(isAvailable: true, unavailableReason: nil)
@@ -166,12 +158,10 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     }
   }
 
-  // [macOS 26] Change the value type to LanguageModelSession
-  private var sessionPool = [String: AnyObject]()
+  private var sessionPool = [String: LanguageModelSession]()
 
-  @available(macOS 26.0, *)
   private func session(with sessionID: String?) -> LanguageModelSession? {
-    guard let sessionID, let session = (sessionPool[sessionID] as? LanguageModelSession) else {
+    guard let sessionID, let session = sessionPool[sessionID] else {
       return nil
     }
 
@@ -183,7 +173,7 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 
 #if canImport(FoundationModels, _version: 2)
 
-@available(macOS 27.0, *)
+@available(anyAppleOS 27.0, *)
 private extension EditorModuleFoundationModels {
   func languageModel(named modelName: String) -> any LanguageModel {
     switch modelName {
@@ -212,7 +202,6 @@ private extension EditorModuleFoundationModels {
 
 #endif
 
-@available(macOS 26.0, *)
 private extension GenerationOptions {
   init(_ options: LanguageModelGenerationOptions?) {
   #if canImport(FoundationModels, _version: 2)
@@ -231,7 +220,6 @@ private extension GenerationOptions {
   }
 }
 
-@available(macOS 26.0, *)
 private extension GenerationOptions.SamplingMode {
   init?(_ sampling: LanguageModelSampling?) {
     if sampling?.greedy == true {
