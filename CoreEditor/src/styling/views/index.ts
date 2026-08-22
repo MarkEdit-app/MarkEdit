@@ -7,8 +7,7 @@ import { globalState } from '../../common/store';
  */
 export class PreviewWidget extends WidgetView {
   constructor(private readonly code: string, private readonly type: PreviewType, pos: number) {
-    super();
-    this.pos = pos;
+    super(pos);
   }
 
   toDOM() {
@@ -44,8 +43,7 @@ export class PreviewWidget extends WidgetView {
  */
 export class LineBreakWidget extends WidgetView {
   constructor(pos: number) {
-    super();
-    this.pos = pos;
+    super(pos);
   }
 
   toDOM() {
