@@ -24,9 +24,13 @@ export function setTheme(name: string) {
 export function setFontFace(fontFace: WebFontFace) {
   styling.setFontFace(fontFace);
   window.config.fontFace = fontFace;
-  window.editor.requestMeasure();
 
-  refreshEditFocus();
+  const editor = tryGetEditor();
+  if (editor !== null) {
+    editor.requestMeasure();
+    refreshEditFocus();
+  }
+
   recalculateTextMetrics();
   notifyEditorConfigChange('fontFace', fontFace);
 }
@@ -34,9 +38,13 @@ export function setFontFace(fontFace: WebFontFace) {
 export function setFontSize(fontSize: number) {
   styling.setFontSize(fontSize);
   window.config.fontSize = fontSize;
-  window.editor.requestMeasure();
 
-  refreshEditFocus();
+  const editor = tryGetEditor();
+  if (editor !== null) {
+    editor.requestMeasure();
+    refreshEditFocus();
+  }
+
   recalculateTextMetrics();
   notifyEditorConfigChange('fontSize', fontSize);
 }
