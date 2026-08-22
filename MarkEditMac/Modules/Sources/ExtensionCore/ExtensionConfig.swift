@@ -120,12 +120,19 @@ public enum ExtensionConfig {
     persist(installed: reconciled)
   }
 
-  /// Persists an installed extension: updates an existing entry with the same id in place
-  /// (preserving injection order) or appends a new one.
-  public static func upsertInstalled(_ entry: Installed) {
+  /// Persists an installed extension, placing a new entry at the requested insertion boundary.
+  public static func upsertInstalled(
+    _ entry: Installed,
+    afterID: String? = nil,
+    beforeIDs: Set<String> = []
+  ) {
     var installed = currentDefinition?.installed ?? []
     if let index = (installed.firstIndex { $0.id == entry.id }) {
       installed[index] = entry
+    } else if let index = (installed.firstIndex { $0.id == afterID }) {
+      installed.insert(entry, at: index + 1)
+    } else if let index = (installed.firstIndex { beforeIDs.contains($0.id) }) {
+      installed.insert(entry, at: index)
     } else {
       installed.append(entry)
     }

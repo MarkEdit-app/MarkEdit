@@ -303,7 +303,12 @@ extension ExtensionsModel {
 
     await runBusyAction(itemID: item.id) {
       let record = try await ExtensionDownloader.install(entry: entry)
-      ExtensionConfig.upsertInstalled(record)
+      let position = insertionPosition(for: entry.category)
+      ExtensionConfig.upsertInstalled(
+        record,
+        afterID: position.afterID,
+        beforeIDs: position.beforeIDs
+      )
     }
   }
 
@@ -406,6 +411,20 @@ private extension ExtensionsModel {
     static let progressStepDelay: Duration = .milliseconds(400)
   }
 
+  /// Places a new item after its category, or before the next category when it is the first.
+  func insertionPosition(for category: ExtensionEntry.Category) -> (afterID: String?, beforeIDs: Set<String>) {
+    let afterID = installedItems.last {
+      $0.category == category
+    }?.id
+
+    let beforeIDs = Set(installedItems.compactMap { item in
+      let isBoundary = item.entry == nil || (category == .extension && item.category == .theme)
+      return isBoundary ? item.id : nil
+    })
+
+    return (afterID, beforeIDs)
+  }
+
   /// Rebuilds both lists; `installed` is injectable so the mapping can be tested in isolation.
   func rebuildItems(index: ExtensionIndex?, installed: [ExtensionConfig.Installed] = ExtensionConfig.installed) {
     if index != nil {
@@ -418,7 +437,7 @@ private extension ExtensionsModel {
     let updates = index.map { ExtensionRegistry.availableUpdates(index: $0, installed: installed) } ?? []
     let updateByID = Dictionary(updates.map { ($0.installed.id, $0) }) { lhs, _ in lhs }
 
-    installedItems = extensionsFirst(installed.map { installed in
+    installedItems = installed.map { installed in
       let entry = entryByID[installed.id]
       return Item(
         id: installed.id,
@@ -434,7 +453,7 @@ private extension ExtensionsModel {
         installed: installed,
         entry: entry
       )
-    })
+    }
 
     let installedByID = Dictionary(installed.map { ($0.id, $0) }) { lhs, _ in lhs }
     discoverItems = ExtensionEntry.discoverOrder(entries).map { entry in
@@ -454,11 +473,6 @@ private extension ExtensionsModel {
         entry: entry
       )
     }
-  }
-
-  /// Extensions first, then themes, preserving each group's original order.
-  func extensionsFirst(_ items: [Item]) -> [Item] {
-    items.filter { $0.category == .extension } + items.filter { $0.category != .extension }
   }
 
   /// Runs a mutating action in the busy state (ignoring re-entrant calls), keeping the spinner briefly visible and reporting failures.
