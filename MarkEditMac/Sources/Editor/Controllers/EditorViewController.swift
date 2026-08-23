@@ -26,7 +26,7 @@ final class EditorViewController: NSViewController {
   var mouseExitedWindow = false
   var nativeSearchQueryChanged = false
   var bottomPanelHeight: Double = 0
-  var pendingResetCount: Int = 0
+  var pendingResetCount: Int = 1
   var webBackgroundColor = AppPreferences.Window.cachedBackgroundColor?.nsColor
   var localEventMonitor: Any?
   var safeAreaObservation: NSKeyValueObservation?
@@ -374,6 +374,10 @@ extension EditorViewController {
       return
     }
 
+    if lastResetDocumentID != nil {
+      pendingResetCount += 1
+    }
+
     let textContent = document.stringValue
     let documentID = ObjectIdentifier(document)
 
@@ -399,7 +403,6 @@ extension EditorViewController {
       webView.magnification = 1.0
     }
 
-    pendingResetCount += 1
     Task { @MainActor [weak self] in
       guard let self else {
         return
