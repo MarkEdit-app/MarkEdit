@@ -41,7 +41,9 @@ extension EditorViewController {
 
   func updateToolbarItemMenus(_ menu: NSMenu) {
     if menu.identifier == Constants.tableOfContentsMenuIdentifier {
-      updateTableOfContentsMenu(menu)
+      Task { @MainActor in
+        await updateTableOfContentsMenu(menu)
+      }
     }
   }
 
@@ -58,14 +60,17 @@ extension EditorViewController {
 
     // Pop up the menu relative to the document title view
     if let menu = (tableOfContentsItem as? NSMenuToolbarItem)?.menu {
-      if let sourceView = view.window?.titlebarDocumentTitleView {
-        menu.popUp(
-          positioning: nil,
-          at: CGPoint(x: sourceView.bounds.minX, y: sourceView.bounds.maxY + 15),
-          in: sourceView
-        )
-      } else {
-        Logger.assertFail("Missing document title view")
+      Task { @MainActor in
+        await updateTableOfContentsMenu(menu)
+        if let sourceView = view.window?.titlebarDocumentTitleView {
+          menu.popUp(
+            positioning: nil,
+            at: CGPoint(x: sourceView.bounds.minX, y: sourceView.bounds.maxY + 15),
+            in: sourceView
+          )
+        } else {
+          Logger.assertFail("Missing document title view")
+        }
       }
 
       return
@@ -282,41 +287,39 @@ private extension EditorViewController {
     return nil
   }
 
-  func updateTableOfContentsMenu(_ menu: NSMenu) {
+  func updateTableOfContentsMenu(_ menu: NSMenu) async {
     // Remove existing items, the first two are placeholders that we want to keep
     for (index, item) in menu.items.enumerated() where index > 1 {
       menu.removeItem(item)
     }
 
-    Task {
-      let tableOfContents = await tableOfContents
-      let baseLevel = tableOfContents?.map { $0.level }.min() ?? 1
+    let tableOfContents = await tableOfContents
+    let baseLevel = tableOfContents?.map { $0.level }.min() ?? 1
 
-      tableOfContents?.forEach { info in
-        let title = String(repeating: " ", count: (info.level - baseLevel) * 2) + info.title
-        let item = menu.addItem(withTitle: title, action: #selector(self.gotoHeader(_:)))
-        item.representedObject = info
-        item.setAccessibilityLabel(title)
-        item.setAccessibilityValue(info.level)
+    tableOfContents?.forEach { info in
+      let title = String(repeating: " ", count: (info.level - baseLevel) * 2) + info.title
+      let item = menu.addItem(withTitle: title, action: #selector(self.gotoHeader(_:)))
+      item.representedObject = info
+      item.setAccessibilityLabel(title)
+      item.setAccessibilityValue(info.level)
 
-        if info.selected {
-          item.setAccessibilityHelp(Localized.General.selected)
-        }
-
-        let fontSize = 15.0 - min(3, Double(info.level))
-        let attributedTitle = NSMutableAttributedString()
-
-        attributedTitle.append(NSAttributedString(string: info.selected ? "‣" : " ", attributes: [
-          .font: NSFont.monospacedSystemFont(ofSize: fontSize, weight: .medium),
-        ]))
-
-        attributedTitle.append(NSAttributedString(string: " \(title)", attributes: [
-          .font: NSFont.systemFont(ofSize: fontSize, weight: .medium),
-        ]))
-
-        item.attributedTitle = attributedTitle
-        menu.addItem(.separator())
+      if info.selected {
+        item.setAccessibilityHelp(Localized.General.selected)
       }
+
+      let fontSize = 15.0 - min(3, Double(info.level))
+      let attributedTitle = NSMutableAttributedString()
+
+      attributedTitle.append(NSAttributedString(string: info.selected ? "‣" : " ", attributes: [
+        .font: NSFont.monospacedSystemFont(ofSize: fontSize, weight: .medium),
+      ]))
+
+      attributedTitle.append(NSAttributedString(string: " \(title)", attributes: [
+        .font: NSFont.systemFont(ofSize: fontSize, weight: .medium),
+      ]))
+
+      item.attributedTitle = attributedTitle
+      menu.addItem(.separator())
     }
   }
 
