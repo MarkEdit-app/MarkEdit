@@ -11,13 +11,28 @@ import MarkEditKit
 @MainActor
 enum AppRelauncher {
   private(set) static var isRequested = false
+  private(set) static var isSafeMode = false
 
-  static func request() {
+  static func request(safeMode: Bool = false) {
     isRequested = true
+    isSafeMode = safeMode
   }
 
   static func cancel() {
     isRequested = false
+    isSafeMode = false
+  }
+
+  static func commit() {
+    guard isRequested else {
+      return
+    }
+
+    if isSafeMode {
+      AppCustomization.requestSafeMode()
+    } else {
+      AppCustomization.cancelSafeMode()
+    }
   }
 
   static func scheduleIfRequested() {
@@ -26,6 +41,8 @@ enum AppRelauncher {
     }
 
     isRequested = false
+    isSafeMode = false
+
     let path = Bundle.main.bundleURL
     let pid = ProcessInfo.processInfo.processIdentifier
     let task = Process()

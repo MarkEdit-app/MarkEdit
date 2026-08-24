@@ -4589,6 +4589,30 @@
         }
       }
     },
+    "zSM-YV-rGb.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Launch Safe Mode\"; ObjectID = \"zSM-YV-rGb\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Launch Safe Mode"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以安全模式启动"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以安全模式啟動"
+          }
+        }
+      }
+    },
     "zsS-up-p9L.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Select All Occurrences\"; ObjectID = \"zsS-up-p9L\";",
       "extractionState" : "extracted_with_value",

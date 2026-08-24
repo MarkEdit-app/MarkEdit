@@ -138,14 +138,16 @@ enum AppRuntimeConfig {
   }
 
   static let jsonLiteral: String = {
-    {
-      guard let fileData, (try? JSONSerialization.jsonObject(with: fileData, options: [])) != nil else {
-        Logger.log(.error, "Invalid json file was found at: \(AppCustomization.settings.fileURL)")
-        return nil
-      }
+    guard !AppCustomization.isSafeMode else {
+      return "{}"
+    }
 
-      return fileData.toString()
-    }() ?? "{}"
+    guard let fileData, (try? JSONSerialization.jsonObject(with: fileData, options: [])) != nil else {
+      Logger.log(.error, "Invalid json file was found at: \(AppCustomization.settings.fileURL)")
+      return "{}"
+    }
+
+    return fileData.toString() ?? "{}"
   }()
 
   static var jsonObject: [String: Any] {
@@ -338,6 +340,10 @@ private extension AppRuntimeConfig {
   )
 
   static let currentDefinition: Definition? = {
+    guard !AppCustomization.isSafeMode else {
+      return nil
+    }
+
     guard let fileData else {
       Logger.log(.error, "Missing settings.json to proceed")
       return nil

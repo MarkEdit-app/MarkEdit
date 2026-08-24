@@ -2328,6 +2328,23 @@
         }
       }
     },
+    "MarkEdit (Safe Mode)" : {
+      "comment" : "App menu title when running without customizations",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit（安全模式）"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MarkEdit（安全模式）"
+          }
+        }
+      }
+    },
     "MarkEdit %@ is available!" : {
       "comment" : "Title for new version available",
       "localizations" : {

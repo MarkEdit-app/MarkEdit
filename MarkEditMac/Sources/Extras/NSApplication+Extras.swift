@@ -32,9 +32,9 @@ extension NSApplication {
     }
   }
 
-  func relaunchSafely(_ sender: Any? = nil) {
+  func relaunchSafely(_ sender: Any? = nil, safeMode: Bool = false) {
     RunLoop.performOnMain {
-      Terminator.shared.relaunchApp(sender)
+      Terminator.shared.relaunchApp(sender, safeMode: safeMode)
     }
   }
 }
@@ -58,8 +58,8 @@ private final class Terminator: NSObject {
     performTermination(sender)
   }
 
-  func relaunchApp(_ sender: Any? = nil) {
-    AppRelauncher.request()
+  func relaunchApp(_ sender: Any? = nil, safeMode: Bool = false) {
+    AppRelauncher.request(safeMode: safeMode)
     terminateApp(sender)
   }
 

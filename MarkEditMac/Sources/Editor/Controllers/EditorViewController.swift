@@ -140,7 +140,7 @@ final class EditorViewController: NSViewController {
     let controller = WKUserContentController()
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
-    let scripts = [
+    let scripts = AppCustomization.isSafeMode ? [] : [
       AppCustomization.editorScript.fileContents,
     ] + AppCustomization.scriptsDirectory.contentsFrom(fileNames: ExtensionConfig.enabledFileNames)
 
@@ -184,14 +184,17 @@ final class EditorViewController: NSViewController {
 
     let theme = AppTheme.current.editorTheme
     DispatchQueue.global(qos: .userInitiated).async {
-      let html = [
+      let styles = AppCustomization.isSafeMode ? [] : [
+        AppCustomization.editorStyle.fileContents,
+        AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
+      ]
+
+      let html = ([
         EditorIndexHtml.fromAppBundle(
           config: AppPreferences.editorConfig(theme: theme),
           userSettings: AppRuntimeConfig.jsonLiteral
         ),
-        AppCustomization.editorStyle.fileContents,
-        AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
-      ].joined(separator: "\n\n")
+      ] + styles).joined(separator: "\n\n")
 
       DispatchQueue.main.async {
         // Non-nil baseURL is required by scenarios like opening local files

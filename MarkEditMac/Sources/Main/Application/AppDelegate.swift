@@ -13,6 +13,8 @@ import MarkEditKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+  @IBOutlet weak var mainAppMenuItem: NSMenuItem?
+
   @IBOutlet weak var mainFileMenu: NSMenu?
   @IBOutlet weak var mainEditMenu: NSMenu?
   @IBOutlet weak var mainExtensionsMenu: NSMenu?
@@ -148,6 +150,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // Install uncaught exception handler
     AppExceptionCatcher.install()
+
+    if AppCustomization.isSafeMode {
+      mainAppMenuItem?.title = Localized.General.safeModeAppName
+    }
   }
 
   func applicationShouldTerminate(_ application: NSApplication) -> NSApplication.TerminateReply {
@@ -165,6 +171,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationWillTerminate(_ notification: Notification) {
+    AppRelauncher.commit()
     AppUpdater.commitStagedUpdate()
     EditorSelectionHistory.purgeStaleEntries()
   }
