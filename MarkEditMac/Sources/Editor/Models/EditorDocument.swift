@@ -284,12 +284,15 @@ extension EditorDocument {
   }
 
   override func close() {
-    saveToClosedTabHistory()
-    super.close()
+    if !isTerminating {
+      saveToClosedTabHistory()
+    }
 
     if let spellDocTag {
       NSSpellChecker.shared.closeSpellDocument(withTag: spellDocTag)
     }
+
+    super.close()
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {

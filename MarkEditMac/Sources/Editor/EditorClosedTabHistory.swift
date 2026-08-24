@@ -57,8 +57,16 @@ final class EditorClosedTabHistory {
     }
 
     var current = EditorHistory.closedTabs
-    current.removeAll { $0.resolvedURL?.path(percentEncoded: false) == path }
-    current.append(ClosedTab(bookmark: bookmark, tabIndex: tabIndex, wasStandalone: wasStandalone))
+    current.removeAll {
+      let options: URL.BookmarkResolutionOptions = [.withoutUI, .withoutMounting]
+      return $0.resolvedURL(options: options)?.path(percentEncoded: false) == path
+    }
+
+    current.append(ClosedTab(
+      bookmark: bookmark,
+      tabIndex: tabIndex,
+      wasStandalone: wasStandalone
+    ))
 
     if let sourceWindow {
       windowRefs.setObject(sourceWindow, forKey: path as NSString)
@@ -78,7 +86,7 @@ final class EditorClosedTabHistory {
     for index in current.indices.reversed() {
       let entry = current[index]
 
-      guard let url = entry.resolvedURL else {
+      guard let url = entry.resolvedURL() else {
         current.remove(at: index)
         continue
       }
@@ -117,10 +125,11 @@ final class EditorClosedTabHistory {
 private typealias ClosedTab = EditorHistory.ClosedTab
 
 private extension ClosedTab {
-  var resolvedURL: URL? {
+  func resolvedURL(options: URL.BookmarkResolutionOptions = []) -> URL? {
     var isStale = false
     return try? URL(
       resolvingBookmarkData: bookmark,
+      options: options,
       relativeTo: nil,
       bookmarkDataIsStale: &isStale
     )

@@ -68,7 +68,7 @@ private extension AppDelegate {
       var isStale = false
       let bookmarkURL = try URL(
         resolvingBookmarkData: bookmarkData,
-        options: .withSecurityScope,
+        options: [.withSecurityScope, .withoutUI, .withoutMounting],
         relativeTo: nil,
         bookmarkDataIsStale: &isStale
       )
