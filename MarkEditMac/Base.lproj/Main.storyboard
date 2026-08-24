@@ -67,6 +67,12 @@
                                                             <action selector="grantFolderAccess:" target="Voe-Tx-rLC" id="NVa-7Q-Zg0"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Launch Safe Mode" id="zSM-YV-rGb">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="launchSafeMode:" target="Voe-Tx-rLC" id="sSM-qM-GZb"/>
+                                                        </connections>
+                                                    </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="USk-ey-oWO"/>
                                                     <menuItem title="Development Guide" id="aSl-kC-hp8">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -1090,6 +1096,7 @@ Gw
                         <outlet property="lineEndingsCRLFItem" destination="mc2-DH-5Iy" id="w6F-ls-MGF"/>
                         <outlet property="lineEndingsLFItem" destination="qOk-v8-kKx" id="4t7-oc-c7R"/>
                         <outlet property="lineEndingsMenu" destination="7eH-ja-yIc" id="CYf-hv-ZvG"/>
+                        <outlet property="mainAppMenuItem" destination="1Xt-HY-uBw" id="X4F-8a-j5z"/>
                         <outlet property="mainEditMenu" destination="W48-6f-4Dl" id="xUc-Fy-SjE"/>
                         <outlet property="mainExtensionsMenu" destination="nkD-z6-yjV" id="40H-WY-xHu"/>
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>

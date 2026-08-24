@@ -50,6 +50,8 @@ extension AppDelegate: NSMenuDelegate {
 extension AppDelegate: NSMenuItemValidation {
   func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
     switch menuItem.action {
+    case #selector(launchSafeMode(_:)):
+      return !AppCustomization.isSafeMode
     case #selector(newFileFromClipboard(_:)):
       return NSPasteboard.general.hasText
     case #selector(reopenClosedTab(_:)):
@@ -171,6 +173,14 @@ private extension AppDelegate {
 // MARK: - Private
 
 private extension AppDelegate {
+  @IBAction func launchSafeMode(_ sender: Any?) {
+    guard !AppCustomization.isSafeMode else {
+      return
+    }
+
+    NSApp.relaunchSafely(sender, safeMode: true)
+  }
+
   @IBAction func checkForUpdates(_ sender: Any?) {
     Task {
       await AppUpdater.checkForUpdates(explicitly: true)

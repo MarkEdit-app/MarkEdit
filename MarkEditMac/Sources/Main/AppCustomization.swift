@@ -138,3 +138,23 @@ struct AppCustomization {
     !name.isEmpty && name != "." && name != ".." && name == (name as NSString).lastPathComponent
   }
 }
+
+// MARK: - Safe Mode
+
+extension AppCustomization {
+  private static let safeModeKey = "launch-safe-mode"
+
+  static let isSafeMode: Bool = {
+    let enabled = UserDefaults.standard.bool(forKey: safeModeKey)
+    UserDefaults.standard.removeObject(forKey: safeModeKey)
+    return enabled
+  }()
+
+  static func requestSafeMode() {
+    UserDefaults.standard.set(true, forKey: safeModeKey)
+  }
+
+  static func cancelSafeMode() {
+    UserDefaults.standard.removeObject(forKey: safeModeKey)
+  }
+}

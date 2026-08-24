@@ -19,6 +19,7 @@ import MarkEditCore
  */
 enum Localized {
   enum General {
+    static let safeModeAppName = String(localized: "MarkEdit (Safe Mode)", comment: "App menu title when running without customizations")
     static let done = String(localized: "Done", comment: "Button title, confirm an action")
     static let cancel = String(localized: "Cancel", comment: "Button title, cancel an action")
     static let delete = String(localized: "Delete", comment: "Button title, confirm the deletion")
