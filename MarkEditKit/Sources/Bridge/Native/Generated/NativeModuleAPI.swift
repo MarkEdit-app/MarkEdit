@@ -29,6 +29,10 @@ public protocol NativeModuleAPI: NativeModule {
   func getFileContent(path: String?) async -> String?
   func getFileObject(path: String?) async -> String?
   func getFileInfo(path: String?) async -> String?
+  func getFileVersions() async -> String?
+  func getFileVersionContent(id: String) async -> String?
+  func restoreFileVersion(id: String) async -> Bool
+  func deleteFileVersions(ids: [String]) async -> Bool
   func getPasteboardItems() async -> String?
   func getPasteboardString() async -> String?
   func terminateApp()
@@ -86,6 +90,14 @@ final class NativeBridgeAPI: NativeBridge {
       return await getFileObject(parameters: parameters)
     case "getFileInfo":
       return await getFileInfo(parameters: parameters)
+    case "getFileVersions":
+      return await getFileVersions(parameters: parameters)
+    case "getFileVersionContent":
+      return await getFileVersionContent(parameters: parameters)
+    case "restoreFileVersion":
+      return await restoreFileVersion(parameters: parameters)
+    case "deleteFileVersions":
+      return await deleteFileVersions(parameters: parameters)
     case "getPasteboardItems":
       return await getPasteboardItems(parameters: parameters)
     case "getPasteboardString":
@@ -448,6 +460,77 @@ final class NativeBridgeAPI: NativeBridge {
     }
 
     let result = await module.getFileInfo(path: message.path)
+    return .success(result)
+  }
+
+  private func getFileVersions(parameters: Data) async -> Result<Any?, Error>? {
+    let result = await module.getFileVersions()
+    return .success(result)
+  }
+
+  private func getFileVersionContent(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var id: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        id = try container.value("id")
+      }
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.getFileVersionContent(id: message.id)
+    return .success(result)
+  }
+
+  private func restoreFileVersion(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var id: String
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        id = try container.value("id")
+      }
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.restoreFileVersion(id: message.id)
+    return .success(result)
+  }
+
+  private func deleteFileVersions(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var ids: [String]
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        ids = try container.value("ids")
+      }
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.deleteFileVersions(ids: message.ids)
     return .success(result)
   }
 

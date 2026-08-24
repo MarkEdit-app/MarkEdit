@@ -1,30 +1,41 @@
 //
 //  NSFileVersion+Extension.swift
 //
-//  Created by cyan on 10/16/24.
+//  Created by cyan on 8/24/26.
 //
 
-import AppKit
+import Foundation
 
 public extension NSFileVersion {
   var needsDownloading: Bool {
     !hasLocalContents && !FileManager.default.fileExists(atPath: url.path)
   }
 
-  @MainActor
-  func fetchLocalContents(
-    startedDownloading: @Sendable @MainActor @escaping () -> Void,
-    contentsFetched: @Sendable @MainActor @escaping () -> Void
-  ) {
+  func fetchLocalContents() async -> Bool {
     guard needsDownloading else {
-      return contentsFetched()
+      return true
     }
 
-    startedDownloading()
-    DispatchQueue.global(qos: .userInitiated).async {
-      let coordinator = NSFileCoordinator()
-      coordinator.coordinate(readingItemAt: self.url, error: nil) { _ in
-        DispatchQueue.main.async(execute: contentsFetched)
+    let url = url
+    return await withCheckedContinuation { continuation in
+      DispatchQueue.global(qos: .userInitiated).async {
+        var error: NSError?
+        var succeeded = false
+
+        let coordinator = NSFileCoordinator()
+        coordinator.coordinate(readingItemAt: url, error: &error) { _ in
+          succeeded = true
+        }
+
+        continuation.resume(returning: error == nil && succeeded)
+      }
+    }
+  }
+
+  func removeFromDisk() async throws {
+    try await withCheckedThrowingContinuation { continuation in
+      DispatchQueue.global(qos: .utility).async {
+        continuation.resume(with: Result { try self.remove() })
       }
     }
   }

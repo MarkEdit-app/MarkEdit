@@ -29,12 +29,12 @@ extension EditorViewController {
       return
     }
 
-    DispatchQueue.global(qos: .default).async {
-      do {
-        try versions.forEach { try $0.remove() }
-      } catch {
-        Logger.log(.error, error.localizedDescription)
+    do {
+      for version in versions {
+        try await version.removeFromDisk()
       }
+    } catch {
+      Logger.log(.error, error.localizedDescription)
     }
   }
 }

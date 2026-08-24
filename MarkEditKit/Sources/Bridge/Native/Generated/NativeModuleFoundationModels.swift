@@ -175,11 +175,13 @@ final class NativeBridgeFoundationModels: NativeBridge {
 }
 
 public struct LanguageModelGenerationOptions: Decodable {
+  public var attachments: [String]?
   public var sampling: LanguageModelSampling?
   public var temperature: Double?
   public var maximumResponseTokens: Int?
 
-  public init(sampling: LanguageModelSampling?, temperature: Double?, maximumResponseTokens: Int?) {
+  public init(attachments: [String]?, sampling: LanguageModelSampling?, temperature: Double?, maximumResponseTokens: Int?) {
+    self.attachments = attachments
     self.sampling = sampling
     self.temperature = temperature
     self.maximumResponseTokens = maximumResponseTokens
@@ -187,6 +189,7 @@ public struct LanguageModelGenerationOptions: Decodable {
 
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    attachments = try container.value("attachments")
     sampling = try container.value("sampling")
     temperature = try container.value("temperature")
     maximumResponseTokens = try container.value("maximumResponseTokens")

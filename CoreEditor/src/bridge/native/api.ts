@@ -26,6 +26,10 @@ export interface NativeModuleAPI extends NativeModule {
   getFileContent({ path }: { path: string | undefined }): Promise<string | undefined>;
   getFileObject({ path }: { path: string | undefined }): Promise<string | undefined>;
   getFileInfo({ path }: { path: string | undefined }): Promise<string | undefined>;
+  getFileVersions(): Promise<string | undefined>;
+  getFileVersionContent({ id }: { id: string }): Promise<string | undefined>;
+  restoreFileVersion({ id }: { id: string }): Promise<boolean>;
+  deleteFileVersions({ ids }: { ids: string[] }): Promise<boolean>;
   getPasteboardItems(): Promise<string | undefined>;
   getPasteboardString(): Promise<string | undefined>;
   terminateApp(): void;
