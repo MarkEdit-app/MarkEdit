@@ -534,14 +534,16 @@ extension EditorDocument: FileVersionPickerDelegate {
     hostViewController?.presentAsSheet(picker)
   }
 
-  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion) {
+  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion) async {
     guard let contents = try? Data(contentsOf: version.url).toString() else {
       return Logger.assertFail("Failed to get file contents of version: \(version)")
     }
 
     stringValue = contents
     hostViewController?.resetEditor()
-    saveContent()
+
+    await hostViewController?.waitUntilEditorReset()
+    await waitUntilSaveCompleted()
   }
 
   func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool) {

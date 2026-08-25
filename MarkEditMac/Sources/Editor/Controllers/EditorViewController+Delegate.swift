@@ -419,6 +419,18 @@ extension EditorViewController: EditorModuleAPIDelegate {
     return URL(filePath: path)
   }
 
+  func editorAPI(_ sender: EditorModuleAPI, restoreFileVersionContent content: String) async -> Bool {
+    guard let document else {
+      return false
+    }
+
+    document.stringValue = content
+    resetEditor()
+    await waitUntilEditorReset()
+    await document.waitUntilSaveCompleted()
+    return true
+  }
+
   func editorAPITerminateApp(_ sender: EditorModuleAPI) {
     NSApp.terminateSafely()
   }

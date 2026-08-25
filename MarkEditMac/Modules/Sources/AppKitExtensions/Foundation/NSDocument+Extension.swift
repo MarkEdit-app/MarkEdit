@@ -38,7 +38,10 @@ public extension NSDocument {
     }
 
     let all = NSFileVersion.otherVersionsOfItem(at: url) ?? []
-    let sorted = all.newestToOldest(throttle: false)
+    let sorted = all.sorted {
+      ($0.modificationDate ?? .distantPast) > ($1.modificationDate ?? .distantPast)
+    }
+
     return maxLength > (sorted.count - 1) ? [] : Array(sorted.suffix(from: maxLength))
   }
 }

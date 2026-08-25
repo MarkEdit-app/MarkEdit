@@ -59,6 +59,7 @@ function simply(options?: LanguageModelGenerationOptions): SimplifiedGenerationO
   }
 
   return {
+    attachments: options.attachments?.map(file => file.data),
     sampling: (() => {
       const sampling = options.sampling;
       switch (sampling?.mode) {

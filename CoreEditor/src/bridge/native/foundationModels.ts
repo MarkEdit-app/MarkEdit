@@ -1,6 +1,7 @@
 import { NativeModule } from '../nativeModule';
 
 export interface LanguageModelGenerationOptions {
+  attachments?: string[];
   sampling?: LanguageModelSampling;
   temperature?: number;
   maximumResponseTokens?: CodeGen_Int;

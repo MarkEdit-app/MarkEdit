@@ -4,6 +4,7 @@
 //  Created by cyan on 9/18/25.
 //
 
+import CoreImage
 import Foundation
 import FoundationModels
 import MarkEditCore
@@ -85,10 +86,9 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     }
 
     do {
-      let response = try await session.respond(
-        to: prompt,
-        options: GenerationOptions(options)
-      )
+      let response = try await session.respond(options: GenerationOptions(options)) {
+        buildPrompt(prompt, attachments: options?.attachments)
+      }
 
       return encode(response.content, nil, true)
     } catch {
@@ -128,10 +128,9 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 
     Task {
       do {
-        let stream = session.streamResponse(
-          to: prompt,
-          options: GenerationOptions(options)
-        )
+        let stream = session.streamResponse(options: GenerationOptions(options)) {
+          buildPrompt(prompt, attachments: options?.attachments)
+        }
 
         for try await snapshot in stream {
           didReceive(snapshot.content, nil, false)
@@ -180,6 +179,22 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 }
 
 // MARK: - Private
+
+@available(macOS 26.0, *)
+private extension EditorModuleFoundationModels {
+  @PromptBuilder
+  func buildPrompt(_ promptText: String, attachments: [String]?) -> Prompt {
+    promptText
+
+  #if canImport(FoundationModels, _version: 2)
+    if #available(macOS 27.0, *) {
+      for image in (attachments ?? []).compactMap(CIImage.init(base64Encoded:)) {
+        Attachment(image)
+      }
+    }
+  #endif
+  }
+}
 
 #if canImport(FoundationModels, _version: 2)
 
@@ -243,5 +258,15 @@ private extension GenerationOptions.SamplingMode {
     } else {
       return nil
     }
+  }
+}
+
+private extension CIImage {
+  convenience init?(base64Encoded string: String) {
+    guard let data = Data(base64Encoded: string) else {
+      return nil
+    }
+
+    self.init(data: data)
   }
 }

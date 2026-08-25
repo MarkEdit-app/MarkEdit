@@ -11,7 +11,7 @@ import MarkEditKit
 
 @MainActor
 public protocol FileVersionPickerDelegate: AnyObject {
-  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion)
+  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion) async
   func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool)
 }
 
@@ -338,8 +338,13 @@ private extension FileVersionPicker {
       return NSSound.beep()
     }
 
-    delegate?.fileVersionPicker(self, didPickVersion: allVersions[versionMenuButton.indexOfSelectedItem])
-    dismiss(self)
+    isDownloading = true
+    let version = allVersions[versionMenuButton.indexOfSelectedItem]
+
+    Task {
+      await delegate?.fileVersionPicker(self, didPickVersion: version)
+      dismiss(self)
+    }
   }
 
   func goBack() {
@@ -406,21 +411,26 @@ private extension FileVersionPicker {
 
   func loadChosenVersion(scrollToTop: Bool = true) {
     let version = allVersions[versionMenuButton.indexOfSelectedItem]
-    version.fetchLocalContents(
-      startedDownloading: {
-        self.isDownloading = true
-      },
-      contentsFetched: {
-        if let newVersion = try? Data(contentsOf: version.url).toString() {
-          self.renderDifferences(newVersion: newVersion, scrollToTop: scrollToTop)
-        } else {
-          Logger.log(.error, "Failed to get file contents of version: \(version)")
-        }
+    guard version.needsDownloading else {
+      return finishLoading(version, succeeded: true, scrollToTop: scrollToTop)
+    }
 
-        self.isDownloading = false
-        self.versionMenuButton.selectedItem?.attributedTitle = self.formattedDate(for: version)
-      }
-    )
+    isDownloading = true
+    Task {
+      let succeeded = await version.fetchLocalContents()
+      finishLoading(version, succeeded: succeeded, scrollToTop: scrollToTop)
+    }
+  }
+
+  func finishLoading(_ version: NSFileVersion, succeeded: Bool, scrollToTop: Bool) {
+    if succeeded, let newVersion = try? Data(contentsOf: version.url).toString() {
+      renderDifferences(newVersion: newVersion, scrollToTop: scrollToTop)
+    } else {
+      Logger.log(.error, "Failed to get file contents of version: \(version)")
+    }
+
+    isDownloading = false
+    versionMenuButton.selectedItem?.attributedTitle = formattedDate(for: version)
   }
 
   func renderDifferences(newVersion: String, scrollToTop: Bool) {

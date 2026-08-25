@@ -33,12 +33,15 @@ public protocol EditorModuleAPIDelegate: AnyObject {
   func editorAPI(_ sender: EditorModuleAPI, runService name: String, input: String?) async -> Bool
   func editorAPIOpenFile(_ sender: EditorModuleAPI, fileURL: URL) -> Bool
   func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL?
+  func editorAPI(_ sender: EditorModuleAPI, restoreFileVersionContent content: String) async -> Bool
   func editorAPITerminateApp(_ sender: EditorModuleAPI)
   func editorAPIRelaunchApp(_ sender: EditorModuleAPI)
 }
 
 public final class EditorModuleAPI: NativeModuleAPI {
   private weak var delegate: EditorModuleAPIDelegate?
+  private var fileVersionURL: URL?
+  private var fileVersionMap = [String: NSFileVersion]()
 
   public init(delegate: EditorModuleAPIDelegate) {
     self.delegate = delegate
@@ -274,12 +277,199 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 }
 
+// MARK: - File Versions
+
+public extension EditorModuleAPI {
+  func getFileVersions() async -> String? {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: nil) else {
+      clearFileVersions()
+      return nil
+    }
+
+    if fileVersionURL != fileURL {
+      clearFileVersions()
+      fileVersionURL = fileURL
+    }
+
+    let nonlocalVersions = (try? await NSFileVersion.nonlocalVersionsOfItem(at: fileURL)) ?? []
+    guard isCurrentFileVersionURL(fileURL) else {
+      return nil
+    }
+
+    var idsByVersion = [FileVersionKey: String]()
+    for (id, version) in fileVersionMap {
+      if let key = FileVersionKey(version) {
+        idsByVersion[key] = id
+      }
+    }
+
+    let localVersions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
+    var seenVersions = Set<FileVersionKey>()
+
+    let versions = (localVersions + nonlocalVersions).filter {
+      guard let key = FileVersionKey($0) else {
+        return false
+      }
+
+      return seenVersions.insert(key).inserted
+    }
+    .newestToOldest(throttle: false)
+
+    var newVersionMap = [String: NSFileVersion]()
+    let result: [[String: Any]] = versions.compactMap { version in
+      guard let key = FileVersionKey(version), let modificationDate = version.modificationDate else {
+        return nil
+      }
+
+      let id = idsByVersion[key] ?? UUID().uuidString
+      newVersionMap[id] = version
+      return [
+        "id": id,
+        "modificationDate": modificationDate.timeIntervalSince1970,
+      ]
+    }
+
+    fileVersionMap = newVersionMap
+    return try? JSONSerialization.data(withJSONObject: result).toString()
+  }
+
+  func getFileVersionContent(id: String) async -> String? {
+    guard let version = currentFileVersion(id: id), let key = FileVersionKey(version) else {
+      return nil
+    }
+
+    guard await version.fetchLocalContents() else {
+      return nil
+    }
+
+    guard let currentVersion = currentFileVersion(id: id), FileVersionKey(currentVersion) == key else {
+      return nil
+    }
+
+    return try? Data(contentsOf: currentVersion.url).toString()
+  }
+
+  func restoreFileVersion(id: String) async -> Bool {
+    guard let version = currentFileVersion(id: id), let key = FileVersionKey(version) else {
+      return false
+    }
+
+    guard await version.fetchLocalContents() else {
+      return false
+    }
+
+    guard let currentVersion = currentFileVersion(id: id), FileVersionKey(currentVersion) == key else {
+      return false
+    }
+
+    guard let content = try? Data(contentsOf: currentVersion.url).toString() else {
+      return false
+    }
+
+    return await delegate?.editorAPI(self, restoreFileVersionContent: content) == true
+  }
+
+  func deleteFileVersions(ids: [String]) async -> Bool {
+    let uniqueIDs = Set(ids)
+    guard !uniqueIDs.isEmpty, uniqueIDs.allSatisfy({ currentFileVersion(id: $0) != nil }) else {
+      return false
+    }
+
+    guard let fileVersionURL else {
+      return false
+    }
+
+    let versions = uniqueIDs.compactMap { id -> (String, NSFileVersion, FileVersionKey)? in
+      guard let version = fileVersionMap[id], let key = FileVersionKey(version) else {
+        return nil
+      }
+
+      return (id, version, key)
+    }
+
+    guard versions.count == uniqueIDs.count else {
+      return false
+    }
+
+    for (id, version, key) in versions {
+      guard isCurrentFileVersionURL(fileVersionURL) else {
+        return false
+      }
+
+      do {
+        try await version.removeFromDisk()
+      } catch {
+        Logger.log(.error, error.localizedDescription)
+        return false
+      }
+
+      guard isCurrentFileVersionURL(fileVersionURL) else {
+        return false
+      }
+
+      if let currentVersion = fileVersionMap[id], FileVersionKey(currentVersion) != key {
+        return false
+      }
+
+      fileVersionMap.removeValue(forKey: id)
+    }
+
+    return true
+  }
+}
+
 // MARK: - Internal
 
 extension CreateFileOptions: WebDataTransfer {}
 extension SavePanelOptions: WebDataTransfer {}
 
 // MARK: - Private
+
+private extension EditorModuleAPI {
+  func currentFileVersion(id: String) -> NSFileVersion? {
+    guard isCurrentFileVersionURL() else {
+      return nil
+    }
+
+    return fileVersionMap[id]
+  }
+
+  func isCurrentFileVersionURL(_ expectedURL: URL? = nil) -> Bool {
+    guard let fileURL = delegate?.editorAPIGetFileURL(self, path: nil) else {
+      return false
+    }
+
+    guard fileURL == fileVersionURL, expectedURL == nil || fileURL == expectedURL else {
+      if expectedURL == nil || fileVersionURL == expectedURL {
+        clearFileVersions()
+      }
+
+      return false
+    }
+
+    return true
+  }
+
+  func clearFileVersions() {
+    fileVersionMap.removeAll()
+    fileVersionURL = nil
+  }
+}
+
+private struct FileVersionKey: Hashable {
+  let persistentIdentifier: Data
+
+  init?(_ version: NSFileVersion) {
+    guard let persistentIdentifier = try? NSKeyedArchiver.archivedData(
+      withRootObject: version.persistentIdentifier,
+      requiringSecureCoding: false
+    ) else {
+      return nil
+    }
+
+    self.persistentIdentifier = persistentIdentifier
+  }
+}
 
 private extension WebMenuItem {
   var uniqueID: String {
