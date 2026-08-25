@@ -9,7 +9,7 @@ import { getNodesNamed } from '../../modules/lezer';
 import { getTableOfContents, getLinkAnchor, gotoHeader } from '../../modules/toc';
 
 export const regexp = {
-  standard: /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?([a-zA-Z0-9-]+\.)?[-a-zA-Z0-9@:%._+~#=]+(\.[a-z]+)?\b([-a-zA-Z0-9@:%._+~#=?&/]*)|(\[(?:\\.|[^\]\\])*\]\()([^()\s]+(?:\([^()]*\)[^()\s]*)*)(?:\s+["'][^"'\n]*["'])?\)|(<[^>]*\b(?:src|srcset|href|poster)\s*=\s*["'])([^"']*)["']/gi,
+  standard: /[a-zA-Z][a-zA-Z0-9+.-]*:\/\/\/?([a-zA-Z0-9-]+\.)?[-a-zA-Z0-9@:%._+~#=]+(\.[a-z]+)?\b([-a-zA-Z0-9@:%._+~#=?&/]*)|(\[(?:\\.|[^\]\\])*\]\()(<(?:\\.|[^<>\n])*>|[^()\s]+(?:\([^()]*\)[^()\s]*)*)(?:\s+["'][^"'\n]*["'])?\)|(<[^>]*\b(?:src|srcset|href|poster)\s*=\s*["'])([^"']*)["']/gi,
   footnote: /^\[\^[^\]]+\]$/,
   reference: /^\[(?:\\.|[^\]\\])+\]\s*\[((?:\\.|[^\]\\])+)\]$/,
 };
@@ -45,7 +45,11 @@ const standardMatcher = new MatchDecorator({
     if (match[4]) {
       // Decorate the full match and add the url as an attribute
       if (match[5]) {
-        return add(from, to, createDeco({ 'data-link-url': match[5] }));
+        const destination = match[5];
+        const url = destination.startsWith('<') && destination.endsWith('>')
+          ? destination.slice(1, -1)
+          : destination;
+        return add(from, to, createDeco({ 'data-link-url': url }));
       }
 
       // Usually speaking, this should not happen
