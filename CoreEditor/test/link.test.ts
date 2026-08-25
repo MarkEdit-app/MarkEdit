@@ -1,5 +1,6 @@
 import { describe, expect, test, jest, beforeEach, afterEach } from '@jest/globals';
-import { startClickable, stopClickable, regexp } from '../src/styling/nodes/link';
+import { startClickable, stopClickable, regexp, linkStyles } from '../src/styling/nodes/link';
+import * as editor from './utils/editor';
 
 // Mock the events module before importing link.ts so the timer callback's
 // internal isMetaKeyDown() check is driven by the test.
@@ -195,10 +196,31 @@ describe('regexp.standard — markdown links', () => {
     expect(m?.[5]).toBe('../README.md');
   });
 
+  test('matches angle-bracket destinations with spaces', () => {
+    const m = findMarkdownLink('[doc](<../03 Brazil/brazil.md>)');
+    expect(m).toBeDefined();
+    expect(m?.[5]).toBe('<../03 Brazil/brazil.md>');
+  });
+
   test('matches anchor-only destinations', () => {
     const m = findMarkdownLink('[top](#heading)');
     expect(m).toBeDefined();
     expect(m?.[5]).toBe('#heading');
+  });
+});
+
+describe('markdown link decoration', () => {
+  afterEach(() => {
+    window.editor.destroy();
+    document.body.innerHTML = '';
+  });
+
+  test('unwraps angle-bracket destinations', () => {
+    window.config = {} as typeof window.config;
+    editor.setUp('[doc](<../03 Brazil/brazil.md>)', linkStyles);
+
+    const link = document.querySelector<HTMLElement>('.cm-md-link');
+    expect(link?.dataset.linkUrl).toBe('../03 Brazil/brazil.md');
   });
 });
 
