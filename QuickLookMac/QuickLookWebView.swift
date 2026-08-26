@@ -28,7 +28,40 @@ final class QuickLookWebView: WKWebView {
       }
     }
 
+    if window?.level == .floating {
+      menu.addItem(.separator())
+      menu.addItem(resetWindowSizeItem())
+    }
+
     super.willOpenMenu(menu, with: event)
+  }
+}
+
+// MARK: - Contextual Menu
+
+private extension QuickLookWebView {
+  private func resetWindowSizeItem() -> NSMenuItem {
+    let item = NSMenuItem(
+      title: String(
+        localized: "Reset Window Size",
+        comment: "Menu item to reset the Quick Look window size"
+      ),
+      action: #selector(resetWindowSizeAction),
+      keyEquivalent: ""
+    )
+
+    item.subtitle = String(
+      localized: "Takes effect after relaunching Quick Look",
+      comment: "Subtitle explaining when the Quick Look window size reset takes effect"
+    )
+
+    item.target = self
+    item.isEnabled = QuickLookWindowSize.savedValue != nil
+    return item
+  }
+
+  @objc private func resetWindowSizeAction() {
+    QuickLookWindowSize.savedValue = nil
   }
 }
 

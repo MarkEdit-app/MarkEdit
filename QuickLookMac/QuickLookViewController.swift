@@ -22,6 +22,7 @@ final class QuickLookViewController: NSViewController {
 
   private var previewDirectoryURL: URL?
   private var appearanceObservation: NSKeyValueObservation?
+  private weak var observedResizeWindow: NSWindow?
 
   lazy var webView: WKWebView = {
     let config: WKWebViewConfiguration = .preferredConfig()
@@ -59,6 +60,8 @@ final class QuickLookViewController: NSViewController {
   }
 
   deinit {
+    NotificationCenter.default.removeObserver(self)
+
     if let mouseDownMonitor {
       NSEvent.removeMonitor(mouseDownMonitor)
       self.mouseDownMonitor = nil
@@ -77,6 +80,10 @@ final class QuickLookViewController: NSViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    if let size = QuickLookWindowSize.savedValue {
+      preferredContentSize = size
+    }
+
     view.wantsLayer = true
     view.addSubview(webView)
 
@@ -96,6 +103,11 @@ final class QuickLookViewController: NSViewController {
         self.updateAppearance()
       }
     }
+  }
+
+  override func viewDidAppear() {
+    super.viewDidAppear()
+    observeWindowResize()
   }
 
   override func viewDidLayout() {
@@ -139,5 +151,39 @@ extension QuickLookViewController: WKNavigationDelegate {
     decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
   ) {
     decisionHandler(navigationAction.navigationType == .linkActivated ? .cancel : .allow)
+  }
+}
+
+// MARK: - Private
+
+private extension QuickLookViewController {
+  func observeWindowResize() {
+    guard let window = view.window, window.level == .floating, window !== observedResizeWindow else {
+      return
+    }
+
+    if let observedResizeWindow {
+      NotificationCenter.default.removeObserver(
+        self,
+        name: NSWindow.didEndLiveResizeNotification,
+        object: observedResizeWindow
+      )
+    }
+
+    observedResizeWindow = window
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(windowDidResize(_:)),
+      name: NSWindow.didEndLiveResizeNotification,
+      object: window
+    )
+  }
+
+  @objc func windowDidResize(_ notification: Notification) {
+    guard let window = notification.object as? NSWindow, window.level == .floating else {
+      return
+    }
+
+    QuickLookWindowSize.savedValue = view.bounds.size
   }
 }
