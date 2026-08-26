@@ -80,11 +80,12 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-tooltip-autocomplete': {
     overflow: 'auto',
     marginTop: '5px',
-    borderRadius: '5px',
+    borderRadius: '8px',
     maxWidth: '1280px',
   },
   '.cm-tooltip-autocomplete ul': {
     maxHeight: 'var(--tooltip-completion-max-height) !important',
+    padding: '4px !important',
   },
   '.cm-tooltip-autocomplete ul li': {
     padding: '4px !important',
@@ -179,15 +180,22 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Autocomplete
     '.cm-tooltip-autocomplete': {
-      border: `1px solid ${colors.text}4d`,
-      backgroundColor: `${colors.background}99`,
-      backdropFilter: 'blur(10px)',
-      boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08)',
+      border: `1px solid ${colors.text}33`,
+      background: scheme === 'dark'
+        ? `linear-gradient(#ffffff0d, #ffffff0d), ${colors.background}d9`
+        : `linear-gradient(#0000000d, #0000000d), ${colors.background}d9`,
+      backdropFilter: 'blur(16px) saturate(70%)',
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
     },
     '.cm-tooltip-autocomplete ul li[aria-selected]': {
-      backgroundColor: `${colors.text}12`,
+      color: colors.text,
+      background: scheme === 'dark'
+        ? `linear-gradient(#ffffff24, #ffffff24), ${colors.background}`
+        : colors.background,
+      borderRadius: '6px',
+      boxShadow: '0 1px 4px rgba(0, 0, 0, 0.12)',
     },
-    '.cm-tooltip-autocomplete ul li, .cm-tooltip-autocomplete ul li[aria-selected]': {
+    '.cm-tooltip-autocomplete ul li': {
       color: colors.text,
     },
     '.cm-completionMatchedText': {
