@@ -54,7 +54,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   },
   '.cm-foldGutter, .cm-foldPlaceholder': {
     // Don't use ui-monospace because ▶︎ and ••• look very big
-    fontFamily: 'monospace !important',
+    fontFamily: 'Menlo, monospace !important',
     // Make ▼ and ▶︎ more visually centered
     transform: 'translateY(-0.1em)',
   },
