@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		84FB00F02C6C4AED00850E94 /* AppWritingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */; };
 		8701D0A42CC12321006AF8C2 /* FileVersion in Frameworks */ = {isa = PBXBuildFile; productRef = 8701D0A32CC12321006AF8C2 /* FileVersion */; };
+		8703C175303E7DD300A896D0 /* QuickLookWindowSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */; };
 		87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87067E2629755D5C0052E795 /* EditorStatusView.swift */; };
 		87091B9A2A963C6B00F5EF0D /* EditorTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87091B992A963C6B00F5EF0D /* EditorTextInput.swift */; };
 		8709C69E29B4412F009EABB5 /* AssistantSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */; };
@@ -177,6 +178,7 @@
 
 /* Begin PBXFileReference section */
 		84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWritingTools.swift; sourceTree = "<group>"; };
+		8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookWindowSize.swift; sourceTree = "<group>"; };
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
 		87091B992A963C6B00F5EF0D /* EditorTextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextInput.swift; sourceTree = "<group>"; };
 		8709C69D29B4412F009EABB5 /* AssistantSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantSettingsView.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 			children = (
 				879FCC6E30184C1A00B46145 /* Extensions */,
 				8794A0612FC5254E005CCC73 /* QuickLookWebView.swift */,
+				8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */,
 				872924052951525C007156B1 /* QuickLookViewController.swift */,
 				8794A06A2FC525DF005CCC73 /* QuickLookConfig.swift */,
 				872924262951A134007156B1 /* Supporting Files */,
@@ -1004,6 +1007,7 @@
 				872924062951525C007156B1 /* QuickLookViewController.swift in Sources */,
 				8794A0632FC52551005CCC73 /* QuickLookWebView.swift in Sources */,
 				8794A08C2FC53C28005CCC73 /* QuickLookViewController+Dragging.swift in Sources */,
+				8703C175303E7DD300A896D0 /* QuickLookWindowSize.swift in Sources */,
 				8794A0832FC53BCC005CCC73 /* QuickLookViewController+UI.swift in Sources */,
 				8794A06C2FC525E2005CCC73 /* QuickLookConfig.swift in Sources */,
 			);

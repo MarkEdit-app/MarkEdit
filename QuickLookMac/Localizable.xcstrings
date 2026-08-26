@@ -17,6 +17,40 @@
           }
         }
       }
+    },
+    "Reset Window Size" : {
+      "comment" : "Menu item to reset the Quick Look window size",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重置窗口大小"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重設視窗大小"
+          }
+        }
+      }
+    },
+    "Takes effect after relaunching Quick Look" : {
+      "comment" : "Subtitle explaining when the Quick Look window size reset takes effect",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新启动“快速预览”后生效"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動“快速查看”後生效"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
