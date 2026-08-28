@@ -425,7 +425,7 @@ extension EditorViewController: EditorModuleAPIDelegate {
     }
 
     document.stringValue = content
-    resetEditor()
+    resetEditor(resetSelection: true)
     await waitUntilEditorReset()
     await document.waitUntilSaveCompleted()
     return true

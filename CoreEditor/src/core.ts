@@ -61,9 +61,9 @@ export async function resetEditor(
   selectionRange?: { anchor: number; head: number },
   documentChanged: boolean = true,
 ): Promise<boolean> {
-  // Used to restore the scroll position if the document is not changed
+  // Preserve scroll position for same-document resets without an explicit range
   const previousOffset = (() => {
-    if (documentChanged) {
+    if (documentChanged || selectionRange !== undefined) {
       return undefined;
     }
 
@@ -75,8 +75,8 @@ export async function resetEditor(
     return { top: scrollDOM.scrollTop, left: scrollDOM.scrollLeft };
   })();
 
-  // Used to restore the selection if the document is not changed
-  if (!documentChanged) {
+  // Preserve selection for same-document resets without an explicit range
+  if (!documentChanged && selectionRange === undefined) {
     selectionRange = tryGetEditor()?.state.selection.main;
   }
 

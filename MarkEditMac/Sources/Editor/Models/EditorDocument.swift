@@ -540,7 +540,7 @@ extension EditorDocument: FileVersionPickerDelegate {
     }
 
     stringValue = contents
-    hostViewController?.resetEditor()
+    hostViewController?.resetEditor(resetSelection: true)
 
     await hostViewController?.waitUntilEditorReset()
     await waitUntilSaveCompleted()

@@ -372,7 +372,7 @@ extension EditorViewController {
     bridge.core.insertText(text: text, from: 0, to: 0)
   }
 
-  func resetEditor() {
+  func resetEditor(resetSelection: Bool = false) {
     guard hasFinishedLoading, let document else {
       return
     }
@@ -388,7 +388,11 @@ extension EditorViewController {
     lastResetDocumentID = documentID
 
     let selectionRange: SelectionRange? = {
-      // CoreEditor preserves selection for same-document resets
+      if resetSelection {
+        return .init(anchor: 0, head: 0)
+      }
+
+      // Pass nil to preserve selection for same-document resets
       guard documentChanged else {
         return nil
       }
