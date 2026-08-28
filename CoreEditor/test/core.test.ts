@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
+import { describe, expect, jest, test, beforeEach } from '@jest/globals';
 import { EditorSelection } from '@codemirror/state';
 import { Config } from '../src/config';
 import { performTextDrop, resetEditor } from '../src/core';
@@ -213,14 +213,18 @@ describe('resetEditor documentChanged', () => {
     expect(sel.head).toBe(0);
   });
 
-  test('same-document reset overrides caller-provided selectionRange with the live caret', async () => {
+  test('same-document reset uses and scrolls to a caller-provided zero selectionRange', async () => {
     await resetEditor('Hello, World!');
     window.editor.dispatch({ selection: EditorSelection.range(3, 8) });
+    window.editor.scrollDOM.scrollTop = 100;
+    const scrollTo = jest.spyOn(HTMLElement.prototype, 'scrollTo');
 
     await resetEditor('Hello, World!', { anchor: 0, head: 0 }, false);
     const sel = window.editor.state.selection.main;
-    expect(sel.anchor).toBe(3);
-    expect(sel.head).toBe(8);
+    expect(sel.anchor).toBe(0);
+    expect(sel.head).toBe(0);
+    expect(scrollTo.mock.calls.map(call => call[0])).toContainEqual({ top: 0 });
+    scrollTo.mockRestore();
   });
 
   test('documentChanged=true ignores the live caret and uses provided range', async () => {
