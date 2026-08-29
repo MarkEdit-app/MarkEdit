@@ -218,7 +218,7 @@ private extension FileVersionPicker {
     view.addSubview(bottomDivider)
 
     modeMenuButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-    modeMenuButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    modeMenuButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     modeMenuButton.addItems(withTitles: localizable.modeTitles)
     modeMenuButton.target = self
     modeMenuButton.action = #selector(didChangeMode(_:))
@@ -227,6 +227,7 @@ private extension FileVersionPicker {
 
     versionMenuButton.target = self
     versionMenuButton.action = #selector(didChangeVersion(_:))
+    versionMenuButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     versionMenuButton.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(versionMenuButton)
 
