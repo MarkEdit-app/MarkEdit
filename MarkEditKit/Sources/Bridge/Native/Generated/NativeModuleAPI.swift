@@ -32,7 +32,7 @@ public protocol NativeModuleAPI: NativeModule {
   func getFileVersions() async -> String?
   func getFileVersionContent(id: String) async -> String?
   func restoreFileVersion(id: String) async -> Bool
-  func deleteFileVersions(ids: [String]) async -> Bool
+  func deleteLocalFileVersions(ids: [String]) async -> Bool
   func getPasteboardItems() async -> String?
   func getPasteboardString() async -> String?
   func terminateApp()
@@ -96,8 +96,8 @@ final class NativeBridgeAPI: NativeBridge {
       return await getFileVersionContent(parameters: parameters)
     case "restoreFileVersion":
       return await restoreFileVersion(parameters: parameters)
-    case "deleteFileVersions":
-      return await deleteFileVersions(parameters: parameters)
+    case "deleteLocalFileVersions":
+      return await deleteLocalFileVersions(parameters: parameters)
     case "getPasteboardItems":
       return await getPasteboardItems(parameters: parameters)
     case "getPasteboardString":
@@ -512,7 +512,7 @@ final class NativeBridgeAPI: NativeBridge {
     return .success(result)
   }
 
-  private func deleteFileVersions(parameters: Data) async -> Result<Any?, Error>? {
+  private func deleteLocalFileVersions(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
       var ids: [String]
 
@@ -530,7 +530,7 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.deleteFileVersions(ids: message.ids)
+    let result = await module.deleteLocalFileVersions(ids: message.ids)
     return .success(result)
   }
 

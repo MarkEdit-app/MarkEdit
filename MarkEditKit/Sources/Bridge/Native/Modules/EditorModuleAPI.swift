@@ -304,6 +304,7 @@ public extension EditorModuleAPI {
     }
 
     let localVersions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
+    let localKeys = Set(localVersions.compactMap(FileVersionKey.init))
     var seenVersions = Set<FileVersionKey>()
 
     let versions = (localVersions + nonlocalVersions).filter {
@@ -326,6 +327,7 @@ public extension EditorModuleAPI {
       return [
         "id": id,
         "modificationDate": modificationDate.timeIntervalSince1970,
+        "isLocal": localKeys.contains(key),
       ]
     }
 
@@ -369,7 +371,7 @@ public extension EditorModuleAPI {
     return await delegate?.editorAPI(self, restoreFileVersionContent: content) == true
   }
 
-  func deleteFileVersions(ids: [String]) async -> Bool {
+  func deleteLocalFileVersions(ids: [String]) async -> Bool {
     let uniqueIDs = Set(ids)
     guard !uniqueIDs.isEmpty, uniqueIDs.allSatisfy({ currentFileVersion(id: $0) != nil }) else {
       return false

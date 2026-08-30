@@ -52,6 +52,7 @@ final class FileVersionTests: XCTestCase {
     let first = try decodeVersions(await api.getFileVersions())
     let second = try decodeVersions(await api.getFileVersions())
     XCTAssertEqual(Set(first.map(\.id)), Set(second.map(\.id)))
+    XCTAssertTrue(first.allSatisfy(\.isLocal))
   }
 
   @MainActor
@@ -71,14 +72,14 @@ final class FileVersionTests: XCTestCase {
   }
 
   @MainActor
-  func testEditorModuleAPIDeletesFileVersions() async throws {
+  func testEditorModuleAPIDeletesLocalFileVersions() async throws {
     let fixture = try makeFixture(count: 2)
     defer { fixture.remove() }
 
     let delegate = EditorModuleAPIDelegateStub(fileURL: fixture.documentURL)
     let api = EditorModuleAPI(delegate: delegate)
     let versions = try decodeVersions(await api.getFileVersions())
-    let deleted = await api.deleteFileVersions(ids: versions.map(\.id))
+    let deleted = await api.deleteLocalFileVersions(ids: versions.map(\.id))
     let remaining = try decodeVersions(await api.getFileVersions())
 
     XCTAssertTrue(deleted)
@@ -93,7 +94,7 @@ final class FileVersionTests: XCTestCase {
     let delegate = EditorModuleAPIDelegateStub(fileURL: fixture.documentURL)
     let api = EditorModuleAPI(delegate: delegate)
     let versions = try decodeVersions(await api.getFileVersions())
-    let deleted = await api.deleteFileVersions(ids: [versions[0].id, "invalid"])
+    let deleted = await api.deleteLocalFileVersions(ids: [versions[0].id, "invalid"])
     let remaining = try decodeVersions(await api.getFileVersions())
 
     XCTAssertFalse(deleted)
@@ -158,6 +159,7 @@ private extension FileVersionTests {
 
 private struct FileVersionInfo: Decodable {
   let id: String
+  let isLocal: Bool
 }
 
 @MainActor
