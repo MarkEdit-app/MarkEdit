@@ -6,10 +6,11 @@ export async function getFileVersions(): Promise<FileVersion[]> {
     return [];
   }
 
-  const versions: { id: string; modificationDate: number }[] = JSON.parse(json);
+  const versions: { id: string; modificationDate: number; isLocal: boolean }[] = JSON.parse(json);
   return versions.map(version => ({
     id: version.id,
     modificationDate: new Date(version.modificationDate * 1000),
+    isLocal: version.isLocal,
   }));
 }
 
@@ -21,6 +22,6 @@ export async function restoreFileVersion(id: string): Promise<boolean> {
   return window.nativeModules.api.restoreFileVersion({ id });
 }
 
-export async function deleteFileVersions(ids: string[]): Promise<boolean> {
-  return window.nativeModules.api.deleteFileVersions({ ids });
+export async function deleteLocalFileVersions(ids: string[]): Promise<boolean> {
+  return window.nativeModules.api.deleteLocalFileVersions({ ids });
 }

@@ -29,7 +29,7 @@ export interface NativeModuleAPI extends NativeModule {
   getFileVersions(): Promise<string | undefined>;
   getFileVersionContent({ id }: { id: string }): Promise<string | undefined>;
   restoreFileVersion({ id }: { id: string }): Promise<boolean>;
-  deleteFileVersions({ ids }: { ids: string[] }): Promise<boolean>;
+  deleteLocalFileVersions({ ids }: { ids: string[] }): Promise<boolean>;
   getPasteboardItems(): Promise<string | undefined>;
   getPasteboardString(): Promise<string | undefined>;
   terminateApp(): void;
