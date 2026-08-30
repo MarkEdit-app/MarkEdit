@@ -397,7 +397,7 @@ public extension EditorModuleAPI {
       }
 
       do {
-        try await version.removeFromDisk()
+        try await version.removeFromDisk(for: fileVersionURL)
       } catch {
         Logger.log(.error, error.localizedDescription)
         return false

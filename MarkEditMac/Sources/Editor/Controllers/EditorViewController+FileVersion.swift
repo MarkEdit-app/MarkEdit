@@ -19,6 +19,10 @@ extension EditorViewController {
       return
     }
 
+    guard let fileURL = document?.fileURL else {
+      return Logger.assertFail("Missing file URL when deleting versions")
+    }
+
     alert.messageText = String(format: Localized.FileVersion.foundVersionsFormat, versions.count)
     alert.informativeText = Localized.FileVersion.cannotBeUndone
 
@@ -31,7 +35,7 @@ extension EditorViewController {
 
     do {
       for version in versions {
-        try await version.removeFromDisk()
+        try await version.removeFromDisk(for: fileURL)
       }
     } catch {
       Logger.log(.error, error.localizedDescription)
