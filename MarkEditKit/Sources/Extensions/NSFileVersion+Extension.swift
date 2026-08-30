@@ -32,10 +32,21 @@ public extension NSFileVersion {
     }
   }
 
-  func removeFromDisk() async throws {
+  func removeFromDisk(for itemURL: URL) async throws {
     try await withCheckedThrowingContinuation { continuation in
       DispatchQueue.global(qos: .utility).async {
-        continuation.resume(with: Result { try self.remove() })
+        var error: NSError?
+        var result: Result<Void, Error> = .failure(CocoaError(.fileWriteUnknown))
+
+        NSFileCoordinator().coordinate(writingItemAt: itemURL, error: &error) { _ in
+          result = Result { try self.remove() }
+        }
+
+        if let error {
+          result = .failure(error)
+        }
+
+        continuation.resume(with: result)
       }
     }
   }
