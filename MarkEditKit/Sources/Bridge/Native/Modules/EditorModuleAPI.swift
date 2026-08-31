@@ -275,6 +275,14 @@ public final class EditorModuleAPI: NativeModuleAPI {
   public func relaunchApp() {
     delegate?.editorAPIRelaunchApp(self)
   }
+
+  public func playSystemBeep() {
+  #if os(macOS)
+    NSSound.beep()
+  #else
+    Logger.assertFail("Missing implementation, playing the system beep requires AppKit")
+  #endif
+  }
 }
 
 // MARK: - File Versions

@@ -37,6 +37,7 @@ public protocol NativeModuleAPI: NativeModule {
   func getPasteboardString() async -> String?
   func terminateApp()
   func relaunchApp()
+  func playSystemBeep()
 }
 
 public extension NativeModuleAPI {
@@ -106,6 +107,8 @@ final class NativeBridgeAPI: NativeBridge {
       return await terminateApp(parameters: parameters)
     case "relaunchApp":
       return await relaunchApp(parameters: parameters)
+    case "playSystemBeep":
+      return await playSystemBeep(parameters: parameters)
     default:
       return nil
     }
@@ -551,6 +554,11 @@ final class NativeBridgeAPI: NativeBridge {
 
   private func relaunchApp(parameters: Data) async -> Result<Any?, Error>? {
     module.relaunchApp()
+    return .success(nil)
+  }
+
+  private func playSystemBeep(parameters: Data) async -> Result<Any?, Error>? {
+    module.playSystemBeep()
     return .success(nil)
   }
 }

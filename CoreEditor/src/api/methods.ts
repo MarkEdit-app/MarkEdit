@@ -56,6 +56,10 @@ export function relaunchApp(): void {
   window.nativeModules.api.relaunchApp();
 }
 
+export function playSystemBeep(): void {
+  window.nativeModules.api.playSystemBeep();
+}
+
 export function addExtension(extension: Extension) {
   storage.extensions.push(extension);
 
