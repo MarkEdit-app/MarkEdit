@@ -132,44 +132,6 @@ export function clearSyntaxSelections() {
   storage.selectionHistory = [];
 }
 
-export function deleteEmojiBackward(editor: EditorView) {
-  const state = editor.state;
-  if (state.readOnly) {
-    return false;
-  }
-
-  const starts = state.selection.ranges.map(range => {
-    if (!range.empty) {
-      return undefined;
-    }
-
-    const line = state.doc.lineAt(range.from);
-    const pos = range.from - line.from;
-    const from = findClusterBreak(line.text, pos, false);
-    return isEmojiSplitByBackwardDeletion(line.text.slice(from, pos)) ? from + line.from : undefined;
-  });
-
-  if (starts.some(from => from === undefined)) {
-    return false;
-  }
-
-  let index = 0;
-  const updates = state.changeByRange(range => {
-    const from = starts[index++] as number;
-    return {
-      changes: { from, to: range.from },
-      range: EditorSelection.cursor(from),
-    };
-  });
-
-  editor.dispatch(state.update(updates, {
-    scrollIntoView: true,
-    userEvent: 'delete.backward',
-  }));
-
-  return true;
-}
-
 export const emojiDeletionKeymap: KeyBinding[] = [
   { key: 'Backspace', run: deleteEmojiBackward, shift: deleteEmojiBackward },
 ];
@@ -240,6 +202,46 @@ export const customizedCommandsKeymap: KeyBinding[] = [
 
 export { formatContent };
 export type { EditCommand };
+
+function deleteEmojiBackward(editor: EditorView) {
+  const state = editor.state;
+  if (state.readOnly) {
+    return false;
+  }
+
+  const starts = state.selection.ranges.map(range => {
+    if (!range.empty) {
+      return undefined;
+    }
+
+    const line = state.doc.lineAt(range.from);
+    const pos = range.from - line.from;
+    const precedingText = line.text.slice(0, pos);
+    const subdivisionFlagFrom = precedingText.search(/\u{1F3F4}[\u{E0020}-\u{E007E}]+\u{E007F}$/u);
+    const from = subdivisionFlagFrom < 0 ? findClusterBreak(line.text, pos, false, true) : subdivisionFlagFrom;
+    return isEmojiSplitByBackwardDeletion(line.text.slice(from, pos)) ? from + line.from : undefined;
+  });
+
+  if (starts.some(from => from === undefined)) {
+    return false;
+  }
+
+  let index = 0;
+  const updates = state.changeByRange(range => {
+    const from = starts[index++] as number;
+    return {
+      changes: { from, to: range.from },
+      range: EditorSelection.cursor(from),
+    };
+  });
+
+  editor.dispatch(state.update(updates, {
+    scrollIntoView: true,
+    userEvent: 'delete.backward',
+  }));
+
+  return true;
+}
 
 /**
  * Scroll one page, leaving the selection untouched.

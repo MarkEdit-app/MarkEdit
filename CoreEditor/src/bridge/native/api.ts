@@ -34,4 +34,5 @@ export interface NativeModuleAPI extends NativeModule {
   getPasteboardString(): Promise<string | undefined>;
   terminateApp(): void;
   relaunchApp(): void;
+  playSystemBeep(): void;
 }

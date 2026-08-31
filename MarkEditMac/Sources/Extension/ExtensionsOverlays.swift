@@ -69,7 +69,7 @@ private extension ExtensionsStateView {
       VStack(spacing: 10) {
         Image(systemName: isRegistryError ? Icons.cupAndHeatWaves : Icons.puzzlepieceExtension)
           .resizable()
-          .aspectRatio(contentMode: .fit)
+          .scaledToFit()
           .frame(width: 72)
           .fontWeight(.light)
           .foregroundStyle(.secondary)

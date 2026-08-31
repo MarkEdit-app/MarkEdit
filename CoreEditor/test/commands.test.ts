@@ -111,11 +111,11 @@ describe('Commands module', () => {
 });
 
 describe('emoji backward deletion', () => {
-  const deleteBackward = (text: string) => {
+  const deleteBackward = (text: string, position = text.length) => {
     editor.setUp(text);
-    editor.selectRange(text.length, text.length);
+    editor.selectRange(position, position);
     return {
-      handled: commands.deleteEmojiBackward(window.editor),
+      handled: commands.emojiDeletionKeymap[0].run?.(window.editor),
       text: editor.getText(),
     };
   };
@@ -131,7 +131,8 @@ describe('emoji backward deletion', () => {
   );
 
   test('deletes the complete subdivision flag', () => {
-    expect(deleteBackward('🏴󠁧󠁢󠁥󠁮󠁧󠁿')).toEqual({ handled: true, text: '' });
+    const text = 'a🏴󠁧󠁢󠁥󠁮󠁧󠁿b';
+    expect(deleteBackward(text, text.length - 1)).toEqual({ handled: true, text: 'ab' });
   });
 
   test.each(['👨‍👩‍👧‍👦', '❤️', '🇺🇸', 'é', 'a'])(
