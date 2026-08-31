@@ -37,7 +37,11 @@ export function showPreview(event: MouseEvent) {
 }
 
 export function cancelDefaultEvent(event: MouseEvent) {
-  const target = event.target as HTMLElement;
+  const target = event.target as HTMLElement | null;
+  if (target === null) {
+    return;
+  }
+
   if (target.className.includes('cm-md-previewButton')) {
     event.preventDefault();
     event.stopPropagation();
