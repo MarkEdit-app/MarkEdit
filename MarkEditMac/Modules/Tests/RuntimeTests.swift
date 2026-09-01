@@ -15,6 +15,26 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: configuration, selector: "_drawsBackground")
   }
 
+  func testColorMixComputedStyle() async throws {
+    let webView = WKWebView()
+    let result = try await webView.evaluateJavaScript("""
+      const element = document.createElement('div');
+      element.style.backgroundColor = 'color-mix(in srgb, rgb(255, 255, 255) 40%, transparent)';
+      document.body.append(element);
+      const color = getComputedStyle(element).backgroundColor;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+      const context = canvas.getContext('2d');
+      context.fillStyle = color;
+      context.fillRect(0, 0, 1, 1);
+      [...context.getImageData(0, 0, 1, 1).data].join(',');
+      """) as? String
+
+    XCTAssertEqual(result, "255,255,255,102")
+  }
+
   func testExistenceOfDeveloperPreferences() {
     let configuration = WKWebViewConfiguration()
     testExistenceOfSelector(object: configuration, selector: "_setCORSDisablingPatterns:")

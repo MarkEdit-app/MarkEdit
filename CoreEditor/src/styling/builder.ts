@@ -3,7 +3,7 @@ import { HighlightStyle, TagStyle, syntaxHighlighting } from '@codemirror/langua
 import { Tag, tags as defaultTags } from '@lezer/highlight';
 import { StyleSpec } from 'style-mod';
 import { ColorScheme, EditorColors } from './types';
-import { shadowableTextColor } from './helper';
+import { adjustAlpha, shadowableTextColor } from './helper';
 import { isChrome } from '../common/utils';
 
 // Extend tags by adding Markdown-specific ones
@@ -158,7 +158,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Handle of code folding
     '.cm-foldGutter.cm-gutterHover, .cm-foldPlaceholder': {
-      color: `${colors.text}66`,
+      color: adjustAlpha(colors.text, 0.4),
     },
     '.cm-foldPlaceholder': {
       backgroundColor: colors.lighterBackground,
@@ -180,10 +180,10 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Autocomplete
     '.cm-tooltip-autocomplete': {
-      border: `1px solid ${colors.text}33`,
+      border: `1px solid ${adjustAlpha(colors.text, 0.2)}`,
       background: scheme === 'dark'
-        ? `linear-gradient(#ffffff08, #ffffff08), ${colors.background}d9`
-        : `linear-gradient(#00000008, #00000008), ${colors.background}d9`,
+        ? `linear-gradient(#ffffff08, #ffffff08), ${adjustAlpha(colors.background, 0.85)}`
+        : `linear-gradient(#00000008, #00000008), ${adjustAlpha(colors.background, 0.85)}`,
       backdropFilter: 'blur(16px) saturate(70%)',
       boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
     },
@@ -216,10 +216,10 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       color: colors.visibleSpace,
     },
     '.cm-selectedVisible .cm-visibleTab': {
-      backgroundColor: `${colors.text}99`,
+      backgroundColor: adjustAlpha(colors.text, 0.6),
     },
     '.cm-selectedVisible .cm-visibleSpace::before, .cm-selectedVisible .cm-visibleLineBreak::before': {
-      color: `${colors.text}99`,
+      color: adjustAlpha(colors.text, 0.6),
     },
     '.cm-md-activeIndicator': {
       background: colors.activeLine,

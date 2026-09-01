@@ -69,7 +69,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "github-dark",
-      windowBackground: NSColor(hexCode: 0x0d1116),
+      windowBackground: NSColor(hexCode: 0x0d1117),
       prefersTintedToolbar: true
     )
   }
@@ -150,7 +150,7 @@ extension AppTheme: CaseIterable, Hashable, CustomStringConvertible {
     Self(
       isDark: true,
       editorTheme: "synthwave84",
-      windowBackground: NSColor(hexCode: 0x252335),
+      windowBackground: NSColor(hexCode: 0x262335),
       prefersTintedToolbar: true
     )
   }

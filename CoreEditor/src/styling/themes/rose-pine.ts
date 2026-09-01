@@ -1,5 +1,6 @@
 import { EditorColors, EditorTheme } from '../types';
 import { buildTheme, buildHighlight, tags } from '../builder';
+import { adjustAlpha } from '../helper';
 
 const palette = {
   lightGray: '#6e6a86',
@@ -12,14 +13,14 @@ const colors: EditorColors = {
   comment: palette.lightGray,
   background: '#191724',
   caret: palette.lightGray,
-  selection: '#6e6a8633',
+  selection: '#6e6a8666',
   activeLine: '#6e6a861a',
   matchingBracket: '#0000',
   lineNumber: palette.darkGray,
   searchMatch: '#6e6a8666',
   selectionHighlight: '#6e6a8666',
   visibleSpace: palette.lightGray,
-  lighterBackground: `${palette.lightGray}66`,
+  lighterBackground: adjustAlpha(palette.lightGray, 0.4),
   bracketBorder: palette.darkGray,
 };
 

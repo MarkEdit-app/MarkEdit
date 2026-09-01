@@ -15,7 +15,7 @@ const colors: EditorColors = {
   caret: '#007aff',
   lineNumber: dark.gray1,
   matchingBracket: dark.gray3,
-  selection: dark.gray5,
+  selection: dark.gray4,
   activeLine: fallback.activeLine,
   searchMatch: fallback.searchMatch,
   selectionHighlight: fallback.selectionHighlight,
