@@ -182,8 +182,8 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-tooltip-autocomplete': {
       border: `1px solid ${colors.text}33`,
       background: scheme === 'dark'
-        ? `linear-gradient(#ffffff0d, #ffffff0d), ${colors.background}d9`
-        : `linear-gradient(#0000000d, #0000000d), ${colors.background}d9`,
+        ? `linear-gradient(#ffffff08, #ffffff08), ${colors.background}d9`
+        : `linear-gradient(#00000008, #00000008), ${colors.background}d9`,
       backdropFilter: 'blur(16px) saturate(70%)',
       boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
     },

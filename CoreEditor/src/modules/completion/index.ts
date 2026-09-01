@@ -16,8 +16,20 @@ export const autocompleteExtensions = [
     compareCompletions: () => 0, // Don't sort options
   }),
 
-  // In some keyboards this is used to insert the backtick, see #1171
-  Prec.highest(keymap.of(completionKeymap.filter(keymap => keymap.mac !== 'Alt-`'))),
+  Prec.highest(keymap.of(completionKeymap
+    // In some keyboards this is used to insert the backtick, see #1171
+    .filter(binding => binding.mac !== 'Alt-`')
+    .map(binding => ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(binding.key ?? '') ? {
+      ...binding,
+      run: editor => {
+        const handled = binding.run?.(editor) ?? false;
+        if (handled) {
+          requestAnimationFrame(ensureVisibleRect);
+        }
+
+        return handled;
+      },
+    } : binding))),
 ];
 
 // https://codemirror.net/docs/ref/#state.EditorState.languageDataAt
@@ -274,6 +286,33 @@ function bracketBoundary(context: CompletionContext) {
   }
 
   return undefined;
+}
+
+function ensureVisibleRect() {
+  const list = document.querySelector<HTMLElement>('.cm-tooltip-autocomplete ul');
+  const selected = list?.querySelector<HTMLElement>('li[aria-selected]') as HTMLElement | null;
+  if (list === null || selected === null) {
+    return;
+  }
+
+  const listRect = list.getBoundingClientRect();
+  const selectedRect = selected.getBoundingClientRect();
+  const scaleY = list.offsetHeight === 0 ? 0 : listRect.height / list.offsetHeight;
+  if (!Number.isFinite(scaleY) || scaleY <= 0) {
+    return;
+  }
+
+  const style = getComputedStyle(list);
+  const paddingTop = parseFloat(style.paddingTop) || 0;
+  const paddingBottom = parseFloat(style.paddingBottom) || 0;
+  const top = listRect.top + paddingTop * scaleY;
+  const bottom = listRect.bottom - paddingBottom * scaleY;
+
+  if (selectedRect.top < top) {
+    list.scrollTop -= (top - selectedRect.top) / scaleY;
+  } else if (selectedRect.bottom > bottom) {
+    list.scrollTop += (selectedRect.bottom - bottom) / scaleY;
+  }
 }
 
 const storage: {
