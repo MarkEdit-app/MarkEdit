@@ -4,19 +4,19 @@ import { lightBase as base } from './colors';
 
 const colors: EditorColors = {
   accent: '#0550ae',
-  text: '#24292f',
+  text: '#1f2328',
   comment: '#6e7781',
   background: '#ffffff',
-  caret: '#0a69da',
+  caret: '#0969da',
   selection: '#add6ff',
-  activeLine: '#eaeef27f',
-  matchingBracket: '#cee9d6',
+  activeLine: '#eaeef280',
+  matchingBracket: '#4ac26b40',
   lineNumber: '#8c959f',
-  searchMatch: '#fae17d7f',
+  searchMatch: '#fae17d80',
   selectionHighlight: '#4ac26b40',
   visibleSpace: '#afb8c1',
-  lighterBackground: '#afb8c133',
-  bracketBorder: '#83d296',
+  lighterBackground: '#6e77811a',
+  bracketBorder: '#4ac26b99',
 };
 
 function theme() {

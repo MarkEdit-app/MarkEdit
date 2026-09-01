@@ -83,6 +83,23 @@ export function shadowableTextColor(input: string) {
   }, style);
 }
 
+export function adjustAlpha(color: string, alpha: number) {
+  const match = color.match(/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
+  if (match === null) {
+    return `color-mix(in srgb, ${color} ${alpha * 100}%, transparent)`;
+  }
+
+  let hex = match[1];
+  if (hex.length <= 4) {
+    hex = [...hex].map(value => value.repeat(2)).join('');
+  }
+
+  const rgb = hex.slice(0, 6);
+  const existingAlpha = hex.length === 8 ? parseInt(hex.slice(6), 16) / 255 : 1;
+  const resultAlpha = Math.round(existingAlpha * alpha * 255).toString(16).padStart(2, '0');
+  return `#${rgb}${resultAlpha}`;
+}
+
 export function notifyBackgroundColor(inputColor?: string) {
   const color = inputColor ?? getComputedStyle(window.editor.dom).backgroundColor;
   const match = color.match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\s*\)/);

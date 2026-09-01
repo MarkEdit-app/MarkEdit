@@ -13,7 +13,7 @@ const colors: EditorColors = {
   background: '#011627',
   caret: '#80a4c2',
   selection: '#1d3b53',
-  activeLine: '#0003',
+  activeLine: '#28707d29',
   matchingBracket: '#1d3443',
   lineNumber: '#4b6479',
   searchMatch: '#5f7e9779',
@@ -30,7 +30,8 @@ function theme() {
 function highlight() {
   // Order matters, don't change it unless you fully understand how it works
   return buildHighlight(colors, [
-    { tag: [tags.keyword, tags.modifier, tags.operator, tags.operatorKeyword], color: palette.purple },
+    { tag: [tags.keyword, tags.modifier], color: palette.purple },
+    { tag: [tags.operator, tags.operatorKeyword], color: '#7fdbca' },
     { tag: [tags.quote, tags.quoteMark], color: '#697098', fontStyle: 'italic' },
     { tag: [tags.deleted, tags.macroName], color: '#ef535090' },
     { tag: [tags.inserted, tags.inlineCode, tags.typeName, tags.attributeName], color: palette.yellow },
@@ -38,7 +39,8 @@ function highlight() {
     { tag: [tags.meta, tags.comment], color: colors.comment, fontStyle: 'italic' },
     { tag: [tags.escape, tags.string, tags.special(tags.string)], color: '#ecc48d' },
     { tag: [tags.link, tags.contentSeparator, tags.definition(tags.typeName)], color: colors.text },
-    { tag: [tags.linkMark, tags.self, tags.angleBracket], color: '#7fdbca' },
+    { tag: [tags.linkMark, tags.angleBracket], color: '#7fdbca' },
+    { tag: tags.self, color: '#41eec6', fontStyle: 'italic' },
     { tag: tags.listMark, color: '#d9f5dd' },
     { tag: tags.url, color: '#ff869a' },
     { tag: tags.strong, color: palette.yellow, fontWeight: 'bolder' },
