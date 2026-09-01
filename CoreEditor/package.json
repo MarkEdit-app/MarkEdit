@@ -40,7 +40,7 @@
     "globals": "^15.15.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "markedit-api": "https://github.com/MarkEdit-app/MarkEdit-api#v0.34.0",
+    "markedit-api": "https://github.com/MarkEdit-app/MarkEdit-api#v0.35.0",
     "ts-gyb": "^0.12.0",
     "ts-jest": "^29.4.5",
     "tslib": "^2.6.2",
