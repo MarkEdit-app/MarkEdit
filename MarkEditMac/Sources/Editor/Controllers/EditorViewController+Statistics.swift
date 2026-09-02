@@ -49,7 +49,8 @@ extension EditorViewController {
         asPopoverRelativeTo: sourceView.bounds,
         of: sourceView,
         preferredEdge: .maxY,
-        behavior: .semitransient
+        behavior: .semitransient,
+        hasFullSizeContent: true
       )
     }
   }

@@ -13,8 +13,8 @@ import MarkEditKit
  */
 public final class StatisticsController: NSViewController {
   private enum Constants {
-    static let contentWidth: Double = 240
-    static let contentHeight: Double = 288
+    static let contentWidth: Double = 266
+    static let contentHeight: Double = 314
     static let maxExtraRows: Int = 3
   }
 
