@@ -5,6 +5,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import SwiftUI
 import MarkEditKit
 
@@ -23,18 +24,21 @@ public final class StatisticsController: NSViewController {
   private let fileURL: URL?
   private let localizable: StatisticsLocalizable
   private let customRules: [StatisticsRule]
+  private let tintColor: NSColor?
   private var contentView: NSView?
 
   public init(
     modernStyle: Bool,
     content: ReadableContentPair,
     fileURL: URL?,
+    tintColor: NSColor? = nil,
     localizable: StatisticsLocalizable,
     customRules: [StatisticsRule] = []
   ) {
     self.modernStyle = modernStyle
     self.content = content
     self.fileURL = fileURL
+    self.tintColor = tintColor
     self.localizable = localizable
     self.customRules = customRules
     super.init(nibName: nil, bundle: nil)
@@ -52,6 +56,8 @@ public final class StatisticsController: NSViewController {
       width: Constants.contentWidth,
       height: Constants.contentHeight
     ))
+
+    view.layerBackgroundColor = tintColor
   }
 
   override public func viewDidLoad() {

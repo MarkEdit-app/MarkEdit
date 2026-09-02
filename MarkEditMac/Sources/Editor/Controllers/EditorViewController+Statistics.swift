@@ -29,6 +29,7 @@ extension EditorViewController {
         modernStyle: AppDesign.modernStyle,
         content: content,
         fileURL: document?.fileURL,
+        tintColor: transientTintColor(for: .current),
         localizable: StatisticsLocalizable(
           mainTitle: Localized.Toolbar.statistics,
           selection: Localized.Statistics.selection,

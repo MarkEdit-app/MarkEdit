@@ -5,8 +5,18 @@
 //
 
 import AppKit
+import AppKitExtensions
 
 final class GotoLineView: NSView {
+  var tintColor: NSColor? {
+    get {
+      tintView.layerBackgroundColor
+    }
+    set {
+      tintView.layerBackgroundColor = newValue
+    }
+  }
+
   private enum Constants {
     static let cornerRadius: Double = 12
     static let padding: Double = 8
@@ -29,11 +39,13 @@ final class GotoLineView: NSView {
     return textField
   }()
 
+  private let tintView = NSView()
   private let effectViewType: NSView.Type
   private let handler: (Int) -> Void
 
   init(
     effectViewType: NSView.Type,
+    tintColor: NSColor?,
     frame: CGRect,
     placeholder: String,
     accessibilityHelp: String,
@@ -46,11 +58,16 @@ final class GotoLineView: NSView {
     super.init(frame: frame)
 
     wantsLayer = true
+    clipsToBounds = true
     layer?.cornerCurve = .continuous
     layer?.cornerRadius = Constants.cornerRadius
 
     effectView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(effectView)
+
+    tintView.layerBackgroundColor = tintColor
+    tintView.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(tintView)
 
     let iconView = NSImageView(image: .with(symbolName: iconName, pointSize: 24, weight: .light))
     iconView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,6 +84,11 @@ final class GotoLineView: NSView {
       effectView.trailingAnchor.constraint(equalTo: trailingAnchor),
       effectView.topAnchor.constraint(equalTo: topAnchor),
       effectView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+      tintView.leadingAnchor.constraint(equalTo: leadingAnchor),
+      tintView.trailingAnchor.constraint(equalTo: trailingAnchor),
+      tintView.topAnchor.constraint(equalTo: topAnchor),
+      tintView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
       iconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.padding),
       iconView.centerYAnchor.constraint(equalTo: centerYAnchor),

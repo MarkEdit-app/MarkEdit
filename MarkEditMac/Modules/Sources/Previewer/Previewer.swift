@@ -22,6 +22,7 @@ public final class Previewer: NSViewController {
 
   private let code: String
   private let type: PreviewType
+  private let tintColor: NSColor?
 
   private lazy var webView = {
     let controller = WKUserContentController()
@@ -38,9 +39,10 @@ public final class Previewer: NSViewController {
 
   private var isRenderComplete = false
 
-  public init(code: String, type: PreviewType) {
+  public init(code: String, type: PreviewType, tintColor: NSColor? = nil) {
     self.code = code
     self.type = type
+    self.tintColor = tintColor
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -52,6 +54,7 @@ public final class Previewer: NSViewController {
   override public func loadView() {
     // The initial size is minimum, it will be updated by resizeObserver
     view = NSView(frame: CGRect(x: 0, y: 0, width: Constants.popoverSize, height: Constants.minimumHeight))
+    view.layerBackgroundColor = tintColor
   }
 
   override public func viewDidLoad() {

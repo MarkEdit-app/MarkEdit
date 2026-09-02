@@ -15,7 +15,7 @@ extension EditorViewController {
       return
     }
 
-    let previewer = Previewer(code: code, type: type)
+    let previewer = Previewer(code: code, type: type, tintColor: transientTintColor(for: .current))
     presentAsPopover(contentViewController: previewer, rect: rect)
   }
 }

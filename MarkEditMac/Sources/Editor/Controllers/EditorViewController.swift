@@ -220,6 +220,7 @@ final class EditorViewController: NSViewController {
     TextCompletionContext(
       modernStyle: AppDesign.modernStyle,
       effectViewType: AppDesign.modernEffectView,
+      tintColor: transientTintColor(for: .current),
       localizable: TextCompletionLocalizable(selectedHint: Localized.General.selected)
     ) { [weak self] in
       guard let self else {

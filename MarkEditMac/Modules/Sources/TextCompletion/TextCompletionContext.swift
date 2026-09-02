@@ -34,6 +34,12 @@ public final class TextCompletionContext {
     }
   }
 
+  public var tintColor: NSColor? {
+    didSet {
+      panel.tintColor = tintColor
+    }
+  }
+
   public var fromIndex: Int = 0
   public var toIndex: Int = 0
   public var selectedText: String { panel.selectedCompletion() }
@@ -41,11 +47,13 @@ public final class TextCompletionContext {
   public init(
     modernStyle: Bool,
     effectViewType: NSView.Type,
+    tintColor: NSColor? = nil,
     localizable: TextCompletionLocalizable,
     commitCompletion: @escaping @Sendable () -> Void
   ) {
     self.modernStyle = modernStyle
     self.effectViewType = effectViewType
+    self.tintColor = tintColor
     self.localizable = localizable
     self.commitCompletion = commitCompletion
   }
@@ -118,6 +126,7 @@ public final class TextCompletionContext {
   private lazy var panel = TextCompletionPanel(
     modernStyle: modernStyle,
     effectViewType: effectViewType,
+    tintColor: tintColor,
     localizable: localizable,
     commitCompletion: commitCompletion
   )
