@@ -41,7 +41,8 @@ private extension EditorViewController {
       asPopoverRelativeTo: focusTrackingView.bounds,
       of: focusTrackingView,
       preferredEdge: .maxX,
-      behavior: .transient
+      behavior: .transient,
+      hasFullSizeContent: true
     )
   }
 }

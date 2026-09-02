@@ -15,8 +15,8 @@ import MarkEditKit
  */
 public final class Previewer: NSViewController {
   private enum Constants {
-    static let popoverSize: Double = 390
-    static let minimumHeight: Double = 160
+    static let popoverSize: Double = 416
+    static let minimumHeight: Double = 186
     static let maximumWidth: Double = 1280
   }
 
