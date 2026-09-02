@@ -15,6 +15,7 @@ public final class GotoLineWindow: NSWindow {
 
   public init(
     effectViewType: NSView.Type,
+    tintColor: NSColor? = nil,
     relativeTo parentRect: CGRect,
     placeholder: String,
     accessibilityHelp: String,
@@ -38,6 +39,7 @@ public final class GotoLineWindow: NSWindow {
 
     self.contentView = GotoLineView(
       effectViewType: effectViewType,
+      tintColor: tintColor,
       frame: rect,
       placeholder: placeholder,
       accessibilityHelp: accessibilityHelp,
@@ -50,6 +52,15 @@ public final class GotoLineWindow: NSWindow {
     self.isOpaque = false
     self.hasShadow = true
     self.backgroundColor = .clear
+  }
+
+  public var tintColor: NSColor? {
+    get {
+      (contentView as? GotoLineView)?.tintColor
+    }
+    set {
+      (contentView as? GotoLineView)?.tintColor = newValue
+    }
   }
 
   override public var canBecomeKey: Bool {

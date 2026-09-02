@@ -22,6 +22,7 @@ extension EditorViewController {
 
     let window = GotoLineWindow(
       effectViewType: AppDesign.modernEffectView,
+      tintColor: transientTintColor(for: .current),
       relativeTo: parentRect,
       placeholder: Localized.Document.gotoLineLabel,
       accessibilityHelp: Localized.Document.gotoLineHelp,

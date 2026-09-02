@@ -190,6 +190,7 @@ let package = Package(
     ),
     .target(
       name: "TextCompletion",
+      dependencies: ["AppKitExtensions"],
       path: "Sources/TextCompletion",
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")

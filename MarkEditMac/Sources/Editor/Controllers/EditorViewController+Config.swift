@@ -6,7 +6,6 @@
 //
 
 import AppKit
-import SharedUI
 import MarkEditCore
 import MarkEditKit
 
@@ -46,9 +45,7 @@ extension EditorViewController {
 
     // Also update windows that inherit appearance from the editor
     completionContext.appearance = resolvedAppearance
-    for case let window as GotoLineWindow in NSApp.windows {
-      window.appearance = resolvedAppearance
-    }
+    updateVisibleTransientTintColors(for: theme)
   }
 
   func setFontFace(_ fontFace: WebFontFace) {

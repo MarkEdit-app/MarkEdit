@@ -102,6 +102,7 @@ private extension EditorViewController {
     let changed = completionContext.isPanelVisible != isVisible
     if isVisible {
       completionContext.appearance = view.effectiveAppearance
+      completionContext.tintColor = transientTintColor(for: .current)
     }
 
     if completionContext.isPanelVisible != isVisible {

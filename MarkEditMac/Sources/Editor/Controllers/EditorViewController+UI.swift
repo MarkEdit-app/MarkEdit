@@ -126,7 +126,7 @@ extension EditorViewController {
     view.window?.backgroundColor = backgroundColor
     titlebarView?.layerBackgroundColor = backgroundColor
 
-    let prefersTintedToolbar = theme.prefersTintedToolbar || backgroundColor.isTintedColor
+    let prefersTintedToolbar = theme.prefersTintedColors || backgroundColor.isTintedColor
     (view.window as? EditorWindow)?.prefersTintedToolbar = prefersTintedToolbar
 
     if AppDesign.modernTitleBar {
@@ -152,6 +152,29 @@ extension EditorViewController {
     statusView.setBackgroundColor(backgroundColor)
     findPanel.setBackgroundColor(backgroundColor)
     replacePanel.setBackgroundColor(backgroundColor)
+  }
+
+  func updateVisibleTransientTintColors(for theme: AppTheme) {
+    let tintColor = transientTintColor(for: theme)
+    completionContext.tintColor = tintColor
+
+    for case let window as GotoLineWindow in NSApp.windows {
+      window.appearance = theme.resolvedAppearance
+      window.tintColor = tintColor
+    }
+
+    presentedViewControllers?.forEach {
+      $0.view.layerBackgroundColor = tintColor
+    }
+  }
+
+  func transientTintColor(for theme: AppTheme) -> NSColor? {
+    let backgroundColor = webBackgroundColor ?? theme.windowBackground
+    guard theme.prefersTintedColors || backgroundColor.isTintedColor else {
+      return nil
+    }
+
+    return backgroundColor.withAlphaComponent(0.5).resolvedColor()
   }
 
   @available(macOS 15.1, *)
