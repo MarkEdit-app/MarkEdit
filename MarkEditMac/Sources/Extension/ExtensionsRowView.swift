@@ -95,9 +95,9 @@ struct ExtensionsRowView: View {
 
         if item.category == .theme, let patterns = item.colorPatterns, !patterns.isEmpty {
           ThemePreview(patterns: patterns, showsBothSchemes: item.colorScheme == .both)
-          // Centered vertically between subtitle and metadata
+            // Centered vertically between subtitle and metadata
             .padding(.top, 12)
-          // Decorative illustration; the row already conveys the theme textually
+            // Decorative illustration; the row already conveys the theme textually
             .accessibilityHidden(true)
         }
 
@@ -328,6 +328,7 @@ private extension ExtensionsRowView {
       Text(notes)
         .font(.body)
         .textSelection(.enabled)
+        .lineLimit(nil)
         .fixedSize(horizontal: false, vertical: true)
         .padding(.bottom, 16)
 
