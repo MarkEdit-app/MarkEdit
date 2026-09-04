@@ -41,7 +41,7 @@ public protocol EditorModuleAPIDelegate: AnyObject {
 public final class EditorModuleAPI: NativeModuleAPI {
   private weak var delegate: EditorModuleAPIDelegate?
   private var fileVersionURL: URL?
-  private var fileVersionMap = [String: NSFileVersion]()
+  private var fileVersionMap = [String: (version: NSFileVersion, isLocal: Bool)]()
 
   public init(delegate: EditorModuleAPIDelegate) {
     self.delegate = delegate
@@ -305,7 +305,7 @@ public extension EditorModuleAPI {
     }
 
     var idsByVersion = [FileVersionKey: String]()
-    for (id, version) in fileVersionMap {
+    for (id, (version, _)) in fileVersionMap {
       if let key = FileVersionKey(version) {
         idsByVersion[key] = id
       }
@@ -324,18 +324,19 @@ public extension EditorModuleAPI {
     }
     .newestToOldest(throttle: false)
 
-    var newVersionMap = [String: NSFileVersion]()
+    var newVersionMap = [String: (version: NSFileVersion, isLocal: Bool)]()
     let result: [[String: Any]] = versions.compactMap { version in
       guard let key = FileVersionKey(version), let modificationDate = version.modificationDate else {
         return nil
       }
 
       let id = idsByVersion[key] ?? UUID().uuidString
-      newVersionMap[id] = version
+      let isLocal = localKeys.contains(key)
+      newVersionMap[id] = (version, isLocal)
       return [
         "id": id,
         "modificationDate": modificationDate.timeIntervalSince1970,
-        "isLocal": localKeys.contains(key),
+        "isLocal": isLocal,
       ]
     }
 
@@ -390,7 +391,7 @@ public extension EditorModuleAPI {
     }
 
     let versions = uniqueIDs.compactMap { id -> (String, NSFileVersion, FileVersionKey)? in
-      guard let version = fileVersionMap[id], let key = FileVersionKey(version) else {
+      guard let (version, isLocal) = fileVersionMap[id], isLocal, let key = FileVersionKey(version) else {
         return nil
       }
 
@@ -417,7 +418,7 @@ public extension EditorModuleAPI {
         return false
       }
 
-      if let currentVersion = fileVersionMap[id], FileVersionKey(currentVersion) != key {
+      if let currentVersion = fileVersionMap[id]?.version, FileVersionKey(currentVersion) != key {
         return false
       }
 
@@ -441,7 +442,7 @@ private extension EditorModuleAPI {
       return nil
     }
 
-    return fileVersionMap[id]
+    return fileVersionMap[id]?.version
   }
 
   func isCurrentFileVersionURL(_ expectedURL: URL? = nil) -> Bool {
