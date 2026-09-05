@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MarkEditCore
 import UniformTypeIdentifiers
 
 public extension URL {
@@ -30,11 +31,17 @@ public extension URL {
       return false
     }
 
-    if suggestedFileType?.conforms(to: .text) ?? true {
+    let type = suggestedFileType
+    if type?.conforms(to: .text) == true {
       return false
     }
 
-    return true
+    let isTypeless = pathExtension.isEmpty && (type == nil || type == .data || type?.isDynamic == true)
+    if isTypeless, let binarySample {
+      return binarySample.isProbablyBinary
+    }
+
+    return type != nil
   }
 
   var isImageFile: Bool {
@@ -86,6 +93,20 @@ private extension URL {
     }
 
     return UTType(filenameExtension: pathExtension)
+  }
+
+  var binarySample: Data? {
+    guard (try? resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true,
+          let handle = try? FileHandle(forReadingFrom: self) else {
+      return nil
+    }
+
+    defer { try? handle.close() }
+    do {
+      return try handle.read(upToCount: 512) ?? Data()
+    } catch {
+      return nil
+    }
   }
 }
 
