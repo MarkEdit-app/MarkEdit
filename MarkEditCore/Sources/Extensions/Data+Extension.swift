@@ -12,6 +12,33 @@ public extension Data {
     SHA256.hash(data: self).map { String(format: "%02x", $0) }.joined()
   }
 
+  var isProbablyBinary: Bool {
+    // Treat a UTF-16 BOM as text
+    if starts(with: [0xFE, 0xFF]) || starts(with: [0xFF, 0xFE]) {
+      return false
+    }
+
+    var containsZero = false
+    var couldBeLittleEndian = true
+    var couldBeBigEndian = true
+
+    // Scan the first 512 bytes for NULs and UTF-16 patterns
+    for (offset, byte) in prefix(512).enumerated() {
+      let isZero = byte == 0
+      let isEven = offset.isMultiple(of: 2)
+      containsZero = containsZero || isZero
+      couldBeLittleEndian = couldBeLittleEndian && (isZero != isEven)
+      couldBeBigEndian = couldBeBigEndian && (isZero == isEven)
+
+      // NULs outside either UTF-16 pattern suggest binary
+      if containsZero && !couldBeLittleEndian && !couldBeBigEndian {
+        return true
+      }
+    }
+
+    return false
+  }
+
   /// Handle text encoding in Cocoa apps: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Strings/introStrings.html.
   ///
   /// Ideally, the encoding for Markdown should always be utf-8 as described in: https://daringfireball.net/linked/2011/08/05/markdown-uti.
