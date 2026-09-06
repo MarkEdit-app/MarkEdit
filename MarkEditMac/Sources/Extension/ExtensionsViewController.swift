@@ -28,7 +28,7 @@ enum ExtensionsScrollTarget: Equatable {
 @Observable
 @MainActor
 final class ExtensionsListInteraction {
-  var scrollGeneration = 0
+  var updatePopoverItemID: String?
   var inlineUpdateItemIDs: Set<String> = []
 }
 
@@ -403,13 +403,19 @@ private extension ExtensionsViewController {
   }
 
   @objc func scrollViewBoundsDidChange(_ notification: Notification) {
+    if listInteraction.updatePopoverItemID != nil {
+      listInteraction.updatePopoverItemID = nil
+    }
+
+    guard !listInteraction.inlineUpdateItemIDs.isEmpty else {
+      return
+    }
+
     let inlineRows = IndexSet(listInteraction.inlineUpdateItemIDs.compactMap { id in
       displayedItems.firstIndex { $0.id == id }
     })
 
     listInteraction.inlineUpdateItemIDs.removeAll()
-    listInteraction.scrollGeneration &+= 1
-
     if !inlineRows.isEmpty {
       reloadRows(inlineRows)
     }

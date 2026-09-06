@@ -18,8 +18,6 @@ struct ExtensionsRowView: View {
   let rowMargin: Double
   let rowHeightChanged: () -> Void
 
-  @State private var showingUpdatePopover = false
-
   var body: some View {
     // Read live state so the cell animates its own updates instead of being reloaded
     let item = liveItem
@@ -134,9 +132,6 @@ struct ExtensionsRowView: View {
     )
     // Fresh identity per mode and item so tab switches and cell reuse reset row state
     .id("\(model.mode):\(item.id)")
-    .onChange(of: listInteraction.scrollGeneration) {
-      showingUpdatePopover = false
-    }
   }
 
   var sizingSubtitleText: String? {
@@ -185,6 +180,17 @@ private extension ExtensionsRowView {
 
   var showingUpdateInline: Bool {
     listInteraction.inlineUpdateItemIDs.contains(item.id)
+  }
+
+  var showingUpdatePopover: Bool {
+    get { listInteraction.updatePopoverItemID == item.id }
+    nonmutating set {
+      if newValue {
+        listInteraction.updatePopoverItemID = item.id
+      } else if listInteraction.updatePopoverItemID == item.id {
+        listInteraction.updatePopoverItemID = nil
+      }
+    }
   }
 
   func subtitle(_ text: String) -> some View {
@@ -409,7 +415,7 @@ private extension ExtensionsRowView {
           .font(.callout)
           .fontWeight(.medium)
           .foregroundStyle(.tint)
-          .popover(isPresented: $showingUpdatePopover, arrowEdge: .bottom) {
+          .popover(isPresented: .init(get: { showingUpdatePopover }, set: { showingUpdatePopover = $0 }), arrowEdge: .bottom) {
             updateNotesPopover(notes, releaseDate: item.releaseDate, releaseURL: item.releasePageURL)
           }
           .onDisappear {
