@@ -58,13 +58,12 @@ public struct FontPicker: View {
       .frame(width: 190, height: 19, alignment: .center)
 
       Stepper(
-        value: $selectedFontSize,
+        value: Binding(
+          get: { selectedFontSize },
+          set: { changeFontSize($0) }
+        ),
         in: Self.minimumFontSize...Self.maximumFontSize,
-        label: {},
-        onEditingChanged: { _ in
-          changeFontSize(selectedFontSize)
-        }
-      )
+      ) {}.accessibilityLabel(selectedFontName)
 
       ZStack(alignment: .bottomLeading) {
         IdentifiableWrapper()
