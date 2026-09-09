@@ -83,8 +83,9 @@ private extension EditorIndexHtml {
     config: EditorConfig,
     userSettings: String
   ) -> String {
+    // Replace the later placeholder first to avoid searching arbitrarily large inserted JSON
     template
-      .replacingOccurrences(of: "\"{{EDITOR_CONFIG}}\"", with: config.jsonEncoded)
-      .replacingOccurrences(of: "\"{{USER_SETTINGS}}\"", with: userSettings)
+      .replacing("\"{{USER_SETTINGS}}\"", with: userSettings, maxReplacements: 1)
+      .replacing("\"{{EDITOR_CONFIG}}\"", with: config.jsonEncoded, maxReplacements: 1)
   }
 }

@@ -120,11 +120,11 @@ private extension String {
     //
     // Order matters; it may not be the fastest, but it's easy to understand.
     var output = self
-    output = output.replacingOccurrences(of: "\r\n", with: "\n")
-    output = output.replacingOccurrences(of: "\r", with: "\n")
+    output = output.replacingOccurrences(of: "\r\n", with: "\n", options: .literal)
+    output = output.replacingOccurrences(of: "\r", with: "\n", options: .literal)
 
     if lineBreak != "\n" {
-      output = output.replacingOccurrences(of: "\n", with: lineBreak)
+      output = output.replacingOccurrences(of: "\n", with: lineBreak, options: .literal)
     }
 
     return output
