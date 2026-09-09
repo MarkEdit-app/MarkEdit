@@ -30,8 +30,15 @@ public final class EditorImageLoader: NSObject, WKURLSchemeHandler {
       return os_logger.log(level: .error, "Invalid baseURL")
     }
 
-    let fileName = url.absoluteString.replacingOccurrences(of: "\(Self.scheme)://", with: "")
-    let fileURL = baseURL.appending(path: fileName.removingPercentEncoding ?? fileName, directoryHint: .notDirectory)
+    let fileName = url.absoluteString.replacingOccurrences(
+      of: "\(Self.scheme)://",
+      with: ""
+    )
+
+    let fileURL = baseURL.appending(
+      path: fileName.removingPercentEncoding ?? fileName,
+      directoryHint: .notDirectory
+    )
 
     if let fileData = try? Data(contentsOf: fileURL) {
       let response = URLResponse(
