@@ -8,7 +8,6 @@ import AppKit
 import AppKitExtensions
 
 public class NonBezelButton: NSButton {
-  public var modernStyle = false
   var focusRingRadius: Double?
   var focusRingCorners: NSBezierPath.Corners?
   var modernCornerRadius: Double = 0
@@ -31,31 +30,18 @@ public class NonBezelButton: NSButton {
     let rectPath = NSBezierPath(rect: bounds)
     rectPath.fill()
 
-    // Classic style:
-    //  - Default: clear background
-    //  - Highlighted: light gray background
-    //
-    // Modern style:
     //  - Default: light gray background
     //  - Highlighted: slightly darker light gray, rounded corner
-
-    if modernStyle {
-      modernStateChanged?(isHighlighted)
-      NSColor.modernButtonBackground.setFill()
-      rectPath.fill()
-    }
+    modernStateChanged?(isHighlighted)
+    NSColor.modernButtonBackground.setFill()
+    rectPath.fill()
 
     if isHighlighted {
-      if modernStyle {
-        NSBezierPath(
-          roundedRect: bounds,
-          xRadius: modernCornerRadius,
-          yRadius: modernCornerRadius
-        ).fill()
-      } else {
-        NSColor.plainButtonHighlighted.setFill()
-        rectPath.fill()
-      }
+      NSBezierPath(
+        roundedRect: bounds,
+        xRadius: modernCornerRadius,
+        yRadius: modernCornerRadius
+      ).fill()
     }
   }
 

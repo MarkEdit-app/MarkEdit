@@ -10,11 +10,6 @@ import SharedUI
 import SwiftUI
 
 extension ExtensionsViewController {
-  /// Horizontal margin for the row content; separators use the same value so they stay aligned.
-  var rowMargin: Double {
-    AppDesign.modernStyle ? 20 : 10
-  }
-
   struct RowMetrics {
     let item: ExtensionsModel.Item
     let mode: ExtensionsModel.Mode
