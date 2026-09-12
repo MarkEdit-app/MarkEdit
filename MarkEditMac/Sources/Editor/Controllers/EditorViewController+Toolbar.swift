@@ -168,9 +168,7 @@ private extension EditorViewController {
     menu.identifier = Constants.tableOfContentsMenuIdentifier
     menu.minimumWidth = Constants.tableOfContentsMinimumWidth
 
-    let label = NSMenuItem(title: Localized.Toolbar.tableOfContents, action: nil, keyEquivalent: "")
-    label.isEnabled = false
-
+    let label = NSMenuItem.sectionHeader(title: Localized.Toolbar.tableOfContents)
     menu.items = [label, .separator()]
     menu.autoenablesItems = false
 
