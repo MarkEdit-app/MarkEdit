@@ -854,6 +854,23 @@
         }
       }
     },
+    "Dark Themes" : {
+      "comment" : "Dark theme section title",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "深色主题"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "深色主題"
+          }
+        }
+      }
+    },
     "Default Line Endings:" : {
       "comment" : "Line endings for creating new files",
       "localizations" : {
@@ -2222,6 +2239,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "淺色主題："
+          }
+        }
+      }
+    },
+    "Light Themes" : {
+      "comment" : "Light theme section title",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浅色主题"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "淺色主題"
           }
         }
       }
