@@ -89,7 +89,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     editorViewController?.bridge.core.handleFocusLost()
   }
 
-  func windowShouldZoom(_ window: NSWindow, toFrame newFrame: NSRect) -> Bool {
+  func windowShouldZoom(_ window: NSWindow, toFrame newFrame: CGRect) -> Bool {
     // By default, zooming a window doesn't clear the tiling state,
     // this is different from moving or resizing the window.
     //

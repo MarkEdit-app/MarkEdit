@@ -29,7 +29,7 @@ final class EditorReplaceTextField: NSTextField {
     bezelView.frame = bounds
   }
 
-  override func draw(_ dirtyRect: NSRect) {
+  override func draw(_ dirtyRect: CGRect) {
     // Ignore the bezel and background color by only drawing interior
     cell?.drawInterior(withFrame: bounds, in: self)
   }

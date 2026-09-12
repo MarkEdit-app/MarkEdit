@@ -77,7 +77,7 @@ public final class LabeledSearchField: NSSearchField {
     }
   }
 
-  override public func draw(_ dirtyRect: NSRect) {
+  override public func draw(_ dirtyRect: CGRect) {
     // Ignore the bezel and background color by only drawing interior
     cell?.drawInterior(withFrame: bounds, in: self)
   }
@@ -172,7 +172,7 @@ private extension LabeledSearchField {
 }
 
 private class CustomIconView: NSImageView {
-  override func hitTest(_ point: NSPoint) -> NSView? {
+  override func hitTest(_ point: CGPoint) -> NSView? {
     nil
   }
 

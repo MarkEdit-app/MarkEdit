@@ -96,7 +96,7 @@ open class RoundedButtonGroup: NSView {
     layer?.borderColor = NSColor.plainButtonBorder.cgColor
   }
 
-  override public func hitTest(_ point: NSPoint) -> NSView? {
+  override public func hitTest(_ point: CGPoint) -> NSView? {
     isEnabled ? super.hitTest(point) : nil
   }
 }

@@ -27,12 +27,12 @@ public final class BezelView: NSView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override public func draw(_ dirtyRect: NSRect) {
+  override public func draw(_ dirtyRect: CGRect) {
     super.draw(dirtyRect)
     layer?.borderColor = borderColor.cgColor
   }
 
-  override public func hitTest(_ point: NSPoint) -> NSView? {
+  override public func hitTest(_ point: CGPoint) -> NSView? {
     // Only visually draw a bezel, not clickable
     nil
   }
