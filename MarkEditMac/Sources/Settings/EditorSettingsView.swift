@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import SwiftUI
 import FontPicker
 import SettingsUI
@@ -205,8 +206,12 @@ private extension EditorSettingsView {
 
   @ViewBuilder
   func createThemePicker() -> some View {
-    ForEach(AppTheme.allCases, id: \.self) {
-      Text($0.description).tag($0.editorTheme)
+    Section(Localized.Settings.lightThemes) {
+      createThemePicker(isDark: false)
+    }
+
+    Section(Localized.Settings.darkThemes) {
+      createThemePicker(isDark: true)
     }
 
     Divider()
@@ -214,6 +219,20 @@ private extension EditorSettingsView {
     Label(Localized.Settings.getCustomThemes, systemImage: Icons.paintpalette)
       .labelStyle(.titleAndIcon)
       .tag(Constants.customThemesTag)
+  }
+
+  func createThemePicker(isDark: Bool) -> some View {
+    ForEach(AppTheme.allCases.filter { $0.isDark == isDark }, id: \.self) { theme in
+      Label {
+        Text(theme.displayName)
+      } icon: {
+        Image(nsImage: theme.patternImage)
+          .renderingMode(.original)
+          .accessibilityHidden(true)
+      }
+      .labelStyle(.titleAndIcon)
+      .tag(theme.editorTheme)
+    }
   }
 
   func getCustomThemes(selection: Binding<String>, revertTo value: String) {
