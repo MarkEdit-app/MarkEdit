@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MarkEditKit
 
 final class EditorWindowController: NSWindowController, NSWindowDelegate {
   var autosavedFrame: CGRect?
@@ -50,6 +51,14 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
     }
 
     showWindowImmediately(sender)
+  }
+
+  override func newWindowForTab(_ sender: Any?) {
+    guard let editorViewController else {
+      return Logger.assertFail("Missing editorViewController")
+    }
+
+    editorViewController.createNewTab(sender)
   }
 
   func windowDidBecomeMain(_ notification: Notification) {

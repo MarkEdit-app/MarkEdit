@@ -157,6 +157,31 @@ extension EditorViewController {
   }
 }
 
+// MARK: - Window & Tabbing
+
+extension EditorViewController {
+  @IBAction func toggleWindowFloating(_ sender: Any?) {
+    view.window?.level = view.window?.level == .floating ? .normal : .floating
+  }
+
+  @IBAction func createNewTab(_ sender: Any?) {
+    let window = view.window
+    let tabbingMode = window?.tabbingMode
+
+    // Force tabbing without mutating the persisted preference
+    EditorWindow.forcedTabbing = true
+    window?.tabbingMode = .preferred
+    NSDocumentController.shared.newDocument(sender)
+
+    DispatchQueue.main.async {
+      EditorWindow.forcedTabbing = false
+      if let tabbingMode {
+        window?.tabbingMode = tabbingMode
+      }
+    }
+  }
+}
+
 // MARK: - Developer
 
 extension EditorViewController {
@@ -308,23 +333,6 @@ extension EditorViewController {
 private extension EditorViewController {
   @IBAction func performClose(_ sender: Any?) {
     view.window?.performClose(sender)
-  }
-
-  @IBAction func createNewTab(_ sender: Any?) {
-    let window = view.window
-    let tabbingMode = window?.tabbingMode
-
-    // Force tabbing without mutating the persisted preference
-    EditorWindow.forcedTabbing = true
-    window?.tabbingMode = .preferred
-    NSDocumentController.shared.newDocument(sender)
-
-    DispatchQueue.main.async {
-      EditorWindow.forcedTabbing = false
-      if let tabbingMode {
-        window?.tabbingMode = tabbingMode
-      }
-    }
   }
 
   @IBAction func revealInFinder(_ sender: Any?) {
@@ -498,14 +506,6 @@ private extension EditorViewController {
 
   @IBAction func zoomOut(_ sender: Any?) {
     webView.magnification = max(Constants.minimumZoomLevel, webView.magnification - 0.1)
-  }
-}
-
-// MARK: - Window
-
-private extension EditorViewController {
-  @IBAction func toggleWindowFloating(_ sender: Any?) {
-    view.window?.level = view.window?.level == .floating ? .normal : .floating
   }
 }
 
