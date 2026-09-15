@@ -38,10 +38,6 @@ let package = Package(
       targets: ["FontPicker"]
     ),
     .library(
-      name: "Previewer",
-      targets: ["Previewer"]
-    ),
-    .library(
       name: "SettingsUI",
       targets: ["SettingsUI"]
     ),
@@ -135,20 +131,6 @@ let package = Package(
       name: "FontPicker",
       dependencies: ["AppKitExtensions"],
       path: "Sources/FontPicker",
-      swiftSettings: [
-        .enableExperimentalFeature("StrictConcurrency")
-      ],
-      plugins: [
-        .plugin(name: "SwiftLint", package: "MarkEditTools"),
-      ]
-    ),
-    .target(
-      name: "Previewer",
-      dependencies: ["AppKitExtensions", "MarkEditCore", "MarkEditKit"],
-      path: "Sources/Previewer",
-      resources: [
-        .process("Resources"),
-      ],
       swiftSettings: [
         .enableExperimentalFeature("StrictConcurrency")
       ],

@@ -62,3 +62,34 @@ public final class WebBridgeSelection {
     webView?.invoke(path: "webModules.selection.navigateGoBack", completion: completion)
   }
 }
+
+/// "CGRect-fashion" rect.
+public struct WebRect: Codable {
+  public var x: Double
+  public var y: Double
+  public var width: Double
+  public var height: Double
+
+  public init(x: Double, y: Double, width: Double, height: Double) {
+    self.x = x
+    self.y = y
+    self.width = width
+    self.height = height
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    x = try container.value("x")
+    y = try container.value("y")
+    width = try container.value("width")
+    height = try container.value("height")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(x, forKey: "x")
+    try container.encode(y, forKey: "y")
+    try container.encode(width, forKey: "width")
+    try container.encode(height, forKey: "height")
+  }
+}

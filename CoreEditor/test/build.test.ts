@@ -20,8 +20,9 @@ describe('Build system', () => {
 
   test('test everything is inlined in a single file', () => {
     const html = readHtml();
-    expect(html).not.toMatch(/<script[^>]*\ssrc=/i);
-    expect(html).not.toMatch(/<link[^>]*\srel=["']?stylesheet/i);
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelector('script[src]')).toBeNull();
+    expect(document.querySelector('link[rel="stylesheet"]')).toBeNull();
     expect(html).not.toContain('chunk-loader');
   });
 });

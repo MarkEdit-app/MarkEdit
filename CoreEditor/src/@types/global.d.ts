@@ -2,7 +2,6 @@ import { Config, Dynamics } from '../config';
 import { WebModule } from '../bridge/webModule';
 import { NativeModuleCore } from '../bridge/native/core';
 import { NativeModuleCompletion } from '../bridge/native/completion';
-import { NativeModulePreview } from '../bridge/native/preview';
 import { NativeModuleTokenizer } from '../bridge/native/tokenizer';
 import { NativeModuleAPI } from '../bridge/native/api';
 import { NativeModuleFoundationModels } from '../bridge/native/foundationModels';
@@ -44,7 +43,6 @@ declare global {
     nativeModules: {
       core: NativeModuleCore;
       completion: NativeModuleCompletion;
-      preview: NativeModulePreview;
       tokenizer: NativeModuleTokenizer;
       api: NativeModuleAPI;
       foundationModels: NativeModuleFoundationModels;
@@ -53,14 +51,6 @@ declare global {
     __extractStyleRules__: (theme: Extension) => string[] | undefined;
     __extractHighlightSpecs__: (theme: Extension) => TagStyle[] | undefined;
     __flattenThemeExtensions__: (theme: Extension) => Extension[];
-  }
-
-  interface ImportMetaEnv {
-    readonly PROD: boolean;
-  }
-
-  interface ImportMeta {
-    readonly env: ImportMetaEnv;
   }
 }
 

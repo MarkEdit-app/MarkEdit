@@ -8,5 +8,10 @@ module.exports = {
   moduleNameMapper: {
     '^@codemirror/lang-html$': '<rootDir>/src/@vendor/lang-html',
     '^@codemirror/lang-markdown$': '<rootDir>/src/@vendor/lang-markdown',
+    '^(\\./(?:script\\.js|style\\.css))\\?raw$': '$1',
+  },
+  transform: {
+    '^.+/src/modules/preview/frame/(?:script\\.js|style\\.css)$': '<rootDir>/test/utils/rawTextTransformer.cjs',
+    '^.+\\.tsx?$': ['ts-jest', {}],
   },
 };
