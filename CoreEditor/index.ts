@@ -18,7 +18,6 @@ import { pseudoDocument } from './test/utils/mock';
 import { createNativeModule } from './src/bridge/nativeModule';
 import { NativeModuleCore } from './src/bridge/native/core';
 import { NativeModuleCompletion } from './src/bridge/native/completion';
-import { NativeModulePreview } from './src/bridge/native/preview';
 import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 import { NativeModuleAPI } from './src/bridge/native/api';
 import { NativeModuleFoundationModels } from './src/bridge/native/foundationModels';
@@ -53,6 +52,7 @@ const config = import.meta.env.PROD ? window.config : {
   standardDirectories: {},
   localizable: {
     previewButtonTitle: 'Preview',
+    closeButtonTitle: 'Close',
     cmdClickToFollow: '⌘-click to follow',
     cmdClickToToggleTodo: '⌘-click to toggle todo',
   },
@@ -62,7 +62,6 @@ const config = import.meta.env.PROD ? window.config : {
 window.nativeModules = {
   core: createNativeModule<NativeModuleCore>('core'),
   completion: createNativeModule<NativeModuleCompletion>('completion'),
-  preview: createNativeModule<NativeModulePreview>('preview'),
   tokenizer: createNativeModule<NativeModuleTokenizer>('tokenizer'),
   api: createNativeModule<NativeModuleAPI>('api'),
   foundationModels: createNativeModule<NativeModuleFoundationModels>('foundationModels'),

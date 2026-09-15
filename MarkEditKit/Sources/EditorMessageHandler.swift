@@ -22,6 +22,10 @@ public final class EditorMessageHandler: NSObject, Sendable, WKScriptMessageHand
       return (nil, message)
     }
 
+    guard message.frameInfo.isMainFrame else {
+      return reportError("Native bridge is unavailable to subframes")
+    }
+
     guard message.name == "bridge", let body = message.body as? [String: Any] else {
       return reportError("Invalid message payload: \(message.name), \(message.body)")
     }

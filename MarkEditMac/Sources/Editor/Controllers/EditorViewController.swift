@@ -121,15 +121,10 @@ final class EditorViewController: NSViewController {
     return view
   }()
 
-  private(set) lazy var focusTrackingView = {
-    FocusTrackingView()
-  }()
-
   private(set) lazy var webView: WKWebView = {
     let modules = NativeModules(modules: [
       EditorModuleCore(delegate: self),
       EditorModuleCompletion(delegate: self),
-      EditorModulePreview(delegate: self),
       EditorModuleTokenizer(),
       EditorModuleAPI(delegate: self),
       EditorModuleFoundationModels(delegate: self),
@@ -148,7 +143,7 @@ final class EditorViewController: NSViewController {
       controller.addUserScript(WKUserScript(
         source: $0,
         injectionTime: .atDocumentEnd,
-        forMainFrameOnly: false
+        forMainFrameOnly: true
       ))
     }
 

@@ -5,7 +5,7 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "strict": true,
     "noEmit": true,
     "isolatedModules": true,
