@@ -60,12 +60,16 @@ export function startObserving() {
     // Remember where an empty-cursor composition began, so the commit can be
     // prevented from deleting committed text before it (WebKit IME over-delete).
     const editor = tryGetEditor();
-    editingState.compositionPosition = editor?.state.selection.main.empty === true
-      ? editor.state.selection.main.head
-      : undefined;
+    const selection = editor?.state.selection.main;
+    editingState.compositionPosition = selection?.empty === true ? selection.head : undefined;
 
-    // Remember the bottom state so the commit can re-pin it, see observeChanges.
-    editingState.wasScrolledToBottom = editor !== null && isScrolledToBottom(editor.scrollDOM);
+    if (editor === null || selection === undefined) {
+      editingState.wasScrolledToBottom = false;
+    } else {
+      const line = editor.state.doc.lineAt(selection.from);
+      const selectedWholeLine = selection.from === line.from && selection.to === line.to;
+      editingState.wasScrolledToBottom = selectedWholeLine && isScrolledToBottom(editor.scrollDOM);
+    }
   });
 
   document.addEventListener('compositionend', () => {
