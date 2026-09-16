@@ -1,0 +1,70 @@
+:root {
+  color-scheme: light dark;
+  color: var(--preview-text, CanvasText);
+  background: var(--preview-background, Canvas);
+}
+
+html, body {
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+#container {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: safe center;
+  align-items: safe center;
+  width: max-content;
+  min-width: 100%;
+  min-height: 100vh;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+#container[role="alert"] {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.katex-display {
+  margin: 0;
+}
+
+table {
+  flex: none;
+  width: auto;
+  max-width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 6px 13px;
+  border: 1px solid #ccc;
+}
+
+th {
+  font-weight: 600;
+  background: #00000005;
+}
+
+@media (prefers-color-scheme: dark) {
+  th {
+    background: #ffffff0a;
+  }
+
+  th, td {
+    border-color: #777;
+  }
+}

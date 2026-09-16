@@ -18,6 +18,7 @@ public struct EditorLocalizable: Encodable {
   let foldLine: String
   let unfoldLine: String
   let previewButtonTitle: String
+  let closeButtonTitle: String
   let cmdClickToFollow: String
   let cmdClickToToggleTodo: String
 
@@ -30,6 +31,7 @@ public struct EditorLocalizable: Encodable {
     foldLine: String,
     unfoldLine: String,
     previewButtonTitle: String,
+    closeButtonTitle: String,
     cmdClickToFollow: String,
     cmdClickToToggleTodo: String
   ) {
@@ -41,6 +43,7 @@ public struct EditorLocalizable: Encodable {
     self.foldLine = foldLine
     self.unfoldLine = unfoldLine
     self.previewButtonTitle = previewButtonTitle
+    self.closeButtonTitle = closeButtonTitle
     self.cmdClickToFollow = cmdClickToFollow
     self.cmdClickToToggleTodo = cmdClickToToggleTodo
   }
@@ -55,6 +58,7 @@ public struct EditorLocalizable: Encodable {
     try container.encode(foldLine, forKey: "foldLine")
     try container.encode(unfoldLine, forKey: "unfoldLine")
     try container.encode(previewButtonTitle, forKey: "previewButtonTitle")
+    try container.encode(closeButtonTitle, forKey: "closeButtonTitle")
     try container.encode(cmdClickToFollow, forKey: "cmdClickToFollow")
     try container.encode(cmdClickToToggleTodo, forKey: "cmdClickToToggleTodo")
   }

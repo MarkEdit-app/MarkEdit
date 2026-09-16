@@ -585,6 +585,23 @@
         }
       }
     },
+    "Close" : {
+      "comment" : "Button title to close a preview",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "關閉"
+          }
+        }
+      }
+    },
     "Column" : {
       "comment" : "Column name for table creation",
       "localizations" : {
