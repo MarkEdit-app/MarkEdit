@@ -13,7 +13,87 @@
   padding-inline-end: 18px;
 }
 
+.cm-previewOverlay {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: Canvas;
+  color: CanvasText;
+  animation: preview-fade-in 0.2s ease-out;
+}
+
+.cm-previewOverlay::backdrop {
+  background: transparent;
+}
+
+.cm-previewScroller {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cm-previewContent {
+  width: 100%;
+  height: 100%;
+}
+
+.cm-previewFrame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.cm-previewClose {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+}
+
+.cm-previewKeyboardFocus .cm-previewClose:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+
+.cm-previewClose::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: color-mix(in srgb, CanvasText 40%, Canvas);
+  mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 18"><path fill-rule="evenodd" d="M9 0a9 9 0 1 0 0 18A9 9 0 0 0 9 0z M9 7.94l-2.47-2.47a.75.75 0 0 0-1.06 1.06L7.94 9l-2.47 2.47a.75.75 0 0 0 1.06 1.06L9 10.06l2.47 2.47a.75.75 0 0 0 1.06-1.06L10.06 9l2.47-2.47a.75.75 0 0 0-1.06-1.06z"/></svg>') center / 16px 16px no-repeat;
+}
+
+.cm-previewClose:active::before {
+  background: color-mix(in srgb, CanvasText 55%, Canvas);
+}
+
+@keyframes preview-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .cm-previewOverlay {
+    animation: none;
+  }
+
   .cm-md-previewWrapper {
     transition: none;
   }

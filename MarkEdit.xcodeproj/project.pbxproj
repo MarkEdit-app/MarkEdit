@@ -25,7 +25,6 @@
 		870F177D29855CA500003DA7 /* MarkEditKit in Frameworks */ = {isa = PBXBuildFile; productRef = 870F177C29855CA500003DA7 /* MarkEditKit */; };
 		870F178E2985775B00003DA7 /* SharedUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178D2985775B00003DA7 /* SharedUI */; };
 		870F17902985775B00003DA7 /* AppKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178F2985775B00003DA7 /* AppKitExtensions */; };
-		870F17922985775B00003DA7 /* Previewer in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17912985775B00003DA7 /* Previewer */; };
 		870F17962985775B00003DA7 /* SettingsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17952985775B00003DA7 /* SettingsUI */; };
 		87132AA32C188FE900FD262B /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87132AA22C188FE900FD262B /* AppShortcuts.xcstrings */; };
 		871C995B2973F1E6003FF3A7 /* AppDelegate+Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C995A2973F1E6003FF3A7 /* AppDelegate+Document.swift */; };
@@ -96,7 +95,6 @@
 		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */; };
 		87B3ED8F2CBE1E12001FA6CE /* DiffKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87B3ED8E2CBE1E12001FA6CE /* DiffKit */; };
 		87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */; };
-		87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BD071129699A290053EF5F /* EditorViewController+Preview.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
@@ -266,7 +264,6 @@
 		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
 		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extras.swift"; sourceTree = "<group>"; };
 		87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppExceptionCatcher.swift; sourceTree = "<group>"; };
-		87BD071129699A290053EF5F /* EditorViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Preview.swift"; sourceTree = "<group>"; };
 		87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+GotoLine.swift"; sourceTree = "<group>"; };
 		87BEF30029A88F6800596E17 /* AppCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCustomization.swift; sourceTree = "<group>"; };
 		87BFF238298AAC75006C31E4 /* MarkEditTools */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditTools; sourceTree = "<group>"; };
@@ -316,7 +313,6 @@
 				CC000020300000000000FD01 /* FileDrop in Frameworks */,
 				EE200001EEEE000000000001 /* ExtensionCore in Frameworks */,
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
-				870F17922985775B00003DA7 /* Previewer in Frameworks */,
 				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
 				870F178E2985775B00003DA7 /* SharedUI in Frameworks */,
 				870F17962985775B00003DA7 /* SettingsUI in Frameworks */,
@@ -585,7 +581,6 @@
 				870F17652984D2C000003DA7 /* EditorViewController+LineEndings.swift */,
 				878B7B992CE0DA7D00220F39 /* EditorViewController+FileVersion.swift */,
 				87AA1223296560AE00BE4719 /* EditorViewController+HyperLink.swift */,
-				87BD071129699A290053EF5F /* EditorViewController+Preview.swift */,
 				87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */,
 				8790ABD32A98F5F40083825C /* EditorViewController+Statistics.swift */,
 				873126E3297BAC9C001521A0 /* EditorViewController+Pandoc.swift */,
@@ -731,7 +726,6 @@
 				870F177C29855CA500003DA7 /* MarkEditKit */,
 				870F178D2985775B00003DA7 /* SharedUI */,
 				870F178F2985775B00003DA7 /* AppKitExtensions */,
-				870F17912985775B00003DA7 /* Previewer */,
 				870F17952985775B00003DA7 /* SettingsUI */,
 				8775A77A29867012005867BF /* FontPicker */,
 				874823CD29B0BD980067EC49 /* TextCompletion */,
@@ -914,7 +908,6 @@
 				874BE70E29BB73CA002F83BA /* UpdateFileContentIntent.swift in Sources */,
 				8780AC202982A2DD00065EF4 /* WindowSettingsView.swift in Sources */,
 				8763C3202F92574D00A3841D /* EditorHistoryStorage.swift in Sources */,
-				87BD071229699A290053EF5F /* EditorViewController+Preview.swift in Sources */,
 				878B7B9A2CE0DA8A00220F39 /* EditorViewController+FileVersion.swift in Sources */,
 				873D6402295FCC3E0095DEF7 /* AppResources.swift in Sources */,
 				870A51BC294702AF0095C7EB /* AppDelegate.swift in Sources */,
@@ -1449,10 +1442,6 @@
 		870F178F2985775B00003DA7 /* AppKitExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppKitExtensions;
-		};
-		870F17912985775B00003DA7 /* Previewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Previewer;
 		};
 		870F17952985775B00003DA7 /* SettingsUI */ = {
 			isa = XCSwiftPackageProductDependency;

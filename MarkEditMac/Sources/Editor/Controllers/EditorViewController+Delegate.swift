@@ -343,14 +343,6 @@ extension EditorViewController: EditorModuleCompletionDelegate {
   }
 }
 
-// MARK: - EditorModulePreviewDelegate
-
-extension EditorViewController: EditorModulePreviewDelegate {
-  func editorPreview(_ sender: EditorModulePreview, show code: String, type: PreviewType, rect: CGRect) {
-    showPreview(code: code, type: type, rect: rect)
-  }
-}
-
 // MARK: - EditorModuleAPIDelegate
 
 extension EditorViewController: EditorModuleAPIDelegate {

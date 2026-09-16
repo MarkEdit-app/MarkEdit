@@ -42,6 +42,7 @@ enum Localized {
     static let unfoldLine = String(localized: "Unfold Line", comment: "Phrase used in CodeMirror to unfold a line")
     static let defaultLinkTitle = String(localized: "title", comment: "Default title used for link insertion")
     static let previewButtonTitle = String(localized: "Preview", comment: "Button title for code preview")
+    static let closeButtonTitle = String(localized: "Close", comment: "Button title to close a preview")
     static let cmdClickToFollow = String(localized: "⌘-click to follow", comment: "Tooltip for links")
     static let cmdClickToToggleTodo = String(localized: "⌘-click to toggle todo", comment: "Tooltip for tasks")
     static let tableColumnName = String(localized: "Column", comment: "Column name for table creation")
@@ -326,6 +327,7 @@ extension EditorLocalizable {
       foldLine: Localized.Editor.foldLine,
       unfoldLine: Localized.Editor.unfoldLine,
       previewButtonTitle: Localized.Editor.previewButtonTitle,
+      closeButtonTitle: Localized.Editor.closeButtonTitle,
       cmdClickToFollow: Localized.Editor.cmdClickToFollow,
       cmdClickToToggleTodo: Localized.Editor.cmdClickToToggleTodo
     )

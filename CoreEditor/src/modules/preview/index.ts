@@ -1,4 +1,5 @@
-import { getClientRect } from '../../common/utils';
+import { renderPreview } from './render';
+import createPreviewOverlay from './overlay';
 
 export enum PreviewType {
   mermaid = 'mermaid',
@@ -7,7 +8,7 @@ export enum PreviewType {
 }
 
 /**
- * Invokes native methods to show code preview.
+ * Shows a focused preview over the editor.
  */
 export function showPreview(event: MouseEvent) {
   const target = event.target as HTMLSpanElement;
@@ -20,20 +21,18 @@ export function showPreview(event: MouseEvent) {
     return;
   }
 
-  const pos = target.dataset.pos;
-  if (pos === undefined) {
-    return;
-  }
-
-  const rect = window.editor.coordsAtPos(parseInt(pos));
-  if (rect === null) {
-    return;
-  }
-
   const type = target.dataset.type as PreviewType;
-  window.nativeModules.preview.show({ code, type, rect: getClientRect(rect) });
+  if (!Object.values(PreviewType).includes(type)) {
+    return;
+  }
+
+  const overlay = createPreviewOverlay(type);
+  if (overlay === undefined) {
+    return;
+  }
 
   cancelDefaultEvent(event);
+  void renderPreview(overlay, type, code);
 }
 
 export function cancelDefaultEvent(event: MouseEvent) {
