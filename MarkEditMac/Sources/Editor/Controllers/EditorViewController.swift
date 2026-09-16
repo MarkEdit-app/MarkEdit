@@ -148,7 +148,7 @@ final class EditorViewController: NSViewController {
       controller.addUserScript(WKUserScript(
         source: $0,
         injectionTime: .atDocumentEnd,
-        forMainFrameOnly: false
+        forMainFrameOnly: true
       ))
     }
 

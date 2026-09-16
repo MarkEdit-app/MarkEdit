@@ -28,7 +28,7 @@ extension QuickLookViewController {
       WKUserScript(
         source: EditorUserAsset.script(for: url, contents: contents),
         injectionTime: .atDocumentEnd,
-        forMainFrameOnly: false
+        forMainFrameOnly: true
       )
     }
   }
