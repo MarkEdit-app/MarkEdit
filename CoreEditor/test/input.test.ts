@@ -1,6 +1,7 @@
-import { describe, expect, test, afterEach } from '@jest/globals';
+import { afterEach, beforeAll, describe, expect, test } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { filterTransaction, observeChanges } from '../src/modules/input';
+import { startObserving } from '../src/modules/events';
 import { editingState } from '../src/common/store';
 import wrapBlock from '../src/modules/input/wrapBlock';
 import insertCodeBlock from '../src/modules/input/insertCodeBlock';
@@ -149,15 +150,18 @@ describe('Composition over-delete clamp', () => {
 });
 
 describe('Composition bottom pinning', () => {
+  beforeAll(startObserving);
+
   afterEach(() => {
     editingState.wasScrolledToBottom = false;
     editingState.compositionEnded = true;
+    editingState.compositionPosition = undefined;
   });
 
   // jsdom has no layout, mock the scroll metrics and capture scrollTop writes.
   // A real DOM clamps scrollTop to [0, scrollHeight - clientHeight].
-  function mockScroller(scrollHeight = 1000, clientHeight = 100) {
-    let top = 0;
+  function mockScroller(scrollHeight = 1000, clientHeight = 100, scrollTop = 0) {
+    let top = scrollTop;
     const maxTop = scrollHeight - clientHeight;
     const scrollDOM = window.editor.scrollDOM;
     Object.defineProperty(scrollDOM, 'scrollHeight', { configurable: true, get: () => scrollHeight });
@@ -165,6 +169,42 @@ describe('Composition bottom pinning', () => {
     Object.defineProperty(scrollDOM, 'scrollTop', { configurable: true, get: () => top, set: (value: number) => { top = Math.max(0, Math.min(value, maxTop)); } });
     return () => top;
   }
+
+  function startComposition(doc: string, anchor = doc.length, head = anchor) {
+    editor.setUp(doc);
+    editor.selectRange(anchor, head);
+    mockScroller(1000, 100, 900);
+    window.editor.contentDOM.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
+  }
+
+  test('enables bottom pinning when composition starts on an empty line', () => {
+    startComposition('hello\n');
+    expect(editingState.wasScrolledToBottom).toBe(true);
+  });
+
+  test.each([
+    [6, 11],
+    [11, 6],
+  ])('enables bottom pinning when a range from %i to %i selects a whole line', (anchor, head) => {
+    startComposition('hello\nworld', anchor, head);
+    expect(editingState.wasScrolledToBottom).toBe(true);
+    expect(editingState.compositionPosition).toBeUndefined();
+  });
+
+  test('does not enable bottom pinning when composition starts on a populated line', () => {
+    startComposition('hello\nworld', 6);
+    expect(editingState.wasScrolledToBottom).toBe(false);
+  });
+
+  test('does not enable bottom pinning when a range is within a line', () => {
+    startComposition('hello\nworld', 7, 9);
+    expect(editingState.wasScrolledToBottom).toBe(false);
+  });
+
+  test('does not enable bottom pinning when a range only starts at a line boundary', () => {
+    startComposition('hello\nworld', 6, 8);
+    expect(editingState.wasScrolledToBottom).toBe(false);
+  });
 
   function compose(insert: string) {
     window.editor.dispatch({
