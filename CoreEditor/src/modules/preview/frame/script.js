@@ -1,5 +1,5 @@
 const loadModule = url => import(url);
-const render = globalThis.__MARKEDIT_RENDERER__;
+const render = globalThis.__MARKEDIT_PREVIEW_RENDERER__;
 const container = globalThis.document.querySelector('#container');
 
 globalThis.document.addEventListener('click', event => {
@@ -25,5 +25,18 @@ globalThis.addEventListener('message', async function handleRender(event) {
     container.textContent = String(error);
   } finally {
     globalThis.parent.postMessage({ type: 'preview-rendered' }, '*');
+  }
+});
+
+globalThis.addEventListener('message', event => {
+  if (event.source !== globalThis.parent || event.data?.type !== 'preview-colors') {
+    return;
+  }
+
+  const { background, text } = event.data;
+  if (typeof background === 'string' && typeof text === 'string') {
+    const style = globalThis.document.documentElement.style;
+    style.setProperty('--preview-background', background);
+    style.setProperty('--preview-text', text);
   }
 });

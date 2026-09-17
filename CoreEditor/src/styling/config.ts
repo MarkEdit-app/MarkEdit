@@ -221,6 +221,7 @@ function setEditorColors(colors: EditorColors) {
   });
 
   globalState.colors = colors;
+  window.dispatchEvent(new Event('editor-colors-changed'));
 }
 
 function enableGutterHoverEffects() {

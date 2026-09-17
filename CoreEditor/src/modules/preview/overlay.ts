@@ -12,10 +12,15 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
   const dialog = document.createElement('dialog');
   dialog.className = 'cm-previewOverlay';
 
-  if (globalState.colors !== undefined) {
-    dialog.style.setProperty('--preview-background', globalState.colors.background);
-    dialog.style.setProperty('--preview-text', globalState.colors.text);
-  }
+  const updateColors = () => {
+    if (globalState.colors !== undefined) {
+      dialog.style.setProperty('--preview-background', globalState.colors.background);
+      dialog.style.setProperty('--preview-text', globalState.colors.text);
+    }
+  };
+
+  updateColors();
+  window.addEventListener('editor-colors-changed', updateColors);
 
   const background = window.editor.dom;
   const scaleAnimations: Animation[] = [];
@@ -80,6 +85,7 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
   frame.setAttribute('sandbox', 'allow-scripts');
 
   dialog.addEventListener('close', () => {
+    window.removeEventListener('editor-colors-changed', updateColors);
     scaleAnimations.forEach(animation => animation.cancel());
     frame.dispatchEvent(new Event('preview-close'));
     dialog.remove();

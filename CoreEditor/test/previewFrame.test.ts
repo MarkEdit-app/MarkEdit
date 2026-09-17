@@ -6,6 +6,7 @@ const source = '</script><script>window.webkit.messageHandlers.bridge.postMessag
 
 describe('Preview frame', () => {
   afterEach(() => {
+    document.querySelectorAll('iframe').forEach(frame => frame.dispatchEvent(new Event('preview-close')));
     jest.restoreAllMocks();
     globalState.colors = undefined;
     document.body.innerHTML = '';
@@ -58,5 +59,36 @@ describe('Preview frame', () => {
     }));
 
     expect(frame.hasAttribute('aria-busy')).toBe(false);
+  });
+
+  test('sends current colors after load and theme changes until close', () => {
+    const frame = document.body.appendChild(document.createElement('iframe'));
+    const postMessage = jest.spyOn(frame.contentWindow as Window, 'postMessage');
+    renderPreview(frame, 'table', source);
+
+    const originalDocument = frame.srcdoc;
+    globalState.colors = {
+      background: '#282a36', text: '#f8f8f2',
+    } as NonNullable<typeof globalState.colors>;
+
+    frame.dispatchEvent(new Event('load'));
+    expect(postMessage.mock.calls.at(-1)).toEqual([{
+      type: 'preview-colors', background: '#282a36', text: '#f8f8f2',
+    }, '*']);
+
+    globalState.colors = {
+      background: '#ffffff', text: '#1f2328',
+    } as NonNullable<typeof globalState.colors>;
+
+    window.dispatchEvent(new Event('editor-colors-changed'));
+    expect(postMessage.mock.calls.at(-1)).toEqual([{
+      type: 'preview-colors', background: '#ffffff', text: '#1f2328',
+    }, '*']);
+    expect(frame.srcdoc).toBe(originalDocument);
+
+    frame.dispatchEvent(new Event('preview-close'));
+    postMessage.mockClear();
+    window.dispatchEvent(new Event('editor-colors-changed'));
+    expect(postMessage).not.toHaveBeenCalled();
   });
 });
