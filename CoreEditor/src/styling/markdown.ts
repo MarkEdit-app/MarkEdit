@@ -1,11 +1,12 @@
 import { syntaxHighlighting } from '@codemirror/language';
 import { classHighlighter, tagHighlighter, styleTags } from '@lezer/highlight';
 import { MarkdownConfig } from '@lezer/markdown';
-import { markdownMathExtension as markdownMathConfig } from '../@vendor/joplin/markdownMathParser';
+import { markdownMathExtension as markdownMathConfig } from '../modules/math';
 import { tags } from './builder';
 import { linkDefinitionConfig } from './nodes/def';
 import { listIndentStyle } from './nodes/indent';
-import { inlineCodeStyle, codeBlockStyle, previewMermaid, previewMath } from './nodes/code';
+import { inlineCodeStyle, codeBlockStyle, previewMermaid } from './nodes/code';
+import { previewMath } from './nodes/math';
 import { previewTable, tableStyle } from './nodes/table';
 import { frontMatterStyle } from './nodes/frontMatter';
 import { taskMarkerStyle } from './nodes/task';
