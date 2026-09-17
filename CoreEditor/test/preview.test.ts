@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globa
 import { PreviewType, showPreview } from '../src/modules/preview';
 import { renderPreview } from '../src/modules/preview/render';
 import { renderTable } from '../src/modules/preview/renderers/table';
+import { renderMermaid } from '../src/modules/preview/renderers/mermaid';
 import { Localizable } from '../src/config';
 import { globalState } from '../src/common/store';
 import loadModule from '../src/modules/preview/renderers/loadModule';
@@ -105,6 +106,22 @@ describe('Preview overlay', () => {
     expect(dialog?.style.getPropertyValue('--preview-text')).toBe('#f8f8f2');
   });
 
+  test('updates open preview colors and stops observing after close', () => {
+    const dialog = open(PreviewType.table, 'test');
+    globalState.colors = {
+      background: '#282a36', text: '#f8f8f2',
+    } as NonNullable<typeof globalState.colors>;
+
+    window.dispatchEvent(new Event('editor-colors-changed'));
+    expect(dialog?.style.getPropertyValue('--preview-background')).toBe('#282a36');
+    expect(dialog?.style.getPropertyValue('--preview-text')).toBe('#f8f8f2');
+
+    dialog?.close();
+    globalState.colors.background = '#ffffff';
+    window.dispatchEvent(new Event('editor-colors-changed'));
+    expect(dialog?.style.getPropertyValue('--preview-background')).toBe('#282a36');
+  });
+
   test('closing restores focus without changing the document or selection', async () => {
     window.editor.dispatch({ selection: { anchor: 4 } });
     const dialog = open(PreviewType.table, '| Test |');
@@ -184,6 +201,48 @@ describe('Preview overlay', () => {
     const dialog = open(PreviewType.table, 'test');
     window.dispatchEvent(new MessageEvent('message', { data: 'close-preview', source: window }));
     expect(dialog?.open).toBe(true);
+  });
+});
+
+describe('Mermaid preview rendering', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('serializes appearance changes during rendering and switches back to light', async () => {
+    const appearance = Object.assign(new EventTarget(), { matches: false });
+    jest.spyOn(window, 'matchMedia').mockReturnValue(appearance as MediaQueryList);
+    let finishInitial: (result: { svg: string }) => void = () => {};
+    const initial = new Promise<{ svg: string }>(resolve => { finishInitial = resolve; });
+    const initialize = jest.fn();
+    const render = jest.fn<() => Promise<{ svg: string }>>()
+      .mockReturnValueOnce(initial)
+      .mockResolvedValueOnce({ svg: '<svg data-theme="dark" viewBox="0 0 936 103"></svg>' })
+      .mockResolvedValueOnce({ svg: '<svg data-theme="light" viewBox="0 0 936 103"></svg>' });
+    jest.mocked(loadModule).mockReset().mockResolvedValue({ default: { initialize, render } });
+
+    const container = document.createElement('div');
+    const rendering = renderMermaid(container, 'graph TD; Start --> Finish', loadModule);
+    await Promise.resolve();
+
+    appearance.matches = true;
+    appearance.dispatchEvent(new Event('change'));
+    expect(render).toHaveBeenCalledTimes(1);
+    finishInitial({ svg: '<svg data-theme="initial"></svg>' });
+
+    await rendering;
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(initialize).toHaveBeenLastCalledWith({ theme: 'dark', startOnLoad: false });
+    expect(container.querySelector('svg')?.getAttribute('data-theme')).toBe('dark');
+    expect(container.querySelector('svg')?.style.width).toBe('936px');
+
+    appearance.matches = false;
+    appearance.dispatchEvent(new Event('change'));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(initialize).toHaveBeenLastCalledWith({ theme: 'default', startOnLoad: false });
+    expect(container.querySelector('svg')?.getAttribute('data-theme')).toBe('light');
+    expect(container.querySelector('svg')?.style.width).toBe('936px');
+    expect(loadModule).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -81,7 +81,7 @@
 }
 
 .cm-previewClose:active::before {
-  background: color-mix(in srgb, CanvasText 55%, Canvas);
+  background: color-mix(in srgb, currentColor 55%, var(--preview-background, Canvas));
 }
 
 @keyframes preview-fade-in {

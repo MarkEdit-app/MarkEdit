@@ -6,6 +6,13 @@ import styleTemplate from './style.css?raw';
 export type Renderer = (container: HTMLElement, code: string, loadModule: ModuleLoader) => Promise<void>;
 
 export function renderInFrame(frame: HTMLIFrameElement, renderer: Renderer, code: string): void {
+  const updateColors = () => {
+    if (globalState.colors !== undefined) {
+      const { background, text } = globalState.colors;
+      frame.contentWindow?.postMessage({ type: 'preview-colors', background, text }, '*');
+    }
+  };
+
   const rendered = (event: MessageEvent) => {
     if (event.source !== frame.contentWindow || event.data?.type !== 'preview-rendered') {
       return;
@@ -16,12 +23,16 @@ export function renderInFrame(frame: HTMLIFrameElement, renderer: Renderer, code
   };
 
   window.addEventListener('message', rendered);
+  window.addEventListener('editor-colors-changed', updateColors);
+
   frame.addEventListener('preview-close', () => {
     window.removeEventListener('message', rendered);
+    window.removeEventListener('editor-colors-changed', updateColors);
   }, { once: true });
 
   frame.addEventListener('load', () => {
     frame.contentWindow?.postMessage({ type: 'render-preview', code }, '*');
+    updateColors();
   }, { once: true });
 
   frame.setAttribute('aria-busy', 'true');
@@ -57,7 +68,7 @@ function createFrameDocument(renderer: Renderer): string {
   const script = frameDocument.createElement('script');
   script.type = 'module';
   script.textContent = scriptTemplate.replace(
-    'globalThis.__MARKEDIT_RENDERER__',
+    'globalThis.__MARKEDIT_PREVIEW_RENDERER__',
     `(${renderer.toString()})`,
   );
 

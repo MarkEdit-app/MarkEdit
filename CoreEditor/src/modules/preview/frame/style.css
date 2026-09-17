@@ -26,6 +26,10 @@ body {
   text-align: center;
 }
 
+#container:has(> table) {
+  width: 100%;
+}
+
 #container[role="alert"] {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -37,6 +41,11 @@ svg {
   height: auto;
 }
 
+#container > svg {
+  flex: none;
+  max-width: none;
+}
+
 .katex-display {
   margin: 0;
 }
@@ -44,7 +53,7 @@ svg {
 table {
   flex: none;
   width: auto;
-  max-width: 100%;
+  max-width: min(100%, 960px);
   border-spacing: 0;
   border-collapse: collapse;
 }
