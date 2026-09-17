@@ -79,21 +79,3 @@ export const previewMermaid = createDecoPlugin(() => {
   click: showPreview,
   mousedown: cancelDefaultEvent,
 });
-
-/**
- * Enable [preview] button for https://katex.org/.
- */
-export const previewMath = createDecoPlugin(() => {
-  return createWidgetDeco('BlockMath', node => {
-    const state = window.editor.state;
-    const code = state.sliceDoc(node.from + 2, node.to - 2); // 2 is the length of "$$"
-    if (code.trim().length === 0) {
-      return null;
-    }
-
-    return new PreviewWidget(code, PreviewType.katex, node.from + 2);
-  });
-}, {
-  click: showPreview,
-  mousedown: cancelDefaultEvent,
-});
