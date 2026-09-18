@@ -7,12 +7,15 @@ import { adjustAlpha, shadowableTextColor } from './helper';
 import { isChrome } from '../common/utils';
 
 // Extend tags by adding Markdown-specific ones
+const listMark = Tag.define();
+const tableMark = Tag.define(listMark);
+
 const tags = {
   ...defaultTags,
   inlineCode: Tag.define(),
   codeInfo: Tag.define(),
   codeMark: Tag.define(),
-  listMark: Tag.define(),
+  listMark, tableMark,
   quoteMark: Tag.define(),
   linkMark: Tag.define(),
   linkDefinition: Tag.define(),
@@ -117,6 +120,9 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-md-inlineCodeEnd': {
     borderTopRightRadius: '3px',
     borderBottomRightRadius: '3px',
+  },
+  '.cm-md-tableMark': {
+    fontWeight: '500',
   },
 };
 

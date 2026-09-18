@@ -5,6 +5,8 @@ import { selectedLinesDecoration } from '../src/styling/nodes/selection';
 import { adjustAlpha } from '../src/styling/helper';
 import { InvisiblesBehavior } from '../src/config';
 import { editingState } from '../src/common/store';
+import { classHighlighters } from '../src/styling/markdown';
+import GitHubLight from '../src/styling/themes/github-light';
 import { sleep } from './utils/helpers';
 import * as editor from './utils/editor';
 
@@ -32,6 +34,17 @@ describe('Styling module', () => {
     expect(classNames.has('cm-foldGutter')).toBeTruthy();
     expect(classNames.has('cm-line')).toBeTruthy();
     expect(classNames.has('cm-lineNumbers')).toBeTruthy();
+  });
+
+  test('styles GFM table delimiters separately from content', () => {
+    editor.setUp('| Name | Value |\n|:-----|------:|\n| one | two |', [
+      classHighlighters,
+      GitHubLight().extension,
+    ]);
+
+    const marks = [...window.editor.dom.querySelectorAll('.cm-md-tableMark')];
+    expect(marks.map(mark => mark.textContent)).toEqual(['|', '|', '|', '|:-----|------:|', '|', '|', '|']);
+    expect(getComputedStyle(marks[0]).fontWeight).toBe('500');
   });
 
   test('decorate active line immediately for focus mode', async () => {
