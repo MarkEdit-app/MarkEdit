@@ -50,6 +50,7 @@ enum Localized {
   }
 
   enum Toolbar {
+    static let viewMode = String(localized: "View Mode", comment: "Toolbar item to show the preview extension's view modes")
     static let tableOfContents = String(localized: "Table of Contents", comment: "Toolbar item to show table of contents")
     static let formatHeaders = String(localized: "Headers", comment: "Toolbar item to toggle heading levels")
     static let toggleBold = String(localized: "Bold", comment: "Toolbar item to toggle bold")

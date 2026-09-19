@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import ExtensionCore
 import SharedUI
 import MarkEditCore
 import MarkEditKit
@@ -227,7 +228,26 @@ enum AppRuntimeConfig {
   }
 
   static var customToolbarItems: [CustomToolbarItem] {
-    currentDefinition?.customToolbarItems ?? []
+    let items = currentDefinition?.customToolbarItems ?? []
+
+    // Make the preview extension's menu available in the toolbar customization
+    // palette without changing the user's default toolbar or settings.json.
+    guard !AppCustomization.isSafeMode,
+          ExtensionConfig.installed.contains(where: { $0.id == "markedit-preview" && $0.enabled != false }) else {
+      return items
+    }
+
+    let title = Localized.Toolbar.viewMode
+    guard !items.contains(where: { $0.menuName == title }) else {
+      return items
+    }
+
+    return items + [CustomToolbarItem(
+      title: title,
+      icon: "arrow.triangle.2.circlepath",
+      actionName: nil,
+      menuName: title
+    )]
   }
 
   static var updateBehavior: Definition.UpdateBehavior {

@@ -4383,6 +4383,23 @@
         }
       }
     },
+    "View Mode" : {
+      "comment" : "Toolbar item to show the preview extension's view modes",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "视图模式"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "視圖模式"
+          }
+        }
+      }
+    },
     "View Release Details…" : {
       "comment" : "Menu title that brings up the update dialog, where the release notes and actions live",
       "localizations" : {
