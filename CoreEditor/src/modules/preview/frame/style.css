@@ -8,10 +8,39 @@ html, body {
   min-width: 100%;
   min-height: 100%;
   margin: 0;
+  overscroll-behavior: contain;
 }
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  z-index: 1;
+  inset: 0 0 auto;
+  height: 40px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Keep the stronger blur's fade from exposing sharp content underneath. */
+body::before {
+  backdrop-filter: blur(2px);
+  mask-image: linear-gradient(#000 50%, transparent);
+}
+
+body::after {
+  background: color-mix(in srgb, var(--preview-background, Canvas) 75%, transparent);
+  backdrop-filter: blur(12px);
+  mask-image: linear-gradient(#000, transparent);
+}
+
+.preview-scrolled body::before,
+.preview-scrolled body::after {
+  opacity: 1;
 }
 
 #container {
@@ -22,7 +51,7 @@ body {
   width: max-content;
   min-width: 100%;
   min-height: 100vh;
-  padding: 40px 24px;
+  padding: 60px 24px;
   text-align: center;
 }
 

@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, jest, test } from '@jest/globals';
+import { runInNewContext } from 'node:vm';
 import { renderPreview } from '../src/modules/preview/render';
+import { renderInFrame } from '../src/modules/preview/frame';
 import { globalState } from '../src/common/store';
 
 const source = '</script><script>window.webkit.messageHandlers.bridge.postMessage({})</script>';
@@ -35,6 +37,24 @@ describe('Preview frame', () => {
     const frameDocument = new DOMParser().parseFromString(frame.srcdoc, 'text/html');
     expect(frameDocument.documentElement.style.getPropertyValue('--preview-background')).toBe('#282a36');
     expect(frameDocument.documentElement.style.getPropertyValue('--preview-text')).toBe('#f8f8f2');
+  });
+
+  test.each([0, 100, -10])('updates the scroll fade from an initial offset of %s', scrollY => {
+    const frame = document.body.appendChild(document.createElement('iframe'));
+    renderInFrame(frame, async () => {}, '');
+
+    const frameDocument = new DOMParser().parseFromString(frame.srcdoc, 'text/html');
+    const script = frameDocument.querySelector('script')?.textContent;
+    if (script === undefined) throw new Error('Missing frame script');
+    const frameWindow = Object.assign(new EventTarget(), { document: frameDocument, scrollY });
+    runInNewContext(script, { globalThis: frameWindow });
+    expect(frameDocument.documentElement.classList.contains('preview-scrolled')).toBe(scrollY > 0);
+
+    for (const offset of [1, 200, 0, -10]) {
+      frameWindow.scrollY = offset;
+      frameWindow.dispatchEvent(new Event('scroll'));
+      expect(frameDocument.documentElement.classList.contains('preview-scrolled')).toBe(offset > 0);
+    }
   });
 
   test('sends source after load and accepts completion only from its frame', () => {

@@ -22,15 +22,6 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
   updateColors();
   window.addEventListener('editor-colors-changed', updateColors);
 
-  const background = window.editor.dom;
-  const scaleAnimations: Animation[] = [];
-  const animateScale = (element: HTMLElement, from: string, to: string) => {
-    scaleAnimations.push(element.animate([
-      { scale: from },
-      { scale: to },
-    ], { duration: 200, easing: 'ease-out', fill: 'forwards' }));
-  };
-
   dialog.setAttribute('aria-label', window.config.localizable?.previewButtonTitle ?? 'Preview');
   dialog.addEventListener('keydown', event => {
     if (event.key === 'Tab') {
@@ -46,13 +37,10 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
 
     isDismissing = true;
     if (!isMotionReduced()) {
-      animateScale(background, getComputedStyle(background).scale, '1');
-      animateScale(content, getComputedStyle(content).scale, '0.96');
-
       await dialog.animate([
         { opacity: getComputedStyle(dialog).opacity },
         { opacity: 0 },
-      ], { duration: 200, easing: 'ease-out', fill: 'forwards' }).finished.catch(() => {});
+      ], { duration: 160, easing: 'ease-out', fill: 'forwards' }).finished.catch(() => {});
     }
 
     if (dialog.open) {
@@ -86,7 +74,6 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
 
   dialog.addEventListener('close', () => {
     window.removeEventListener('editor-colors-changed', updateColors);
-    scaleAnimations.forEach(animation => animation.cancel());
     frame.dispatchEvent(new Event('preview-close'));
     dialog.remove();
     overlay = undefined;
@@ -96,11 +83,6 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
   overlay = dialog;
   document.body.appendChild(dialog);
   dialog.showModal();
-
-  if (!isMotionReduced()) {
-    animateScale(background, '1', '0.96');
-    animateScale(content, '0.96', '1');
-  }
 
   return frame;
 }
