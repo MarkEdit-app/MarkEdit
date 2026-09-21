@@ -1,3 +1,9 @@
+:root:has(.cm-previewOverlay[open]),
+body:has(.cm-previewOverlay[open]) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 .cm-md-previewWrapper {
   margin: 0 2px;
   padding: 0 4px;
@@ -25,9 +31,10 @@
   padding: 0;
   border: 0;
   overflow: hidden;
+  overscroll-behavior: none;
   background: var(--preview-background, Canvas);
   color: var(--preview-text, CanvasText);
-  animation: preview-fade-in 0.2s ease-out;
+  animation: preview-fade-in 160ms ease-out;
 }
 
 .cm-previewOverlay::backdrop {
@@ -76,12 +83,12 @@
   content: '';
   position: absolute;
   inset: 4px;
-  background: color-mix(in srgb, currentColor 40%, var(--preview-background, Canvas));
+  background: color-mix(in srgb, currentColor 50%, var(--preview-background, Canvas));
   mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 18"><path fill-rule="evenodd" d="M9 0a9 9 0 1 0 0 18A9 9 0 0 0 9 0z M9 7.94l-2.47-2.47a.75.75 0 0 0-1.06 1.06L7.94 9l-2.47 2.47a.75.75 0 0 0 1.06 1.06L9 10.06l2.47 2.47a.75.75 0 0 0 1.06-1.06L10.06 9l2.47-2.47a.75.75 0 0 0-1.06-1.06z"/></svg>') center / 16px 16px no-repeat;
 }
 
 .cm-previewClose:active::before {
-  background: color-mix(in srgb, currentColor 55%, var(--preview-background, Canvas));
+  background: color-mix(in srgb, currentColor 65%, var(--preview-background, Canvas));
 }
 
 @keyframes preview-fade-in {

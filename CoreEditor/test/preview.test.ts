@@ -144,17 +144,15 @@ describe('Preview overlay', () => {
     expect(document.querySelectorAll('dialog')).toHaveLength(1);
   });
 
-  test('scales the editor back and the preview forward, then cancels scales on close', () => {
+  test('opens and closes without scaling the editor or preview', async () => {
     const animate = jest.spyOn(HTMLElement.prototype, 'animate');
     const dialog = open(PreviewType.table, 'test');
-    expect(animate.mock.contexts).toEqual([window.editor.dom, dialog?.querySelector('.cm-previewContent')]);
-    expect(animate.mock.calls).toEqual([
-      [[{ scale: '1' }, { scale: '0.96' }], { duration: 200, easing: 'ease-out', fill: 'forwards' }],
-      [[{ scale: '0.96' }, { scale: '1' }], { duration: 200, easing: 'ease-out', fill: 'forwards' }],
-    ]);
+    expect(animate).not.toHaveBeenCalled();
 
-    dialog?.close();
-    animate.mock.results.forEach(result => expect((result.value as Animation).cancel).toHaveBeenCalledTimes(1));
+    dialog?.querySelector('button')?.click();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(animate).not.toHaveBeenCalled();
   });
 
   test.each(['button', 'Escape'])('%s reveals the editor during one fade before closing', async trigger => {
@@ -173,6 +171,10 @@ describe('Preview overlay', () => {
     expect(getComputedStyle(window.editor.dom).visibility).toBe('visible');
     expect(document.activeElement).toBe(dialog.querySelector('button'));
     expect(animate).toHaveBeenCalledTimes(1);
+    expect(animate).toHaveBeenCalledWith([
+      { opacity: getComputedStyle(dialog).opacity },
+      { opacity: 0 },
+    ], { duration: 160, easing: 'ease-out', fill: 'forwards' });
     finish();
 
     await Promise.resolve();

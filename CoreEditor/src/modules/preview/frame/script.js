@@ -2,6 +2,13 @@ const loadModule = url => import(url);
 const render = globalThis.__MARKEDIT_PREVIEW_RENDERER__;
 const container = globalThis.document.querySelector('#container');
 
+const updateScroll = () => {
+  globalThis.document.documentElement.classList.toggle('preview-scrolled', globalThis.scrollY > 0);
+};
+
+globalThis.addEventListener('scroll', updateScroll, { passive: true });
+updateScroll();
+
 globalThis.document.addEventListener('click', event => {
   if (event.target.closest('a')) {
     event.preventDefault();
