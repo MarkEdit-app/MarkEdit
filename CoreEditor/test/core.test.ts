@@ -1,10 +1,13 @@
 import { describe, expect, jest, test, beforeEach } from '@jest/globals';
 import { EditorSelection } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 import { Config } from '../src/config';
 import { performTextDrop, resetEditor } from '../src/core';
 import { editingState } from '../src/common/store';
 import { tryGetEditor } from '../src/common/utils';
+import { caretScrollDefaults } from '../src/modules/selection';
 import normalizeSelection from '../src/modules/selection/normalizeSelection';
+import * as styling from '../src/styling/config';
 
 // Minimal config
 window.config = {
@@ -122,6 +125,48 @@ describe('resetEditor selection', () => {
     const content = 'Hello, MarkEdit!';
     await resetEditor(content, { anchor: 0, head: 5 });
     expect(window.editor.state.doc.toString()).toBe(content);
+  });
+});
+
+describe('resetEditor caret scrolling', () => {
+  beforeEach(() => {
+    tryGetEditor()?.destroy();
+    document.body.innerHTML = '';
+  });
+
+  test.each([
+    { anchor: 5, head: 5, expectedHead: 5 },
+    { anchor: 10, head: 3, expectedHead: 3 },
+    { anchor: 100, head: 200, expectedHead: 13 },
+  ])('restores the caret margin after styling for $anchor -> $head', async ({ anchor, head, expectedHead }) => {
+    const scrollIntoView = jest.spyOn(EditorView, 'scrollIntoView');
+    const setUp = jest.spyOn(styling, 'setUp');
+
+    try {
+      await resetEditor('Hello, World!', { anchor, head });
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+      expect(scrollIntoView).toHaveBeenLastCalledWith(expectedHead, caretScrollDefaults);
+      expect(scrollIntoView.mock.invocationCallOrder[0]).toBeGreaterThan(setUp.mock.invocationCallOrder[0]);
+    } finally {
+      scrollIntoView.mockRestore();
+      setUp.mockRestore();
+    }
+  });
+
+  test('does not scroll to the caret when preserving a saved offset', async () => {
+    await resetEditor('Hello, World!', { anchor: 5, head: 5 });
+    window.editor.scrollDOM.scrollTop = 100;
+    const scrollIntoView = jest.spyOn(EditorView, 'scrollIntoView');
+    const scrollTo = jest.spyOn(HTMLElement.prototype, 'scrollTo');
+
+    try {
+      await resetEditor('Hello, World!', undefined, false);
+      expect(scrollIntoView).not.toHaveBeenCalled();
+      expect(scrollTo.mock.calls.map(call => call[0])).toContainEqual({ top: 100, left: 0 });
+    } finally {
+      scrollIntoView.mockRestore();
+      scrollTo.mockRestore();
+    }
   });
 });
 
