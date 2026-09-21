@@ -96,10 +96,6 @@ export async function resetEditor(
       extensions: extensions({ lineBreak }),
     }),
     parent: document.querySelector('#editor') ?? document.body,
-    // Initial scroll to avoid an extra transaction
-    scrollTo: (selectionRestored && previousOffset === undefined)
-      ? EditorView.scrollIntoView(initialSelection.head, caretScrollDefaults)
-      : undefined,
   });
 
   const editor = window.editor;
@@ -168,6 +164,13 @@ export async function resetEditor(
 
   // Reconfigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
+
+  // Restore the caret margin after styling has configured the layout
+  if (selectionRestored && previousOffset === undefined) {
+    editor.dispatch({
+      effects: EditorView.scrollIntoView(initialSelection.head, caretScrollDefaults),
+    });
+  }
 
   applyReducedMotion(isMotionReduced());
   observeBackgroundColorChanges(editor.dom);
