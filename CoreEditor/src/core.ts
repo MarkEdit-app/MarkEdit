@@ -84,6 +84,9 @@ export async function resetEditor(
   const initialDoc = normalizeLineBreaks(initialContent, lineBreak);
   const initialSelection = normalizeSelection(initialDoc.length, selectionRange);
   const selectionRestored = selectionRange !== undefined && (selectionRange.anchor !== 0 || selectionRange.head !== 0);
+  const initialScroll = (selectionRestored && previousOffset === undefined)
+    ? EditorView.scrollIntoView(initialSelection.head, caretScrollDefaults)
+    : undefined;
 
   // Honest flag, set before the view so extensions don't need an extra reconfigure pass
   editingState.hasSelection = !initialSelection.empty;
@@ -96,6 +99,7 @@ export async function resetEditor(
       extensions: extensions({ lineBreak }),
     }),
     parent: document.querySelector('#editor') ?? document.body,
+    scrollTo: initialScroll,
   });
 
   const editor = window.editor;
@@ -165,11 +169,9 @@ export async function resetEditor(
   // Reconfigure, window.config might have changed
   setUp(window.config, loadTheme(window.config.theme).colors);
 
-  // Restore the caret margin after styling has configured the layout
-  if (selectionRestored && previousOffset === undefined) {
-    editor.dispatch({
-      effects: EditorView.scrollIntoView(initialSelection.head, caretScrollDefaults),
-    });
+  // Reapply the caret margin because styling can change the initial scroll geometry
+  if (initialScroll !== undefined) {
+    editor.dispatch({ effects: initialScroll });
   }
 
   applyReducedMotion(isMotionReduced());

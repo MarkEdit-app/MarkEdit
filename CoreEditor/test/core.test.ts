@@ -138,18 +138,28 @@ describe('resetEditor caret scrolling', () => {
     { anchor: 5, head: 5, expectedHead: 5 },
     { anchor: 10, head: 3, expectedHead: 3 },
     { anchor: 100, head: 200, expectedHead: 13 },
-  ])('restores the caret margin after styling for $anchor -> $head', async ({ anchor, head, expectedHead }) => {
+  ])('requests initial scrolling and reapplies the caret margin after styling for $anchor -> $head', async ({ anchor, head, expectedHead }) => {
     const scrollIntoView = jest.spyOn(EditorView, 'scrollIntoView');
     const setUp = jest.spyOn(styling, 'setUp');
+    const update = jest.spyOn(EditorView.prototype, 'update');
 
     try {
       await resetEditor('Hello, World!', { anchor, head });
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
-      expect(scrollIntoView).toHaveBeenLastCalledWith(expectedHead, caretScrollDefaults);
-      expect(scrollIntoView.mock.invocationCallOrder[0]).toBeGreaterThan(setUp.mock.invocationCallOrder[0]);
+      expect(scrollIntoView).toHaveBeenCalledWith(expectedHead, caretScrollDefaults);
+      expect(scrollIntoView.mock.invocationCallOrder[0]).toBeLessThan(setUp.mock.invocationCallOrder[0]);
+
+      const initialScroll = scrollIntoView.mock.results[0].value;
+      const scrollUpdate = update.mock.calls.findIndex(([transactions]) =>
+        transactions.some(transaction => transaction.effects.some(effect => effect === initialScroll)),
+      );
+
+      expect(scrollUpdate).toBeGreaterThanOrEqual(0);
+      expect(update.mock.invocationCallOrder[scrollUpdate]).toBeGreaterThan(setUp.mock.invocationCallOrder[0]);
     } finally {
       scrollIntoView.mockRestore();
       setUp.mockRestore();
+      update.mockRestore();
     }
   });
 
