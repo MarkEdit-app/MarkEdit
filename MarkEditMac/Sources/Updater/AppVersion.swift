@@ -11,11 +11,11 @@ import Foundation
 /**
  [GitHub Releases API](https://api.github.com/repos/MarkEdit-app/MarkEdit/releases/latest)
  */
-struct AppVersion: Decodable {
+struct AppVersion: Decodable, Sendable {
   private static let universalArchive = "UpdateArchive.zip"
   private static let appleSiliconArchive = "UpdateArchive-arm64.zip"
 
-  struct Asset: Decodable {
+  struct Asset: Decodable, Sendable {
     let name: String
     let browserDownloadUrl: String
   }
@@ -62,6 +62,6 @@ struct AppVersion: Decodable {
 
  It typically contains extra information for better updating experience.
  */
-struct ReleaseInfo: Decodable {
+struct ReleaseInfo: Decodable, Sendable {
   let minOSVer: String
 }

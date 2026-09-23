@@ -97,6 +97,7 @@
 		87BB5A2C2E929BAA00A17C14 /* AppExceptionCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BB5A292E929BA700A17C14 /* AppExceptionCatcher.swift */; };
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
+		87C600000000000000000001 /* EditorDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C600000000000000000002 /* EditorDocumentTests.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
 		87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */; };
 		87DA0000000000000000E00B /* UpdateInstaller.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E000 /* UpdateInstaller.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -139,6 +140,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 872923FF2951525C007156B1;
 			remoteInfo = QuickLookMac;
+		};
+		87C600000000000000000003 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 870A519A294700DE0095C7EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 870A51A1294700DE0095C7EB;
+			remoteInfo = MarkEditMac;
 		};
 		87DA0000000000000000E00A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -268,6 +276,8 @@
 		87BEF30029A88F6800596E17 /* AppCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCustomization.swift; sourceTree = "<group>"; };
 		87BFF238298AAC75006C31E4 /* MarkEditTools */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditTools; sourceTree = "<group>"; };
 		87C3CBFA29545944002A3436 /* MarkEditKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditKit; sourceTree = "<group>"; };
+		87C600000000000000000002 /* EditorDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDocumentTests.swift; sourceTree = "<group>"; };
+		87C600000000000000000004 /* MarkEditMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkEditMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceTextField.swift; sourceTree = "<group>"; };
 		87DA0000000000000000E000 /* UpdateInstaller.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = UpdateInstaller.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		87DA0000000000000000E010 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -327,6 +337,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		87C600000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		87DA0000000000000000E007 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -361,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				870A51A2294700DE0095C7EB /* MarkEdit.app */,
+				87C600000000000000000004 /* MarkEditMacTests.xctest */,
 				872924002951525C007156B1 /* QuickLookExtension.appex */,
 				87DA0000000000000000E000 /* UpdateInstaller.xpc */,
 			);
@@ -372,6 +390,7 @@
 			children = (
 				870F178C2985774D00003DA7 /* Modules */,
 				870A51C52947103A0095C7EB /* Sources */,
+				87C600000000000000000006 /* Tests */,
 				870A51C229470D5C0095C7EB /* Resources */,
 				870A51C129470CAB0095C7EB /* Supporting Files */,
 			);
@@ -688,6 +707,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		87C600000000000000000006 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				87C600000000000000000002 /* EditorDocumentTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		87DA0000000000000000E001 /* UpdateInstaller */ = {
 			isa = PBXGroup;
 			children = (
@@ -762,6 +789,23 @@
 			productReference = 872924002951525C007156B1 /* QuickLookExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		87C600000000000000000007 /* MarkEditMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87C600000000000000000008 /* Build configuration list for PBXNativeTarget "MarkEditMacTests" */;
+			buildPhases = (
+				87C600000000000000000009 /* Sources */,
+				87C600000000000000000005 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87C60000000000000000000A /* PBXTargetDependency */,
+			);
+			name = MarkEditMacTests;
+			productName = MarkEditMacTests;
+			productReference = 87C600000000000000000004 /* MarkEditMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		87DA0000000000000000E002 /* UpdateInstaller */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 87DA0000000000000000E003 /* Build configuration list for PBXNativeTarget "UpdateInstaller" */;
@@ -799,6 +843,10 @@
 					872923FF2951525C007156B1 = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					87C600000000000000000007 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 870A51A1294700DE0095C7EB;
+					};
 					87DA0000000000000000E002 = {
 						CreatedOnToolsVersion = 26.4;
 					};
@@ -820,6 +868,7 @@
 			projectRoot = "";
 			targets = (
 				870A51A1294700DE0095C7EB /* MarkEditMac */,
+				87C600000000000000000007 /* MarkEditMacTests */,
 				872923FF2951525C007156B1 /* QuickLookMac */,
 				87DA0000000000000000E002 /* UpdateInstaller */,
 			);
@@ -1006,6 +1055,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		87C600000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87C600000000000000000001 /* EditorDocumentTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		87DA0000000000000000E006 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1036,6 +1093,11 @@
 		87BFF24E298AB754006C31E4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 87BFF24D298AB754006C31E4 /* SwiftLint */;
+		};
+		87C60000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 870A51A1294700DE0095C7EB /* MarkEditMac */;
+			targetProxy = 87C600000000000000000003 /* PBXContainerItemProxy */;
 		};
 		87DA0000000000000000E009 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1339,6 +1401,42 @@
 			};
 			name = Release;
 		};
+		87C60000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.cyan.markedit.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarkEdit.app/Contents/MacOS/MarkEdit";
+			};
+			name = Debug;
+		};
+		87C60000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.cyan.markedit.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MarkEdit.app/Contents/MacOS/MarkEdit";
+			};
+			name = Release;
+		};
 		87DA0000000000000000E004 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8743B26229593B2000F83DAE /* Build.xcconfig */;
@@ -1411,6 +1509,15 @@
 			buildConfigurations = (
 				872924122951525C007156B1 /* Debug */,
 				872924132951525C007156B1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		87C600000000000000000008 /* Build configuration list for PBXNativeTarget "MarkEditMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87C60000000000000000000B /* Debug */,
+				87C60000000000000000000C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

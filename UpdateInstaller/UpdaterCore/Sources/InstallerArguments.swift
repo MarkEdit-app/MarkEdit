@@ -7,7 +7,7 @@
 import Foundation
 
 /// Arguments shared by the launcher and detached installer.
-public struct InstallerArguments: Equatable {
+public struct InstallerArguments: Equatable, Sendable {
   public static let installFlag = "--install"
   public let stagedPath: String
   public let processIdentifier: Int32

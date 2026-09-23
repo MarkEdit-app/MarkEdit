@@ -564,7 +564,7 @@ final class NativeBridgeAPI: NativeBridge {
 }
 
 /// Represents a menu item in native menus.
-public struct WebMenuItem: Decodable {
+public struct WebMenuItem: Decodable, Sendable {
   public var separator: Bool
   public var title: String?
   public var icon: String?
@@ -599,7 +599,7 @@ public struct WebMenuItem: Decodable {
 }
 
 /// "CGPoint-fashion" point.
-public struct WebPoint: Decodable {
+public struct WebPoint: Decodable, Sendable {
   public var x: Double
   public var y: Double
 
@@ -615,7 +615,7 @@ public struct WebPoint: Decodable {
   }
 }
 
-public struct SavePanelOptions: Decodable {
+public struct SavePanelOptions: Decodable, Sendable {
   /// String representation of the file, if applicable.
   public var string: String?
   /// Base64 representation of the file, if applicable.
@@ -637,7 +637,7 @@ public struct SavePanelOptions: Decodable {
   }
 }
 
-public struct CreateFileOptions: Decodable {
+public struct CreateFileOptions: Decodable, Sendable {
   /// File path.
   ///
   /// It must be one that the app can access. See the [wiki](https://github.com/MarkEdit-app/MarkEdit/wiki/Customization#grant-folder-access) for more details.
@@ -669,7 +669,7 @@ public struct CreateFileOptions: Decodable {
   }
 }
 
-public struct MoveFileOptions: Decodable {
+public struct MoveFileOptions: Decodable, Sendable {
   /// Source file path.
   public var source: String
   /// Destination file path.

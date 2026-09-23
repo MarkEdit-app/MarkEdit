@@ -11,11 +11,12 @@ import os.log
 /// URL scheme handler to load local images.
 ///
 /// E.g., image-loader://Image.png
+@MainActor
 public final class EditorImageLoader: NSObject, WKURLSchemeHandler {
   public static let scheme = "image-loader"
-  private let getBaseURL: () -> URL?
+  private let getBaseURL: @MainActor () -> URL?
 
-  public init(getBaseURL: @escaping () -> URL?) {
+  public init(getBaseURL: @escaping @MainActor () -> URL?) {
     self.getBaseURL = getBaseURL
   }
 

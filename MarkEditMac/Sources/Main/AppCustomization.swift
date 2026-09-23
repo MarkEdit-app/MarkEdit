@@ -72,7 +72,7 @@ struct AppCustomization {
   }
 
   var fileURL: URL {
-    URL.documentsDirectory.appending(
+    ApplicationEnvironment.documentsDirectory.appending(
       path: fileType.fileName,
       directoryHint: fileType.isDirectory ? .isDirectory : .notDirectory
     ).resolvingSymbolicLink
@@ -145,16 +145,16 @@ extension AppCustomization {
   private static let safeModeKey = "launch-safe-mode"
 
   static let isSafeMode: Bool = {
-    let enabled = UserDefaults.standard.bool(forKey: safeModeKey)
-    UserDefaults.standard.removeObject(forKey: safeModeKey)
+    let enabled = ApplicationEnvironment.preferences.bool(forKey: safeModeKey)
+    ApplicationEnvironment.preferences.removeObject(forKey: safeModeKey)
     return enabled
   }()
 
   static func requestSafeMode() {
-    UserDefaults.standard.set(true, forKey: safeModeKey)
+    ApplicationEnvironment.preferences.set(true, forKey: safeModeKey)
   }
 
   static func cancelSafeMode() {
-    UserDefaults.standard.removeObject(forKey: safeModeKey)
+    ApplicationEnvironment.preferences.removeObject(forKey: safeModeKey)
   }
 }

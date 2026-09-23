@@ -29,6 +29,7 @@ public protocol EditorModuleCompletionDelegate: AnyObject {
   func editorCompletionDidSelectBottom(_ sender: EditorModuleCompletion)
 }
 
+@MainActor
 public final class EditorModuleCompletion: NativeModuleCompletion {
   private weak var delegate: EditorModuleCompletionDelegate?
   private var cachedTokens = [String]()

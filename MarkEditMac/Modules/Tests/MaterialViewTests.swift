@@ -18,8 +18,8 @@ final class MaterialViewTests: XCTestCase {
   /// Production discovers the blur backdrop structurally (by its gaussianBlur filter) with no
   /// private ivar names. This guards that the realized layer tree still matches that contract,
   /// and that the inputs we mutate are settable.
-  func testStructuralDiscoveryFindsBackdrop() throws {
-    let view = makeRealizedView()
+  func testStructuralDiscoveryFindsBackdrop() async throws {
+    let view = try await makeRealizedView()
     let backdrop = try realizedBackdrop(in: view)
 
     let names = Set((backdrop.filters ?? []).compactMap {
@@ -38,8 +38,8 @@ final class MaterialViewTests: XCTestCase {
   /// Production matches the backdrop by three independent traits (filter, name, class) for
   /// resilience. Assert each is present so losing any single trait fails loudly here, while
   /// production still finds the backdrop via the others.
-  func testBackdropCarriesAllKnownTraits() throws {
-    let view = makeRealizedView()
+  func testBackdropCarriesAllKnownTraits() async throws {
+    let view = try await makeRealizedView()
     let backdrop = try realizedBackdrop(in: view)
 
     let filterNames = Set((backdrop.filters ?? []).compactMap {
@@ -80,7 +80,7 @@ private extension MaterialViewTests {
     )
   }
 
-  func makeRealizedView() -> EffectView {
+  func makeRealizedView() async throws -> EffectView {
     let view = EffectView()
     view.material = .titlebar
     view.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
@@ -90,9 +90,7 @@ private extension MaterialViewTests {
     window.makeKeyAndOrderFront(nil)
 
     // Give the visual effect view a chance to build its material layers
-    let expectation = XCTestExpectation(description: "Material layer realization")
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { expectation.fulfill() }
-    wait(for: [expectation], timeout: 2.0)
+    try await Task.sleep(for: .seconds(1))
     return view
   }
 

@@ -10,7 +10,7 @@ import Security
 import UpdaterCore
 
 /// The app this service is embedded in, nil when it isn't where it is expected to be.
-let hostBundlePath = HostBundle.path(ofServiceAt: Bundle.main.bundleURL)
+nonisolated let hostBundlePath = HostBundle.path(ofServiceAt: Bundle.main.bundleURL)
 
 // Re-executed by the service itself to install the update once the app has quit
 if CommandLine.arguments.contains(InstallerArguments.installFlag) {

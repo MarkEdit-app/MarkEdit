@@ -89,6 +89,7 @@ extension EditorStatusView {
 
 // MARK: - Private
 
+@MainActor
 private enum Constants {
   static let titleFont: NSFont = .monospacedDigitSystemFont(ofSize: 11, weight: .regular)
 }

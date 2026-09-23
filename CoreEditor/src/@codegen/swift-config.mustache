@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct {{moduleName}}: Encodable {
+public struct {{moduleName}}: Encodable, Sendable {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}

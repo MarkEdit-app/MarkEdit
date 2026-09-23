@@ -9,13 +9,13 @@
 
 import Foundation
 
-public enum EditorHost: String, Codable {
+public enum EditorHost: String, Codable, Sendable {
   case mainApp = "mainApp"
   case quicklook = "quicklook"
 }
 
 /// Font face attributes to control the font styles.
-public struct WebFontFace: Codable {
+public struct WebFontFace: Codable, Sendable {
   public var family: String
   public var weight: String?
   public var style: String?
@@ -41,21 +41,21 @@ public struct WebFontFace: Codable {
   }
 }
 
-public enum EditorInvisiblesBehavior: String, Codable {
+public enum EditorInvisiblesBehavior: String, Codable, Sendable {
   case never = "never"
   case selection = "selection"
   case trailing = "trailing"
   case always = "always"
 }
 
-public enum EditorIndentBehavior: String, Codable {
+public enum EditorIndentBehavior: String, Codable, Sendable {
   case never = "never"
   case paragraph = "paragraph"
   case line = "line"
 }
 
 /// Information about the runtime.
-public struct RuntimeInfo: Codable {
+public struct RuntimeInfo: Codable, Sendable {
   /// Application version, such as `1.0`.
   public var appVersion: String
   /// Application build number, such as `100`.
@@ -89,7 +89,7 @@ public struct RuntimeInfo: Codable {
   }
 }
 
-public struct SelectionRange: Codable {
+public struct SelectionRange: Codable, Sendable {
   public var anchor: Int
   public var head: Int
 
@@ -111,7 +111,7 @@ public struct SelectionRange: Codable {
   }
 }
 
-public struct TextTokenizeAnchor: Codable {
+public struct TextTokenizeAnchor: Codable, Sendable {
   public var text: String
   public var pos: Int
   public var offset: Int

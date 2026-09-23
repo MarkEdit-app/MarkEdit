@@ -12,7 +12,7 @@ import AppKit
 @MainActor
 final class FontManagerDelegate {
   static let shared = FontManagerDelegate()
-  var fontDidChange: ((NSFont) -> Void)?
+  var fontDidChange: (@MainActor (NSFont) -> Void)?
 
   @objc func changeFont(_ sender: NSFontManager?) {
     guard let newFont = sender?.convert(.systemFont(ofSize: NSFont.systemFontSize)) else {

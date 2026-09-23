@@ -8,10 +8,11 @@ import AppKit
 import AppKitExtensions
 import SwiftUI
 
+@MainActor
 public struct FontPicker: View {
-  public static let defaultFontSize: Double = 15
-  public static let minimumFontSize: Double = 9
-  public static let maximumFontSize: Double = 96
+  nonisolated public static let defaultFontSize: Double = 15
+  nonisolated public static let minimumFontSize: Double = 9
+  nonisolated public static let maximumFontSize: Double = 96
 
   private let configuration: FontPickerConfiguration
   private let handlers: FontPickerHandlers

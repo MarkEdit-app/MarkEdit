@@ -92,6 +92,7 @@ public extension WKWebViewConfiguration {
 
 // MARK: - WebKitConfigSPI
 
+@MainActor
 public protocol WebKitConfigSPI: NSObject {}
 extension WKWebView: WebKitConfigSPI {}
 extension WKWebViewConfiguration: WebKitConfigSPI {}

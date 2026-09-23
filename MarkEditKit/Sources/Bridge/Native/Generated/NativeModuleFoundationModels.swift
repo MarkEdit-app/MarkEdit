@@ -174,7 +174,7 @@ final class NativeBridgeFoundationModels: NativeBridge {
   }
 }
 
-public struct LanguageModelGenerationOptions: Decodable {
+public struct LanguageModelGenerationOptions: Decodable, Sendable {
   public var attachments: [String]?
   public var sampling: LanguageModelSampling?
   public var temperature: Double?
@@ -196,7 +196,7 @@ public struct LanguageModelGenerationOptions: Decodable {
   }
 }
 
-public struct LanguageModelSampling: Decodable {
+public struct LanguageModelSampling: Decodable, Sendable {
   public var greedy: Bool?
   public var top_k: Int?
   public var top_p: Double?

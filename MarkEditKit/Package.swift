@@ -28,5 +28,13 @@ let package = Package(
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
       ]
     ),
+    .testTarget(
+      name: "MarkEditKitTests",
+      dependencies: ["MarkEditCore", "MarkEditKit"],
+      path: "Tests",
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
   ]
 )

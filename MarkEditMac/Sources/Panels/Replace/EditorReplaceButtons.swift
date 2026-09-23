@@ -9,6 +9,7 @@ import AppKit
 import SharedUI
 
 final class EditorReplaceButtons: RoundedButtonGroup {
+  @MainActor
   private enum Constants {
     static let font: NSFont = .systemFont(ofSize: 12)
   }

@@ -12,6 +12,7 @@ import MarkEditKit
 /**
  UI to show statistics of text.
  */
+@MainActor
 public final class StatisticsController: NSViewController {
   private enum Constants {
     static let contentWidth: Double = 266
@@ -129,8 +130,6 @@ public final class StatisticsController: NSViewController {
     contentView?.frame = view.bounds
   }
 }
-
-extension ReadableContentPair: @unchecked @retroactive Sendable {}
 
 // MARK: - Private
 

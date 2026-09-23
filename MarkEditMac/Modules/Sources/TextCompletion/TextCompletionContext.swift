@@ -9,6 +9,7 @@ import AppKit
 /**
  Panel interface used to render word completions.
  */
+@MainActor
 public protocol TextCompletionPanelProtocol {}
 
 /**
@@ -48,7 +49,7 @@ public final class TextCompletionContext {
     effectViewType: NSView.Type,
     tintColor: NSColor? = nil,
     localizable: TextCompletionLocalizable,
-    commitCompletion: @escaping @Sendable () -> Void
+    commitCompletion: @escaping @MainActor () -> Void
   ) {
     self.effectViewType = effectViewType
     self.tintColor = tintColor
@@ -135,7 +136,7 @@ public final class TextCompletionContext {
 
   private let effectViewType: NSView.Type
   private let localizable: TextCompletionLocalizable
-  private let commitCompletion: @Sendable () -> Void
+  private let commitCompletion: @MainActor () -> Void
 }
 
 // MARK: - Private

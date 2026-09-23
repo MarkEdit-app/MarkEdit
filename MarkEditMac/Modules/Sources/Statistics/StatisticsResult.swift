@@ -6,7 +6,7 @@
 
 import Foundation
 
-struct StatisticsResult {
+struct StatisticsResult: Sendable {
   let characters: Int
   let paragraphs: Int
   let comments: Int

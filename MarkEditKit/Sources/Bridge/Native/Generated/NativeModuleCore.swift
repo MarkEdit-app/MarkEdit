@@ -276,17 +276,17 @@ final class NativeBridgeCore: NativeBridge {
   }
 }
 
-public enum NativeModuleCoreNotifyWindowResizeMethod: String, Codable {
+public enum NativeModuleCoreNotifyWindowResizeMethod: String, Codable, Sendable {
   case to = "to"
   case by = "by"
 }
 
-public enum NativeModuleCoreNotifyWindowMoveMethod: String, Codable {
+public enum NativeModuleCoreNotifyWindowMoveMethod: String, Codable, Sendable {
   case to = "to"
   case by = "by"
 }
 
-public struct LineColumnInfo: Decodable {
+public struct LineColumnInfo: Decodable, Sendable {
   public var contentLength: Int
   public var lineNumber: Int
   public var columnText: String

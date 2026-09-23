@@ -26,7 +26,7 @@ final class TextCompletionPanel: NSPanel, TextCompletionPanelProtocol {
     effectViewType: NSView.Type,
     tintColor: NSColor?,
     localizable: TextCompletionLocalizable,
-    commitCompletion: @escaping () -> Void
+    commitCompletion: @escaping @MainActor () -> Void
   ) {
     super.init(
       contentRect: .zero,

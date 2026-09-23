@@ -37,6 +37,7 @@ public protocol EditorModuleCoreDelegate: AnyObject {
   func editorCoreLightWarning(_ sender: EditorModuleCore)
 }
 
+@MainActor
 public final class EditorModuleCore: NativeModuleCore {
   private weak var delegate: EditorModuleCoreDelegate?
 

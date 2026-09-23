@@ -18,4 +18,7 @@ REGISTER_APP_GROUPS = NO
 MARKETING_VERSION = 1.36.0
 CURRENT_PROJECT_VERSION = 96
 
+// Coverage is opt-in; hosted tests must not instrument ordinary app builds.
+ENABLE_CODE_COVERAGE = NO
+
 #include? "Local.xcconfig"
