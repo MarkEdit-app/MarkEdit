@@ -26,29 +26,21 @@ final class RuntimeTests: XCTestCase {
     await fulfillment(of: [loaded], timeout: 10)
     try XCTUnwrap(navigationDelegate.result).get()
 
-    _ = try await evaluateJavaScript("1 + 1", in: webView, stage: "basic evaluation")
-    let computedColorScript = """
+    let result = try await webView.evaluateJavaScript("""
       const element = document.createElement('div');
       element.style.backgroundColor = 'color-mix(in srgb, rgb(255, 255, 255) 40%, transparent)';
       document.body.append(element);
       const color = getComputedStyle(element).backgroundColor;
-      color;
-      """
-    _ = try await evaluateJavaScript(computedColorScript, in: webView, stage: "computed color")
 
-    let canvasPaintScript = """
       const canvas = document.createElement('canvas');
       canvas.width = 1;
       canvas.height = 1;
+      // Avoid GPU-backed readback failures on virtualized macOS runners.
       const context = canvas.getContext('2d', { willReadFrequently: true });
       context.fillStyle = color;
       context.fillRect(0, 0, 1, 1);
-      context.fillStyle;
-      """
-    _ = try await evaluateJavaScript(canvasPaintScript, in: webView, stage: "canvas paint")
-
-    let readbackScript = "[...context.getImageData(0, 0, 1, 1).data].join(',');"
-    let result = try await evaluateJavaScript(readbackScript, in: webView, stage: "canvas readback") as? String
+      [...context.getImageData(0, 0, 1, 1).data].join(',');
+      """) as? String
 
     XCTAssertEqual(result, "255,255,255,102")
   }
@@ -265,19 +257,6 @@ final class RuntimeTests: XCTestCase {
 // MARK: - Private
 
 private extension RuntimeTests {
-  func evaluateJavaScript(_ script: String, in webView: WKWebView, stage: String) async throws -> Any? {
-    print("Color-mix test starting: \(stage)")
-    do {
-      let result = try await webView.evaluateJavaScript(script)
-      print("Color-mix test completed: \(stage), result: \(String(describing: result))")
-      return result
-    } catch {
-      let nsError = error as NSError
-      print("Color-mix test failed: \(stage), domain: \(nsError.domain), code: \(nsError.code), userInfo: \(nsError.userInfo), error: \(String(reflecting: error))")
-      throw error
-    }
-  }
-
   func testExistenceOfSelector(object: AnyObject, selector: String) {
     XCTAssert(object.responds(to: sel_getUid(selector)), "Missing \(selector) in \(object.self)")
   }
