@@ -10,7 +10,7 @@ on:
 jobs:
   markedit-mac:
     name: MarkEditMac
-    runs-on: macos-27
+    runs-on: xcode-27
     if: github.event.pull_request.draft == false
     env:
       node-version: '22.x'
