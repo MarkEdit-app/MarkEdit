@@ -46,7 +46,15 @@ jobs:
 
       - name: Test ModulesTests
         run: |
-          xcodebuild test -project ../MarkEdit.xcodeproj -scheme ModulesTests -destination 'platform=macOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+          xcodebuild test -project ../MarkEdit.xcodeproj -scheme ModulesTests -destination 'platform=macOS' -resultBundlePath "$RUNNER_TEMP/ModulesTests.xcresult" CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+
+      - name: Upload module test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ModulesTests-results
+          path: ${{ runner.temp }}/ModulesTests.xcresult
+          retention-days: 7
 
       - name: Test UpdaterCoreTests
         run: |
