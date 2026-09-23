@@ -17,6 +17,15 @@ final class RuntimeTests: XCTestCase {
 
   func testColorMixComputedStyle() async throws {
     let webView = WKWebView()
+    let loaded = expectation(description: "Test document loaded")
+    let navigationDelegate = TestNavigationDelegate(loaded: loaded)
+    webView.navigationDelegate = navigationDelegate
+    defer { webView.navigationDelegate = nil }
+
+    webView.loadHTMLString("<!doctype html><html><body></body></html>", baseURL: nil)
+    await fulfillment(of: [loaded], timeout: 10)
+    try XCTUnwrap(navigationDelegate.result).get()
+
     let result = try await webView.evaluateJavaScript("""
       const element = document.createElement('div');
       element.style.backgroundColor = 'color-mix(in srgb, rgb(255, 255, 255) 40%, transparent)';
@@ -253,5 +262,30 @@ private extension RuntimeTests {
 
   func testExistenceOfClass(named className: String) {
     XCTAssertNotNil(NSClassFromString(className), "Class \(className) cannot be found")
+  }
+}
+
+@MainActor
+private final class TestNavigationDelegate: NSObject, WKNavigationDelegate {
+  let loaded: XCTestExpectation
+  private(set) var result: Result<Void, Error>?
+
+  init(loaded: XCTestExpectation) {
+    self.loaded = loaded
+  }
+
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    result = .success(())
+    loaded.fulfill()
+  }
+
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    result = .failure(error)
+    loaded.fulfill()
+  }
+
+  func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    result = .failure(error)
+    loaded.fulfill()
   }
 }
