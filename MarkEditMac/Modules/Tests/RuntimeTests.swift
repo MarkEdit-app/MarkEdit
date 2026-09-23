@@ -236,8 +236,8 @@ final class RuntimeTests: XCTestCase {
     }
 
     item.ensureImageVisibility()
-
     XCTAssertIdentical(item.image, image)
+
     if #available(macOS 27.0, *) {
       XCTAssertEqual(item.preferredImageVisibility, .visible)
     }
