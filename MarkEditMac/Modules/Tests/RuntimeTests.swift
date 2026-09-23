@@ -274,17 +274,17 @@ private final class TestNavigationDelegate: NSObject, WKNavigationDelegate {
     self.loaded = loaded
   }
 
-  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
     result = .success(())
     loaded.fulfill()
   }
 
-  func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
     result = .failure(error)
     loaded.fulfill()
   }
 
-  func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+  func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
     result = .failure(error)
     loaded.fulfill()
   }
