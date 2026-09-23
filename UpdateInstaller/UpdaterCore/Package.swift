@@ -21,9 +21,6 @@ let package = Package(
     .target(
       name: "UpdaterCore",
       path: "Sources",
-      swiftSettings: [
-        .enableExperimentalFeature("StrictConcurrency")
-      ],
       plugins: [
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
       ]
