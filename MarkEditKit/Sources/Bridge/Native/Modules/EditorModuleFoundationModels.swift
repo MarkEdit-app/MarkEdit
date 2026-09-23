@@ -26,11 +26,9 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
   }
 
   public func availability(modelName: String) async -> String {
-  #if canImport(FoundationModels, _version: 2)
     if #available(anyAppleOS 27.0, *) {
       return availability(of: languageModel(named: modelName)).jsonEncoded
     }
-  #endif
 
     return defaultModelAvailability.jsonEncoded
   }
@@ -39,7 +37,6 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     let identifier = UUID().uuidString
     let session: LanguageModelSession
 
-  #if canImport(FoundationModels, _version: 2)
     if #available(anyAppleOS 27.0, *) {
       session = LanguageModelSession(
         model: languageModel(named: modelName),
@@ -48,9 +45,6 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     } else {
       session = LanguageModelSession(instructions: instructions)
     }
-  #else
-    session = LanguageModelSession(instructions: instructions)
-  #endif
 
     sessionPool[identifier] = session
     return identifier
@@ -170,23 +164,18 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
 
 // MARK: - Private
 
-@available(anyAppleOS 26.0, *)
 private extension EditorModuleFoundationModels {
   @PromptBuilder
   func buildPrompt(_ promptText: String, attachments: [String]?) -> Prompt {
     promptText
 
-  #if canImport(FoundationModels, _version: 2)
     if #available(anyAppleOS 27.0, *) {
       for image in (attachments ?? []).compactMap(CIImage.init(base64Encoded:)) {
         Attachment(image)
       }
     }
-  #endif
   }
 }
-
-#if canImport(FoundationModels, _version: 2)
 
 @available(anyAppleOS 27.0, *)
 private extension EditorModuleFoundationModels {
@@ -215,23 +204,13 @@ private extension EditorModuleFoundationModels {
   }
 }
 
-#endif
-
 private extension GenerationOptions {
   init(_ options: LanguageModelGenerationOptions?) {
-  #if canImport(FoundationModels, _version: 2)
     self.init(
       samplingMode: SamplingMode(options?.sampling),
       temperature: options?.temperature,
       maximumResponseTokens: options?.maximumResponseTokens
     )
-  #else
-    self.init(
-      sampling: SamplingMode(options?.sampling),
-      temperature: options?.temperature,
-      maximumResponseTokens: options?.maximumResponseTokens
-    )
-  #endif
   }
 }
 
