@@ -71,8 +71,6 @@ For bugs, [open an issue](https://github.com/MarkEdit-app/MarkEdit/issues/new) o
 
 Please refer to the [wiki page](https://github.com/MarkEdit-app/MarkEdit/wiki/Development) for development instructions.
 
-The `xcode27` branch requires Xcode 27 or later to build. It still supports macOS 26, and its shared packages support iOS 26, so runtime availability checks for OS 27 APIs remain necessary.
-
 ## Acknowledgments
 
 Built on [CodeMirror 6](https://codemirror.net/), with [ts-gyb](https://github.com/microsoft/ts-gyb) for code generation.
