@@ -225,6 +225,23 @@ final class RuntimeTests: XCTestCase {
     let item = NSMenuItem.systemWritingToolsItem
     XCTAssertNotNil(item)
   }
+
+  func testEnsureMenuImageVisibility() {
+    let item = NSMenuItem(title: "Test")
+    let image = NSImage(size: CGSize(width: 16, height: 16))
+    item.image = image
+
+    if #available(macOS 27.0, *) {
+      item.preferredImageVisibility = .hidden
+    }
+
+    item.ensureImageVisibility()
+
+    XCTAssertIdentical(item.image, image)
+    if #available(macOS 27.0, *) {
+      XCTAssertEqual(item.preferredImageVisibility, .visible)
+    }
+  }
 }
 
 // MARK: - Private
