@@ -17,6 +17,15 @@ final class RuntimeTests: XCTestCase {
 
   func testColorMixComputedStyle() async throws {
     let webView = WKWebView()
+    let loaded = expectation(description: "Test document loaded")
+    let navigationDelegate = TestNavigationDelegate(loaded: loaded)
+    webView.navigationDelegate = navigationDelegate
+    defer { webView.navigationDelegate = nil }
+
+    webView.loadHTMLString("<!doctype html><html><body></body></html>", baseURL: nil)
+    await fulfillment(of: [loaded], timeout: 10)
+    try XCTUnwrap(navigationDelegate.result).get()
+
     let result = try await webView.evaluateJavaScript("""
       const element = document.createElement('div');
       element.style.backgroundColor = 'color-mix(in srgb, rgb(255, 255, 255) 40%, transparent)';
@@ -26,7 +35,9 @@ final class RuntimeTests: XCTestCase {
       const canvas = document.createElement('canvas');
       canvas.width = 1;
       canvas.height = 1;
-      const context = canvas.getContext('2d');
+
+      // Avoid GPU-backed readback failures on virtualized macOS runners
+      const context = canvas.getContext('2d', { willReadFrequently: true });
       context.fillStyle = color;
       context.fillRect(0, 0, 1, 1);
       [...context.getImageData(0, 0, 1, 1).data].join(',');
@@ -225,6 +236,23 @@ final class RuntimeTests: XCTestCase {
     let item = NSMenuItem.systemWritingToolsItem
     XCTAssertNotNil(item)
   }
+
+  func testEnsureMenuImageVisibility() {
+    let item = NSMenuItem(title: "Test")
+    let image = NSImage(size: CGSize(width: 16, height: 16))
+    item.image = image
+
+    if #available(macOS 27.0, *) {
+      item.preferredImageVisibility = .hidden
+    }
+
+    item.ensureImageVisibility()
+    XCTAssertIdentical(item.image, image)
+
+    if #available(macOS 27.0, *) {
+      XCTAssertEqual(item.preferredImageVisibility, .visible)
+    }
+  }
 }
 
 // MARK: - Private
@@ -236,5 +264,30 @@ private extension RuntimeTests {
 
   func testExistenceOfClass(named className: String) {
     XCTAssertNotNil(NSClassFromString(className), "Class \(className) cannot be found")
+  }
+}
+
+@MainActor
+private final class TestNavigationDelegate: NSObject, WKNavigationDelegate {
+  let loaded: XCTestExpectation
+  private(set) var result: Result<Void, Error>?
+
+  init(loaded: XCTestExpectation) {
+    self.loaded = loaded
+  }
+
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
+    result = .success(())
+    loaded.fulfill()
+  }
+
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
+    result = .failure(error)
+    loaded.fulfill()
+  }
+
+  func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
+    result = .failure(error)
+    loaded.fulfill()
   }
 }
