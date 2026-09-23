@@ -99,7 +99,7 @@ public final class WebBridgeSearch {
   }
 }
 
-public struct SearchOptions: Codable {
+public struct SearchOptions: Codable, Sendable {
   public var search: String
   public var caseSensitive: Bool
   public var diacriticInsensitive: Bool
@@ -145,7 +145,7 @@ public struct SearchOptions: Codable {
   }
 }
 
-public enum SearchOperation: String, Codable {
+public enum SearchOperation: String, Codable, Sendable {
   case selectAll = "selectAll"
   case selectAllInSelection = "selectAllInSelection"
   case replaceAll = "replaceAll"
@@ -153,7 +153,7 @@ public enum SearchOperation: String, Codable {
 }
 
 /// Info to show text like "1 of 3".
-public struct SearchCounterInfo: Codable {
+public struct SearchCounterInfo: Codable, Sendable {
   /// Total number of matched items
   public var numberOfItems: Int
   /// Index for the selected item, zero-based

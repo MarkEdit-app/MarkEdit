@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct EditorConfig: Encodable {
+public struct EditorConfig: Encodable, Sendable {
   let host: EditorHost
   let text: String
   let fontFace: WebFontFace

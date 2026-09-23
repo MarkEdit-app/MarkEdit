@@ -634,7 +634,7 @@ private extension EditorDocument {
   }
 
   var closeAlwaysConfirmsChanges: Bool {
-    UserDefaults.standard.bool(forKey: NSCloseAlwaysConfirmsChanges)
+    ApplicationEnvironment.preferences.bool(forKey: NSCloseAlwaysConfirmsChanges)
   }
 
   var needsFormatting: Bool {
@@ -696,7 +696,7 @@ private extension EditorDocument {
       return // Cancelled
     }
 
-    let performClose = {
+    let performClose: @MainActor @Sendable () -> Void = {
       // isReleasedWhenClosed is not initially set to true to prevent crashes when deleting drafts.
       // However, we need to release the window in the confirmsChanges function;
       // otherwise, it will cause a memory leak.

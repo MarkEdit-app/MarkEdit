@@ -63,11 +63,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var settingsWindowController: NSWindowController?
 
   func applicationWillFinishLaunching(_ notification: Notification) {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
     NSApp.appearance = AppPreferences.General.appearance.resolved()
     EditorPreloader.shared.warmUp()
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
     AppDesign.migrateMainMenuIcons(delegate: self)
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
       Task { @MainActor in
@@ -157,6 +165,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationShouldTerminate(_ application: NSApplication) -> NSApplication.TerminateReply {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return .terminateNow
+    }
+
     if AppRuntimeConfig.autoSaveWhenIdle && NSDocumentController.shared.hasOutdatedDocuments {
       // Terminate after all outdated documents are saved
       Task {
@@ -171,12 +183,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationWillTerminate(_ notification: Notification) {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
     AppRelauncher.commit()
     AppUpdater.commitStagedUpdate()
     EditorSelectionHistory.purgeStaleEntries()
   }
 
   func shouldOpenOrCreateDocument() -> Bool {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return false
+    }
+
     if let settingsWindow = settingsWindowController?.window {
       // We don't open or create documents when the settings pane is the key and visible
       return !(settingsWindow.isKeyWindow && settingsWindow.isVisible)
@@ -190,6 +210,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension AppDelegate {
   func application(_ application: NSApplication, open urls: [URL]) {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
     for url in urls {
       // https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#using-url-schemes
       let components = URLComponents(url: url, resolvingAgainstBaseURL: false)

@@ -8,6 +8,7 @@
 import Foundation
 import MarkEditCore
 
+@MainActor
 enum EditorHistory {
   struct ClosedTab: Codable {
     let bookmark: Data

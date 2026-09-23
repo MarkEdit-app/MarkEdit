@@ -5,6 +5,7 @@
 //
 
 import XCTest
+import Testing
 @testable import UpdaterCore
 
 final class UpdaterCoreTests: XCTestCase {
@@ -118,6 +119,26 @@ final class UpdaterCoreTests: XCTestCase {
   func testRequirementIsMissingForUnsignedBundles() throws {
     let bundle = try makeBundle(name: "Unsigned", version: "1.0.0")
     XCTAssertThrowsError(try BundleVerifier.designatedRequirement(of: bundle))
+  }
+}
+
+@Test
+@MainActor
+func installerArgumentsCrossTaskBoundary() async {
+  let arguments = InstallerArguments(
+    stagedPath: "/Applications/.markedit-update-test/MarkEdit.app",
+    processIdentifier: 42,
+    relaunch: true
+  )
+
+  await withTaskGroup(of: InstallerArguments?.self) { group in
+    group.addTask {
+      InstallerArguments(parsing: ["/path/to/UpdateInstaller"] + arguments.commandLine)
+    }
+
+    for await result in group {
+      #expect(result == arguments)
+    }
   }
 }
 

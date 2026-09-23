@@ -8,6 +8,7 @@ import Foundation
 import NaturalLanguage
 import MarkEditCore
 
+@MainActor
 public final class EditorModuleTokenizer: NativeModuleTokenizer {
   public init() {}
 

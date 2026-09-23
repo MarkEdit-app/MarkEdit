@@ -38,6 +38,7 @@ public protocol EditorModuleAPIDelegate: AnyObject {
   func editorAPIRelaunchApp(_ sender: EditorModuleAPI)
 }
 
+@MainActor
 public final class EditorModuleAPI: NativeModuleAPI {
   private weak var delegate: EditorModuleAPIDelegate?
   private var fileVersionURL: URL?
@@ -255,7 +256,7 @@ public final class EditorModuleAPI: NativeModuleAPI {
     return try? JSONSerialization.data(withJSONObject: json).toString()
   #else
     Logger.assertFail("Missing implementation, consider using web api directly")
-    return []
+    return nil
   #endif
   }
 

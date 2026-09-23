@@ -79,7 +79,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
 {{#documentationLines}}
 ///{{{.}}}
 {{/documentationLines}}
-public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFromReturn}}{{^isFromReturn}}Decodable{{/isFromReturn}}{{/isFromParameter}}{{^isFromParameter}}{{#isFromReturn}}Encodable{{/isFromReturn}}{{/isFromParameter}} {
+public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFromReturn}}{{^isFromReturn}}Decodable{{/isFromReturn}}{{/isFromParameter}}{{^isFromParameter}}{{#isFromReturn}}Encodable{{/isFromReturn}}{{/isFromParameter}}, Sendable {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}
@@ -106,7 +106,7 @@ public struct {{typeName}}: {{#isFromParameter}}{{#isFromReturn}}Codable{{/isFro
 {{#documentationLines}}
 ///{{{.}}}
 {{/documentationLines}}
-public enum {{typeName}}: {{valueType}}, Codable {
+public enum {{typeName}}: {{valueType}}, Codable, Sendable {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}

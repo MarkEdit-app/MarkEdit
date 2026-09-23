@@ -49,10 +49,10 @@ enum AppPreferences {
 
     static var quitAlwaysKeepsWindows: Bool {
       get {
-        UserDefaults.standard.bool(forKey: NSQuitAlwaysKeepsWindows)
+        ApplicationEnvironment.preferences.bool(forKey: NSQuitAlwaysKeepsWindows)
       }
       set {
-        UserDefaults.standard.set(newValue, forKey: NSQuitAlwaysKeepsWindows)
+        ApplicationEnvironment.preferences.set(newValue, forKey: NSQuitAlwaysKeepsWindows)
       }
     }
   }
@@ -161,11 +161,11 @@ enum AppPreferences {
     }
 
     static var smartQuotesEnabled: Bool {
-      guard UserDefaults.standard.object(forKey: WKAutomaticQuoteSubstitutionEnabled) != nil else {
+      guard ApplicationEnvironment.preferences.object(forKey: WKAutomaticQuoteSubstitutionEnabled) != nil else {
         return NSSpellChecker.isAutomaticQuoteSubstitutionEnabled
       }
 
-      return UserDefaults.standard.bool(forKey: WKAutomaticQuoteSubstitutionEnabled)
+      return ApplicationEnvironment.preferences.bool(forKey: WKAutomaticQuoteSubstitutionEnabled)
     }
 
     static func smartQuotesOptionToggled() {
@@ -427,7 +427,7 @@ enum NewWindowBehavior: String, CompactCodableEnum {
   case newDocument
 }
 
-enum NewFilenameExtension: String, Codable, CaseIterable {
+enum NewFilenameExtension: String, Codable, CaseIterable, Sendable {
   case md
   case markdown
   case txt
@@ -459,7 +459,7 @@ extension NSWindow.TabbingMode: @retroactive Codable {}
 // MARK: - Private
 
 private extension AppPreferences {
-  static func performUpdates(action: @escaping (EditorViewController) -> Void) {
+  static func performUpdates(action: @escaping @MainActor (EditorViewController) -> Void) {
     Task { @MainActor in
       for editor in EditorPreloader.shared.viewControllers() {
         action(editor)
@@ -480,7 +480,7 @@ struct Storage<T: Codable> {
 
   var wrappedValue: T {
     get {
-      guard let data = UserDefaults.standard.object(forKey: key) as? Data else {
+      guard let data = ApplicationEnvironment.preferences.object(forKey: key) as? Data else {
         return defaultValue
       }
 
@@ -489,7 +489,7 @@ struct Storage<T: Codable> {
     }
     set {
       let data = try? Coders.encoder.encode(newValue)
-      UserDefaults.standard.set(data, forKey: key)
+      ApplicationEnvironment.preferences.set(data, forKey: key)
     }
   }
 }

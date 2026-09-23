@@ -37,7 +37,7 @@ public final class WebBridgeFoundationModels {
   }
 }
 
-public struct LanguageModelAvailability: Codable {
+public struct LanguageModelAvailability: Codable, Sendable {
   public var isAvailable: Bool
   public var unavailableReason: String?
 
@@ -59,7 +59,7 @@ public struct LanguageModelAvailability: Codable {
   }
 }
 
-public struct LanguageModelResponse: Codable {
+public struct LanguageModelResponse: Codable, Sendable {
   public var content: String?
   public var error: String?
   public var done: Bool

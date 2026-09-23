@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct EditorLocalizable: Encodable {
+public struct EditorLocalizable: Encodable, Sendable {
   let controlCharacter: String
   let foldedLines: String
   let unfoldedLines: String

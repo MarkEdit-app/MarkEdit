@@ -72,7 +72,7 @@ public extension NSColor {
   func resolvedColor(with appearance: NSAppearance = NSApp.effectiveAppearance) -> NSColor {
     var cgColor: CGColor?
     appearance.performAsCurrentDrawingAppearance {
-      // [macOS 26] Revisit this later (#1281)
+      // AppKit invokes this synchronously in our main-actor call, but its block is not annotated.
       MainActor.assumeIsolated {
         cgColor = self.cgColor
       }

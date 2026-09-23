@@ -2,7 +2,7 @@
 {{#documentationLines}}
 ///{{{.}}}
 {{/documentationLines}}
-public struct {{typeName}}: Codable {
+public struct {{typeName}}: Codable, Sendable {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}
@@ -29,7 +29,7 @@ public struct {{typeName}}: Codable {
 {{#documentationLines}}
 ///{{{.}}}
 {{/documentationLines}}
-public enum {{typeName}}: {{valueType}}, Codable {
+public enum {{typeName}}: {{valueType}}, Codable, Sendable {
   {{#members}}
   {{#documentationLines}}
   ///{{{.}}}

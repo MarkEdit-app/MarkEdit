@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 import SwiftUI
 
+@MainActor
 struct StatisticsView: View {
   private let fullResult: StatisticsResult
   private let selectionResult: StatisticsResult?

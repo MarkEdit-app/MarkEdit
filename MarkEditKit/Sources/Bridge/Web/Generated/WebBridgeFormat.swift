@@ -116,7 +116,7 @@ public final class WebBridgeFormat {
   }
 }
 
-public enum EditCommand: String, Codable {
+public enum EditCommand: String, Codable, Sendable {
   case indentLess = "indentLess"
   case indentMore = "indentMore"
   case expandSelection = "expandSelection"

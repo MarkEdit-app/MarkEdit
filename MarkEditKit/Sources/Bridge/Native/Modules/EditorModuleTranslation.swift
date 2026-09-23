@@ -9,6 +9,7 @@ import NaturalLanguage
 import Translation
 import MarkEditCore
 
+@MainActor
 public final class EditorModuleTranslation: NativeModuleTranslation {
   public init() {}
 

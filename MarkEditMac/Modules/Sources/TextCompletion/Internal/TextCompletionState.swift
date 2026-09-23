@@ -6,6 +6,7 @@
 
 import Observation
 
+@MainActor
 @Observable
 final class TextCompletionState {
   var items = [String]()

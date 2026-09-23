@@ -147,7 +147,7 @@ public final class WebBridgeConfig {
   }
 }
 
-public enum TabKeyBehavior: Int, Codable {
+public enum TabKeyBehavior: Int, Codable, Sendable {
   case insertTab = 0
   case insertTwoSpaces = 1
   case insertFourSpaces = 2

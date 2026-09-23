@@ -125,7 +125,7 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfSelector(object: NSImage(), selector: "_setTintColor:")
   }
 
-  func testExistenceOfAppKitSearchField() throws {
+  func testExistenceOfAppKitSearchField() async throws {
     if #available(macOS 27.0, *) {
       throw XCTSkip("[macOS 27] Revisit this later")
     }
@@ -136,12 +136,7 @@ final class RuntimeTests: XCTestCase {
     let searchField = NSSearchField(frame: CGRect(x: 0, y: 0, width: 240, height: 40))
     window.contentView?.addSubview(searchField)
 
-    let expectation = XCTestExpectation()
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-      expectation.fulfill()
-    }
-
-    wait(for: [expectation])
+    try await Task.sleep(for: .seconds(1))
     XCTAssertNotNil(searchField.modernBezelView)
   }
 
@@ -154,7 +149,7 @@ final class RuntimeTests: XCTestCase {
     XCTAssertEqual(item.minimumSearchFieldWidth, 500)
   }
 
-  func testRetrievingPopover() {
+  func testRetrievingPopover() async throws {
     class ContentViewController: NSViewController {
       override func loadView() {
         view = NSView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -177,12 +172,7 @@ final class RuntimeTests: XCTestCase {
       preferredEdge: .maxX
     )
 
-    let expectation = XCTestExpectation()
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-      expectation.fulfill()
-    }
-
-    wait(for: [expectation])
+    try await Task.sleep(for: .seconds(1))
     XCTAssertNotNil(popover.contentViewController?.view.window?.value(forKey: "_popover"))
     XCTAssertNotNil(popover.value(forKey: "positioningView"))
   }

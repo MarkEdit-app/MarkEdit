@@ -7,10 +7,11 @@
 import AppKit
 import SwiftUI
 
+@MainActor
 struct TextCompletionView: View {
   private var state: TextCompletionState
   private let localizable: TextCompletionLocalizable
-  private let commitCompletion: () -> Void
+  private let commitCompletion: @MainActor () -> Void
 
   private enum Constants {
     static let fontSize: Double = 14
@@ -23,7 +24,7 @@ struct TextCompletionView: View {
   init(
     state: TextCompletionState,
     localizable: TextCompletionLocalizable,
-    commitCompletion: @escaping () -> Void
+    commitCompletion: @escaping @MainActor () -> Void
   ) {
     self.state = state
     self.localizable = localizable

@@ -23,6 +23,14 @@ final class AppDocumentController: NSDocumentController {
     min(super.maximumRecentDocumentCount, 8)
   }
 
+  override func noteNewRecentDocumentURL(_ url: URL) {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
+    super.noteNewRecentDocumentURL(url)
+  }
+
   override func beginOpenPanel(_ openPanel: NSOpenPanel, forTypes inTypes: [String]?) async -> Int {
     if let defaultDirectory = AppRuntimeConfig.defaultOpenDirectory {
       setOpenPanelDirectory(defaultDirectory)
@@ -89,6 +97,13 @@ final class AppDocumentController: NSDocumentController {
     display displayDocument: Bool,
     completionHandler: @escaping (NSDocument?, Bool, (any Error)?) -> Void
   ) {
+    if ApplicationEnvironment.isRunningTests {
+      // AppKit can route opens through the shared controller even when a test supplies its own.
+      // Do not preload the editor, which loads the user's installed extensions.
+      super.openDocument(withContentsOf: url, display: false, completionHandler: completionHandler)
+      return
+    }
+
     if url.isBinaryFile {
       // Dead loop prevention
       if Bundle.main.isDefaultApp(toOpen: url) {

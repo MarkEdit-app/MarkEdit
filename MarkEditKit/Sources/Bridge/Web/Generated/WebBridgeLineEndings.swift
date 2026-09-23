@@ -35,7 +35,7 @@ public final class WebBridgeLineEndings {
   }
 }
 
-public enum LineEndings: Int, Codable {
+public enum LineEndings: Int, Codable, Sendable {
   /// Unspecified, let CodeMirror do the normalization magic.
   case unspecified = 0
   /// Line Feed, used on macOS and Unix systems.

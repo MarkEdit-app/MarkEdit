@@ -18,6 +18,7 @@ public protocol FileVersionPickerDelegate: AnyObject {
 /**
  A custom file version picker to replace Time Machine due to its performance issues.
  */
+@MainActor
 public final class FileVersionPicker: NSViewController {
   private let fileURL: URL
   private let currentText: String

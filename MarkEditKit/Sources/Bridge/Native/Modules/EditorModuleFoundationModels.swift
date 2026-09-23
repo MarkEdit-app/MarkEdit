@@ -18,6 +18,7 @@ public protocol EditorModuleFoundationModelsDelegate: AnyObject {
   )
 }
 
+@MainActor
 public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
   private weak var delegate: EditorModuleFoundationModelsDelegate?
 

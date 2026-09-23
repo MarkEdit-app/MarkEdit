@@ -9,6 +9,7 @@ import AppKit
 import AppKitExtensions
 import MarkEditKit
 
+@MainActor
 enum AppUpdater {
   private enum Constants {
     static let defaultOSVer = "1.0.0"
