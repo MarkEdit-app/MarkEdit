@@ -21,6 +21,7 @@ final class QuickLookViewController: NSViewController {
   var defaultOpenAction: Selector?
 
   private var previewDirectoryURL: URL?
+  private var previewRequestID = UUID()
   private var appearanceObservation: NSKeyValueObservation?
   private weak var observedResizeWindow: NSWindow?
 
@@ -59,7 +60,7 @@ final class QuickLookViewController: NSViewController {
     NSNib.Name("Main")
   }
 
-  deinit {
+  isolated deinit {
     NotificationCenter.default.removeObserver(self)
 
     if let mouseDownMonitor {
@@ -125,15 +126,23 @@ final class QuickLookViewController: NSViewController {
 
 extension QuickLookViewController: QLPreviewingController {
   func preparePreviewOfFile(at url: URL) async throws {
+    try Task.checkCancellation()
+    let requestID = UUID()
+    previewRequestID = requestID
+
     guard EditorIndexHtml.sharedFileExists else {
       return showSetUpGuidance()
     }
 
-    let fileURL = textFileURL(of: url)
-    previewDirectoryURL = fileURL.deletingLastPathComponent()
+    let contents = try await Self.readPreview(at: url)
+    try Task.checkCancellation()
+    guard previewRequestID == requestID else {
+      return
+    }
 
+    previewDirectoryURL = contents.url.deletingLastPathComponent()
     let config = EditorConfig.quicklookConfig(
-      fileData: try Data(contentsOf: fileURL)
+      fileData: contents.data
     )
 
     let index = [EditorIndexHtml.fromSharedContainer(config: config)]
