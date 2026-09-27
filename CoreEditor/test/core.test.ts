@@ -180,6 +180,51 @@ describe('resetEditor caret scrolling', () => {
   });
 });
 
+describe('scrollbar mouse handling', () => {
+  beforeEach(async () => {
+    tryGetEditor()?.destroy();
+    document.body.innerHTML = '';
+    await resetEditor('Hello, World!');
+
+    const scroller = window.editor.scrollDOM;
+    Object.defineProperty(scroller, 'clientWidth', { configurable: true, value: 500 });
+  });
+
+  test.each([
+    { tagName: 'div', clientX: 326 },
+    { tagName: 'span', clientX: 326 },
+    { tagName: 'div', clientX: 490 },
+    { tagName: 'span', clientX: 490 },
+  ])('does not cancel clicks on a nested cell $tagName at $clientX', ({ tagName, clientX }) => {
+    const cell = document.createElement(tagName);
+    cell.contentEditable = 'true';
+    Object.defineProperty(cell, 'clientWidth', { value: 87 });
+    window.editor.scrollDOM.appendChild(cell);
+
+    const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientX });
+    cell.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+    cell.remove();
+  });
+
+  test.each([
+    { direction: 'ltr', clientX: 484, prevented: false },
+    { direction: 'ltr', clientX: 485, prevented: false },
+    { direction: 'ltr', clientX: 486, prevented: true },
+    { direction: 'rtl', clientX: 14, prevented: true },
+    { direction: 'rtl', clientX: 15, prevented: false },
+    { direction: 'rtl', clientX: 16, prevented: false },
+  ])('preserves direct $direction scrollbar handling at $clientX', ({ direction, clientX, prevented }) => {
+    const scroller = window.editor.scrollDOM;
+    scroller.dir = direction;
+
+    const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientX });
+    scroller.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(prevented);
+  });
+});
+
 describe('performTextDrop', () => {
   beforeEach(() => {
     tryGetEditor()?.destroy();

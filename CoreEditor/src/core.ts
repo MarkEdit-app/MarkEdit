@@ -365,6 +365,11 @@ function fixWebKitWheelIssues(scrollDOM: HTMLElement) {
   //
   // Better to fix CodeMirror at some point.
   scrollDOM.addEventListener('mousedown', event => {
+    // Descendant clicks belong to editor content, not the scrollbar
+    if (event.target !== scrollDOM) {
+      return;
+    }
+
     const target = event.target as HTMLElement;
     const clientX = event.clientX;
     const clientWidth = target.clientWidth;
