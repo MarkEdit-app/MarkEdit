@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { KeyBinding } from '@codemirror/view';
+import { acceptCompletion, autocompletion, closeCompletion, completionStatus, startCompletion } from '@codemirror/autocomplete';
 import { editingState } from '../src/common/store';
+import { observeChanges } from '../src/modules/input';
 
 import * as editor from './utils/editor';
 import * as commands from '../src/modules/commands';
@@ -187,6 +189,8 @@ describe('insertCodeBlock command', () => {
 
 describe('formatContent', () => {
   afterEach(() => {
+    window.editor.destroy();
+    jest.useRealTimers();
     jest.restoreAllMocks();
     editingState.compositionEnded = true;
   });
@@ -213,6 +217,108 @@ describe('formatContent', () => {
 
     expect(commands.formatContent(true, true, false)).toBe(false);
     expect(editor.getText()).toBe('Hello  ');
+  });
+
+  const startTableCompletion = async (status: 'pending' | 'active', doc = '|') => {
+    jest.useFakeTimers();
+    editor.setUp(doc, [observeChanges(), autocompletion({
+      override: [context => ({
+        from: context.pos,
+        options: [{ label: 'Insert table', type: 'table' }],
+      })],
+    })]);
+
+    editor.selectRange(doc.length, doc.length);
+    startCompletion(window.editor);
+    if (status === 'active') {
+      await jest.advanceTimersByTimeAsync(100);
+    }
+
+    expect(completionStatus(window.editor.state)).toBe(status);
+  };
+
+  test.each(['pending', 'active'] as const)('defers background formatting during %s completion', async status => {
+    await startTableCompletion(status, 'text  \n|');
+    const state = window.editor.state;
+
+    expect(commands.formatContent(true, true, false)).toBe(false);
+    expect(window.editor.state).toBe(state);
+    expect(completionStatus(window.editor.state)).toBe(status);
+  });
+
+  test('automatically retries idle formatting after completion closes without an edit', async () => {
+    await startTableCompletion('active');
+    const notifyIdle = jest.spyOn(window.nativeModules.core, 'notifyEditorDidBecomeIdle').mockImplementation(() => {
+      commands.formatContent(true, true, false);
+    });
+
+    window.editor.dispatch({ changes: { from: 0, insert: 'text  \n' }, userEvent: '@none' });
+    await jest.advanceTimersByTimeAsync(1000);
+
+    window.editor.dispatch({ changes: { from: 0, insert: 'more\n' }, userEvent: '@none' });
+    await jest.advanceTimersByTimeAsync(1499);
+    expect(notifyIdle).not.toHaveBeenCalled();
+
+    await jest.advanceTimersByTimeAsync(1);
+    expect(notifyIdle).toHaveBeenCalledTimes(1);
+    expect(editor.getText()).toBe('more\ntext  \n|');
+    expect(completionStatus(window.editor.state)).toBe('active');
+
+    closeCompletion(window.editor);
+    await jest.advanceTimersByTimeAsync(1499);
+    expect(notifyIdle).toHaveBeenCalledTimes(1);
+    await jest.advanceTimersByTimeAsync(1);
+    expect(notifyIdle).toHaveBeenCalledTimes(2);
+    expect(editor.getText()).toBe('more\ntext\n|\n');
+  });
+
+  test('waits for reopened completion and coalesces acceptance into one retry', async () => {
+    await startTableCompletion('active');
+    const notifyIdle = jest.spyOn(window.nativeModules.core, 'notifyEditorDidBecomeIdle').mockImplementation(() => {
+      commands.formatContent(true, false, false);
+    });
+    expect(commands.formatContent(true, false, false)).toBe(false);
+    closeCompletion(window.editor);
+    await jest.advanceTimersByTimeAsync(500);
+    startCompletion(window.editor);
+    await jest.advanceTimersByTimeAsync(1500);
+    expect(completionStatus(window.editor.state)).toBe('active');
+    expect(notifyIdle).not.toHaveBeenCalled();
+    expect(editor.getText()).toBe('|');
+
+    expect(acceptCompletion(window.editor)).toBe(true);
+    await jest.advanceTimersByTimeAsync(1500);
+    expect(notifyIdle).toHaveBeenCalledTimes(1);
+    expect(editor.getText()).toBe('|Insert table\n');
+  });
+
+  test.each([true, false])('does not retry an old editor after replacement (destroyed: %s)', async destroy => {
+    await startTableCompletion('active');
+    const notifyIdle = jest.spyOn(window.nativeModules.core, 'notifyEditorDidBecomeIdle');
+    expect(commands.formatContent(true, false, false)).toBe(false);
+    closeCompletion(window.editor);
+    const previousEditor = window.editor;
+    if (destroy) {
+      previousEditor.destroy();
+    }
+
+    editor.setUp('replacement', observeChanges());
+    try {
+      await jest.advanceTimersByTimeAsync(2000);
+      expect(notifyIdle).not.toHaveBeenCalled();
+      expect(editor.getText()).toBe('replacement');
+    } finally {
+      if (!destroy) {
+        previousEditor.destroy();
+      }
+    }
+  });
+
+  test('still formats on explicit save while completion is active', async () => {
+    await startTableCompletion('active', 'text  \n|');
+    expect(commands.formatContent(true, true, true)).toBe(true);
+    expect(editor.getText()).toBe('text\n|\n');
+    expect(completionStatus(window.editor.state)).toBe(null);
   });
 });
 

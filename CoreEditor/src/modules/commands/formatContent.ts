@@ -1,10 +1,13 @@
 import { ChangeSpec, Transaction } from '@codemirror/state';
+import { completionStatus } from '@codemirror/autocomplete';
 import { isComposing } from '../../common/store';
 import { getEditorText } from '../../core';
 import { applyChangesNoScroll } from '../selection';
+import { deferredFormatting } from '../input/contentUpdates';
 
 /**
  * Format the content, usually gets called when saving files.
+ * Background requests deferred for completion resume through the editor's idle updates.
  *
  * @param insertFinalNewline Whether to insert newline at end of file
  * @param trimTrailingWhitespace Whether to remove trailing whitespaces
@@ -21,8 +24,14 @@ export default function formatContent(
   }
 
   const editor = window.editor;
-  const state = editor.state;
+  // Background edits can dismiss completion, including requests that are still pending
+  if (!userInitiated && completionStatus(editor.state) !== null) {
+    deferredFormatting.add(editor);
+    return false;
+  }
 
+  deferredFormatting.delete(editor);
+  const state = editor.state;
   const apply = (changes: ChangeSpec) => {
     applyChangesNoScroll(changes, {
       annotations: Transaction.addToHistory.of(userInitiated),
