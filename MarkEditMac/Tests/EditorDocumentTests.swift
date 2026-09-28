@@ -1,4 +1,5 @@
 import AppKit
+import PDFKit
 import XCTest
 @testable import MarkEdit
 
@@ -7,6 +8,7 @@ final class EditorDocumentTests: XCTestCase {
   override static func setUp() {
     super.setUp()
     precondition(ApplicationEnvironment.isRunningTests, "Hosted tests must bypass normal application startup")
+    XCTAssertTrue(NSApp.windows.isEmpty)
   }
 
   override static func tearDown() {
@@ -50,7 +52,6 @@ final class EditorDocumentTests: XCTestCase {
     delegate.applicationWillTerminate(Notification(name: NSApplication.willTerminateNotification, object: NSApp))
     XCTAssertEqual(AppPreferences.Updater.stagedUpdatePath, stagedPath)
     XCTAssertEqual(AppPreferences.Updater.stagedUpdateVersion, "test-version")
-    XCTAssertTrue(NSApp.windows.isEmpty)
   }
 
   func testHostDoesNotRecordRecentDocuments() throws {
@@ -99,7 +100,97 @@ final class EditorDocumentTests: XCTestCase {
     try await Self.waitUntilLoaded(document, data: replacement)
     XCTAssertEqual(document.stringValue, "Replacement text\n")
   }
+}
 
+extension EditorDocumentTests {
+  func testClosingDocumentCancelsDeferredWindowPresentation() async throws {
+    let storyboard = NSStoryboard(name: "Main", bundle: nil)
+    var controller: EditorWindowController? = try XCTUnwrap(
+      storyboard.instantiateController(withIdentifier: "EditorWindowController") as? EditorWindowController
+    )
+
+    var editor: EditorViewController? = EditorViewController(preloadDelay: 60)
+    editor?.view = NSView()
+    editor?.hasFinishedLoading = true
+    editor?.pendingResetCount = 1
+    controller?.contentViewController = editor
+    weak let releasedController = controller
+    weak let releasedEditor = editor
+
+    let window = try XCTUnwrap(controller?.window)
+    defer { window.close() }
+
+    let document = NSDocument()
+    document.addWindowController(try XCTUnwrap(controller))
+    controller?.showWindow(nil)
+    document.close()
+    XCTAssertNil(controller?.document)
+
+    await editor?.waitUntilEditorReset()
+    controller?.contentViewController = nil
+    controller = nil
+    editor = nil
+
+    let deadline = ContinuousClock.now + .seconds(5)
+    while releasedController != nil || releasedEditor != nil, ContinuousClock.now < deadline {
+      try await Task.sleep(for: .milliseconds(10))
+    }
+    XCTAssertNil(releasedController)
+    XCTAssertNil(releasedEditor)
+    XCTAssertFalse(window.isVisible)
+  }
+
+  func testPrintWithoutWindow() async throws {
+    let document = EditorDocument()
+    let data = Data("Windowless printing\n".utf8)
+    try document.read(from: data, ofType: "public.plain-text")
+    XCTAssertTrue(document.windowControllers.isEmpty)
+
+    defer {
+      document.isTerminating = true
+      document.close()
+    }
+
+    let url = ApplicationEnvironment.documentsDirectory.appending(path: "\(UUID().uuidString).pdf")
+    defer { try? FileManager.default.removeItem(at: url) }
+
+    let originalInfo = try XCTUnwrap(document.printInfo.dictionary().copy() as? NSDictionary)
+    let completed = expectation(description: "Printing completes")
+    let context = UnsafeMutableRawPointer.allocate(byteCount: 1, alignment: 1)
+    defer { context.deallocate() }
+
+    let delegate = PrintDelegate { printedDocument, success, returnedContext in
+      XCTAssertIdentical(printedDocument, document)
+      XCTAssertTrue(success)
+      XCTAssertEqual(returnedContext, context)
+      completed.fulfill()
+    }
+
+    document.print(
+      withSettings: [
+        .jobDisposition: NSPrintInfo.JobDisposition.save,
+        .jobSavingURL: url,
+        .paperSize: NSSize(width: 400, height: 600),
+      ],
+      showPrintPanel: false,
+      delegate: delegate,
+      didPrint: #selector(PrintDelegate.document(_:didPrint:contextInfo:)),
+      contextInfo: context
+    )
+
+    await fulfillment(of: [completed], timeout: 10)
+    withExtendedLifetime(delegate) {}
+    XCTAssertEqual(document.fileData, data)
+    XCTAssertEqual(document.printInfo.dictionary(), originalInfo)
+
+    let pdf = try XCTUnwrap(PDFDocument(url: url))
+    XCTAssertEqual(pdf.pageCount, 1)
+    XCTAssertTrue(try XCTUnwrap(pdf.string).contains("Windowless printing"))
+    XCTAssertEqual(pdf.page(at: 0)?.bounds(for: .mediaBox).size, NSSize(width: 400, height: 600))
+  }
+}
+
+extension EditorDocumentTests {
   func testTextBundleRoundTrip() async throws {
     let document = EditorDocument()
     let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
@@ -119,6 +210,19 @@ final class EditorDocumentTests: XCTestCase {
     )
 
     XCTAssertTrue(document.writableTypes(for: .saveOperation).contains("org.textbundle.package"))
+  }
+
+  @MainActor
+  private final class PrintDelegate: NSObject {
+    let completion: (NSDocument, Bool, UnsafeMutableRawPointer?) -> Void
+
+    init(completion: @escaping (NSDocument, Bool, UnsafeMutableRawPointer?) -> Void) {
+      self.completion = completion
+    }
+
+    @objc func document(_ document: NSDocument, didPrint success: Bool, contextInfo: UnsafeMutableRawPointer?) {
+      completion(document, success, contextInfo)
+    }
   }
 
   func testConcurrentOpeningThroughAppKit() async throws {

@@ -40,6 +40,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
         // Defer the actual show until the editor finishes its first paint
         await self.editorViewController?.waitUntilEditorReset()
 
+        // The document might have been closed, for example Finder closes the file after printing
+        guard self.document != nil else {
+          return
+        }
+
         let tabbingToRestore = NSWindow.allowsAutomaticWindowTabbing
         NSWindow.allowsAutomaticWindowTabbing = callerTabbingPreference
 

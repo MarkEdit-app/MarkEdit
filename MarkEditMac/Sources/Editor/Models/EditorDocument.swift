@@ -77,6 +77,7 @@ final class EditorDocument: NSDocument {
   }
 
   private var autosaveDelayedTask: Task<Void, Never>?
+  private let pendingFileReads = DispatchGroup()
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
   private var suggestedTextEncoding: EditorTextEncoding?
@@ -346,6 +347,7 @@ extension EditorDocument {
 
 extension EditorDocument {
   override func read(from data: Data, ofType typeName: String) throws {
+    pendingFileReads.enter()
     DispatchQueue.global(qos: .userInitiated).async {
       let newValue = {
         if let encoding = AppDocumentController.suggestedTextEncoding {
@@ -357,6 +359,7 @@ extension EditorDocument {
       }()
 
       DispatchQueue.main.async {
+        defer { self.pendingFileReads.leave() }
         self.fileData = data
         self.stringValue = newValue
         self.hostViewController?.representedObject = self
@@ -594,11 +597,13 @@ extension EditorDocument {
 // MARK: - Printing
 
 extension EditorDocument {
-  @IBAction override func printDocument(_ sender: Any?) {
-    guard let window = hostViewController?.view.window else {
-      return
-    }
-
+  override func print(
+    withSettings printSettings: [NSPrintInfo.AttributeKey: Any],
+    showPrintPanel: Bool,
+    delegate: Any?,
+    didPrint didPrintSelector: Selector?,
+    contextInfo: UnsafeMutableRawPointer?
+  ) {
     // Ideally we should be able to print WKWebView,
     // but it doesn't work well because of the lazily rendering strategy used in CodeMirror.
     //
@@ -606,13 +611,24 @@ extension EditorDocument {
     // we don't expect printing to be used a lot.
 
     Task { @MainActor in
+      await withCheckedContinuation { continuation in
+        pendingFileReads.notify(queue: .main) {
+          continuation.resume()
+        }
+      }
+
+      guard let info = printInfo.copy() as? NSPrintInfo else {
+        return Logger.assertFail("NSPrintInfo.copy() must return NSPrintInfo")
+      }
+
       // Alignment
-      printInfo.isHorizontallyCentered = true
-      printInfo.isVerticallyCentered = false
+      info.isHorizontallyCentered = true
+      info.isVerticallyCentered = false
+      info.dictionary().addEntries(from: printSettings)
 
       // Sizing
-      let width = printInfo.paperSize.width - printInfo.leftMargin - printInfo.rightMargin
-      let height = printInfo.paperSize.height - printInfo.topMargin - printInfo.bottomMargin
+      let width = info.paperSize.width - info.leftMargin - info.rightMargin
+      let height = info.paperSize.height - info.topMargin - info.bottomMargin
       let frame = CGRect(x: 0, y: 0, width: width, height: height)
 
       // Rendering
@@ -620,8 +636,14 @@ extension EditorDocument {
       textView.string = await hostViewController?.editorText ?? stringValue
       textView.sizeToFit()
 
-      let operation = NSPrintOperation(view: textView)
-      operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
+      let operation = NSPrintOperation(view: textView, printInfo: info)
+      operation.showsPrintPanel = showPrintPanel
+      runModalPrintOperation(
+        operation,
+        delegate: delegate,
+        didRun: didPrintSelector,
+        contextInfo: contextInfo
+      )
     }
   }
 }
