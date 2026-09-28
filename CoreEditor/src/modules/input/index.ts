@@ -17,6 +17,7 @@ import redrawSelectionLayer from '../selection/redrawSelectionLayer';
 import selectionChanged from '../selection/selectionChanged';
 import wrapBlock from './wrapBlock';
 import insertCodeBlock from './insertCodeBlock';
+import { contentUpdates } from './contentUpdates';
 
 export function filterTransaction(transaction: Transaction) {
   // Return nothing for read-only mode
@@ -132,7 +133,7 @@ export function interceptInputs() {
  * Returns an extension that handles all the editor changes.
  */
 export function observeChanges() {
-  return EditorView.updateListener.of(update => {
+  const listener = EditorView.updateListener.of(update => {
     if (update.docChanged) {
       // This should be called before updating the native view
       setHistoryExplictlyMoved(update);
@@ -168,15 +169,6 @@ export function observeChanges() {
           refreshEditFocus(true);
         }
       }
-
-      // Content is updated periodically
-      if (storage.contentUpdater !== undefined) {
-        clearTimeout(storage.contentUpdater);
-      }
-
-      storage.contentUpdater = setTimeout(() => {
-        window.nativeModules.core.notifyEditorDidBecomeIdle();
-      }, 1500);
     }
 
     if (selectionChanged(update) || update.docChanged) {
@@ -272,16 +264,16 @@ export function observeChanges() {
       }
     }
   });
+
+  return [contentUpdates, listener];
 }
 
 const storage: {
   caretOffsetY: number | undefined;
   gutterUpdater: ReturnType<typeof setTimeout> | undefined;
-  contentUpdater: ReturnType<typeof setTimeout> | undefined;
   lineColumnUpdater: ReturnType<typeof setTimeout> | undefined;
 } = {
   caretOffsetY: undefined,
   gutterUpdater: undefined,
-  contentUpdater: undefined,
   lineColumnUpdater: undefined,
 };

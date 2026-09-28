@@ -152,7 +152,8 @@ final class EditorDocument: NSDocument {
         completion?()
       }
 
-      if isOutdated || (userInitiated && needsFormatting) {
+      // Deferred formatting can remain after the editor text has been synchronized
+      if isOutdated || needsFormatting {
         updateContent(userInitiated: userInitiated, saveAction: saveAction)
       } else {
         saveAction()
