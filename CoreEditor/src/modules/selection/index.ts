@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { ChangeSpec, EditorSelection, Line, SelectionRange, TransactionSpec } from '@codemirror/state';
 import { selectAll as selectAllCommand } from '@codemirror/commands';
 import { isComposing } from '../../common/store';
-import { isReleaseMode } from '../../common/utils';
+import { focusedEditor, isReleaseMode } from '../../common/utils';
 import { almostEqual, afterDomUpdate, getClientRect } from '../../common/utils';
 
 import { InvisiblesBehavior } from '../../config';
@@ -75,8 +75,9 @@ export function selectedMainText(): string {
 }
 
 export function selectWholeDocument() {
-  if (window.editor.hasFocus) {
-    selectAllCommand(window.editor);
+  const editor = focusedEditor();
+  if (editor !== null) {
+    selectAllCommand(editor);
   }
 }
 

@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { extensions } from './extensions';
 import { globalState, editingState } from './common/store';
-import { tryGetEditor, almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
+import { tryGetEditor, focusedEditor, almostEqual, afterDomUpdate, getViewportScale, isReleaseMode, isMotionReduced } from './common/utils';
 
 import hasSelection from './modules/selection/hasSelection';
 import normalizeSelection from './modules/selection/normalizeSelection';
@@ -219,9 +219,10 @@ export async function resetEditor(
 }
 
 export function getEditorState() {
+  const editor = focusedEditor();
   return {
-    hasFocus: window.editor.hasFocus,
-    hasSelection: hasSelection(),
+    hasFocus: editor !== null,
+    hasSelection: editor === null ? hasSelection() : editor.state.selection.ranges.some(range => !range.empty),
   };
 }
 

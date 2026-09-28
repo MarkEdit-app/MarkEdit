@@ -2,10 +2,82 @@ import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { editingState } from '../src/common/store';
-import { refreshEditFocus } from '../src/modules/selection';
+import { refreshEditFocus, selectWholeDocument } from '../src/modules/selection';
 
 import * as editor from './utils/editor';
 import selectionChanged from '../src/modules/selection/selectionChanged';
+
+describe('selectWholeDocument', () => {
+  let nestedEditor: EditorView | undefined;
+
+  afterEach(() => {
+    nestedEditor?.destroy();
+    nestedEditor = undefined;
+    window.editor.destroy();
+    document.body.innerHTML = '';
+  });
+
+  function setUpCell(doc = 'Table cell') {
+    editor.setUp('Main document');
+    const widget = document.createElement('div');
+    widget.contentEditable = 'false';
+    window.editor.contentDOM.appendChild(widget);
+    nestedEditor = new EditorView({ doc, parent: widget });
+    return nestedEditor;
+  }
+
+  test('selects the full main document when it has focus', () => {
+    editor.setUp('Main document');
+    selectWholeDocument();
+    expect(window.editor.state.selection.main).toEqual(EditorSelection.range(0, 13));
+  });
+
+  test('selects only the focused nested editor', () => {
+    const cell = setUpCell();
+    cell.focus();
+    selectWholeDocument();
+    expect(cell.state.selection.main).toEqual(EditorSelection.range(0, 10));
+    expect(window.editor.state.selection.main.empty).toBe(true);
+    expect(cell.hasFocus).toBe(true);
+  });
+
+  test('keeps an empty cell focused without selecting the main document', () => {
+    const cell = setUpCell('');
+    cell.focus();
+    selectWholeDocument();
+    expect(cell.state.selection.main.empty).toBe(true);
+    expect(window.editor.state.selection.main.empty).toBe(true);
+    expect(cell.hasFocus).toBe(true);
+  });
+
+  test('selects the main document after focus returns from a nested editor', () => {
+    const cell = setUpCell();
+    cell.focus();
+    window.editor.focus();
+    selectWholeDocument();
+    expect(window.editor.state.selection.main).toEqual(EditorSelection.range(0, 13));
+    expect(cell.state.selection.main.empty).toBe(true);
+  });
+
+  test('does not select an unrelated editor', () => {
+    editor.setUp('Main document');
+    nestedEditor = new EditorView({ doc: 'Unrelated', parent: document.body });
+    nestedEditor.focus();
+    selectWholeDocument();
+    expect(nestedEditor.state.selection.main.empty).toBe(true);
+    expect(window.editor.state.selection.main.empty).toBe(true);
+  });
+
+  test('does not select the document when an input inside the editor has focus', () => {
+    editor.setUp('Main document');
+    const input = document.createElement('input');
+    window.editor.dom.appendChild(input);
+    input.focus();
+    selectWholeDocument();
+    expect(window.editor.state.selection.main.empty).toBe(true);
+    expect(document.activeElement).toBe(input);
+  });
+});
 
 describe('selectionChanged', () => {
   afterEach(() => {

@@ -19,6 +19,17 @@ export function tryGetEditor(): EditorView | null {
   return null;
 }
 
+export function focusedEditor(): EditorView | null {
+  const root = tryGetEditor();
+  const dom = root?.root.activeElement?.closest('.cm-editor');
+  if (root === null || !(dom instanceof HTMLElement) || !root.dom.contains(dom)) {
+    return null;
+  }
+
+  const editor = EditorView.findFromDOM(dom);
+  return editor?.hasFocus === true ? editor : null;
+}
+
 export function almostEqual(a: number, b: number) {
   return Math.abs(a - b) < 0.001;
 };
