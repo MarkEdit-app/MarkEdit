@@ -34,6 +34,7 @@ describe('Preview overlay', () => {
 
     Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
       configurable: true,
+      writable: true,
       value() {
         this.open = true;
         this.querySelector('[autofocus]')?.focus();
@@ -135,6 +136,65 @@ describe('Preview overlay', () => {
     expect(window.editor.hasFocus).toBe(true);
     expect(window.editor.state.doc.toString()).toBe('Unchanged document');
     expect(window.editor.state.selection.main.anchor).toBe(4);
+  });
+
+  test('blurs before opening and restores focus after removing the dialog', () => {
+    const view = window.editor;
+    const showModal = HTMLDialogElement.prototype.showModal;
+    const show = jest.spyOn(HTMLDialogElement.prototype, 'showModal').mockImplementation(function (this: HTMLDialogElement) {
+      expect(view.hasFocus).toBe(false);
+      showModal.call(this);
+    });
+
+    const dispatch = jest.spyOn(view, 'dispatch');
+    const focus = view.focus.bind(view);
+    const restoreFocus = jest.spyOn(view, 'focus').mockImplementation(() => {
+      expect(document.querySelector('dialog')).toBeNull();
+      focus();
+    });
+
+    expect(view.hasFocus).toBe(true);
+    const dialog = open(PreviewType.table, '| Test |');
+    expect(show).toHaveBeenCalledTimes(1);
+    expect(restoreFocus).not.toHaveBeenCalled();
+    dialog?.close();
+
+    expect(view.hasFocus).toBe(true);
+    expect(restoreFocus).toHaveBeenCalledTimes(1);
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  test.each([
+    { anchor: 4, head: 4 },
+    { anchor: 4, head: 10 },
+    { anchor: 10, head: 4 },
+  ])('restores the retained selection when native focus resets the caret: %j', selection => {
+    const view = window.editor;
+    view.dispatch({ selection });
+    const dialog = open(PreviewType.table, '| Test |');
+    const anchor = view.domAtPos(selection.anchor);
+    const head = view.domAtPos(selection.head);
+
+    window.getSelection()?.setBaseAndExtent(anchor.node, anchor.offset, head.node, head.offset);
+    document.dispatchEvent(new Event('selectionchange'));
+
+    const nativeFocus = view.contentDOM.focus.bind(view.contentDOM);
+    jest.spyOn(view.contentDOM, 'focus').mockImplementation(options => {
+      expect(window.getSelection()?.rangeCount).toBe(0);
+      nativeFocus(options);
+      const start = view.domAtPos(0);
+      window.getSelection()?.collapse(start.node, start.offset);
+    });
+
+    dialog?.close();
+    expect(view.state.selection.main.anchor).toBe(selection.anchor);
+    expect(view.state.selection.main.head).toBe(selection.head);
+    const domSelection = window.getSelection();
+    expect(domSelection?.rangeCount).toBe(1);
+
+    if (!domSelection?.anchorNode || !domSelection.focusNode) throw new Error('Missing DOM selection');
+    expect(view.posAtDOM(domSelection.anchorNode, domSelection.anchorOffset)).toBe(selection.anchor);
+    expect(view.posAtDOM(domSelection.focusNode, domSelection.focusOffset)).toBe(selection.head);
   });
 
   test('does not duplicate overlays or accept unknown preview types', () => {
