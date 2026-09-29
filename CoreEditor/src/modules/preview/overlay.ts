@@ -77,11 +77,26 @@ export default function createPreviewOverlay(type: PreviewType): HTMLIFrameEleme
     frame.dispatchEvent(new Event('preview-close'));
     dialog.remove();
     overlay = undefined;
-    window.editor.focus();
+
+    const editor = window.editor;
+    const { anchor, head } = editor.state.selection.main;
+    const selection = window.getSelection();
+
+    // Clear WebKit's retained selection to prevent scrolling on focus
+    selection?.removeAllRanges();
+    editor.focus();
+
+    // CodeMirror's cached selection can leave the actual DOM range unrestored
+    const anchorDOM = editor.domAtPos(anchor);
+    const headDOM = editor.domAtPos(head);
+    selection?.setBaseAndExtent(anchorDOM.node, anchorDOM.offset, headDOM.node, headDOM.offset);
   }, { once: true });
 
   overlay = dialog;
   document.body.appendChild(dialog);
+
+  // Prevent the dialog from automatically refocusing the editor on close
+  window.editor.contentDOM.blur();
   dialog.showModal();
 
   return frame;
