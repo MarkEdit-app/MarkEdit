@@ -9,6 +9,10 @@ import AppKit
 
 enum AppExceptionCatcher {
   static func install() {
+    guard !AppRuntimeConfig.disableDebugFiles else {
+      return
+    }
+
     NSSetUncaughtExceptionHandler(handleException)
   }
 }
