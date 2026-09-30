@@ -103,6 +103,7 @@ enum AppRuntimeConfig {
     let checksForUpdates: Bool? // [Deprecated] Kept for backward compatibility
     let defaultOpenDirectory: String?
     let defaultSaveDirectory: String?
+    let disableDebugFiles: Bool?
     let disableOpenPanelOptions: Bool?
     let disableCorsRestrictions: Bool?
     let disabledWebKitFeatures: [String]?
@@ -129,6 +130,7 @@ enum AppRuntimeConfig {
       case checksForUpdates = "general.checksForUpdates"
       case defaultOpenDirectory = "general.defaultOpenDirectory"
       case defaultSaveDirectory = "general.defaultSaveDirectory"
+      case disableDebugFiles = "general.disableDebugFiles"
       case disableOpenPanelOptions = "general.disableOpenPanelOptions"
       case disableCorsRestrictions = "general.disableCorsRestrictions"
       case disabledWebKitFeatures = "general.disabledWebKitFeatures"
@@ -248,6 +250,10 @@ enum AppRuntimeConfig {
     currentDefinition?.defaultSaveDirectory
   }
 
+  static var disableDebugFiles: Bool {
+    currentDefinition?.disableDebugFiles ?? false
+  }
+
   static var disableOpenPanelOptions: Bool {
     if let option = currentDefinition?.disableOpenPanelOptions {
       return option
@@ -330,6 +336,7 @@ private extension AppRuntimeConfig {
     checksForUpdates: nil,
     defaultOpenDirectory: nil,
     defaultSaveDirectory: nil,
+    disableDebugFiles: false,
     disableOpenPanelOptions: nil, // [macOS 26] Future macOS with the fix can be opted out
     disableCorsRestrictions: true,
     disabledWebKitFeatures: nil,

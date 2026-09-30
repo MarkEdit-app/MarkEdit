@@ -685,6 +685,10 @@ private extension EditorDocument {
       stringValue = editorText
 
       DispatchQueue.global(qos: .utility).async {
+        guard !AppRuntimeConfig.disableDebugFiles else {
+          return
+        }
+
         let fileData = editorText.toData() ?? Data()
         let directory = AppCustomization.debugDirectory.fileURL
         try? fileData.write(to: directory.appending(path: "last-edited.md"))

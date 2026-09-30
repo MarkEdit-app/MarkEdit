@@ -64,11 +64,16 @@ struct AppCustomization {
     stylesDirectory.createFile()
     editorScript.createFile()
     scriptsDirectory.createFile()
-    debugDirectory.createFile()
     pandoc.createFile("from: gfm\nstandalone: true\npdf-engine: context\n")
     statisticsRules.createFile("[]")
     settings.createFile(AppRuntimeConfig.defaultContents)
     extensions.createFile(ExtensionConfig.defaultContents)
+
+    if AppRuntimeConfig.disableDebugFiles {
+      try? FileManager.default.removeItem(at: debugDirectory.fileURL)
+    } else {
+      debugDirectory.createFile()
+    }
   }
 
   var fileURL: URL {

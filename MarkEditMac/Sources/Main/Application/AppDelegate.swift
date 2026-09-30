@@ -131,6 +131,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
       }
 
       DispatchQueue.global(qos: .utility).async {
+        guard !AppRuntimeConfig.disableDebugFiles else {
+          return
+        }
+
         let defaults = UserDefaults.standard.dictionaryRepresentation()
         let plist = defaults.merging(AppRuntimeConfig.jsonObject) { _, rhs in rhs }
         let fileData = try? PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
