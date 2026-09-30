@@ -4,6 +4,7 @@
 //  Created by cyan on 10/4/24.
 //
 
+import Darwin
 import Foundation
 import UniformTypeIdentifiers
 
@@ -140,17 +141,27 @@ public final class EditorModuleAPI: NativeModuleAPI {
     }
 
     do {
-      if FileManager.default.fileExists(at: destinationURL).fileExists {
+      let fileManager = FileManager.default
+      if fileManager.fileExists(at: destinationURL).fileExists {
+        if try fileManager.isSameFile(at: sourceURL, and: destinationURL) {
+          return true
+        }
+
         guard options.overwrites == true else {
+          Logger.log(.error, "moveFile destination already exists")
           return false
         }
 
-        try FileManager.default.removeItem(at: destinationURL)
+        guard Darwin.rename(sourceURL.path, destinationURL.path) == 0 else {
+          throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno))
+        }
+      } else {
+        try fileManager.moveItem(at: sourceURL, to: destinationURL)
       }
 
-      try FileManager.default.moveItem(at: sourceURL, to: destinationURL)
       return true
     } catch {
+      Logger.log(.error, "moveFile failed: \(error.localizedDescription)")
       return false
     }
   }
@@ -515,6 +526,19 @@ private extension WebDataTransfer {
 }
 
 private extension FileManager {
+  func isSameFile(at sourceURL: URL, and destinationURL: URL) throws -> Bool {
+    let source = try attributesOfItem(atPath: sourceURL.resolvingSymlinksInPath().path)
+    let destination = try attributesOfItem(atPath: destinationURL.resolvingSymlinksInPath().path)
+    guard let sourceVolume = source[.systemNumber] as? NSNumber,
+          let sourceFile = source[.systemFileNumber] as? NSNumber,
+          let destinationVolume = destination[.systemNumber] as? NSNumber,
+          let destinationFile = destination[.systemFileNumber] as? NSNumber else {
+      return false
+    }
+
+    return sourceVolume == destinationVolume && sourceFile == destinationFile
+  }
+
   func fileExists(at url: URL) -> (fileExists: Bool, isDirectory: Bool) {
     var isDirectory: ObjCBool = false
     let fileExists = fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory)
