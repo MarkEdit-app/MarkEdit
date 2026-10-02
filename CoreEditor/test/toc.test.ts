@@ -1,3 +1,4 @@
+import { EditorSelection } from '@codemirror/state';
 import { describe, expect, test } from '@jest/globals';
 import { sleep } from './utils/helpers';
 import * as editor from './utils/editor';
@@ -59,5 +60,20 @@ describe('Table of contents module', () => {
     expect(results.length).toBe(1);
     expect(results[0].level).toBe(1);
     expect(results[0].title).toBe('Title with spaces');
+  });
+
+  test('selecting previous section first moves to the current heading', async() => {
+    const text = '# First\n\nFirst body\n\n# Last\n\nLast body';
+    editor.setUp(text);
+    await sleep(200);
+    window.editor.dispatch({
+      selection: EditorSelection.cursor(text.indexOf('Last body')),
+    });
+
+    toc.selectPreviousSection();
+    expect(window.editor.state.selection.main.head).toBe(text.indexOf('# Last'));
+
+    toc.selectPreviousSection();
+    expect(window.editor.state.selection.main.head).toBe(text.indexOf('# First'));
   });
 });
