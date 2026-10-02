@@ -192,10 +192,10 @@ export function scrollIntoView(anchor: number | SelectionRange, strategy: Scroll
   // Try with the suggested strategy
   tryToScroll(strategy);
 
-  // Try centering if the suggested strategy failed
+  // Try again in case the initial attempt didn't work
   afterDomUpdate(() => {
     if (almostEqual(editor.scrollDOM.scrollTop, currentOffset)) {
-      tryToScroll('center');
+      tryToScroll(strategy);
     }
   });
 }
