@@ -35,6 +35,8 @@ public enum EditorUserAsset {
     }
 
     return """
+    /* Proxied script-local context */
+    (({MarkEdit, require}) => {
     (() => {
     /* Injected by MarkEdit */
     const __FILE_PATH__ = '\(filePath)';
@@ -44,6 +46,7 @@ public enum EditorUserAsset {
     /* User script */
     \(script)
     })();
+    })(__createScriptContext__('\(filePath)'));
     """
   }
 
