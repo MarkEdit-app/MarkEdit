@@ -17,7 +17,7 @@ import { TextEditor } from './editor';
 import { Translator } from './translation';
 import { languageModel } from './languageModel';
 
-import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
+import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, recentDocumentPaths, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
 import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, showPrintPanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getFileVersions, getFileVersionContent, restoreFileVersion, deleteLocalFileVersions } from './fileVersion';
@@ -59,6 +59,7 @@ export function initMarkEditModules() {
   MarkEdit.onEditorConfigChange = onEditorConfigChange;
   MarkEdit.saveDocument = saveDocument;
   MarkEdit.closeDocument = closeDocument;
+  MarkEdit.recentDocumentPaths = recentDocumentPaths;
   MarkEdit.addExtension = addExtension;
   MarkEdit.addMarkdownConfig = addMarkdownConfig;
   MarkEdit.addCodeLanguage = addCodeLanguage;

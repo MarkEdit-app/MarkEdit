@@ -14,6 +14,7 @@ import MarkEditCore
 public protocol NativeModuleAPI: NativeModule {
   func saveDocument() async -> Bool
   func closeDocument() async -> Bool
+  func recentDocumentPaths() async -> [String]
   func addMainMenuItems(items: [WebMenuItem])
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
@@ -62,6 +63,8 @@ final class NativeBridgeAPI: NativeBridge {
       return await saveDocument(parameters: parameters)
     case "closeDocument":
       return await closeDocument(parameters: parameters)
+    case "recentDocumentPaths":
+      return await recentDocumentPaths(parameters: parameters)
     case "addMainMenuItems":
       return await addMainMenuItems(parameters: parameters)
     case "showContextMenu":
@@ -124,6 +127,11 @@ final class NativeBridgeAPI: NativeBridge {
 
   private func closeDocument(parameters: Data) async -> Result<Any?, Error>? {
     let result = await module.closeDocument()
+    return .success(result)
+  }
+
+  private func recentDocumentPaths(parameters: Data) async -> Result<Any?, Error>? {
+    let result = await module.recentDocumentPaths()
     return .success(result)
   }
 

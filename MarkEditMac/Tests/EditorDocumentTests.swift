@@ -1,5 +1,6 @@
 import AppKit
 import ExtensionCore
+import MarkEditKit
 import PDFKit
 import XCTest
 @testable import MarkEdit
@@ -63,6 +64,19 @@ final class EditorDocumentTests: XCTestCase {
 
     controller.noteNewRecentDocumentURL(url)
     XCTAssertEqual(controller.recentDocumentURLs, originalURLs)
+  }
+
+  func testRecentDocumentPathsMatchesDocumentController() async throws {
+    let editor = EditorViewController(preloadDelay: 60)
+    let api = EditorModuleAPI(delegate: editor)
+    let expected = NSDocumentController.shared.recentDocumentURLs.map(\.path)
+
+    let paths = await api.recentDocumentPaths()
+    XCTAssertEqual(paths, expected)
+
+    let result = await api.bridge.invoke(method: "recentDocumentPaths", parameters: Data("{}".utf8))
+    let value = try XCTUnwrap(result).get()
+    XCTAssertEqual(try XCTUnwrap(value as? [String]), expected)
   }
 
   func testPreferenceWritesUseIsolatedSuite() throws {

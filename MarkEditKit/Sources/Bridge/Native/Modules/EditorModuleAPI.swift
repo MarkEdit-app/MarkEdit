@@ -58,6 +58,15 @@ public final class EditorModuleAPI: NativeModuleAPI {
     delegate?.editorAPICloseDocument(self) == true
   }
 
+  public func recentDocumentPaths() async -> [String] {
+    #if os(macOS)
+      NSDocumentController.shared.recentDocumentURLs.map(\.path)
+    #else
+      Logger.log(.error, "Recent documents are only supported on macOS")
+      return []
+    #endif
+  }
+
   public func addMainMenuItems(items: [WebMenuItem]) {
     delegate?.editorAPI(self, addMainMenuItems: items.map { item in
       (item.uniqueID.sha256Hash, item)

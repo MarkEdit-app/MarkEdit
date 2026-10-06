@@ -11,6 +11,7 @@ import { WebPoint } from '../../@types/WebPoint';
 export interface NativeModuleAPI extends NativeModule {
   saveDocument(): Promise<boolean>;
   closeDocument(): Promise<boolean>;
+  recentDocumentPaths(): Promise<string[]>;
   addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
   showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
