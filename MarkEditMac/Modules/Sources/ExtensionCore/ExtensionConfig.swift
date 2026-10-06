@@ -84,11 +84,6 @@ public enum ExtensionConfig {
     currentDefinition?.installed ?? []
   }
 
-  /// Filenames of enabled installed extensions, in injection order.
-  public static var enabledFileNames: [String] {
-    installed.filter { $0.enabled != false }.map(\.file)
-  }
-
   /// Syncs installed[] with the scripts on disk.
   ///
   /// The filesystem is the source of truth: records whose file was removed are dropped,
