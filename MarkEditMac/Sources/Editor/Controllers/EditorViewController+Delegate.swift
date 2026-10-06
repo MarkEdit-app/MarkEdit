@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import WebKit
 import MarkEditCore
 import MarkEditKit
@@ -442,6 +443,32 @@ extension EditorViewController: EditorModuleFoundationModelsDelegate {
     response: LanguageModelResponse
   ) {
     bridge.foundationModels.applyStreamUpdate(streamID: streamID, response: response)
+  }
+}
+
+// MARK: - EditorModuleSecretStorageDelegate
+
+extension EditorViewController: EditorModuleSecretStorageDelegate {
+  func confirmSecretAccess(extensionID: String, path: String, key: String) async throws {
+    let scriptURL = URL(fileURLWithPath: path)
+    let displayPath = scriptURL == AppCustomization.editorScript.fileURL
+      ? "Documents ‣ editor.js"
+      : "Documents ‣ scripts ‣ \(scriptURL.lastPathComponent)"
+    let alert = NSAlert()
+    alert.alertStyle = .critical
+    alert.messageText = String(format: Localized.SecretStorage.title, extensionID)
+    alert.informativeText = String(format: Localized.SecretStorage.message, displayPath, key)
+    alert.addButton(withTitle: Localized.SecretStorage.allowOnce)
+    alert.addButton(withTitle: Localized.General.cancel)
+
+    let learnMoreButton = alert.addButton(withTitle: Localized.General.learnMore)
+    learnMoreButton.addAction {
+      NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#extension-credentials")
+    }
+
+    if await presentSheetModal(alert) != .alertFirstButtonReturn {
+      throw SecretStorageError.cancelled
+    }
   }
 }
 

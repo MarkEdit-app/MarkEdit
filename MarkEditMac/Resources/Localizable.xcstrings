@@ -18,6 +18,23 @@
         }
       }
     },
+    "%@ wants to read “%@”." : {
+      "comment" : "Secret access confirmation message, with the script breadcrumb path and secret key",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 想要读取“%@”。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 想要讀取“%@”。"
+          }
+        }
+      }
+    },
     "%d of %d" : {
       "comment" : "Index of matches, such as 1 of 3",
       "localizations" : {
@@ -288,6 +305,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部"
+          }
+        }
+      }
+    },
+    "Allow “%@” to Read a Saved Credential?" : {
+      "comment" : "Secret access confirmation title, with the extension identity",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许“%@”读取已保存的凭据吗？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許“%@”讀取已儲存的憑證嗎？"
+          }
+        }
+      }
+    },
+    "Allow Once" : {
+      "comment" : "Button to approve one script read from Keychain",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许一次"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許一次"
           }
         }
       }
@@ -2222,6 +2273,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "稍後"
+          }
+        }
+      }
+    },
+    "Learn More…" : {
+      "comment" : "Button title, open related documentation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "了解更多…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "瞭解更多…"
           }
         }
       }

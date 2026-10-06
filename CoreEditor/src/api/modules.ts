@@ -16,6 +16,7 @@ import * as customHistory from '../@vendor/commands/history';
 import { TextEditor } from './editor';
 import { Translator } from './translation';
 import { languageModel } from './languageModel';
+import { secretStorage } from './secretStorage';
 
 import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, recentDocumentPaths, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
 import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, showPrintPanel, runService } from './ui';
@@ -47,6 +48,7 @@ export function initMarkEditModules() {
   MarkEdit.editorAPI = new TextEditor();
   MarkEdit.translationService = new Translator();
   MarkEdit.languageModel = languageModel;
+  MarkEdit.secretStorage = secretStorage;
   MarkEdit.codemirror = codemirror;
   MarkEdit.lezer = lezer;
 

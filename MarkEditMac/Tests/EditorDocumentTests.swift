@@ -1,7 +1,9 @@
 import AppKit
+import AppKitExtensions
 import ExtensionCore
 import MarkEditKit
 import PDFKit
+import Security
 import XCTest
 @testable import MarkEdit
 
@@ -153,6 +155,110 @@ extension EditorDocumentTests {
 
     ExtensionConfig.setEnabled(false, forID: id)
     XCTAssertFalse(AppCustomization.userScripts().contains { $0.id == id })
+  }
+
+  func testSecretConfirmationApprovalAndCancellation() async throws {
+    let editor = EditorViewController(preloadDelay: 60)
+    let frame = NSRect(x: 0, y: 0, width: 400, height: 300)
+    editor.view = NSView(frame: frame)
+
+    let window = NSWindow(contentRect: frame, styleMask: [.titled], backing: .buffered, defer: false)
+    window.isReleasedWhenClosed = false
+    window.contentView = editor.view
+    window.orderFront(nil)
+    defer { window.close() }
+
+    let contexts = [
+      (id: "local:editor.js", path: AppCustomization.editorScript.fileURL.path(percentEncoded: false), displayPath: "Documents ‣ editor.js"),
+      (id: "test-extension", path: "/scripts/test-extension.js", displayPath: "Documents ‣ scripts ‣ test-extension.js"),
+    ]
+
+    for (context, response) in zip(contexts, [NSApplication.ModalResponse.alertFirstButtonReturn, .alertSecondButtonReturn]) {
+      let task = Task { try await editor.confirmSecretAccess(extensionID: context.id, path: context.path, key: "api-token") }
+      let sheet = try await waitForSecretSheet(window)
+      XCTAssertEqual(sheet.defaultButtonCell?.title, Localized.SecretStorage.allowOnce)
+
+      let learnMore: NSButton = try XCTUnwrap(sheet.contentView?.firstDescendant {
+        $0.title == Localized.General.learnMore
+      })
+
+      XCTAssertNotNil(learnMore.target)
+      XCTAssertEqual(learnMore.action, NSSelectorFromString("invoke"))
+
+      let text = sheet.contentView.map(secretConfirmationText) ?? ""
+      XCTAssertTrue(text.contains("api-token"))
+      XCTAssertTrue(text.contains(String(format: Localized.SecretStorage.title, context.id)))
+      XCTAssertTrue(text.contains(String(format: Localized.SecretStorage.message, context.displayPath, "api-token")))
+      XCTAssertFalse(text.contains(context.path))
+
+      if response == .alertFirstButtonReturn {
+        let button = try XCTUnwrap(sheet.defaultButtonCell?.controlView as? NSButton)
+        button.performClick(nil)
+      } else {
+        window.endSheet(sheet, returnCode: response)
+      }
+
+      do {
+        try await task.value
+        XCTAssertEqual(response, .alertFirstButtonReturn)
+      } catch SecretStorageError.cancelled {
+        XCTAssertEqual(response, .alertSecondButtonReturn)
+      }
+    }
+  }
+
+  private func waitForSecretSheet(_ window: NSWindow) async throws -> NSWindow {
+    let deadline = ContinuousClock.now + .seconds(5)
+    while window.attachedSheet == nil, ContinuousClock.now < deadline {
+      try await Task.sleep(for: .milliseconds(10))
+    }
+
+    return try XCTUnwrap(window.attachedSheet)
+  }
+
+  private func secretConfirmationText(_ view: NSView) -> String {
+    let text = (view as? NSTextField)?.stringValue ?? ""
+    return ([text] + view.subviews.map(secretConfirmationText)).joined(separator: "\n")
+  }
+
+  func testSecretStorageWithSystemKeychain() async throws {
+    final class Approval: EditorModuleSecretStorageDelegate {
+      func confirmSecretAccess(extensionID: String, path: String, key: String) async throws {}
+    }
+
+    let context = (id: "test:\(UUID().uuidString)", path: "/scripts/keychain-test.js")
+    let approval = Approval()
+    let module = EditorModuleSecretStorage(scripts: [context.path: context.id], delegate: approval)
+    let query: [String: Any] = [
+      kSecClass as String: kSecClassGenericPassword,
+      kSecUseDataProtectionKeychain as String: true,
+      kSecAttrSynchronizable as String: false,
+      kSecAttrService as String: "app.cyan.markedit.extension-secrets.\(context.id)",
+      kSecAttrAccount as String: "token",
+    ]
+
+    let stored = await module.set(path: context.path, key: "token", value: "test-token")
+    let error = try secretStorageResponse(stored)["error"] as? String
+    if error == SecretStorageError.keychain(errSecMissingEntitlement).localizedDescription {
+      throw XCTSkip("System Keychain tests require a signed host with Keychain entitlements.")
+    }
+
+    defer {
+      let status = SecItemDelete(query as CFDictionary)
+      XCTAssertTrue(status == errSecSuccess || status == errSecItemNotFound)
+    }
+
+    XCTAssertNil(error)
+    let exists = await module.has(path: context.path, key: "token")
+    XCTAssertEqual(try secretStorageResponse(exists)["value"] as? Bool, true)
+    let value = await module.get(path: context.path, key: "token")
+    XCTAssertEqual(try secretStorageResponse(value)["value"] as? String, "test-token")
+    let removed = await module.delete(path: context.path, key: "token")
+    XCTAssertEqual(try secretStorageResponse(removed)["value"] as? Bool, true)
+  }
+
+  private func secretStorageResponse(_ json: String) throws -> [String: Any] {
+    try XCTUnwrap(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any])
   }
 
   func testClosingDocumentCancelsDeferredWindowPresentation() async throws {

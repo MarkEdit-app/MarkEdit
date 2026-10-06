@@ -22,6 +22,7 @@ import { NativeModuleTokenizer } from './src/bridge/native/tokenizer';
 import { NativeModuleAPI } from './src/bridge/native/api';
 import { NativeModuleFoundationModels } from './src/bridge/native/foundationModels';
 import { NativeModuleTranslation } from './src/bridge/native/translation';
+import { NativeModuleSecretStorage } from './src/bridge/native/secretStorage';
 
 import { resetEditor } from './src/core';
 import { initThemeExtractors, initMarkEditModules } from './src/api/modules';
@@ -67,6 +68,7 @@ window.nativeModules = {
   api: createNativeModule<NativeModuleAPI>('api'),
   foundationModels: createNativeModule<NativeModuleFoundationModels>('foundationModels'),
   translation: createNativeModule<NativeModuleTranslation>('translation'),
+  secretStorage: createNativeModule<NativeModuleSecretStorage>('secretStorage'),
 };
 
 // For injected scripts to create a script-local MarkEdit context
