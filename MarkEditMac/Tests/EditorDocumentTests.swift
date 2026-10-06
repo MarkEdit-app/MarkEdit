@@ -1,4 +1,5 @@
 import AppKit
+import ExtensionCore
 import PDFKit
 import XCTest
 @testable import MarkEdit
@@ -103,6 +104,43 @@ final class EditorDocumentTests: XCTestCase {
 }
 
 extension EditorDocumentTests {
+  func testScriptLoadingBindsInstalledIdentityAndFiltersDisabledScripts() throws {
+    AppCustomization.createFiles()
+    let id = "script-loading-test"
+    let scriptURL = AppCustomization.scriptsDirectory.fileURL.appending(path: "\(id).js")
+    try Data("window.testScript = true;".utf8).write(to: scriptURL)
+
+    defer {
+      ExtensionConfig.remove(id: id)
+      do {
+        try FileManager.default.removeItem(at: scriptURL)
+      } catch {
+        XCTFail("Unable to remove test script: \(error)")
+      }
+    }
+
+    ExtensionConfig.upsertInstalled(ExtensionConfig.Installed(
+      id: id,
+      version: "1",
+      url: nil,
+      sha256: nil,
+      file: scriptURL.lastPathComponent,
+      enabled: true,
+      installDate: nil
+    ))
+
+    let first = try XCTUnwrap(AppCustomization.userScripts().first { $0.id == id })
+    let second = try XCTUnwrap(AppCustomization.userScripts().first { $0.id == id })
+    XCTAssertEqual(first.path, scriptURL.resolvingSymlinksInPath().path)
+    XCTAssertEqual(first.id, second.id)
+    XCTAssertEqual(first.path, second.path)
+    XCTAssertTrue(first.source.contains(first.path))
+    XCTAssertTrue(first.source.contains("window.testScript = true;"))
+
+    ExtensionConfig.setEnabled(false, forID: id)
+    XCTAssertFalse(AppCustomization.userScripts().contains { $0.id == id })
+  }
+
   func testClosingDocumentCancelsDeferredWindowPresentation() async throws {
     let storyboard = NSStoryboard(name: "Main", bundle: nil)
     var controller: EditorWindowController? = try XCTUnwrap(

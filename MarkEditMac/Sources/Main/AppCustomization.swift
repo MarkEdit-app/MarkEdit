@@ -92,11 +92,28 @@ struct AppCustomization {
       .compactMap { createContents(url: $0.resolvingSymbolicLink) }
   }
 
-  func contentsFrom(fileNames: [String]) -> [String] {
-    fileNames
-      .filter { isSafeFileName($0) }
-      .map { fileURL.appending(path: $0, directoryHint: .notDirectory).resolvingSymbolicLink }
-      .compactMap { createContents(url: $0) }
+  static func userScripts() -> [(id: String, path: String, source: String)] {
+    guard !isSafeMode else {
+      return []
+    }
+
+    let scripts = [(id: "local:editor.js", url: editorScript.fileURL)] + ExtensionConfig.installed
+      .filter { $0.enabled != false && scriptsDirectory.isSafeFileName($0.file) }
+      .map { entry in
+        (id: entry.id, url: scriptsDirectory.fileURL.appending(path: entry.file).resolvingSymbolicLink)
+      }
+
+    return scripts.compactMap { script in
+      guard let source = editorScript.createContents(url: script.url) else {
+        return nil
+      }
+
+      return (
+        script.id,
+        script.url.path(percentEncoded: false),
+        source
+      )
+    }
   }
 
   // MARK: - Private

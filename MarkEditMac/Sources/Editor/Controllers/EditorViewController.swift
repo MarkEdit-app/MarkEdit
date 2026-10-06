@@ -122,6 +122,7 @@ final class EditorViewController: NSViewController {
   }()
 
   private(set) lazy var webView: WKWebView = {
+    let scripts = AppCustomization.userScripts()
     let modules = NativeModules(modules: [
       EditorModuleCore(delegate: self),
       EditorModuleCompletion(delegate: self),
@@ -135,13 +136,9 @@ final class EditorViewController: NSViewController {
     let controller = WKUserContentController()
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
-    let scripts = AppCustomization.isSafeMode ? [] : [
-      AppCustomization.editorScript.fileContents,
-    ] + AppCustomization.scriptsDirectory.contentsFrom(fileNames: ExtensionConfig.enabledFileNames)
-
     scripts.forEach {
       controller.addUserScript(WKUserScript(
-        source: $0,
+        source: $0.source,
         injectionTime: .atDocumentEnd,
         forMainFrameOnly: true
       ))
