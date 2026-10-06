@@ -18,7 +18,7 @@ import { Translator } from './translation';
 import { languageModel } from './languageModel';
 
 import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
-import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
+import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, showPrintPanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getFileVersions, getFileVersionContent, restoreFileVersion, deleteLocalFileVersions } from './fileVersion';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
@@ -68,6 +68,7 @@ export function initMarkEditModules() {
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;
   MarkEdit.showSavePanel = showSavePanel;
+  MarkEdit.showPrintPanel = showPrintPanel;
   MarkEdit.runService = runService;
   MarkEdit.openFile = openFile;
   MarkEdit.createFile = createFile;

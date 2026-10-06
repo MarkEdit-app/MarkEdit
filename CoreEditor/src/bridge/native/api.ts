@@ -1,4 +1,4 @@
-import { CreateFileOptions, MoveFileOptions, SavePanelOptions } from 'markedit-api';
+import { CreateFileOptions, MoveFileOptions, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
 import { NativeModule } from '../nativeModule';
 import { WebMenuItem } from '../../@types/WebMenuItem';
 import { WebPoint } from '../../@types/WebPoint';
@@ -16,6 +16,7 @@ export interface NativeModuleAPI extends NativeModule {
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
   showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;
   showSavePanel({ options }: { options: SavePanelOptions }): Promise<boolean>;
+  showPrintPanel({ options }: { options: PrintPanelOptions }): Promise<boolean>;
   runService({ name, input }: { name: string; input?: string }): Promise<boolean>;
   openFile({ path }: { path: string }): Promise<boolean>;
   createFile({ options }: { options: CreateFileOptions }): Promise<boolean>;

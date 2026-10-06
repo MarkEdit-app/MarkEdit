@@ -19,6 +19,7 @@ public protocol NativeModuleAPI: NativeModule {
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String?
   func showSavePanel(options: SavePanelOptions) async -> Bool
+  func showPrintPanel(options: PrintPanelOptions) async -> Bool
   func runService(name: String, input: String?) async -> Bool
   func openFile(path: String) async -> Bool
   func createFile(options: CreateFileOptions) async -> Bool
@@ -71,6 +72,8 @@ final class NativeBridgeAPI: NativeBridge {
       return await showTextBox(parameters: parameters)
     case "showSavePanel":
       return await showSavePanel(parameters: parameters)
+    case "showPrintPanel":
+      return await showPrintPanel(parameters: parameters)
     case "runService":
       return await runService(parameters: parameters)
     case "openFile":
@@ -241,6 +244,28 @@ final class NativeBridgeAPI: NativeBridge {
     }
 
     let result = await module.showSavePanel(options: message.options)
+    return .success(result)
+  }
+
+  private func showPrintPanel(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var options: PrintPanelOptions
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        options = try container.value("options")
+      }
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.showPrintPanel(options: message.options)
     return .success(result)
   }
 
@@ -634,6 +659,27 @@ public struct SavePanelOptions: Decodable, Sendable {
     string = try container.value("string")
     data = try container.value("data")
     fileName = try container.value("fileName")
+  }
+}
+
+public struct PrintPanelOptions: Decodable, Sendable {
+  /// Base64 representation of the content to print. For 'pdf', this is PDF data.
+  public var data: String
+  /// Job title shown in the print panel and print queue.
+  public var title: String?
+  /// Content type to print. Currently only PDF is supported.
+  private var type: String = "pdf"
+
+  public init(data: String, title: String?) {
+    self.data = data
+    self.title = title
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    data = try container.value("data")
+    title = try container.value("title")
+    type = try container.value("type")
   }
 }
 

@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 
 #if os(macOS)
   import AppKit
+  import PDFKit
 #endif
 
 @MainActor
@@ -77,6 +78,39 @@ public final class EditorModuleAPI: NativeModuleAPI {
 
   public func showSavePanel(options: SavePanelOptions) async -> Bool {
     await delegate?.editorAPI(self, showSavePanel: options.decodedData, fileName: options.fileName) == true
+  }
+
+  public func showPrintPanel(options: PrintPanelOptions) async -> Bool {
+    #if os(macOS)
+      guard let data = Data(base64Encoded: options.data) else {
+        Logger.log(.error, "Failed to decode PDF data for printing")
+        return false
+      }
+
+      guard let document = PDFDocument(data: data) else {
+        Logger.log(.error, "Failed to open PDF for printing")
+        return false
+      }
+
+      guard let operation = document.printOperation(
+        for: .shared,
+        scalingMode: .pageScaleDownToFit,
+        autoRotate: true
+      ) else {
+        Logger.log(.error, "Failed to create print operation for PDF")
+        return false
+      }
+
+      if let title = options.title {
+        operation.jobTitle = title
+      }
+
+      operation.showsPrintPanel = true
+      return operation.run()
+    #else
+      Logger.log(.error, "PDF printing is only supported on macOS")
+      return false
+    #endif
   }
 
   public func runService(name: String, input: String?) async -> Bool {
