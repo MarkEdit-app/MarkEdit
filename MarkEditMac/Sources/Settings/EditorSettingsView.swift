@@ -215,8 +215,7 @@ private extension EditorSettingsView {
 
     Divider()
 
-    Label(Localized.Settings.getCustomThemes, systemImage: Icons.paintpalette)
-      .labelStyle(.titleAndIcon)
+    Text(Localized.Settings.getCustomThemes)
       .tag(Constants.customThemesTag)
   }
 
