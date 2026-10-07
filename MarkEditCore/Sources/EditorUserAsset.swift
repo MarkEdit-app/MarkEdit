@@ -5,11 +5,36 @@
 //
 
 import Foundation
+import WebKit
 
 /**
  Wrappers for user-injected scripts and styles.
  */
 public enum EditorUserAsset {
+  /**
+   Prepare all contexts first, then inject each script separately.
+   */
+  @MainActor
+  public static func contextualScripts(
+    for scripts: [(path: String, source: String, capability: String?)]
+  ) -> [WKUserScript] {
+    let contexts = scripts.map {
+      ["path": $0.path, "capability": $0.capability].compactMapValues { $0 }
+    }
+
+    let sources = ["__prepareScriptContexts__(\(contexts.jsonEncoded));"] + scripts.map {
+      """
+      __runScriptWithContext__(\(($0.capability ?? $0.path).jsonEncoded), (MarkEdit, require) => {
+      \($0.source)
+      });
+      """
+    }
+
+    return sources.map {
+      WKUserScript(source: $0, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
+  }
+
   /**
    Wrap a user JavaScript file for injection.
    */
@@ -35,8 +60,6 @@ public enum EditorUserAsset {
     }
 
     return """
-    /* Proxied script-local context */
-    (({MarkEdit, require}) => {
     (() => {
     /* Injected by MarkEdit */
     const __FILE_PATH__ = '\(filePath)';
@@ -46,7 +69,6 @@ public enum EditorUserAsset {
     /* User script */
     \(script)
     })();
-    })(__createScriptContext__('\(filePath)'));
     """
   }
 

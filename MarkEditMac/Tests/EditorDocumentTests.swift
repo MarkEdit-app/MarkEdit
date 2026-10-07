@@ -4,6 +4,7 @@ import ExtensionCore
 import MarkEditKit
 import PDFKit
 import Security
+import WebKit
 import XCTest
 @testable import MarkEdit
 
@@ -120,6 +121,63 @@ final class EditorDocumentTests: XCTestCase {
 }
 
 extension EditorDocumentTests {
+  func testScriptsRemainSeparateAndKeepPreparedBindings() async throws {
+    AppCustomization.createFiles()
+    let original = try Data(contentsOf: AppCustomization.editorScript.fileURL)
+    let id = "inspectable-script-test"
+    let url = AppCustomization.scriptsDirectory.fileURL.appending(path: "\(id).js")
+    defer {
+      ExtensionConfig.remove(id: id)
+      do {
+        try original.write(to: AppCustomization.editorScript.fileURL)
+        try FileManager.default.removeItem(at: url)
+      } catch {
+        XCTFail("Unable to restore test scripts: \(error)")
+      }
+    }
+
+    try Data("""
+    window.scriptOrder = ['first'];
+    window.Function = () => { throw new Error('Dynamic compilation is forbidden'); };
+    window.require = () => { throw new Error('Replaced require'); };
+    window.nativeModules.secretStorage = new Proxy({}, { get() { throw new Error('Replaced storage'); } });
+    try {
+      window.__prepareScriptContexts__([]);
+    } catch {
+      window.reinitializationBlocked = true;
+    }
+    """.utf8).write(to: AppCustomization.editorScript.fileURL)
+    try Data("""
+    const { MarkEdit } = require('markedit-api');
+    window.scriptOrder.push('second');
+    window.storageResult = MarkEdit.secretStorage.has('').then(
+      () => 'unexpected success',
+      error => error.message
+    );
+    """.utf8).write(to: url)
+    ExtensionConfig.upsertInstalled(ExtensionConfig.Installed(
+      id: id, version: "1", url: nil, sha256: nil, file: url.lastPathComponent, enabled: true, installDate: nil
+    ))
+
+    let editor = EditorViewController()
+    await editor.waitUntilLoaded()
+    let scripts = editor.webView.configuration.userContentController.userScripts
+    XCTAssertEqual(scripts.count, 3)
+    XCTAssertFalse(scripts[0].source.contains("window.scriptOrder"))
+    XCTAssertTrue(scripts[1].source.contains("window.scriptOrder = ['first']"))
+    XCTAssertTrue(scripts[2].source.contains("window.scriptOrder.push('second')"))
+    XCTAssertTrue(editor.webView.isInspectable)
+
+    let order = try await editor.webView.evaluateJavaScript("window.scriptOrder")
+    XCTAssertEqual(order as? [String], ["first", "second"])
+    let blocked = try await editor.webView.evaluateJavaScript("window.reinitializationBlocked")
+    XCTAssertEqual(blocked as? Bool, true)
+    let result = try await editor.webView.callAsyncJavaScript(
+      "return await window.storageResult;", arguments: [:], in: nil, contentWorld: .page
+    )
+    XCTAssertEqual(result as? String, SecretStorageError.invalidKey.localizedDescription)
+  }
+
   func testScriptLoadingBindsInstalledIdentityAndFiltersDisabledScripts() throws {
     AppCustomization.createFiles()
     let id = "script-loading-test"
@@ -226,9 +284,9 @@ extension EditorDocumentTests {
       func confirmSecretAccess(extensionID: String, path: String, key: String) async throws {}
     }
 
-    let context = (id: "test:\(UUID().uuidString)", path: "/scripts/keychain-test.js")
+    let context = EditorModuleSecretStorage.Context(id: "test:\(UUID().uuidString)", path: "/scripts/keychain-test.js")
     let approval = Approval()
-    let module = EditorModuleSecretStorage(scripts: [context.path: context.id], delegate: approval)
+    let module = EditorModuleSecretStorage(contexts: [context], delegate: approval)
     let query: [String: Any] = [
       kSecClass as String: kSecClassGenericPassword,
       kSecUseDataProtectionKeychain as String: true,
@@ -237,7 +295,7 @@ extension EditorDocumentTests {
       kSecAttrAccount as String: "token",
     ]
 
-    let stored = await module.set(path: context.path, key: "token", value: "test-token")
+    let stored = await module.set(capability: context.capability, key: "token", value: "test-token")
     let error = try secretStorageResponse(stored)["error"] as? String
     if error == SecretStorageError.keychain(errSecMissingEntitlement).localizedDescription {
       throw XCTSkip("System Keychain tests require a signed host with Keychain entitlements.")
@@ -249,11 +307,11 @@ extension EditorDocumentTests {
     }
 
     XCTAssertNil(error)
-    let exists = await module.has(path: context.path, key: "token")
+    let exists = await module.has(capability: context.capability, key: "token")
     XCTAssertEqual(try secretStorageResponse(exists)["value"] as? Bool, true)
-    let value = await module.get(path: context.path, key: "token")
+    let value = await module.get(capability: context.capability, key: "token")
     XCTAssertEqual(try secretStorageResponse(value)["value"] as? String, "test-token")
-    let removed = await module.delete(path: context.path, key: "token")
+    let removed = await module.delete(capability: context.capability, key: "token")
     XCTAssertEqual(try secretStorageResponse(removed)["value"] as? Bool, true)
   }
 

@@ -6,8 +6,8 @@ import { NativeModule } from '../nativeModule';
  * @bridgeName NativeBridgeSecretStorage
  */
 export interface NativeModuleSecretStorage extends NativeModule {
-  has(args: { path: string; key: string }): Promise<string>;
-  get(args: { path: string; key: string }): Promise<string>;
-  set(args: { path: string; key: string; value: string }): Promise<string>;
-  delete(args: { path: string; key: string }): Promise<string>;
+  has(args: { capability?: string; key: string }): Promise<string>;
+  get(args: { capability?: string; key: string }): Promise<string>;
+  set(args: { capability?: string; key: string; value: string }): Promise<string>;
+  delete(args: { capability?: string; key: string }): Promise<string>;
 }
