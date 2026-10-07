@@ -71,8 +71,14 @@ window.nativeModules = {
   secretStorage: createNativeModule<NativeModuleSecretStorage>('secretStorage'),
 };
 
+let scriptContextsPrepared = false;
 Object.defineProperty(window, '__prepareScriptContexts__', {
   value: (scripts: Parameters<typeof createScriptRunner>[0]) => {
+    if (scriptContextsPrepared) {
+      throw new Error('Script contexts are already prepared.');
+    }
+
+    scriptContextsPrepared = true;
     Object.defineProperty(window, '__runScriptWithContext__', { value: createScriptRunner(scripts) });
   },
 });

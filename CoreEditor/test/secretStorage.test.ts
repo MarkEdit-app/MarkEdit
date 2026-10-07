@@ -147,10 +147,13 @@ describe('secretStorage', () => {
 
   test('malformed responses reject instead of appearing to be missing secrets', async () => {
     const secrets = storageFor('/scripts/a.js');
-    for (const response of ['null', '[]', '{"unexpected":true}', '{"value":false}']) {
+    for (const response of ['null', '[]', '{"unexpected":true}']) {
       postMessage.mockResolvedValue(response);
-      await expect(secrets.get('token')).rejects.toThrow('Invalid secret storage');
+      await expect(secrets.get('token')).rejects.toThrow('Invalid contextual native response');
     }
+
+    postMessage.mockResolvedValue('{"value":false}');
+    await expect(secrets.get('token')).rejects.toThrow('Invalid secret storage value');
   });
 
   test('unbound access fails without contacting native', () => {
