@@ -22,6 +22,7 @@ enum Localized {
     static let safeModeAppName = String(localized: "MarkEdit (Safe Mode)", comment: "App menu title when running without customizations")
     static let done = String(localized: "Done", comment: "Button title, confirm an action")
     static let cancel = String(localized: "Cancel", comment: "Button title, cancel an action")
+    static let learnMore = String(localized: "Learn More…", comment: "Button title, open related documentation")
     static let delete = String(localized: "Delete", comment: "Button title, confirm the deletion")
     static let previous = String(localized: "Previous", comment: "Button title, move to the previous item")
     static let next = String(localized: "Next", comment: "Button title, move to the next item")
@@ -30,6 +31,12 @@ enum Localized {
     static let grantAccess = String(localized: "Grant Access", comment: "Open panel prompt, used for granting access for the selected folder")
     static let insertTab = String(localized: "Insert Tab", comment: "Insert a tab into the current editor")
     static let insertLineBreak = String(localized: "Insert Line Break", comment: "Insert a line break into the current editor")
+  }
+
+  enum SecretStorage {
+    static let title = String(localized: "Allow “%@” to Read a Saved Credential?", comment: "Secret access confirmation title, with the extension identity")
+    static let message = String(localized: "%@ wants to read “%@”.", comment: "Secret access confirmation message, with the script breadcrumb path and secret key")
+    static let allowOnce = String(localized: "Allow Once", comment: "Button to approve one script read from Keychain")
   }
 
   enum Editor {

@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { MenuItem, MenuItemState, Alert, TextBox, SavePanelOptions } from 'markedit-api';
+import { MenuItem, MenuItemState, Alert, TextBox, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
@@ -63,6 +63,14 @@ export function showSavePanel(options: SavePanelOptions): Promise<boolean> {
   return window.nativeModules.api.showSavePanel({ options });
 }
 
+export function showPrintPanel(options: PrintPanelOptions): Promise<boolean> {
+  if (!isSupportedPrintType(options.type)) {
+    return Promise.reject(new Error(`Unsupported print content type: ${options.type}`));
+  }
+
+  return window.nativeModules.api.showPrintPanel({ options });
+}
+
 export function runService(name: string, input?: string): Promise<boolean> {
   return window.nativeModules.api.runService({ name, input });
 }
@@ -118,6 +126,10 @@ function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMe
     children: item.children?.map(item => createMenuItem(item, actions)),
   };
 };
+
+function isSupportedPrintType(type: string): boolean {
+  return type === 'pdf';
+}
 
 type ActionType = () => void | MenuItemState;
 const mainActions = new Map<string, ActionType>();

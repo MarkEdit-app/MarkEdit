@@ -16,9 +16,10 @@ import * as customHistory from '../@vendor/commands/history';
 import { TextEditor } from './editor';
 import { Translator } from './translation';
 import { languageModel } from './languageModel';
+import { secretStorage } from './secretStorage';
 
-import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
-import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, runService } from './ui';
+import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, recentDocumentPaths, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
+import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, showPrintPanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getFileVersions, getFileVersionContent, restoreFileVersion, deleteLocalFileVersions } from './fileVersion';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
@@ -47,6 +48,7 @@ export function initMarkEditModules() {
   MarkEdit.editorAPI = new TextEditor();
   MarkEdit.translationService = new Translator();
   MarkEdit.languageModel = languageModel;
+  MarkEdit.secretStorage = secretStorage;
   MarkEdit.codemirror = codemirror;
   MarkEdit.lezer = lezer;
 
@@ -59,6 +61,7 @@ export function initMarkEditModules() {
   MarkEdit.onEditorConfigChange = onEditorConfigChange;
   MarkEdit.saveDocument = saveDocument;
   MarkEdit.closeDocument = closeDocument;
+  MarkEdit.recentDocumentPaths = recentDocumentPaths;
   MarkEdit.addExtension = addExtension;
   MarkEdit.addMarkdownConfig = addMarkdownConfig;
   MarkEdit.addCodeLanguage = addCodeLanguage;
@@ -68,6 +71,7 @@ export function initMarkEditModules() {
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;
   MarkEdit.showSavePanel = showSavePanel;
+  MarkEdit.showPrintPanel = showPrintPanel;
   MarkEdit.runService = runService;
   MarkEdit.openFile = openFile;
   MarkEdit.createFile = createFile;

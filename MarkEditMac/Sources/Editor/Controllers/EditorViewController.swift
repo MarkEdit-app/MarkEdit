@@ -130,6 +130,12 @@ final class EditorViewController: NSViewController {
       EditorModuleAPI(delegate: self),
       EditorModuleFoundationModels(delegate: self),
       EditorModuleTranslation(),
+
+      // Map script paths to storage namespaces
+      EditorModuleSecretStorage(
+        scripts: Dictionary(scripts.map { ($0.path, $0.id) }) { first, _ in first },
+        delegate: self
+      ),
     ])
 
     let handler = EditorMessageHandler(modules: modules)

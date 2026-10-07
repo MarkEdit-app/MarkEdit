@@ -39,6 +39,10 @@ export async function closeDocument(): Promise<boolean> {
   return window.nativeModules.api.closeDocument();
 }
 
+export async function recentDocumentPaths(): Promise<string[]> {
+  return window.nativeModules.api.recentDocumentPaths();
+}
+
 export function runtimeInfo(): RuntimeInfo {
   const runtimeInfo = window.config.runtimeInfo;
   if (runtimeInfo === undefined) {
