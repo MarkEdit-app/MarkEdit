@@ -34,7 +34,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem title="(settings.json)" secondaryImage="gearshape.2" catalog="system" hidden="YES" keyEquivalent="," allowsKeyEquivalentWhenHidden="YES" id="6iB-Ox-Xb3">
-                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="openSettingsJSON:" target="Voe-Tx-rLC" id="IEe-p5-MWL"/>
                                             </connections>
@@ -438,7 +438,8 @@ Gw
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Table of Contents" id="BxI-nv-Xa5">
                                                 <items>
-                                                    <menuItem title="Open Menu" keyEquivalent="O" id="IPm-0a-pwK">
+                                                    <menuItem title="Open Menu" keyEquivalent="o" id="IPm-0a-pwK">
+                                                        <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                                         <connections>
                                                             <action selector="openTableOfContents:" target="Ady-hI-5gd" id="GAy-8C-JmJ"/>
                                                         </connections>
