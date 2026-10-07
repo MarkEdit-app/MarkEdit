@@ -133,7 +133,10 @@ final class EditorWebView: WKWebView {
       menu.addItem(item)
     }
 
-    menu.addItem(.separator())
+    if #unavailable(macOS 27.0) {
+      menu.addItem(.separator())
+    }
+
     updateMenuItems(menu: menu)
     super.willOpenMenu(menu, with: event)
 
