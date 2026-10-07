@@ -1,6 +1,7 @@
 import AppKit
 import AppKitExtensions
 import ExtensionCore
+import MarkEditCore
 import MarkEditKit
 import PDFKit
 import Security
@@ -121,6 +122,147 @@ final class EditorDocumentTests: XCTestCase {
 }
 
 extension EditorDocumentTests {
+  func testSecretStorageResistsPromiseHooksInWebKit() async throws {
+    AppCustomization.createFiles()
+    let completed = expectation(description: "Protected reads complete")
+    let victim = EditorModuleSecretStorage.Context(id: "victim", path: "/victim.js")
+    let probe = SecretReplyProbe(capability: victim.capability, completed: completed)
+    let configuration = WKWebViewConfiguration()
+    let controller = configuration.userContentController
+    controller.addScriptMessageHandler(probe, contentWorld: .page, name: "bridge")
+    controller.addScriptMessageHandler(probe, contentWorld: .page, name: "testResults")
+    defer { controller.removeAllScriptMessageHandlers() }
+
+    let attacker = """
+    const constructor = Object.getOwnPropertyDescriptor(Promise.prototype, 'constructor');
+    const then = Object.getOwnPropertyDescriptor(Promise.prototype, 'then');
+    const species = Object.getOwnPropertyDescriptor(Promise, Symbol.species);
+    window.intercepted = [];
+    window.restorePromiseHooks = () => {
+      Object.defineProperty(Promise.prototype, 'constructor', constructor);
+      Object.defineProperty(Promise.prototype, 'then', then);
+      Object.defineProperty(Promise, Symbol.species, species);
+    };
+    Object.defineProperty(Promise.prototype, 'constructor', { value: {}, configurable: true });
+    Promise.prototype.then = new Proxy(Promise.prototype.then, {
+      apply(target, receiver, [onFulfilled, onRejected]) {
+        return Reflect.apply(target, receiver, [value => {
+          window.intercepted.push(value);
+          return typeof onFulfilled === 'function' ? onFulfilled(value) : value;
+        }, onRejected]);
+      }
+    });
+    Object.defineProperty(Promise, Symbol.species, {
+      value: new Proxy(Promise, {
+        construct(target, [executor]) {
+          return new target((resolve, reject) => {
+            executor(value => {
+              window.intercepted.push(value);
+              resolve(value);
+            }, reject);
+          });
+        }
+      }),
+      configurable: true
+    });
+    """
+
+    let consumer = """
+    (async () => {
+      const values = [];
+      let failure;
+      try {
+        for (const method of ['await', 'then', 'catch', 'finally']) {
+          const result = MarkEdit.secretStorage.get(method);
+          switch (method) {
+            case 'then': values.push(await result.then(value => value)); break;
+            case 'catch': values.push(await result.catch(() => undefined)); break;
+            case 'finally': values.push(await result.finally(() => {})); break;
+            default: values.push(await result);
+          }
+        }
+      } catch (error) {
+        failure = String(error);
+      } finally {
+        window.restorePromiseHooks();
+      }
+      const message = { values, intercepted: window.intercepted };
+      if (failure !== undefined) message.failure = failure;
+      window.webkit.messageHandlers.testResults.postMessage(message);
+    })();
+    """
+
+    for script in EditorUserAsset.contextualScripts(for: [
+      ("/attacker.js", EditorUserAsset.script(for: URL(fileURLWithPath: "/attacker.js"), contents: attacker), UUID().uuidString),
+      (victim.path, EditorUserAsset.script(for: URL(fileURLWithPath: victim.path), contents: consumer), victim.capability),
+    ]) {
+      controller.addUserScript(script)
+    }
+
+    let webView = WKWebView(frame: .zero, configuration: configuration)
+    let html = EditorIndexHtml.fromAppBundle(
+      config: AppPreferences.editorConfig(theme: AppTheme.current.editorTheme),
+      userSettings: "{}"
+    )
+
+    webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
+    await fulfillment(of: [completed], timeout: 10)
+    withExtendedLifetime(webView) {}
+
+    let result = try XCTUnwrap(probe.result)
+    XCTAssertNil(result["failure"])
+    XCTAssertEqual(result["values"] as? [String], Array(repeating: "synthetic-secret", count: 4))
+
+    let intercepted = try XCTUnwrap(result["intercepted"] as? [Any])
+    let encoded = try JSONSerialization.data(withJSONObject: intercepted)
+    XCTAssertFalse(try XCTUnwrap(String(data: encoded, encoding: .utf8)).contains("synthetic-secret"))
+    XCTAssertEqual(probe.keys, ["await", "then", "catch", "finally"])
+  }
+
+  private final class SecretReplyProbe: NSObject, WKScriptMessageHandlerWithReply {
+    let capability: String
+    let completed: XCTestExpectation
+    var keys: [String] = []
+    var result: [String: Any]?
+
+    init(capability: String, completed: XCTestExpectation) {
+      self.capability = capability
+      self.completed = completed
+    }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+      if message.name == "testResults" {
+        result = message.body as? [String: Any]
+        completed.fulfill()
+        return (nil, nil)
+      }
+
+      guard let body = message.body as? [String: Any] else {
+        XCTFail("Invalid native message")
+        return (nil, "Invalid native message")
+      }
+
+      guard body["moduleName"] as? String == "secretStorage" else {
+        return (nil, nil)
+      }
+
+      do {
+        let json = try XCTUnwrap(body["parameters"] as? String)
+        let parameters = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: String])
+        guard body["methodName"] as? String == "get", parameters["capability"] == capability, let key = parameters["key"] else {
+          XCTFail("Unexpected secret storage request")
+          return (nil, "Unexpected secret storage request")
+        }
+
+        keys.append(key)
+        return (#"{"value":"synthetic-secret"}"#, nil)
+      } catch {
+        XCTFail("Invalid secret storage parameters: \(error)")
+        return (nil, error.localizedDescription)
+      }
+    }
+  }
+
   func testScriptsRemainSeparateAndKeepPreparedBindings() async throws {
     AppCustomization.createFiles()
     let original = try Data(contentsOf: AppCustomization.editorScript.fileURL)
@@ -141,8 +283,14 @@ extension EditorDocumentTests {
     window.Function = () => { throw new Error('Dynamic compilation is forbidden'); };
     window.require = () => { throw new Error('Replaced require'); };
     window.nativeModules.secretStorage = new Proxy({}, { get() { throw new Error('Replaced storage'); } });
+    window.reinitializationTouched = false;
     try {
-      window.__prepareScriptContexts__([]);
+      window.__prepareScriptContexts__(new Proxy([], {
+        get() {
+          window.reinitializationTouched = true;
+          throw new Error('Repeated preparation must not inspect its input');
+        }
+      }));
     } catch {
       window.reinitializationBlocked = true;
     }
@@ -170,11 +318,17 @@ extension EditorDocumentTests {
 
     let order = try await editor.webView.evaluateJavaScript("window.scriptOrder")
     XCTAssertEqual(order as? [String], ["first", "second"])
+
     let blocked = try await editor.webView.evaluateJavaScript("window.reinitializationBlocked")
     XCTAssertEqual(blocked as? Bool, true)
+
+    let touched = try await editor.webView.evaluateJavaScript("window.reinitializationTouched")
+    XCTAssertEqual(touched as? Bool, false)
+
     let result = try await editor.webView.callAsyncJavaScript(
       "return await window.storageResult;", arguments: [:], in: nil, contentWorld: .page
     )
+
     XCTAssertEqual(result as? String, SecretStorageError.invalidKey.localizedDescription)
   }
 
