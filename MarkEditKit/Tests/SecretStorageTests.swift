@@ -99,16 +99,16 @@ final class SecretStorageTests: XCTestCase {
     let delegate = SecretApproval()
     let module = makeModule(delegate: delegate, keychain: keychain)
 
-    _ = await module.has(path: scriptPath, key: "token")
-    let stored = await module.set(path: scriptPath, key: "token", value: "secret")
+    _ = await module.has(capability: script.capability, key: "token")
+    let stored = await module.set(capability: script.capability, key: "token", value: "secret")
     XCTAssertNil(try response(stored)["error"])
     XCTAssertTrue(delegate.requests.isEmpty)
 
-    let value = await module.get(path: scriptPath, key: "token")
+    let value = await module.get(capability: script.capability, key: "token")
     XCTAssertEqual(try response(value)["value"] as? String, "secret")
 
-    _ = await module.delete(path: scriptPath, key: "token")
-    let missing = await module.get(path: scriptPath, key: "token")
+    _ = await module.delete(capability: script.capability, key: "token")
+    let missing = await module.get(capability: script.capability, key: "token")
     XCTAssertTrue(try response(missing).isEmpty)
     XCTAssertEqual(delegate.requests.map(\.key), ["token", "token"])
     XCTAssertEqual(delegate.requests.map(\.path), [scriptPath, scriptPath])
@@ -121,20 +121,31 @@ final class SecretStorageTests: XCTestCase {
     delegate.denied = true
 
     let module = makeModule(delegate: delegate, keychain: keychain)
-    let result = await module.get(path: scriptPath, key: "token")
+    let result = await module.get(capability: script.capability, key: "token")
     XCTAssertEqual(try response(result)["error"] as? String, SecretStorageError.cancelled.localizedDescription)
     XCTAssertTrue(keychain.state.withLock { $0.calls.isEmpty })
   }
 
-  func testUnknownScriptPathsReject() async throws {
+  func testForgedCapabilitiesRejectEveryOperation() async throws {
     let keychain = MemorySecretKeychain()
     let delegate = SecretApproval()
     let module = makeModule(delegate: delegate, keychain: keychain)
-    for path in ["", "extension", "/scripts/not-loaded.js"] {
-      let result = await module.has(path: path, key: "token")
-      XCTAssertEqual(try response(result)["error"] as? String, SecretStorageError.missingContext.localizedDescription)
+    let otherEditor = EditorModuleSecretStorage.Context(id: script.id, path: script.path)
+
+    for capability in ["", script.id, script.path, UUID().uuidString, otherEditor.capability] {
+      let results = [
+        await module.has(capability: capability, key: "token"),
+        await module.get(capability: capability, key: "token"),
+        await module.set(capability: capability, key: "token", value: "secret"),
+        await module.delete(capability: capability, key: "token"),
+      ]
+
+      for result in results {
+        XCTAssertEqual(try response(result)["error"] as? String, SecretStorageError.missingContext.localizedDescription)
+      }
     }
 
+    XCTAssertTrue(delegate.requests.isEmpty)
     XCTAssertTrue(keychain.state.withLock { $0.calls.isEmpty })
   }
 
@@ -142,10 +153,17 @@ final class SecretStorageTests: XCTestCase {
     let keychain = MemorySecretKeychain()
     let delegate = SecretApproval()
     let firstModule = makeModule(delegate: delegate, keychain: keychain)
-    let secondModule = makeModule(delegate: delegate, keychain: keychain)
-    _ = await firstModule.set(path: scriptPath, key: "token", value: "secret")
-    let value = await secondModule.get(path: scriptPath, key: "token")
+    let second = EditorModuleSecretStorage.Context(id: script.id, path: "/scripts/renamed.js")
+    let secondModule = EditorModuleSecretStorage(
+      contexts: [second], delegate: delegate, storage: KeychainSecretStorage(keychain: keychain)
+    )
+
+    XCTAssertNotEqual(script.capability, second.capability)
+    _ = await firstModule.set(capability: script.capability, key: "token", value: "secret")
+    let value = await secondModule.get(capability: second.capability, key: "token")
     XCTAssertEqual(try response(value)["value"] as? String, "secret")
+    let rejected = await secondModule.get(capability: script.capability, key: "token")
+    XCTAssertEqual(try response(rejected)["error"] as? String, SecretStorageError.missingContext.localizedDescription)
   }
 
   func testEmptyKeysRejectWithoutTouchingKeychain() async throws {
@@ -153,10 +171,10 @@ final class SecretStorageTests: XCTestCase {
     let keychain = MemorySecretKeychain()
     let module = makeModule(delegate: delegate, keychain: keychain)
     let results = [
-      await module.has(path: scriptPath, key: ""),
-      await module.get(path: scriptPath, key: ""),
-      await module.set(path: scriptPath, key: "", value: "secret"),
-      await module.delete(path: scriptPath, key: ""),
+      await module.has(capability: script.capability, key: ""),
+      await module.get(capability: script.capability, key: ""),
+      await module.set(capability: script.capability, key: "", value: "secret"),
+      await module.delete(capability: script.capability, key: ""),
     ]
 
     for result in results {
@@ -170,7 +188,7 @@ final class SecretStorageTests: XCTestCase {
   func testBridgePropagatesCancellationAndMissingResults() async throws {
     let delegate = SecretApproval()
     let module = makeModule(delegate: delegate, keychain: MemorySecretKeychain())
-    let parameters = try JSONEncoder().encode(["path": scriptPath, "key": "token"])
+    let parameters = try JSONEncoder().encode(["capability": script.capability, "key": "token"])
     let missing = await module.bridge.invoke(method: "get", parameters: parameters)
     XCTAssertEqual(try XCTUnwrap(missing).get() as? String, "{}")
     delegate.denied = true
@@ -183,12 +201,12 @@ final class SecretStorageTests: XCTestCase {
   func testBridgeDispatchesWritesAndExistenceChecks() async throws {
     let delegate = SecretApproval()
     let module = makeModule(delegate: delegate, keychain: MemorySecretKeychain())
-    let writeParameters = try JSONEncoder().encode(["path": scriptPath, "key": "token", "value": "secret"])
+    let writeParameters = try JSONEncoder().encode(["capability": script.capability, "key": "token", "value": "secret"])
     let stored = await module.bridge.invoke(method: "set", parameters: writeParameters)
     XCTAssertEqual(try XCTUnwrap(stored).get() as? String, "{}")
 
     let parameters = try JSONEncoder().encode([
-      "path": scriptPath,
+      "capability": script.capability,
       "key": "token",
     ])
 
@@ -201,7 +219,35 @@ final class SecretStorageTests: XCTestCase {
     XCTAssertTrue(delegate.requests.isEmpty)
   }
 
-  private let scriptPath = "/scripts/extension.js"
+  func testBridgeRejectsLegacyPathsAndIgnoresClaimedIdentity() async throws {
+    let delegate = SecretApproval()
+    let keychain = MemorySecretKeychain()
+    let victim = EditorModuleSecretStorage.Context(id: "victim", path: "/scripts/victim.js")
+    let module = EditorModuleSecretStorage(
+      contexts: [script, victim], delegate: delegate, storage: KeychainSecretStorage(keychain: keychain)
+    )
+
+    _ = await module.set(capability: victim.capability, key: "token", value: "victim-secret")
+    for method in ["has", "get", "set", "delete"] {
+      let parameters = try JSONEncoder().encode(["path": victim.path, "key": "token", "value": "forged"])
+      let result = await module.bridge.invoke(method: method, parameters: parameters)
+      let json = try XCTUnwrap(try XCTUnwrap(result).get() as? String)
+      XCTAssertEqual(try response(json)["error"] as? String, SecretStorageError.missingContext.localizedDescription)
+    }
+
+    let parameters = try JSONEncoder().encode([
+      "capability": script.capability, "path": victim.path, "id": victim.id, "key": "token",
+    ])
+
+    let result = await module.bridge.invoke(method: "get", parameters: parameters)
+    XCTAssertEqual(try XCTUnwrap(result).get() as? String, "{}")
+    XCTAssertEqual(delegate.requests.map(\.extensionID), [script.id])
+    let value = await module.get(capability: victim.capability, key: "token")
+    XCTAssertEqual(try response(value)["value"] as? String, "victim-secret")
+  }
+
+  private let script = EditorModuleSecretStorage.Context(id: "extension", path: "/scripts/extension.js")
+  private var scriptPath: String { script.path }
 
   private func response(_ json: String) throws -> [String: Any] {
     try XCTUnwrap(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any])
@@ -211,7 +257,7 @@ final class SecretStorageTests: XCTestCase {
     delegate: SecretApproval,
     keychain: MemorySecretKeychain
   ) -> EditorModuleSecretStorage {
-    EditorModuleSecretStorage(scripts: [scriptPath: "extension"], delegate: delegate, storage: KeychainSecretStorage(keychain: keychain))
+    EditorModuleSecretStorage(contexts: [script], delegate: delegate, storage: KeychainSecretStorage(keychain: keychain))
   }
 
   private func expectKeychainError(_ operation: () async throws -> Void) async {

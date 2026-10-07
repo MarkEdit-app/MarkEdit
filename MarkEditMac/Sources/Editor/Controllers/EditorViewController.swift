@@ -122,7 +122,13 @@ final class EditorViewController: NSViewController {
   }()
 
   private(set) lazy var webView: WKWebView = {
-    let scripts = AppCustomization.userScripts()
+    let scripts = AppCustomization.userScripts().map { script in
+      (
+        context: EditorModuleSecretStorage.Context(id: script.id, path: script.path),
+        source: script.source
+      )
+    }
+
     let modules = NativeModules(modules: [
       EditorModuleCore(delegate: self),
       EditorModuleCompletion(delegate: self),
@@ -130,24 +136,18 @@ final class EditorViewController: NSViewController {
       EditorModuleAPI(delegate: self),
       EditorModuleFoundationModels(delegate: self),
       EditorModuleTranslation(),
-
-      // Map script paths to storage namespaces
-      EditorModuleSecretStorage(
-        scripts: Dictionary(scripts.map { ($0.path, $0.id) }) { first, _ in first },
-        delegate: self
-      ),
+      EditorModuleSecretStorage(contexts: scripts.map(\.context), delegate: self),
     ])
 
     let handler = EditorMessageHandler(modules: modules)
     let controller = WKUserContentController()
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
-    scripts.forEach {
-      controller.addUserScript(WKUserScript(
-        source: $0.source,
-        injectionTime: .atDocumentEnd,
-        forMainFrameOnly: true
-      ))
+    EditorUserAsset.contextualScripts(for: scripts.map {
+      (path: $0.context.path, source: $0.source, capability: $0.context.capability)
+    })
+    .forEach {
+      controller.addUserScript($0)
     }
 
     let config: WKWebViewConfiguration = .newConfig(

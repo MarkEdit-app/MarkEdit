@@ -29,7 +29,7 @@ import { initThemeExtractors, initMarkEditModules } from './src/api/modules';
 import { setUp, applyReducedMotion } from './src/styling/config';
 import { loadTheme } from './src/styling/themes';
 import { startObserving } from './src/modules/events';
-import { createScriptContext } from './src/scriptContext';
+import { createScriptRunner } from './src/scriptContext';
 import { setUpQuickLook } from './src/@quicklook';
 
 // In release mode, window.config = "{{EDITOR_CONFIG}}" will be replaced with a JSON literal
@@ -71,8 +71,11 @@ window.nativeModules = {
   secretStorage: createNativeModule<NativeModuleSecretStorage>('secretStorage'),
 };
 
-// For injected scripts to create a script-local MarkEdit context
-window.__createScriptContext__ = createScriptContext;
+Object.defineProperty(window, '__prepareScriptContexts__', {
+  value: (scripts: Parameters<typeof createScriptRunner>[0]) => {
+    Object.defineProperty(window, '__runScriptWithContext__', { value: createScriptRunner(scripts) });
+  },
+});
 
 switch (config.host) {
   case Host.mainApp: setUpMainApp(config); break;

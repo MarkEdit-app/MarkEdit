@@ -12,10 +12,10 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleSecretStorage: NativeModule {
-  func has(path: String, key: String) async -> String
-  func get(path: String, key: String) async -> String
-  func set(path: String, key: String, value: String) async -> String
-  func delete(path: String, key: String) async -> String
+  func has(capability: String?, key: String) async -> String
+  func get(capability: String?, key: String) async -> String
+  func set(capability: String?, key: String, value: String) async -> String
+  func delete(capability: String?, key: String) async -> String
 }
 
 public extension NativeModuleSecretStorage {
@@ -50,12 +50,12 @@ final class NativeBridgeSecretStorage: NativeBridge {
 
   private func has(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var path: String
+      var capability: String?
       var key: String
 
       init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
+        capability = try container.value("capability")
         key = try container.value("key")
       }
     }
@@ -68,18 +68,18 @@ final class NativeBridgeSecretStorage: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.has(path: message.path, key: message.key)
+    let result = await module.has(capability: message.capability, key: message.key)
     return .success(result)
   }
 
   private func get(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var path: String
+      var capability: String?
       var key: String
 
       init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
+        capability = try container.value("capability")
         key = try container.value("key")
       }
     }
@@ -92,19 +92,19 @@ final class NativeBridgeSecretStorage: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.get(path: message.path, key: message.key)
+    let result = await module.get(capability: message.capability, key: message.key)
     return .success(result)
   }
 
   private func set(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var path: String
+      var capability: String?
       var key: String
       var value: String
 
       init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
+        capability = try container.value("capability")
         key = try container.value("key")
         value = try container.value("value")
       }
@@ -118,18 +118,18 @@ final class NativeBridgeSecretStorage: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.set(path: message.path, key: message.key, value: message.value)
+    let result = await module.set(capability: message.capability, key: message.key, value: message.value)
     return .success(result)
   }
 
   private func delete(parameters: Data) async -> Result<Any?, Error>? {
     struct Message: Decodable {
-      var path: String
+      var capability: String?
       var key: String
 
       init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
+        capability = try container.value("capability")
         key = try container.value("key")
       }
     }
@@ -142,7 +142,7 @@ final class NativeBridgeSecretStorage: NativeBridge {
       return .failure(error)
     }
 
-    let result = await module.delete(path: message.path, key: message.key)
+    let result = await module.delete(capability: message.capability, key: message.key)
     return .success(result)
   }
 }
