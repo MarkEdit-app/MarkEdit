@@ -33,6 +33,8 @@ interface HistoryConfig {
   joinToEvent?: (tr: Transaction, isAdjacent: boolean) => boolean
   /// [MarkEdit] Allow event handling to be optionally skipped
   ignoreBeforeInput?: (event: InputEvent, view: EditorView) => boolean
+  /// [MarkEdit] Called when an undo/redo command (including selection history) returns false.
+  onCommandFailed?: () => void
 }
 
 const historyConfig = Facet.define<HistoryConfig, Required<HistoryConfig>>({
@@ -42,6 +44,7 @@ const historyConfig = Facet.define<HistoryConfig, Required<HistoryConfig>>({
       newGroupDelay: 500,
       joinToEvent: (_t, isAdjacent) => isAdjacent,
       ignoreBeforeInput: undefined,
+      onCommandFailed: undefined,
     }, {
       minDepth: Math.max,
       newGroupDelay: Math.min,
@@ -120,11 +123,11 @@ export const historyField = historyField_ as StateField<unknown>
 
 function cmd(side: BranchName, selection: boolean): StateCommand {
   return function({state, dispatch}: {state: EditorState, dispatch: (tr: Transaction) => void}) {
-    if (!selection && state.readOnly) return false
-    let historyState = state.field(historyField_, false)
-    if (!historyState) return false
-    let tr = historyState.pop(side, state, selection)
-    if (!tr) return false
+    let tr = !selection && state.readOnly ? null : state.field(historyField_, false)?.pop(side, state, selection)
+    if (!tr) {
+      state.facet(historyConfig).onCommandFailed?.()
+      return false
+    }
     dispatch(tr)
     return true
   }

@@ -30,6 +30,7 @@ import { gutterExtensions } from './styling/nodes/gutter';
 import { IndentBehavior } from './config';
 import { bundledLanguages } from './languages';
 import { editingState } from './common/store';
+import { playSystemBeep } from './common/utils';
 
 import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
@@ -83,6 +84,7 @@ export function extensions(options: { lineBreak?: string }) {
     history({
       newGroupDelay: window.config.undoGroupingInterval ?? 300,
       ignoreBeforeInput: () => isWritingToolsActive(),
+      onCommandFailed: () => playSystemBeep('Failed to move history'),
     }),
     drawSelection({ cursorBlinkRate: 1000 }),
     dropCursor(),

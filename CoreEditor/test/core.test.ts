@@ -6,6 +6,7 @@ import { performTextDrop, resetEditor } from '../src/core';
 import { editingState } from '../src/common/store';
 import { tryGetEditor } from '../src/common/utils';
 import { caretScrollDefaults } from '../src/modules/selection';
+import { undo, redo } from '../src/@vendor/commands/history';
 import normalizeSelection from '../src/modules/selection/normalizeSelection';
 import * as styling from '../src/styling/config';
 
@@ -76,6 +77,26 @@ describe('resetEditor selection', () => {
   beforeEach(() => {
     tryGetEditor()?.destroy();
     document.body.innerHTML = '';
+  });
+
+  test('configured history beeps only when undo or redo fails', async () => {
+    const api = window.nativeModules.api;
+    const playSystemBeep = jest.fn();
+    window.nativeModules.api = { ...api, playSystemBeep };
+
+    try {
+      await resetEditor('Hello, World!');
+      expect(undo(window.editor)).toBe(false);
+      expect(redo(window.editor)).toBe(false);
+      expect(playSystemBeep).toHaveBeenCalledTimes(2);
+
+      window.editor.dispatch({ changes: { from: 0, insert: 'Hi! ' } });
+      expect(undo(window.editor)).toBe(true);
+      expect(redo(window.editor)).toBe(true);
+      expect(playSystemBeep).toHaveBeenCalledTimes(2);
+    } finally {
+      window.nativeModules.api = api;
+    }
   });
 
   test('without selection range, cursor is at 0', async () => {

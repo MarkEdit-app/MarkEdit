@@ -4,6 +4,7 @@ import { LanguageDescription, LanguageSupport } from '@codemirror/language';
 import { MarkdownConfig } from '@lezer/markdown';
 import { EditorConfigChange, RuntimeInfo } from 'markedit-api';
 import { markdownConfigurations } from '../extensions';
+import { playSystemBeep as beep } from '../common/utils';
 
 type EditorReadyListener = (editor: EditorView) => void;
 type EditorConfigChangeListener = (...change: EditorConfigChange) => void;
@@ -61,7 +62,7 @@ export function relaunchApp(): void {
 }
 
 export function playSystemBeep(): void {
-  window.nativeModules.api.playSystemBeep();
+  beep();
 }
 
 export function addExtension(extension: Extension) {
