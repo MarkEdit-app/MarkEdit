@@ -271,6 +271,25 @@ describe('Mermaid preview rendering', () => {
     jest.restoreAllMocks();
   });
 
+  test.each([400, 1000, 1600])('fits a %spx diagram with a 75%% minimum width', async width => {
+    const appearance = Object.assign(new EventTarget(), { matches: false });
+    jest.spyOn(window, 'matchMedia').mockReturnValue(appearance as MediaQueryList);
+    const render = jest.fn<() => Promise<{ svg: string }>>().mockResolvedValue({
+      svg: `<svg width="100%" viewBox="0 0 ${width} 600" style="max-width: ${width}px"></svg>`,
+    });
+
+    jest.mocked(loadModule).mockReset().mockResolvedValue({
+      default: { initialize: jest.fn(), render },
+    });
+
+    const container = document.createElement('div');
+    await renderMermaid(container, 'graph TD; Start --> Finish', loadModule);
+
+    expect(container.style.getPropertyValue('--mermaid-min-width')).toBe(`${width * 0.75}px`);
+    expect(container.querySelector('svg')?.style.width).toBe(`${width}px`);
+    expect(container.querySelector('svg')?.style.maxWidth).toBe('100%');
+  });
+
   test('serializes appearance changes during rendering and switches back to light', async () => {
     const appearance = Object.assign(new EventTarget(), { matches: false });
     jest.spyOn(window, 'matchMedia').mockReturnValue(appearance as MediaQueryList);
@@ -280,7 +299,8 @@ describe('Mermaid preview rendering', () => {
     const render = jest.fn<() => Promise<{ svg: string }>>()
       .mockReturnValueOnce(initial)
       .mockResolvedValueOnce({ svg: '<svg data-theme="dark" viewBox="0 0 936 103"></svg>' })
-      .mockResolvedValueOnce({ svg: '<svg data-theme="light" viewBox="0 0 936 103"></svg>' });
+      .mockResolvedValueOnce({ svg: '<svg data-theme="light" viewBox="0 0 1200 103"></svg>' })
+      .mockResolvedValueOnce({ svg: '<svg data-theme="empty"></svg>' });
     jest.mocked(loadModule).mockReset().mockResolvedValue({ default: { initialize, render } });
 
     const container = document.createElement('div');
@@ -297,13 +317,22 @@ describe('Mermaid preview rendering', () => {
     expect(initialize).toHaveBeenLastCalledWith({ theme: 'dark', startOnLoad: false });
     expect(container.querySelector('svg')?.getAttribute('data-theme')).toBe('dark');
     expect(container.querySelector('svg')?.style.width).toBe('936px');
+    expect(container.querySelector('svg')?.style.maxWidth).toBe('100%');
+    expect(container.style.getPropertyValue('--mermaid-min-width')).toBe('702px');
 
     appearance.matches = false;
     appearance.dispatchEvent(new Event('change'));
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(initialize).toHaveBeenLastCalledWith({ theme: 'default', startOnLoad: false });
     expect(container.querySelector('svg')?.getAttribute('data-theme')).toBe('light');
-    expect(container.querySelector('svg')?.style.width).toBe('936px');
+    expect(container.querySelector('svg')?.style.width).toBe('1200px');
+    expect(container.querySelector('svg')?.style.maxWidth).toBe('100%');
+    expect(container.style.getPropertyValue('--mermaid-min-width')).toBe('900px');
+
+    appearance.dispatchEvent(new Event('change'));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(container.querySelector('svg')?.getAttribute('data-theme')).toBe('empty');
+    expect(container.style.getPropertyValue('--mermaid-min-width')).toBe('');
     expect(loadModule).toHaveBeenCalledTimes(1);
   });
 });

@@ -13,10 +13,14 @@ export async function renderMermaid(container: HTMLElement, code: string, loadMo
     mermaid.initialize({ theme, startOnLoad: false });
     container.innerHTML = (await mermaid.render('markedit-diagram', code, container)).svg;
     container.removeAttribute('role');
+    container.style.removeProperty('--mermaid-min-width');
 
     const diagram = container.querySelector('svg');
     if (diagram && diagram.viewBox.baseVal.width > 0) {
+      // Fit the available width, but scroll rather than shrink below 75%.
+      container.style.setProperty('--mermaid-min-width', `${diagram.viewBox.baseVal.width * 0.75}px`);
       diagram.style.width = `${diagram.viewBox.baseVal.width}px`;
+      diagram.style.maxWidth = '100%';
     }
   };
 
