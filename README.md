@@ -34,14 +34,14 @@ _For perspective: at just 4 MB, MarkEdit is much smaller than Electron apps. Han
 ## What makes MarkEdit different
 
 - Privacy-focused: doesn't collect any user data
-- Native: clean and intuitive, feels right at home on Mac
-- Fast: edits 10 MB files easily
-- Lightweight: installer size is about 4 MB
-- Extensible: seamless integration with Shortcuts and AppleScript
+- Native: macOS aesthetics, with Shortcuts and AppleScript support
+- Fast: launches in a flash, edits million-line files easily
+- Lightweight: installer is about 4 MB
+- Extensible: built-in extension manager for curated extensions
 
 MarkEdit strictly follows the [GFM specification](https://github.github.com/gfm/), with no proprietary syntax or invented features. Complex editing like multi-caret and code folding is built on [CodeMirror 6](https://codemirror.net/) for correctness and performance, consistently faster than most macOS editors. UI controls remain native to macOS in both aesthetics and behavior, including force-touch word lookup, inline predictions, and Writing Tools.
 
-Customization is built around CSS, JavaScript, and [CodeMirror extensions](https://github.com/MarkEdit-app/MarkEdit-api). Official extensions include [MarkEdit-preview](https://markedit-app.github.io/extensions/#markedit-preview) for a preview pane, [MarkEdit-theming](https://github.com/MarkEdit-app/MarkEdit-theming) for custom themes, and [MarkEdit-ai-writer](https://markedit-app.github.io/extensions/#markedit-ai-writer) for Apple Intelligence on macOS Tahoe or later.
+Customization is built around CSS, JavaScript, and [CodeMirror extensions](https://github.com/MarkEdit-app/MarkEdit-api). Official extensions let you preview Markdown, hide syntax, customize themes, write with AI, edit tables visually, and much more.
 
 <img src="./Screenshots/extensions.png" width="800" alt="MarkEdit Extensions">
 

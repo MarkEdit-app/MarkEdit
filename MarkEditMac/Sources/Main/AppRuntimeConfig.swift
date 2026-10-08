@@ -29,6 +29,12 @@ enum AppRuntimeConfig {
       ///
       /// Custom values are used as-is and need not follow these relationships.
       var material: (backdropBlur: Double, tintedOpacity: Double, plainOpacity: Double) {
+      #if DEBUG
+        if ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] == "YES" {
+          return (16, 0.9, 0.6)
+        }
+      #endif
+
         switch self {
         case .readable: return (16, 0.9, 0.6)
         case .default: return (8, 0.7, 0.4)
