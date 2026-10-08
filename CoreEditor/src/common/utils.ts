@@ -55,6 +55,14 @@ export function sleep(milliseconds: number) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
+export function playSystemBeep(reason = 'Operation unavailable'): void {
+  if (isReleaseMode) {
+    window.nativeModules.api.playSystemBeep();
+  } else {
+    console.warn(`Invalid operation: ${reason} (system beep requested in non-release mode)`);
+  }
+}
+
 export function getFontSizeValue(fontSize: string) {
   // "10px" -> 10
   const match = fontSize.match(/^[0-9.]+/);

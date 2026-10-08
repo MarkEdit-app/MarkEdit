@@ -4,7 +4,7 @@ import { HeadingInfo } from './types';
 import { getSyntaxTree } from '../lezer';
 import { scrollToSelection } from '../selection';
 import { saveGoBackSelection } from '../selection/navigate';
-import { isReleaseMode } from '../../common/utils';
+import { playSystemBeep } from '../../common/utils';
 import selectWithRanges from '../selection/selectWithRanges';
 
 // Ctrl-Mod-Arrow to navigate sections, Alt-Mod-Arrow conflicts with adding carets
@@ -92,7 +92,7 @@ export function selectPreviousSection() {
   const selection = window.editor.state.selection.main.head;
   const target = selection > (toc[current]?.to ?? selection) ? current : current - 1;
   if (target < 0) {
-    return handleInvalidOperation();
+    return playSystemBeep('Invalid Heading');
   }
 
   gotoHeader(toc[target]);
@@ -102,7 +102,7 @@ export function selectNextSection() {
   const toc = getTableOfContents();
   const current = toc.findIndex(info => info.selected);
   if (current === toc.length - 1) {
-    return handleInvalidOperation();
+    return playSystemBeep('Invalid Heading');
   }
 
   gotoHeader(toc[current + 1]);
@@ -115,11 +115,3 @@ export function gotoHeader(headingInfo: HeadingInfo) {
 }
 
 export type { HeadingInfo };
-
-function handleInvalidOperation(reason = 'Invalid Heading') {
-  if (isReleaseMode) {
-    window.nativeModules.api.playSystemBeep();
-  } else {
-    console.warn(`Invalid operation: ${reason} (system beep requested in non-release mode)`);
-  }
-}
