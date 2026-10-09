@@ -12,11 +12,11 @@ public extension NSApplication {
   }
 
   var shiftKeyIsPressed: Bool {
-    currentEvent?.modifierFlags.contains(.shift) == true
+    NSEvent.modifierFlags.contains(.shift)
   }
 
   var optionKeyIsPressed: Bool {
-    currentEvent?.modifierFlags.contains(.option) == true
+    NSEvent.modifierFlags.contains(.option)
   }
 
   @MainActor

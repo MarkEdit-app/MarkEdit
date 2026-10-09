@@ -7,7 +7,7 @@
 import AppKit
 
 /**
- Hairline-width divider, it requires manual layout to be correctly rendered.
+ Non-interactive hairline-width divider, it requires manual layout to be correctly rendered.
  */
 public final class DividerView: NSView {
   public var length: Double {
@@ -30,5 +30,9 @@ public final class DividerView: NSView {
 
   override public func updateLayer() {
     layerBackgroundColor = color
+  }
+
+  override public func hitTest(_ point: CGPoint) -> NSView? {
+    nil
   }
 }

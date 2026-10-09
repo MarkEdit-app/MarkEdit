@@ -486,7 +486,7 @@ private extension FileVersionPicker {
         self?.scrollView.scrollTextViewUp()
         return nil
       case .kVK_Space:
-        self?.gotoVersion(at: NSApp.shiftKeyIsPressed ? ((self?.allVersions.count ?? 1) - 1) : 0)
+        self?.gotoVersion(at: event.modifierFlags.contains(.shift) ? ((self?.allVersions.count ?? 1) - 1) : 0)
         return nil
       default:
         return event
