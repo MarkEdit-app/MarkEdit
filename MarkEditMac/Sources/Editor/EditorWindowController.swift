@@ -33,15 +33,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
       let callerTabbingPreference = NSWindow.allowsAutomaticWindowTabbing
 
       Task { @MainActor [weak self] in
-        guard let self else {
-          return
-        }
-
-        // Defer the actual show until the editor finishes its first paint
-        await self.editorViewController?.waitUntilEditorReset()
-
-        // The document might have been closed, for example Finder closes the file after printing
-        guard self.document != nil else {
+        guard let self, await self.windowReadyForPresentation() != nil else {
           return
         }
 
@@ -142,6 +134,30 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
   }
 }
 
+// MARK: - Document Opening
+
+extension EditorWindowController {
+  func showWindow(target: OpenDocumentTarget, relativeTo sourceWindow: NSWindow?) async throws {
+    guard let window = await windowReadyForPresentation() else {
+      throw CancellationError()
+    }
+
+    let tabbingMode = window.tabbingMode
+    if target != .automatic {
+      window.tabbingMode = .disallowed
+    }
+
+    showWindowImmediately(nil)
+    window.tabbingMode = tabbingMode
+
+    if target == .tab, let sourceWindow, sourceWindow !== window, sourceWindow.isVisible {
+      sourceWindow.addTabbedWindow(window, ordered: .above)
+      sourceWindow.tabGroup?.selectedWindow = window
+      window.makeKeyAndOrderFront(nil)
+    }
+  }
+}
+
 // MARK: - Private
 
 private extension EditorWindowController {
@@ -155,6 +171,15 @@ private extension EditorWindowController {
     }
 
     return editor.hasFinishedLoading && editor.pendingResetCount > 0
+  }
+
+  func windowReadyForPresentation() async -> NSWindow? {
+    if shouldWaitResetting {
+      await editorViewController?.waitUntilEditorReset()
+    }
+
+    // The document may have closed while waiting for the editor
+    return document != nil ? window : nil
   }
 
   func showWindowImmediately(_ sender: Any?) {

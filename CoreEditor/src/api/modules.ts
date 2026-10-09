@@ -18,8 +18,8 @@ import { Translator } from './translation';
 import { languageModel } from './languageModel';
 import { secretStorage } from './secretStorage';
 
-import { onAppReady, onEditorReady, onEditorConfigChange, saveDocument, closeDocument, recentDocumentPaths, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
-import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showSavePanel, showPrintPanel, runService } from './ui';
+import { onAppReady, onEditorReady, onEditorConfigChange, openDocument, saveDocument, closeDocument, recentDocumentPaths, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
+import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showOpenPanel, showSavePanel, showPrintPanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getFileVersions, getFileVersionContent, restoreFileVersion, deleteLocalFileVersions } from './fileVersion';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
@@ -59,6 +59,7 @@ export function initMarkEditModules() {
   MarkEdit.onAppReady = onAppReady;
   MarkEdit.onEditorReady = onEditorReady;
   MarkEdit.onEditorConfigChange = onEditorConfigChange;
+  MarkEdit.openDocument = openDocument;
   MarkEdit.saveDocument = saveDocument;
   MarkEdit.closeDocument = closeDocument;
   MarkEdit.recentDocumentPaths = recentDocumentPaths;
@@ -70,6 +71,7 @@ export function initMarkEditModules() {
   MarkEdit.showContextMenu = showContextMenu;
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;
+  MarkEdit.showOpenPanel = showOpenPanel;
   MarkEdit.showSavePanel = showSavePanel;
   MarkEdit.showPrintPanel = showPrintPanel;
   MarkEdit.runService = runService;

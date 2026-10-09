@@ -347,6 +347,21 @@ extension EditorViewController: EditorModuleCompletionDelegate {
 // MARK: - EditorModuleAPIDelegate
 
 extension EditorViewController: EditorModuleAPIDelegate {
+  func editorAPI(_ sender: EditorModuleAPI, openDocument fileURL: URL, target: OpenDocumentTarget) async -> Bool {
+    guard let controller = NSDocumentController.shared as? AppDocumentController else {
+      Logger.log(.error, "Missing AppDocumentController")
+      return false
+    }
+
+    do {
+      try await controller.openDocument(at: fileURL, target: target, relativeTo: viewIfLoaded?.window)
+      return true
+    } catch {
+      Logger.log(.error, "Failed to open document: \(error.localizedDescription)")
+      return false
+    }
+  }
+
   func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool {
     guard let document else {
       return false

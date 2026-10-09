@@ -13,8 +13,11 @@ import UniformTypeIdentifiers
   import PDFKit
 #endif
 
+public typealias OpenDocumentTarget = NativeModuleAPIOpenDocumentTarget
+
 @MainActor
 public protocol EditorModuleAPIDelegate: AnyObject {
+  func editorAPI(_ sender: EditorModuleAPI, openDocument fileURL: URL, target: OpenDocumentTarget) async -> Bool
   func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool
   func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
@@ -50,6 +53,10 @@ public final class EditorModuleAPI: NativeModuleAPI {
     self.delegate = delegate
   }
 
+  public func openDocument(path: String, target: OpenDocumentTarget?) async -> Bool {
+    await delegate?.editorAPI(self, openDocument: URL(filePath: path), target: target ?? .automatic) == true
+  }
+
   public func saveDocument() async -> Bool {
     await delegate?.editorAPISaveDocument(self) == true
   }
@@ -59,12 +66,12 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 
   public func recentDocumentPaths() async -> [String] {
-    #if os(macOS)
-      NSDocumentController.shared.recentDocumentURLs.map(\.path)
-    #else
-      Logger.log(.error, "Recent documents are only supported on macOS")
-      return []
-    #endif
+  #if os(macOS)
+    NSDocumentController.shared.recentDocumentURLs.map(\.path)
+  #else
+    Logger.log(.error, "Recent documents are only supported on macOS")
+    return []
+  #endif
   }
 
   public func addMainMenuItems(items: [WebMenuItem]) {
@@ -90,36 +97,36 @@ public final class EditorModuleAPI: NativeModuleAPI {
   }
 
   public func showPrintPanel(options: PrintPanelOptions) async -> Bool {
-    #if os(macOS)
-      guard let data = Data(base64Encoded: options.data) else {
-        Logger.log(.error, "Failed to decode PDF data for printing")
-        return false
-      }
-
-      guard let document = PDFDocument(data: data) else {
-        Logger.log(.error, "Failed to open PDF for printing")
-        return false
-      }
-
-      guard let operation = document.printOperation(
-        for: .shared,
-        scalingMode: .pageScaleDownToFit,
-        autoRotate: true
-      ) else {
-        Logger.log(.error, "Failed to create print operation for PDF")
-        return false
-      }
-
-      if let title = options.title {
-        operation.jobTitle = title
-      }
-
-      operation.showsPrintPanel = true
-      return operation.run()
-    #else
-      Logger.log(.error, "PDF printing is only supported on macOS")
+  #if os(macOS)
+    guard let data = Data(base64Encoded: options.data) else {
+      Logger.log(.error, "Failed to decode PDF data for printing")
       return false
-    #endif
+    }
+
+    guard let document = PDFDocument(data: data) else {
+      Logger.log(.error, "Failed to open PDF for printing")
+      return false
+    }
+
+    guard let operation = document.printOperation(
+      for: .shared,
+      scalingMode: .pageScaleDownToFit,
+      autoRotate: true
+    ) else {
+      Logger.log(.error, "Failed to create print operation for PDF")
+      return false
+    }
+
+    if let title = options.title {
+      operation.jobTitle = title
+    }
+
+    operation.showsPrintPanel = true
+    return operation.run()
+  #else
+    Logger.log(.error, "PDF printing is only supported on macOS")
+    return false
+  #endif
   }
 
   public func runService(name: String, input: String?) async -> Bool {
@@ -336,6 +343,49 @@ public final class EditorModuleAPI: NativeModuleAPI {
     NSSound.beep()
   #else
     Logger.assertFail("Missing implementation, playing the system beep requires AppKit")
+  #endif
+  }
+}
+
+// MARK: - Open Panel
+
+public extension EditorModuleAPI {
+  func showOpenPanel(options: OpenPanelOptions) async -> [String]? {
+  #if os(macOS)
+    let openPanel = NSOpenPanel()
+    if let title = options.title {
+      openPanel.title = title
+    }
+
+    if let message = options.message {
+      openPanel.message = message
+    }
+
+    if let prompt = options.prompt {
+      openPanel.prompt = prompt
+    }
+
+    let selectionType = options.selectionType ?? .files
+    openPanel.canChooseFiles = selectionType != .directories
+    openPanel.canChooseDirectories = selectionType != .files
+    openPanel.allowsMultipleSelection = options.allowsMultipleSelection ?? false
+    openPanel.showsHiddenFiles = true
+    openPanel.canCreateDirectories = true
+    openPanel.titlebarAppearsTransparent = true
+
+    guard await openPanel.begin() == .OK else {
+      return nil
+    }
+
+    guard !openPanel.urls.isEmpty else {
+      Logger.log(.error, "No files or folders were selected")
+      return nil
+    }
+
+    return openPanel.urls.map(\.path)
+  #else
+    Logger.log(.error, "Open panels are only supported on macOS")
+    return nil
   #endif
   }
 }

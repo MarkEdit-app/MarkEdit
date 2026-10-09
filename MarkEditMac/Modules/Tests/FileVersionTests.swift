@@ -171,6 +171,7 @@ private final class EditorModuleAPIDelegateStub: EditorModuleAPIDelegate {
     self.fileURL = fileURL
   }
 
+  func editorAPI(_ sender: EditorModuleAPI, openDocument fileURL: URL, target: OpenDocumentTarget) async -> Bool { false }
   func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool { true }
   func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool { true }
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {}
