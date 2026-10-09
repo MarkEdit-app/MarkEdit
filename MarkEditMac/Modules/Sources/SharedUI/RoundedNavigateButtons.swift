@@ -1,5 +1,5 @@
 //
-//  EditorFindButtons.swift
+//  RoundedNavigateButtons.swift
 //
 //  Created by cyan on 12/17/22.
 //

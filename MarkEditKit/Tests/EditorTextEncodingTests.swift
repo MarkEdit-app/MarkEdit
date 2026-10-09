@@ -1,6 +1,8 @@
 //
 //  EditorTextEncodingTests.swift
 //
+//  Created by cyan on 9/23/26.
+//
 
 import MarkEditKit
 import XCTest

@@ -1,5 +1,5 @@
 //
-//  SwiftLintPlugin.swift
+//  main.swift
 //
 //  Created by cyan on 1/30/23.
 //

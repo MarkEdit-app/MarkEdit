@@ -1,3 +1,9 @@
+//
+//  EditorDocumentTests.swift
+//
+//  Created by cyan on 9/23/26.
+//
+
 import AppKit
 import AppKitExtensions
 import ExtensionCore
@@ -173,7 +179,7 @@ final class EditorDocumentTests: XCTestCase {
   func testOpenDocumentWindowTargets() async throws {
     let storyboard = NSStoryboard(name: "Main", bundle: nil)
     let source = NSWindow(
-      contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+      contentRect: CGRect(x: 0, y: 0, width: 400, height: 300),
       styleMask: [.titled, .closable, .resizable],
       backing: .buffered,
       defer: false
@@ -589,7 +595,7 @@ extension EditorDocumentTests {
 
   func testSecretConfirmationApprovalAndCancellation() async throws {
     let editor = EditorViewController(preloadDelay: 60)
-    let frame = NSRect(x: 0, y: 0, width: 400, height: 300)
+    let frame = CGRect(x: 0, y: 0, width: 400, height: 300)
     editor.view = NSView(frame: frame)
 
     let window = NSWindow(contentRect: frame, styleMask: [.titled], backing: .buffered, defer: false)
@@ -758,7 +764,7 @@ extension EditorDocumentTests {
       withSettings: [
         .jobDisposition: NSPrintInfo.JobDisposition.save,
         .jobSavingURL: url,
-        .paperSize: NSSize(width: 400, height: 600),
+        .paperSize: CGSize(width: 400, height: 600),
       ],
       showPrintPanel: false,
       delegate: delegate,
@@ -774,7 +780,7 @@ extension EditorDocumentTests {
     let pdf = try XCTUnwrap(PDFDocument(url: url))
     XCTAssertEqual(pdf.pageCount, 1)
     XCTAssertTrue(try XCTUnwrap(pdf.string).contains("Windowless printing"))
-    XCTAssertEqual(pdf.page(at: 0)?.bounds(for: .mediaBox).size, NSSize(width: 400, height: 600))
+    XCTAssertEqual(pdf.page(at: 0)?.bounds(for: .mediaBox).size, CGSize(width: 400, height: 600))
   }
 }
 
