@@ -89,9 +89,9 @@ export function setUpQuickLook(config: Config) {
 }
 
 /**
- * Homemade scrollbar dragging, driven by mouse events forwarded from native.
+ * Homemade scrollbar dragging, driven by native mouse and touch input.
  */
-function enableDragGestures() {
+export function enableDragGestures() {
   const bridge = window;
   bridge.startDragging = (original: number) => {
     // scrollbarOffset is the distance between the top of the scrollbar and the mouse location
@@ -103,7 +103,8 @@ function enableDragGestures() {
     // note this might not be 100% accurate as CodeMirror render the document lazily,
     // long documents may not have correct scrollHeight at the moment.
     if (location < scrollbarTop || location > scrollbarTop + scrollbarHeight) {
-      scrollToMouseLocation(location, scrollbarHeight * 0.5, 'smooth');
+      storage.scrollbarOffset = scrollbarHeight * 0.5;
+      scrollToMouseLocation(location, storage.scrollbarOffset, 'smooth');
     }
   };
 
