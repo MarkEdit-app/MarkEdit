@@ -12,6 +12,7 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleAPI: NativeModule {
+  func openDocument(path: String, target: NativeModuleAPIOpenDocumentTarget?) async -> Bool
   func saveDocument() async -> Bool
   func closeDocument() async -> Bool
   func recentDocumentPaths() async -> [String]
@@ -19,6 +20,7 @@ public protocol NativeModuleAPI: NativeModule {
   func showContextMenu(items: [WebMenuItem], location: WebPoint)
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String?
+  func showOpenPanel(options: OpenPanelOptions) async -> [String]?
   func showSavePanel(options: SavePanelOptions) async -> Bool
   func showPrintPanel(options: PrintPanelOptions) async -> Bool
   func runService(name: String, input: String?) async -> Bool
@@ -59,6 +61,8 @@ final class NativeBridgeAPI: NativeBridge {
 
   func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
     switch method {
+    case "openDocument":
+      return await openDocument(parameters: parameters)
     case "saveDocument":
       return await saveDocument(parameters: parameters)
     case "closeDocument":
@@ -73,6 +77,8 @@ final class NativeBridgeAPI: NativeBridge {
       return await showAlert(parameters: parameters)
     case "showTextBox":
       return await showTextBox(parameters: parameters)
+    case "showOpenPanel":
+      return await showOpenPanel(parameters: parameters)
     case "showSavePanel":
       return await showSavePanel(parameters: parameters)
     case "showPrintPanel":
@@ -118,6 +124,30 @@ final class NativeBridgeAPI: NativeBridge {
     default:
       return nil
     }
+  }
+
+  private func openDocument(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var path: String
+      var target: NativeModuleAPIOpenDocumentTarget?
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        path = try container.value("path")
+        target = try container.value("target")
+      }
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.openDocument(path: message.path, target: message.target)
+    return .success(result)
   }
 
   private func saveDocument(parameters: Data) async -> Result<Any?, Error>? {
@@ -230,6 +260,28 @@ final class NativeBridgeAPI: NativeBridge {
     }
 
     let result = await module.showTextBox(title: message.title, placeholder: message.placeholder, defaultValue: message.defaultValue)
+    return .success(result)
+  }
+
+  private func showOpenPanel(parameters: Data) async -> Result<Any?, Error>? {
+    struct Message: Decodable {
+      var options: OpenPanelOptions
+
+      init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+        options = try container.value("options")
+      }
+    }
+
+    let message: Message
+    do {
+      message = try decoder.decode(Message.self, from: parameters)
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    let result = await module.showOpenPanel(options: message.options)
     return .success(result)
   }
 
@@ -596,6 +648,12 @@ final class NativeBridgeAPI: NativeBridge {
   }
 }
 
+public enum NativeModuleAPIOpenDocumentTarget: String, Codable, Sendable {
+  case automatic = "automatic"
+  case window = "window"
+  case tab = "tab"
+}
+
 /// Represents a menu item in native menus.
 public struct WebMenuItem: Decodable, Sendable {
   public var separator: Bool
@@ -648,6 +706,42 @@ public struct WebPoint: Decodable, Sendable {
   }
 }
 
+public struct OpenPanelOptions: Decodable, Sendable {
+  /// Panel title. Uses the system default if omitted.
+  public var title: String?
+  /// Instructions displayed in the panel.
+  public var message: String?
+  /// Confirmation button label. Uses the system default if omitted.
+  public var prompt: String?
+  /// Types of items that can be selected. Defaults to 'files'.
+  public var selectionType: OpenPanelOptionsMembersSelectionTypeType?
+  /// Allow selecting multiple items. Defaults to false.
+  public var allowsMultipleSelection: Bool?
+
+  public init(title: String?, message: String?, prompt: String?, selectionType: OpenPanelOptionsMembersSelectionTypeType?, allowsMultipleSelection: Bool?) {
+    self.title = title
+    self.message = message
+    self.prompt = prompt
+    self.selectionType = selectionType
+    self.allowsMultipleSelection = allowsMultipleSelection
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    title = try container.value("title")
+    message = try container.value("message")
+    prompt = try container.value("prompt")
+    selectionType = try container.value("selectionType")
+    allowsMultipleSelection = try container.value("allowsMultipleSelection")
+  }
+}
+
+public enum OpenPanelOptionsMembersSelectionTypeType: String, Codable, Sendable {
+  case files = "files"
+  case directories = "directories"
+  case both = "both"
+}
+
 public struct SavePanelOptions: Decodable, Sendable {
   /// String representation of the file, if applicable.
   public var string: String?
@@ -693,8 +787,6 @@ public struct PrintPanelOptions: Decodable, Sendable {
 
 public struct CreateFileOptions: Decodable, Sendable {
   /// File path.
-  ///
-  /// It must be one that the app can access. See the [wiki](https://github.com/MarkEdit-app/MarkEdit/wiki/Customization#grant-folder-access) for more details.
   public var path: String
   /// If set to true, a directory will be created instead.
   public var isDirectory: Bool?

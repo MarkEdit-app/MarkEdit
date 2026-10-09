@@ -157,6 +157,7 @@ private extension MoveFileTests {
     func editorAPIGetFileURL(_ sender: EditorModuleAPI, path: String?) -> URL? {
       path.map { URL(filePath: $0) }
     }
+    func editorAPI(_ sender: EditorModuleAPI, openDocument fileURL: URL, target: OpenDocumentTarget) async -> Bool { false }
     func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool { false }
     func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool { false }
     func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {}

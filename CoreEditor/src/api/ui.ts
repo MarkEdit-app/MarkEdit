@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { MenuItem, MenuItemState, Alert, TextBox, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
+import { MenuItem, MenuItemState, Alert, TextBox, OpenPanelOptions, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
@@ -57,6 +57,10 @@ export function showAlert(spec: Alert): Promise<number> {
 export function showTextBox(spec?: TextBox): Promise<string | undefined> {
   const textBox = typeof spec === 'string' ? { title: spec } : spec;
   return window.nativeModules.api.showTextBox(textBox ?? {});
+}
+
+export function showOpenPanel(options?: OpenPanelOptions): Promise<string[] | undefined> {
+  return window.nativeModules.api.showOpenPanel({ options: options ?? {} });
 }
 
 export function showSavePanel(options: SavePanelOptions): Promise<boolean> {

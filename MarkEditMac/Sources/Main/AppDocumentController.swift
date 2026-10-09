@@ -134,6 +134,46 @@ final class AppDocumentController: NSDocumentController {
   }
 }
 
+// MARK: - Document Opening
+
+extension AppDocumentController {
+  func openDocument(
+    at url: URL,
+    target: OpenDocumentTarget,
+    relativeTo sourceWindow: NSWindow?
+  ) async throws {
+    let url = url.resolvingSymlinksInPath()
+    if document(for: url) == nil {
+      try url.ensureCanOpenInternally()
+      if !ApplicationEnvironment.isRunningTests {
+        await EditorPreloader.shared.prepareViewController()
+      }
+    }
+
+    // Bypass the override, which routes binary files to other apps
+    let (document, alreadyOpen) = try await super.openDocument(withContentsOf: url, display: false)
+    guard let document = document as? EditorDocument else {
+      throw CocoaError(.fileReadCorruptFile)
+    }
+
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
+    if alreadyOpen {
+      document.showWindows()
+      return
+    }
+
+    document.makeWindowControllers()
+    guard let controller = document.windowControllers.first as? EditorWindowController else {
+      throw CocoaError(.fileReadUnknown)
+    }
+
+    try await controller.showWindow(target: target, relativeTo: sourceWindow)
+  }
+}
+
 // MARK: - Private
 
 private extension AppDocumentController {
@@ -160,5 +200,16 @@ private extension NSOpenPanel {
   /// For example, the animation of opening documents will sometimes be skipped.
   func relayoutAccessoryView() {
     accessoryView?.needsLayout = true
+  }
+}
+
+private extension URL {
+  /// Rejects binary files and directories other than TextBundles.
+  func ensureCanOpenInternally() throws {
+    let values = try resourceValues(forKeys: [.isRegularFileKey, .isDirectoryKey])
+    let isTextBundle = values.isDirectory == true && pathExtension.lowercased() == "textbundle"
+    guard values.isRegularFile == true || isTextBundle, !isBinaryFile else {
+      throw CocoaError(.fileReadCorruptFile)
+    }
   }
 }

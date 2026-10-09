@@ -83,6 +83,179 @@ final class EditorDocumentTests: XCTestCase {
     XCTAssertEqual(try XCTUnwrap(value as? [String]), expected)
   }
 
+  func testOpenDocumentAPI() async throws {
+    let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+
+    let editor = EditorViewController(preloadDelay: 60)
+    let api = EditorModuleAPI(delegate: editor)
+    let controller = NSDocumentController.shared
+
+    let url = directory.appending(path: "document.txt")
+    let data = Data("Plain text\n".utf8)
+    try data.write(to: url)
+
+    let parameters = try JSONSerialization.data(withJSONObject: ["path": url.path])
+    let result = await api.bridge.invoke(method: "openDocument", parameters: parameters)
+    XCTAssertEqual(try XCTUnwrap(result).get() as? Bool, true)
+
+    let document = try XCTUnwrap(controller.document(for: url) as? EditorDocument)
+    defer {
+      document.isTerminating = true
+      document.close()
+      controller.removeDocument(document)
+    }
+
+    try await Self.waitUntilLoaded(document, data: data)
+    XCTAssertEqual(document.stringValue, "Plain text\n")
+
+    let reopened = await api.openDocument(path: url.path, target: .window)
+    XCTAssertTrue(reopened)
+    XCTAssertIdentical(controller.document(for: url), document)
+  }
+
+  func testOpenDocumentAPIFollowsSymlink() async throws {
+    let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+
+    let url = directory.appending(path: "document.txt")
+    let link = directory.appending(path: "link.txt")
+    let data = Data("Plain text\n".utf8)
+    try data.write(to: url)
+    try FileManager.default.createSymbolicLink(at: link, withDestinationURL: url)
+
+    let editor = EditorViewController(preloadDelay: 60)
+    let api = EditorModuleAPI(delegate: editor)
+    let opened = await api.openDocument(path: link.path, target: nil)
+    XCTAssertTrue(opened)
+
+    let controller = NSDocumentController.shared
+    let document = try XCTUnwrap(controller.document(for: url) as? EditorDocument)
+    defer {
+      document.isTerminating = true
+      document.close()
+      controller.removeDocument(document)
+    }
+
+    try await Self.waitUntilLoaded(document, data: data)
+    XCTAssertEqual(document.stringValue, "Plain text\n")
+
+    let reopened = await api.openDocument(path: link.path, target: .window)
+    XCTAssertTrue(reopened)
+    XCTAssertIdentical(controller.document(for: url), document)
+  }
+
+  func testOpenDocumentAPIRejectsUnsupportedFiles() async throws {
+    let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+
+    let editor = EditorViewController(preloadDelay: 60)
+    let api = EditorModuleAPI(delegate: editor)
+    let controller = NSDocumentController.shared
+    let originalCount = controller.documents.count
+
+    let binary = directory.appending(path: "image.png")
+    try Data([0, 1, 2]).write(to: binary)
+    let link = directory.appending(path: "image.txt")
+    try FileManager.default.createSymbolicLink(at: link, withDestinationURL: binary)
+
+    for url in [binary, link, directory, directory.appending(path: "missing.md")] {
+      let opened = await api.openDocument(path: url.path, target: .tab)
+      XCTAssertFalse(opened)
+    }
+
+    XCTAssertEqual(controller.documents.count, originalCount)
+  }
+
+  func testOpenDocumentWindowTargets() async throws {
+    let storyboard = NSStoryboard(name: "Main", bundle: nil)
+    let source = NSWindow(
+      contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+      styleMask: [.titled, .closable, .resizable],
+      backing: .buffered,
+      defer: false
+    )
+
+    source.isReleasedWhenClosed = false
+    source.tabbingMode = .disallowed
+    source.makeKeyAndOrderFront(nil)
+    defer { source.close() }
+
+    let other = NSWindow(contentRect: source.frame, styleMask: source.styleMask, backing: .buffered, defer: false)
+    other.isReleasedWhenClosed = false
+    other.tabbingMode = .disallowed
+    other.makeKeyAndOrderFront(nil)
+    defer { other.close() }
+
+    let allowsTabbing = NSWindow.allowsAutomaticWindowTabbing
+    defer { NSWindow.allowsAutomaticWindowTabbing = allowsTabbing }
+    NSWindow.allowsAutomaticWindowTabbing = true
+
+    let cases: [(OpenDocumentTarget, NSWindow.TabbingMode, NSWindow?)] = [
+      (.window, .preferred, source),
+      (.tab, .disallowed, source),
+      (.tab, .preferred, nil),
+      (.automatic, .disallowed, source),
+    ]
+
+    for (target, tabbingMode, host) in cases {
+      source.tabbingMode = tabbingMode
+      other.tabbingMode = tabbingMode
+      other.makeKeyAndOrderFront(nil)
+
+      let controller = try XCTUnwrap(
+        storyboard.instantiateController(withIdentifier: "EditorWindowController") as? EditorWindowController
+      )
+
+      let window = try XCTUnwrap(controller.window)
+      window.tabbingIdentifier = source.tabbingIdentifier
+      window.tabbingMode = tabbingMode
+
+      let document = NSDocument()
+      document.addWindowController(controller)
+      defer {
+        document.close()
+        window.close()
+      }
+
+      try await controller.showWindow(target: target, relativeTo: host)
+      XCTAssertTrue(window.isVisible)
+      XCTAssertEqual(source.tabbedWindows?.contains(window) == true, target == .tab && host != nil)
+      XCTAssertNotEqual(other.tabbedWindows?.contains(window), true)
+
+      if target == .tab, host != nil {
+        XCTAssertIdentical(source.tabGroup?.selectedWindow, window)
+      }
+
+      XCTAssertTrue(NSWindow.allowsAutomaticWindowTabbing)
+      XCTAssertEqual(window.tabbingMode, tabbingMode)
+    }
+  }
+
+  func testOpenDocumentClosedBeforePresentationFails() async throws {
+    let storyboard = NSStoryboard(name: "Main", bundle: nil)
+    let controller = try XCTUnwrap(
+      storyboard.instantiateController(withIdentifier: "EditorWindowController") as? EditorWindowController
+    )
+
+    let window = try XCTUnwrap(controller.window)
+    let document = NSDocument()
+    document.addWindowController(controller)
+
+    defer { window.close() }
+    document.close()
+
+    do {
+      try await controller.showWindow(target: .window, relativeTo: nil)
+      XCTFail("A closed document must not be presented")
+    } catch is CancellationError {
+      XCTAssertFalse(window.isVisible)
+    }
+  }
+
   func testPreferenceWritesUseIsolatedSuite() throws {
     let key = "test-isolation.\(UUID().uuidString)"
     let preferences = ApplicationEnvironment.preferences
@@ -367,6 +540,51 @@ extension EditorDocumentTests {
 
     ExtensionConfig.setEnabled(false, forID: id)
     XCTAssertFalse(AppCustomization.userScripts().contains { $0.id == id })
+  }
+
+  func testOpenPanelOptionsAndCancellation() async throws {
+    let editor = EditorViewController(preloadDelay: 60)
+    let api = EditorModuleAPI(delegate: editor)
+    let defaults = NSOpenPanel()
+    let cases: [(options: String, selection: (files: Bool, directories: Bool), multiple: Bool)] = [
+      ("{}", (true, false), false),
+      (#"{"selectionType":"files","allowsMultipleSelection":false}"#, (true, false), false),
+      (#"{"selectionType":"directories"}"#, (false, true), false),
+      (#"{"selectionType":"both","allowsMultipleSelection":true,"title":"Select items","message":"Choose files or folders.","prompt":"Choose"}"#, (true, true), true),
+    ]
+
+    for item in cases {
+      let parameters = Data(#"{"options":\#(item.options)}"#.utf8)
+      let task = Task {
+        let result = await api.bridge.invoke(method: "showOpenPanel", parameters: parameters)
+        XCTAssertNil(try XCTUnwrap(result).get())
+      }
+
+      let deadline = ContinuousClock.now + .seconds(5)
+      while !NSApp.windows.contains(where: { $0 is NSOpenPanel && $0.isVisible }), ContinuousClock.now < deadline {
+        try await Task.sleep(for: .milliseconds(10))
+      }
+
+      let panel = try XCTUnwrap(NSApp.windows.compactMap { $0 as? NSOpenPanel }.first { $0.isVisible })
+      XCTAssertNil(panel.sheetParent)
+      XCTAssertEqual(panel.canChooseFiles, item.selection.files)
+      XCTAssertEqual(panel.canChooseDirectories, item.selection.directories)
+      XCTAssertEqual(panel.allowsMultipleSelection, item.multiple)
+      XCTAssertTrue(panel.showsHiddenFiles)
+      XCTAssertTrue(panel.canCreateDirectories)
+      XCTAssertTrue(panel.allowedContentTypes.isEmpty)
+      XCTAssertEqual(panel.title, item.multiple ? "Select items" : defaults.title)
+      XCTAssertEqual(panel.message, item.multiple ? "Choose files or folders." : defaults.message)
+      XCTAssertEqual(panel.prompt, item.multiple ? "Choose" : defaults.prompt)
+
+      panel.cancel(nil)
+      try await task.value
+    }
+  }
+
+  func testOpenPanelRejectsInvalidSelectionType() {
+    let data = Data(#"{"selectionType":"invalid"}"#.utf8)
+    XCTAssertThrowsError(try JSONDecoder().decode(OpenPanelOptions.self, from: data))
   }
 
   func testSecretConfirmationApprovalAndCancellation() async throws {
