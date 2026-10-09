@@ -57,6 +57,15 @@ public extension NSMenuItem {
     NSApp.sendAction(action, to: target, from: self)
   }
 
+  func ensureTitleVisibility() {
+    guard #available(macOS 27.0, *), attributedTitle == nil else {
+      return
+    }
+
+    // [macOS 27] Regression: title is truncated
+    attributedTitle = NSAttributedString(string: title)
+  }
+
   func ensureImageVisibility() {
     guard #available(macOS 27.0, *) else {
       return
