@@ -138,8 +138,7 @@ struct StatisticsView: View {
         .padding(.horizontal, 8)
         .frame(maxWidth: .infinity)
       }
-
-      Spacer()
+      .safeAreaPadding(.bottom, 8)
     }
   }
 }

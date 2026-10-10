@@ -487,7 +487,16 @@ extension EditorDocumentTests {
     ))
 
     let editor = EditorViewController()
-    await editor.waitUntilLoaded()
+    let deadline = ContinuousClock.now + .seconds(10)
+    while !editor.hasFinishedLoading, ContinuousClock.now < deadline {
+      try await Task.sleep(for: .milliseconds(10))
+    }
+
+    guard editor.hasFinishedLoading else {
+      XCTFail("Editor did not finish loading before checking prepared script bindings")
+      return
+    }
+
     let scripts = editor.webView.configuration.userContentController.userScripts
     XCTAssertEqual(scripts.count, 3)
     XCTAssertFalse(scripts[0].source.contains("window.scriptOrder"))
