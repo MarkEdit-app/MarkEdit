@@ -69,7 +69,7 @@ struct TextCompletionView: View {
               .accessibilityHint(index == state.selectedIndex ? localizable.selectedHint : "")
               .contentShape(Rectangle())
               .simultaneousGesture(
-                DragGesture(minimumDistance: 0).onChanged { _ in
+                selectionDragGesture.onChanged { _ in
                   state.selectedIndex = index
                 }
                 .onEnded {
@@ -85,6 +85,7 @@ struct TextCompletionView: View {
                   }
                 }
               )
+              .simultaneousGesture(completionTapGesture(index: index))
             }
           }
         }.onChange(of: state.selectedIndex) {
@@ -111,5 +112,29 @@ struct TextCompletionView: View {
       width: width + 2 * Constants.itemPadding,
       height: height + 2 * Constants.itemPadding
     )
+  }
+}
+
+// MARK: - Private
+
+private extension TextCompletionView {
+  var selectionDragGesture: DragGesture {
+    if #available(macOS 27.0, *) {
+      // Finger drags belong to the scroll view, not row selection
+      DragGesture(minimumDistance: 0, inputKinds: .pointer)
+    } else {
+      DragGesture(minimumDistance: 0)
+    }
+  }
+
+  func completionTapGesture(index: Int) -> (some Gesture)? {
+    if #available(macOS 27.0, *) {
+      SpatialTapGesture(inputKinds: .directTouch).onEnded { _ in
+        state.selectedIndex = index
+        commitCompletion()
+      }
+    } else {
+      nil
+    }
   }
 }
