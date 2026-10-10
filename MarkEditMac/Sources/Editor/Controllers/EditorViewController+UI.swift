@@ -449,19 +449,12 @@ extension EditorViewController {
   }
 
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String? {
-    class TextField: NSTextField {
-      // The main menu binds "Select All" to `selectWholeDocument(_:)`
-      @IBAction func selectWholeDocument(_ sender: Any?) {
-        currentEditor()?.selectAll(nil)
-      }
-    }
-
     let alert = NSAlert()
     alert.messageText = title ?? ""
     alert.addButton(withTitle: Localized.General.done)
     alert.addButton(withTitle: Localized.General.cancel)
 
-    let textField = TextField.alertCapableTextField
+    let textField = NSTextField.alertCapableTextField
     textField.placeholderString = placeholder
     textField.stringValue = defaultValue ?? ""
     alert.accessoryView = textField
