@@ -405,15 +405,6 @@ private extension EditorViewController {
     }
   }
 
-  @IBAction func selectWholeDocument(_ sender: Any?) {
-    // The default implementation "selectAll" only selects the viewport
-    if let currentInput {
-      currentInput.performTextAction(.selectAll, sender: sender)
-    } else {
-      NSApp.sendAction(#selector(selectAll(_:)), to: nil, from: sender)
-    }
-  }
-
   @IBAction func gotoLine(_ sender: Any?) {
     showGotoLineWindow(sender)
   }

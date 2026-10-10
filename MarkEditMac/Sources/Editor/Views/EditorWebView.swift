@@ -65,6 +65,11 @@ final class EditorWebView: WKWebView {
   static let userDefinedContextMenuID = NSUserInterfaceItemIdentifier("userDefinedContextMenu")
   weak var actionDelegate: EditorWebViewActionDelegate?
 
+  override func selectAll(_ sender: Any?) {
+    // The default implementation "selectAll" only selects the viewport
+    actionDelegate?.editorWebView(self, didPerform: .selectAll, sender: sender)
+  }
+
   override func mouseDown(with event: NSEvent) {
     super.mouseDown(with: event)
     actionDelegate?.editorWebView(self, mouseDownWith: event)

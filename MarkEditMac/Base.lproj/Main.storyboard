@@ -425,7 +425,7 @@ Gw
                                         </menuItem>
                                         <menuItem title="Select All" secondaryImage="character.textbox" catalog="system" keyEquivalent="a" id="Ruw-6m-B2m">
                                             <connections>
-                                                <action selector="selectWholeDocument:" target="Ady-hI-5gd" id="VLu-xb-TLI"/>
+                                                <action selector="selectAll:" target="Ady-hI-5gd" id="VLu-xb-TLI"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Ts4-WW-MvM"/>

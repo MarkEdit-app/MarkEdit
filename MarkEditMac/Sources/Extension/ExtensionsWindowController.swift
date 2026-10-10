@@ -66,11 +66,6 @@ final class ExtensionsWindowController: NSWindowController {
 // MARK: - Responder Chain
 
 extension ExtensionsWindowController {
-  // The main menu binds "Select All" to `selectWholeDocument(_:)`
-  @IBAction func selectWholeDocument(_ sender: Any?) {
-    NSApp.sendAction(#selector(NSResponder.selectAll(_:)), to: nil, from: sender)
-  }
-
   // The main menu binds "Find" (Cmd-F) to `startFind(_:)`; focus the toolbar search field
   @IBAction func startFind(_ sender: Any?) {
     searchToolbarItem?.beginSearchInteraction()
