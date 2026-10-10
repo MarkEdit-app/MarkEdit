@@ -58,6 +58,7 @@ final class ExtensionsViewController: NSViewController {
 
   private var displayedMode: ExtensionsModel.Mode
   private var isRunningProgressOverlay = false
+  private var isPullRefreshing = false
   private var displayedRelaunch = false
   private var isAnimatingRelaunch = false
   private var pendingScrollTarget: ExtensionsScrollTarget?
@@ -293,10 +294,41 @@ extension ExtensionsViewController: ExtensionsPresenting {
 // MARK: - Refresh
 
 extension ExtensionsViewController {
+  func isBusyRefreshing() -> Bool {
+    isRunningProgressOverlay || isPullRefreshing
+  }
+
   /// Explicit "Refresh": animate every row out, reconcile and refetch, then animate the fresh rows in.
   func refreshAnimated() {
     runWithProgressOverlay(message: Localized.Extension.refreshing) { [weak self] in
       await self?.model.load(forceRefresh: true)
+    }
+  }
+
+  /// Pull refresh keeps the list visible and uses only the native refresh indicator.
+  @available(macOS 27.0, *)
+  @objc private func pullToRefresh(_ sender: NSRefreshController) {
+    guard !isPullRefreshing else {
+      return
+    }
+
+    guard !isRunningProgressOverlay, !model.isBusy, model.phase != .loading else {
+      sender.endRefreshing()
+      return
+    }
+
+    isPullRefreshing = true
+    updateStateController()
+
+    Task { @MainActor in
+      defer {
+        isPullRefreshing = false
+        sender.endRefreshing()
+        updateStateController()
+      }
+
+      await model.load(forceRefresh: true)
+      applyModelChanges()
     }
   }
 
@@ -392,6 +424,13 @@ private extension ExtensionsViewController {
     scrollView.drawsBackground = true
     scrollView.backgroundColor = .windowBackgroundColor
     view.addSubview(scrollView)
+
+    if #available(macOS 27.0, *) {
+      let refreshController = NSRefreshController()
+      refreshController.target = self
+      refreshController.action = #selector(pullToRefresh(_:))
+      scrollView.refreshController = refreshController
+    }
 
     let contentView = scrollView.contentView
     contentView.postsBoundsChangedNotifications = true
@@ -562,13 +601,13 @@ private extension ExtensionsViewController {
   }
 
   func updateStateController() {
-    // The state view (loading spinner / empty message) shows only when there are no rows
-    stateController.view.isHidden = !displayedItems.isEmpty
+    // Pull refresh owns loading feedback even when the list is empty
+    stateController.view.isHidden = isPullRefreshing || !displayedItems.isEmpty
   }
 
   /// Empties the list to reveal the whole-page spinner, runs `action`, then animates the fresh rows in.
   func runWithProgressOverlay(message: String, action: @escaping () async -> Void) {
-    guard !isRunningProgressOverlay else {
+    guard !isBusyRefreshing() else {
       return
     }
 
