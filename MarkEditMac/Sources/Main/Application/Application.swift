@@ -41,7 +41,7 @@ final class Application: NSApplication {
     let delegate = AppDelegate()
 
     application.delegate = delegate
-    delegate.startAccessingGrantedFolder()
+    delegate.startAccessingBookmarks()
 
     reconciled.wait()
     _ = NSApplicationMain(CommandLine.argc, CommandLine.unsafeArgv)

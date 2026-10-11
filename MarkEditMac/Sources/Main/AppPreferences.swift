@@ -45,7 +45,7 @@ enum AppPreferences {
      Due to historical issues, this can be either a file bookmark, or an array of file bookmarks.
      */
     @Storage(key: "general.granted-folder-bookmark", defaultValue: nil)
-    static var grantedFolderBookmark: Data?
+    static var fileBookmarks: Data?
 
     static var quitAlwaysKeepsWindows: Bool {
       get {

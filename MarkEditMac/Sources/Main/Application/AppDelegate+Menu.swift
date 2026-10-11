@@ -31,6 +31,8 @@ extension AppDelegate: NSMenuDelegate {
       reconfigureOpenFileInMenu(document: currentDocument)
     case reopenFileMenu:
       reconfigureReopenFileMenu(document: currentDocument)
+    case bookmarksMenu:
+      reconfigureBookmarksMenu(menu)
     case lineEndingsMenu:
       reconfigureLineEndingsMenu(document: currentDocument)
     default:
@@ -167,6 +169,65 @@ private extension AppDelegate {
       lineEndingsMenu?.reloadItems()
     }
   }
+
+  func reconfigureBookmarksMenu(_ menu: NSMenu) {
+    menu.removeAllItems()
+    menu.autoenablesItems = false
+
+    let bookmarks = bookmarkStore.load()
+    let urls = Array(Set(bookmarks.compactMap { $0.url?.standardizedFileURL }))
+    var displayedURLs = Set<URL>()
+
+    for (index, bookmark) in bookmarks.enumerated() {
+      if let url = bookmark.url, !displayedURLs.insert(url.standardizedFileURL).inserted {
+        continue
+      }
+
+      let title = bookmark.url.map {
+        $0.standardizedFileURL.displayTitle(among: urls)
+      } ?? String(format: Localized.Bookmarks.unavailable, index + 1)
+
+      let item = menu.addItem(withTitle: title)
+      item.toolTip = bookmark.url?.path ?? bookmark.error?.localizedDescription
+      if let url = bookmark.url {
+        item.setAccessibilityLabel(url.path)
+        item.image = NSWorkspace.shared.icon(forFile: url.path).resized(with: CGSize(width: 16, height: 16))
+        item.ensureImageVisibility()
+      }
+
+      let submenu = NSMenu(title: title)
+      submenu.autoenablesItems = false
+
+      let reveal = submenu.addItem(withTitle: Localized.Bookmarks.revealInFinder) {
+        if let url = bookmark.url {
+          NSWorkspace.shared.activateFileViewerSelecting([url])
+        }
+      }
+
+      reveal.isEnabled = bookmark.url != nil
+      submenu.addItem(withTitle: Localized.Bookmarks.revokeBookmark) { [weak self] in
+        guard let self else { return }
+        self.performBookmarkChange {
+          try self.bookmarkStore.revoke(bookmark)
+        }
+      }
+
+      item.submenu = submenu
+    }
+
+    if !menu.items.isEmpty {
+      menu.addItem(.separator())
+    }
+
+    let addItem = menu.addItem(withTitle: Localized.Bookmarks.addBookmarks, action: #selector(addBookmarks(_:)))
+    addItem.target = self
+
+    let revokeAllItem = menu.addItem(withTitle: Localized.Bookmarks.revokeAll) { [weak self] in
+      self?.bookmarkStore.revokeAll()
+    }
+
+    revokeAllItem.isEnabled = !bookmarks.isEmpty
+  }
 }
 
 // MARK: - Private
@@ -190,10 +251,10 @@ private extension AppDelegate {
     NSWorkspace.shared.open(.documentsDirectory)
   }
 
-  @IBAction func grantFolderAccess(_ sender: Any?) {
+  @IBAction func addBookmarks(_ sender: Any?) {
     NSApp.closeOpenPanels()
     Task {
-      await saveGrantedFolderAsBookmark()
+      await addBookmarks()
     }
   }
 

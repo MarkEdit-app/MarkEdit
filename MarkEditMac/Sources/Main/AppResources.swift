@@ -28,7 +28,6 @@ enum Localized {
     static let next = String(localized: "Next", comment: "Button title, move to the next item")
     static let all = String(localized: "All", comment: "Button title, perform actions to all items")
     static let selected = String(localized: "Selected", comment: "General title that indicates something is selected")
-    static let grantAccess = String(localized: "Grant Access", comment: "Open panel prompt, used for granting access for the selected folder")
     static let insertTab = String(localized: "Insert Tab", comment: "Insert a tab into the current editor")
     static let insertLineBreak = String(localized: "Insert Line Break", comment: "Insert a line break into the current editor")
   }
@@ -54,6 +53,16 @@ enum Localized {
     static let cmdClickToToggleTodo = String(localized: "⌘-click to toggle todo", comment: "Tooltip for tasks")
     static let tableColumnName = String(localized: "Column", comment: "Column name for table creation")
     static let tableItemName = String(localized: "Item", comment: "Item name for table creation")
+  }
+
+  enum Bookmarks {
+    static let addBookmarksPrompt = String(localized: "Add Bookmarks", comment: "Menu and button title to bookmark files and folders")
+    static let addBookmarks = addBookmarksPrompt + "…" // Used as the menu item title
+    static let accessMessage = String(localized: "Allow MarkEdit to access the selected files and folders.", comment: "Open panel message explaining bookmark access")
+    static let revealInFinder = String(localized: "Reveal in Finder", comment: "Menu item to reveal a bookmarked file or folder")
+    static let revokeBookmark = String(localized: "Revoke Bookmark", comment: "Menu item to remove a bookmark and release its access")
+    static let revokeAll = String(localized: "Revoke All", comment: "Menu item to remove all bookmarks and release their access")
+    static let unavailable = String(localized: "Unavailable Bookmark %d", comment: "Title for an unresolvable bookmark, numbered by its position")
   }
 
   enum Toolbar {
