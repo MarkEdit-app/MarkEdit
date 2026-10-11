@@ -20,18 +20,23 @@ extension EditorViewController {
       cancelCompletion()
     }
 
-    let window = GotoLineWindow(
+    let window = QuickOpenWindow(
       effectViewType: AppDesign.modernEffectView,
       tintColor: transientTintColor(for: .current),
       relativeTo: parentRect,
       placeholder: Localized.Document.gotoLineLabel,
       accessibilityHelp: Localized.Document.gotoLineHelp,
       iconName: Icons.arrowUturnBackwardCircle,
-      defaultLineNumber: States.selectedLineNumber
-    ) { [weak self] lineNumber in
+      defaultText: States.selectedLineNumber.map { String($0) }
+    ) { [weak self] text in
+      guard let lineNumber = Int(text), lineNumber > 0 else {
+        return false
+      }
+
       States.selectedLineNumber = lineNumber
       self?.startTextEditing()
       self?.bridge.selection.gotoLine(lineNumber: lineNumber)
+      return true
     }
 
     window.appearance = view.effectiveAppearance

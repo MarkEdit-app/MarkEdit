@@ -1,5 +1,5 @@
 //
-//  GotoLineView.swift
+//  QuickOpenView.swift
 //
 //  Created by cyan on 1/17/23.
 //
@@ -7,7 +7,7 @@
 import AppKit
 import AppKitExtensions
 
-final class GotoLineView: NSView {
+final class QuickOpenView: NSView {
   var tintColor: NSColor? {
     get {
       tintView.layerBackgroundColor
@@ -41,7 +41,7 @@ final class GotoLineView: NSView {
 
   private let tintView = NSView()
   private let effectViewType: NSView.Type
-  private let handler: (Int) -> Void
+  private let handler: (String) -> Bool
 
   init(
     effectViewType: NSView.Type,
@@ -50,8 +50,8 @@ final class GotoLineView: NSView {
     placeholder: String,
     accessibilityHelp: String,
     iconName: String,
-    defaultLineNumber: Int? = nil,
-    handler: @escaping (Int) -> Void
+    defaultText: String? = nil,
+    handler: @escaping (String) -> Bool
   ) {
     self.effectViewType = effectViewType
     self.handler = handler
@@ -100,8 +100,8 @@ final class GotoLineView: NSView {
       textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
     ])
 
-    if let defaultLineNumber {
-      textField.stringValue = String(defaultLineNumber)
+    if let defaultText {
+      textField.stringValue = defaultText
       textField.selectAll()
     }
   }
@@ -114,11 +114,11 @@ final class GotoLineView: NSView {
 
 // MARK: - NSTextFieldDelegate
 
-extension GotoLineView: NSTextFieldDelegate {
+extension QuickOpenView: NSTextFieldDelegate {
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
     switch selector {
     case #selector(insertNewline(_:)):
-      performGotoLine()
+      submit()
       return true
     default:
       return false
@@ -128,16 +128,14 @@ extension GotoLineView: NSTextFieldDelegate {
 
 // MARK: - Private
 
-private extension GotoLineView {
-  func performGotoLine() {
-    // We don't know exactly how many lines we have, unreasonable values will fail silently
-    guard let lineNumber = Int(textField.stringValue), lineNumber > 0 else {
+private extension QuickOpenView {
+  func submit() {
+    guard handler(textField.stringValue) else {
       NSSound.beep()
       textField.currentEditor()?.selectAll(nil)
       return
     }
 
-    handler(lineNumber)
     window?.orderOut(self)
   }
 }

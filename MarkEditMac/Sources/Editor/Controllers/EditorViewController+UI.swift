@@ -151,7 +151,7 @@ extension EditorViewController {
     let tintColor = transientTintColor(for: theme)
     completionContext.tintColor = tintColor
 
-    for case let window as GotoLineWindow in NSApp.windows {
+    for case let window as QuickOpenWindow in NSApp.windows {
       window.appearance = theme.resolvedAppearance
       window.tintColor = tintColor
     }
