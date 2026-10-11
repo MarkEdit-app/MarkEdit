@@ -19,10 +19,6 @@ final class AppDocumentController: NSDocumentController {
   static var suggestedTextEncoding: EditorTextEncoding?
   static var suggestedFilename: String?
 
-  override var maximumRecentDocumentCount: Int {
-    min(super.maximumRecentDocumentCount, 8)
-  }
-
   override func noteNewRecentDocumentURL(_ url: URL) {
     guard !ApplicationEnvironment.isRunningTests else {
       return
