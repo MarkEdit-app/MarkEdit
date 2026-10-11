@@ -23,6 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var copyPandocCommandMenu: NSMenu?
   @IBOutlet weak var openFileInMenu: NSMenu?
   @IBOutlet weak var reopenFileMenu: NSMenu?
+  @IBOutlet weak var bookmarksMenu: NSMenu?
   @IBOutlet weak var lineEndingsMenu: NSMenu?
   @IBOutlet weak var editCommandsMenu: NSMenu?
   @IBOutlet weak var editTableOfContentsMenu: NSMenu?
@@ -59,6 +60,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   @IBOutlet weak var postponeUpdateItem: NSMenuItem?
   @IBOutlet weak var ignoreUpdateItem: NSMenuItem?
 
+  lazy var bookmarkStore = BookmarkStore.shared
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
 

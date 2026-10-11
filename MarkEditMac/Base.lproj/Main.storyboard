@@ -61,10 +61,10 @@
                                                             <action selector="openDocumentsFolder:" target="Voe-Tx-rLC" id="cD9-hQ-p0k"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Grant Folder Access" id="hw9-Pl-u8s">
+                                                    <menuItem title="Add Bookmarks…" id="hw9-Pl-u8s">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="grantFolderAccess:" target="Voe-Tx-rLC" id="NVa-7Q-Zg0"/>
+                                                            <action selector="addBookmarks:" target="Voe-Tx-rLC" id="NVa-7Q-Zg0"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem title="Launch Safe Mode" id="zSM-YV-rGb">
@@ -309,11 +309,13 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="McZ-Mt-f0I"/>
-                                        <menuItem title="Grant Folder Access" id="j7w-ok-RLg">
+                                        <menuItem title="Bookmarks" secondaryImage="bookmark" catalog="system" id="j7w-ok-RLg">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="grantFolderAccess:" target="Voe-Tx-rLC" id="RGE-SD-4YU"/>
-                                            </connections>
+                                            <menu key="submenu" title="Bookmarks" id="bkm-Mn-001">
+                                                <connections>
+                                                    <outlet property="delegate" destination="Voe-Tx-rLC" id="bkm-Dl-001"/>
+                                                </connections>
+                                            </menu>
                                         </menuItem>
                                         <menuItem title="Purge History Versions" id="yfL-ea-k7X">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -1097,6 +1099,7 @@ Gw
                         <outlet property="lineEndingsCRLFItem" destination="mc2-DH-5Iy" id="w6F-ls-MGF"/>
                         <outlet property="lineEndingsLFItem" destination="qOk-v8-kKx" id="4t7-oc-c7R"/>
                         <outlet property="lineEndingsMenu" destination="7eH-ja-yIc" id="CYf-hv-ZvG"/>
+                        <outlet property="bookmarksMenu" destination="bkm-Mn-001" id="bkm-Ot-001"/>
                         <outlet property="mainAppMenuItem" destination="1Xt-HY-uBw" id="X4F-8a-j5z"/>
                         <outlet property="mainEditMenu" destination="W48-6f-4Dl" id="xUc-Fy-SjE"/>
                         <outlet property="mainExtensionsMenu" destination="nkD-z6-yjV" id="40H-WY-xHu"/>
@@ -1158,6 +1161,7 @@ Gw
         <image name="bell" catalog="system" width="15" height="16"/>
         <image name="bell.slash" catalog="system" width="15" height="17"/>
         <image name="bold" catalog="system" width="11" height="12"/>
+        <image name="bookmark" catalog="system" width="11" height="16"/>
         <image name="character.textbox" catalog="system" width="19" height="14"/>
         <image name="clock.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="16" height="15"/>
         <image name="curlybraces" catalog="system" width="15" height="16"/>

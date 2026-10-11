@@ -78,6 +78,29 @@ public extension URL {
   func replacingPathExtension(_ pathExtension: String) -> URL {
     deletingPathExtension().appendingPathExtension(pathExtension)
   }
+
+  /// A compact filename, disambiguated with parent components when needed.
+  func displayTitle(among urls: [URL]) -> String {
+    let name = lastPathComponent
+    let peers = urls.filter {
+      $0 != self && $0.lastPathComponent == name
+    }
+
+    guard !peers.isEmpty else {
+      return name.truncatedForDisplay()
+    }
+
+    let components = pathComponents
+    var depth = 2
+    while depth < components.count && (peers.contains {
+      $0.pathComponents.suffix(depth).elementsEqual(components.suffix(depth))
+    }) {
+      depth += 1
+    }
+
+    let parent = NSString.path(withComponents: Array(components.dropLast().suffix(depth - 1)))
+    return "\(name) \u{2014} \(parent)".truncatedForDisplay()
+  }
 }
 
 // MARK: - Private

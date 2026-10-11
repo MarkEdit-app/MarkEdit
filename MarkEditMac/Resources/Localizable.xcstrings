@@ -1,6 +1,108 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Add Bookmarks" : {
+      "comment" : "Menu and button title to bookmark files and folders",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加书签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入書籤"
+          }
+        }
+      }
+    },
+    "Allow MarkEdit to access the selected files and folders." : {
+      "comment" : "Open panel message explaining bookmark access",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许 MarkEdit 访问所选文件和文件夹。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許 MarkEdit 存取所選的檔案與檔案夾。"
+          }
+        }
+      }
+    },
+    "Reveal in Finder" : {
+      "comment" : "Menu item to reveal a bookmarked file or folder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在访达中找到"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Finder 中找到"
+          }
+        }
+      }
+    },
+    "Revoke Bookmark" : {
+      "comment" : "Menu item to remove a bookmark and release its access",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撤销书签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撤銷書籤"
+          }
+        }
+      }
+    },
+    "Revoke All" : {
+      "comment" : "Menu item to remove all bookmarks and release their access",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部撤销"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部撤銷"
+          }
+        }
+      }
+    },
+    "Unavailable Bookmark %d" : {
+      "comment" : "Title for an unresolvable bookmark, numbered by its position",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不可用的书签 %d"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法使用的書籤 %d"
+          }
+        }
+      }
+    },
     "**URL:** %@" : {
       "comment" : "Extension URL line (format) in the install confirmation",
       "localizations" : {
@@ -1742,23 +1844,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "跳轉到行"
-          }
-        }
-      }
-    },
-    "Grant Access" : {
-      "comment" : "Open panel prompt, used for granting access for the selected folder",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "授予权限"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "授予許可權"
           }
         }
       }
