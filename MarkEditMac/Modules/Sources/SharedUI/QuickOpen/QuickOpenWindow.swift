@@ -1,18 +1,19 @@
 //
-//  GotoLineWindow.swift
+//  QuickOpenWindow.swift
 //
 //  Created by cyan on 1/17/23.
 //
 
 import AppKit
 
-public final class GotoLineWindow: NSWindow {
+public final class QuickOpenWindow: NSWindow {
   private enum Constants {
     // Values are copied from Xcode
     static let width: Double = 456
     static let height: Double = 48
   }
 
+  /// The handler returns `true` to dismiss the window, or `false` to beep and select the input for correction.
   public init(
     effectViewType: NSView.Type,
     tintColor: NSColor? = nil,
@@ -20,8 +21,8 @@ public final class GotoLineWindow: NSWindow {
     placeholder: String,
     accessibilityHelp: String,
     iconName: String,
-    defaultLineNumber: Int? = nil,
-    handler: @escaping (Int) -> Void
+    defaultText: String? = nil,
+    handler: @escaping (String) -> Bool
   ) {
     let rect = CGRect(
       x: parentRect.minX + (parentRect.width - Constants.width) * 0.5,
@@ -37,14 +38,14 @@ public final class GotoLineWindow: NSWindow {
       defer: false
     )
 
-    self.contentView = GotoLineView(
+    self.contentView = QuickOpenView(
       effectViewType: effectViewType,
       tintColor: tintColor,
       frame: rect,
       placeholder: placeholder,
       accessibilityHelp: accessibilityHelp,
       iconName: iconName,
-      defaultLineNumber: defaultLineNumber,
+      defaultText: defaultText,
       handler: handler
     )
 
@@ -56,10 +57,10 @@ public final class GotoLineWindow: NSWindow {
 
   public var tintColor: NSColor? {
     get {
-      (contentView as? GotoLineView)?.tintColor
+      (contentView as? QuickOpenView)?.tintColor
     }
     set {
-      (contentView as? GotoLineView)?.tintColor = newValue
+      (contentView as? QuickOpenView)?.tintColor = newValue
     }
   }
 
