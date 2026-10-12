@@ -1,12 +1,12 @@
 //
-//  QuickOpenWindow.swift
+//  QuickSearchWindow.swift
 //
 //  Created by cyan on 1/17/23.
 //
 
 import AppKit
 
-public final class QuickOpenWindow: NSWindow {
+public final class QuickSearchWindow: NSWindow {
   private enum Constants {
     // Values are copied from Xcode
     static let width: Double = 456
@@ -38,7 +38,7 @@ public final class QuickOpenWindow: NSWindow {
       defer: false
     )
 
-    self.contentView = QuickOpenView(
+    self.contentView = QuickSearchView(
       effectViewType: effectViewType,
       tintColor: tintColor,
       frame: rect,
@@ -57,10 +57,10 @@ public final class QuickOpenWindow: NSWindow {
 
   public var tintColor: NSColor? {
     get {
-      (contentView as? QuickOpenView)?.tintColor
+      (contentView as? QuickSearchView)?.tintColor
     }
     set {
-      (contentView as? QuickOpenView)?.tintColor = newValue
+      (contentView as? QuickSearchView)?.tintColor = newValue
     }
   }
 

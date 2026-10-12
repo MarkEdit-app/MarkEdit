@@ -7,6 +7,7 @@
 
 import AppKit
 import AppKitExtensions
+import QuickSearchUI
 import SharedUI
 import WebKit
 import MarkEditKit
@@ -151,7 +152,7 @@ extension EditorViewController {
     let tintColor = transientTintColor(for: theme)
     completionContext.tintColor = tintColor
 
-    for case let window as QuickOpenWindow in NSApp.windows {
+    for case let window as QuickSearchWindow in NSApp.windows {
       window.appearance = theme.resolvedAppearance
       window.tintColor = tintColor
     }

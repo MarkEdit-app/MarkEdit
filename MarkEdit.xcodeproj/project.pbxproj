@@ -24,6 +24,7 @@
 		870F17682985285B00003DA7 /* EditorViewController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870F17672985285B00003DA7 /* EditorViewController+Config.swift */; };
 		870F177D29855CA500003DA7 /* MarkEditKit in Frameworks */ = {isa = PBXBuildFile; productRef = 870F177C29855CA500003DA7 /* MarkEditKit */; };
 		870F178E2985775B00003DA7 /* SharedUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178D2985775B00003DA7 /* SharedUI */; };
+		0A1100013010000000000001 /* QuickSearchUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100013010000000000002 /* QuickSearchUI */; };
 		870F17902985775B00003DA7 /* AppKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178F2985775B00003DA7 /* AppKitExtensions */; };
 		870F17962985775B00003DA7 /* SettingsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17952985775B00003DA7 /* SettingsUI */; };
 		87132AA32C188FE900FD262B /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87132AA22C188FE900FD262B /* AppShortcuts.xcstrings */; };
@@ -329,6 +330,7 @@
 				8775A77B29867012005867BF /* FontPicker in Frameworks */,
 				874823CE29B0BD980067EC49 /* TextCompletion in Frameworks */,
 				870F178E2985775B00003DA7 /* SharedUI in Frameworks */,
+				0A1100013010000000000001 /* QuickSearchUI in Frameworks */,
 				870F17962985775B00003DA7 /* SettingsUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -758,6 +760,7 @@
 			packageProductDependencies = (
 				870F177C29855CA500003DA7 /* MarkEditKit */,
 				870F178D2985775B00003DA7 /* SharedUI */,
+				0A1100013010000000000002 /* QuickSearchUI */,
 				870F178F2985775B00003DA7 /* AppKitExtensions */,
 				870F17952985775B00003DA7 /* SettingsUI */,
 				8775A77A29867012005867BF /* FontPicker */,
@@ -1544,6 +1547,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0A1100013010000000000002 /* QuickSearchUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = QuickSearchUI;
+		};
 		8701D0A32CC12321006AF8C2 /* FileVersion */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FileVersion;
