@@ -1,5 +1,5 @@
 import { WebModule } from '../webModule';
-import { HeadingInfo, getTableOfContents, selectPreviousSection, selectNextSection, gotoHeader } from '../../modules/toc';
+import { DocumentOutline, HeadingInfo, getDocumentOutline, getTableOfContents, selectPreviousSection, selectNextSection, gotoHeader } from '../../modules/toc';
 
 /**
  * @shouldExport true
@@ -8,6 +8,7 @@ import { HeadingInfo, getTableOfContents, selectPreviousSection, selectNextSecti
  */
 export interface WebModuleTableOfContents extends WebModule {
   getTableOfContents(): HeadingInfo[];
+  getDocumentOutline({ knownRevision }: { knownRevision?: string }): DocumentOutline;
   selectPreviousSection(): void;
   selectNextSection(): void;
   gotoHeader({ headingInfo }: { headingInfo: HeadingInfo }): void;
@@ -16,6 +17,10 @@ export interface WebModuleTableOfContents extends WebModule {
 export class WebModuleTableOfContentsImpl implements WebModuleTableOfContents {
   getTableOfContents(): HeadingInfo[] {
     return getTableOfContents();
+  }
+
+  getDocumentOutline({ knownRevision }: { knownRevision?: string }): DocumentOutline {
+    return getDocumentOutline(knownRevision);
   }
 
   selectPreviousSection(): void {
