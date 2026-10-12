@@ -1,5 +1,5 @@
 //
-//  QuickOpenView.swift
+//  QuickSearchView.swift
 //
 //  Created by cyan on 1/17/23.
 //
@@ -7,7 +7,7 @@
 import AppKit
 import AppKitExtensions
 
-final class QuickOpenView: NSView {
+final class QuickSearchView: NSView {
   var tintColor: NSColor? {
     get {
       tintView.layerBackgroundColor
@@ -114,7 +114,7 @@ final class QuickOpenView: NSView {
 
 // MARK: - NSTextFieldDelegate
 
-extension QuickOpenView: NSTextFieldDelegate {
+extension QuickSearchView: NSTextFieldDelegate {
   func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
     switch selector {
     case #selector(insertNewline(_:)):
@@ -128,7 +128,7 @@ extension QuickOpenView: NSTextFieldDelegate {
 
 // MARK: - Private
 
-private extension QuickOpenView {
+private extension QuickSearchView {
   func submit() {
     guard handler(textField.stringValue) else {
       NSSound.beep()

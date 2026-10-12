@@ -14,6 +14,10 @@ let package = Package(
       targets: ["SharedUI"]
     ),
     .library(
+      name: "QuickSearchUI",
+      targets: ["QuickSearchUI"]
+    ),
+    .library(
       name: "QuickSearchCore",
       targets: ["QuickSearchCore"]
     ),
@@ -64,6 +68,14 @@ let package = Package(
     .package(path: "../MarkEditTools"),
   ],
   targets: [
+    .target(
+      name: "QuickSearchUI",
+      dependencies: ["AppKitExtensions"],
+      path: "Sources/QuickSearchUI",
+      plugins: [
+        .plugin(name: "SwiftLint", package: "MarkEditTools"),
+      ]
+    ),
     .target(
       name: "QuickSearchCore",
       path: "Sources/QuickSearchCore",
@@ -164,6 +176,7 @@ let package = Package(
       name: "ModulesTests",
       dependencies: [
         "SharedUI",
+        "QuickSearchUI",
         "QuickSearchCore",
         "AppKitExtensions",
         "ExtensionCore",

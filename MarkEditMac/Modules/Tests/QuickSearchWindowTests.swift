@@ -1,15 +1,15 @@
 //
-//  QuickOpenTests.swift
+//  QuickSearchWindowTests.swift
 //
 //  Created by cyan on 10/11/26.
 //
 
 import AppKit
 import XCTest
-@testable import SharedUI
+@testable import QuickSearchUI
 
 @MainActor
-final class QuickOpenTests: XCTestCase {
+final class QuickSearchWindowTests: XCTestCase {
   func testAcceptedTextDismissesWindow() throws {
     var submittedText: String?
     let window = makeWindow { text in
@@ -49,9 +49,9 @@ final class QuickOpenTests: XCTestCase {
   }
 }
 
-private extension QuickOpenTests {
-  func makeWindow(handler: @escaping (String) -> Bool) -> QuickOpenWindow {
-    QuickOpenWindow(
+private extension QuickSearchWindowTests {
+  func makeWindow(handler: @escaping (String) -> Bool) -> QuickSearchWindow {
+    QuickSearchWindow(
       effectViewType: NSVisualEffectView.self,
       relativeTo: CGRect(x: 0, y: 0, width: 800, height: 600),
       placeholder: "Open",
@@ -61,13 +61,13 @@ private extension QuickOpenTests {
     )
   }
 
-  func textField(in window: QuickOpenWindow) throws -> NSTextField {
-    let view = try XCTUnwrap(window.contentView as? QuickOpenView)
+  func textField(in window: QuickSearchWindow) throws -> NSTextField {
+    let view = try XCTUnwrap(window.contentView as? QuickSearchView)
     return try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
   }
 
-  func submit(_ window: QuickOpenWindow) throws -> Bool {
-    let view = try XCTUnwrap(window.contentView as? QuickOpenView)
+  func submit(_ window: QuickSearchWindow) throws -> Bool {
+    let view = try XCTUnwrap(window.contentView as? QuickSearchView)
     return view.control(
       try textField(in: window),
       textView: NSTextView(),

@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import SharedUI
+import QuickSearchUI
 import MarkEditKit
 
 extension EditorViewController {
@@ -20,7 +20,7 @@ extension EditorViewController {
       cancelCompletion()
     }
 
-    let window = QuickOpenWindow(
+    let window = QuickSearchWindow(
       effectViewType: AppDesign.modernEffectView,
       tintColor: transientTintColor(for: .current),
       relativeTo: parentRect,
