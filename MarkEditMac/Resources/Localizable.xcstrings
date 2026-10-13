@@ -103,6 +103,176 @@
         }
       }
     },
+    "Quick Search" : {
+      "comment" : "Quick Search option in new window settings",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜索"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜尋"
+          }
+        }
+      }
+    },
+    "Quick Search for files, text, and commands" : {
+      "comment" : "Quick Search input placeholder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜索文件、文本和指令"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜尋檔案、文字與指令"
+          }
+        }
+      }
+    },
+    "Filter Results" : {
+      "comment" : "Quick Search filter menu accessibility label",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "筛选结果"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "篩選結果"
+          }
+        }
+      }
+    },
+    "Recents" : {
+      "comment" : "Quick Search filter for recent documents",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近使用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近使用"
+          }
+        }
+      }
+    },
+    "Bookmarks" : {
+      "comment" : "Quick Search filter for granted files and folders",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "书签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書籤"
+          }
+        }
+      }
+    },
+    "Headings" : {
+      "comment" : "Quick Search filter for active-document headings",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標題"
+          }
+        }
+      }
+    },
+    "Contents" : {
+      "comment" : "Quick Search filter for active-document text",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "內容"
+          }
+        }
+      }
+    },
+    "Menu Actions" : {
+      "comment" : "Quick Search filter for menu actions",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "菜单操作"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選單操作"
+          }
+        }
+      }
+    },
+    "Current Document" : {
+      "comment" : "Quick Search filter section for the active document",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前文档"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "當前文件"
+          }
+        }
+      }
+    },
+    "Search files, the current document, and menu actions" : {
+      "comment" : "Accessibility help for Quick Search",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索文件、当前文档和菜单操作"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜尋檔案、當前文件與選單操作"
+          }
+        }
+      }
+    },
     "**URL:** %@" : {
       "comment" : "Extension URL line (format) in the install confirmation",
       "localizations" : {

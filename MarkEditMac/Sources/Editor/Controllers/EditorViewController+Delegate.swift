@@ -221,6 +221,10 @@ extension EditorViewController: EditorModuleCoreDelegate {
     if contentEdited {
       document?.isOutdated = true
 
+      if view.window === NSApp.appDelegate?.quickSearchSourceWindow {
+        NSApp.appDelegate?.quickSearchController?.refreshDocument()
+      }
+
       // Window restoration is enabled, explicit autosave to prevent data loss
       if document?.fileURL == nil && AppPreferences.General.quitAlwaysKeepsWindows {
         document?.autosaveDelayed()

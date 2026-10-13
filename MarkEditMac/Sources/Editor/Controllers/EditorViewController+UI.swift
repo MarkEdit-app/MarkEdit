@@ -153,10 +153,15 @@ extension EditorViewController {
     completionContext.tintColor = tintColor
 
     for case let window as QuickSearchWindow in NSApp.windows {
+      guard window !== NSApp.appDelegate?.quickSearchController?.window else {
+        continue
+      }
+
       window.appearance = theme.resolvedAppearance
       window.tintColor = tintColor
     }
 
+    NSApp.appDelegate?.updateQuickSearchAppearance()
     presentedViewControllers?.forEach {
       $0.view.layerBackgroundColor = tintColor
     }

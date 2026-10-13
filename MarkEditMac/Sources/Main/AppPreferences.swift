@@ -425,6 +425,7 @@ enum LineHeight: String, CompactCodableEnum {
 enum NewWindowBehavior: String, CompactCodableEnum {
   case openDocument
   case newDocument
+  case quickSearch
 }
 
 enum NewFilenameExtension: String, Codable, CaseIterable, Sendable {
