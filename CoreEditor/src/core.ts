@@ -306,6 +306,21 @@ export function handleFocusLost() {
   resetKeyStates();
 }
 
+export function restoreFocus() {
+  const element = document.activeElement;
+  if (!(element instanceof HTMLElement)) {
+    return;
+  }
+
+  const dom = element.closest('.cm-editor');
+  const editor = dom instanceof HTMLElement ? EditorView.findFromDOM(dom) : null;
+  if (editor?.contentDOM === element) {
+    editor.focus();
+  } else {
+    element.focus({ preventScroll: true });
+  }
+}
+
 export function handleMouseExited(_clientX: number, _clientY: number) {
   setGutterHovered(false);
 }

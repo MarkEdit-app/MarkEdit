@@ -1,8 +1,8 @@
-import { describe, expect, jest, test, beforeEach } from '@jest/globals';
+import { describe, expect, jest, test, beforeEach, afterEach } from '@jest/globals';
 import { EditorSelection } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { Config } from '../src/config';
-import { performTextDrop, resetEditor } from '../src/core';
+import { performTextDrop, resetEditor, restoreFocus } from '../src/core';
 import { editingState } from '../src/common/store';
 import { tryGetEditor } from '../src/common/utils';
 import { caretScrollDefaults } from '../src/modules/selection';
@@ -26,6 +26,66 @@ window.config = {
   invisiblesBehavior: 'never',
   indentBehavior: 'never',
 } as Config;
+
+describe('restoreFocus', () => {
+  let nestedEditor: EditorView | undefined;
+
+  beforeEach(async () => {
+    tryGetEditor()?.destroy();
+    document.body.innerHTML = '';
+    await resetEditor('Main document', { anchor: 1, head: 4 });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    nestedEditor?.destroy();
+    nestedEditor = undefined;
+    window.editor.destroy();
+    document.body.innerHTML = '';
+  });
+
+  test('refocuses the owning editor, including nested editors', () => {
+    const editor = window.editor;
+    const widget = document.createElement('div');
+    widget.contentEditable = 'false';
+    editor.contentDOM.appendChild(widget);
+    nestedEditor = new EditorView({ doc: 'Table cell', selection: { anchor: 1, head: 3 }, parent: widget });
+
+    for (const owner of [nestedEditor, editor]) {
+      owner.focus();
+      const focus = jest.spyOn(owner, 'focus');
+      const selection = owner.state.selection;
+      owner.scrollDOM.scrollTop = 50;
+      document.getSelection()?.removeAllRanges();
+      document.dispatchEvent(new Event('selectionchange'));
+
+      restoreFocus();
+      expect(focus).toHaveBeenCalledTimes(1);
+      expect(document.activeElement).toBe(owner.contentDOM);
+      expect(owner.state.selection).toEqual(selection);
+      expect(owner.scrollDOM.scrollTop).toBe(50);
+      expect(document.getSelection()?.toString()).toBe(owner.state.sliceDoc(selection.main.from, selection.main.to));
+      focus.mockRestore();
+    }
+  });
+
+  test('preserves input focus and selection without focusing the editor', () => {
+    const input = document.createElement('input');
+    input.value = 'Query';
+    window.editor.dom.appendChild(input);
+    input.focus();
+    input.setSelectionRange(1, 3);
+
+    const focus = jest.spyOn(input, 'focus');
+    const editorFocus = jest.spyOn(window.editor, 'focus');
+
+    restoreFocus();
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(editorFocus).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(input);
+    expect([input.selectionStart, input.selectionEnd]).toEqual([1, 3]);
+  });
+});
 
 describe('Selection clamping logic', () => {
   const doc = 'Hello, World!'; // length = 13
