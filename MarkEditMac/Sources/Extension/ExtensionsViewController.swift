@@ -15,12 +15,12 @@ import Observation
 /// A row to scroll to once it's listed, either the first of a category or an exact item.
 enum ExtensionsScrollTarget: Equatable {
   case category(ExtensionEntry.Category)
-  case item(id: String)
+  case item(id: String, highlight: Bool = true)
 
   func matches(_ item: ExtensionsModel.Item) -> Bool {
     switch self {
     case .category(let category): return item.category == category
-    case .item(let id): return item.id == id
+    case .item(let id, _): return item.id == id
     }
   }
 }
@@ -373,7 +373,7 @@ extension ExtensionsViewController {
     scrollView.contentView.setBoundsOrigin(boundsOrigin)
     scrollView.reflectScrolledClipView(scrollView.contentView)
 
-    if case .item(let id) = target {
+    if case .item(let id, highlight: true) = target {
       flashHighlight(itemID: id)
     }
   }

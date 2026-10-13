@@ -196,6 +196,11 @@ final class ExtensionsModel {
   private var discoverItems: [Item] = []
   private var installedItems: [Item] = []
 
+  /// Installed theme extensions in injection order, including disabled themes.
+  var installedThemes: [Item] {
+    installedItems.filter { $0.category == .theme }
+  }
+
   /// Items for the current mode, filtered to updatable extensions in the Updates mode and by the search query.
   var items: [Item] {
     var base = mode.isLocalList ? installedItems : discoverItems
@@ -230,11 +235,6 @@ final class ExtensionsModel {
   /// The latest item for `id`, so a cell can read live state instead of a stale snapshot.
   func liveItem(id: String) -> Item? {
     items.first { $0.id == id }
-  }
-
-  /// Whether the unfiltered Discover list already contains the reveal target.
-  func hasDiscoverItem(matching target: ExtensionsScrollTarget) -> Bool {
-    discoverItems.contains(where: target.matches)
   }
 
   /// Item count for `mode`, surfaced as the segment tooltip.

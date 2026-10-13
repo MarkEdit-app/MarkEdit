@@ -31,6 +31,11 @@ struct AppTheme {
 
   /// Illustration of the theme's color pattern.
   @MainActor var patternImage: NSImage {
+    Self.patternImage(colorPattern: colorPattern, isDark: isDark)
+  }
+
+  @MainActor
+  static func patternImage(colorPattern: [String], isDark: Bool) -> NSImage {
     let length = 8.0
     let spacing = 2.5
     let padding = 3.0
