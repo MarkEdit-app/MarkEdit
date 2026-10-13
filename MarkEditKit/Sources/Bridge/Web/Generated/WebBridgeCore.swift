@@ -87,6 +87,10 @@ public final class WebBridgeCore {
     webView?.invoke(path: "webModules.core.handleFocusLost", completion: completion)
   }
 
+  public func restoreFocus(completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
+    webView?.invoke(path: "webModules.core.restoreFocus", completion: completion)
+  }
+
   public func handleMouseExited(clientX: Double, clientY: Double, completion: ((Result<Void, WKWebView.InvokeError>) -> Void)? = nil) {
     let message = BridgeMessage(
       ("clientX", clientX),
