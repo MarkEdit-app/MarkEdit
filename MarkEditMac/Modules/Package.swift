@@ -70,7 +70,7 @@ let package = Package(
   targets: [
     .target(
       name: "QuickSearchUI",
-      dependencies: ["AppKitExtensions"],
+      dependencies: ["QuickSearchCore", "AppKitExtensions"],
       path: "Sources/QuickSearchUI",
       plugins: [
         .plugin(name: "SwiftLint", package: "MarkEditTools"),
