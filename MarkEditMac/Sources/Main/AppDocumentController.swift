@@ -9,6 +9,7 @@ import AppKit
 import AppKitExtensions
 import MarkEditCore
 import MarkEditKit
+import QuickSearchUI
 
 /**
  Subclass of `NSDocumentController` to allow customizations.
@@ -85,7 +86,26 @@ final class AppDocumentController: NSDocumentController {
     }
 
     appearanceDidChange()
-    return await super.beginOpenPanel(openPanel, forTypes: inTypes)
+    let result = await QuickSearchController.interceptOpenPanelShortcut(
+      in: openPanel,
+      registerShortcut: { handler in
+        AppHotKeys.register(keyEquivalent: "O", modifiers: ["Shift", "Command"], handler: handler)
+      },
+      present: {
+        await super.beginOpenPanel(openPanel, forTypes: inTypes)
+      }
+    )
+
+    if result.quickSearchRequested {
+      // Let AppKit finish unwinding the cancelled panel before presenting another window
+      DispatchQueue.main.async {
+        if !NSApp.sendAction(#selector(AppDelegate.quickSearch(_:)), to: NSApp.delegate, from: nil) {
+          Logger.log(.error, "Unable to present Quick Search after dismissing the Open panel")
+        }
+      }
+    }
+
+    return result.response
   }
 
   override func openDocument(

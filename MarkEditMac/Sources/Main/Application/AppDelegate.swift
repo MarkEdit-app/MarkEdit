@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 import ExtensionCore
 import SettingsUI
+import QuickSearchUI
 import MarkEditCore
 import MarkEditKit
 
@@ -22,6 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   @IBOutlet weak var copyPandocCommandMenu: NSMenu?
   @IBOutlet weak var openFileInMenu: NSMenu?
+  @IBOutlet weak var openRecentMenu: NSMenu?
   @IBOutlet weak var reopenFileMenu: NSMenu?
   @IBOutlet weak var bookmarksMenu: NSMenu?
   @IBOutlet weak var lineEndingsMenu: NSMenu?
@@ -64,6 +66,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   private var appearanceObservation: NSKeyValueObservation?
   private var settingsWindowController: NSWindowController?
 
+  var quickSearchController: QuickSearchController?
+  weak var quickSearchSourceWindow: NSWindow?
+
   func applicationWillFinishLaunching(_ notification: Notification) {
     guard !ApplicationEnvironment.isRunningTests else {
       return
@@ -82,6 +87,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     appearanceObservation = NSApp.observe(\.effectiveAppearance) { _, _ in
       Task { @MainActor in
         AppTheme.current.updateAppearance()
+        NSApp.appDelegate?.updateQuickSearchAppearance()
       }
     }
 

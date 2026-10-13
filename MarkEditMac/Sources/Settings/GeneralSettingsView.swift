@@ -36,6 +36,7 @@ struct GeneralSettingsView: View {
         Picker(Localized.Settings.newWindowBehavior, selection: $newWindowBehavior) {
           Text(Localized.Document.openDocument).tag(NewWindowBehavior.openDocument)
           Text(Localized.Document.newDocument).tag(NewWindowBehavior.newDocument)
+          Text(Localized.QuickSearch.title).tag(NewWindowBehavior.quickSearch)
         }
         .onChange(of: newWindowBehavior) {
           AppPreferences.General.newWindowBehavior = newWindowBehavior

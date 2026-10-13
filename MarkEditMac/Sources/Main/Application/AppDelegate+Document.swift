@@ -24,14 +24,16 @@ extension AppDelegate {
   func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
     let menu = NSMenu()
 
-    // Only show the secondary option based on the preference
-    switch AppPreferences.General.newWindowBehavior {
-    case .openDocument:
+    // Keep explicit file actions available when they aren't the default behavior
+    let behavior = AppPreferences.General.newWindowBehavior
+    if behavior != .newDocument {
       menu.addItem(withTitle: Localized.Document.newDocument) {
         NSDocumentController.shared.newDocument(nil)
         NSApp.activate(ignoringOtherApps: true)
       }
-    case .newDocument:
+    }
+
+    if behavior != .openDocument {
       menu.addItem(withTitle: Localized.Document.openDocument) {
         sender.showOpenPanel()
       }
@@ -124,6 +126,9 @@ private extension AppDelegate {
         sender.showOpenPanel()
       }
 
+      return false
+    case .quickSearch:
+      quickSearch(sender)
       return false
     case .newDocument:
       States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate

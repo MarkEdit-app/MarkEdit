@@ -135,6 +135,12 @@
                                                 <action selector="openDocument:" target="Ady-hI-5gd" id="bVn-NM-KNZ"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Quick Search…" keyEquivalent="O" id="OQ1-op-enQ">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="quickSearch:" target="Voe-Tx-rLC" id="OQ2-op-enQ"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Open Recent" id="tXI-mr-wws">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="oas-Oc-fiZ">
@@ -1071,6 +1077,7 @@ Gw
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MarkEdit" customModuleProvider="target">
                     <connections>
+                        <outlet property="bookmarksMenu" destination="bkm-Mn-001" id="bkm-Ot-001"/>
                         <outlet property="copyPandocCommandMenu" destination="QZC-LS-WMo" id="GLu-1M-G8M"/>
                         <outlet property="editCommandsMenu" destination="9un-8n-UQZ" id="TkW-D6-2rF"/>
                         <outlet property="editFindMenu" destination="1b7-l0-nxx" id="qe6-lW-EOG"/>
@@ -1099,11 +1106,11 @@ Gw
                         <outlet property="lineEndingsCRLFItem" destination="mc2-DH-5Iy" id="w6F-ls-MGF"/>
                         <outlet property="lineEndingsLFItem" destination="qOk-v8-kKx" id="4t7-oc-c7R"/>
                         <outlet property="lineEndingsMenu" destination="7eH-ja-yIc" id="CYf-hv-ZvG"/>
-                        <outlet property="bookmarksMenu" destination="bkm-Mn-001" id="bkm-Ot-001"/>
                         <outlet property="mainAppMenuItem" destination="1Xt-HY-uBw" id="X4F-8a-j5z"/>
                         <outlet property="mainEditMenu" destination="W48-6f-4Dl" id="xUc-Fy-SjE"/>
                         <outlet property="mainExtensionsMenu" destination="nkD-z6-yjV" id="40H-WY-xHu"/>
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>
+                        <outlet property="openRecentMenu" destination="oas-Oc-fiZ" id="oqr-Ot-001"/>
                         <outlet property="mainUpdateItem" destination="ETL-k6-svK" id="rQZ-1x-GRC"/>
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
@@ -1161,7 +1168,7 @@ Gw
         <image name="bell" catalog="system" width="15" height="16"/>
         <image name="bell.slash" catalog="system" width="15" height="17"/>
         <image name="bold" catalog="system" width="11" height="12"/>
-        <image name="bookmark" catalog="system" width="11" height="16"/>
+        <image name="bookmark" catalog="system" width="14" height="16"/>
         <image name="character.textbox" catalog="system" width="19" height="14"/>
         <image name="clock.arrow.trianglehead.counterclockwise.rotate.90" catalog="system" width="16" height="15"/>
         <image name="curlybraces" catalog="system" width="15" height="16"/>

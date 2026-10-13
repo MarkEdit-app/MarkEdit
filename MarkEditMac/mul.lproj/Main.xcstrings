@@ -25,6 +25,30 @@
         }
       }
     },
+    "OQ1-op-enQ.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Quick Search…\"; ObjectID = \"OQ1-op-enQ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Quick Search…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜索…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜尋…"
+          }
+        }
+      }
+    },
     "0C5-FE-fvI.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Float on Top\"; ObjectID = \"0C5-FE-fvI\";",
       "extractionState" : "extracted_with_value",
