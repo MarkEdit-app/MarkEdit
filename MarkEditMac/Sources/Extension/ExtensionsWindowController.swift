@@ -19,16 +19,19 @@ final class ExtensionsWindowController: NSWindowController {
   private weak var updateAllItem: NSMenuItem?
   private weak var updateBehaviorMenu: NSMenu?
 
-  func present(scrollTo target: ExtensionsScrollTarget? = nil) {
+  func present(mode: ExtensionsModel.Mode? = nil, scrollTo target: ExtensionsScrollTarget? = nil) {
     if !AppPreferences.Extensions.windowHasBeenOpened {
       AppPreferences.Extensions.windowHasBeenOpened = true
       ExtensionUpdater.requestMenuUpdate()
     }
 
-    let canRevealImmediately = target.map(model.hasDiscoverItem) ?? false
-    if canRevealImmediately {
-      prepareToRevealTarget()
+    if mode != nil || target != nil {
+      prepareToRevealTarget(mode: mode ?? .discover)
     }
+
+    let canRevealImmediately = target.map {
+      model.items.contains(where: $0.matches)
+    } ?? false
 
     showWindow(nil)
     window?.makeKeyAndOrderFront(nil)
@@ -45,7 +48,7 @@ final class ExtensionsWindowController: NSWindowController {
       await model.load(forceRefresh: true)
 
       if let target {
-        prepareToRevealTarget()
+        prepareToRevealTarget(mode: mode ?? .discover)
         extensionsVC?.reveal(target)
       }
     }
@@ -157,10 +160,10 @@ private extension ExtensionsWindowController {
     window?.toolbar?.items.first { $0.itemIdentifier == .search } as? NSSearchToolbarItem
   }
 
-  /// Clears filtering and selects Discover before a programmatic reveal.
-  func prepareToRevealTarget() {
-    if model.mode != .discover {
-      model.mode = .discover
+  /// Clears filtering and selects the requested mode before a programmatic reveal.
+  func prepareToRevealTarget(mode: ExtensionsModel.Mode) {
+    if model.mode != mode {
+      model.mode = mode
     }
 
     if !model.searchQuery.isEmpty {

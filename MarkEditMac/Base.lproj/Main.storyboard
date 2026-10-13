@@ -1110,10 +1110,10 @@ Gw
                         <outlet property="mainEditMenu" destination="W48-6f-4Dl" id="xUc-Fy-SjE"/>
                         <outlet property="mainExtensionsMenu" destination="nkD-z6-yjV" id="40H-WY-xHu"/>
                         <outlet property="mainFileMenu" destination="bib-Uj-vzu" id="cNR-Lu-ST1"/>
-                        <outlet property="openRecentMenu" destination="oas-Oc-fiZ" id="oqr-Ot-001"/>
                         <outlet property="mainUpdateItem" destination="ETL-k6-svK" id="rQZ-1x-GRC"/>
                         <outlet property="mainWindowMenu" destination="Td7-aD-5lo" id="9j1-c6-lEO"/>
                         <outlet property="openFileInMenu" destination="Tuy-2U-frg" id="Udj-25-y2I"/>
+                        <outlet property="openRecentMenu" destination="oas-Oc-fiZ" id="oqr-Ot-001"/>
                         <outlet property="postponeUpdateItem" destination="r3b-uF-Yy9" id="8kS-ni-Kae"/>
                         <outlet property="presentUpdateItem" destination="Jc8-2v-hRb" id="Ywd-5S-qLn"/>
                         <outlet property="reopenFileMenu" destination="sPG-vJ-QST" id="6e4-Zg-kFp"/>

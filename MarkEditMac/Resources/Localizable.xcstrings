@@ -1952,23 +1952,6 @@
         }
       }
     },
-    "Get Custom Themes…" : {
-      "comment" : "Get custom themes from the GitHub",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "获取自定义主题…"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "獲取自訂主題…"
-          }
-        }
-      }
-    },
     "Get File Content" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2698,6 +2681,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOS / Unix (LF)"
+          }
+        }
+      }
+    },
+    "Manage…" : {
+      "comment" : "Open installed theme extensions",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理…"
           }
         }
       }
@@ -4245,6 +4245,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新將在 MarkEdit 下次啟動時套用。"
+          }
+        }
+      }
+    },
+    "Enabled Extensions" : {
+      "comment" : "Enabled theme extensions section title",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已启用的扩展"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已啟用的擴充功能"
           }
         }
       }
