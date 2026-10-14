@@ -34,8 +34,9 @@ enum Localized {
 
   enum SecretStorage {
     static let title = String(localized: "Allow “%@” to Read a Saved Credential?", comment: "Secret access confirmation title, with the extension identity")
-    static let message = String(localized: "%@ wants to read “%@”.", comment: "Secret access confirmation message, with the script breadcrumb path and secret key")
-    static let allowOnce = String(localized: "Allow Once", comment: "Button to approve one script read from Keychain")
+    static let message = String(localized: "Credential: %@\nRequested by: %@\n\nThe extension may retain and reuse the credential after this read.", comment: "Secret access confirmation message, with the secret key followed by the requesting script's breadcrumb path")
+    static let allowThisRead = String(localized: "Allow This Read", comment: "Button to approve one script read from Keychain")
+    static let dontAllowRead = String(localized: "Don’t Allow Read", comment: "Button to deny a script read from Keychain")
   }
 
   enum Editor {
