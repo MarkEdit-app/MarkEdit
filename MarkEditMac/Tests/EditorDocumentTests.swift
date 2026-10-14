@@ -618,10 +618,22 @@ extension EditorDocumentTests {
       (id: "test-extension", path: "/scripts/test-extension.js", displayPath: "Documents ‣ scripts ‣ test-extension.js"),
     ]
 
-    for (context, response) in zip(contexts, [NSApplication.ModalResponse.alertFirstButtonReturn, .alertSecondButtonReturn]) {
+    for (context, response) in zip(contexts, [NSApplication.ModalResponse.alertFirstButtonReturn, .alertThirdButtonReturn]) {
       let task = Task { try await editor.confirmSecretAccess(extensionID: context.id, path: context.path, key: "api-token") }
       let sheet = try await waitForSecretSheet(window)
-      XCTAssertEqual(sheet.defaultButtonCell?.title, Localized.SecretStorage.allowOnce)
+      XCTAssertEqual(sheet.defaultButtonCell?.title, Localized.SecretStorage.allowThisRead)
+
+      let icon: NSImageView? = sheet.contentView?.firstDescendant {
+        $0.image?.tiffRepresentation == NSApp.applicationIconImage.tiffRepresentation
+      }
+
+      XCTAssertNotNil(icon)
+
+      let dontAllow: NSButton = try XCTUnwrap(sheet.contentView?.firstDescendant {
+        $0.title == Localized.SecretStorage.dontAllowRead
+      })
+
+      XCTAssertEqual(dontAllow.keyEquivalent, "\u{1b}")
 
       let learnMore: NSButton = try XCTUnwrap(sheet.contentView?.firstDescendant {
         $0.title == Localized.General.learnMore
@@ -630,24 +642,39 @@ extension EditorDocumentTests {
       XCTAssertNotNil(learnMore.target)
       XCTAssertEqual(learnMore.action, NSSelectorFromString("invoke"))
 
+      let allow = try XCTUnwrap(sheet.defaultButtonCell?.controlView as? NSButton)
+      let allowFrame = allow.convert(allow.bounds, to: nil)
+      let denyFrame = dontAllow.convert(dontAllow.bounds, to: nil)
+      let learnMoreFrame = learnMore.convert(learnMore.bounds, to: nil)
+      XCTAssertGreaterThan(allowFrame.minY, learnMoreFrame.minY)
+      XCTAssertGreaterThan(learnMoreFrame.minY, denyFrame.minY)
+
       let text = sheet.contentView.map(secretConfirmationText) ?? ""
       XCTAssertTrue(text.contains("api-token"))
       XCTAssertTrue(text.contains(String(format: Localized.SecretStorage.title, context.id)))
-      XCTAssertTrue(text.contains(String(format: Localized.SecretStorage.message, context.displayPath, "api-token")))
+
+      let message = String(format: Localized.SecretStorage.message, "api-token", context.displayPath)
+      XCTAssertTrue(text.contains(message))
+
+      let lines = message.components(separatedBy: "\n")
+      XCTAssertEqual(lines.count, 4)
+      XCTAssertEqual(lines.first?.contains("api-token"), true)
+      XCTAssertEqual(lines.dropFirst().first?.contains(context.displayPath), true)
+      XCTAssertFalse(lines.last?.isEmpty ?? true)
       XCTAssertFalse(text.contains(context.path))
 
       if response == .alertFirstButtonReturn {
         let button = try XCTUnwrap(sheet.defaultButtonCell?.controlView as? NSButton)
         button.performClick(nil)
       } else {
-        window.endSheet(sheet, returnCode: response)
+        dontAllow.performClick(nil)
       }
 
       do {
         try await task.value
         XCTAssertEqual(response, .alertFirstButtonReturn)
       } catch SecretStorageError.cancelled {
-        XCTAssertEqual(response, .alertSecondButtonReturn)
+        XCTAssertEqual(response, .alertThirdButtonReturn)
       }
     }
   }

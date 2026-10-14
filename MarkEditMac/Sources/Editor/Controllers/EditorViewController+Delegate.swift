@@ -474,16 +474,19 @@ extension EditorViewController: EditorModuleSecretStorageDelegate {
       ? "Documents ‣ editor.js"
       : "Documents ‣ scripts ‣ \(scriptURL.lastPathComponent)"
     let alert = NSAlert()
-    alert.alertStyle = .critical
+    alert.alertStyle = .warning
+    alert.icon = NSApp.applicationIconImage
     alert.messageText = String(format: Localized.SecretStorage.title, extensionID)
-    alert.informativeText = String(format: Localized.SecretStorage.message, displayPath, key)
-    alert.addButton(withTitle: Localized.SecretStorage.allowOnce)
-    alert.addButton(withTitle: Localized.General.cancel)
+    alert.informativeText = String(format: Localized.SecretStorage.message, key, displayPath)
+    alert.addButton(withTitle: Localized.SecretStorage.allowThisRead)
 
     let learnMoreButton = alert.addButton(withTitle: Localized.General.learnMore)
     learnMoreButton.addAction {
       NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#extension-credentials")
     }
+
+    // The "Cancel" button will always be the last one as long as Escape key is assigned
+    alert.addButton(withTitle: Localized.SecretStorage.dontAllowRead).keyEquivalent = "\u{1b}"
 
     if await presentSheetModal(alert) != .alertFirstButtonReturn {
       throw SecretStorageError.cancelled

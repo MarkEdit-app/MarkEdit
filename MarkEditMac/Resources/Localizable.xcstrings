@@ -239,6 +239,23 @@
         }
       }
     },
+    "Credential: %@\nRequested by: %@\n\nThe extension may retain and reuse the credential after this read." : {
+      "comment" : "Secret access confirmation message, with the secret key followed by the requesting script's breadcrumb path",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "凭据：%@\n请求来源：%@\n\n扩展可能会在此次读取后保留并重复使用该凭据。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "憑證：%@\n請求來源：%@\n\n擴充功能可能會在此次讀取後保留並重複使用該憑證。"
+          }
+        }
+      }
+    },
     "Current Document" : {
       "comment" : "Quick Search filter section for the active document",
       "localizations" : {
@@ -286,23 +303,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**連結：**%@"
-          }
-        }
-      }
-    },
-    "%@ wants to read “%@”." : {
-      "comment" : "Secret access confirmation message, with the script breadcrumb path and secret key",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 想要读取“%@”。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 想要讀取“%@”。"
           }
         }
       }
@@ -598,19 +598,19 @@
         }
       }
     },
-    "Allow Once" : {
+    "Allow This Read" : {
       "comment" : "Button to approve one script read from Keychain",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允许一次"
+            "value" : "允许此次读取"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "允許一次"
+            "value" : "允許此次讀取"
           }
         }
       }
@@ -1411,6 +1411,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全文件"
+          }
+        }
+      }
+    },
+    "Don’t Allow Read" : {
+      "comment" : "Button to deny a script read from Keychain",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不允许读取"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不允許讀取"
           }
         }
       }
