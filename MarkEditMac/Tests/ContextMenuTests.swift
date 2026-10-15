@@ -103,7 +103,7 @@ final class ContextMenuTests: XCTestCase {
       target: self,
       selector: #selector(checkContextMenuHighlight(_:)),
       userInfo: (editor, expectedIndex, checked),
-      repeats: false
+      repeats: true
     )
 
     RunLoop.main.add(timer, forMode: .eventTracking)
@@ -116,7 +116,6 @@ final class ContextMenuTests: XCTestCase {
   @objc private func checkContextMenuHighlight(_ timer: Timer) {
     guard let (editor, expectedIndex, checked) = timer.userInfo as? (EditorViewController, Int?, XCTestExpectation),
           let menu = editor.presentedMenu else {
-      XCTFail("Missing context menu")
       return
     }
 
@@ -127,6 +126,7 @@ final class ContextMenuTests: XCTestCase {
     }
 
     checked.fulfill()
+    timer.invalidate()
     menu.cancelTracking()
   }
 }
