@@ -113,7 +113,7 @@ final class QuickSearchMenuTests: XCTestCase {
 
     let fileID = "file:\(file.absoluteString)"
     let cases: [(String, QuickSearchFilter, [String])] = [
-      ("new tab", .all, [fileID, "menu:0.0", "menu:1.0", "menu:1.1", "heading:1", "line:2"]),
+      ("new tab", .all, ["heading:1", "line:2", fileID, "menu:0.0", "menu:1.0", "menu:1.1"]),
       ("", .all, [fileID, "heading:1"]),
       ("", .menuActions, actions.map(\.id)),
       ("nwt", .menuActions, actions.map(\.id)),
@@ -215,7 +215,7 @@ final class QuickSearchMenuTests: XCTestCase {
       menuActions: actions
     )
 
-    XCTAssertEqual(results.map(\.id), ["menu:1.0", "menu:1.1", "line:1", "menu:0.0"])
+    XCTAssertEqual(results.map(\.id), ["line:1", "menu:1.0", "menu:1.1", "menu:0.0"])
 
     let matches = try MenuActionSearchResult.search("help", actions: actions)
     XCTAssertEqual(matches.map(\.isExactMatch), [true, false, false])
