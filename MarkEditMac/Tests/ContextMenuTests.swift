@@ -22,7 +22,7 @@ final class ContextMenuTests: XCTestCase {
     let editor = EditorViewController(preloadDelay: 60)
     window.contentViewController = editor
     window.makeKeyAndOrderFront(nil)
-    defer { window.orderOut(nil) }
+    defer { window.close() }
 
     let api = EditorModuleAPI(delegate: editor)
     let cases: [(index: Int?, expected: Int?)] = [
@@ -63,7 +63,7 @@ final class ContextMenuTests: XCTestCase {
     let editor = EditorViewController()
     window.contentViewController = editor
     window.makeKeyAndOrderFront(nil)
-    defer { window.orderOut(nil) }
+    defer { window.close() }
 
     let deadline = ContinuousClock.now + .seconds(10)
     while !editor.hasFinishedLoading, ContinuousClock.now < deadline {
@@ -103,7 +103,7 @@ final class ContextMenuTests: XCTestCase {
       target: self,
       selector: #selector(checkContextMenuHighlight(_:)),
       userInfo: (editor, expectedIndex, checked),
-      repeats: true
+      repeats: false
     )
 
     RunLoop.main.add(timer, forMode: .eventTracking)
@@ -116,6 +116,7 @@ final class ContextMenuTests: XCTestCase {
   @objc private func checkContextMenuHighlight(_ timer: Timer) {
     guard let (editor, expectedIndex, checked) = timer.userInfo as? (EditorViewController, Int?, XCTestExpectation),
           let menu = editor.presentedMenu else {
+      XCTFail("Missing context menu")
       return
     }
 
@@ -126,7 +127,6 @@ final class ContextMenuTests: XCTestCase {
     }
 
     checked.fulfill()
-    timer.invalidate()
     menu.cancelTracking()
   }
 }
