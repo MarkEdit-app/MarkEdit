@@ -140,7 +140,7 @@ package enum QuickSearchResult: Sendable {
     let prefixActions = actions.filter(\.isPrefixMatch).map(Self.menuAction)
     let otherActions = actions.filter { !$0.isExactMatch && !$0.isPrefixMatch }.map(Self.menuAction)
 
-    return exactFiles + exactActions + prefixFiles + prefixActions
-      + headings.map(Self.heading) + content + recentFiles + bookmarkedFiles + otherActions
+    return headings.map(Self.heading) + content
+      + exactFiles + exactActions + prefixFiles + prefixActions + recentFiles + bookmarkedFiles + otherActions
   }
 }

@@ -8,7 +8,7 @@ import XCTest
 @testable import QuickSearchCore
 
 final class QuickSearchResultTests: XCTestCase {
-  func testAllPromotesDirectPrefixesWithoutPromotingMenuNamesOrWeakMatches() throws {
+  func testAllRanksHeadingsThenContentBeforeGlobalMatches() throws {
     let recent = URL(filePath: "/Notes/Release Plan.md")
     let exact = URL(filePath: "/Notes/Plan.md")
     let prefix = URL(filePath: "/Archive/Planning.md")
@@ -32,9 +32,11 @@ final class QuickSearchResultTests: XCTestCase {
       menuActions: actions
     )
 
-    let expected = [
-      "file:\(exact.absoluteString)", "menu:0.0", "file:\(prefix.absoluteString)", "menu:0.1", "heading:101",
-    ] + (1...100).map { "line:\($0)" } + ["file:\(recent.absoluteString)", "menu:2.0", "menu:1.0"]
+    let expected = ["heading:101"] + (1...100).map { "line:\($0)" } + [
+      "file:\(exact.absoluteString)", "menu:0.0", "file:\(prefix.absoluteString)", "menu:0.1",
+      "file:\(recent.absoluteString)", "menu:2.0", "menu:1.0",
+    ]
+
     XCTAssertEqual(results.map(\.id), expected)
     XCTAssertEqual(Set(results.map(\.id)).count, results.count)
   }
@@ -303,7 +305,7 @@ extension QuickSearchResultTests {
 
     let cases: [(String, QuickSearchFilter, [String])] = [
       ("plan", .all, [
-        recentIDs[0], bookmarkIDs[1], "menu:0.0", bookmarkIDs[2], "heading:1", "line:2", recentIDs[1],
+        "heading:1", "line:2", recentIDs[0], bookmarkIDs[1], "menu:0.0", bookmarkIDs[2], recentIDs[1],
       ]),
       ("plan", .recents, recentIDs),
       ("plan", .bookmarks, bookmarkIDs),

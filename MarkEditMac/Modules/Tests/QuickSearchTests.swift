@@ -215,7 +215,7 @@ extension QuickSearchTests {
       return try XCTUnwrap(cell.subviews.compactMap { $0 as? NSTextField }.first).stringValue
     }
 
-    XCTAssertEqual(titles, ["Plan.md", "Release Plan", "Project Planning", "A plan for launch."])
+    XCTAssertEqual(titles, ["Release Plan", "Project Planning", "A plan for launch.", "Plan.md"])
     try await search("pp", count: 1)
     let submit = #selector(NSResponder.insertNewline(_:))
     snapshot = .init(
@@ -379,7 +379,6 @@ extension QuickSearchTests {
       try await waitUntil { table.numberOfRows == 2 }
       XCTAssertFalse(results.isHidden)
       XCTAssertEqual(table.selectedRow, 0)
-      XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: #selector(NSResponder.moveDown(_:))))
 
       return view
     }
@@ -391,7 +390,7 @@ extension QuickSearchTests {
 
     let table: NSTableView = try XCTUnwrap(firstView.firstDescendant())
     try await waitUntil {
-      let cell = table.view(atColumn: 0, row: 1, makeIfNecessary: true)
+      let cell = table.view(atColumn: 0, row: 0, makeIfNecessary: true)
       return cell?.subviews.compactMap { $0 as? NSTextField }.last?.stringValue == "Untitled:4"
         && controller.window?.isActivatingResult == false
     }
@@ -400,7 +399,7 @@ extension QuickSearchTests {
     XCTAssertEqual(controller.window?.isVisible, true)
     XCTAssertTrue(navigatedLines.isEmpty)
 
-    XCTAssertTrue(firstView.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.moveDown(_:))))
+    XCTAssertEqual(table.selectedRow, 0)
     XCTAssertTrue(firstView.control(NSControl(), textView: NSTextView(), doCommandBy: submit))
     try await waitUntil { !navigatedLines.isEmpty }
     XCTAssertEqual(navigatedLines, [4])
