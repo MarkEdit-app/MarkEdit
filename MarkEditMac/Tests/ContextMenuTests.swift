@@ -22,7 +22,7 @@ final class ContextMenuTests: XCTestCase {
     let editor = EditorViewController(preloadDelay: 60)
     window.contentViewController = editor
     window.makeKeyAndOrderFront(nil)
-    defer { window.orderOut(nil) }
+    defer { window.close() }
 
     let api = EditorModuleAPI(delegate: editor)
     let cases: [(index: Int?, expected: Int?)] = [
@@ -63,7 +63,7 @@ final class ContextMenuTests: XCTestCase {
     let editor = EditorViewController()
     window.contentViewController = editor
     window.makeKeyAndOrderFront(nil)
-    defer { window.orderOut(nil) }
+    defer { window.close() }
 
     let deadline = ContinuousClock.now + .seconds(10)
     while !editor.hasFinishedLoading, ContinuousClock.now < deadline {
