@@ -14,7 +14,7 @@ export interface NativeModuleAPI extends NativeModule {
   closeDocument(): Promise<boolean>;
   recentDocumentPaths(): Promise<string[]>;
   addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
-  showContextMenu(args: { items: WebMenuItem[]; location: WebPoint }): void;
+  showContextMenu(args: { items: WebMenuItem[]; location: WebPoint; highlightedIndex?: CodeGen_Int }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
   showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;
   showOpenPanel({ options }: { options: OpenPanelOptions }): Promise<string[] | undefined>;

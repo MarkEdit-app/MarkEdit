@@ -17,7 +17,7 @@ public protocol NativeModuleAPI: NativeModule {
   func closeDocument() async -> Bool
   func recentDocumentPaths() async -> [String]
   func addMainMenuItems(items: [WebMenuItem])
-  func showContextMenu(items: [WebMenuItem], location: WebPoint)
+  func showContextMenu(items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?)
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String?
   func showOpenPanel(options: OpenPanelOptions) async -> [String]?
@@ -191,11 +191,13 @@ final class NativeBridgeAPI: NativeBridge {
     struct Message: Decodable {
       var items: [WebMenuItem]
       var location: WebPoint
+      var highlightedIndex: Int?
 
       init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: BridgeFieldKey.self)
         items = try container.value("items")
         location = try container.value("location")
+        highlightedIndex = try container.value("highlightedIndex")
       }
     }
 
@@ -207,7 +209,7 @@ final class NativeBridgeAPI: NativeBridge {
       return .failure(error)
     }
 
-    module.showContextMenu(items: message.items, location: message.location)
+    module.showContextMenu(items: message.items, location: message.location, highlightedIndex: message.highlightedIndex)
     return .success(nil)
   }
 

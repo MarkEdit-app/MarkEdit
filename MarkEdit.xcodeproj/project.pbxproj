@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1100013010000000000001 /* QuickSearchUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100013010000000000002 /* QuickSearchUI */; };
+		0A1100013010000000000003 /* AppDelegate+QuickSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100013010000000000004 /* AppDelegate+QuickSearch.swift */; };
+		0A1100023010000000000001 /* QuickSearchCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100023010000000000002 /* QuickSearchCore */; };
 		84FB00F02C6C4AED00850E94 /* AppWritingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */; };
 		8701D0A42CC12321006AF8C2 /* FileVersion in Frameworks */ = {isa = PBXBuildFile; productRef = 8701D0A32CC12321006AF8C2 /* FileVersion */; };
 		8703C175303E7DD300A896D0 /* QuickLookWindowSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */; };
@@ -24,9 +27,6 @@
 		870F17682985285B00003DA7 /* EditorViewController+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870F17672985285B00003DA7 /* EditorViewController+Config.swift */; };
 		870F177D29855CA500003DA7 /* MarkEditKit in Frameworks */ = {isa = PBXBuildFile; productRef = 870F177C29855CA500003DA7 /* MarkEditKit */; };
 		870F178E2985775B00003DA7 /* SharedUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178D2985775B00003DA7 /* SharedUI */; };
-		0A1100013010000000000001 /* QuickSearchUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100013010000000000002 /* QuickSearchUI */; };
-		0A1100023010000000000001 /* QuickSearchCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100023010000000000002 /* QuickSearchCore */; };
-		0A1100013010000000000003 /* AppDelegate+QuickSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100013010000000000004 /* AppDelegate+QuickSearch.swift */; };
 		870F17902985775B00003DA7 /* AppKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 870F178F2985775B00003DA7 /* AppKitExtensions */; };
 		870F17962985775B00003DA7 /* SettingsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 870F17952985775B00003DA7 /* SettingsUI */; };
 		87132AA32C188FE900FD262B /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87132AA22C188FE900FD262B /* AppShortcuts.xcstrings */; };
@@ -95,7 +95,6 @@
 		87AF5957302379C4006E8C6A /* AppRelauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AF5956302379C3006E8C6A /* AppRelauncher.swift */; };
 		87B000000000000000000102 /* BookmarkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B000000000000000000101 /* BookmarkStore.swift */; };
 		87B000000000000000000104 /* BookmarkStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B000000000000000000103 /* BookmarkStoreTests.swift */; };
-		87D700000000000000000001 /* QuickSearchMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D700000000000000000002 /* QuickSearchMenuTests.swift */; };
 		87B0D1022F1A4C0100B0D101 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */; };
 		87B3ED5A2CBCA97D001FA6CE /* AppDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */; };
 		87B3ED5D2CBCADD6001FA6CE /* NSDocumentController+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */; };
@@ -105,6 +104,8 @@
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
 		87C600000000000000000001 /* EditorDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C600000000000000000002 /* EditorDocumentTests.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
+		87D700000000000000000001 /* QuickSearchMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D700000000000000000002 /* QuickSearchMenuTests.swift */; };
+		87D800000000000000000001 /* ContextMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D800000000000000000002 /* ContextMenuTests.swift */; };
 		87D9322E2A925C6700B20D84 /* EditorReplaceTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */; };
 		87DA0000000000000000E00B /* UpdateInstaller.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E000 /* UpdateInstaller.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		87DA0000000000000000E020 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DA0000000000000000E010 /* main.swift */; };
@@ -189,6 +190,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A1100013010000000000004 /* AppDelegate+QuickSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+QuickSearch.swift"; sourceTree = "<group>"; };
 		84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWritingTools.swift; sourceTree = "<group>"; };
 		8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookWindowSize.swift; sourceTree = "<group>"; };
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
@@ -276,7 +278,6 @@
 		87AF5956302379C3006E8C6A /* AppRelauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRelauncher.swift; sourceTree = "<group>"; };
 		87B000000000000000000101 /* BookmarkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkStore.swift; sourceTree = "<group>"; };
 		87B000000000000000000103 /* BookmarkStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkStoreTests.swift; sourceTree = "<group>"; };
-		87D700000000000000000002 /* QuickSearchMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchMenuTests.swift; sourceTree = "<group>"; };
 		87B0D1012F1A4C0100B0D101 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDocumentController.swift; sourceTree = "<group>"; };
 		87B3ED5C2CBCADD6001FA6CE /* NSDocumentController+Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDocumentController+Extras.swift"; sourceTree = "<group>"; };
@@ -287,6 +288,8 @@
 		87C3CBFA29545944002A3436 /* MarkEditKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditKit; sourceTree = "<group>"; };
 		87C600000000000000000002 /* EditorDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDocumentTests.swift; sourceTree = "<group>"; };
 		87C600000000000000000004 /* MarkEditMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkEditMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87D700000000000000000002 /* QuickSearchMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchMenuTests.swift; sourceTree = "<group>"; };
+		87D800000000000000000002 /* ContextMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTests.swift; sourceTree = "<group>"; };
 		87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceTextField.swift; sourceTree = "<group>"; };
 		87DA0000000000000000E000 /* UpdateInstaller.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = UpdateInstaller.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		87DA0000000000000000E010 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -307,7 +310,6 @@
 		B0E02F672D8F77A50060DEA5 /* MarkEdit.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = MarkEdit.sdef; sourceTree = "<group>"; };
 		CC000002300000000000001B /* EditorDocument+ClosedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorDocument+ClosedTab.swift"; sourceTree = "<group>"; };
 		CC000003300000000000001B /* AppDelegate+ClosedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+ClosedTab.swift"; sourceTree = "<group>"; };
-		0A1100013010000000000004 /* AppDelegate+QuickSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+QuickSearch.swift"; sourceTree = "<group>"; };
 		CC000004300000000000001B /* EditorSelectionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionHistory.swift; sourceTree = "<group>"; };
 		CC000006300000000000001B /* EditorClosedTabHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorClosedTabHistory.swift; sourceTree = "<group>"; };
 		EE100007EEEE000000000007 /* ExtensionInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionInstaller.swift; sourceTree = "<group>"; };
@@ -727,6 +729,7 @@
 				87C600000000000000000002 /* EditorDocumentTests.swift */,
 				87B000000000000000000103 /* BookmarkStoreTests.swift */,
 				87D700000000000000000002 /* QuickSearchMenuTests.swift */,
+				87D800000000000000000002 /* ContextMenuTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1082,6 +1085,7 @@
 				87C600000000000000000001 /* EditorDocumentTests.swift in Sources */,
 				87B000000000000000000104 /* BookmarkStoreTests.swift in Sources */,
 				87D700000000000000000001 /* QuickSearchMenuTests.swift in Sources */,
+				87D800000000000000000001 /* ContextMenuTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -175,7 +175,7 @@ private final class EditorModuleAPIDelegateStub: EditorModuleAPIDelegate {
   func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool { true }
   func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool { true }
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {}
-  func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint) {}
+  func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?) {}
   func editorAPI(
     _ sender: EditorModuleAPI,
     alertWith title: String?,

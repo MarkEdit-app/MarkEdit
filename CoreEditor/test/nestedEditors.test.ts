@@ -235,6 +235,99 @@ describe('context menu caret geometry', () => {
     expect(dispatch).not.toHaveBeenCalled();
   });
 
+  test.each([{}, { highlightedIndex: 0 }])('uses the cell caret with options %j', options => {
+    jest.useFakeTimers();
+    const show = prepareMenu();
+    showContextMenu([{ title: 'First' }], undefined, options);
+    expect(show).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(50);
+    expect(show).toHaveBeenCalledWith({
+      items: [expect.objectContaining({ title: 'First' })],
+      location: { x: 80, y: 70 },
+      highlightedIndex: options.highlightedIndex,
+    });
+  });
+
+  test.each([undefined, 0, 1, 2])('uses an explicit location with highlighted index %s', highlightedIndex => {
+    const show = prepareMenu();
+    const dispatch = jest.spyOn(cell, 'dispatch');
+
+    showContextMenu([{ title: 'First' }, { separator: true }, { title: 'Last' }], { x: 1, y: 2 }, {
+      highlightedIndex,
+    });
+
+    expect(show).toHaveBeenCalledWith({
+      items: [expect.objectContaining({ title: 'First' }), expect.objectContaining({ separator: true }), expect.objectContaining({ title: 'Last' })],
+      location: { x: 1, y: 2 },
+      highlightedIndex,
+    });
+
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  test.each([-1, 3, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER])(
+    'forwards out-of-range integer %s for native fallback',
+    highlightedIndex => {
+      const show = prepareMenu();
+      showContextMenu([
+        { title: 'First' },
+        { separator: true },
+        { title: 'Disabled', state: () => ({ isEnabled: false }) },
+      ], { x: 1, y: 2 }, { highlightedIndex });
+
+      expect(show).toHaveBeenCalledWith(expect.objectContaining({
+        location: { x: 1, y: 2 },
+        highlightedIndex,
+      }));
+    },
+  );
+
+  test.each([0.5, NaN, Infinity, -Infinity, Number.MAX_VALUE, Number.MAX_SAFE_INTEGER + 1, Number.MIN_SAFE_INTEGER - 1])(
+    'opens menus without a highlight for non-safe integer %s',
+    highlightedIndex => {
+      jest.useFakeTimers();
+      const show = prepareMenu();
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      for (const location of [undefined, { x: 1, y: 2 }]) {
+        showContextMenu([{ title: 'First' }], location, { highlightedIndex });
+      }
+
+      expect(show).toHaveBeenCalledTimes(1);
+      expect(show).toHaveBeenNthCalledWith(1, expect.objectContaining({
+        items: [expect.objectContaining({ title: 'First' })],
+        location: { x: 1, y: 2 },
+        highlightedIndex: undefined,
+      }));
+
+      jest.advanceTimersByTime(50);
+      expect(show).toHaveBeenCalledTimes(2);
+      expect(show).toHaveBeenNthCalledWith(2, expect.objectContaining({
+        items: [expect.objectContaining({ title: 'First' })],
+        location: { x: 80, y: 70 },
+        highlightedIndex: undefined,
+      }));
+    },
+  );
+
+  test('forwards an integer index for native fallback in an empty menu', () => {
+    const show = prepareMenu();
+    showContextMenu([], { x: 1, y: 2 }, { highlightedIndex: 0 });
+    expect(show).toHaveBeenCalledWith({ items: [], location: { x: 1, y: 2 }, highlightedIndex: 0 });
+  });
+
+  test('leaves item state evaluation to native code after scrolling to the caret', () => {
+    jest.useFakeTimers();
+    const show = prepareMenu();
+    const state = jest.fn(() => ({ isEnabled: false }));
+    showContextMenu([{ title: 'First', state }], undefined, { highlightedIndex: 0 });
+    expect(state).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(50);
+    expect(state).not.toHaveBeenCalled();
+    expect(show).toHaveBeenCalledWith(expect.objectContaining({ highlightedIndex: 0 }));
+  });
+
   test('falls back to document geometry when no editor has focus', () => {
     jest.useFakeTimers();
     const show = prepareMenu();

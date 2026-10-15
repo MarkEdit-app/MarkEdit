@@ -21,7 +21,7 @@ public protocol EditorModuleAPIDelegate: AnyObject {
   func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool
   func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
-  func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint)
+  func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?)
   func editorAPI(
     _ sender: EditorModuleAPI,
     alertWith title: String?,
@@ -80,8 +80,8 @@ public final class EditorModuleAPI: NativeModuleAPI {
     })
   }
 
-  public func showContextMenu(items: [WebMenuItem], location: WebPoint) {
-    delegate?.editorAPI(self, showContextMenu: items, location: location)
+  public func showContextMenu(items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?) {
+    delegate?.editorAPI(self, showContextMenu: items, location: location, highlightedIndex: highlightedIndex)
   }
 
   public func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int {
