@@ -91,7 +91,7 @@ public final class QuickSearchWindow: NSWindow {
     let width = min(640, visibleFrame.width - 24)
     let rect = CGRect(
       x: parentRect.midX - width * 0.5,
-      y: parentRect.maxY - 198,
+      y: parentRect.maxY - 248,
       width: width,
       height: 48
     )
