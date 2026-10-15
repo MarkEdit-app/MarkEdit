@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view';
-import { MenuItem, MenuItemState, Alert, TextBox, OpenPanelOptions, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
+import { MenuItem, MenuItemState, ContextMenuOptions, Alert, TextBox, OpenPanelOptions, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
@@ -15,12 +15,19 @@ export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
   });
 }
 
-export function showContextMenu(items: MenuItem[], location?: WebPoint) {
+export function showContextMenu(items: MenuItem[], location?: WebPoint, options?: ContextMenuOptions) {
+  let { highlightedIndex } = options ?? {};
+  if (highlightedIndex !== undefined && !Number.isSafeInteger(highlightedIndex)) {
+    console.error('showContextMenu: highlightedIndex must be a safe integer.', highlightedIndex);
+    highlightedIndex = undefined;
+  }
+
   const editor = focusedEditor() ?? window.editor;
   const caretPos = editor.state.selection.main.head;
   const invokeNative = () => {
     window.nativeModules.api.showContextMenu({
       items: items.map(item => createMenuItem(item, contextActions)),
+      highlightedIndex: highlightedIndex === undefined ? undefined : (highlightedIndex as CodeGen_Int),
       location: location ?? (() => {
         const coords = editor.coordsAtPos(caretPos);
         if (coords === null) {

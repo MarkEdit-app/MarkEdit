@@ -163,7 +163,7 @@ private extension MoveFileTests {
     func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool { false }
     func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool { false }
     func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)]) {}
-    func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint) {}
+    func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?) {}
     func editorAPI(
       _ sender: EditorModuleAPI, alertWith title: String?, message: String?, buttons: [String]?
     ) async -> Int { 0 }

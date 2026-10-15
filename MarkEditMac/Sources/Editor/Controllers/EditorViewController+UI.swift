@@ -434,12 +434,45 @@ extension EditorViewController {
     resetUserDefinedMenuItems()
   }
 
-  func showContextMenu(items: [WebMenuItem], location: CGPoint) {
+  func showContextMenu(items: [WebMenuItem], location: CGPoint, highlightedIndex: Int?) {
     let menu = createMenu(items: items, handler: bridge.api.handleContextMenuAction)
     menu.identifier = EditorWebView.userDefinedContextMenuID
 
-    NSCursor.arrow.push()
-    menu.popUp(positioning: nil, at: location, in: webView)
+    let highlightedItem: NSMenuItem? = {
+      guard let highlightedIndex, menu.items.indices.contains(highlightedIndex) else {
+        return nil
+      }
+
+      menu.update()
+      let item = menu.items[highlightedIndex]
+      return item.isEnabled && !item.isSeparatorItem ? item : nil
+    }()
+
+    let popUp = { (item: NSMenuItem?) in
+      NSCursor.arrow.push()
+      menu.popUp(positioning: item, at: location, in: self.webView)
+    }
+
+    guard let item = highlightedItem as? UserDefinedMenuItem,
+          let stateGetterID = item.stateGetterID else {
+      return popUp(highlightedItem)
+    }
+
+    Task {
+      var itemToHighlight: NSMenuItem?
+      do {
+        let state = try await bridge.api.getMenuItemState(id: stateGetterID)
+        itemToHighlight = state.isEnabled == false ? nil : item
+      } catch {
+        Logger.log(.error, "Failed to retrieve context menu item state: \(error)")
+      }
+
+      guard view.window != nil else {
+        return Logger.log(.debug, "Context menu dismissed because its editor is no longer in a window")
+      }
+
+      popUp(itemToHighlight)
+    }
   }
 
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> NSApplication.ModalResponse {
