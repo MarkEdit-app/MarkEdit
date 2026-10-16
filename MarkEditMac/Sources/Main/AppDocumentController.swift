@@ -50,6 +50,7 @@ final class AppDocumentController: NSDocumentController {
 
     Self.suggestedTextEncoding = nil
     openPanel.showsHiddenFiles = AppPreferences.General.showHiddenFiles
+    openPanel.message = AppPreferences.General.hasUsedQuickSearch ? "" : Localized.QuickSearch.openPanelHint
     openPanel.relayoutAccessoryView()
 
     let onBecomeActive = NotificationCenter.default.addObserver(

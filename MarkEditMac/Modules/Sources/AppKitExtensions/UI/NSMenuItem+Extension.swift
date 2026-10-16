@@ -49,12 +49,13 @@ public extension NSMenuItem {
   }
 
   @MainActor
-  func performAction() {
+  @discardableResult
+  func performAction() -> Bool {
     guard let action else {
-      return
+      return false
     }
 
-    NSApp.sendAction(action, to: target, from: self)
+    return NSApp.sendAction(action, to: target, from: self)
   }
 
   func ensureTitleVisibility() {

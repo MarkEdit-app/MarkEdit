@@ -1633,6 +1633,23 @@
         }
       }
     },
+    "Find files faster with Quick Search (⇧⌘O)." : {
+      "comment" : "Open panel hint, hidden after the first successful Quick Search action",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用快速搜索（⇧⌘O）更快地查找文件。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用快速搜尋（⇧⌘O）更快地尋找檔案。"
+          }
+        }
+      }
+    },
     "Find Selection" : {
       "comment" : "Menu item: use selection to find",
       "localizations" : {
