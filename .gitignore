@@ -5,3 +5,6 @@
 xcuserdata/
 Local.xcconfig
 *.local.entitlements
+
+## Local release tools and build output
+/build/
