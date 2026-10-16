@@ -20,7 +20,6 @@ final class EditorDocumentTests: XCTestCase {
   override static func setUp() {
     super.setUp()
     precondition(ApplicationEnvironment.isRunningTests, "Hosted tests must bypass normal application startup")
-    XCTAssertTrue(NSApp.windows.isEmpty)
   }
 
   override static func tearDown() {
@@ -39,6 +38,8 @@ final class EditorDocumentTests: XCTestCase {
 
   func testHostSkipsApplicationLifecycle() async throws {
     let delegate = try XCTUnwrap(NSApp.delegate as? AppDelegate)
+    XCTAssertTrue(NSDocumentController.shared.documents.isEmpty)
+    XCTAssertFalse(NSApp.windows.contains { $0 is EditorWindow && $0.isVisible })
     XCTAssertTrue(UserDefaults.standard.bool(forKey: "ApplePersistenceIgnoreState"))
     XCTAssertNotIdentical(ApplicationEnvironment.preferences, UserDefaults.standard)
     XCTAssertNotEqual(ApplicationEnvironment.documentsDirectory, URL.documentsDirectory)
