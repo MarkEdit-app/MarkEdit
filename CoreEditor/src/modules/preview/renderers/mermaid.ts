@@ -6,7 +6,7 @@ interface Mermaid {
 }
 
 export async function renderMermaid(container: HTMLElement, code: string, loadModule: ModuleLoader): Promise<void> {
-  const { default: mermaid } = await loadModule<{ default: Mermaid }>('https://cdn.jsdelivr.net/npm/mermaid@12.0.0/dist/mermaid.esm.min.mjs');
+  const { default: mermaid } = await loadModule<{ default: Mermaid }>('https://cdn.jsdelivr.net/npm/mermaid@12.2.0/dist/mermaid.esm.min.mjs');
   const appearance = matchMedia('(prefers-color-scheme: dark)');
   const draw = async () => {
     const theme = appearance.matches ? 'dark' : 'default';
