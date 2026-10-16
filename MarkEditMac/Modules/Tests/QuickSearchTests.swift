@@ -286,7 +286,7 @@ extension QuickSearchTests {
 
     let firstWindow = try XCTUnwrap(controller.window)
     XCTAssertEqual(firstWindow.frame.midX, screen.visibleFrame.midX, accuracy: 1)
-    XCTAssertEqual(firstWindow.frame.maxY, screen.visibleFrame.maxY - 150, accuracy: 1)
+    XCTAssertEqual(firstWindow.frame.maxY, screen.visibleFrame.maxY - 200, accuracy: 1)
     defer { controller.window?.orderOut(nil) }
 
     let view = try XCTUnwrap(firstWindow.contentView as? QuickSearchView)
