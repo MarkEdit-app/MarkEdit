@@ -6,7 +6,7 @@ interface Katex {
 
 export async function renderKatex(container: HTMLElement, code: string, loadModule: ModuleLoader): Promise<void> {
   const [{ default: katex }] = await Promise.all([
-    loadModule<{ default: Katex }>('https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/katex.min.mjs'),
+    loadModule<{ default: Katex }>('https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.mjs'),
     loadMathStyles(),
   ]);
 
@@ -19,7 +19,7 @@ export async function renderKatex(container: HTMLElement, code: string, loadModu
     return new Promise<void>((resolve, reject) => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/katex.min.css';
+      link.href = 'https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css';
       link.onload = () => resolve();
       link.onerror = () => {
         link.remove();
