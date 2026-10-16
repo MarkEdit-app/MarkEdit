@@ -62,6 +62,9 @@ extension AppDelegate {
           menuActions: Localized.QuickSearch.menuActions,
           currentDocument: Localized.QuickSearch.currentDocument
         ),
+        filterMenuHelp: (Localized.QuickSearch.helpTitle, {
+          NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Manual#quick-search")
+        }),
         reportError: { Logger.log(.error, "Quick Search: \($0)") },
         onResultActivated: { AppPreferences.General.hasUsedQuickSearch = true },
         openDocument: { [weak self] url in

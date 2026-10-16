@@ -28,6 +28,7 @@ final class QuickSearchFilterTests: XCTestCase {
       gotoLine: { _ in XCTFail("Filtering must not navigate") }
     )
 
+    var helpRequests = 0
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
       placeholder: "Quick Search for files, text, and commands",
@@ -42,6 +43,7 @@ final class QuickSearchFilterTests: XCTestCase {
         menuActions: "Menu Actions",
         currentDocument: "Current Document"
       ),
+      filterMenuHelp: ("Help…", { helpRequests += 1 }),
       reportError: { XCTFail($0) },
       openDocument: { _ in XCTFail("Filtering must not open a document") }
     )
@@ -68,12 +70,21 @@ final class QuickSearchFilterTests: XCTestCase {
 
     XCTAssertEqual(
       visibleItems.map(\.title),
-      ["All", "", "Recents", "Bookmarks", "Menu Actions", "", "Current Document", "Headings", "Contents"]
+      [
+        "All", "", "Recents", "Bookmarks", "Menu Actions", "", "Current Document", "Headings", "Contents",
+        "", "Help…",
+      ]
     )
 
     XCTAssertTrue(visibleItems[1].isSeparatorItem)
     XCTAssertTrue(visibleItems[5].isSeparatorItem)
     XCTAssertTrue(visibleItems[6].isSectionHeader)
+    XCTAssertTrue(visibleItems[9].isSeparatorItem)
+
+    menu.performActionForItem(at: try XCTUnwrap(menu.items.firstIndex { $0.title == "Help…" }))
+    XCTAssertEqual(helpRequests, 1)
+
+    XCTAssertEqual(visibleItems.last?.state, .off)
     XCTAssertEqual(menu.items.first { $0.title == "All" }?.state, .on)
     XCTAssertEqual(button.contentTintColor, .secondaryLabelColor)
     XCTAssertEqual(field.placeholderString, "Quick Search for files, text, and commands")
