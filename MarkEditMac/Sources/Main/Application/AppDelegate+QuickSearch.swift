@@ -63,6 +63,7 @@ extension AppDelegate {
           currentDocument: Localized.QuickSearch.currentDocument
         ),
         reportError: { Logger.log(.error, "Quick Search: \($0)") },
+        onResultActivated: { AppPreferences.General.hasUsedQuickSearch = true },
         openDocument: { [weak self] url in
           guard let self else {
             throw CancellationError()

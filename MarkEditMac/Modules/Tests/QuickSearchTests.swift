@@ -94,12 +94,14 @@ final class QuickSearchTests: XCTestCase {
 
   func testActivationWaitsForResultsMatchingTheCurrentQueryAndFilter() async throws {
     var opened: [URL] = []
+    var activations = 0
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
       placeholder: "Quick Search",
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { XCTFail($0) },
+      onResultActivated: { activations += 1 },
       openDocument: { opened.append($0) }
     )
 
@@ -123,6 +125,7 @@ final class QuickSearchTests: XCTestCase {
     XCTAssertTrue(window.isVisible)
     try await waitUntil { table.numberOfRows == 1 }
     XCTAssertTrue(opened.isEmpty)
+    XCTAssertEqual(activations, 0)
 
     let bookmarks = try XCTUnwrap(menu.items.firstIndex { $0.title == "Bookmarks" })
     menu.performActionForItem(at: bookmarks)
@@ -139,6 +142,40 @@ final class QuickSearchTests: XCTestCase {
     XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: submit))
     try await waitUntil { !window.isVisible }
     XCTAssertEqual(opened, [urls[1]])
+    XCTAssertEqual(activations, 1)
+  }
+}
+
+extension QuickSearchTests {
+  func testRecentFileActivationNotifiesOnlyOnSuccessWithoutAQuery() async throws {
+    for shouldFail in [true, false] {
+      var errors: [String] = []
+      var activations = 0
+      let controller = QuickSearchController(
+        effectViewType: NSVisualEffectView.self,
+        placeholder: "Quick Search",
+        accessibilityHelp: "Search",
+        filterLabels: filterLabels,
+        reportError: { errors.append($0) },
+        onResultActivated: { activations += 1 },
+        openDocument: { _ in
+          if shouldFail {
+            throw CocoaError(.fileNoSuchFile)
+          }
+        }
+      )
+
+      controller.present(recentURLs: [URL(filePath: "/Notes/Plan.md")], screen: try XCTUnwrap(NSScreen.main))
+      let window = try XCTUnwrap(controller.window)
+      defer { window.orderOut(nil) }
+      XCTAssertEqual(activations, 0)
+
+      let view = try XCTUnwrap(window.contentView as? QuickSearchView)
+      XCTAssertTrue(view.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
+      try await waitUntil { !window.isActivatingResult }
+      XCTAssertEqual(errors.count, shouldFail ? 1 : 0)
+      XCTAssertEqual(activations, shouldFail ? 0 : 1)
+    }
   }
 }
 
@@ -154,6 +191,7 @@ extension QuickSearchTests {
 
     var errors: [String] = []
     var navigatedLines: [Int] = []
+    var activations = 0
 
     let document = QuickSearchDocument(
       title: "Untitled",
@@ -168,6 +206,7 @@ extension QuickSearchTests {
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { errors.append($0) },
+      onResultActivated: { activations += 1 },
       openDocument: { _ in XCTFail("Expected heading navigation") }
     )
 
@@ -235,6 +274,7 @@ extension QuickSearchTests {
     XCTAssertTrue(errors.isEmpty)
     XCTAssertEqual(controller.window?.isVisible, true)
     XCTAssertTrue(navigatedLines.isEmpty)
+    XCTAssertEqual(activations, 0)
 
     controller.window?.cancelOperation(nil)
     controller.present(recentURLs: recentURLs, document: document, screen: screen)
@@ -247,6 +287,7 @@ extension QuickSearchTests {
     XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: #selector(NSResponder.moveDown(_:))))
     XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: submit))
     try await waitUntil { navigatedLines == [4] }
+    XCTAssertEqual(activations, 1)
 
     controller.present(recentURLs: recentURLs, screen: screen)
     let newView = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
@@ -262,6 +303,7 @@ extension QuickSearchTests {
     let finished = expectation(description: "Opening finished")
     var continuation: CheckedContinuation<Void, any Error>?
     var opens = 0
+    var activations = 0
 
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
@@ -269,6 +311,7 @@ extension QuickSearchTests {
       accessibilityHelp: "Search files",
       filterLabels: filterLabels,
       reportError: { XCTFail($0) },
+      onResultActivated: { activations += 1 },
       openDocument: { _ in
         opens += 1
         defer { finished.fulfill() }
@@ -308,6 +351,7 @@ extension QuickSearchTests {
     await Task.yield()
     XCTAssertTrue(secondWindow.isVisible)
     XCTAssertFalse(secondWindow.isActivatingResult)
+    XCTAssertEqual(activations, 0)
   }
 
   func testGrantedAndLiveContentResultsRejectStaleMatchesThenNavigate() async throws {

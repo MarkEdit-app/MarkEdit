@@ -17,6 +17,7 @@ public final class QuickSearchController: NSObject {
   private let accessibilityHelp: String
   private let filterLabels: QuickSearchFilterLabels
   private let reportError: (String) -> Void
+  private let onResultActivated: () -> Void
   private let openDocument: (URL) async throws -> Void
   private var recentURLs: [URL] = []
   private var discoveredURLs: [URL] = []
@@ -45,6 +46,7 @@ public final class QuickSearchController: NSObject {
     accessibilityHelp: String,
     filterLabels: QuickSearchFilterLabels,
     reportError: @escaping (String) -> Void,
+    onResultActivated: @escaping () -> Void = {},
     openDocument: @escaping (URL) async throws -> Void
   ) {
     self.effectViewType = effectViewType
@@ -52,6 +54,7 @@ public final class QuickSearchController: NSObject {
     self.accessibilityHelp = accessibilityHelp
     self.filterLabels = filterLabels
     self.reportError = reportError
+    self.onResultActivated = onResultActivated
     self.openDocument = openDocument
     super.init()
   }
@@ -520,13 +523,13 @@ private extension QuickSearchController {
           window.isActivatingResult = false
           self.cancel()
 
-          guard let item else {
+          guard item?.performAction() == true else {
             self.reportError("Menu action is no longer available: \(match.action.subtitle)")
             NSSound.beep()
             return
           }
 
-          item.performAction()
+          self.onResultActivated()
           return
         }
 
@@ -536,6 +539,7 @@ private extension QuickSearchController {
 
         window.isActivatingResult = false
         if didActivate {
+          self.onResultActivated()
           window.orderOut(nil)
         } else {
           window.focusInput()

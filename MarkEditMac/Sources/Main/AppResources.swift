@@ -106,6 +106,7 @@ enum Localized {
   }
 
   enum QuickSearch {
+    static let openPanelHint = String(localized: "Find files faster with Quick Search (⇧⌘O).", comment: "Open panel hint, hidden after the first successful Quick Search action")
     static let title = String(localized: "Quick Search", comment: "Quick Search option in new window settings")
     static let placeholder = String(localized: "Quick Search for files, text, and commands", comment: "Quick Search input placeholder")
     static let filterResults = String(localized: "Filter Results", comment: "Quick Search filter menu accessibility label")
