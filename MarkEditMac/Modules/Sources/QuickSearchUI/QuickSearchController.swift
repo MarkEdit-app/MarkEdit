@@ -547,6 +547,8 @@ private extension QuickSearchController {
 
         window.isActivatingResult = false
         if didActivate {
+          // Focus transfer may have already hidden the palette without notifying dismissal
+          self.cancel()
           self.onResultActivated()
           window.orderOut(nil)
         } else {

@@ -147,6 +147,54 @@ final class QuickSearchTests: XCTestCase {
 }
 
 extension QuickSearchTests {
+  func testSuccessfulActivationReleasesSessionAfterLosingFocus() async throws {
+    final class Token { let text = "" }
+    weak var retainedToken: Token?
+    var palette: QuickSearchWindow?
+    var activations = 0
+    let controller = QuickSearchController(
+      effectViewType: NSVisualEffectView.self,
+      placeholder: "Quick Search",
+      accessibilityHelp: "Search",
+      filterLabels: filterLabels,
+      reportError: { XCTFail($0) },
+      onResultActivated: { activations += 1 },
+      openDocument: { _ in
+        XCTAssertEqual(palette?.isActivatingResult, true)
+        palette?.resignKey()
+      }
+    )
+
+    do {
+      let token = Token()
+      retainedToken = token
+      controller.present(
+        recentURLs: [URL(filePath: "/Notes/Plan.md")],
+        document: .init(
+          title: "Source",
+          url: nil,
+          readSnapshot: { .init(text: token.text) },
+          gotoLine: { _ in XCTFail("Expected file activation") }
+        ),
+        screen: try XCTUnwrap(NSScreen.main)
+      )
+    }
+
+    let window = try XCTUnwrap(controller.window)
+    palette = window
+    defer { window.orderOut(nil) }
+    XCTAssertNotNil(retainedToken)
+
+    let view = try XCTUnwrap(window.contentView as? QuickSearchView)
+    XCTAssertTrue(view.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
+    try await waitUntil { !window.isActivatingResult }
+    XCTAssertFalse(window.isVisible)
+    XCTAssertEqual(activations, 1)
+    withExtendedLifetime(controller) {
+      XCTAssertNil(retainedToken)
+    }
+  }
+
   func testRecentFileActivationNotifiesOnlyOnSuccessWithoutAQuery() async throws {
     for shouldFail in [true, false] {
       var errors: [String] = []
