@@ -82,6 +82,7 @@ extension AppDelegate {
     let types = Bundle.main.infoDictionary?["CFBundleDocumentTypes"] as? [[String: Any]] ?? []
     let extensions = types.flatMap { $0["CFBundleTypeExtensions"] as? [String] ?? [] }
 
+    NSApp.closeOpenPanels()
     quickSearchController?.present(
       recentURLs: NSDocumentController.shared.recentDocumentURLs,
       locations: QuickSearchLocations(
