@@ -1949,6 +1949,23 @@
         }
       }
     },
+    "Help…" : {
+      "comment" : "Quick Search filter menu item opening its documentation",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帮助…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輔助說明…"
+          }
+        }
+      }
+    },
     "Hidden" : {
       "comment" : "Hidden mode for window toolbar",
       "localizations" : {

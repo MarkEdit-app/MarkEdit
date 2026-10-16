@@ -16,6 +16,7 @@ public final class QuickSearchController: NSObject {
   private let placeholder: String
   private let accessibilityHelp: String
   private let filterLabels: QuickSearchFilterLabels
+  private let filterMenuHelp: (title: String, action: () -> Void)?
   private let reportError: (String) -> Void
   private let onResultActivated: () -> Void
   private let openDocument: (URL) async throws -> Void
@@ -45,6 +46,7 @@ public final class QuickSearchController: NSObject {
     placeholder: String,
     accessibilityHelp: String,
     filterLabels: QuickSearchFilterLabels,
+    filterMenuHelp: (title: String, action: () -> Void)? = nil,
     reportError: @escaping (String) -> Void,
     onResultActivated: @escaping () -> Void = {},
     openDocument: @escaping (URL) async throws -> Void
@@ -53,6 +55,7 @@ public final class QuickSearchController: NSObject {
     self.placeholder = placeholder
     self.accessibilityHelp = accessibilityHelp
     self.filterLabels = filterLabels
+    self.filterMenuHelp = filterMenuHelp
     self.reportError = reportError
     self.onResultActivated = onResultActivated
     self.openDocument = openDocument
@@ -217,6 +220,11 @@ private extension QuickSearchController {
       if option.filter == .all {
         menu.addItem(.separator())
       }
+    }
+
+    if let filterMenuHelp {
+      menu.addItem(.separator())
+      menu.addItem(withTitle: filterMenuHelp.title, action: filterMenuHelp.action)
     }
 
     filterMenu = menu
