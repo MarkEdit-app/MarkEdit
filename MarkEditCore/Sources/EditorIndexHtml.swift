@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import os.log
 
 /**
  index.html built by CoreEditor, shared between the app and its extensions.
@@ -23,8 +24,14 @@ public enum EditorIndexHtml {
   }
 
   public static func fromSharedContainer(config: EditorConfig) -> String {
-    // Extensions have no access to settings.json
-    toHtml(template: sharedContents, config: config, userSettings: "{}")
+    toHtml(
+      template: sharedContents,
+      config: config,
+      userSettings: userSettings(at: URL.sharedContainerURL?.appending(
+        path: "Shared/settings.json",
+        directoryHint: .notDirectory
+      )) ?? "{}"
+    )
   }
 
   public static func copyToSharedContainer() {
@@ -45,6 +52,27 @@ public enum EditorIndexHtml {
       try data.write(to: targetURL, options: .atomic)
     } catch {
       assertionFailure("Failed to copy index.html to shared container: \(error)")
+    }
+  }
+
+  static func userSettings(at url: URL?) -> String? {
+    guard let url else {
+      return nil
+    }
+
+    do {
+      let data = try Data(contentsOf: url)
+      let object = try JSONSerialization.jsonObject(with: data)
+      guard let settings = object as? [String: Any] else {
+        os_logger.log(level: .error, "Shared settings must be a JSON object: \(url)")
+        return nil
+      }
+
+      let json = try JSONSerialization.data(withJSONObject: settings)
+      return String(bytes: json, encoding: .utf8)
+    } catch {
+      os_logger.log(level: .error, "Failed to read shared settings at \(url): \(error)")
+      return nil
     }
   }
 }
@@ -89,3 +117,5 @@ private extension EditorIndexHtml {
       .replacing("\"{{EDITOR_CONFIG}}\"", with: config.jsonEncoded, maxReplacements: 1)
   }
 }
+
+private let os_logger = os.Logger()
