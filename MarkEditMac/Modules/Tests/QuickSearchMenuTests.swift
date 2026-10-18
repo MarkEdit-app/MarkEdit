@@ -252,7 +252,7 @@ extension QuickSearchMenuTests {
       var activations = 0
       let controller = QuickSearchController(
         effectViewType: NSVisualEffectView.self,
-        placeholder: "Quick Search",
+        placeholder: { _ in "Quick Search" },
         accessibilityHelp: "Search",
         filterLabels: .init(
           title: "Filter Results",

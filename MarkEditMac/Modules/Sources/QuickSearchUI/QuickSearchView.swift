@@ -175,6 +175,19 @@ final class QuickSearchView: NSView {
     filterButton?.contentTintColor = active ? .controlAccentColor : .secondaryLabelColor
   }
 
+  func setPlaceholder(_ placeholder: String) {
+    textField.placeholderString = placeholder
+  }
+
+  func performFilterKeyEquivalent(with event: NSEvent) -> Bool {
+    guard let filterButton, filterButton.isEnabled,
+          (textField.currentEditor() as? NSTextView)?.hasMarkedText() != true else {
+      return false
+    }
+
+    return filterButton.menu?.performKeyEquivalent(with: event) == true
+  }
+
   private func configureFilterMenu(_ menu: NSMenu) {
     let button = NSPopUpButton(frame: .zero, pullsDown: true)
     let iconItem = NSMenuItem(title: menu.title, action: nil, keyEquivalent: "")

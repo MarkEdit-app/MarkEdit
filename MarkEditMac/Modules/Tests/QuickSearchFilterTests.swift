@@ -31,7 +31,16 @@ final class QuickSearchFilterTests: XCTestCase {
     var helpRequests = 0
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search for files, text, and commands",
+      placeholder: { filter in
+        switch filter {
+        case .all: "Quick Search for files, text, and commands"
+        case .headings: "Quick Search for headings"
+        case .contents: "Quick Search for text"
+        case .recents: "Quick Search for recent files"
+        case .bookmarks: "Quick Search for bookmarked files"
+        case .menuActions: "Quick Search for commands"
+        }
+      },
       accessibilityHelp: "Search",
       filterLabels: .init(
         title: "Filter Results",
@@ -71,14 +80,14 @@ final class QuickSearchFilterTests: XCTestCase {
     XCTAssertEqual(
       visibleItems.map(\.title),
       [
-        "All", "", "Recents", "Bookmarks", "Menu Actions", "", "Current Document", "Headings", "Contents",
+        "All", "", "Current Document", "Headings", "Contents", "", "Recents", "Bookmarks", "Menu Actions",
         "", "Help…",
       ]
     )
 
     XCTAssertTrue(visibleItems[1].isSeparatorItem)
     XCTAssertTrue(visibleItems[5].isSeparatorItem)
-    XCTAssertTrue(visibleItems[6].isSectionHeader)
+    XCTAssertTrue(visibleItems[2].isSectionHeader)
     XCTAssertTrue(visibleItems[9].isSeparatorItem)
 
     menu.performActionForItem(at: try XCTUnwrap(menu.items.firstIndex { $0.title == "Help…" }))
@@ -167,6 +176,45 @@ final class QuickSearchFilterTests: XCTestCase {
     XCTAssertEqual(field.stringValue, "plan")
     XCTAssertNotNil(field.currentEditor())
 
+    for (key, title, placeholder, titles) in [
+      ("0", "All", "Quick Search for files, text, and commands", ["Plan", "A plan", "Recent Plan.md", "Bookmark Plan.md"]),
+      ("1", "Headings", "Quick Search for headings", ["Plan"]),
+      ("2", "Contents", "Quick Search for text", ["# Plan", "A plan"]),
+      ("3", "Recents", "Quick Search for recent files", ["Recent Plan.md", "Bookmark Plan.md"]),
+      ("4", "Bookmarks", "Quick Search for bookmarked files", ["Bookmark Plan.md"]),
+      ("5", "Menu Actions", "Quick Search for commands", []),
+    ] {
+      let item = try XCTUnwrap(menu.items.first { $0.title == title })
+      XCTAssertEqual(item.keyEquivalent, key)
+      XCTAssertEqual(item.keyEquivalentModifierMask, .command)
+
+      let window = try XCTUnwrap(controller.window)
+      let event = try XCTUnwrap(NSEvent.keyEvent(
+        with: .keyDown,
+        location: .zero,
+        modifierFlags: .command,
+        timestamp: 0,
+        windowNumber: window.windowNumber,
+        context: nil,
+        characters: key,
+        charactersIgnoringModifiers: key,
+        isARepeat: false,
+        keyCode: 0
+      ))
+
+      XCTAssertTrue(window.performKeyEquivalent(with: event))
+      XCTAssertEqual(item.state, .on)
+      XCTAssertEqual(field.placeholderString, placeholder)
+      XCTAssertEqual(field.stringValue, "plan")
+      try await waitForTitles(titles)
+
+      window.isActivatingResult = true
+      XCTAssertFalse(button.isEnabled)
+      XCTAssertFalse(view.performFilterKeyEquivalent(with: event))
+      window.isActivatingResult = false
+      XCTAssertTrue(button.isEnabled)
+    }
+
     try select("All")
     try select("Headings")
     controller.window?.cancelOperation(nil)
@@ -176,6 +224,9 @@ final class QuickSearchFilterTests: XCTestCase {
     let reopenedButton = try XCTUnwrap(reopened.subviews.compactMap { $0 as? NSPopUpButton }.first)
     XCTAssertEqual(reopenedButton.menu?.items.first { $0.title == "Headings" }?.state, .on)
     XCTAssertEqual(reopenedButton.contentTintColor, .controlAccentColor)
+
+    let reopenedField = try XCTUnwrap(reopened.subviews.compactMap { $0 as? NSTextField }.first)
+    XCTAssertEqual(reopenedField.placeholderString, "Quick Search for headings")
 
     menu.performActionForItem(at: try XCTUnwrap(menu.items.firstIndex { $0.title == "All" }))
     XCTAssertEqual(reopenedButton.menu?.items.first { $0.title == "Headings" }?.state, .on)

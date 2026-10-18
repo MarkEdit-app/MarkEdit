@@ -512,6 +512,23 @@
         }
       }
     },
+    "bookmarked files" : {
+      "comment" : "Search target in the Quick Search placeholder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "书签文件"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書籤檔案"
+          }
+        }
+      }
+    },
     "Bookmarks" : {
       "comment" : "Quick Search filter for granted files and folders",
       "localizations" : {
@@ -700,6 +717,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "欄"
+          }
+        }
+      }
+    },
+    "commands" : {
+      "comment" : "Search target in the Quick Search placeholder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指令"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指令"
           }
         }
       }
@@ -1599,6 +1633,23 @@
         }
       }
     },
+    "files, text, and commands" : {
+      "comment" : "Search target in the Quick Search placeholder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件、文本和指令"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檔案、文字與指令"
+          }
+        }
+      }
+    },
     "Filter Results" : {
       "comment" : "Quick Search filter menu accessibility label",
       "localizations" : {
@@ -1917,6 +1968,23 @@
     },
     "Headers" : {
       "comment" : "Toolbar item to toggle heading levels",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標題"
+          }
+        }
+      }
+    },
+    "headings" : {
+      "comment" : "Search target in the Quick Search placeholder",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -3213,19 +3281,19 @@
         }
       }
     },
-    "Quick Search for files, text, and commands" : {
-      "comment" : "Quick Search input placeholder",
+    "Quick Search for %@" : {
+      "comment" : "Quick Search placeholder, with a localized search target",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "快速搜索文件、文本和指令"
+            "value" : "快速搜索%@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "快速搜尋檔案、文字與指令"
+            "value" : "快速搜尋%@"
           }
         }
       }
@@ -3277,6 +3345,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "閱讀時間"
+          }
+        }
+      }
+    },
+    "recent files" : {
+      "comment" : "Search target in the Quick Search placeholder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近使用的文件"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近使用的檔案"
           }
         }
       }
@@ -4228,6 +4313,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "內容目錄"
+          }
+        }
+      }
+    },
+    "text" : {
+      "comment" : "Search target in the Quick Search placeholder",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文本"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字"
           }
         }
       }

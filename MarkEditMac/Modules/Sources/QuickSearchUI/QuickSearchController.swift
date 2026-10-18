@@ -13,7 +13,7 @@ public final class QuickSearchController: NSObject {
   public private(set) var window: QuickSearchWindow?
 
   private let effectViewType: NSView.Type
-  private let placeholder: String
+  private let placeholder: (QuickSearchFilter) -> String
   private let accessibilityHelp: String
   private let filterLabels: QuickSearchFilterLabels
   private let filterMenuHelp: (title: String, action: () -> Void)?
@@ -43,7 +43,7 @@ public final class QuickSearchController: NSObject {
 
   public init(
     effectViewType: NSView.Type,
-    placeholder: String,
+    placeholder: @escaping (QuickSearchFilter) -> String,
     accessibilityHelp: String,
     filterLabels: QuickSearchFilterLabels,
     filterMenuHelp: (title: String, action: () -> Void)? = nil,
@@ -106,7 +106,7 @@ public final class QuickSearchController: NSObject {
       tintColor: tintColor,
       relativeTo: screen.visibleFrame,
       visibleFrame: screen.visibleFrame,
-      placeholder: placeholder,
+      placeholder: placeholder(filter),
       accessibilityHelp: accessibilityHelp,
       iconName: "magnifyingglass",
       results: QuickSearchResultsConfiguration(
@@ -205,19 +205,24 @@ private extension QuickSearchController {
     let menu = NSMenu(title: filterLabels.title)
     menu.autoenablesItems = false
 
-    for option in filterLabels.options {
+    for (index, option) in filterLabels.options.enumerated() {
       if option.filter == .headings {
-        menu.addItem(.separator())
         menu.addItem(.sectionHeader(title: filterLabels.currentDocument))
       }
 
-      let item = NSMenuItem(title: option.title, action: #selector(selectFilter(_:)), keyEquivalent: "")
+      let item = NSMenuItem(
+        title: option.title,
+        action: #selector(selectFilter(_:)),
+        keyEquivalent: String(index)
+      )
+
+      item.keyEquivalentModifierMask = .command
       item.target = self
       item.tag = option.filter.rawValue
       item.state = option.filter == filter ? .on : .off
       menu.addItem(item)
 
-      if option.filter == .all {
+      if option.filter == .all || option.filter == .contents {
         menu.addItem(.separator())
       }
     }
@@ -250,6 +255,7 @@ private extension QuickSearchController {
     }
 
     window?.setFilterActive(filter != .all)
+    window?.setPlaceholder(placeholder(filter))
     search(query)
     window?.focusInput()
   }

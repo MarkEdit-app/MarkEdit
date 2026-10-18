@@ -25,11 +25,11 @@ public struct QuickSearchFilterLabels: Sendable {
     self.currentDocument = currentDocument
     options = [
       (.all, all),
+      (.headings, headings),
+      (.contents, contents),
       (.recents, recents),
       (.bookmarks, bookmarks),
       (.menuActions, menuActions),
-      (.headings, headings),
-      (.contents, contents),
     ]
   }
 }
