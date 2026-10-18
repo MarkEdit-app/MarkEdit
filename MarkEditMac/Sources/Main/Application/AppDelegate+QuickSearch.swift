@@ -50,7 +50,18 @@ extension AppDelegate {
     if quickSearchController == nil {
       quickSearchController = QuickSearchController(
         effectViewType: AppDesign.modernEffectView,
-        placeholder: Localized.QuickSearch.placeholder,
+        placeholder: { filter in
+          let target = switch filter {
+          case .all: Localized.QuickSearch.allTarget
+          case .headings: Localized.QuickSearch.headingsTarget
+          case .contents: Localized.QuickSearch.contentsTarget
+          case .recents: Localized.QuickSearch.recentsTarget
+          case .bookmarks: Localized.QuickSearch.bookmarksTarget
+          case .menuActions: Localized.QuickSearch.menuActionsTarget
+          }
+
+          return Localized.QuickSearch.placeholder(for: target)
+        },
         accessibilityHelp: Localized.QuickSearch.help,
         filterLabels: QuickSearchFilterLabels(
           title: Localized.QuickSearch.filterResults,
@@ -118,6 +129,32 @@ extension AppDelegate {
 
     window.appearance = AppTheme.current.resolvedAppearance
     window.tintColor = quickSearchTintColor
+  }
+}
+
+extension Localized {
+  enum QuickSearch {
+    static let helpTitle = String(localized: "Help…", comment: "Quick Search filter menu item opening its documentation")
+    static let openPanelHint = String(localized: "Find files faster with Quick Search (⇧⌘O).", comment: "Open panel hint, hidden after the first successful Quick Search action")
+    static let title = String(localized: "Quick Search", comment: "Quick Search option in new window settings")
+    static let filterResults = String(localized: "Filter Results", comment: "Quick Search filter menu accessibility label")
+    static let recents = String(localized: "Recents", comment: "Quick Search filter for recent documents")
+    static let bookmarks = String(localized: "Bookmarks", comment: "Quick Search filter for granted files and folders")
+    static let headings = String(localized: "Headings", comment: "Quick Search filter for active-document headings")
+    static let contents = String(localized: "Contents", comment: "Quick Search filter for active-document text")
+    static let menuActions = String(localized: "Menu Actions", comment: "Quick Search filter for menu actions")
+    static let currentDocument = String(localized: "Current Document", comment: "Quick Search filter section for the active document")
+    static let help = String(localized: "Search files, the current document, and menu actions", comment: "Accessibility help for Quick Search")
+    static let allTarget = String(localized: "files, text, and commands", comment: "Search target in the Quick Search placeholder")
+    static let headingsTarget = String(localized: "headings", comment: "Search target in the Quick Search placeholder")
+    static let contentsTarget = String(localized: "text", comment: "Search target in the Quick Search placeholder")
+    static let recentsTarget = String(localized: "recent files", comment: "Search target in the Quick Search placeholder")
+    static let bookmarksTarget = String(localized: "bookmarked files", comment: "Search target in the Quick Search placeholder")
+    static let menuActionsTarget = String(localized: "commands", comment: "Search target in the Quick Search placeholder")
+
+    static func placeholder(for target: String) -> String {
+      String(format: String(localized: "Quick Search for %@", comment: "Quick Search placeholder, with a localized search target"), target)
+    }
   }
 }
 

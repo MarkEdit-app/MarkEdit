@@ -160,6 +160,18 @@ public final class QuickSearchWindow: NSWindow {
     (contentView as? QuickSearchView)?.setFilterActive(active)
   }
 
+  public func setPlaceholder(_ placeholder: String) {
+    (contentView as? QuickSearchView)?.setPlaceholder(placeholder)
+  }
+
+  override public func performKeyEquivalent(with event: NSEvent) -> Bool {
+    if (contentView as? QuickSearchView)?.performFilterKeyEquivalent(with: event) == true {
+      return true
+    }
+
+    return super.performKeyEquivalent(with: event)
+  }
+
   public var tintColor: NSColor? {
     get {
       (contentView as? QuickSearchView)?.tintColor

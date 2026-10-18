@@ -105,21 +105,6 @@ enum Localized {
     static let indexOfMatches = String(localized: "%d of %d", comment: "Index of matches, such as 1 of 3")
   }
 
-  enum QuickSearch {
-    static let helpTitle = String(localized: "Help…", comment: "Quick Search filter menu item opening its documentation")
-    static let openPanelHint = String(localized: "Find files faster with Quick Search (⇧⌘O).", comment: "Open panel hint, hidden after the first successful Quick Search action")
-    static let title = String(localized: "Quick Search", comment: "Quick Search option in new window settings")
-    static let placeholder = String(localized: "Quick Search for files, text, and commands", comment: "Quick Search input placeholder")
-    static let filterResults = String(localized: "Filter Results", comment: "Quick Search filter menu accessibility label")
-    static let recents = String(localized: "Recents", comment: "Quick Search filter for recent documents")
-    static let bookmarks = String(localized: "Bookmarks", comment: "Quick Search filter for granted files and folders")
-    static let headings = String(localized: "Headings", comment: "Quick Search filter for active-document headings")
-    static let contents = String(localized: "Contents", comment: "Quick Search filter for active-document text")
-    static let menuActions = String(localized: "Menu Actions", comment: "Quick Search filter for menu actions")
-    static let currentDocument = String(localized: "Current Document", comment: "Quick Search filter section for the active document")
-    static let help = String(localized: "Search files, the current document, and menu actions", comment: "Accessibility help for Quick Search")
-  }
-
   enum Document {
     static let openDocument = String(localized: "Open Document", comment: "Menu item: open an existing document")
     static let newDocument = String(localized: "New Document", comment: "Menu item: create a new document")

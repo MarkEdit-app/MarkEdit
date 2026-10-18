@@ -97,7 +97,7 @@ final class QuickSearchTests: XCTestCase {
     var activations = 0
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { XCTFail($0) },
@@ -154,7 +154,7 @@ extension QuickSearchTests {
     var activations = 0
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { XCTFail($0) },
@@ -201,7 +201,7 @@ extension QuickSearchTests {
       var activations = 0
       let controller = QuickSearchController(
         effectViewType: NSVisualEffectView.self,
-        placeholder: "Quick Search",
+        placeholder: { _ in "Quick Search" },
         accessibilityHelp: "Search",
         filterLabels: filterLabels,
         reportError: { errors.append($0) },
@@ -250,7 +250,7 @@ extension QuickSearchTests {
 
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { errors.append($0) },
@@ -355,7 +355,7 @@ extension QuickSearchTests {
 
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search files",
       filterLabels: filterLabels,
       reportError: { XCTFail($0) },
@@ -424,7 +424,7 @@ extension QuickSearchTests {
     let locations = QuickSearchLocations(urls: [directory], filenameExtensions: ["md"], showsHiddenFiles: false)
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { errors.append($0) },
@@ -526,7 +526,7 @@ extension QuickSearchTests {
 
       let controller = QuickSearchController(
         effectViewType: NSVisualEffectView.self,
-        placeholder: "Quick Search",
+        placeholder: { _ in "Quick Search" },
         accessibilityHelp: "Search",
         filterLabels: filterLabels,
         reportError: { XCTFail($0) },
@@ -578,7 +578,7 @@ extension QuickSearchTests {
 
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { errors.append($0) },
@@ -625,7 +625,7 @@ extension QuickSearchTests {
 
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
-      placeholder: "Quick Search",
+      placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
       reportError: { XCTFail($0) },
