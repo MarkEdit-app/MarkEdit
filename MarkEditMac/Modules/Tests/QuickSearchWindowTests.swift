@@ -229,9 +229,9 @@ extension QuickSearchWindowTests {
     let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
     cell.layoutSubtreeIfNeeded()
 
-    let icon = try XCTUnwrap(cell.subviews.compactMap { $0 as? NSImageView }.first)
-    XCTAssertEqual(icon.frame.size, NSSize(width: 28, height: 28))
-    XCTAssertEqual(icon.layer?.cornerCurve, .continuous)
+    let iconBackground = try XCTUnwrap(cell.subviews.first { $0.layer?.cornerRadius == 6 })
+    XCTAssertEqual(iconBackground.frame.size, NSSize(width: 28, height: 28))
+    XCTAssertEqual(iconBackground.layer?.cornerCurve, .continuous)
 
     let row = try XCTUnwrap(table.rowView(atRow: 0, makeIfNecessary: true))
     row.layoutSubtreeIfNeeded()
