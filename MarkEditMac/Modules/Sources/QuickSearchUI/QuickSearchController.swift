@@ -369,7 +369,7 @@ private extension QuickSearchController {
           title: content.snippet,
           subtitle: "\(document?.url.map(breadcrumb) ?? document?.title ?? ""):\(content.lineNumber)",
           iconName: "text.alignleft",
-          iconColor: .systemGreen,
+          iconColor: .systemMint,
           highlightedRanges: [content.highlightedRange]
         )
       case .heading(let match):
@@ -387,7 +387,7 @@ private extension QuickSearchController {
           title: match.action.title,
           subtitle: match.action.subtitle,
           iconName: "command",
-          iconColor: .systemPurple,
+          iconColor: .systemIndigo,
           highlightedRanges: match.highlightedRanges
         )
       }
