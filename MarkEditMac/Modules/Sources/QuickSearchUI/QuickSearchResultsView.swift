@@ -242,7 +242,8 @@ private final class ResultRow: NSTableRowView {
 }
 
 private final class ResultCell: NSTableCellView {
-  private let icon = ResultIcon()
+  private let iconBackground = NSView()
+  private let iconGlyph = NSImageView()
   private let title = NSTextField(labelWithString: "")
   private let subtitle = NSTextField(labelWithString: "")
   private var item: QuickSearchItem?
@@ -251,9 +252,9 @@ private final class ResultCell: NSTableCellView {
   init() {
     super.init(frame: .zero)
 
-    icon.wantsLayer = true
-    icon.layer?.cornerCurve = .continuous
-    icon.layer?.cornerRadius = 6
+    iconBackground.wantsLayer = true
+    iconBackground.layer?.cornerCurve = .continuous
+    iconBackground.layer?.cornerRadius = 6
 
     title.maximumNumberOfLines = 1
     title.lineBreakMode = .byTruncatingTail
@@ -262,18 +263,20 @@ private final class ResultCell: NSTableCellView {
     subtitle.lineBreakMode = .byTruncatingMiddle
     subtitle.font = .systemFont(ofSize: 12)
 
-    for view in [icon, title, subtitle] {
+    for view in [iconBackground, iconGlyph, title, subtitle] {
       view.translatesAutoresizingMaskIntoConstraints = false
       addSubview(view)
     }
 
     NSLayoutConstraint.activate([
-      icon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-      icon.centerYAnchor.constraint(equalTo: centerYAnchor),
-      icon.widthAnchor.constraint(equalToConstant: 28),
-      icon.heightAnchor.constraint(equalTo: icon.widthAnchor),
+      iconBackground.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+      iconBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
+      iconBackground.widthAnchor.constraint(equalToConstant: 28),
+      iconBackground.heightAnchor.constraint(equalTo: iconBackground.widthAnchor),
+      iconGlyph.centerXAnchor.constraint(equalTo: iconBackground.centerXAnchor),
+      iconGlyph.centerYAnchor.constraint(equalTo: iconBackground.centerYAnchor),
 
-      title.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 12),
+      title.leadingAnchor.constraint(equalTo: iconBackground.trailingAnchor, constant: 12),
       title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
       title.topAnchor.constraint(equalTo: topAnchor, constant: 7),
 
@@ -300,9 +303,9 @@ private final class ResultCell: NSTableCellView {
     self.item = item
     self.selected = selected
 
-    icon.image = .with(symbolName: item.iconName, pointSize: 18)
-    icon.contentTintColor = selected ? .selectedContentBackgroundColor : .white
-    icon.layerBackgroundColor = selected ? .white : item.iconColor
+    iconGlyph.image = .with(symbolName: item.iconName, pointSize: 18)
+    iconGlyph.contentTintColor = selected ? .selectedContentBackgroundColor : .white
+    iconBackground.layerBackgroundColor = selected ? .white : item.iconColor
 
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineBreakMode = .byTruncatingTail
@@ -335,12 +338,5 @@ private final class ResultCell: NSTableCellView {
 
     toolTip = item.subtitle
     setAccessibilityLabel("\(item.title), \(item.subtitle)")
-  }
-}
-
-private final class ResultIcon: NSImageView {
-  // SF Symbol alignment insets must not expand the square background beyond its constraints
-  override var alignmentRectInsets: NSEdgeInsets {
-    .init()
   }
 }
