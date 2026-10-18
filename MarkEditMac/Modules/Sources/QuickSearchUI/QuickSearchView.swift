@@ -191,7 +191,7 @@ final class QuickSearchView: NSView {
   private func configureFilterMenu(_ menu: NSMenu) {
     let button = NSPopUpButton(frame: .zero, pullsDown: true)
     let iconItem = NSMenuItem(title: menu.title, action: nil, keyEquivalent: "")
-    iconItem.image = .with(symbolName: "line.3.horizontal.decrease", pointSize: 20, weight: .light)
+    iconItem.image = .with(symbolName: "line.3.horizontal.decrease.circle", pointSize: 20, weight: .light)
     iconItem.isHidden = true
     menu.insertItem(iconItem, at: 0)
 
