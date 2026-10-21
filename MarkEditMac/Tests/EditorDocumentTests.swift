@@ -822,6 +822,15 @@ extension EditorDocumentTests {
 }
 
 extension EditorDocumentTests {
+  static func waitUntilLoaded(_ document: EditorDocument, data: Data) async throws {
+    let deadline = ContinuousClock.now + .seconds(5)
+    while document.fileData != data, ContinuousClock.now < deadline {
+      try await Task.sleep(for: .milliseconds(10))
+    }
+
+    XCTAssertEqual(document.fileData, data)
+  }
+
   func testTextBundleRoundTrip() async throws {
     let document = EditorDocument()
     let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
@@ -944,15 +953,6 @@ extension EditorDocumentTests {
     try await waitUntilLoaded(document, data: Data(text.utf8))
     XCTAssertEqual(document.stringValue, text)
     XCTAssertEqual(document.fileURL, url)
-  }
-
-  private static func waitUntilLoaded(_ document: EditorDocument, data: Data) async throws {
-    let deadline = ContinuousClock.now + .seconds(5)
-    while document.fileData != data, ContinuousClock.now < deadline {
-      try await Task.sleep(for: .milliseconds(10))
-    }
-
-    XCTAssertEqual(document.fileData, data)
   }
 
   private static func textBundle(contents: Data) -> FileWrapper {

@@ -103,6 +103,7 @@
 		87BDF6E42976C97100548079 /* EditorViewController+GotoLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BDF6E32976C97100548079 /* EditorViewController+GotoLine.swift */; };
 		87BEF30129A88F6800596E17 /* AppCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BEF30029A88F6800596E17 /* AppCustomization.swift */; };
 		87C600000000000000000001 /* EditorDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C600000000000000000002 /* EditorDocumentTests.swift */; };
+		87EA18300000000000000002 /* EditorDocumentSaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EA18300000000000000001 /* EditorDocumentSaveTests.swift */; };
 		87CC48FD29CC01E100BE1441 /* TextBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 87CC48FC29CC01E100BE1441 /* TextBundle */; };
 		87D700000000000000000001 /* QuickSearchMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D700000000000000000002 /* QuickSearchMenuTests.swift */; };
 		87D800000000000000000001 /* ContextMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D800000000000000000002 /* ContextMenuTests.swift */; };
@@ -288,6 +289,7 @@
 		87C3CBFA29545944002A3436 /* MarkEditKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarkEditKit; sourceTree = "<group>"; };
 		87C600000000000000000002 /* EditorDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDocumentTests.swift; sourceTree = "<group>"; };
 		87C600000000000000000004 /* MarkEditMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkEditMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87EA18300000000000000001 /* EditorDocumentSaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDocumentSaveTests.swift; sourceTree = "<group>"; };
 		87D700000000000000000002 /* QuickSearchMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchMenuTests.swift; sourceTree = "<group>"; };
 		87D800000000000000000002 /* ContextMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuTests.swift; sourceTree = "<group>"; };
 		87D9322D2A925C6700B20D84 /* EditorReplaceTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReplaceTextField.swift; sourceTree = "<group>"; };
@@ -727,6 +729,7 @@
 			isa = PBXGroup;
 			children = (
 				87C600000000000000000002 /* EditorDocumentTests.swift */,
+				87EA18300000000000000001 /* EditorDocumentSaveTests.swift */,
 				87B000000000000000000103 /* BookmarkStoreTests.swift */,
 				87D700000000000000000002 /* QuickSearchMenuTests.swift */,
 				87D800000000000000000002 /* ContextMenuTests.swift */,
@@ -1083,6 +1086,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87C600000000000000000001 /* EditorDocumentTests.swift in Sources */,
+				87EA18300000000000000002 /* EditorDocumentSaveTests.swift in Sources */,
 				87B000000000000000000104 /* BookmarkStoreTests.swift in Sources */,
 				87D700000000000000000001 /* QuickSearchMenuTests.swift in Sources */,
 				87D800000000000000000001 /* ContextMenuTests.swift in Sources */,
