@@ -225,7 +225,12 @@ extension QuickSearchWindowTests {
     let view = try XCTUnwrap(window.contentView as? QuickSearchView)
     XCTAssertEqual(view.layer?.cornerRadius, 20)
     view.layoutSubtreeIfNeeded()
+
     let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+    window.updateResults(items.reversed())
+    XCTAssertEqual(table.selectedRow, 0)
+    window.updateResults(items)
+
     let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
     cell.layoutSubtreeIfNeeded()
 

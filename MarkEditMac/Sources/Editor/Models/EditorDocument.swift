@@ -16,6 +16,7 @@ import TextBundle
  https://developer.apple.com/documentation/appkit/nsdocument
  */
 final class EditorDocument: NSDocument {
+  let sessionID = UUID()
   var fileData: Data?
   var spellDocTag: Int?
   var stringValue = ""
