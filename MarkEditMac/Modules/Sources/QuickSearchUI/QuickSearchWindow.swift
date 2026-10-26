@@ -74,6 +74,7 @@ public final class QuickSearchWindow: NSWindow {
     placeholder: String,
     accessibilityHelp: String,
     iconName: String,
+    defaultText: String? = nil,
     results: QuickSearchResultsConfiguration
   ) {
     self.init(
@@ -82,7 +83,8 @@ public final class QuickSearchWindow: NSWindow {
       relativeTo: parentRect,
       placeholder: placeholder,
       accessibilityHelp: accessibilityHelp,
-      iconName: iconName
+      iconName: iconName,
+      defaultText: defaultText
     ) { _ in false }
 
     resultsConfiguration = results
