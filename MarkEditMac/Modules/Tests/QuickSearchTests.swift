@@ -612,6 +612,68 @@ extension QuickSearchTests {
 }
 
 extension QuickSearchTests {
+  func testReopeningRestoresSelectedQueryAndRefreshesResults() async throws {
+    let screen = try XCTUnwrap(NSScreen.main)
+    let urls = ["First.md", "Second.md", "Second Draft.md"].map { URL(filePath: "/Notes/\($0)") }
+
+    for activate in [false, true] {
+      var opened: [URL] = []
+      let controller = QuickSearchController(
+        effectViewType: NSVisualEffectView.self,
+        placeholder: { _ in "Quick Search" },
+        accessibilityHelp: "Search",
+        filterLabels: filterLabels,
+        reportError: { XCTFail($0) },
+        openDocument: { opened.append($0) }
+      )
+
+      defer { controller.window?.orderOut(nil) }
+      controller.present(recentURLs: Array(urls.prefix(2)), screen: screen)
+      let window = try XCTUnwrap(controller.window)
+      let view = try XCTUnwrap(window.contentView as? QuickSearchView)
+      let field = try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
+      let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+      XCTAssertEqual(field.stringValue, "")
+
+      let query = " Second "
+      field.stringValue = query
+      view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
+
+      if activate {
+        try await waitUntil { table.numberOfRows == 1 }
+        XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
+        try await waitUntil { !window.isVisible }
+        XCTAssertEqual(opened, [urls[1]])
+      } else {
+        window.cancelOperation(nil)
+      }
+
+      controller.present(recentURLs: urls, screen: screen)
+      let reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+      let reopenedField = try XCTUnwrap(reopened.subviews.compactMap { $0 as? NSTextField }.first)
+      let reopenedTable: NSTableView = try XCTUnwrap(reopened.firstDescendant())
+      XCTAssertEqual(reopenedField.stringValue, query)
+      XCTAssertEqual(reopenedField.currentEditor()?.selectedRange, NSRange(location: 0, length: query.utf16.count))
+
+      try await waitUntil { reopenedTable.numberOfRows == 2 }
+      let titles = (0..<reopenedTable.numberOfRows).compactMap {
+        reopenedTable.view(atColumn: 0, row: $0, makeIfNecessary: true)?
+          .subviews.compactMap { $0 as? NSTextField }.first?.stringValue
+      }
+
+      XCTAssertEqual(titles, ["Second.md", "Second Draft.md"])
+      reopenedField.stringValue = ""
+      reopened.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: reopenedField))
+      controller.window?.cancelOperation(nil)
+      controller.present(recentURLs: urls, screen: screen)
+
+      let cleared = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+      XCTAssertEqual(cleared.subviews.compactMap { $0 as? NSTextField }.first?.stringValue, "")
+      let clearedTable: NSTableView = try XCTUnwrap(cleared.firstDescendant())
+      XCTAssertEqual(clearedTable.numberOfRows, urls.count)
+    }
+  }
+
   func testDiscoveryIncludesFinalPartialBatchForActiveQuery() async throws {
     let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

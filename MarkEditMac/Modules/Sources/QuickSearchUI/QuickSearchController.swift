@@ -31,6 +31,7 @@ public final class QuickSearchController: NSObject {
   private var results: [QuickSearchResult] = []
   private var query = ""
   private var resultsQuery = ""
+  private var lastQuery = ""
   private var filter: QuickSearchFilter = .all
   private var resultsFilter: QuickSearchFilter = .all
   private var filterMenu: NSMenu?
@@ -98,7 +99,6 @@ public final class QuickSearchController: NSObject {
     documentSnapshot = nil
     displayedDocumentSnapshot = nil
     locations?.errors.forEach(reportError)
-    query = ""
 
     let invocation = invocation
     let window = QuickSearchWindow(
@@ -109,6 +109,7 @@ public final class QuickSearchController: NSObject {
       placeholder: placeholder(filter),
       accessibilityHelp: accessibilityHelp,
       iconName: "magnifyingglass",
+      defaultText: lastQuery,
       results: QuickSearchResultsConfiguration(
         filterMenu: makeFilterMenu(),
         onQueryChange: { [weak self] query in
@@ -116,6 +117,7 @@ public final class QuickSearchController: NSObject {
             return
           }
 
+          self.lastQuery = query
           self.search(query)
         },
         onActivate: { [weak self] id in
@@ -139,7 +141,7 @@ public final class QuickSearchController: NSObject {
     window.appearance = appearance
     window.setFilterActive(filter != .all)
 
-    search("")
+    search(lastQuery)
     window.makeKeyAndOrderFront(nil)
     window.focusInput()
 
