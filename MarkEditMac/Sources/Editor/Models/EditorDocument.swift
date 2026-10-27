@@ -16,7 +16,6 @@ import TextBundle
  https://developer.apple.com/documentation/appkit/nsdocument
  */
 final class EditorDocument: NSDocument {
-  let sessionID = UUID()
   var fileData: Data?
   var spellDocTag: Int?
   var stringValue = ""
@@ -77,6 +76,8 @@ final class EditorDocument: NSDocument {
     AppRuntimeConfig.autoSaveWhenIdle && fileURL != nil
   }
 
+  // Defer identity generation until Quick Search needs it
+  private(set) lazy var sessionID = UUID()
   private var autosaveDelayedTask: Task<Void, Never>?
   private let pendingFileReads = DispatchGroup()
   private var textBundle: TextBundleWrapper?
