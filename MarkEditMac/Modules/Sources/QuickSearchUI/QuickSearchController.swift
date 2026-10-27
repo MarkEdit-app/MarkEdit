@@ -20,6 +20,7 @@ public final class QuickSearchController: NSObject {
   private let reportError: (String) -> Void
   private let onResultActivated: () -> Void
   private let openDocument: (URL) async throws -> Void
+  private let breadcrumbSeparator = " \u{203A} "
   private var recentURLs: [URL] = []
   private var discoveredURLs: [URL] = []
   private var discoveryNeedsRefresh = false
@@ -399,15 +400,29 @@ private extension QuickSearchController {
     let items = results.map { result in
       switch result {
       case .file(let file):
-        QuickSearchItem(
+        var subtitleRanges: [NSRange] = []
+        var subtitleFocusRange: NSRange?
+
+        if let index = file.matchedFolderIndex {
+          let components = file.url.pathComponents.filter { $0 != "/" }
+          let offset = components.prefix(index).reduce(0) { $0 + $1.utf16.count + breadcrumbSeparator.utf16.count }
+          subtitleFocusRange = NSRange(location: offset, length: components[index].utf16.count)
+          subtitleRanges = file.match.ranges.map {
+            NSRange(location: offset + $0.location, length: $0.length)
+          }
+        }
+
+        return QuickSearchItem(
           id: result.id,
           title: file.url.lastPathComponent,
           subtitle: breadcrumb(file.url),
           iconName: recentFiles.contains(file.url) ? "clock" : "bookmark",
-          highlightedRanges: file.match.ranges
+          highlightedRanges: file.matchedFolderIndex == nil ? file.match.ranges : [],
+          subtitleHighlightedRanges: subtitleRanges,
+          subtitleFocusRange: subtitleFocusRange
         )
       case .content(let content):
-        QuickSearchItem(
+        return QuickSearchItem(
           id: result.id,
           title: content.snippet,
           subtitle: "\(document?.url.map(breadcrumb) ?? document?.title ?? ""):\(content.lineNumber)",
@@ -416,7 +431,7 @@ private extension QuickSearchController {
           highlightedRanges: [content.highlightedRange]
         )
       case .heading(let match):
-        QuickSearchItem(
+        return QuickSearchItem(
           id: result.id,
           title: match.heading.title,
           subtitle: "\(document?.url.map(breadcrumb) ?? document?.title ?? ""):\(match.heading.lineNumber)",
@@ -425,7 +440,7 @@ private extension QuickSearchController {
           highlightedRanges: match.match.ranges
         )
       case .menuAction(let match):
-        QuickSearchItem(
+        return QuickSearchItem(
           id: result.id,
           title: match.action.title,
           subtitle: match.action.subtitle,
@@ -448,7 +463,7 @@ private extension QuickSearchController {
   }
 
   func breadcrumb(_ url: URL) -> String {
-    url.pathComponents.filter { $0 != "/" }.joined(separator: " \u{203A} ")
+    url.pathComponents.filter { $0 != "/" }.joined(separator: breadcrumbSeparator)
   }
 
   func discover(_ locations: QuickSearchLocations) {

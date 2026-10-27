@@ -369,6 +369,47 @@ extension QuickSearchResultTests {
   }
 }
 
+extension QuickSearchResultTests {
+  func testFolderMatchesIncludeAncestorsButPreferFilenamesAndRespectSources() throws {
+    let paths = [
+      "/editor/a.md", "/editor/b.md", "/editor/subfolder/c.md",
+      "/Other/Editor.md", "/Other/Edit Or.md", "/Other/d.md",
+    ]
+
+    let urls = paths.map { URL(filePath: $0) }
+    let matches = try FileSearchResult.search("editor", urls: urls + urls)
+    XCTAssertEqual(matches.map(\.url), [urls[3], urls[4], urls[0], urls[1], urls[2]])
+    XCTAssertEqual(matches.map(\.matchedFolderIndex), [nil, nil, 0, 0, 0])
+    XCTAssertEqual(try FileSearchResult.search("", urls: urls).map(\.url), urls)
+    XCTAssertTrue(try FileSearchResult.search("editorsubfolder", urls: [urls[2]]).isEmpty)
+
+    for (filter, expected) in [
+      (QuickSearchFilter.all, [urls[3], urls[4], urls[0], urls[1], urls[2]]),
+      (.recents, [urls[0]]),
+      (.bookmarks, [urls[3], urls[4], urls[1], urls[2]]),
+    ] {
+      let results = try QuickSearchResult.search(
+        "editor",
+        filter: filter,
+        recentURLs: [urls[0]],
+        bookmarkedURLs: Array(urls.dropFirst()),
+        snapshot: nil
+      )
+
+      XCTAssertEqual(results.map(\.id), expected.map { "file:\($0.absoluteString)" })
+    }
+
+    let url = URL(filePath: "/Notes/\u{1F4C4} Re\u{301}sume\u{301}/nested/a.md")
+    for query in ["resume", "rsm"] {
+      let result = try XCTUnwrap(FileSearchResult.search(query, urls: [url]).first)
+      let index = try XCTUnwrap(result.matchedFolderIndex)
+      let folder = url.pathComponents.filter { $0 != "/" }[index]
+      let highlighted = result.match.ranges.map { (folder as NSString).substring(with: $0) }.joined()
+      XCTAssertEqual(highlighted, query == "resume" ? "Re\u{301}sume\u{301}" : "Rsm")
+    }
+  }
+}
+
 private actor DiscoveryCollector {
   var batch = FileDiscovery.Batch()
   var batchSizes: [Int] = []
