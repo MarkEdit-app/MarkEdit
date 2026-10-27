@@ -7,6 +7,7 @@
 
 import AppKit
 import AppKitExtensions
+import Carbon.HIToolbox
 import MarkEditCore
 import MarkEditKit
 import QuickSearchUI
@@ -90,7 +91,8 @@ final class AppDocumentController: NSDocumentController {
     let result = await QuickSearchController.interceptOpenPanelShortcut(
       in: openPanel,
       registerShortcut: { handler in
-        AppHotKeys.register(keyEquivalent: "O", modifiers: ["Shift", "Command"], handler: handler)
+        // Use the fixed shortcut directly to avoid initializing the key-name lookup table at startup
+        AppHotKeys.register(keyCode: UInt32(kVK_ANSI_O), modifiers: [.shift, .command], handler: handler)
       },
       present: {
         await super.beginOpenPanel(openPanel, forTypes: inTypes)
