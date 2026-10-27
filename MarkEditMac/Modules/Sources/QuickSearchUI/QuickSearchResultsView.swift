@@ -304,6 +304,11 @@ private final class ResultCell: NSTableCellView {
     }
   }
 
+  override func layout() {
+    super.layout()
+    updateSubtitle()
+  }
+
   func configure(_ item: QuickSearchItem, selected: Bool) {
     self.item = item
     self.selected = selected
@@ -315,14 +320,7 @@ private final class ResultCell: NSTableCellView {
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineBreakMode = .byTruncatingTail
 
-    // Replace each separator separately to preserve UTF-16 highlight offsets
-    let displayTitle = item.title.replacingOccurrences(
-      of: "[\\r\\n\\u0085\\u2028\\u2029]",
-      with: " ",
-      options: .regularExpression
-    )
-
-    let text = NSMutableAttributedString(string: displayTitle, attributes: [
+    let text = NSMutableAttributedString(string: singleLine(item.title), attributes: [
       .paragraphStyle: paragraphStyle,
       .font: NSFont.systemFont(ofSize: 15),
       .foregroundColor: selected
@@ -338,10 +336,122 @@ private final class ResultCell: NSTableCellView {
     }
 
     title.attributedStringValue = text
-    subtitle.stringValue = item.subtitle
-    subtitle.textColor = selected ? .white.withAlphaComponent(0.7) : .secondaryLabelColor
-
+    updateSubtitle()
     toolTip = item.subtitle
     setAccessibilityLabel("\(item.title), \(item.subtitle)")
+  }
+
+  // MARK: - Private
+
+  private func updateSubtitle() {
+    guard let item else {
+      return
+    }
+
+    let subtitleStyle = NSMutableParagraphStyle()
+    subtitleStyle.lineBreakMode = .byTruncatingMiddle
+
+    let subtitleText = NSMutableAttributedString(string: singleLine(item.subtitle), attributes: [
+      .paragraphStyle: subtitleStyle,
+      .font: NSFont.systemFont(ofSize: 12),
+      .foregroundColor: selected ? NSColor.white.withAlphaComponent(0.7) : NSColor.secondaryLabelColor,
+    ])
+
+    for range in item.subtitleHighlightedRanges {
+      subtitleText.addAttributes([
+        .font: NSFont.systemFont(ofSize: 12, weight: .semibold),
+        .foregroundColor: selected ? NSColor.white : NSColor.labelColor,
+      ], range: range)
+    }
+
+    let displayText = compactSubtitle(subtitleText, item: item)
+    if !subtitle.attributedStringValue.isEqual(to: displayText) {
+      subtitle.attributedStringValue = displayText
+    }
+  }
+
+  private func compactSubtitle(_ text: NSAttributedString, item: QuickSearchItem) -> NSAttributedString {
+    let width = subtitle.cell?.drawingRect(forBounds: subtitle.bounds).width ?? subtitle.bounds.width
+    // Reserve highlight width so the breadcrumb stays stable as the query changes
+    let fits: (NSAttributedString) -> Bool = { text in
+      (text.string as NSString).size(withAttributes: [
+        .font: NSFont.systemFont(ofSize: 12, weight: .semibold),
+      ]).width <= width
+    }
+
+    guard let focus = item.subtitleFocusRange, width > 0, !fits(text) else {
+      return text
+    }
+
+    var attributes = text.attributes(at: 0, effectiveRange: nil)
+    attributes[.font] = NSFont.systemFont(ofSize: 12)
+    attributes[.foregroundColor] = selected ? NSColor.white.withAlphaComponent(0.7) : NSColor.secondaryLabelColor
+
+    let prefix = focus.location > 0 ? "\u{2026} \u{203A} " : ""
+    let shortened = NSMutableAttributedString(string: prefix, attributes: attributes)
+    shortened.append(text.attributedSubstring(from: NSRange(
+      location: focus.location, length: text.length - focus.location
+    )))
+
+    if fits(shortened) {
+      return shortened
+    }
+
+    let folder = text.attributedSubstring(from: focus)
+    let filename = NSRange(location: text.length - item.title.utf16.count, length: item.title.utf16.count)
+    let compact = NSMutableAttributedString(string: prefix, attributes: attributes)
+    compact.append(folder)
+
+    let separator = filename.location - NSMaxRange(focus) > 3 ? " \u{203A} \u{2026} \u{203A} " : " \u{203A} "
+    compact.append(NSAttributedString(string: separator, attributes: attributes))
+    compact.append(text.attributedSubstring(from: filename))
+
+    if fits(compact) {
+      return compact
+    }
+
+    // The filename is already shown in the title,
+    // give the matching folder priority in narrow rows.
+    guard !fits(folder), let firstMatch = item.subtitleHighlightedRanges.first else {
+      return folder
+    }
+
+    let match = item.subtitleHighlightedRanges.reduce(firstMatch, NSUnionRange)
+    let excerpt = NSMutableAttributedString(string: match.location > focus.location ? "\u{2026}" : "", attributes: attributes)
+    excerpt.append(text.attributedSubstring(from: match))
+
+    if NSMaxRange(match) < NSMaxRange(focus) {
+      excerpt.append(NSAttributedString(string: "\u{2026}", attributes: attributes))
+    }
+
+    if fits(excerpt) {
+      return excerpt
+    }
+
+    let highlights = NSMutableAttributedString(string: "", attributes: attributes)
+    var end = focus.location
+    for range in item.subtitleHighlightedRanges {
+      if range.location > end {
+        highlights.append(NSAttributedString(string: "\u{2026}", attributes: attributes))
+      }
+
+      highlights.append(text.attributedSubstring(from: range))
+      end = NSMaxRange(range)
+    }
+
+    if end < NSMaxRange(focus) {
+      highlights.append(NSAttributedString(string: "\u{2026}", attributes: attributes))
+    }
+
+    return highlights
+  }
+
+  private func singleLine(_ text: String) -> String {
+    // Replace each separator separately to preserve UTF-16 highlight offsets
+    text.replacingOccurrences(
+      of: "[\\r\\n\\u0085\\u2028\\u2029]",
+      with: " ",
+      options: .regularExpression
+    )
   }
 }

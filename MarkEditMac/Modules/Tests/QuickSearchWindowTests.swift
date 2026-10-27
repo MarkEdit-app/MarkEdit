@@ -188,6 +188,110 @@ final class QuickSearchWindowTests: XCTestCase {
 }
 
 extension QuickSearchWindowTests {
+  func testFolderSubtitleKeepsMatchVisibleWithoutChangingBreadcrumbAsHighlightsChange() throws {
+    let view = QuickSearchResultsView { _ in }
+    let window = makeWindow { _ in true }
+    defer { window.orderOut(nil) }
+    window.contentView = view
+
+    let path = String(repeating: "Long ancestor \u{203A} ", count: 8)
+      + "Editor \u{203A} " + String(repeating: "Nested folder \u{203A} ", count: 8) + "LibreMac.md"
+    let focus = (path as NSString).range(of: "Editor")
+
+    for width in [640.0, 320.0] {
+      var previousText: String?
+      for length in [2, 6] {
+        let items = (0...1).map {
+          QuickSearchItem(
+            id: "\($0)",
+            title: "LibreMac.md",
+            subtitle: path,
+            iconName: "bookmark",
+            subtitleHighlightedRanges: [NSRange(location: focus.location, length: length)],
+            subtitleFocusRange: focus
+          )
+        }
+
+        view.update(items, message: nil, preserveSelection: false)
+        window.setContentSize(NSSize(width: width, height: view.preferredHeight))
+        view.layoutSubtreeIfNeeded()
+
+        let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+        for row in 0...1 {
+          let cell = try XCTUnwrap(table.view(atColumn: 0, row: row, makeIfNecessary: true))
+          cell.layoutSubtreeIfNeeded()
+
+          let field = try XCTUnwrap(cell.subviews.compactMap { $0 as? NSTextField }.last)
+          let text = field.attributedStringValue
+          let match = (text.string as NSString).range(of: "Editor")
+          XCTAssertNotEqual(match.location, NSNotFound)
+          XCTAssertTrue(text.string.hasSuffix("LibreMac.md"))
+          XCTAssertLessThanOrEqual(text.size().width, try XCTUnwrap(field.cell).drawingRect(forBounds: field.bounds).width)
+          XCTAssertEqual(cell.toolTip, path)
+          XCTAssertEqual(
+            text.attribute(.font, at: match.location, effectiveRange: nil) as? NSFont,
+            .systemFont(ofSize: 12, weight: .semibold)
+          )
+
+          XCTAssertEqual(
+            text.attribute(.foregroundColor, at: match.location, effectiveRange: nil) as? NSColor,
+            row == 0 ? .white : .labelColor
+          )
+
+          if let previousText {
+            XCTAssertEqual(text.string, previousText)
+          }
+
+          previousText = text.string
+        }
+      }
+    }
+
+    let gap = String(repeating: "W", count: 80)
+    for (folder, matches, nestedCount) in [
+      ("Editor", ["Editor"], 20),
+      (String(repeating: "Long ", count: 30) + "Editor" + String(repeating: " tail", count: 30), ["Editor"], 20),
+      ("a\(gap)b\(gap)c", ["a", "b", "c"], 20),
+      ("Archive\nEditor", ["Editor"], 0),
+      ("A\r\n\u{0085}\u{2028}\u{2029}Editor", ["Editor"], 20),
+    ] {
+      let path = folder + " \u{203A} " + String(repeating: "Nested \u{203A} ", count: nestedCount) + "LibreMac.md"
+      let ranges = matches.map { (folder as NSString).range(of: $0) }
+      let item = QuickSearchItem(
+        id: "file",
+        title: "LibreMac.md",
+        subtitle: path,
+        iconName: "bookmark",
+        subtitleHighlightedRanges: ranges,
+        subtitleFocusRange: NSRange(location: 0, length: folder.utf16.count)
+      )
+
+      view.update([item], message: nil, preserveSelection: false)
+      window.setContentSize(NSSize(width: 320, height: view.preferredHeight))
+      view.layoutSubtreeIfNeeded()
+
+      let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+      let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
+      cell.layoutSubtreeIfNeeded()
+
+      let field = try XCTUnwrap(cell.subviews.compactMap { $0 as? NSTextField }.last)
+      let text = field.attributedStringValue
+      let displayedMatches = matches.map { (text.string as NSString).range(of: $0) }
+
+      XCTAssertTrue(displayedMatches.allSatisfy { $0.location != NSNotFound })
+      XCTAssertLessThanOrEqual(text.size().width, try XCTUnwrap(field.cell).drawingRect(forBounds: field.bounds).width)
+      XCTAssertEqual(cell.toolTip, path)
+      XCTAssertEqual(cell.accessibilityLabel(), "\(item.title), \(path)")
+      XCTAssertNil(text.string.rangeOfCharacter(from: .newlines))
+
+      text.enumerateAttribute(.font, in: NSRange(location: 0, length: text.length)) { font, range, _ in
+        let isMatch = displayedMatches.contains { NSIntersectionRange(range, $0).length > 0 }
+        let weight: NSFont.Weight = isMatch ? .semibold : .regular
+        XCTAssertEqual(font as? NSFont, .systemFont(ofSize: 12, weight: weight))
+      }
+    }
+  }
+
   func testResultsRouteQuerySelectionAndDismissalWithoutSubmittingText() async throws {
     var query = ""
     var activatedID: String?

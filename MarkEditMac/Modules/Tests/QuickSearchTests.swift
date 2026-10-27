@@ -635,6 +635,78 @@ extension QuickSearchTests {
 }
 
 extension QuickSearchTests {
+  func testFolderMatchesHighlightTheBreadcrumbInsteadOfTheFilename() async throws {
+    let controller = QuickSearchController(
+      effectViewType: NSVisualEffectView.self,
+      placeholder: { _ in "Quick Search" },
+      accessibilityHelp: "Search",
+      filterLabels: filterLabels,
+      reportError: { XCTFail($0) },
+      openDocument: { _ in XCTFail("Searching must not open a file") }
+    )
+
+    controller.present(
+      recentURLs: [URL(filePath: "/\u{1F4C4}/Re\u{301}sume\u{301}/nested/a.md")],
+      screen: try XCTUnwrap(NSScreen.main)
+    )
+
+    defer { controller.window?.orderOut(nil) }
+    let view = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+    let field = try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
+    let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+
+    field.stringValue = "resume"
+    view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
+
+    let folderRange = NSRange(location: 5, length: 8)
+    try await waitUntil {
+      let subtitle = table.view(atColumn: 0, row: 0, makeIfNecessary: true)?
+        .subviews.compactMap { $0 as? NSTextField }.last
+      return subtitle?.attributedStringValue.attribute(
+        .foregroundColor, at: folderRange.location, effectiveRange: nil
+      ) as? NSColor == .white
+    }
+
+    let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
+    let fields = cell.subviews.compactMap { $0 as? NSTextField }
+    let title = try XCTUnwrap(fields.first)
+    let subtitle = try XCTUnwrap(fields.last)
+
+    XCTAssertEqual(title.stringValue, "a.md")
+    XCTAssertEqual(
+      title.attributedStringValue.attribute(.font, at: 0, effectiveRange: nil) as? NSFont,
+      .systemFont(ofSize: 15)
+    )
+
+    XCTAssertEqual((subtitle.stringValue as NSString).substring(with: folderRange), "Re\u{301}sume\u{301}")
+    XCTAssertEqual(
+      subtitle.attributedStringValue.attribute(.font, at: folderRange.location, effectiveRange: nil) as? NSFont,
+      .systemFont(ofSize: 12, weight: .semibold)
+    )
+
+    XCTAssertEqual(
+      subtitle.attributedStringValue.attribute(.font, at: NSMaxRange(folderRange), effectiveRange: nil) as? NSFont,
+      .systemFont(ofSize: 12)
+    )
+
+    field.stringValue = ""
+    view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
+
+    let resetCell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
+    let resetSubtitle = try XCTUnwrap(resetCell.subviews.compactMap { $0 as? NSTextField }.last)
+    XCTAssertEqual(
+      resetSubtitle.attributedStringValue.attribute(.font, at: folderRange.location, effectiveRange: nil) as? NSFont,
+      .systemFont(ofSize: 12)
+    )
+
+    XCTAssertEqual(
+      resetSubtitle.attributedStringValue.attribute(
+        .foregroundColor, at: folderRange.location, effectiveRange: nil
+      ) as? NSColor,
+      .white.withAlphaComponent(0.7)
+    )
+  }
+
   func testReopeningRestoresQueryAndCachedResultsBeforeRefreshing() async throws {
     let screen = try XCTUnwrap(NSScreen.main)
     let urls = ["First.md", "Second.md", "Second Draft.md"].map { URL(filePath: "/Notes/\($0)") }

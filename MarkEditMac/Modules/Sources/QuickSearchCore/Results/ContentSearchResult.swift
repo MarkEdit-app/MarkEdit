@@ -121,11 +121,14 @@ package enum QuickSearchResult: Sendable {
     var prefixFiles: [Self] = []
     var recentFiles: [Self] = []
     var bookmarkedFiles: [Self] = []
+    var folderFiles: [Self] = []
 
     for file in files {
       try Task.checkCancellation()
 
-      if file.match.rank == 0 {
+      if file.matchedFolderIndex != nil {
+        folderFiles.append(.file(file))
+      } else if file.match.rank == 0 {
         exactFiles.append(.file(file))
       } else if file.match.rank == 1 {
         prefixFiles.append(.file(file))
@@ -142,5 +145,6 @@ package enum QuickSearchResult: Sendable {
 
     return headings.map(Self.heading) + content
       + exactFiles + exactActions + prefixFiles + prefixActions + recentFiles + bookmarkedFiles + otherActions
+      + folderFiles
   }
 }

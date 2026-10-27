@@ -13,6 +13,8 @@ public struct QuickSearchItem: Equatable {
   public let iconName: String
   public let iconColor: NSColor
   public let highlightedRanges: [NSRange]
+  public let subtitleHighlightedRanges: [NSRange]
+  public let subtitleFocusRange: NSRange?
 
   public init(
     id: String,
@@ -20,7 +22,9 @@ public struct QuickSearchItem: Equatable {
     subtitle: String,
     iconName: String,
     iconColor: NSColor = .systemBlue,
-    highlightedRanges: [NSRange] = []
+    highlightedRanges: [NSRange] = [],
+    subtitleHighlightedRanges: [NSRange] = [],
+    subtitleFocusRange: NSRange? = nil
   ) {
     self.id = id
     self.title = title
@@ -28,6 +32,8 @@ public struct QuickSearchItem: Equatable {
     self.iconName = iconName
     self.iconColor = iconColor
     self.highlightedRanges = highlightedRanges
+    self.subtitleHighlightedRanges = subtitleHighlightedRanges
+    self.subtitleFocusRange = subtitleFocusRange
   }
 }
 
