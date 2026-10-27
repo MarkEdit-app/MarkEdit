@@ -151,6 +151,7 @@ final class QuickSearchFilterTests: XCTestCase {
       XCTAssertEqual(try XCTUnwrap(image.tiffRepresentation), try XCTUnwrap(expected.tiffRepresentation))
     }
 
+    try await waitForTitles(["Bookmark Plan.md", "Recent Plan.md", "Plan"])
     try assertIcon("clock")
     try select("Bookmarks")
     try await waitForTitles(["Bookmark Plan.md"])
@@ -217,10 +218,14 @@ final class QuickSearchFilterTests: XCTestCase {
 
     try select("All")
     try select("Headings")
+    try await waitForTitles(["Plan"])
     controller.window?.cancelOperation(nil)
     controller.present(recentURLs: recents, document: document, screen: screen)
 
     let reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+    let reopenedTable: NSTableView = try XCTUnwrap(reopened.firstDescendant())
+    XCTAssertEqual(reopenedTable.numberOfRows, 1)
+
     let reopenedButton = try XCTUnwrap(reopened.subviews.compactMap { $0 as? NSPopUpButton }.first)
     XCTAssertEqual(reopenedButton.menu?.items.first { $0.title == "Headings" }?.state, .on)
     XCTAssertEqual(reopenedButton.contentTintColor, .controlAccentColor)

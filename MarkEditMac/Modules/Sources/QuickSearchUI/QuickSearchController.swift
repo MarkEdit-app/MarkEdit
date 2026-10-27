@@ -29,6 +29,10 @@ public final class QuickSearchController: NSObject {
   private var documentSnapshot: QuickSearchDocumentSnapshot?
   private var displayedDocumentSnapshot: QuickSearchDocumentSnapshot?
   private var results: [QuickSearchResult] = []
+  private var cachedResults: CachedResults?
+  private var isPreparingResults = false
+  private var isReadingDocument = false
+  private var isDiscovering = false
   private var query = ""
   private var resultsQuery = ""
   private var lastQuery = ""
@@ -100,6 +104,11 @@ public final class QuickSearchController: NSObject {
     displayedDocumentSnapshot = nil
     locations?.errors.forEach(reportError)
 
+    query = lastQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+    isPreparingResults = true
+    isReadingDocument = document != nil
+    isDiscovering = locations != nil
+
     let invocation = invocation
     let window = QuickSearchWindow(
       effectViewType: effectViewType,
@@ -118,6 +127,7 @@ public final class QuickSearchController: NSObject {
           }
 
           self.lastQuery = query
+          self.isPreparingResults = false
           self.search(query)
         },
         onActivate: { [weak self] id in
@@ -140,6 +150,15 @@ public final class QuickSearchController: NSObject {
     self.window = window
     window.appearance = appearance
     window.setFilterActive(filter != .all)
+
+    if let cachedResults, cachedResults.documentID == document?.id,
+       cachedResults.query == query, cachedResults.filter == filter {
+      results = cachedResults.results
+      resultsQuery = cachedResults.query
+      resultsFilter = cachedResults.filter
+      displayedDocumentSnapshot = cachedResults.documentSnapshot
+      window.updateResults(cachedResults.items, preserveSelection: false)
+    }
 
     search(lastQuery)
     window.makeKeyAndOrderFront(nil)
@@ -170,8 +189,18 @@ public final class QuickSearchController: NSObject {
     }
 
     documentTask?.cancel()
+    isReadingDocument = true
+
     let invocation = invocation
     documentTask = Task { [weak self] in
+      defer {
+        if let self, self.invocation == invocation, !Task.isCancelled, self.isReadingDocument {
+          self.documentTask = nil
+          self.isReadingDocument = false
+          self.search(self.query, preserveSelection: true)
+        }
+      }
+
       do {
         let snapshot = try await document.readSnapshot()
 
@@ -180,7 +209,6 @@ public final class QuickSearchController: NSObject {
         }
 
         self.documentSnapshot = snapshot
-        self.search(self.query, preserveSelection: true)
       } catch is CancellationError {
         return
       } catch QuickSearchDocumentError.unavailable {
@@ -188,6 +216,7 @@ public final class QuickSearchController: NSObject {
           return
         }
 
+        self.documentTask = nil
         self.removeDocument()
       } catch {
         guard let self, self.invocation == invocation, !Task.isCancelled else {
@@ -252,6 +281,8 @@ private extension QuickSearchController {
     }
 
     self.filter = filter
+    isPreparingResults = false
+
     sender.menu?.items.forEach {
       $0.state = $0 === sender ? .on : .off
     }
@@ -268,6 +299,16 @@ private extension QuickSearchController {
     searchTask?.cancel()
     queryRevision += 1
     self.query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+
+    if isPreparingResults {
+      let needsDocument = filter == .all || filter == .headings || filter == .contents
+      let needsBookmarks = filter == .bookmarks || filter == .all && !self.query.isEmpty
+      guard !(needsDocument && isReadingDocument), !(needsBookmarks && isDiscovering) else {
+        return
+      }
+
+      isPreparingResults = false
+    }
 
     let filter = filter
     let recentURLs = recentURLs
@@ -396,6 +437,14 @@ private extension QuickSearchController {
     }
 
     window?.updateResults(items, preserveSelection: preserveSelection)
+    cachedResults = CachedResults(
+      documentID: document?.id,
+      query: resultsQuery,
+      filter: resultsFilter,
+      results: results,
+      items: items,
+      documentSnapshot: displayedDocumentSnapshot
+    )
   }
 
   func breadcrumb(_ url: URL) -> String {
@@ -431,6 +480,14 @@ private extension QuickSearchController {
     discoveredURLs.append(contentsOf: batch.urls)
     batch.errors.forEach(reportError)
     discoveryNeedsRefresh = discoveryNeedsRefresh || !batch.urls.isEmpty
+    if isFinal {
+      isDiscovering = false
+    }
+
+    if isPreparingResults {
+      search(query, preserveSelection: true)
+      return
+    }
 
     guard discoveryNeedsRefresh, filter == .bookmarks || filter == .all && !query.isEmpty else {
       return
@@ -446,16 +503,15 @@ private extension QuickSearchController {
 
   func removeDocument() {
     documentTask?.cancel()
+    isReadingDocument = false
     document = nil
     documentSnapshot = nil
     displayedDocumentSnapshot = nil
 
     results.removeAll {
       switch $0 {
-      case .file, .menuAction:
-        false
-      case .heading, .content:
-        true
+      case .heading, .content: true
+      case .file, .menuAction: false
       }
     }
 
@@ -611,5 +667,17 @@ private extension QuickSearchController {
     results = []
     resultsQuery = ""
     filterMenu = nil
+    isPreparingResults = false
+    isReadingDocument = false
+    isDiscovering = false
   }
+}
+
+private struct CachedResults {
+  let documentID: UUID?
+  let query: String
+  let filter: QuickSearchFilter
+  let results: [QuickSearchResult]
+  let items: [QuickSearchItem]
+  let documentSnapshot: QuickSearchDocumentSnapshot?
 }

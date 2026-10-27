@@ -21,6 +21,7 @@ final class QuickSearchResultsView: NSView {
   private let separator = NSBox()
   private let onActivate: (String) -> Void
   private var items: [QuickSearchItem] = []
+  private var hasExplicitSelection = false
 
   init(onActivate: @escaping (String) -> Void) {
     self.onActivate = onActivate
@@ -118,7 +119,9 @@ final class QuickSearchResultsView: NSView {
     }
 
     if itemsChanged || !preserveSelection {
-      let index = preserveSelection ? items.firstIndex { $0.id == selectedID } : nil
+      // Keep the top result selected as sources arrive, unless the user has navigated
+      let index = preserveSelection && hasExplicitSelection ? items.firstIndex { $0.id == selectedID } : nil
+      hasExplicitSelection = index != nil
 
       if !items.isEmpty {
         tableView.selectRowIndexes(IndexSet(integer: index ?? 0), byExtendingSelection: false)
@@ -137,6 +140,7 @@ final class QuickSearchResultsView: NSView {
     }
 
     let index = min(max(tableView.selectedRow + offset, 0), items.count - 1)
+    hasExplicitSelection = true
     tableView.selectRowIndexes(IndexSet(integer: index), byExtendingSelection: false)
     tableView.scrollRowToVisible(index)
   }
@@ -159,6 +163,7 @@ final class QuickSearchResultsView: NSView {
       return
     }
 
+    hasExplicitSelection = true
     activateSelection()
   }
 }

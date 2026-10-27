@@ -186,7 +186,10 @@ extension QuickSearchTests {
     XCTAssertNotNil(retainedToken)
 
     let view = try XCTUnwrap(window.contentView as? QuickSearchView)
+    let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+    try await waitUntil { table.numberOfRows == 1 }
     XCTAssertTrue(view.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
+
     try await waitUntil { !window.isActivatingResult }
     XCTAssertFalse(window.isVisible)
     XCTAssertEqual(activations, 1)
@@ -266,7 +269,7 @@ extension QuickSearchTests {
     var view = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
     var field = try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
     var table: NSTableView = try XCTUnwrap(view.firstDescendant())
-    XCTAssertEqual(table.numberOfRows, 1)
+    XCTAssertEqual(table.numberOfRows, 0)
 
     func search(_ query: String, count: Int) async throws {
       field.stringValue = query
@@ -312,6 +315,13 @@ extension QuickSearchTests {
       }
     )
 
+    controller.window?.cancelOperation(nil)
+    controller.present(recentURLs: recentURLs, document: document, screen: screen)
+    view = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+    field = try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
+    table = try XCTUnwrap(view.firstDescendant())
+    XCTAssertEqual(table.numberOfRows, 1)
+
     XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: submit))
     try await waitUntil {
       let cell = table.view(atColumn: 0, row: 0, makeIfNecessary: true)
@@ -337,12 +347,19 @@ extension QuickSearchTests {
     try await waitUntil { navigatedLines == [4] }
     XCTAssertEqual(activations, 1)
 
-    controller.present(recentURLs: recentURLs, screen: screen)
+    controller.present(
+      recentURLs: recentURLs,
+      document: .init(title: "Untitled", url: nil, readSnapshot: { .init(text: "") }, gotoLine: { _ in }),
+      screen: screen
+    )
+
     let newView = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+    let newTable: NSTableView = try XCTUnwrap(newView.firstDescendant())
+    XCTAssertEqual(newTable.numberOfRows, 0, "A different untitled document must not restore cached results")
+
     let newField = try XCTUnwrap(newView.subviews.compactMap { $0 as? NSTextField }.first)
     newField.stringValue = "pp"
     newView.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: newField))
-    let newTable: NSTableView = try XCTUnwrap(newView.firstDescendant())
     try await waitUntil { newTable.numberOfRows == 0 }
   }
 
@@ -501,8 +518,8 @@ extension QuickSearchTests {
 
 extension QuickSearchTests {
   func testUnavailableDocumentRemovesItsResultsWithoutDismissingPalette() async throws {
-    for stage in ["refresh", "activation", "navigation"] {
-      var sourceAvailable = true
+    for stage in ["presentation", "refresh", "activation", "navigation"] {
+      var sourceAvailable = stage != "presentation"
       var navigationAvailable = true
 
       let document = QuickSearchDocument(
@@ -545,6 +562,12 @@ extension QuickSearchTests {
       let view = try XCTUnwrap(window.contentView as? QuickSearchView)
       let field = try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
       let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+
+      if stage == "presentation" {
+        try await waitUntil { table.numberOfRows == 1 }
+        XCTAssertTrue(window.isVisible)
+        continue
+      }
 
       field.stringValue = "plan"
       view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
@@ -612,7 +635,7 @@ extension QuickSearchTests {
 }
 
 extension QuickSearchTests {
-  func testReopeningRestoresSelectedQueryAndRefreshesResults() async throws {
+  func testReopeningRestoresQueryAndCachedResultsBeforeRefreshing() async throws {
     let screen = try XCTUnwrap(NSScreen.main)
     let urls = ["First.md", "Second.md", "Second Draft.md"].map { URL(filePath: "/Notes/\($0)") }
 
@@ -638,9 +661,9 @@ extension QuickSearchTests {
       let query = " Second "
       field.stringValue = query
       view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
+      try await waitUntil { table.numberOfRows == 1 }
 
       if activate {
-        try await waitUntil { table.numberOfRows == 1 }
         XCTAssertTrue(view.control(field, textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
         try await waitUntil { !window.isVisible }
         XCTAssertEqual(opened, [urls[1]])
@@ -652,6 +675,8 @@ extension QuickSearchTests {
       let reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
       let reopenedField = try XCTUnwrap(reopened.subviews.compactMap { $0 as? NSTextField }.first)
       let reopenedTable: NSTableView = try XCTUnwrap(reopened.firstDescendant())
+      XCTAssertEqual(reopenedTable.numberOfRows, 1)
+      XCTAssertEqual(reopenedTable.selectedRow, 0)
       XCTAssertEqual(reopenedField.stringValue, query)
       XCTAssertEqual(reopenedField.currentEditor()?.selectedRange, NSRange(location: 0, length: query.utf16.count))
 
@@ -674,7 +699,7 @@ extension QuickSearchTests {
     }
   }
 
-  func testDiscoveryIncludesFinalPartialBatchForActiveQuery() async throws {
+  func testCachedResultsWaitForFinalDiscoveryBatch() async throws {
     let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: directory) }
@@ -685,20 +710,39 @@ extension QuickSearchTests {
       return url
     }
 
+    var refreshingTable: NSTableView?
+    var expectedCachedRows = 3
+    var errors: [String] = []
+    var documentAvailable = true
+
+    let document = QuickSearchDocument(
+      title: "Untitled",
+      url: nil,
+      readSnapshot: {
+        guard documentAvailable else {
+          throw QuickSearchDocumentError.unavailable
+        }
+
+        return .init(text: "# Plan\nA plan", headings: [.init(title: "Plan", level: 1, lineNumber: 1)])
+      },
+      gotoLine: { _ in XCTFail("Discovery must not navigate") }
+    )
+
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
       placeholder: { _ in "Quick Search" },
       accessibilityHelp: "Search",
       filterLabels: filterLabels,
-      reportError: { XCTFail($0) },
+      reportError: {
+        errors.append($0)
+        XCTAssertEqual(refreshingTable?.numberOfRows, expectedCachedRows)
+      },
       openDocument: { _ in XCTFail("Discovery must not open a file") }
     )
 
-    controller.present(
-      recentURLs: [],
-      locations: .init(urls: urls, filenameExtensions: ["md"], showsHiddenFiles: false),
-      screen: try XCTUnwrap(NSScreen.main)
-    )
+    let screen = try XCTUnwrap(NSScreen.main)
+    let recent = URL(filePath: "/Notes/Plan.md")
+    controller.present(recentURLs: [recent, URL(filePath: "/Notes/Other.md")], document: document, screen: screen)
 
     defer {
       controller.window?.orderOut(nil)
@@ -709,13 +753,50 @@ extension QuickSearchTests {
     let table: NSTableView = try XCTUnwrap(view.firstDescendant())
     field.stringValue = "Plan"
     view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
-    try await waitUntil { table.numberOfRows == urls.count }
 
-    field.stringValue = "Plan-204"
-    view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
-    try await waitUntil { table.numberOfRows == 1 }
+    try await waitUntil { table.numberOfRows == 3 }
+    controller.window?.cancelOperation(nil)
 
-    let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
+    let locations = QuickSearchLocations(
+      urls: urls + [directory.appending(path: "Missing")],
+      filenameExtensions: ["md"],
+      showsHiddenFiles: false
+    )
+
+    controller.present(
+      recentURLs: [recent],
+      locations: locations,
+      document: document,
+      screen: screen
+    )
+
+    var reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+    var reopenedTable: NSTableView = try XCTUnwrap(reopened.firstDescendant())
+    refreshingTable = reopenedTable
+    XCTAssertEqual(reopenedTable.numberOfRows, expectedCachedRows)
+
+    try await waitUntil { reopenedTable.numberOfRows == urls.count + 3 }
+    XCTAssertEqual(errors.count, 1)
+
+    controller.window?.cancelOperation(nil)
+    documentAvailable = false
+    expectedCachedRows = urls.count + 1
+
+    controller.present(recentURLs: [recent], locations: locations, document: document, screen: screen)
+    reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
+    reopenedTable = try XCTUnwrap(reopened.firstDescendant())
+    refreshingTable = reopenedTable
+    XCTAssertEqual(reopenedTable.numberOfRows, urls.count + 3)
+
+    // The final discovery error checks that unavailable rows were removed before discovery completed
+    try await waitUntil { errors.count == 2 && reopenedTable.numberOfRows == expectedCachedRows }
+
+    let reopenedField = try XCTUnwrap(reopened.subviews.compactMap { $0 as? NSTextField }.first)
+    reopenedField.stringValue = "Plan-204"
+    reopened.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: reopenedField))
+    try await waitUntil { reopenedTable.numberOfRows == 1 }
+
+    let cell = try XCTUnwrap(reopenedTable.view(atColumn: 0, row: 0, makeIfNecessary: true))
     XCTAssertEqual(cell.subviews.compactMap { $0 as? NSTextField }.first?.stringValue, "Plan-204.md")
   }
 }

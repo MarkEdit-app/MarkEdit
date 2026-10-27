@@ -179,6 +179,7 @@ private extension AppDelegate {
 
     var cachedSnapshot: (text: String, revision: String)?
     return QuickSearchDocument(
+      id: document.sessionID,
       title: document.displayName ?? document.defaultDraftName(),
       url: document.fileURL,
       readSnapshot: {
