@@ -303,7 +303,7 @@ extension EditorDocument {
     // Include all markdown and plaintext types, but prioritize the configured default
     let exportedTypes = NewFilenameExtension.allCases
       .sorted { lhs, _ in
-        lhs.rawValue == AppPreferences.General.newFilenameExtension.rawValue
+        lhs.rawValue == newFilenameExtension
       }
       .map { $0.exportedType }
 
@@ -311,12 +311,19 @@ extension EditorDocument {
     return textBundle == nil ? exportedTypes : ["org.textbundle.package"] + exportedTypes
   }
 
-  override func fileNameExtension(forType typeName: String, saveOperation: NSDocument.SaveOperationType) -> String? {
+  override func fileNameExtension(
+    forType typeName: String,
+    saveOperation: NSDocument.SaveOperationType
+  ) -> String? {
     if typeName.isTextBundle {
       return "textbundle"
     }
 
-    return NewFilenameExtension.preferredExtension(for: typeName).rawValue
+    if let preferredExtension = NewFilenameExtension.preferredExtension(for: typeName) {
+      return preferredExtension.rawValue
+    }
+
+    return fileURL?.pathExtension ?? newFilenameExtension
   }
 
   override func prepareSavePanel(_ savePanel: NSSavePanel) -> Bool {
@@ -464,7 +471,7 @@ extension EditorDocument {
 
     // Provided limited support for the 'as' parameter
     if let desiredType = command.evaluatedArguments?["FileType"] as? String {
-      let desiredExtension = NewFilenameExtension.preferredExtension(for: desiredType).rawValue
+      let desiredExtension = NewFilenameExtension.preferredExtension(for: desiredType)?.rawValue ?? newFilenameExtension
       if inputExtension == desiredExtension {
         return super.handleSave(command)
       }
@@ -660,6 +667,10 @@ private extension EditorDocument {
 
   var closeAlwaysConfirmsChanges: Bool {
     ApplicationEnvironment.preferences.bool(forKey: NSCloseAlwaysConfirmsChanges)
+  }
+
+  var newFilenameExtension: String {
+    AppPreferences.General.newFilenameExtension.rawValue
   }
 
   var needsFormatting: Bool {
