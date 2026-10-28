@@ -11,6 +11,7 @@
 			<key>QLSupportedContentTypes</key>
 			<array>
 				<string>net.daringfireball.markdown</string>
+				<string>com.mdxjs.mdx</string>
 				<string>org.textbundle.package</string>
 				<string>net.ia.markdown</string>
 				<string>app.markedit.md</string>
