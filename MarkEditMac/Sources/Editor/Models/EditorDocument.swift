@@ -390,22 +390,33 @@ extension EditorDocument {
     saveContent(sender: sender, userInitiated: true)
   }
 
-  override func autosave(withImplicitCancellability implicitlyCancellable: Bool) async throws {
+  // Keep the caller's nested AppKit file-access context when the editor text is already synchronized.
+  override func autosave(
+    withImplicitCancellability implicitlyCancellable: Bool,
+    completionHandler: @escaping (Error?) -> Void
+  ) {
+    let saveAction = {
+      do {
+        // Preserve the existing synchronous write used during termination.
+        if !self.hasBeenReverted && self.isTerminating && self.hasUnautosavedChanges,
+           let fileURL = self.fileURL, let fileType = self.fileType {
+          try self.writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
+          self.fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
+          completionHandler(nil)
+          return
+        }
+
+        super.autosave(withImplicitCancellability: implicitlyCancellable, completionHandler: completionHandler)
+      } catch {
+        completionHandler(error)
+      }
+    }
+
     if isOutdated {
-      await updateContent()
+      updateContent(saveAction: saveAction)
+    } else {
+      saveAction()
     }
-
-    // The default autosave doesn't work when the app is about to terminate,
-    // it is because we have to do it in an asynchronous way.
-    //
-    // To work around this, check a flag to save the document manually.
-    if !hasBeenReverted && isTerminating && hasUnautosavedChanges, let fileURL, let fileType {
-      try writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
-      fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
-      return
-    }
-
-    try await super.autosave(withImplicitCancellability: implicitlyCancellable)
   }
 
   override func data(ofType typeName: String) throws -> Data {

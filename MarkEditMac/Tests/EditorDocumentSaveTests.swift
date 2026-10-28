@@ -112,6 +112,52 @@ extension EditorDocumentTests {
     }
   }
 
+  func testAutosaveCompletesDuringCoordinatedFileAccess() async throws {
+    let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+
+    let url = directory.appending(path: "document.txt")
+    let data = Data("Original text\n".utf8)
+    try data.write(to: url)
+    let document = try EditorDocument(contentsOf: url, ofType: "public.plain-text")
+    defer {
+      document.isTerminating = true
+      document.close()
+    }
+
+    try await Self.waitUntilLoaded(document, data: data)
+    document.stringValue = "Autosaved text\n"
+    document.updateChangeCount(.changeDone)
+    XCTAssertFalse(document.isOutdated)
+
+    let saved = expectation(description: "Autosave completes")
+    let released = expectation(description: "Coordinated file access is released")
+    document.presentedItemOperationQueue.addOperation {
+      let relinquishToWriter = document.relinquishPresentedItem(toWriter:)
+      relinquishToWriter { reacquire in
+        let completed = DispatchSemaphore(value: 0)
+        // Release independently of the main thread so a stalled autosave can finish and be cleaned up.
+        DispatchQueue.global().async {
+          if completed.wait(timeout: .now() + 3) == .timedOut {
+            XCTFail("Autosave did not finish inside coordinated file access")
+          }
+          reacquire?()
+          released.fulfill()
+        }
+
+        document.savePresentedItemChanges { error in
+          XCTAssertNil(error)
+          completed.signal()
+          saved.fulfill()
+        }
+      }
+    }
+
+    await fulfillment(of: [released, saved], timeout: 10)
+    XCTAssertEqual(try Data(contentsOf: url), Data("Autosaved text\n".utf8))
+  }
+
   func testPreferredExtensionOnlyRecognizesOutputTypes() {
     for fileExtension in NewFilenameExtension.allCases {
       XCTAssertEqual(NewFilenameExtension.preferredExtension(for: fileExtension.exportedType), fileExtension)
