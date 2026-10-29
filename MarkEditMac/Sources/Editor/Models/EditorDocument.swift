@@ -390,14 +390,15 @@ extension EditorDocument {
     saveContent(sender: sender, userInitiated: true)
   }
 
-  // Keep the caller's nested AppKit file-access context when the editor text is already synchronized.
+  // Deliberately use the callback override to preserve AppKit's nested file-access context,
+  // deferring the call to super can deadlock during coordinated file access.
   override func autosave(
     withImplicitCancellability implicitlyCancellable: Bool,
     completionHandler: @escaping (Error?) -> Void
   ) {
     let saveAction = {
       do {
-        // Preserve the existing synchronous write used during termination.
+        // Write synchronously because asynchronous autosaving may not finish during termination
         if !self.hasBeenReverted && self.isTerminating && self.hasUnautosavedChanges,
            let fileURL = self.fileURL, let fileType = self.fileType {
           try self.writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
