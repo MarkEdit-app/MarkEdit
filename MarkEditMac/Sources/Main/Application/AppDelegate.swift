@@ -246,6 +246,28 @@ extension AppDelegate {
   }
 }
 
+// MARK: - Settings
+
+extension AppDelegate {
+  @IBAction func showPreferences(_ sender: Any?) {
+    if settingsWindowController == nil {
+      settingsWindowController = SettingsRootViewController.withTabs([
+        .editor,
+        .assistant,
+        .general,
+        .window,
+      ])
+
+      // The window size relies on the SwiftUI content view size, it takes time
+      DispatchQueue.main.async {
+        self.settingsWindowController?.showWindow(self)
+      }
+    } else {
+      settingsWindowController?.showWindow(self)
+    }
+  }
+}
+
 // MARK: - Private
 
 private extension AppDelegate {
@@ -270,24 +292,6 @@ private extension AppDelegate {
 
   @objc func extensionsMenuNeedsUpdate(_ notification: Notification) {
     updateExtensionsMenu()
-  }
-
-  @IBAction func showPreferences(_ sender: Any?) {
-    if settingsWindowController == nil {
-      settingsWindowController = SettingsRootViewController.withTabs([
-        .editor,
-        .assistant,
-        .general,
-        .window,
-      ])
-
-      // The window size relies on the SwiftUI content view size, it takes time
-      DispatchQueue.main.async {
-        self.settingsWindowController?.showWindow(self)
-      }
-    } else {
-      settingsWindowController?.showWindow(self)
-    }
   }
 
   @IBAction func openSettingsJSON(_ sender: Any?) {

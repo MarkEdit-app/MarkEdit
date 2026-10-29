@@ -23,6 +23,16 @@ final class QuickSearchMenuTests: XCTestCase {
 
     let recentMenu = try XCTUnwrap(appDelegate.openRecentMenu)
     XCTAssertTrue(recentMenu.isDescendantOf(menu: appDelegate.mainFileMenu))
+
+    let source = QuickSearchMenuActions(
+      menu: try XCTUnwrap(NSApp.mainMenu),
+      sourceWindow: nil,
+      openRecentMenu: recentMenu,
+      suggestedActions: AppDelegate.quickSearchSuggestedActions
+    )
+
+    let orders = source.actions.compactMap(\.suggestedOrder).sorted()
+    XCTAssertEqual(orders, NSPasteboard.general.hasText ? [0, 1, 2, 3, 4] : [0, 2, 3, 4])
   }
 
   func testWindowListEntriesAreExcludedWithoutHidingWindowCommands() throws {
