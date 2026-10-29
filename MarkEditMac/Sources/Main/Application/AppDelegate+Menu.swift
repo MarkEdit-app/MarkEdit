@@ -230,6 +230,18 @@ private extension AppDelegate {
   }
 }
 
+// MARK: - Actions
+
+extension AppDelegate {
+  @IBAction func newFileFromClipboard(_ sender: Any?) {
+    createNewFile(initialContent: NSPasteboard.general.string)
+  }
+
+  @IBAction func manageExtensions(_ sender: Any?) {
+    ExtensionsWindowController.shared.present()
+  }
+}
+
 // MARK: - Private
 
 private extension AppDelegate {
@@ -258,20 +270,12 @@ private extension AppDelegate {
     }
   }
 
-  @IBAction func newFileFromClipboard(_ sender: Any?) {
-    createNewFile(initialContent: NSPasteboard.general.string)
-  }
-
   @IBAction func saveAllDocuments(_ sender: Any?) {
     NSDocumentController.shared.saveAllDocuments(nil)
   }
 
   @IBAction func openDevelopmentGuide(_ sender: Any?) {
     NSWorkspace.shared.safelyOpenURL(string: "https://github.com/MarkEdit-app/MarkEdit/wiki/Development")
-  }
-
-  @IBAction func manageExtensions(_ sender: Any?) {
-    ExtensionsWindowController.shared.present()
   }
 
   @IBAction func openCustomizationGuide(_ sender: Any?) {

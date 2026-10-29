@@ -11,6 +11,7 @@ import QuickSearchCore
 final class QuickSearchMenuActions {
   private let menu: NSMenu
   private let openRecentMenu: NSMenu?
+  private let suggestedActions: [Selector]
   private weak var sourceWindow: NSWindow?
   private let hadSourceWindow: Bool
   private let refocusSourceWindow: @MainActor () async throws -> Void
@@ -20,10 +21,12 @@ final class QuickSearchMenuActions {
     menu: NSMenu,
     sourceWindow: NSWindow?,
     openRecentMenu: NSMenu? = nil,
+    suggestedActions: [Selector] = [],
     refocusSourceWindow: (@MainActor () async throws -> Void)? = nil
   ) {
     self.menu = menu
     self.openRecentMenu = openRecentMenu
+    self.suggestedActions = suggestedActions
     self.sourceWindow = sourceWindow
     hadSourceWindow = sourceWindow != nil
     self.refocusSourceWindow = refocusSourceWindow ?? { [weak sourceWindow] in
@@ -74,18 +77,25 @@ final class QuickSearchMenuActions {
     return nil
   }
 
-  private func collect(_ menu: NSMenu, indices: [Int] = [], titles: [String] = []) {
+  private func collect(_ menu: NSMenu, indices: [Int] = [], titles: [String] = [], ancestorsEnabled: Bool = true) {
     menu.delegate?.menuNeedsUpdate?(menu)
     menu.update()
 
     for (index, item) in menu.items.enumerated() where isSearchable(item) {
       let indices = indices + [index]
       let titles = titles + [item.title]
+      let enabled = ancestorsEnabled && item.isEnabled
 
       if let submenu = item.submenu {
-        collect(submenu, indices: indices, titles: titles)
-      } else if item.action != nil {
-        actions.append(.init(indices: indices, titles: titles, shortcutHint: item.shortcutHint))
+        collect(submenu, indices: indices, titles: titles, ancestorsEnabled: enabled)
+      } else if let action = item.action {
+        let suggestedOrder = suggestedActions.firstIndex(of: action)
+        actions.append(.init(
+          indices: indices,
+          titles: titles,
+          shortcutHint: item.shortcutHint,
+          suggestedOrder: suggestedOrder != nil && enabled && hasTarget(item) ? suggestedOrder : nil
+        ))
       }
     }
   }

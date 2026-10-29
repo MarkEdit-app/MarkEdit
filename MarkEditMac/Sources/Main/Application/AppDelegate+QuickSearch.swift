@@ -12,6 +12,14 @@ import QuickSearchCore
 import QuickSearchUI
 
 extension AppDelegate {
+  static let quickSearchSuggestedActions: [Selector] = [
+    #selector(NSDocumentController.newDocument(_:)),
+    #selector(newFileFromClipboard(_:)),
+    #selector(NSDocumentController.openDocument(_:)),
+    #selector(showPreferences(_:)),
+    #selector(manageExtensions(_:)),
+  ]
+
   static func refocusSourceWindow(_ window: NSWindow) async throws {
     window.makeKeyAndOrderFront(nil)
 
@@ -108,6 +116,7 @@ extension AppDelegate {
       document: quickSearchDocument(in: sourceWindow),
       menu: NSApp.mainMenu,
       openRecentMenu: openRecentMenu,
+      suggestedActions: Self.quickSearchSuggestedActions,
       refocusSourceWindow: { [weak sourceWindow] in
         guard let sourceWindow else {
           throw CancellationError()

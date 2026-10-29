@@ -107,10 +107,23 @@ package enum QuickSearchResult: Sendable {
 
     let actions = try MenuActionSearchResult.search(
       query,
-      actions: filter == .menuActions || filter == .all && !query.isEmpty ? menuActions : []
+      actions: filter == .menuActions || filter == .all ? menuActions : []
     )
 
     try Task.checkCancellation()
+
+    if filter == .all, query.isEmpty {
+      let suggestions = actions.compactMap { result -> (Int, Self)? in
+        guard let order = result.action.suggestedOrder else {
+          return nil
+        }
+        return (order, .menuAction(result))
+      }
+      .sorted { $0.0 < $1.0 }
+      .map(\.1)
+
+      return files.map(Self.file) + suggestions + headings.map(Self.heading)
+    }
 
     guard filter == .all, !query.isEmpty else {
       return files.map(Self.file) + headings.map(Self.heading) + content + actions.map(Self.menuAction)

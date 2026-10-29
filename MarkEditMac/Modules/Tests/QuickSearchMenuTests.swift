@@ -129,8 +129,8 @@ final class QuickSearchMenuTests: XCTestCase {
 
   func testMenuMatchingFiltersAndRanking() throws {
     let actions = [
-      MenuActionSearchResult.Action(indices: [0, 0], titles: ["Edit", "New Tab"]),
-      .init(indices: [1, 0], titles: ["Window", "New Tab"]),
+      MenuActionSearchResult.Action(indices: [0, 0], titles: ["Edit", "New Tab"], suggestedOrder: 1),
+      .init(indices: [1, 0], titles: ["Window", "New Tab"], suggestedOrder: 0),
       .init(indices: [1, 1], titles: ["Window", "New Tab Group"]),
     ]
 
@@ -143,7 +143,7 @@ final class QuickSearchMenuTests: XCTestCase {
     let fileID = "file:\(file.absoluteString)"
     let cases: [(String, QuickSearchFilter, [String])] = [
       ("new tab", .all, ["heading:1", "line:2", fileID, "menu:0.0", "menu:1.0", "menu:1.1"]),
-      ("", .all, [fileID, "heading:1"]),
+      ("", .all, [fileID, "menu:1.0", "menu:0.0", "heading:1"]),
       ("", .menuActions, actions.map(\.id)),
       ("nwt", .menuActions, actions.map(\.id)),
       ("new tab", .recents, [fileID]),
@@ -167,6 +167,35 @@ final class QuickSearchMenuTests: XCTestCase {
 
     let match = try XCTUnwrap(MenuActionSearchResult.search("NEW TAB", actions: actions).first)
     XCTAssertEqual(match.match.ranges, [NSRange(location: 0, length: 7)])
+    XCTAssertEqual(
+      try QuickSearchResult.search(
+        "", filter: .all, recentURLs: [], bookmarkedURLs: [], snapshot: nil, menuActions: actions
+      )
+      .map(\.id),
+      ["menu:1.0", "menu:0.0"]
+    )
+  }
+
+  func testSuggestionsExcludeUnavailableActions() {
+    let menu = NSMenu()
+    menu.autoenablesItems = false
+
+    let target = RecentMenuTarget()
+    let selector = #selector(NSDocumentController.clearRecentDocuments(_:))
+    let missingSelector = NSSelectorFromString("quickSearchMissingSuggestion:")
+    for title in ["Available", "Disabled", "Missing Target"] {
+      let item = menu.addItem(withTitle: title, action: title == "Missing Target" ? missingSelector : selector)
+      item.target = title == "Missing Target" ? nil : target
+      item.isEnabled = title != "Disabled"
+    }
+
+    let nested = submenu("Disabled Parent", in: menu)
+    nested.addItem(withTitle: "Unreachable", action: selector).target = target
+    nested.superMenuItem?.isEnabled = false
+
+    let source = QuickSearchMenuActions(menu: menu, sourceWindow: nil, suggestedActions: [selector, missingSelector])
+    XCTAssertEqual(source.actions.count, 4)
+    XCTAssertEqual(source.actions.filter { $0.suggestedOrder != nil }.map(\.title), ["Available"])
   }
 
   func testMatchingMenuIncludesOnlyImmediateActions() throws {
@@ -303,6 +332,7 @@ extension QuickSearchMenuTests {
       controller.present(
         recentURLs: [],
         menu: menu,
+        suggestedActions: [#selector(MenuResponder.newTab(_:))],
         refocusSourceWindow: {
           await Task.yield()
           source.makeKeyAndOrderFront(nil)
@@ -315,11 +345,13 @@ extension QuickSearchMenuTests {
       defer { window.orderOut(nil) }
 
       let view = try XCTUnwrap(window.contentView as? QuickSearchView)
+      let table: NSTableView = try XCTUnwrap(view.firstDescendant())
+      XCTAssertEqual(table.numberOfRows, 1)
+
       let popup = try XCTUnwrap(view.subviews.compactMap { $0 as? NSPopUpButton }.first)
       let filters = try XCTUnwrap(popup.menu)
       filters.performActionForItem(at: try XCTUnwrap(filters.items.firstIndex { $0.title == "Menu Actions" }))
 
-      let table: NSTableView = try XCTUnwrap(view.firstDescendant())
       XCTAssertEqual(table.numberOfRows, 1)
       let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
       XCTAssertEqual(

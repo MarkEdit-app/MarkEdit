@@ -75,6 +75,7 @@ public final class QuickSearchController: NSObject {
     document: QuickSearchDocument? = nil,
     menu: NSMenu? = nil,
     openRecentMenu: NSMenu? = nil,
+    suggestedActions: [Selector] = [],
     refocusSourceWindow: (@MainActor () async throws -> Void)? = nil,
     screen: NSScreen,
     appearance: NSAppearance? = nil,
@@ -99,6 +100,7 @@ public final class QuickSearchController: NSObject {
         menu: $0,
         sourceWindow: NSApp.keyWindow,
         openRecentMenu: openRecentMenu,
+        suggestedActions: suggestedActions,
         refocusSourceWindow: refocusSourceWindow
       )
     }
