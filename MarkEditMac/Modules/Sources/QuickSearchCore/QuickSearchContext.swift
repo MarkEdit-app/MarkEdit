@@ -8,19 +8,19 @@ import Foundation
 
 public struct QuickSearchLocations: Sendable {
   let urls: [URL]
-  let filenameExtensions: Set<String>
   let showsHiddenFiles: Bool
+  let isFileEligible: @Sendable (URL) -> Bool
   package let errors: [String]
 
   public init(
     urls: [URL],
-    filenameExtensions: Set<String>,
     showsHiddenFiles: Bool,
+    isFileEligible: @escaping @Sendable (URL) -> Bool,
     errors: [String] = []
   ) {
     self.urls = urls
-    self.filenameExtensions = Set(filenameExtensions.map { $0.lowercased() })
     self.showsHiddenFiles = showsHiddenFiles
+    self.isFileEligible = isFileEligible
     self.errors = errors
   }
 }

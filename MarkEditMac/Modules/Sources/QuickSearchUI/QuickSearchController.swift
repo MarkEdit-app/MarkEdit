@@ -23,6 +23,7 @@ public final class QuickSearchController: NSObject {
   private let breadcrumbSeparator = " \u{203A} "
   private var recentURLs: [URL] = []
   private var discoveredURLs: [URL] = []
+  private var locations: (() -> QuickSearchLocations)?
   private var discoveryNeedsRefresh = false
   private var lastDiscoveryRefresh = ContinuousClock.now
   private var document: QuickSearchDocument?
@@ -70,7 +71,7 @@ public final class QuickSearchController: NSObject {
 
   public func present(
     recentURLs: [URL],
-    locations: QuickSearchLocations? = nil,
+    locations: (() -> QuickSearchLocations)? = nil,
     document: QuickSearchDocument? = nil,
     menu: NSMenu? = nil,
     openRecentMenu: NSMenu? = nil,
@@ -90,7 +91,9 @@ public final class QuickSearchController: NSObject {
 
     cancel()
     self.recentURLs = recentURLs
+    self.locations = locations
     self.document = document
+
     menuActions = menu.map {
       QuickSearchMenuActions(
         menu: $0,
@@ -103,12 +106,10 @@ public final class QuickSearchController: NSObject {
     discoveredURLs = []
     documentSnapshot = nil
     displayedDocumentSnapshot = nil
-    locations?.errors.forEach(reportError)
 
     query = lastQuery.trimmingCharacters(in: .whitespacesAndNewlines)
     isPreparingResults = true
     isReadingDocument = document != nil
-    isDiscovering = locations != nil
 
     let invocation = invocation
     let window = QuickSearchWindow(
@@ -164,10 +165,6 @@ public final class QuickSearchController: NSObject {
     search(lastQuery)
     window.makeKeyAndOrderFront(nil)
     window.focusInput()
-
-    if let locations {
-      discover(locations)
-    }
 
     refreshDocument()
   }
@@ -301,9 +298,18 @@ private extension QuickSearchController {
     queryRevision += 1
     self.query = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
+    let needsBookmarks = filter == .bookmarks || filter == .all && !self.query.isEmpty
+    if needsBookmarks, let locations {
+      self.locations = nil
+      isDiscovering = true
+
+      let locations = locations()
+      locations.errors.forEach(reportError)
+      discover(locations)
+    }
+
     if isPreparingResults {
       let needsDocument = filter == .all || filter == .headings || filter == .contents
-      let needsBookmarks = filter == .bookmarks || filter == .all && !self.query.isEmpty
       guard !(needsDocument && isReadingDocument), !(needsBookmarks && isDiscovering) else {
         return
       }
@@ -675,6 +681,7 @@ private extension QuickSearchController {
 
     document = nil
     menuActions = nil
+    locations = nil
     documentSnapshot = nil
     displayedDocumentSnapshot = nil
     discoveredURLs = []

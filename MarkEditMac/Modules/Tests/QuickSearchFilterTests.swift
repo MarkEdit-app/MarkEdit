@@ -59,9 +59,15 @@ final class QuickSearchFilterTests: XCTestCase {
 
     let screen = try XCTUnwrap(NSScreen.main)
     let recents = [bookmarked, URL(filePath: "/Notes/Recent Plan.md")]
+    var locationLoads = 0
+    let locations = {
+      locationLoads += 1
+      return QuickSearchLocations(urls: [directory], showsHiddenFiles: false) { _ in true }
+    }
+
     controller.present(
       recentURLs: recents,
-      locations: .init(urls: [directory], filenameExtensions: ["md"], showsHiddenFiles: false),
+      locations: locations,
       document: document,
       screen: screen
     )
@@ -153,8 +159,11 @@ final class QuickSearchFilterTests: XCTestCase {
 
     try await waitForTitles(["Bookmark Plan.md", "Recent Plan.md", "Plan"])
     try assertIcon("clock")
+    XCTAssertEqual(locationLoads, 0)
+
     try select("Bookmarks")
     try await waitForTitles(["Bookmark Plan.md"])
+    XCTAssertEqual(locationLoads, 1)
     try assertIcon("bookmark")
 
     try select("Recents")
@@ -219,8 +228,11 @@ final class QuickSearchFilterTests: XCTestCase {
     try select("All")
     try select("Headings")
     try await waitForTitles(["Plan"])
+    XCTAssertEqual(locationLoads, 1)
+
     controller.window?.cancelOperation(nil)
-    controller.present(recentURLs: recents, document: document, screen: screen)
+    controller.present(recentURLs: recents, locations: locations, document: document, screen: screen)
+    XCTAssertEqual(locationLoads, 1)
 
     let reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
     let reopenedTable: NSTableView = try XCTUnwrap(reopened.firstDescendant())
