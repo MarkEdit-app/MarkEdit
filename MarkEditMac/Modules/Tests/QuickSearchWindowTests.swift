@@ -143,7 +143,8 @@ final class QuickSearchWindowTests: XCTestCase {
         title: $0.element.0,
         subtitle: subtitle,
         iconName: "text.alignleft",
-        highlightedRanges: [NSRange(location: $0.element.0.utf16.count - 5, length: 5)]
+        highlightedRanges: [NSRange(location: $0.element.0.utf16.count - 5, length: 5)],
+        shortcutHint: $0.offset < 2 ? "\u{21E7}\u{2318}T" : nil
       )
     }
 
@@ -163,6 +164,7 @@ final class QuickSearchWindowTests: XCTestCase {
 
         let fields = cell.subviews.compactMap { $0 as? NSTextField }
         let titleField = try XCTUnwrap(fields.first)
+        let shortcutField = fields[1]
         let subtitleField = try XCTUnwrap(fields.last)
 
         if row == 0 {
@@ -171,7 +173,31 @@ final class QuickSearchWindowTests: XCTestCase {
 
         XCTAssertEqual(titleField.frame.height, try XCTUnwrap(singleLineHeight), accuracy: 0.5, "Row \(row)")
         XCTAssertEqual(titleField.stringValue, titles[row].1)
-        XCTAssertEqual(cell.accessibilityLabel(), "\(items[row].title), \(subtitle)")
+        XCTAssertEqual(
+          cell.accessibilityLabel(),
+          [items[row].title, subtitle, items[row].shortcutHint].compactMap { $0 }.joined(separator: ", ")
+        )
+
+        XCTAssertEqual(shortcutField.isHidden, items[row].shortcutHint == nil)
+        if let shortcutHint = items[row].shortcutHint {
+          XCTAssertEqual(shortcutField.stringValue, shortcutHint)
+          XCTAssertTrue(cell.bounds.contains(shortcutField.frame))
+
+          let titleRect = titleField.alignmentRect(forFrame: titleField.frame)
+          let shortcutRect = shortcutField.alignmentRect(forFrame: shortcutField.frame)
+
+          XCTAssertEqual(shortcutRect.minX - titleRect.maxX, 12, accuracy: 0.5)
+          XCTAssertGreaterThanOrEqual(shortcutField.frame.width, shortcutField.intrinsicContentSize.width)
+          XCTAssertEqual(shortcutRect.midY, cell.bounds.midY, accuracy: 0.5)
+          XCTAssertEqual(subtitleField.frame.maxX, titleField.frame.maxX, accuracy: 0.5)
+          XCTAssertFalse(subtitleField.frame.intersects(shortcutField.frame))
+          XCTAssertEqual(
+            shortcutField.textColor,
+            row == 0 ? .white.withAlphaComponent(0.7) : .secondaryLabelColor
+          )
+        } else {
+          XCTAssertEqual(titleField.frame.maxX, subtitleField.frame.maxX, accuracy: 0.5)
+        }
         XCTAssertEqual(
           titleField.attributedStringValue.attribute(
             .font, at: items[row].highlightedRanges[0].location, effectiveRange: nil

@@ -452,7 +452,8 @@ private extension QuickSearchController {
           subtitle: match.action.subtitle,
           iconName: "command",
           iconColor: .systemIndigo,
-          highlightedRanges: match.highlightedRanges
+          highlightedRanges: match.highlightedRanges,
+          shortcutHint: match.action.shortcutHint
         )
       }
     }

@@ -10,6 +10,7 @@ package struct MenuActionSearchResult: Sendable {
   package struct Action: Sendable {
     package let indices: [Int]
     package let titles: [String]
+    package let shortcutHint: String?
 
     var id: String {
       "menu:" + indices.map(String.init).joined(separator: ".")
@@ -23,9 +24,10 @@ package struct MenuActionSearchResult: Sendable {
       titles.joined(separator: " \u{203A} ")
     }
 
-    package init(indices: [Int], titles: [String]) {
+    package init(indices: [Int], titles: [String], shortcutHint: String? = nil) {
       self.indices = indices
       self.titles = titles
+      self.shortcutHint = shortcutHint
     }
   }
 
