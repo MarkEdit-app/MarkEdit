@@ -250,7 +250,10 @@ private final class ResultCell: NSTableCellView {
   private let iconBackground = NSView()
   private let iconGlyph = NSImageView()
   private let title = NSTextField(labelWithString: "")
+  private let shortcutHint = NSTextField(labelWithString: "")
   private let subtitle = NSTextField(labelWithString: "")
+  private lazy var titleTrailing = title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+  private lazy var titleBeforeShortcut = title.trailingAnchor.constraint(equalTo: shortcutHint.leadingAnchor, constant: -12)
   private var item: QuickSearchItem?
   private var selected = false
 
@@ -263,12 +266,18 @@ private final class ResultCell: NSTableCellView {
 
     title.maximumNumberOfLines = 1
     title.lineBreakMode = .byTruncatingTail
+    title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+    shortcutHint.font = .systemFont(ofSize: NSFont.systemFontSize)
+    shortcutHint.maximumNumberOfLines = 1
+    shortcutHint.setContentHuggingPriority(.required, for: .horizontal)
+    shortcutHint.setContentCompressionResistancePriority(.required, for: .horizontal)
 
     subtitle.maximumNumberOfLines = 1
     subtitle.lineBreakMode = .byTruncatingMiddle
     subtitle.font = .systemFont(ofSize: 12)
 
-    for view in [iconBackground, iconGlyph, title, subtitle] {
+    for view in [iconBackground, iconGlyph, title, shortcutHint, subtitle] {
       view.translatesAutoresizingMaskIntoConstraints = false
       addSubview(view)
     }
@@ -282,8 +291,11 @@ private final class ResultCell: NSTableCellView {
       iconGlyph.centerYAnchor.constraint(equalTo: iconBackground.centerYAnchor),
 
       title.leadingAnchor.constraint(equalTo: iconBackground.trailingAnchor, constant: 12),
-      title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+      titleTrailing,
       title.topAnchor.constraint(equalTo: topAnchor, constant: 7),
+
+      shortcutHint.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+      shortcutHint.centerYAnchor.constraint(equalTo: centerYAnchor),
 
       subtitle.leadingAnchor.constraint(equalTo: title.leadingAnchor),
       subtitle.trailingAnchor.constraint(equalTo: title.trailingAnchor),
@@ -336,9 +348,23 @@ private final class ResultCell: NSTableCellView {
     }
 
     title.attributedStringValue = text
+    var shortcutAttributes: [NSAttributedString.Key: Any] = [.kern: 2.0]
+    shortcutAttributes[.font] = shortcutHint.font
+    shortcutHint.attributedStringValue = NSAttributedString(
+      string: item.shortcutHint ?? "",
+      attributes: shortcutAttributes
+    )
+
+    shortcutHint.isHidden = shortcutHint.stringValue.isEmpty
+    shortcutHint.textColor = selected ? .white.withAlphaComponent(0.7) : .secondaryLabelColor
+
+    titleTrailing.isActive = false
+    titleBeforeShortcut.isActive = false
+    (shortcutHint.isHidden ? titleTrailing : titleBeforeShortcut).isActive = true
+
     updateSubtitle()
     toolTip = item.subtitle
-    setAccessibilityLabel("\(item.title), \(item.subtitle)")
+    setAccessibilityLabel([item.title, item.subtitle, item.shortcutHint].compactMap { $0 }.joined(separator: ", "))
   }
 
   // MARK: - Private

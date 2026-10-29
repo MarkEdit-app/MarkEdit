@@ -12,6 +12,35 @@ import XCTest
 
 @MainActor
 final class QuickSearchMenuTests: XCTestCase {
+  func testShortcutHintsUseLiveMenuEquivalents() throws {
+    let menu = NSMenu()
+    let item = menu.addItem(withTitle: "Command") {}
+    let cases: [(String, NSEvent.ModifierFlags, String?)] = [
+      ("", .command, nil),
+      ("n", .command, "\u{2318}N"),
+      (",", .command, "\u{2318},"),
+      ("T", .command, "\u{21E7}\u{2318}T"),
+      ("T", [.shift, .command], "\u{21E7}\u{2318}T"),
+      ("x", [.control, .option, .shift, .command], "\u{2303}\u{2325}\u{21E7}\u{2318}X"),
+      ("\u{F702}", [.option, .command], "\u{2325}\u{2318}\u{2190}"),
+      ("\u{F70F}", [], "F12"),
+      ("\r", .command, "\u{2318}\u{21A9}"),
+      ("\u{7F}", [], "\u{232B}"),
+      ("\u{F728}", [], "\u{2326}"),
+      ("\u{19}", [], "\u{21E7}\u{21E5}"),
+      ("\u{1B}", [], "\u{238B}"),
+      (" ", .control, "\u{2303}\u{2423}"),
+    ]
+
+    for (key, modifiers, expected) in cases {
+      item.keyEquivalent = key
+      item.keyEquivalentModifierMask = modifiers
+
+      let source = QuickSearchMenuActions(menu: menu, sourceWindow: nil)
+      XCTAssertEqual(try XCTUnwrap(source.actions.first).shortcutHint, expected)
+    }
+  }
+
   func testRecursiveDiscoveryIncludesDisabledActionsAndChecksLiveState() async throws {
     let menu = NSMenu()
     let edit = submenu("Edit", in: menu)
@@ -245,7 +274,9 @@ extension QuickSearchMenuTests {
 
       let menu = NSMenu()
       let edit = submenu("Edit", in: menu)
-      edit.addItem(withTitle: "New Tab", action: #selector(MenuResponder.newTab(_:)))
+      let newTab = edit.addItem(withTitle: "New Tab", action: #selector(MenuResponder.newTab(_:)))
+      newTab.keyEquivalent = "t"
+      newTab.keyEquivalentModifierMask = .command
 
       var errors: [String] = []
       var refocuses = 0
@@ -291,8 +322,15 @@ extension QuickSearchMenuTests {
       let table: NSTableView = try XCTUnwrap(view.firstDescendant())
       XCTAssertEqual(table.numberOfRows, 1)
       let cell = try XCTUnwrap(table.view(atColumn: 0, row: 0, makeIfNecessary: true))
-      XCTAssertEqual(cell.subviews.compactMap { $0 as? NSTextField }.map(\.stringValue), ["New Tab", "Edit \u{203A} New Tab"])
-      XCTAssertNotNil(NSImage(systemSymbolName: "command", accessibilityDescription: nil))
+      XCTAssertEqual(
+        cell.subviews.compactMap { $0 as? NSTextField }.map(\.stringValue),
+        ["New Tab", "\u{2318}T", "Edit \u{203A} New Tab"]
+      )
+
+      XCTAssertNotNil(NSImage(
+        systemSymbolName: "command",
+        accessibilityDescription: nil
+      ))
 
       edit.items[0].isEnabled = enabled
       XCTAssertTrue(view.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
