@@ -137,11 +137,12 @@ extension EditorDocumentTests {
       let relinquishToWriter = document.relinquishPresentedItem(toWriter:)
       relinquishToWriter { reacquire in
         let completed = DispatchSemaphore(value: 0)
-        // Release independently of the main thread so a stalled autosave can finish and be cleaned up.
+        // Release independently of the main thread so a stalled autosave can finish and be cleaned up
         DispatchQueue.global().async {
           if completed.wait(timeout: .now() + 3) == .timedOut {
             XCTFail("Autosave did not finish inside coordinated file access")
           }
+
           reacquire?()
           released.fulfill()
         }
