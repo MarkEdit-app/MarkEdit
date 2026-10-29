@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import UniformTypeIdentifiers
 
 package enum FileDiscovery {
   package struct Batch: Sendable {
@@ -48,10 +47,7 @@ package enum FileDiscovery {
         return url.pathExtension.lowercased() == "textbundle"
       }
 
-      return values.isRegularFile == true && (
-        locations.filenameExtensions.contains(url.pathExtension.lowercased())
-          || values.contentType?.conforms(to: .text) == true
-      )
+      return values.isRegularFile == true && locations.isFileEligible(url)
     }
 
     for root in locations.urls {

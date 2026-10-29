@@ -438,7 +438,7 @@ extension QuickSearchTests {
       gotoLine: { navigatedLines.append($0) }
     )
 
-    let locations = QuickSearchLocations(urls: [directory], filenameExtensions: ["md"], showsHiddenFiles: false)
+    let locations = QuickSearchLocations(urls: [directory], showsHiddenFiles: false) { _ in true }
     let controller = QuickSearchController(
       effectViewType: NSVisualEffectView.self,
       placeholder: { _ in "Quick Search" },
@@ -449,7 +449,18 @@ extension QuickSearchTests {
     )
 
     let screen = try XCTUnwrap(NSScreen.main)
-    controller.present(recentURLs: [], locations: locations, document: document, screen: screen)
+    var locationLoads = 0
+    controller.present(
+      recentURLs: [],
+      locations: {
+        locationLoads += 1
+        return locations
+      },
+      document: document,
+      screen: screen
+    )
+
+    XCTAssertEqual(locationLoads, 0)
     defer { controller.window?.orderOut(nil) }
 
     func searchAndSelectContent() async throws -> QuickSearchView {
@@ -465,6 +476,8 @@ extension QuickSearchTests {
       let scroll = try XCTUnwrap(results.subviews.compactMap { $0 as? NSScrollView }.first)
       let table = try XCTUnwrap(scroll.documentView as? NSTableView)
       try await waitUntil { table.numberOfRows == 2 }
+      XCTAssertEqual(locationLoads, 1)
+
       let message = try XCTUnwrap(results.subviews.compactMap { $0 as? NSTextField }.first)
       let frame = controller.window?.frame
 
@@ -610,7 +623,9 @@ extension QuickSearchTests {
 
     controller.present(
       recentURLs: [URL(filePath: "/Notes/Plan.md")],
-      locations: .init(urls: [], filenameExtensions: ["md"], showsHiddenFiles: false, errors: ["Grant unavailable"]),
+      locations: {
+        .init(urls: [], showsHiddenFiles: false, isFileEligible: { _ in true }, errors: ["Grant unavailable"])
+      },
       document: .init(title: "Untitled", url: nil, readSnapshot: { throw readError }, gotoLine: { _ in }),
       screen: try XCTUnwrap(NSScreen.main)
     )
@@ -618,12 +633,20 @@ extension QuickSearchTests {
     let window = try XCTUnwrap(controller.window)
     defer { window.orderOut(nil) }
 
-    try await waitUntil { errors.count == 2 }
-    XCTAssertEqual(errors, ["Grant unavailable", readError.localizedDescription])
+    try await waitUntil { errors.count == 1 }
+    XCTAssertEqual(errors, [readError.localizedDescription])
     XCTAssertTrue(window.isVisible)
 
     let view = try XCTUnwrap(window.contentView as? QuickSearchView)
+    let field = try XCTUnwrap(view.subviews.compactMap { $0 as? NSTextField }.first)
+    field.stringValue = "Plan"
+    view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
+    XCTAssertEqual(errors, [readError.localizedDescription, "Grant unavailable"])
+
+    field.stringValue = ""
+    view.controlTextDidChange(Notification(name: NSControl.textDidChangeNotification, object: field))
     XCTAssertTrue(view.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
+
     try await waitUntil { errors.count == 3 && !window.isActivatingResult }
     XCTAssertEqual(errors.last, openError.localizedDescription)
 
@@ -831,16 +854,22 @@ extension QuickSearchTests {
 
     let locations = QuickSearchLocations(
       urls: urls + [directory.appending(path: "Missing")],
-      filenameExtensions: ["md"],
       showsHiddenFiles: false
-    )
+    ) { _ in true }
+
+    var locationLoads = 0
+    let loadLocations = {
+      locationLoads += 1
+      return locations
+    }
 
     controller.present(
       recentURLs: [recent],
-      locations: locations,
+      locations: loadLocations,
       document: document,
       screen: screen
     )
+    XCTAssertEqual(locationLoads, 1)
 
     var reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
     var reopenedTable: NSTableView = try XCTUnwrap(reopened.firstDescendant())
@@ -854,7 +883,8 @@ extension QuickSearchTests {
     documentAvailable = false
     expectedCachedRows = urls.count + 1
 
-    controller.present(recentURLs: [recent], locations: locations, document: document, screen: screen)
+    controller.present(recentURLs: [recent], locations: loadLocations, document: document, screen: screen)
+    XCTAssertEqual(locationLoads, 2)
     reopened = try XCTUnwrap(controller.window?.contentView as? QuickSearchView)
     reopenedTable = try XCTUnwrap(reopened.firstDescendant())
     refreshingTable = reopenedTable

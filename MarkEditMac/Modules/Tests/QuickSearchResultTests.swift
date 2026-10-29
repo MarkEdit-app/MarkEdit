@@ -5,6 +5,7 @@
 //
 
 import XCTest
+import MarkEditKit
 @testable import QuickSearchCore
 
 final class QuickSearchResultTests: XCTestCase {
@@ -162,14 +163,17 @@ final class QuickSearchResultTests: XCTestCase {
     for path in [
       "Granted/Plan.md", "Granted/.hidden.md", "Granted/Nested/Ideas.txt",
       "Granted/Notes.textbundle/text.md", "Outside/Secret.md", "Direct.md",
+      "Granted/LICENSE", "README", "Granted/Unknown.quicksearchtest",
     ] {
       try "text".write(to: root.appending(path: path), atomically: true, encoding: .utf8)
     }
 
     try Data([0, 1, 2]).write(to: folder.appending(path: "image.bin"))
-    let customNames = ["Upper.QUICKSEARCHTEST", "Lower.quicksearchtest", "Mixed.QuIcKsEaRcHtEsT"]
+    try Data([0, 1, 2]).write(to: folder.appending(path: "Binary"))
+    try Data([0, 1, 2]).write(to: root.appending(path: "DirectBinary"))
+    let markdownNames = ["Upper.MD", "Lower.md", "Mixed.MarkDown"]
 
-    for name in customNames {
+    for name in markdownNames {
       try Data([0, 1, 2]).write(to: folder.appending(path: name))
     }
 
@@ -178,15 +182,17 @@ final class QuickSearchResultTests: XCTestCase {
     for showsHiddenFiles in [false, true] {
       let collector = DiscoveryCollector()
       try await FileDiscovery.scan(.init(
-        urls: [folder, nested, root.appending(path: "Direct.md"), root.appending(path: "Missing")],
-        filenameExtensions: ["MD", "QuIcKsEaRcHtEsT"],
+        urls: [
+          folder, nested, root.appending(path: "Direct.md"), root.appending(path: "Missing"),
+          root.appending(path: "README"), root.appending(path: "DirectBinary"),
+        ],
         showsHiddenFiles: showsHiddenFiles
-      )) {
+      ) { !$0.isBinaryFile }) {
         await collector.append($0)
       }
 
       let batch = await collector.batch
-      var expected = Set(["Plan.md", "Ideas.txt", "Notes.textbundle", "Direct.md"] + customNames)
+      var expected = Set(["Plan.md", "Ideas.txt", "Notes.textbundle", "Direct.md", "LICENSE", "README"] + markdownNames)
       if showsHiddenFiles {
         expected.insert(".hidden.md")
       }
@@ -206,9 +212,11 @@ final class QuickSearchResultTests: XCTestCase {
 
       try await FileDiscovery.scan(.init(
         urls: [URL(filePath: "/missing")],
-        filenameExtensions: [],
         showsHiddenFiles: false
-      )) {
+      ) { _ in
+        XCTFail("Cancelled discovery must not classify files")
+        return false
+      }) {
         await collector.append($0)
       }
     }
@@ -247,7 +255,7 @@ extension QuickSearchResultTests {
 
     for roots in [urls, [directory]] {
       let collector = DiscoveryCollector()
-      try await FileDiscovery.scan(.init(urls: roots, filenameExtensions: ["md"], showsHiddenFiles: false)) {
+      try await FileDiscovery.scan(.init(urls: roots, showsHiddenFiles: false) { _ in true }) {
         await collector.append($0)
       }
 

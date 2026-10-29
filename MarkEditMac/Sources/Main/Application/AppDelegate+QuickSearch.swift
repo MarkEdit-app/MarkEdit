@@ -93,19 +93,18 @@ extension AppDelegate {
       )
     }
 
-    let bookmarks = bookmarkStore.load()
-    let types = Bundle.main.infoDictionary?["CFBundleDocumentTypes"] as? [[String: Any]] ?? []
-    let extensions = types.flatMap { $0["CFBundleTypeExtensions"] as? [String] ?? [] }
-
     NSApp.closeOpenPanels()
     quickSearchController?.present(
       recentURLs: NSDocumentController.shared.recentDocumentURLs,
-      locations: QuickSearchLocations(
-        urls: bookmarks.compactMap(\.url),
-        filenameExtensions: Set(extensions.map { $0.lowercased() }),
-        showsHiddenFiles: AppPreferences.General.showHiddenFiles,
-        errors: bookmarks.compactMap { $0.error?.localizedDescription }
-      ),
+      locations: { [bookmarkStore] in
+        let bookmarks = bookmarkStore.load()
+        return QuickSearchLocations(
+          urls: bookmarks.compactMap(\.url),
+          showsHiddenFiles: AppPreferences.General.showHiddenFiles,
+          isFileEligible: { !$0.isBinaryFile },
+          errors: bookmarks.compactMap { $0.error?.localizedDescription }
+        )
+      },
       document: quickSearchDocument(in: sourceWindow),
       menu: NSApp.mainMenu,
       openRecentMenu: openRecentMenu,
