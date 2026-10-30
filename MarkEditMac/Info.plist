@@ -134,6 +134,8 @@
 	</array>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>NSAutoFillRequiresTextContentTypeForOneTimeCodeOnMac</key>
+	<true/>
 	<key>OSAScriptingDefinition</key>
 	<string>MarkEdit.sdef</string>
 	<key>CFBundleURLTypes</key>
