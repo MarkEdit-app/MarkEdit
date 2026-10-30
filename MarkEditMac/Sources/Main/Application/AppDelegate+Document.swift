@@ -24,7 +24,7 @@ extension AppDelegate {
   func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
     let menu = NSMenu()
 
-    // Keep explicit file actions available when they aren't the default behavior
+    // Keep explicit actions available when they aren't the default behavior
     let behavior = AppPreferences.General.newWindowBehavior
     if behavior != .newDocument {
       menu.addItem(withTitle: Localized.Document.newDocument) {
@@ -36,6 +36,13 @@ extension AppDelegate {
     if behavior != .openDocument {
       menu.addItem(withTitle: Localized.Document.openDocument) {
         sender.showOpenPanel()
+      }
+    }
+
+    if behavior != .quickSearch {
+      menu.addItem(withTitle: Localized.QuickSearch.title) { [weak self] in
+        self?.quickSearch(nil)
+        NSApp.activate(ignoringOtherApps: true)
       }
     }
 
