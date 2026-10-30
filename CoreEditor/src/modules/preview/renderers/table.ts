@@ -15,7 +15,7 @@ interface DOMPurify {
 
 export async function renderTable(container: HTMLElement, code: string, loadModule: ModuleLoader): Promise<void> {
   const [{ marked }, { default: purify }] = await Promise.all([
-    loadModule<{ marked: Marked }>('https://cdn.jsdelivr.net/npm/marked@18.1.1/lib/marked.esm.js'),
+    loadModule<{ marked: Marked }>('https://cdn.jsdelivr.net/npm/marked@18.1.2/lib/marked.esm.js'),
     loadModule<{ default: DOMPurify }>('https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.es.mjs'),
   ]);
 
