@@ -18,9 +18,6 @@ final class EditorPreloader {
   static let shared = EditorPreloader()
 
   func warmUp() {
-    // Launch the Networking process now, it otherwise starts lazily
-    WKWebsiteDataStore.default().launchNetworkProcess()
-
     // Deliberately synchronous, AppKit doesn't drain the main queue until the app finishes launching
     if preloadedController == nil {
       preloadedController = EditorViewController()

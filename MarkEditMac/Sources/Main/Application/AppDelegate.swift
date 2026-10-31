@@ -75,7 +75,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     NSApp.appearance = AppPreferences.General.appearance.resolved()
-    EditorPreloader.shared.warmUp()
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
@@ -90,6 +89,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.appDelegate?.updateQuickSearchAppearance()
       }
     }
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(windowDidBecomeKey(_:)),
+      name: NSWindow.didBecomeKeyNotification,
+      object: nil
+    )
 
     NotificationCenter.default.addObserver(
       self,
@@ -271,6 +277,20 @@ extension AppDelegate {
 // MARK: - Private
 
 private extension AppDelegate {
+  @objc func windowDidBecomeKey(_ notification: Notification) {
+    guard let window = notification.object as? NSWindow else {
+      return
+    }
+
+    guard window is NSOpenPanel || window is QuickSearchWindow else {
+      return
+    }
+
+    DispatchQueue.main.async {
+      EditorPreloader.shared.warmUp()
+    }
+  }
+
   @objc func windowDidResignKey(_ notification: Notification) {
     // [AppKit quirk] Leaving NSOpenPanel up across app switches causes a visible
     // flash the next time the panel is shown (e.g. via Dock > Recent Documents).
