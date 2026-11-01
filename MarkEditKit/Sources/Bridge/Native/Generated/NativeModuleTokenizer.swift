@@ -46,68 +46,47 @@ final class NativeBridgeTokenizer: NativeBridge {
   }
 
   private func tokenize(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var anchor: TextTokenizeAnchor
+    let parameter_anchor: TextTokenizeAnchor
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        anchor = try container.value("anchor")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_anchor = try container.value("anchor")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.tokenize(anchor: message.anchor)
+    let result = await module.tokenize(anchor: parameter_anchor)
     return .success(result)
   }
 
   private func moveWordBackward(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var anchor: TextTokenizeAnchor
+    let parameter_anchor: TextTokenizeAnchor
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        anchor = try container.value("anchor")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_anchor = try container.value("anchor")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.moveWordBackward(anchor: message.anchor)
+    let result = await module.moveWordBackward(anchor: parameter_anchor)
     return .success(result)
   }
 
   private func moveWordForward(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var anchor: TextTokenizeAnchor
+    let parameter_anchor: TextTokenizeAnchor
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        anchor = try container.value("anchor")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_anchor = try container.value("anchor")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.moveWordForward(anchor: message.anchor)
+    let result = await module.moveWordForward(anchor: parameter_anchor)
     return .success(result)
   }
 }

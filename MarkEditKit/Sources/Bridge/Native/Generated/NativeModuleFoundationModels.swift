@@ -45,131 +45,96 @@ final class NativeBridgeFoundationModels: NativeBridge {
     case "respondTo":
       return await respondTo(parameters: parameters)
     case "streamResponseTo":
-      return await streamResponseTo(parameters: parameters)
+      return streamResponseTo(parameters: parameters)
     default:
       return nil
     }
   }
 
   private func availability(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var modelName: String
+    let parameter_modelName: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        modelName = try container.value("modelName")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_modelName = try container.value("modelName")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.availability(modelName: message.modelName)
+    let result = await module.availability(modelName: parameter_modelName)
     return .success(result)
   }
 
   private func createSession(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var modelName: String
-      var instructions: String?
+    let parameter_modelName: String
+    let parameter_instructions: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        modelName = try container.value("modelName")
-        instructions = try container.value("instructions")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_modelName = try container.value("modelName")
+      parameter_instructions = try container.value("instructions")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.createSession(modelName: message.modelName, instructions: message.instructions)
+    let result = await module.createSession(modelName: parameter_modelName, instructions: parameter_instructions)
     return .success(result)
   }
 
   private func isResponding(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var sessionID: String?
+    let parameter_sessionID: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        sessionID = try container.value("sessionID")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_sessionID = try container.value("sessionID")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.isResponding(sessionID: message.sessionID)
+    let result = await module.isResponding(sessionID: parameter_sessionID)
     return .success(result)
   }
 
   private func respondTo(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var sessionID: String?
-      var prompt: String
-      var options: LanguageModelGenerationOptions?
+    let parameter_sessionID: String?
+    let parameter_prompt: String
+    let parameter_options: LanguageModelGenerationOptions?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        sessionID = try container.value("sessionID")
-        prompt = try container.value("prompt")
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_sessionID = try container.value("sessionID")
+      parameter_prompt = try container.value("prompt")
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.respondTo(sessionID: message.sessionID, prompt: message.prompt, options: message.options)
+    let result = await module.respondTo(sessionID: parameter_sessionID, prompt: parameter_prompt, options: parameter_options)
     return .success(result)
   }
 
-  private func streamResponseTo(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var sessionID: String?
-      var streamID: String
-      var prompt: String
-      var options: LanguageModelGenerationOptions?
+  private func streamResponseTo(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_sessionID: String?
+    let parameter_streamID: String
+    let parameter_prompt: String
+    let parameter_options: LanguageModelGenerationOptions?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        sessionID = try container.value("sessionID")
-        streamID = try container.value("streamID")
-        prompt = try container.value("prompt")
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_sessionID = try container.value("sessionID")
+      parameter_streamID = try container.value("streamID")
+      parameter_prompt = try container.value("prompt")
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.streamResponseTo(sessionID: message.sessionID, streamID: message.streamID, prompt: message.prompt, options: message.options)
+    module.streamResponseTo(sessionID: parameter_sessionID, streamID: parameter_streamID, prompt: parameter_prompt, options: parameter_options)
     return .success(nil)
   }
 }

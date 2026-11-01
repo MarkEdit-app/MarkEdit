@@ -49,100 +49,72 @@ final class NativeBridgeSecretStorage: NativeBridge {
   }
 
   private func has(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var capability: String?
-      var key: String
+    let parameter_capability: String?
+    let parameter_key: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        capability = try container.value("capability")
-        key = try container.value("key")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_capability = try container.value("capability")
+      parameter_key = try container.value("key")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.has(capability: message.capability, key: message.key)
+    let result = await module.has(capability: parameter_capability, key: parameter_key)
     return .success(result)
   }
 
   private func get(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var capability: String?
-      var key: String
+    let parameter_capability: String?
+    let parameter_key: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        capability = try container.value("capability")
-        key = try container.value("key")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_capability = try container.value("capability")
+      parameter_key = try container.value("key")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.get(capability: message.capability, key: message.key)
+    let result = await module.get(capability: parameter_capability, key: parameter_key)
     return .success(result)
   }
 
   private func set(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var capability: String?
-      var key: String
-      var value: String
+    let parameter_capability: String?
+    let parameter_key: String
+    let parameter_value: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        capability = try container.value("capability")
-        key = try container.value("key")
-        value = try container.value("value")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_capability = try container.value("capability")
+      parameter_key = try container.value("key")
+      parameter_value = try container.value("value")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.set(capability: message.capability, key: message.key, value: message.value)
+    let result = await module.set(capability: parameter_capability, key: parameter_key, value: parameter_value)
     return .success(result)
   }
 
   private func delete(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var capability: String?
-      var key: String
+    let parameter_capability: String?
+    let parameter_key: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        capability = try container.value("capability")
-        key = try container.value("key")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_capability = try container.value("capability")
+      parameter_key = try container.value("key")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.delete(capability: message.capability, key: message.key)
+    let result = await module.delete(capability: parameter_capability, key: parameter_key)
     return .success(result)
   }
 }

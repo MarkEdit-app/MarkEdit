@@ -40,28 +40,21 @@ final class NativeBridgeTranslation: NativeBridge {
   }
 
   private func translate(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var text: String
-      var from: String?
-      var to: String?
+    let parameter_text: String
+    let parameter_from: String?
+    let parameter_to: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        text = try container.value("text")
-        from = try container.value("from")
-        to = try container.value("to")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_text = try container.value("text")
+      parameter_from = try container.value("from")
+      parameter_to = try container.value("to")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.translate(text: message.text, from: message.from, to: message.to)
+    let result = await module.translate(text: parameter_text, from: parameter_from, to: parameter_to)
     return .success(result)
   }
 }
