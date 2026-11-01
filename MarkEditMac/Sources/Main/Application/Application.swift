@@ -79,7 +79,6 @@ final class Application: NSApplication {
 
 enum ApplicationEnvironment {
   static let isRunningTests = NSClassFromString("XCTestCase") != nil
-
   static let testIdentifier = "app.markedit.tests.\(UUID().uuidString)"
 
   static var preferences: UserDefaults {
@@ -90,6 +89,7 @@ enum ApplicationEnvironment {
     guard let preferences = UserDefaults(suiteName: testIdentifier) else {
       preconditionFailure("Unable to create isolated test preferences")
     }
+
     return preferences
   }
 
@@ -98,12 +98,17 @@ enum ApplicationEnvironment {
       return .documentsDirectory
     }
 
-    let directory = FileManager.default.temporaryDirectory.appending(path: testIdentifier, directoryHint: .isDirectory)
+    let directory = FileManager.default.temporaryDirectory.appending(
+      path: testIdentifier,
+      directoryHint: .isDirectory
+    )
+
     do {
       try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     } catch {
       preconditionFailure("Unable to create isolated test directory: \(error)")
     }
+
     return directory
   }()
 }
