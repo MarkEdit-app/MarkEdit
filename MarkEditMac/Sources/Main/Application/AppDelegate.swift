@@ -180,11 +180,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     if AppCustomization.isSafeMode {
       mainAppMenuItem?.title = Localized.General.safeModeAppName
     }
-
-    // Let the launch callback return before running deferred AppKit setup
-    DispatchQueue.main.async {
-      AppLaunchCoordinator.markReady()
-    }
   }
 
   func applicationShouldTerminate(_ application: NSApplication) -> NSApplication.TerminateReply {
@@ -287,13 +282,13 @@ private extension AppDelegate {
       return
     }
 
-    guard window is NSOpenPanel || window is QuickSearchWindow else {
-      return
+    if window is NSOpenPanel || window is QuickSearchWindow {
+      DispatchQueue.main.async {
+        EditorPreloader.shared.warmUp()
+      }
     }
 
-    DispatchQueue.main.async {
-      EditorPreloader.shared.warmUp()
-    }
+    AppDeferredTasks.markReady()
   }
 
   @objc func windowDidResignKey(_ notification: Notification) {
