@@ -45,232 +45,183 @@ final class NativeBridgeCore: NativeBridge {
   func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
     switch method {
     case "notifyWindowDidLoad":
-      return await notifyWindowDidLoad(parameters: parameters)
+      return notifyWindowDidLoad(parameters: parameters)
     case "notifyWindowResize":
-      return await notifyWindowResize(parameters: parameters)
+      return notifyWindowResize(parameters: parameters)
     case "notifyWindowMove":
-      return await notifyWindowMove(parameters: parameters)
+      return notifyWindowMove(parameters: parameters)
     case "notifyWindowClose":
-      return await notifyWindowClose(parameters: parameters)
+      return notifyWindowClose(parameters: parameters)
     case "notifyEditorDidBecomeIdle":
-      return await notifyEditorDidBecomeIdle(parameters: parameters)
+      return notifyEditorDidBecomeIdle(parameters: parameters)
     case "notifyBackgroundColorDidChange":
-      return await notifyBackgroundColorDidChange(parameters: parameters)
+      return notifyBackgroundColorDidChange(parameters: parameters)
     case "notifyViewportScaleDidChange":
-      return await notifyViewportScaleDidChange(parameters: parameters)
+      return notifyViewportScaleDidChange(parameters: parameters)
     case "notifyViewDidUpdate":
-      return await notifyViewDidUpdate(parameters: parameters)
+      return notifyViewDidUpdate(parameters: parameters)
     case "notifyContentHeightDidChange":
-      return await notifyContentHeightDidChange(parameters: parameters)
+      return notifyContentHeightDidChange(parameters: parameters)
     case "notifyContentOffsetDidChange":
-      return await notifyContentOffsetDidChange(parameters: parameters)
+      return notifyContentOffsetDidChange(parameters: parameters)
     case "notifyCompositionEnded":
-      return await notifyCompositionEnded(parameters: parameters)
+      return notifyCompositionEnded(parameters: parameters)
     case "notifyLinkClicked":
-      return await notifyLinkClicked(parameters: parameters)
+      return notifyLinkClicked(parameters: parameters)
     case "notifyLightWarning":
-      return await notifyLightWarning(parameters: parameters)
+      return notifyLightWarning(parameters: parameters)
     default:
       return nil
     }
   }
 
-  private func notifyWindowDidLoad(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyWindowDidLoad(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowDidLoad()
     return .success(nil)
   }
 
-  private func notifyWindowResize(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var method: NativeModuleCoreNotifyWindowResizeMethod
-      var width: Double
-      var height: Double
+  private func notifyWindowResize(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_method: NativeModuleCoreNotifyWindowResizeMethod
+    let parameter_width: Double
+    let parameter_height: Double
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        method = try container.value("method")
-        width = try container.value("width")
-        height = try container.value("height")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_method = try container.value("method")
+      parameter_width = try container.value("width")
+      parameter_height = try container.value("height")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyWindowResize(method: message.method, width: message.width, height: message.height)
+    module.notifyWindowResize(method: parameter_method, width: parameter_width, height: parameter_height)
     return .success(nil)
   }
 
-  private func notifyWindowMove(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var method: NativeModuleCoreNotifyWindowMoveMethod
-      var x: Double
-      var y: Double
+  private func notifyWindowMove(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_method: NativeModuleCoreNotifyWindowMoveMethod
+    let parameter_x: Double
+    let parameter_y: Double
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        method = try container.value("method")
-        x = try container.value("x")
-        y = try container.value("y")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_method = try container.value("method")
+      parameter_x = try container.value("x")
+      parameter_y = try container.value("y")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyWindowMove(method: message.method, x: message.x, y: message.y)
+    module.notifyWindowMove(method: parameter_method, x: parameter_x, y: parameter_y)
     return .success(nil)
   }
 
-  private func notifyWindowClose(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyWindowClose(parameters: Data) -> Result<Any?, Error>? {
     module.notifyWindowClose()
     return .success(nil)
   }
 
-  private func notifyEditorDidBecomeIdle(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyEditorDidBecomeIdle(parameters: Data) -> Result<Any?, Error>? {
     module.notifyEditorDidBecomeIdle()
     return .success(nil)
   }
 
-  private func notifyBackgroundColorDidChange(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var color: Int
-      var alpha: Double
+  private func notifyBackgroundColorDidChange(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_color: Int
+    let parameter_alpha: Double
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        color = try container.value("color")
-        alpha = try container.value("alpha")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_color = try container.value("color")
+      parameter_alpha = try container.value("alpha")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyBackgroundColorDidChange(color: message.color, alpha: message.alpha)
+    module.notifyBackgroundColorDidChange(color: parameter_color, alpha: parameter_alpha)
     return .success(nil)
   }
 
-  private func notifyViewportScaleDidChange(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyViewportScaleDidChange(parameters: Data) -> Result<Any?, Error>? {
     module.notifyViewportScaleDidChange()
     return .success(nil)
   }
 
-  private func notifyViewDidUpdate(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var contentEdited: Bool
-      var compositionEnded: Bool
-      var isDirty: Bool
-      var selectedLineColumn: LineColumnInfo
+  private func notifyViewDidUpdate(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_contentEdited: Bool
+    let parameter_compositionEnded: Bool
+    let parameter_isDirty: Bool
+    let parameter_selectedLineColumn: LineColumnInfo
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        contentEdited = try container.value("contentEdited")
-        compositionEnded = try container.value("compositionEnded")
-        isDirty = try container.value("isDirty")
-        selectedLineColumn = try container.value("selectedLineColumn")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_contentEdited = try container.value("contentEdited")
+      parameter_compositionEnded = try container.value("compositionEnded")
+      parameter_isDirty = try container.value("isDirty")
+      parameter_selectedLineColumn = try container.value("selectedLineColumn")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyViewDidUpdate(contentEdited: message.contentEdited, compositionEnded: message.compositionEnded, isDirty: message.isDirty, selectedLineColumn: message.selectedLineColumn)
+    module.notifyViewDidUpdate(contentEdited: parameter_contentEdited, compositionEnded: parameter_compositionEnded, isDirty: parameter_isDirty, selectedLineColumn: parameter_selectedLineColumn)
     return .success(nil)
   }
 
-  private func notifyContentHeightDidChange(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var bottomPanelHeight: Double
+  private func notifyContentHeightDidChange(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_bottomPanelHeight: Double
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        bottomPanelHeight = try container.value("bottomPanelHeight")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_bottomPanelHeight = try container.value("bottomPanelHeight")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyContentHeightDidChange(bottomPanelHeight: message.bottomPanelHeight)
+    module.notifyContentHeightDidChange(bottomPanelHeight: parameter_bottomPanelHeight)
     return .success(nil)
   }
 
-  private func notifyContentOffsetDidChange(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyContentOffsetDidChange(parameters: Data) -> Result<Any?, Error>? {
     module.notifyContentOffsetDidChange()
     return .success(nil)
   }
 
-  private func notifyCompositionEnded(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var selectedLineColumn: LineColumnInfo
+  private func notifyCompositionEnded(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_selectedLineColumn: LineColumnInfo
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        selectedLineColumn = try container.value("selectedLineColumn")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_selectedLineColumn = try container.value("selectedLineColumn")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyCompositionEnded(selectedLineColumn: message.selectedLineColumn)
+    module.notifyCompositionEnded(selectedLineColumn: parameter_selectedLineColumn)
     return .success(nil)
   }
 
-  private func notifyLinkClicked(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var link: String
+  private func notifyLinkClicked(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_link: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        link = try container.value("link")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_link = try container.value("link")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.notifyLinkClicked(link: message.link)
+    module.notifyLinkClicked(link: parameter_link)
     return .success(nil)
   }
 
-  private func notifyLightWarning(parameters: Data) async -> Result<Any?, Error>? {
+  private func notifyLightWarning(parameters: Data) -> Result<Any?, Error>? {
     module.notifyLightWarning()
     return .success(nil)
   }

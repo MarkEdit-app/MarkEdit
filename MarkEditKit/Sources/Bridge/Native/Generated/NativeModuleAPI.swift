@@ -70,9 +70,9 @@ final class NativeBridgeAPI: NativeBridge {
     case "recentDocumentPaths":
       return await recentDocumentPaths(parameters: parameters)
     case "addMainMenuItems":
-      return await addMainMenuItems(parameters: parameters)
+      return addMainMenuItems(parameters: parameters)
     case "showContextMenu":
-      return await showContextMenu(parameters: parameters)
+      return showContextMenu(parameters: parameters)
     case "showAlert":
       return await showAlert(parameters: parameters)
     case "showTextBox":
@@ -116,37 +116,30 @@ final class NativeBridgeAPI: NativeBridge {
     case "getPasteboardString":
       return await getPasteboardString(parameters: parameters)
     case "terminateApp":
-      return await terminateApp(parameters: parameters)
+      return terminateApp(parameters: parameters)
     case "relaunchApp":
-      return await relaunchApp(parameters: parameters)
+      return relaunchApp(parameters: parameters)
     case "playSystemBeep":
-      return await playSystemBeep(parameters: parameters)
+      return playSystemBeep(parameters: parameters)
     default:
       return nil
     }
   }
 
   private func openDocument(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String
-      var target: NativeModuleAPIOpenDocumentTarget?
+    let parameter_path: String
+    let parameter_target: NativeModuleAPIOpenDocumentTarget?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-        target = try container.value("target")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
+      parameter_target = try container.value("target")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.openDocument(path: message.path, target: message.target)
+    let result = await module.openDocument(path: parameter_path, target: parameter_target)
     return .success(result)
   }
 
@@ -165,391 +158,272 @@ final class NativeBridgeAPI: NativeBridge {
     return .success(result)
   }
 
-  private func addMainMenuItems(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var items: [WebMenuItem]
+  private func addMainMenuItems(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_items: [WebMenuItem]
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        items = try container.value("items")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_items = try container.value("items")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.addMainMenuItems(items: message.items)
+    module.addMainMenuItems(items: parameter_items)
     return .success(nil)
   }
 
-  private func showContextMenu(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var items: [WebMenuItem]
-      var location: WebPoint
-      var highlightedIndex: Int?
+  private func showContextMenu(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_items: [WebMenuItem]
+    let parameter_location: WebPoint
+    let parameter_highlightedIndex: Int?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        items = try container.value("items")
-        location = try container.value("location")
-        highlightedIndex = try container.value("highlightedIndex")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_items = try container.value("items")
+      parameter_location = try container.value("location")
+      parameter_highlightedIndex = try container.value("highlightedIndex")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.showContextMenu(items: message.items, location: message.location, highlightedIndex: message.highlightedIndex)
+    module.showContextMenu(items: parameter_items, location: parameter_location, highlightedIndex: parameter_highlightedIndex)
     return .success(nil)
   }
 
   private func showAlert(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var title: String?
-      var message: String?
-      var buttons: [String]?
+    let parameter_title: String?
+    let parameter_message: String?
+    let parameter_buttons: [String]?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        title = try container.value("title")
-        message = try container.value("message")
-        buttons = try container.value("buttons")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_title = try container.value("title")
+      parameter_message = try container.value("message")
+      parameter_buttons = try container.value("buttons")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.showAlert(title: message.title, message: message.message, buttons: message.buttons)
+    let result = await module.showAlert(title: parameter_title, message: parameter_message, buttons: parameter_buttons)
     return .success(result)
   }
 
   private func showTextBox(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var title: String?
-      var placeholder: String?
-      var defaultValue: String?
+    let parameter_title: String?
+    let parameter_placeholder: String?
+    let parameter_defaultValue: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        title = try container.value("title")
-        placeholder = try container.value("placeholder")
-        defaultValue = try container.value("defaultValue")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_title = try container.value("title")
+      parameter_placeholder = try container.value("placeholder")
+      parameter_defaultValue = try container.value("defaultValue")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.showTextBox(title: message.title, placeholder: message.placeholder, defaultValue: message.defaultValue)
+    let result = await module.showTextBox(title: parameter_title, placeholder: parameter_placeholder, defaultValue: parameter_defaultValue)
     return .success(result)
   }
 
   private func showOpenPanel(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var options: OpenPanelOptions
+    let parameter_options: OpenPanelOptions
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.showOpenPanel(options: message.options)
+    let result = await module.showOpenPanel(options: parameter_options)
     return .success(result)
   }
 
   private func showSavePanel(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var options: SavePanelOptions
+    let parameter_options: SavePanelOptions
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.showSavePanel(options: message.options)
+    let result = await module.showSavePanel(options: parameter_options)
     return .success(result)
   }
 
   private func showPrintPanel(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var options: PrintPanelOptions
+    let parameter_options: PrintPanelOptions
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.showPrintPanel(options: message.options)
+    let result = await module.showPrintPanel(options: parameter_options)
     return .success(result)
   }
 
   private func runService(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var name: String
-      var input: String?
+    let parameter_name: String
+    let parameter_input: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        name = try container.value("name")
-        input = try container.value("input")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_name = try container.value("name")
+      parameter_input = try container.value("input")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.runService(name: message.name, input: message.input)
+    let result = await module.runService(name: parameter_name, input: parameter_input)
     return .success(result)
   }
 
   private func openFile(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String
+    let parameter_path: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.openFile(path: message.path)
+    let result = await module.openFile(path: parameter_path)
     return .success(result)
   }
 
   private func createFile(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var options: CreateFileOptions
+    let parameter_options: CreateFileOptions
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.createFile(options: message.options)
+    let result = await module.createFile(options: parameter_options)
     return .success(result)
   }
 
   private func deleteFile(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String
+    let parameter_path: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.deleteFile(path: message.path)
+    let result = await module.deleteFile(path: parameter_path)
     return .success(result)
   }
 
   private func moveFile(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var options: MoveFileOptions
+    let parameter_options: MoveFileOptions
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        options = try container.value("options")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_options = try container.value("options")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.moveFile(options: message.options)
+    let result = await module.moveFile(options: parameter_options)
     return .success(result)
   }
 
   private func revealFile(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String?
+    let parameter_path: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.revealFile(path: message.path)
+    let result = await module.revealFile(path: parameter_path)
     return .success(result)
   }
 
   private func listFiles(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String
+    let parameter_path: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.listFiles(path: message.path)
+    let result = await module.listFiles(path: parameter_path)
     return .success(result)
   }
 
   private func getFileContent(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String?
+    let parameter_path: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.getFileContent(path: message.path)
+    let result = await module.getFileContent(path: parameter_path)
     return .success(result)
   }
 
   private func getFileObject(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String?
+    let parameter_path: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.getFileObject(path: message.path)
+    let result = await module.getFileObject(path: parameter_path)
     return .success(result)
   }
 
   private func getFileInfo(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var path: String?
+    let parameter_path: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        path = try container.value("path")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_path = try container.value("path")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.getFileInfo(path: message.path)
+    let result = await module.getFileInfo(path: parameter_path)
     return .success(result)
   }
 
@@ -559,68 +433,47 @@ final class NativeBridgeAPI: NativeBridge {
   }
 
   private func getFileVersionContent(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var id: String
+    let parameter_id: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        id = try container.value("id")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_id = try container.value("id")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.getFileVersionContent(id: message.id)
+    let result = await module.getFileVersionContent(id: parameter_id)
     return .success(result)
   }
 
   private func restoreFileVersion(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var id: String
+    let parameter_id: String
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        id = try container.value("id")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_id = try container.value("id")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.restoreFileVersion(id: message.id)
+    let result = await module.restoreFileVersion(id: parameter_id)
     return .success(result)
   }
 
   private func deleteLocalFileVersions(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var ids: [String]
+    let parameter_ids: [String]
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        ids = try container.value("ids")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_ids = try container.value("ids")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.deleteLocalFileVersions(ids: message.ids)
+    let result = await module.deleteLocalFileVersions(ids: parameter_ids)
     return .success(result)
   }
 
@@ -634,17 +487,17 @@ final class NativeBridgeAPI: NativeBridge {
     return .success(result)
   }
 
-  private func terminateApp(parameters: Data) async -> Result<Any?, Error>? {
+  private func terminateApp(parameters: Data) -> Result<Any?, Error>? {
     module.terminateApp()
     return .success(nil)
   }
 
-  private func relaunchApp(parameters: Data) async -> Result<Any?, Error>? {
+  private func relaunchApp(parameters: Data) -> Result<Any?, Error>? {
     module.relaunchApp()
     return .success(nil)
   }
 
-  private func playSystemBeep(parameters: Data) async -> Result<Any?, Error>? {
+  private func playSystemBeep(parameters: Data) -> Result<Any?, Error>? {
     module.playSystemBeep()
     return .success(nil)
   }

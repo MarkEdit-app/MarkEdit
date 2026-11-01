@@ -39,93 +39,79 @@ final class NativeBridgeCompletion: NativeBridge {
   func invoke(method: String, parameters: Data) async -> Result<Any?, Error>? {
     switch method {
     case "requestCompletions":
-      return await requestCompletions(parameters: parameters)
+      return requestCompletions(parameters: parameters)
     case "commitCompletion":
-      return await commitCompletion(parameters: parameters)
+      return commitCompletion(parameters: parameters)
     case "cancelCompletion":
-      return await cancelCompletion(parameters: parameters)
+      return cancelCompletion(parameters: parameters)
     case "selectPrevious":
-      return await selectPrevious(parameters: parameters)
+      return selectPrevious(parameters: parameters)
     case "selectNext":
-      return await selectNext(parameters: parameters)
+      return selectNext(parameters: parameters)
     case "selectTop":
-      return await selectTop(parameters: parameters)
+      return selectTop(parameters: parameters)
     case "selectBottom":
-      return await selectBottom(parameters: parameters)
+      return selectBottom(parameters: parameters)
     default:
       return nil
     }
   }
 
-  private func requestCompletions(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var anchor: TextTokenizeAnchor
-      var fullText: String?
-      var userInitiated: Bool
+  private func requestCompletions(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_anchor: TextTokenizeAnchor
+    let parameter_fullText: String?
+    let parameter_userInitiated: Bool
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        anchor = try container.value("anchor")
-        fullText = try container.value("fullText")
-        userInitiated = try container.value("userInitiated")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_anchor = try container.value("anchor")
+      parameter_fullText = try container.value("fullText")
+      parameter_userInitiated = try container.value("userInitiated")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.requestCompletions(anchor: message.anchor, fullText: message.fullText, userInitiated: message.userInitiated)
+    module.requestCompletions(anchor: parameter_anchor, fullText: parameter_fullText, userInitiated: parameter_userInitiated)
     return .success(nil)
   }
 
-  private func commitCompletion(parameters: Data) async -> Result<Any?, Error>? {
-    struct Message: Decodable {
-      var insert: String?
+  private func commitCompletion(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_insert: String?
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        insert = try container.value("insert")
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_insert = try container.value("insert")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    module.commitCompletion(insert: message.insert)
+    module.commitCompletion(insert: parameter_insert)
     return .success(nil)
   }
 
-  private func cancelCompletion(parameters: Data) async -> Result<Any?, Error>? {
+  private func cancelCompletion(parameters: Data) -> Result<Any?, Error>? {
     module.cancelCompletion()
     return .success(nil)
   }
 
-  private func selectPrevious(parameters: Data) async -> Result<Any?, Error>? {
+  private func selectPrevious(parameters: Data) -> Result<Any?, Error>? {
     module.selectPrevious()
     return .success(nil)
   }
 
-  private func selectNext(parameters: Data) async -> Result<Any?, Error>? {
+  private func selectNext(parameters: Data) -> Result<Any?, Error>? {
     module.selectNext()
     return .success(nil)
   }
 
-  private func selectTop(parameters: Data) async -> Result<Any?, Error>? {
+  private func selectTop(parameters: Data) -> Result<Any?, Error>? {
     module.selectTop()
     return .success(nil)
   }
 
-  private func selectBottom(parameters: Data) async -> Result<Any?, Error>? {
+  private func selectBottom(parameters: Data) -> Result<Any?, Error>? {
     module.selectBottom()
     return .success(nil)
   }

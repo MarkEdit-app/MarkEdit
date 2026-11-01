@@ -36,7 +36,7 @@ final class {{customTags.bridgeName}}: NativeBridge {
     switch method {
     {{#methods}}
     case "{{methodName}}":
-      return await {{methodName}}(parameters: parameters)
+      return {{#returnType}}await {{/returnType}}{{methodName}}(parameters: parameters)
     {{/methods}}
     default:
       return nil
@@ -44,31 +44,24 @@ final class {{customTags.bridgeName}}: NativeBridge {
   }
   {{#methods}}
 
-  private func {{methodName}}(parameters: Data) async -> Result<Any?, Error>? {
+  private func {{methodName}}(parameters: Data){{#returnType}} async{{/returnType}} -> Result<Any?, Error>? {
     {{#parameters.length}}
-    struct Message: Decodable {
-      {{#parameters}}
-      var {{name}}: {{type}}
-      {{/parameters}}
+    {{#parameters}}
+    let parameter_{{name}}: {{type}}
+    {{/parameters}}
 
-      init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: BridgeFieldKey.self)
-        {{#parameters}}
-        {{name}} = try container.value("{{name}}")
-        {{/parameters}}
-      }
-    }
-
-    let message: Message
     do {
-      message = try decoder.decode(Message.self, from: parameters)
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      {{#parameters}}
+      parameter_{{name}} = try container.value("{{name}}")
+      {{/parameters}}
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
     {{/parameters.length}}
-    {{#returnType}}let result = await {{/returnType}}module.{{methodName}}({{#parameters}}{{name}}: message.{{name}}{{^last}}, {{/last}}{{/parameters}})
+    {{#returnType}}let result = await {{/returnType}}module.{{methodName}}({{#parameters}}{{name}}: parameter_{{name}}{{^last}}, {{/last}}{{/parameters}})
     return .success({{#returnType}}result{{/returnType}}{{^returnType}}nil{{/returnType}})
   }
   {{/methods}}
