@@ -196,6 +196,14 @@ final class QuickSearchMenuTests: XCTestCase {
     let source = QuickSearchMenuActions(menu: menu, sourceWindow: nil, suggestedActions: [selector, missingSelector])
     XCTAssertEqual(source.actions.count, 4)
     XCTAssertEqual(source.actions.filter { $0.suggestedOrder != nil }.map(\.title), ["Available"])
+
+    let availableSource = QuickSearchMenuActions(
+      menu: menu,
+      sourceWindow: nil,
+      excludesUnavailableActions: true
+    )
+
+    XCTAssertEqual(availableSource.actions.map(\.title), ["Available"])
   }
 
   func testMatchingMenuIncludesOnlyImmediateActions() throws {

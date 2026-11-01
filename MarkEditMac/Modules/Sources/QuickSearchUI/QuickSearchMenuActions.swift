@@ -12,6 +12,7 @@ final class QuickSearchMenuActions {
   private let menu: NSMenu
   private let openRecentMenu: NSMenu?
   private let suggestedActions: [Selector]
+  private let excludesUnavailableActions: Bool
   private weak var sourceWindow: NSWindow?
   private let hadSourceWindow: Bool
   private let refocusSourceWindow: @MainActor () async throws -> Void
@@ -22,11 +23,13 @@ final class QuickSearchMenuActions {
     sourceWindow: NSWindow?,
     openRecentMenu: NSMenu? = nil,
     suggestedActions: [Selector] = [],
+    excludesUnavailableActions: Bool = false,
     refocusSourceWindow: (@MainActor () async throws -> Void)? = nil
   ) {
     self.menu = menu
     self.openRecentMenu = openRecentMenu
     self.suggestedActions = suggestedActions
+    self.excludesUnavailableActions = excludesUnavailableActions
     self.sourceWindow = sourceWindow
     hadSourceWindow = sourceWindow != nil
     self.refocusSourceWindow = refocusSourceWindow ?? { [weak sourceWindow] in
@@ -89,6 +92,10 @@ final class QuickSearchMenuActions {
       if let submenu = item.submenu {
         collect(submenu, indices: indices, titles: titles, ancestorsEnabled: enabled)
       } else if let action = item.action {
+        guard !excludesUnavailableActions || (enabled && hasTarget(item)) else {
+          continue
+        }
+
         let suggestedOrder = suggestedActions.firstIndex(of: action)
         actions.append(.init(
           indices: indices,
