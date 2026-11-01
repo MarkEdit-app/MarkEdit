@@ -101,6 +101,7 @@ public final class QuickSearchController: NSObject {
         sourceWindow: NSApp.keyWindow,
         openRecentMenu: openRecentMenu,
         suggestedActions: suggestedActions,
+        excludesUnavailableActions: document == nil,
         refocusSourceWindow: refocusSourceWindow
       )
     }
