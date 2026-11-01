@@ -180,6 +180,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     if AppCustomization.isSafeMode {
       mainAppMenuItem?.title = Localized.General.safeModeAppName
     }
+
+    // Let the launch callback return before running deferred AppKit setup
+    DispatchQueue.main.async {
+      AppLaunchCoordinator.markReady()
+    }
   }
 
   func applicationShouldTerminate(_ application: NSApplication) -> NSApplication.TerminateReply {
