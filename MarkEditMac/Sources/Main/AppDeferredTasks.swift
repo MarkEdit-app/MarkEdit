@@ -1,12 +1,12 @@
 //
-//  AppLaunchCoordinator.swift
+//  AppDeferredTasks.swift
 //  MarkEditMac
 //
 //  Created by cyan on 11/1/26.
 //
 
 @MainActor
-enum AppLaunchCoordinator {
+enum AppDeferredTasks {
   private static var isReady = false
   private static var pending: [@MainActor () -> Void] = []
 
@@ -18,6 +18,7 @@ enum AppLaunchCoordinator {
     // Open the gate before draining so reentrant calls execute normally
     isReady = true
     let actions = pending
+
     pending.removeAll()
     actions.forEach { $0() }
   }

@@ -1,5 +1,5 @@
 //
-//  AppLaunchCoordinatorTests.swift
+//  AppDeferredTasksTests.swift
 //
 //  Created by cyan on 11/1/26.
 //
@@ -8,32 +8,32 @@ import XCTest
 @testable import MarkEdit
 
 @MainActor
-final class AppLaunchCoordinatorTests: XCTestCase {
+final class AppDeferredTasksTests: XCTestCase {
   func testLaunchLifecycle() {
     var calls: [Int] = []
 
-    AppLaunchCoordinator.performWhenReady {
+    AppDeferredTasks.performWhenReady {
       calls.append(1)
-      AppLaunchCoordinator.performWhenReady {
+      AppDeferredTasks.performWhenReady {
         calls.append(2)
       }
 
       XCTAssertEqual(calls, [1, 2])
-      AppLaunchCoordinator.markReady()
+      AppDeferredTasks.markReady()
     }
 
-    AppLaunchCoordinator.performWhenReady {
+    AppDeferredTasks.performWhenReady {
       calls.append(3)
     }
 
     XCTAssertTrue(calls.isEmpty)
-    AppLaunchCoordinator.markReady()
+    AppDeferredTasks.markReady()
     XCTAssertEqual(calls, [1, 2, 3])
 
-    AppLaunchCoordinator.markReady()
+    AppDeferredTasks.markReady()
     XCTAssertEqual(calls, [1, 2, 3])
 
-    AppLaunchCoordinator.performWhenReady {
+    AppDeferredTasks.performWhenReady {
       calls.append(4)
     }
 

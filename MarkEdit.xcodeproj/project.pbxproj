@@ -10,8 +10,8 @@
 		0A1100013010000000000001 /* QuickSearchUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100013010000000000002 /* QuickSearchUI */; };
 		0A1100013010000000000003 /* AppDelegate+QuickSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100013010000000000004 /* AppDelegate+QuickSearch.swift */; };
 		0A1100023010000000000001 /* QuickSearchCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0A1100023010000000000002 /* QuickSearchCore */; };
-		0A1100033010000000000001 /* AppLaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100033010000000000002 /* AppLaunchCoordinator.swift */; };
-		0A1100033010000000000003 /* AppLaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100033010000000000004 /* AppLaunchCoordinatorTests.swift */; };
+		0A1100033010000000000001 /* AppDeferredTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100033010000000000002 /* AppDeferredTasks.swift */; };
+		0A1100033010000000000003 /* AppDeferredTasksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1100033010000000000004 /* AppDeferredTasksTests.swift */; };
 		84FB00F02C6C4AED00850E94 /* AppWritingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */; };
 		8701D0A42CC12321006AF8C2 /* FileVersion in Frameworks */ = {isa = PBXBuildFile; productRef = 8701D0A32CC12321006AF8C2 /* FileVersion */; };
 		8703C175303E7DD300A896D0 /* QuickLookWindowSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */; };
@@ -194,8 +194,8 @@
 
 /* Begin PBXFileReference section */
 		0A1100013010000000000004 /* AppDelegate+QuickSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+QuickSearch.swift"; sourceTree = "<group>"; };
-		0A1100033010000000000002 /* AppLaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchCoordinator.swift; sourceTree = "<group>"; };
-		0A1100033010000000000004 /* AppLaunchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchCoordinatorTests.swift; sourceTree = "<group>"; };
+		0A1100033010000000000002 /* AppDeferredTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDeferredTasks.swift; sourceTree = "<group>"; };
+		0A1100033010000000000004 /* AppDeferredTasksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDeferredTasksTests.swift; sourceTree = "<group>"; };
 		84FB00EF2C6C4AED00850E94 /* AppWritingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWritingTools.swift; sourceTree = "<group>"; };
 		8703C171303E7DCF00A896D0 /* QuickLookWindowSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLookWindowSize.swift; sourceTree = "<group>"; };
 		87067E2629755D5C0052E795 /* EditorStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStatusView.swift; sourceTree = "<group>"; };
@@ -534,8 +534,8 @@
 				877D77C92DFA76E50086180B /* AppDesign.swift */,
 				87DCB61F2B284AAD00A3056F /* AppHacks.swift */,
 				877B965C2C63815000186414 /* AppHotKeys.swift */,
+				0A1100033010000000000002 /* AppDeferredTasks.swift */,
 				87B3ED592CBCA97D001FA6CE /* AppDocumentController.swift */,
-				0A1100033010000000000002 /* AppLaunchCoordinator.swift */,
 				873D6401295FCC3E0095DEF7 /* AppResources.swift */,
 				87DE081A294DDA49004AD33A /* AppTheme.swift */,
 				87AAEE0129585ADC00C8E61C /* AppPreferences.swift */,
@@ -733,12 +733,12 @@
 		87C600000000000000000006 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				0A1100033010000000000004 /* AppDeferredTasksTests.swift */,
 				87C600000000000000000002 /* EditorDocumentTests.swift */,
 				87EA18300000000000000001 /* EditorDocumentSaveTests.swift */,
 				87B000000000000000000103 /* BookmarkStoreTests.swift */,
 				87D700000000000000000002 /* QuickSearchMenuTests.swift */,
 				87D800000000000000000002 /* ContextMenuTests.swift */,
-				0A1100033010000000000004 /* AppLaunchCoordinatorTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1071,7 +1071,7 @@
 				874065792BB505F500B5CE5A /* EditorViewController+Events.swift in Sources */,
 				87067E2729755D5C0052E795 /* EditorStatusView.swift in Sources */,
 				87ACB6942BD8CA8400CE6F9E /* Application.swift in Sources */,
-				0A1100033010000000000001 /* AppLaunchCoordinator.swift in Sources */,
+				0A1100033010000000000001 /* AppDeferredTasks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1097,7 +1097,7 @@
 				87B000000000000000000104 /* BookmarkStoreTests.swift in Sources */,
 				87D700000000000000000001 /* QuickSearchMenuTests.swift in Sources */,
 				87D800000000000000000001 /* ContextMenuTests.swift in Sources */,
-				0A1100033010000000000003 /* AppLaunchCoordinatorTests.swift in Sources */,
+				0A1100033010000000000003 /* AppDeferredTasksTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
