@@ -211,6 +211,18 @@ final class RuntimeTests: XCTestCase {
     XCTAssertEqual(object?.responds(to: sel_getUid("loadAXBundles")), true, "Missing loadAXBundles")
   }
 
+  func testDelayedAppKitInternalFunctions() {
+    testExistenceOfSelector(
+      object: NSApplication.shared,
+      selector: "_customizeMainMenu"
+    )
+
+    testExistenceOfSelector(
+      object: NSDocumentController.shared,
+      selector: "_installOpenRecentMenus"
+    )
+  }
+
   func testExistenceOfShowWritingTools() {
     let webView = WKWebView()
     testExistenceOfSelector(object: webView, selector: "_showWritingTools")

@@ -9,6 +9,13 @@ import AppKit
 import MarkEditKit
 
 extension NSApplication {
+  static let swizzleCustomizeMainMenuOnce: () = {
+    NSApplication.exchangeInstanceMethods(
+      originalSelector: sel_getUid("_customizeMainMenu"),
+      swizzledSelector: #selector(swizzled_customizeMainMenu)
+    )
+  }()
+
   var appDelegate: AppDelegate? {
     guard let delegate = delegate as? AppDelegate else {
       Logger.assert(delegate != nil, "Expected to get AppDelegate")
@@ -35,6 +42,12 @@ extension NSApplication {
   func relaunchSafely(_ sender: Any? = nil, safeMode: Bool = false) {
     RunLoop.performOnMain {
       Terminator.shared.relaunchApp(sender, safeMode: safeMode)
+    }
+  }
+
+  @objc private func swizzled_customizeMainMenu() {
+    AppDeferredTasks.performWhenReady {
+      self.swizzled_customizeMainMenu()
     }
   }
 }

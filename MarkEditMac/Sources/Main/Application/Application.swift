@@ -20,6 +20,8 @@ final class Application: NSApplication {
     }
 
     NSObject.swizzleAccessibilityBundlesOnce
+    NSApplication.swizzleCustomizeMainMenuOnce
+    NSDocumentController.swizzleInstallOpenRecentMenusOnce
     NSMenu.swizzleIsUpdatedExcludingContentTypesOnce
     NSSpellChecker.swizzleInlineCompletionEnabledOnce
     NSSpellChecker.swizzleShowCompletionForCandidateOnce
