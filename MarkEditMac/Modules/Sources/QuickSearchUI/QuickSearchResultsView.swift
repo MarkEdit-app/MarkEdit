@@ -191,6 +191,14 @@ extension QuickSearchResultsView: NSTableViewDataSource, NSTableViewDelegate {
   }
 
   func tableViewSelectionDidChange(_ notification: Notification) {
+    updateSelectionAppearance()
+  }
+
+  func tableViewSelectionIsChanging(_ notification: Notification) {
+    updateSelectionAppearance()
+  }
+
+  private func updateSelectionAppearance() {
     tableView.enumerateAvailableRowViews { _, row in
       guard let cell = tableView.view(atColumn: 0, row: row, makeIfNecessary: false) as? ResultCell else {
         return
