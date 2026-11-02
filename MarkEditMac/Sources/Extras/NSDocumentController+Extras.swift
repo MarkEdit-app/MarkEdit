@@ -9,6 +9,13 @@ import AppKit
 import MarkEditKit
 
 extension NSDocumentController {
+  static let swizzleInstallOpenRecentMenusOnce: () = {
+    NSDocumentController.exchangeInstanceMethods(
+      originalSelector: sel_getUid("_installOpenRecentMenus"),
+      swizzledSelector: #selector(swizzled_installOpenRecentMenus)
+    )
+  }()
+
   var editorDocuments: [EditorDocument] {
     documents.compactMap { $0 as? EditorDocument }
   }
@@ -33,5 +40,11 @@ extension NSDocumentController {
 private extension NSDocumentController {
   var outdatedDocuments: [EditorDocument] {
     editorDocuments.filter { $0.isOutdated }
+  }
+
+  @objc func swizzled_installOpenRecentMenus() {
+    AppDeferredTasks.performWhenReady {
+      self.swizzled_installOpenRecentMenus()
+    }
   }
 }

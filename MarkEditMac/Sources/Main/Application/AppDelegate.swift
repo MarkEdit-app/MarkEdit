@@ -283,7 +283,7 @@ private extension AppDelegate {
     }
 
     if window is NSOpenPanel || window is QuickSearchWindow {
-      DispatchQueue.main.async {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
         EditorPreloader.shared.warmUp()
       }
     }
