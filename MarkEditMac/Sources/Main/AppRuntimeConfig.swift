@@ -84,6 +84,11 @@ enum AppRuntimeConfig {
       case completeModeOnly
 
       var shouldSuppress: Bool {
+        // See https://github.com/WebKit/WebKit/pull/76932 for details
+        guard AppRuntimeConfig.writingToolsBehavior != NSWritingToolsBehavior.none else {
+          return true
+        }
+
         switch self {
         case .systemDefault: return false
         case .alwaysHidden: return true
