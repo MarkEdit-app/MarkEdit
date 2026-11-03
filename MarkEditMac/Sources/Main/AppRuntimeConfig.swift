@@ -78,6 +78,20 @@ enum AppRuntimeConfig {
       }
     }
 
+    enum WritingToolsAffordance: String, Codable, Sendable {
+      case systemDefault
+      case alwaysHidden
+      case completeModeOnly
+
+      var shouldSuppress: Bool {
+        switch self {
+        case .systemDefault: return false
+        case .alwaysHidden: return true
+        case .completeModeOnly: return AppRuntimeConfig.writingToolsBehavior != .complete
+        }
+      }
+    }
+
     enum UpdateBehavior: String, Codable, Sendable {
       case never = "never"         // Don't check for updates
       case quiet = "quiet"         // Only reveal the update menu
@@ -97,6 +111,7 @@ enum AppRuntimeConfig {
     let restoreLastSelection: Bool?
     let indentBehavior: EditorIndentBehavior?
     let writingToolsBehavior: String?
+    let writingToolsAffordance: WritingToolsAffordance?
     let undoGroupingInterval: Double?
     let headerFontSizeDiffs: [Double]?
     let visibleWhitespaceCharacter: String?
@@ -124,6 +139,7 @@ enum AppRuntimeConfig {
       case restoreLastSelection = "editor.restoreLastSelection"
       case indentBehavior = "editor.indentBehavior"
       case writingToolsBehavior = "editor.writingToolsBehavior"
+      case writingToolsAffordance = "editor.writingToolsAffordance"
       case undoGroupingInterval = "editor.undoGroupingInterval"
       case headerFontSizeDiffs = "editor.headerFontSizeDiffs"
       case visibleWhitespaceCharacter = "editor.visibleWhitespaceCharacter"
@@ -202,6 +218,10 @@ enum AppRuntimeConfig {
     case "limited": return NSWritingToolsBehavior.limited
     default: return nil
     }
+  }
+
+  static var writingToolsAffordance: Definition.WritingToolsAffordance {
+    currentDefinition?.writingToolsAffordance ?? .systemDefault
   }
 
   static var undoGroupingInterval: Double? {
@@ -330,6 +350,7 @@ private extension AppRuntimeConfig {
     restoreLastSelection: nil,
     indentBehavior: .never,
     writingToolsBehavior: nil, // [macOS 15] Complete mode still has lots of bugs
+    writingToolsAffordance: nil,
     undoGroupingInterval: nil,
     headerFontSizeDiffs: nil,
     visibleWhitespaceCharacter: nil,

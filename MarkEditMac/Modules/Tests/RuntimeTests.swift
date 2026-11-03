@@ -190,6 +190,10 @@ final class RuntimeTests: XCTestCase {
     testExistenceOfClass(named: "NSTitlebarView")
     testExistenceOfClass(named: "NSToolbarButton")
     testExistenceOfClass(named: "NSThemeDocumentButton")
+
+    Bundle(path: "/System/Library/PrivateFrameworks/WritingToolsUI.framework")?.load()
+    testExistenceOfClass(named: "WTAffordanceWindow")
+    testExistenceOfClass(named: "NSCampoLightweightUIHostWindow")
   }
 
   func testTitlebarDecorationViewSelector() {
