@@ -7,6 +7,9 @@
 import AppKit
 
 public extension NSWindow {
+  var isWritingToolsAffordance: Bool {
+    Self.writingToolsWindowClassNames.contains(className)
+  }
 
   // MARK: - Hierarchy
 
@@ -127,6 +130,13 @@ public extension NSWindow {
 // MARK: - Private
 
 private extension NSWindow {
+  static let writingToolsWindowClassNames = [
+    // Writing Tools (legacy): WTAffordanceWindow
+    ["WT", "Affordance", "Window"].joined(),
+    // Siri AI (new experience): NSCampoLightweightUIHostWindow
+    ["NS", "Campo", "LightweightUIHostWindow"].joined(),
+  ]
+
   var titlebarContainerView: NSView? {
     var node = currentHostingWindow.contentView
     while node?.superview != nil {

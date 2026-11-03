@@ -55,6 +55,15 @@ final class EditorWindow: NSWindow {
     reduceTransparency = AppDesign.reduceTransparency
   }
 
+  override func addChildWindow(_ childWindow: NSWindow, ordered place: NSWindow.OrderingMode) {
+    if childWindow.isWritingToolsAffordance && AppRuntimeConfig.writingToolsAffordance.shouldSuppress {
+      childWindow.orderOut(nil)
+      return
+    }
+
+    super.addChildWindow(childWindow, ordered: place)
+  }
+
   override func layoutIfNeeded() {
     super.layoutIfNeeded()
     updateTitleBarAppearance(clearCaches: false)
