@@ -88,12 +88,14 @@ struct TextCompletionView: View {
               .simultaneousGesture(completionTapGesture(index: index))
             }
           }
-        }.onChange(of: state.selectedIndex) {
+        }
+        .contentMargins(.vertical, Constants.itemPadding, for: .scrollContent)
+        .onChange(of: state.selectedIndex) {
           scrollView.scrollTo(state.selectedIndex)
         }
       }
     }
-    .padding(Constants.itemPadding)
+    .padding(.horizontal, Constants.itemPadding)
     .onHover { isHovered in
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
         if isHovered {
