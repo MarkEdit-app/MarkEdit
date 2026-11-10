@@ -30,7 +30,7 @@ const sharedStyles: { [selector: string]: StyleSpec } = {
   '.cm-content': {
     paddingTop: '2px',
     paddingRight: '12px',
-    paddingBottom: '50vh',
+    paddingBottom: 'var(--typewriter-bottom-padding, 50vh)',
 
     // CodeMirror uses border-left-color of cm-cursor to draw the caret,
     // we need to disable this as it draws an extra caret in macOS Sonoma.
