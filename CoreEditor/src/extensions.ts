@@ -27,6 +27,7 @@ import { selectedLinesDecoration } from './styling/nodes/selection';
 import { invisiblesExtension } from './styling/nodes/invisible';
 import { paragraphIndentStyle, lineIndentStyle } from './styling/nodes/indent';
 import { gutterExtensions } from './styling/nodes/gutter';
+import { typewriterPadding } from './styling/typewriter';
 import { IndentBehavior } from './config';
 import { bundledLanguages } from './languages';
 import { editingState } from './common/store';
@@ -163,6 +164,7 @@ export function extensions(options: { lineBreak?: string }) {
     invisibles.of(invisiblesExtension(window.config.invisiblesBehavior, editingState.hasSelection)), // Must after actionExtensions to have line breaks at the end
     linkStyles, // Must after invisibles because whitespaces can break this
     selectedLines.of(window.config.focusMode ? selectedLinesDecoration : []),
+    typewriterPadding,
 
     // Input handling
     wordTokenizer(),
