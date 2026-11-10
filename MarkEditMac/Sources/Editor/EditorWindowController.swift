@@ -11,6 +11,7 @@ import MarkEditKit
 final class EditorWindowController: NSWindowController, NSWindowDelegate {
   var autosavedFrame: CGRect?
   var needsUpdateFocus = false
+  var pendingInitialPresentation = true
 
   required init?(coder: NSCoder) {
     super.init(coder: coder)
@@ -184,6 +185,7 @@ private extension EditorWindowController {
 
   func showWindowImmediately(_ sender: Any?) {
     super.showWindow(sender)
+    pendingInitialPresentation = false
   }
 
   func updateTitleBarAppearance() {

@@ -76,6 +76,17 @@ final class EditorDocument: NSDocument {
     AppRuntimeConfig.autoSaveWhenIdle && fileURL != nil
   }
 
+  /**
+   File name from external apps, such as Shortcuts or URL schemes.
+   */
+  var externalFilename: String? {
+    didSet {
+      windowControllers.forEach {
+        $0.synchronizeWindowTitleWithDocumentName()
+      }
+    }
+  }
+
   // Defer identity generation until Quick Search needs it
   private(set) lazy var sessionID = UUID()
   private var autosaveDelayedTask: Task<Void, Never>?
@@ -89,11 +100,6 @@ final class EditorDocument: NSDocument {
    File name from the table of contents.
    */
   private var suggestedFilename: String?
-
-  /**
-   File name from external apps, such as Shortcuts or URL schemes.
-   */
-  private var externalFilename: String?
 
   override func makeWindowControllers() {
     let storyboard = NSStoryboard(name: NSStoryboard.Name("Main"), bundle: nil)
@@ -115,9 +121,6 @@ final class EditorDocument: NSDocument {
     isTerminating = false
     hostViewController = contentVC
     hostViewController?.representedObject = self
-
-    externalFilename = AppDocumentController.suggestedFilename
-    AppDocumentController.suggestedFilename = nil
 
     NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)

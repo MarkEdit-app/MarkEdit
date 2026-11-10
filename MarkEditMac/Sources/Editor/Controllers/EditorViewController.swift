@@ -357,7 +357,7 @@ extension EditorViewController {
   }
 
   func prepareInitialContent(_ text: String) {
-    if hasFinishedLoading {
+    if hasFinishedLoading && pendingResetCount == 0 {
       prependTextContent(text)
     } else {
       initialContent = text
@@ -424,7 +424,7 @@ extension EditorViewController {
       }
 
       // Initial content from scenarios like "CreateNewDocumentIntent" or "New File from Clipboard"
-      if let text = self.initialContent {
+      if self.pendingResetCount == 0, let text = self.initialContent {
         self.prependTextContent(text)
         self.initialContent = nil
       }

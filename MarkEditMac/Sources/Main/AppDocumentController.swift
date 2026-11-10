@@ -19,7 +19,6 @@ import QuickSearchUI
  */
 final class AppDocumentController: NSDocumentController {
   static var suggestedTextEncoding: EditorTextEncoding?
-  static var suggestedFilename: String?
 
   override func noteNewRecentDocumentURL(_ url: URL) {
     guard !ApplicationEnvironment.isRunningTests else {
