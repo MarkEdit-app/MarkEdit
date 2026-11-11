@@ -11,6 +11,18 @@ public extension NSDocument {
     fileURL?.deletingLastPathComponent()
   }
 
+  /// Returns the file's bytes if they match the document's current serialized content; otherwise nil.
+  var matchingFileData: Data? {
+    get throws {
+      guard let fileURL, let fileType else {
+        return nil
+      }
+
+      let diskData = try Data(contentsOf: fileURL)
+      return diskData == (try data(ofType: fileType)) ? diskData : nil
+    }
+  }
+
   func markContentDirty(_ isDirty: Bool) {
     // The undo stack is implemented in CoreEditor entirely,
     // there are only two meaningful change count values: 0 (saved) or 1 (dirty).

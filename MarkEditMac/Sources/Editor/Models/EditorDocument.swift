@@ -436,15 +436,38 @@ extension EditorDocument {
     // Only under certain conditions we need this flow,
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
     DispatchQueue.main.async {
+      // A pending decode can still replace the text being compared, retry without blocking main
+      guard self.pendingFileReads.wait(timeout: .now()) == .success else {
+        self.pendingFileReads.notify(queue: .main) {
+          self.presentedItemDidChange()
+        }
+
+        return
+      }
+
       do {
         // For text bundles, use the text.markdown file inside it
         let filePath = self.textBundle?.textFilePath(baseURL: fileURL) ?? fileURL.path
         let modificationDate = try FileManager.default.attributesOfItem(atPath: filePath)[.modificationDate] as? Date
-
-        if let modificationDate, modificationDate > (self.fileModificationDate ?? .distantPast) {
-          self.fileModificationDate = modificationDate
-          try self.revert(toContentsOf: fileURL, ofType: fileType)
+        guard let modificationDate, modificationDate > (self.fileModificationDate ?? .distantPast) else {
+          return
         }
+
+        self.fileModificationDate = modificationDate
+        if !fileType.isTextBundle && !self.isOutdated {
+          do {
+            if let matchingData = try self.matchingFileData {
+              self.fileData = matchingData
+              self.markContentClean()
+              self.markContentDirty(false)
+              return
+            }
+          } catch {
+            Logger.log(.error, "Failed to compare file and document contents: \(error.localizedDescription)")
+          }
+        }
+
+        try self.revert(toContentsOf: fileURL, ofType: fileType)
       } catch {
         Logger.log(.error, error.localizedDescription)
       }
