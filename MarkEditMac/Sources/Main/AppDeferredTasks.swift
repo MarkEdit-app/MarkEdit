@@ -7,27 +7,30 @@
 
 @MainActor
 enum AppDeferredTasks {
-  private static var isReady = false
-  private static var pending: [@MainActor () -> Void] = []
+  enum Stage {
+    case appFinishedLaunching
+    case firstWindowBecameKey
+  }
 
-  static func markReady() {
-    guard !isReady else {
+  private static var readyStages: Set<Stage> = []
+  private static var pending: [Stage: [@MainActor () -> Void]] = [:]
+
+  /// Opens only the given stage's gate; call this after its lifecycle event.
+  static func markReady(stage: Stage) {
+    guard readyStages.insert(stage).inserted else {
       return
     }
 
     // Open the gate before draining so reentrant calls execute normally
-    isReady = true
-    let actions = pending
-
-    pending.removeAll()
-    actions.forEach { $0() }
+    let actions = pending.removeValue(forKey: stage)
+    actions?.forEach { $0() }
   }
 
-  static func performWhenReady(_ action: @escaping @MainActor () -> Void) {
-    if isReady {
+  static func performWhenReady(stage: Stage, _ action: @escaping @MainActor () -> Void) {
+    if readyStages.contains(stage) {
       action()
     } else {
-      pending.append(action)
+      pending[stage, default: []].append(action)
     }
   }
 }

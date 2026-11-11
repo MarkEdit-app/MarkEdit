@@ -183,7 +183,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // Let the launch callback return before running deferred AppKit setup
     DispatchQueue.main.async {
-      AppDeferredTasks.markReady()
+      AppDeferredTasks.markReady(stage: .appFinishedLaunching)
+
+      if NSApp.keyWindow != nil {
+        AppDeferredTasks.markReady(stage: .firstWindowBecameKey)
+      }
     }
   }
 
@@ -292,6 +296,8 @@ private extension AppDelegate {
         EditorPreloader.shared.warmUp()
       }
     }
+
+    AppDeferredTasks.markReady(stage: .firstWindowBecameKey)
   }
 
   @objc func windowDidResignKey(_ notification: Notification) {

@@ -46,7 +46,7 @@ extension NSApplication {
   }
 
   @objc private func swizzled_customizeMainMenu() {
-    AppDeferredTasks.performWhenReady {
+    AppDeferredTasks.performWhenReady(stage: .firstWindowBecameKey) {
       self.swizzled_customizeMainMenu()
     }
   }
