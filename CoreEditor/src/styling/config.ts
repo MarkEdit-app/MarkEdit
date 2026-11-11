@@ -136,7 +136,7 @@ export function setInvisiblesBehavior(behavior: InvisiblesBehavior) {
 export function setTypewriterMode(enabled: boolean) {
   if (styleSheets.typewriterMode === undefined) {
     styleSheets.typewriterMode = createStyleSheet(`
-      .cm-content {
+      .cm-editor:not(.cm-editor .cm-editor) > .cm-scroller > .cm-content {
         padding-top: 50vh !important;
       }
     `, false);

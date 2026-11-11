@@ -26,12 +26,13 @@ const tags = {
 // Here we define color independent theme styles,
 // it's almost the built-in "baseTheme" concept in CodeMirror but provides more flexibility.
 const sharedStyles: { [selector: string]: StyleSpec } = {
-  // Default
-  '.cm-content': {
+  // Document padding must not expand embedded editors
+  '& > .cm-scroller > .cm-content': {
     paddingTop: '2px',
     paddingRight: '12px',
     paddingBottom: 'var(--typewriter-bottom-padding, 50vh)',
-
+  },
+  '.cm-content': {
     // CodeMirror uses border-left-color of cm-cursor to draw the caret,
     // we need to disable this as it draws an extra caret in macOS Sonoma.
     caretColor: 'transparent',

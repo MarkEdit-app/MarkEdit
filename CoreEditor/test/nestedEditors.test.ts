@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { Decoration, EditorView, WidgetType } from '@codemirror/view';
+import { StateEffect } from '@codemirror/state';
 import { markdown } from '../src/@vendor/lang-markdown';
 import { focusedEditor } from '../src/common/utils';
 import { getEditorState } from '../src/core';
@@ -7,6 +8,9 @@ import { performEditCommand } from '../src/modules/commands';
 import { EditCommand } from '../src/modules/commands/types';
 import { getRect } from '../src/modules/selection';
 import { showContextMenu } from '../src/api/ui';
+import { styleSheets } from '../src/common/store';
+import { setTypewriterMode } from '../src/styling/config';
+import GitHubLight from '../src/styling/themes/github-light';
 import * as editor from './utils/editor';
 
 let cell: EditorView;
@@ -52,6 +56,60 @@ describe('nested editor focus reporting', () => {
     input.focus();
     expect(focusedEditor()).toBeNull();
     expect(getEditorState().hasFocus).toBe(false);
+  });
+});
+
+describe('nested editor document padding', () => {
+  afterEach(() => {
+    styleSheets.typewriterMode?.remove();
+    delete styleSheets.typewriterMode;
+  });
+
+  test('keeps document padding out of cell editors', () => {
+    window.editor.dispatch({ effects: StateEffect.appendConfig.of(GitHubLight().extension) });
+    const rules = window.editor.state.facet(EditorView.styleModule).flatMap(module => module.getRules().split('\n'));
+    const paddingRules = rules.filter(rule => rule.includes('--typewriter-bottom-padding'));
+    expect(paddingRules).toHaveLength(1);
+
+    const rule = paddingRules[0];
+    const selector = rule.slice(0, rule.indexOf('{')).trim();
+    expect(window.editor.contentDOM.matches(selector)).toBe(true);
+    expect(cell.contentDOM.matches(selector)).toBe(false);
+    expect(rule).toContain('padding-top: 2px');
+    expect(rule).toContain('padding-right: 12px');
+    expect(rule).toContain('padding-bottom: var(--typewriter-bottom-padding, 50vh)');
+  });
+
+  test.each([false, true])('applies typewriter padding only to the outer editor (wrapped: %s)', wrapped => {
+    if (wrapped) {
+      const container = document.createElement('div');
+      container.id = 'editor';
+      document.body.appendChild(container);
+      container.appendChild(window.editor.dom);
+    }
+
+    setTypewriterMode(true);
+    const sheet = styleSheets.typewriterMode;
+    if (sheet === undefined || sheet.sheet === null) {
+      throw new Error('Typewriter stylesheet was not created');
+    }
+
+    const rule = sheet.sheet.cssRules[0];
+    if (!(rule instanceof CSSStyleRule)) {
+      throw new Error('Typewriter stylesheet is missing its content rule');
+    }
+
+    expect(window.editor.contentDOM.matches(rule.selectorText)).toBe(true);
+    expect(cell.contentDOM.matches(rule.selectorText)).toBe(false);
+    expect(rule.style.getPropertyValue('padding-top')).toBe('50vh');
+    expect(rule.style.getPropertyPriority('padding-top')).toBe('important');
+    expect(sheet.disabled).toBe(false);
+
+    setTypewriterMode(false);
+    expect(sheet.disabled).toBe(true);
+    setTypewriterMode(true);
+    expect(styleSheets.typewriterMode).toBe(sheet);
+    expect(sheet.disabled).toBe(false);
   });
 });
 
