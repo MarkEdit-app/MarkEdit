@@ -51,7 +51,7 @@ private extension NSDocumentController {
   }
 
   @objc func swizzled_installOpenRecentMenus() {
-    AppDeferredTasks.performWhenReady {
+    AppDeferredTasks.performWhenReady(stage: .appFinishedLaunching) {
       self.swizzled_installOpenRecentMenus()
     }
   }
