@@ -24,6 +24,14 @@ extension NSDocumentController {
     !outdatedDocuments.isEmpty
   }
 
+  var hasPendingDocumentPresentation: Bool {
+    documents.contains { document in
+      document.windowControllers.contains {
+        ($0 as? EditorWindowController)?.pendingInitialPresentation == true
+      }
+    }
+  }
+
   func saveOutdatedDocuments(userInitiated: Bool = false) async {
     await withTaskGroup(of: Void.self) { group in
       for document in outdatedDocuments {

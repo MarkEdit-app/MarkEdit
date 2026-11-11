@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MarkEditKit
 
 @MainActor
 extension AppDelegate {
@@ -18,7 +19,23 @@ extension AppDelegate {
   }
 
   func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {
-    shouldOpenOrCreateDocument() && openOrCreateDocument(sender: sender)
+    // AppKit can request a default window before an explicit document finishes presenting
+    guard !NSDocumentController.shared.hasPendingDocumentPresentation else {
+      return false
+    }
+
+    return shouldOpenOrCreateDocument() && openOrCreateDocument(sender: sender)
+  }
+
+  func applicationOpenUntitledFile(_ sender: NSApplication) -> Bool {
+    do {
+      States.untitledDocument = try NSDocumentController.shared.openUntitledDocumentAndDisplay(true)
+      States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate
+      return true
+    } catch {
+      sender.presentError(error)
+      return false
+    }
   }
 
   func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
@@ -50,24 +67,44 @@ extension AppDelegate {
   }
 
   func createNewFile(fileName: String? = nil, initialContent: String? = nil, isIntent: Bool = false) {
-    // In EditorDocument, this is used as an external filename
-    AppDocumentController.suggestedFilename = fileName
+    let controller = NSDocumentController.shared
+    let document: NSDocument
 
     // Activating the app also creates a new file if new window behavior is `newDocument`,
     // prevent duplicate creation from Shortcuts like `CreateNewDocumentIntent`.
-    if !isIntent || (Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate > 0.2) {
-      NSDocumentController.shared.newDocument(nil)
+    if isIntent && (Date.timeIntervalSinceReferenceDate - States.untitledFileOpenedDate <= 0.2),
+       let untitledDocument = States.untitledDocument,
+       untitledDocument.fileURL == nil && (controller.documents.contains { $0 === untitledDocument }) {
+      document = untitledDocument
+    } else {
+      do {
+        document = try controller.openUntitledDocumentAndDisplay(false)
+        document.makeWindowControllers()
+      } catch {
+        NSApp.presentError(error)
+        return
+      }
+    }
+
+    States.untitledDocument = nil
+    guard let document = document as? EditorDocument else {
+      return Logger.assertFail("Unexpected document type: \(document)")
+    }
+
+    guard let editor = document.windowControllers.first?.contentViewController as? EditorViewController else {
+      return Logger.assertFail("Missing editor for new document")
     }
 
     if isIntent {
       NSApp.activate(ignoringOtherApps: true)
     }
 
+    document.externalFilename = fileName
     if let initialContent {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-        self.currentEditor?.prepareInitialContent(initialContent)
-      }
+      editor.prepareInitialContent(initialContent)
     }
+
+    document.showWindows()
   }
 
   func openFile(queryDict: [String: String]?) {
@@ -120,6 +157,7 @@ private extension AppDelegate {
   enum States {
     @MainActor static var openPanelShownDate: TimeInterval = 0
     @MainActor static var untitledFileOpenedDate: TimeInterval = 0
+    @MainActor static weak var untitledDocument: NSDocument?
   }
 
   @discardableResult
@@ -138,7 +176,6 @@ private extension AppDelegate {
       quickSearch(sender)
       return false
     case .newDocument:
-      States.untitledFileOpenedDate = Date.timeIntervalSinceReferenceDate
       return true
     }
   }
