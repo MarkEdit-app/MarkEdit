@@ -720,30 +720,10 @@ private extension EditorDocument {
   }
 
   func updateContent(userInitiated: Bool = false) async {
-    let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
-    let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
+    await formatContent(userInitiated: userInitiated)
 
-    // Format when saving files, only if at least one option is enabled
-    if insertFinalNewline || trimTrailingWhitespace {
-      formatCompleted = (try? await bridge?.format.formatContent(
-        insertFinalNewline: insertFinalNewline,
-        trimTrailingWhitespace: trimTrailingWhitespace,
-        userInitiated: userInitiated
-      )) ?? false
-    }
-
-    if let editorText = await hostViewController?.editorText {
-      stringValue = editorText
-
-      DispatchQueue.global(qos: .utility).async {
-        guard !AppRuntimeConfig.disableDebugFiles else {
-          return
-        }
-
-        let fileData = editorText.toData() ?? Data()
-        let directory = AppCustomization.debugDirectory.fileURL
-        try? fileData.write(to: directory.appending(path: "last-edited.md"))
-      }
+    if let editorText = await synchronizeText() {
+      writeDebugFile(editorText)
     }
 
     // If the content contains headings, use the first one to override the displayName
@@ -758,6 +738,40 @@ private extension EditorDocument {
 
     if userInitiated {
       markContentClean()
+    }
+  }
+
+  func formatContent(userInitiated: Bool) async {
+    let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
+    let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
+
+    if insertFinalNewline || trimTrailingWhitespace {
+      formatCompleted = (try? await bridge?.format.formatContent(
+        insertFinalNewline: insertFinalNewline,
+        trimTrailingWhitespace: trimTrailingWhitespace,
+        userInitiated: userInitiated
+      )) ?? false
+    }
+  }
+
+  func synchronizeText() async -> String? {
+    if let editorText = await hostViewController?.editorText {
+      stringValue = editorText
+      return editorText
+    }
+
+    return nil
+  }
+
+  func writeDebugFile(_ editorText: String) {
+    DispatchQueue.global(qos: .utility).async {
+      guard !AppRuntimeConfig.disableDebugFiles else {
+        return
+      }
+
+      let fileData = editorText.toData() ?? Data()
+      let directory = AppCustomization.debugDirectory.fileURL
+      try? fileData.write(to: directory.appending(path: "last-edited.md"))
     }
   }
 
