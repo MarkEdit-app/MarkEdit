@@ -19,6 +19,7 @@ public final class QuickSearchController: NSObject {
   private let filterMenuHelp: (title: String, action: () -> Void)?
   private let reportError: (String) -> Void
   private let onResultActivated: () -> Void
+  private let performMenuAction: (NSMenuItem) -> Bool
   private let openDocument: (URL) async throws -> Void
   private let breadcrumbSeparator = " \u{203A} "
   private var recentURLs: [URL] = []
@@ -56,6 +57,7 @@ public final class QuickSearchController: NSObject {
     filterMenuHelp: (title: String, action: () -> Void)? = nil,
     reportError: @escaping (String) -> Void,
     onResultActivated: @escaping () -> Void = {},
+    performMenuAction: @escaping (NSMenuItem) -> Bool = { $0.performAction() },
     openDocument: @escaping (URL) async throws -> Void
   ) {
     self.effectViewType = effectViewType
@@ -65,6 +67,7 @@ public final class QuickSearchController: NSObject {
     self.filterMenuHelp = filterMenuHelp
     self.reportError = reportError
     self.onResultActivated = onResultActivated
+    self.performMenuAction = performMenuAction
     self.openDocument = openDocument
     super.init()
   }
@@ -620,7 +623,7 @@ private extension QuickSearchController {
           window.isActivatingResult = false
           self.cancel()
 
-          guard item?.performAction() == true else {
+          guard let item, self.performMenuAction(item) else {
             self.reportError("Menu action is no longer available: \(match.action.subtitle)")
             NSSound.beep()
             return

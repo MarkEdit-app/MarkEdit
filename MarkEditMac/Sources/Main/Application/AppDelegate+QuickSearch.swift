@@ -86,6 +86,23 @@ extension AppDelegate {
         }),
         reportError: { Logger.log(.error, "Quick Search: \($0)") },
         onResultActivated: { AppPreferences.General.hasUsedQuickSearch = true },
+        performMenuAction: { item in
+          if item.action == #selector(NSDocumentController.newDocument(_:)) {
+            // Clicking New in Quick Search can animate the first document from the wrong origin.
+            // Defer the menu action, preserving its target and responder-chain routing.
+            DispatchQueue.main.async {
+              guard item.performAction() else {
+                Logger.log(.error, "Quick Search: deferred New action is no longer available")
+                NSSound.beep()
+                return
+              }
+            }
+
+            return true
+          }
+
+          return item.performAction()
+        },
         openDocument: { [weak self] url in
           guard let self else {
             throw CancellationError()

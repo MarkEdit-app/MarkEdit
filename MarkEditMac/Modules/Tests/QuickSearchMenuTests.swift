@@ -318,6 +318,7 @@ extension QuickSearchMenuTests {
       var errors: [String] = []
       var refocuses = 0
       var activations = 0
+      var dispatches = 0
       let controller = QuickSearchController(
         effectViewType: NSVisualEffectView.self,
         placeholder: { _ in "Quick Search" },
@@ -334,6 +335,11 @@ extension QuickSearchMenuTests {
         ),
         reportError: { errors.append($0) },
         onResultActivated: { activations += 1 },
+        performMenuAction: { item in
+          dispatches += 1
+          XCTAssertIdentical(item, newTab)
+          return item.performAction()
+        },
         openDocument: { _ in XCTFail("Menu action must not open a file") }
       )
 
@@ -387,6 +393,7 @@ extension QuickSearchMenuTests {
       XCTAssertIdentical(source.firstResponder, responder)
       XCTAssertEqual(responder.executions, enabled ? 1 : 0)
       XCTAssertEqual(activations, enabled ? 1 : 0)
+      XCTAssertEqual(dispatches, enabled ? 1 : 0)
       XCTAssertEqual(errors.count, enabled ? 0 : 1)
     }
   }
