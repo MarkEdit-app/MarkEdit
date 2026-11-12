@@ -7,6 +7,7 @@
 import AppKit
 import MarkEditCore
 import UniformTypeIdentifiers
+import WebKit
 import XCTest
 @testable import MarkEdit
 
@@ -167,6 +168,71 @@ extension EditorDocumentTests {
     for typeName in ["public.plain-text", "net.daringfireball.markdown", "com.mdxjs.mdx", "org.textbundle.package", "unknown", ""] {
       XCTAssertNil(NewFilenameExtension.preferredExtension(for: typeName))
     }
+  }
+
+  func testFailedTextSynchronizationKeepsOutdatedFlag() async throws {
+    try await withSynchronizationEditor { document, editor in
+      _ = try await editor.webView.evaluateJavaScript("""
+      window.webModules.core.getEditorText = () => { throw new Error("Test retrieval failure"); };
+      void 0;
+      """)
+
+      document.isOutdated = true
+      await withCheckedContinuation { continuation in
+        document.updateContent { continuation.resume() }
+      }
+
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+    }
+  }
+
+  func testEditDuringTextSynchronizationKeepsOutdatedFlag() async throws {
+    try await withSynchronizationEditor { document, editor in
+      _ = try await editor.webView.evaluateJavaScript("""
+      const getText = window.webModules.core.getEditorText;
+      window.webModules.core.getEditorText = () => {
+        const text = getText();
+        window.editor.dispatch({ changes: { from: 0, insert: "Newer " } });
+        return text;
+      };
+      void 0;
+      """)
+
+      document.stringValue = "Previous snapshot\n"
+      document.isOutdated = true
+      await withCheckedContinuation { continuation in
+        document.updateContent { continuation.resume() }
+      }
+
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+    }
+  }
+
+  private func withSynchronizationEditor(
+    action: (EditorDocument, EditorViewController) async throws -> Void
+  ) async throws {
+    let keepsWindows = AppPreferences.General.quitAlwaysKeepsWindows
+    AppPreferences.General.quitAlwaysKeepsWindows = false
+    defer { AppPreferences.General.quitAlwaysKeepsWindows = keepsWindows }
+
+    let document = try EditorDocument(type: "public.plain-text")
+    document.stringValue = "Original text\n"
+    defer {
+      document.isTerminating = true
+      document.updateChangeCount(.changeCleared)
+      document.close()
+    }
+
+    document.makeWindowControllers()
+    let editor = try XCTUnwrap(document.windowControllers.first?.contentViewController as? EditorViewController)
+    await editor.waitUntilLoaded()
+    await editor.waitUntilEditorReset()
+
+    XCTAssertTrue(editor.hasFinishedLoading)
+    XCTAssertEqual(editor.pendingResetCount, 0)
+    try await action(document, editor)
   }
 
   func testFilenameExtensionPrecedence() throws {

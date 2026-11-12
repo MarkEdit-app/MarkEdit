@@ -20,7 +20,16 @@ final class EditorDocument: NSDocument {
   var spellDocTag: Int?
   var stringValue = ""
   var formatCompleted = false // The result of format content is all good
-  var isOutdated = false // The content is outdated, needs an update
+
+  // The content is outdated, needs an update
+  var isOutdated = false {
+    didSet {
+      if isOutdated {
+        contentChangeCount &+= 1
+      }
+    }
+  }
+
   var isReadOnlyMode = false
   var isTerminating = false
 
@@ -90,6 +99,7 @@ final class EditorDocument: NSDocument {
   // Defer identity generation until Quick Search needs it
   private(set) lazy var sessionID = UUID()
   private var autosaveDelayedTask: Task<Void, Never>?
+  private var contentChangeCount: UInt64 = 0
   private let pendingFileReads = DispatchGroup()
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
@@ -733,9 +743,7 @@ private extension EditorDocument {
       suggestedFilename = nil
     }
 
-    isOutdated = false
     unblockUserInteraction()
-
     if userInitiated {
       markContentClean()
     }
@@ -755,8 +763,10 @@ private extension EditorDocument {
   }
 
   func synchronizeText() async -> String? {
+    let changeCount = contentChangeCount
     if let editorText = await hostViewController?.editorText {
       stringValue = editorText
+      isOutdated = contentChangeCount != changeCount
       return editorText
     }
 
