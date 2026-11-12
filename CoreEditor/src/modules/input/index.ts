@@ -133,6 +133,7 @@ export function interceptInputs() {
  * Returns an extension that handles all the editor changes.
  */
 export function observeChanges() {
+  let contentEditedPending = false;
   const listener = EditorView.updateListener.of(update => {
     if (update.docChanged) {
       // This should be called before updating the native view
@@ -195,13 +196,23 @@ export function observeChanges() {
       // and only called when the update is actually sent. The snapshot is intentional:
       // getInfo() is consistent with the other fields captured in this update.
       const lineColumnState = selectedLineColumn();
+      // A selection-only update must not discard an edit notification waiting to be sent
+      contentEditedPending ||= update.docChanged;
+
       const notifyViewDidUpdate = () => {
         window.nativeModules.core.notifyViewDidUpdate({
-          contentEdited: update.docChanged,
+          contentEdited: contentEditedPending,
           compositionEnded: editingState.compositionEnded,
           isDirty: isContentDirty(),
           selectedLineColumn: lineColumnState.getInfo(),
         });
+
+        // Native normally cancels completion for selection-only updates, but this one also reports an edit
+        if (contentEditedPending && !update.docChanged) {
+          window.nativeModules.completion.cancelCompletion();
+        }
+
+        contentEditedPending = false;
       };
 
       if (storage.lineColumnUpdater !== undefined) {

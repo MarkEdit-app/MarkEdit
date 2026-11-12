@@ -46,4 +46,7 @@ window.nativeModules = {
     notifyContentOffsetDidChange() { /* noop */ },
     notifyEditorDidBecomeIdle() { /* noop */ },
   },
+  completion: {
+    cancelCompletion() { /* noop */ },
+  },
 } as unknown as typeof window.nativeModules;
