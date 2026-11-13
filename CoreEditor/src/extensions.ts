@@ -128,6 +128,11 @@ export function extensions(options: { lineBreak?: string }) {
           return false;
         }
 
+        // Use list-aware indentation instead
+        if (keymap.key === 'Mod-[' || keymap.key === 'Mod-]') {
+          return false;
+        }
+
         // We use customizedCommandsKeymap instead
         if (['Home', 'End', 'Mod-/', 'PageUp', 'PageDown'].includes(keymap.key ?? '')) {
           return false;

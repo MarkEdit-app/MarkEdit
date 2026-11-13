@@ -63,7 +63,8 @@ function itemNumber(item: SyntaxNode, doc: Text) {
   return /^(\s*)(\d+)(?=[.)])/.exec(doc.sliceString(item.from, item.from + 10))!
 }
 
-function renumberList(after: SyntaxNode, doc: Text, changes: ChangeSpec[], offset = 0) {
+// [MarkEdit] Also used by list indentation to preserve sequential numbering
+export function renumberList(after: SyntaxNode, doc: Text, changes: ChangeSpec[], offset = 0) {
   for (let prev = -1, node = after;;) {
     if (node.name == "ListItem") {
       let m = itemNumber(node, doc)

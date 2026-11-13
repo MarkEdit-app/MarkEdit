@@ -1,9 +1,10 @@
-import { KeyBinding } from '@codemirror/view';
-import { indentLess, indentMore, insertTab } from '@codemirror/commands';
+import { EditorView, KeyBinding } from '@codemirror/view';
+import { indentLess as defaultIndentLess, indentMore as defaultIndentMore, insertTab } from '@codemirror/commands';
 import { acceptCompletion as acceptTooltipCompletion } from '@codemirror/autocomplete';
 import { syntaxTree } from '@codemirror/language';
 import { TabKeyBehavior } from './types';
 import { hasTooltipCompletion } from '../completion';
+import { indentList, parseForIndentation } from './list';
 import replaceSelections from '../commands/replaceSelections';
 
 /**
@@ -16,6 +17,10 @@ export const indentationKeymap: KeyBinding[] = [
     run: editor => {
       if (hasTooltipCompletion()) {
         acceptTooltipCompletion(editor);
+        return true;
+      }
+
+      if (!parseForIndentation(editor)) {
         return true;
       }
 
@@ -51,6 +56,22 @@ export const indentationKeymap: KeyBinding[] = [
     preventDefault: true,
     run: indentLess,
   },
+  {
+    key: 'Mod-]',
+    run: indentMore,
+  },
+  {
+    key: 'Mod-[',
+    run: indentLess,
+  },
 ];
+
+export function indentMore(editor: EditorView) {
+  return indentList(editor, 1) || defaultIndentMore(editor);
+}
+
+export function indentLess(editor: EditorView) {
+  return indentList(editor, -1) || defaultIndentLess(editor);
+}
 
 export type { TabKeyBehavior };

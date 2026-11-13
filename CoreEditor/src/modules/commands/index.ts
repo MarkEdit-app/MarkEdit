@@ -6,8 +6,6 @@ import {
   copyLineUp,
   cursorPageDown,
   cursorPageUp,
-  indentLess,
-  indentMore,
   moveLineDown,
   moveLineUp,
   selectLine,
@@ -19,6 +17,7 @@ import {
 } from '@codemirror/commands';
 
 import { EditCommand } from './types';
+import { indentLess, indentMore } from '../indentation';
 import { scrollIntoView } from '../selection';
 import formatContent from './formatContent';
 import toggleBlockWithMarks from './toggleBlockWithMarks';
