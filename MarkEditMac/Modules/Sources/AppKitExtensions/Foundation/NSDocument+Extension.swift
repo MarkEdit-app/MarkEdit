@@ -11,6 +11,15 @@ public extension NSDocument {
     fileURL?.deletingLastPathComponent()
   }
 
+  /// Continue on the main actor even while AppKit is synchronously waiting for document work.
+  /// Unlike a main-queue dispatch, this uses AppKit's mechanism for interrupting that wait.
+  nonisolated func continueAsynchronousWorkOnMainActor(_ body: @Sendable @MainActor @escaping () -> Void) {
+    continueAsynchronousWorkOnMainThread {
+      // AppKit guarantees this callback runs on the main thread, but its signature lacks actor isolation
+      MainActor.assumeIsolated(body)
+    }
+  }
+
   /// Returns the file's bytes if they match the document's current serialized content; otherwise nil.
   var matchingFileData: Data? {
     get throws {

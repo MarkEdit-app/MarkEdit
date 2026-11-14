@@ -114,6 +114,16 @@ extension EditorDocumentTests {
   }
 
   func testAutosaveCompletesDuringCoordinatedFileAccess() async throws {
+    try await assertCoordinatedAutosave(usingEditor: false)
+  }
+
+  func testEditorAutosaveCompletesOrFailsDuringCoordinatedFileAccess() async throws {
+    for failTextRead in [false, true] {
+      try await assertCoordinatedAutosave(usingEditor: true, failTextRead: failTextRead)
+    }
+  }
+
+  private func assertCoordinatedAutosave(usingEditor: Bool, failTextRead: Bool = false) async throws {
     let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     defer { try? FileManager.default.removeItem(at: directory) }
@@ -128,11 +138,42 @@ extension EditorDocumentTests {
     }
 
     try await Self.waitUntilLoaded(document, data: data)
-    document.stringValue = "Autosaved text\n"
-    document.updateChangeCount(.changeDone)
-    XCTAssertFalse(document.isOutdated)
+    if usingEditor {
+      document.makeWindowControllers()
+      let editor = try XCTUnwrap(document.windowControllers.first?.contentViewController as? EditorViewController)
+      await editor.waitUntilLoaded()
+      await editor.waitUntilEditorReset()
+
+      _ = try await editor.webView.evaluateJavaScript("""
+      window.editor.dispatch({
+        changes: { from: 0, to: window.editor.state.doc.length, insert: "Autosaved text\\n" }
+      });
+      void 0;
+      """)
+
+      let deadline = ContinuousClock.now + .seconds(1)
+      while !document.isOutdated, ContinuousClock.now < deadline {
+        try await Task.sleep(for: .milliseconds(10))
+      }
+
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+
+      if failTextRead {
+        _ = try await editor.webView.evaluateJavaScript("""
+        window.webModules.core.getEditorText = () => { throw new Error("Test retrieval failure"); };
+        void 0;
+        """)
+      }
+    } else {
+      document.stringValue = "Autosaved text\n"
+      document.updateChangeCount(.changeDone)
+      XCTAssertFalse(document.isOutdated)
+    }
 
     let saved = expectation(description: "Autosave completes")
+    saved.assertForOverFulfill = true
+
     let released = expectation(description: "Coordinated file access is released")
     document.presentedItemOperationQueue.addOperation {
       let relinquishToWriter = document.relinquishPresentedItem(toWriter:)
@@ -149,7 +190,12 @@ extension EditorDocumentTests {
         }
 
         document.savePresentedItemChanges { error in
-          XCTAssertNil(error)
+          if failTextRead {
+            XCTAssertNotNil(error)
+          } else {
+            XCTAssertNil(error)
+          }
+
           completed.signal()
           saved.fulfill()
         }
@@ -157,7 +203,8 @@ extension EditorDocumentTests {
     }
 
     await fulfillment(of: [released, saved], timeout: 10)
-    XCTAssertEqual(try Data(contentsOf: url), Data("Autosaved text\n".utf8))
+    XCTAssertEqual(document.isOutdated, failTextRead)
+    XCTAssertEqual(try Data(contentsOf: url), failTextRead ? data : Data("Autosaved text\n".utf8))
   }
 
   func testPreferredExtensionOnlyRecognizesOutputTypes() {

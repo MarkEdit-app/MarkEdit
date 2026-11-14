@@ -100,6 +100,7 @@ final class EditorDocument: NSDocument {
   private(set) lazy var sessionID = UUID()
   private var autosaveDelayedTask: Task<Void, Never>?
   private var contentChangeCount: UInt64 = 0
+  private var pendingPresenterSaves = 0
   private let pendingFileReads = DispatchGroup()
   private var textBundle: TextBundleWrapper?
   private var revertedDate: Date = .distantPast
@@ -411,6 +412,9 @@ extension EditorDocument {
   ) {
     let saveAction = {
       do {
+        // Reject stale text; refreshing inside coordinated file access can deadlock
+        try self.requireSynchronizedText()
+
         // Write synchronously because asynchronous autosaving may not finish during termination
         if !self.hasBeenReverted && self.isTerminating && self.hasUnautosavedChanges,
            let fileURL = self.fileURL, let fileType = self.fileType {
@@ -426,7 +430,8 @@ extension EditorDocument {
       }
     }
 
-    if isOutdated {
+    // AppKit can defer its presenter autosave after preparation; never suspend inside that context
+    if isOutdated && pendingPresenterSaves == 0 {
       updateContent(saveAction: saveAction)
     } else {
       saveAction()
@@ -480,6 +485,32 @@ extension EditorDocument {
         try self.revert(toContentsOf: fileURL, ofType: fileType)
       } catch {
         Logger.log(.error, error.localizedDescription)
+      }
+    }
+  }
+
+  override nonisolated func savePresentedItemChanges(
+    completionHandler: @escaping @Sendable (Error?) -> Void
+  ) {
+    Task { @MainActor in
+      if isOutdated {
+        await updateContent()
+      }
+
+      do {
+        try requireSynchronizedText()
+      } catch {
+        completionHandler(error)
+        return
+      }
+
+      // Refresh before AppKit establishes the nested file-access context used by its autosave
+      pendingPresenterSaves += 1
+      super.savePresentedItemChanges { error in
+        self.continueAsynchronousWorkOnMainActor {
+          self.pendingPresenterSaves -= 1
+          completionHandler(error)
+        }
       }
     }
   }
@@ -771,6 +802,13 @@ private extension EditorDocument {
     }
 
     return nil
+  }
+
+  func requireSynchronizedText() throws {
+    guard !isOutdated else {
+      Logger.log(.error, "Cannot autosave while editor text is still outdated")
+      throw CocoaError(.fileWriteUnknown)
+    }
   }
 
   func writeDebugFile(_ editorText: String) {
