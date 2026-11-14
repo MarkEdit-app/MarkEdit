@@ -1,5 +1,6 @@
 import { afterEach, beforeAll, describe, expect, jest, test } from '@jest/globals';
 import { EditorSelection, EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 import { filterTransaction, observeChanges } from '../src/modules/input';
 import { startObserving } from '../src/modules/events';
 import { editingState } from '../src/common/store';
@@ -183,13 +184,56 @@ describe('Composition over-delete clamp', () => {
   });
 });
 
-describe('Composition bottom pinning', () => {
+describe('Composition events and bottom pinning', () => {
+  let nestedEditor: EditorView | undefined;
   beforeAll(startObserving);
 
   afterEach(() => {
+    nestedEditor?.destroy();
+    nestedEditor = undefined;
+    window.editor.destroy();
+    document.body.innerHTML = '';
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+
     editingState.wasScrolledToBottom = false;
     editingState.compositionEnded = true;
     editingState.compositionPosition = undefined;
+  });
+
+  test.each(['main', 'cell', 'input'])('scrolls composition boundaries only with main-editor focus (%s)', focus => {
+    jest.useFakeTimers();
+    editor.setUp('Main document');
+    window.config.typewriterMode = true;
+    editingState.hasSelection = false;
+    Object.defineProperty(window.editor.dom, 'clientHeight', { configurable: true, value: 800 });
+    jest.spyOn(window.editor, 'coordsAtPos').mockReturnValue({ top: 390, bottom: 410, left: 0, right: 0 });
+    let target = window.editor.contentDOM;
+    if (focus === 'cell') {
+      const widget = document.createElement('div');
+      widget.contentEditable = 'false';
+      window.editor.contentDOM.appendChild(widget);
+      nestedEditor = new EditorView({ doc: 'Cell', parent: widget });
+      nestedEditor.focus();
+      target = nestedEditor.contentDOM;
+    } else if (focus === 'input') {
+      const input = document.createElement('input');
+      window.editor.dom.appendChild(input);
+      input.focus();
+      target = input;
+    }
+
+    const scroll = jest.spyOn(EditorView, 'scrollIntoView');
+    const notify = jest.spyOn(window.nativeModules.core, 'notifyCompositionEnded');
+    target.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
+    expect(scroll).toHaveBeenCalledTimes(focus === 'main' ? 1 : 0);
+    expect(editingState.compositionEnded).toBe(false);
+
+    scroll.mockClear();
+    target.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
+    expect(scroll).toHaveBeenCalledTimes(focus === 'main' ? 1 : 0);
+    expect(notify).toHaveBeenCalledTimes(1);
+    expect(editingState.compositionEnded).toBe(true);
   });
 
   // jsdom has no layout, mock the scroll metrics and capture scrollTop writes.
