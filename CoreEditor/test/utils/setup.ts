@@ -44,6 +44,7 @@ window.nativeModules = {
     notifyViewDidUpdate() { /* noop */ },
     notifyContentHeightDidChange() { /* noop */ },
     notifyContentOffsetDidChange() { /* noop */ },
+    notifyCompositionEnded() { /* noop */ },
     notifyEditorDidBecomeIdle() { /* noop */ },
   },
   completion: {

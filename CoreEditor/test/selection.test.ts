@@ -2,7 +2,7 @@ import { afterEach, describe, expect, jest, test } from '@jest/globals';
 import { EditorView, ViewUpdate } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { editingState } from '../src/common/store';
-import { refreshEditFocus, selectWholeDocument } from '../src/modules/selection';
+import { refreshEditFocus, scrollIntoView, selectWholeDocument } from '../src/modules/selection';
 
 import * as editor from './utils/editor';
 import selectionChanged from '../src/modules/selection/selectionChanged';
@@ -109,6 +109,35 @@ describe('selectionChanged', () => {
     });
     expect(update.selectionSet).toBe(false);
     expect(selectionChanged(update)).toBe(false);
+  });
+});
+
+describe('scrollIntoView retries', () => {
+  afterEach(() => {
+    window.editor.destroy();
+    document.body.innerHTML = '';
+    editingState.compositionEnded = true;
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+  });
+
+  test.each(['none', 'active', 'pending', 'codemirror'])('handles %s composition during the retry delay', composition => {
+    jest.useFakeTimers();
+    editor.setUp('Hello');
+
+    const scroll = jest.spyOn(EditorView, 'scrollIntoView');
+    editingState.compositionEnded = composition !== 'active';
+    scrollIntoView(3, 'center');
+    expect(scroll).toHaveBeenCalledTimes(1);
+
+    if (composition === 'pending') {
+      editingState.compositionEnded = false;
+    } else if (composition === 'codemirror') {
+      window.editor.contentDOM.dispatchEvent(new CompositionEvent('compositionstart'));
+    }
+
+    jest.advanceTimersByTime(50);
+    expect(scroll).toHaveBeenCalledTimes(composition === 'none' ? 2 : 1);
   });
 });
 

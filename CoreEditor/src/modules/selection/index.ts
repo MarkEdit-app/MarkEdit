@@ -143,18 +143,20 @@ export function gotoLine(lineNumber: number) {
 /**
  * Make sure caret is visible, with an additional margin to breathe.
  */
-export function scrollCaretToVisible(strategy: ScrollStrategy = caretScrollDefaults.y) {
+export function ensureCaretPosition(strategy: ScrollStrategy = caretScrollDefaults.y) {
   const editor = window.editor;
   const pos = editor.state.selection.main.to;
   const coords = editor.coordsAtPos(pos);
   const margin = caretScrollDefaults.yMargin;
 
   if (coords === null) {
-    return scrollIntoView(pos);
+    scrollIntoView(pos);
+  } else if (coords.bottom + margin > editor.dom.clientHeight) {
+    scrollToSelection(strategy, margin);
   }
 
-  if (coords.bottom + margin > editor.dom.clientHeight) {
-    return scrollToSelection(strategy, margin);
+  if (window.config.typewriterMode) {
+    scrollToSelection('center');
   }
 }
 
@@ -192,9 +194,9 @@ export function scrollIntoView(anchor: number | SelectionRange, strategy: Scroll
   // Try with the suggested strategy
   tryToScroll(strategy);
 
-  // Try again in case the initial attempt didn't work
+  // Retry only outside composition, when the captured selection is not marked text
   afterDomUpdate(() => {
-    if (almostEqual(editor.scrollDOM.scrollTop, currentOffset)) {
+    if (!isComposing() && almostEqual(editor.scrollDOM.scrollTop, currentOffset)) {
       tryToScroll(strategy);
     }
   });

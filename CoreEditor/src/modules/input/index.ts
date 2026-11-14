@@ -10,7 +10,7 @@ import { hasRecentKeyPress } from '../events';
 import { isContentDirty, setHistoryExplictlyMoved } from '../history';
 import { adjustActiveLineGutter, adjustGutterPositions } from '../lines';
 import { tokenizePosition } from '../tokenizer';
-import { refreshEditFocus, scrollCaretToVisible, scrollToSelection, selectedLineColumn, updateActiveLine } from '../../modules/selection';
+import { refreshEditFocus, ensureCaretPosition, selectedLineColumn, updateActiveLine } from '../../modules/selection';
 
 import hasSelection from '../selection/hasSelection';
 import redrawSelectionLayer from '../selection/redrawSelectionLayer';
@@ -139,15 +139,10 @@ export function observeChanges() {
       // This should be called before updating the native view
       setHistoryExplictlyMoved(update);
 
-      if (!update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
-        // We need this because we have different line height for headings,
-        // CodeMirror doesn't by default fix the offset issue.
-        scrollCaretToVisible();
-
-        // Make sure the main selection is always centered for typewriter mode
-        if (window.config.typewriterMode) {
-          scrollToSelection('center');
-        }
+      // We need this because we have different line height for headings,
+      // CodeMirror doesn't by default fix the offset issue.
+      if (!isComposing() && !update.transactions.some(tr => tr.annotation(Transaction.userEvent) === '@none')) {
+        ensureCaretPosition();
       }
 
       // Keep the bottom pinned across an IME composition; the composing string and

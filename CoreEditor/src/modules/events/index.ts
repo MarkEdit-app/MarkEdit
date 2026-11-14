@@ -1,5 +1,6 @@
 import { tryGetEditor, isMetaKey, isScrolledToBottom } from '../../common/utils';
 import { globalState, editingState } from '../../common/store';
+import { ensureCaretPosition } from '../../modules/selection';
 
 import * as completion from '../../modules/completion';
 import * as selection from '../../modules/selection';
@@ -70,6 +71,10 @@ export function startObserving() {
       const selectedWholeLine = selection.from === line.from && selection.to === line.to;
       editingState.wasScrolledToBottom = selectedWholeLine && isScrolledToBottom(editor.scrollDOM);
     }
+
+    if (editor?.hasFocus === true) {
+      ensureCaretPosition();
+    }
   });
 
   document.addEventListener('compositionend', () => {
@@ -77,7 +82,8 @@ export function startObserving() {
     editingState.compositionPosition = undefined;
 
     // [macOS 15] 'compositionend' is received before the editor is initialized
-    if (tryGetEditor() === null) {
+    const editor = tryGetEditor();
+    if (editor === null) {
       return;
     }
 
@@ -92,6 +98,10 @@ export function startObserving() {
     window.nativeModules.core.notifyCompositionEnded({
       selectedLineColumn: selection.selectedLineColumn().getInfo(),
     });
+
+    if (editor.hasFocus) {
+      ensureCaretPosition();
+    }
   });
 
   // It happens usually when the page is scaled, i.e., it's not the actual size
