@@ -84,6 +84,13 @@ extension EditorDocumentTests {
       document.stringValue = "Updated text\n"
       document.updateChangeCount(.changeDone)
 
+      if fileExtension == "txt" {
+        try data.write(to: url, options: .atomic)
+      }
+
+      let date = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(-60)
+      try FileManager.default.setAttributes([.modificationDate: date], ofItemAtPath: url.path)
+
       let completed = expectation(description: "Save completes for .\(fileExtension)")
       let delegate = SaveDelegate { savedDocument, success in
         XCTAssertIdentical(savedDocument, document)
@@ -132,11 +139,18 @@ extension EditorDocumentTests {
     document.updateChangeCount(.changeDone)
     XCTAssertFalse(document.isOutdated)
 
+    let adjustedDate = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(-60)
     let saved = expectation(description: "Autosave completes")
     let released = expectation(description: "Coordinated file access is released")
     document.presentedItemOperationQueue.addOperation {
       let relinquishToWriter = document.relinquishPresentedItem(toWriter:)
       relinquishToWriter { reacquire in
+        do {
+          try FileManager.default.setAttributes([.modificationDate: adjustedDate], ofItemAtPath: url.path)
+        } catch {
+          XCTFail("Failed to adjust the timestamp: \(error)")
+        }
+
         let completed = DispatchSemaphore(value: 0)
         // Release independently of the main thread so a stalled autosave can finish and be cleaned up
         DispatchQueue.global().async {
@@ -158,6 +172,253 @@ extension EditorDocumentTests {
 
     await fulfillment(of: [released, saved], timeout: 10)
     XCTAssertEqual(try Data(contentsOf: url), Data("Autosaved text\n".utf8))
+    XCTAssertEqual(document.fileData, Data("Autosaved text\n".utf8))
+  }
+
+  func testTimestampOnlyChangesPreserveEditsAndAllowSaving() async throws {
+    for autosaving in [false, true] {
+      for offset in [-60.0, 60.0] {
+        try await withExternalChangeDocument { document, url in
+          let date = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(offset)
+          try FileManager.default.setAttributes([.modificationDate: date], ofItemAtPath: url.path)
+          document.stringValue = "Saved B\n"
+          document.updateChangeCount(.changeDone)
+
+          if autosaving {
+            try await document.autosave(withImplicitCancellability: false)
+          } else {
+            try await document.save(to: url, ofType: "public.plain-text", for: .saveOperation)
+          }
+
+          XCTAssertEqual(try Data(contentsOf: url), Data("Saved B\n".utf8))
+          XCTAssertEqual(document.fileData, Data("Saved B\n".utf8))
+          XCTAssertEqual(document.fileModificationDate, try modificationDate(at: url))
+
+          document.stringValue = "Unsaved C\n"
+          document.isOutdated = autosaving
+          document.updateChangeCount(.changeDone)
+
+          let touched = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(offset)
+          try FileManager.default.setAttributes([.modificationDate: touched], ofItemAtPath: url.path)
+          await notifyExternalChange(document)
+
+          XCTAssertEqual(document.stringValue, "Unsaved C\n")
+          XCTAssertEqual(document.isOutdated, autosaving)
+          XCTAssertTrue(document.isDocumentEdited)
+          XCTAssertFalse(document.hasBeenReverted)
+          XCTAssertEqual(document.fileData, Data("Saved B\n".utf8))
+          XCTAssertEqual(document.fileModificationDate, try modificationDate(at: url))
+        }
+      }
+    }
+  }
+
+  func testSaveAsKeepsNewFileContentsDuringOldFileNotification() async throws {
+    try await withExternalChangeDocument { document, url in
+      let date = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(60)
+      try FileManager.default.setAttributes([.modificationDate: date], ofItemAtPath: url.path)
+
+      let text = String(repeating: "B", count: 1_048_576)
+      let data = Data(text.utf8)
+      document.stringValue = text
+      document.updateChangeCount(.changeDone)
+
+      let destination = url.deletingLastPathComponent().appending(path: "saved-as.txt")
+      let saved = expectation(description: "Save As completes")
+      document.save(to: destination, ofType: "public.plain-text", for: .saveAsOperation) { error in
+        XCTAssertNil(error)
+        saved.fulfill()
+      }
+
+      document.presentedItemDidChange()
+      document.updateChangeCount(.changeDone)
+
+      // Exercise queued notifications while save finalization is delayed by work on main
+      let waitForWriting = {
+        let deadline = Date().addingTimeInterval(3)
+        let pause = DispatchSemaphore(value: 0)
+        while document.fileData != data, Date() < deadline {
+          _ = pause.wait(timeout: .now() + 0.001)
+        }
+        _ = document.fileURL
+      }
+
+      waitForWriting()
+      await fulfillment(of: [saved], timeout: 5)
+      await notifyExternalChange(document)
+      let settled = expectation(description: "Queued read publication settles")
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { settled.fulfill() }
+
+      await fulfillment(of: [settled], timeout: 2)
+      try await Self.waitUntilLoaded(document, data: data)
+
+      XCTAssertEqual(document.fileURL, destination)
+      XCTAssertEqual(try Data(contentsOf: destination), data)
+      XCTAssertEqual(document.stringValue, text)
+      XCTAssertEqual(try String(contentsOf: url, encoding: .utf8), "Original text\n")
+    }
+  }
+
+  func testTerminationWritePublishesSavedBytes() async throws {
+    try await withExternalChangeDocument { document, url in
+      document.stringValue = "Last edits\n"
+      document.updateChangeCount(.changeDone)
+      document.isTerminating = true
+      try await document.autosave(withImplicitCancellability: false)
+
+      XCTAssertEqual(document.fileData, Data("Last edits\n".utf8))
+      XCTAssertEqual(try Data(contentsOf: url), document.fileData)
+    }
+  }
+
+  func testRealExternalChangesStillRejectSaving() async throws {
+    for autosaving in [false, true] {
+      try await withExternalChangeDocument { document, url in
+        let external = Data("External contents\n".utf8)
+        try external.write(to: url, options: .atomic)
+        let date = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(-60)
+        try FileManager.default.setAttributes([.modificationDate: date], ofItemAtPath: url.path)
+        document.stringValue = "Unsaved local text\n"
+        document.updateChangeCount(.changeDone)
+        await notifyExternalChange(document)
+
+        do {
+          if autosaving {
+            try await document.autosave(withImplicitCancellability: false)
+          } else {
+            try await document.save(to: url, ofType: "public.plain-text", for: .saveOperation)
+          }
+
+          XCTFail("A genuine external change must not be overwritten")
+        } catch {
+          XCTAssertEqual((error as NSError).code, 67000)
+          document.willNotPresentError(error)
+        }
+
+        XCTAssertEqual(try Data(contentsOf: url), external)
+        XCTAssertEqual(document.stringValue, "Unsaved local text\n")
+        XCTAssertTrue(document.isDocumentEdited)
+        XCTAssertEqual(document.fileData, Data("Original text\n".utf8))
+      }
+    }
+  }
+
+  func testMatchingExternalTextDoesNotResetEditor() async throws {
+    try await withExternalChangeDocument { document, url in
+      let data = Data("Matching text\n".utf8)
+      document.stringValue = "Matching text\n"
+      document.updateChangeCount(.changeDone)
+
+      try data.write(to: url)
+      let date = try XCTUnwrap(document.fileModificationDate).addingTimeInterval(60)
+      try FileManager.default.setAttributes([.modificationDate: date], ofItemAtPath: url.path)
+      await notifyExternalChange(document)
+
+      XCTAssertFalse(document.hasBeenReverted)
+      XCTAssertFalse(document.isDocumentEdited)
+      XCTAssertEqual(document.fileData, data)
+
+      let external = Data("Different external text\n".utf8)
+      try external.write(to: url)
+      try FileManager.default.setAttributes([.modificationDate: date.addingTimeInterval(60)], ofItemAtPath: url.path)
+      document.presentedItemDidChange()
+
+      try await Self.waitUntilLoaded(document, data: external)
+      XCTAssertEqual(document.stringValue, "Different external text\n")
+    }
+  }
+
+  func testExportKeepsOriginalByteCacheAndDate() async throws {
+    try await withExternalChangeDocument { document, url in
+      let date = try XCTUnwrap(document.fileModificationDate)
+      try FileManager.default.setAttributes([.modificationDate: date.addingTimeInterval(60)], ofItemAtPath: url.path)
+      document.stringValue = "Exported text\n"
+      document.updateChangeCount(.changeDone)
+
+      let exported = url.deletingLastPathComponent().appending(path: "export.txt")
+      try await document.save(to: exported, ofType: "public.plain-text", for: .saveToOperation)
+
+      XCTAssertEqual(document.fileData, Data("Original text\n".utf8))
+      XCTAssertEqual(document.fileModificationDate, date)
+      XCTAssertEqual(try String(contentsOf: exported, encoding: .utf8), "Exported text\n")
+      XCTAssertEqual(try String(contentsOf: url, encoding: .utf8), "Original text\n")
+    }
+  }
+
+  func testRecoveryBytesAreNotAnOriginalFileBaseline() async throws {
+    try await withExternalChangeDocument { original, url in
+      original.isTerminating = true
+      original.close()
+
+      let recoveryURL = url.deletingLastPathComponent().appending(path: "recovery.txt")
+      let recovered = Data("Recovered edits\n".utf8)
+      try recovered.write(to: recoveryURL)
+      let document = try EditorDocument(for: url, withContentsOf: recoveryURL, ofType: "public.plain-text")
+      NSFileCoordinator.removeFilePresenter(document)
+
+      defer {
+        document.isTerminating = true
+        document.updateChangeCount(.changeCleared)
+        document.close()
+      }
+
+      try await Self.waitUntilLoaded(document, data: recovered)
+      document.updateChangeCount(.changeDone)
+      let date = try XCTUnwrap(document.fileModificationDate)
+      try FileManager.default.setAttributes([.modificationDate: date.addingTimeInterval(60)], ofItemAtPath: url.path)
+
+      await notifyExternalChange(document)
+      XCTAssertEqual(document.stringValue, "Recovered edits\n")
+      XCTAssertEqual(document.fileModificationDate, date)
+      XCTAssertTrue(document.isDocumentEdited)
+      XCTAssertEqual(try Data(contentsOf: recoveryURL), recovered)
+
+      try await document.save(to: url, ofType: "public.plain-text", for: .saveAsOperation)
+      XCTAssertNil(document.autosavedContentsFileURL)
+      document.stringValue = "Newer edits\n"
+      document.updateChangeCount(.changeDone)
+
+      let savedDate = try XCTUnwrap(document.fileModificationDate)
+      try FileManager.default.setAttributes([.modificationDate: savedDate.addingTimeInterval(-60)], ofItemAtPath: url.path)
+
+      try await document.save(to: url, ofType: "public.plain-text", for: .saveOperation)
+      XCTAssertEqual(document.fileData, Data("Newer edits\n".utf8))
+      XCTAssertEqual(try Data(contentsOf: url), document.fileData)
+    }
+  }
+
+  private func modificationDate(at url: URL) throws -> Date {
+    let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+    return try XCTUnwrap(attributes[.modificationDate] as? Date)
+  }
+
+  private func notifyExternalChange(_ document: EditorDocument) async {
+    await withCheckedContinuation { continuation in
+      document.presentedItemDidChange()
+      DispatchQueue.main.async { continuation.resume() }
+    }
+  }
+
+  private func withExternalChangeDocument(action: (EditorDocument, URL) async throws -> Void) async throws {
+    let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: directory) }
+
+    let url = directory.appending(path: "external.txt")
+    let data = Data("Original text\n".utf8)
+    try data.write(to: url)
+    let document = try EditorDocument(contentsOf: url, ofType: "public.plain-text")
+    NSFileCoordinator.removeFilePresenter(document)
+
+    defer {
+      document.isTerminating = true
+      document.isOutdated = false
+      document.updateChangeCount(.changeCleared)
+      document.close()
+    }
+
+    try await Self.waitUntilLoaded(document, data: data)
+    try await action(document, url)
   }
 
   func testPreferredExtensionOnlyRecognizesOutputTypes() {
