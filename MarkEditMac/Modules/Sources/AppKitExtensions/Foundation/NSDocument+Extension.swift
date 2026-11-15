@@ -11,6 +11,14 @@ public extension NSDocument {
     fileURL?.deletingLastPathComponent()
   }
 
+  var hasDifferentAutosavedFile: Bool {
+    guard let autosavedContentsFileURL else {
+      return false
+    }
+
+    return autosavedContentsFileURL != fileURL
+  }
+
   /// Returns the file's bytes if they match the document's current serialized content; otherwise nil.
   var matchingFileData: Data? {
     get throws {
@@ -20,6 +28,33 @@ public extension NSDocument {
 
       let diskData = try Data(contentsOf: fileURL)
       return diskData == (try data(ofType: fileType)) ? diskData : nil
+    }
+  }
+
+  /// Read the current disk version without asking other presenters to save their edits.
+  func withCoordinatedFileRead(at url: URL, _ accessor: (URL, Date) throws -> Void) throws {
+    var coordinationError: NSError?
+    var fileReadError: Error?
+
+    NSFileCoordinator(filePresenter: self).coordinate(
+      readingItemAt: url,
+      options: .withoutChanges,
+      error: &coordinationError
+    ) { coordinatedURL in
+      do {
+        let attributes = try FileManager.default.attributesOfItem(atPath: coordinatedURL.path)
+        guard let date = attributes[.modificationDate] as? Date else {
+          throw CocoaError(.fileReadUnknown)
+        }
+
+        try accessor(coordinatedURL, date)
+      } catch {
+        fileReadError = error
+      }
+    }
+
+    if let error = coordinationError ?? fileReadError {
+      throw error
     }
   }
 
@@ -55,5 +90,15 @@ public extension NSDocument {
     }
 
     return maxLength > (sorted.count - 1) ? [] : Array(sorted.suffix(from: maxLength))
+  }
+}
+
+public extension NSDocument.SaveOperationType {
+  var updatesDocumentFile: Bool {
+    self != .saveToOperation && self != .autosaveElsewhereOperation
+  }
+
+  var isInPlace: Bool {
+    self == .saveOperation || self == .autosaveInPlaceOperation
   }
 }

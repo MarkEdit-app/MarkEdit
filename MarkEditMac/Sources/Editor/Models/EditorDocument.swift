@@ -8,6 +8,7 @@ import AppKit
 import AppKitExtensions
 import MarkEditKit
 import FileVersion
+import Synchronization
 import TextBundle
 
 /**
@@ -16,7 +17,15 @@ import TextBundle
  https://developer.apple.com/documentation/appkit/nsdocument
  */
 final class EditorDocument: NSDocument {
-  var fileData: Data?
+  var fileData: Data? {
+    get {
+      fileSnapshots.withLock { $0.saved }
+    }
+    set {
+      fileSnapshots.withLock { $0.saved = newValue }
+    }
+  }
+
   var spellDocTag: Int?
   var stringValue = ""
   var formatCompleted = false // The result of format content is all good
@@ -98,6 +107,7 @@ final class EditorDocument: NSDocument {
 
   // Defer identity generation until Quick Search needs it
   private(set) lazy var sessionID = UUID()
+  private let fileSnapshots = Mutex(EditorFileSnapshots())
   private var autosaveDelayedTask: Task<Void, Never>?
   private var contentChangeCount: UInt64 = 0
   private let pendingFileReads = DispatchGroup()
@@ -390,6 +400,35 @@ extension EditorDocument {
     }
   }
 
+  override func writeSafely(
+    to url: URL,
+    ofType typeName: String,
+    for saveOperation: NSDocument.SaveOperationType
+  ) throws {
+    guard !typeName.isTextBundle, saveOperation.updatesDocumentFile else {
+      return try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
+    }
+
+    fileSnapshots.withLock {
+      $0.pending = nil
+      $0.isWriting = true
+    }
+
+    var succeeded = false
+    defer {
+      fileSnapshots.withLock {
+        if !succeeded {
+          $0.pending = nil
+        }
+
+        $0.isWriting = false
+      }
+    }
+
+    try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
+    succeeded = true
+  }
+
   // We don't have a sync way to get the text, override save and autosave to do an async approach.
   //
   // Note that, by only overriding the "saveToURL" method can bring hang issues.
@@ -403,6 +442,38 @@ extension EditorDocument {
     saveContent(sender: sender, userInitiated: true)
   }
 
+  override func save(
+    withDelegate delegate: Any?,
+    didSave selector: Selector?,
+    contextInfo: UnsafeMutableRawPointer?
+  ) {
+    // AppKit can check for conflicts before reaching the save-to-URL override
+    reconcileFileModificationDate()
+    super.save(withDelegate: delegate, didSave: selector, contextInfo: contextInfo)
+  }
+
+  override func save(
+    to url: URL,
+    ofType typeName: String,
+    for saveOperation: NSDocument.SaveOperationType,
+    completionHandler: @escaping (Error?) -> Void
+  ) {
+    if url == fileURL, saveOperation.isInPlace {
+      reconcileFileModificationDate()
+    }
+
+    super.save(to: url, ofType: typeName, for: saveOperation) { error in
+      if !typeName.isTextBundle, saveOperation.updatesDocumentFile {
+        // AppKit has now updated the URL and date, so the saved bytes belong to that file
+        self.fileSnapshots.withLock {
+          $0.saveDidFinish(succeeded: error == nil)
+        }
+      }
+
+      completionHandler(error)
+    }
+  }
+
   // Deliberately use the callback override to preserve AppKit's nested file-access context,
   // deferring the call to super can deadlock during coordinated file access.
   override func autosave(
@@ -411,11 +482,7 @@ extension EditorDocument {
   ) {
     let saveAction = {
       do {
-        // Write synchronously because asynchronous autosaving may not finish during termination
-        if !self.hasBeenReverted && self.isTerminating && self.hasUnautosavedChanges,
-           let fileURL = self.fileURL, let fileType = self.fileType {
-          try self.writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
-          self.fileModificationDate = .now // Prevent immediate presentedItemDidChange calls
+        if try self.writeSafelyBeforeTermination() {
           completionHandler(nil)
           return
         }
@@ -438,11 +505,19 @@ extension EditorDocument {
     return encoding.encode(string: stringValue) ?? stringValue.toData() ?? Data()
   }
 
-  override func presentedItemDidChange() {
-    guard let fileURL, let fileType else {
-      return
+  override func fileWrapper(ofType typeName: String) throws -> FileWrapper {
+    let wrapper = try super.fileWrapper(ofType: typeName)
+    fileSnapshots.withLock {
+      // Keep the serialized bytes, not text that may change while the write finishes
+      if $0.isWriting {
+        $0.pending = wrapper.regularFileContents
+      }
     }
 
+    return wrapper
+  }
+
+  override func presentedItemDidChange() {
     // Only under certain conditions we need this flow,
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
     DispatchQueue.main.async {
@@ -453,6 +528,26 @@ extension EditorDocument {
         }
 
         return
+      }
+
+      guard let fileURL = self.fileURL, let fileType = self.fileType else {
+        return
+      }
+
+      if !fileType.isTextBundle {
+        guard !self.hasDifferentAutosavedFile else {
+          return
+        }
+
+        let documentDate = self.fileModificationDate
+        if self.reconcileFileModificationDate() {
+          return
+        }
+
+        guard self.fileURL == fileURL, self.fileType == fileType,
+              self.fileModificationDate == documentDate else {
+          return
+        }
       }
 
       do {
@@ -771,6 +866,80 @@ private extension EditorDocument {
     }
 
     return nil
+  }
+
+  /// Verify timestamp-only drift without reloading or changing the editor's dirty state.
+  /// Returns true for an unchanged timestamp or verified unchanged contents.
+  @discardableResult
+  func reconcileFileModificationDate() -> Bool {
+    guard let fileURL, let fileType, !fileType.isTextBundle,
+          let documentDate = fileModificationDate,
+          fileData != nil, !hasDifferentAutosavedFile else {
+      return false
+    }
+
+    let matchesFileState = {
+      self.fileURL == fileURL &&
+      self.fileType == fileType &&
+      self.fileModificationDate == documentDate
+    }
+
+    do {
+      let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
+      guard attributes[.modificationDate] as? Date != documentDate else {
+        return true
+      }
+
+      var unchangedDate: Date?
+      try withCoordinatedFileRead(at: fileURL) { url, date in
+        guard matchesFileState(), date != documentDate else {
+          return
+        }
+
+        let diskData = try Data(contentsOf: url)
+        guard matchesFileState() else {
+          return
+        }
+
+        let knownData = self.fileSnapshots.withLock {
+          (saved: $0.saved, pending: $0.pending)
+        }
+
+        if diskData == knownData.saved || diskData == knownData.pending {
+          unchangedDate = date
+        }
+      }
+
+      guard let unchangedDate, matchesFileState() else {
+        return false
+      }
+
+      fileModificationDate = unchangedDate
+      return true
+    } catch {
+      Logger.log(.error, "Failed to check external file changes: \(error.localizedDescription)")
+      return false
+    }
+  }
+
+  func writeSafelyBeforeTermination() throws -> Bool {
+    guard !hasBeenReverted, isTerminating, hasUnautosavedChanges, let fileURL, let fileType else {
+      return false
+    }
+
+    // Asynchronous autosaving may not finish during termination
+    try writeSafely(to: fileURL, ofType: fileType, for: .autosaveAsOperation)
+
+    // This direct write has no save completion callback
+    if !fileType.isTextBundle {
+      fileSnapshots.withLock {
+        $0.saveDidFinish(succeeded: true)
+      }
+    }
+
+    // Prevent immediate presentedItemDidChange calls
+    fileModificationDate = .now
+    return true
   }
 
   func writeDebugFile(_ editorText: String) {
