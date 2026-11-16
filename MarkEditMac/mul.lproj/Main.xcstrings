@@ -1,54 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "bkm-Mn-001.title" : {
-      "comment" : "Class = \"NSMenu\"; title = \"Bookmarks\"; ObjectID = \"bkm-Mn-001\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bookmarks"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "书签"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "書籤"
-          }
-        }
-      }
-    },
-    "OQ1-op-enQ.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Quick Search…\"; ObjectID = \"OQ1-op-enQ\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Quick Search…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "快速搜索…"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "快速搜尋…"
-          }
-        }
-      }
-    },
     "0C5-FE-fvI.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Float on Top\"; ObjectID = \"0C5-FE-fvI\";",
       "extractionState" : "extracted_with_value",
@@ -926,6 +878,30 @@
         }
       }
     },
+    "bkm-Mn-001.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Bookmarks\"; ObjectID = \"bkm-Mn-001\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bookmarks"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "书签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書籤"
+          }
+        }
+      }
+    },
     "BlA-2z-1dH.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Keep Up to 100 Versions\"; ObjectID = \"BlA-2z-1dH\";",
       "extractionState" : "extracted_with_value",
@@ -975,13 +951,13 @@
       }
     },
     "BOF-NM-1cW.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Preferences…\"; ObjectID = \"BOF-NM-1cW\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Settings…\"; ObjectID = \"BOF-NM-1cW\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Preferences…"
+            "value" : "Settings…"
           }
         },
         "zh-Hans" : {
@@ -2785,6 +2761,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隱藏 MarkEdit"
+          }
+        }
+      }
+    },
+    "OQ1-op-enQ.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Quick Search…\"; ObjectID = \"OQ1-op-enQ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Quick Search…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜索…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速搜尋…"
           }
         }
       }
