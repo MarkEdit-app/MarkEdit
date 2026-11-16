@@ -92,6 +92,7 @@ final class EditorDocument: NSDocument {
   private var revertedDate: Date = .distantPast
   private var autosaveDelayedTask: Task<Void, Never>?
   private var contentChangeCount: UInt64 = 0
+  private var pendingPresenterSaves: Int = 0
   private var suggestedFilename: String?
 }
 
@@ -411,18 +412,25 @@ extension EditorDocument {
   ) {
     let saveAction = {
       do {
+        // Reject stale text after a failed refresh or an intervening edit
+        try self.requireSynchronized(implicitlyCancellable: implicitlyCancellable)
+
         if try self.writeSafelyBeforeTermination() {
           completionHandler(nil)
           return
         }
 
-        super.autosave(withImplicitCancellability: implicitlyCancellable, completionHandler: completionHandler)
+        super.autosave(
+          withImplicitCancellability: implicitlyCancellable,
+          completionHandler: completionHandler
+        )
       } catch {
         completionHandler(error)
       }
     }
 
-    if isOutdated {
+    // A presenter autosave must not suspend if another edit arrives after its entry check
+    if isOutdated && pendingPresenterSaves == 0 {
       updateContent(saveAction: saveAction)
     } else {
       saveAction()
@@ -619,6 +627,39 @@ extension EditorDocument {
       } catch {
         Logger.log(.error, error.localizedDescription)
       }
+    }
+  }
+
+  override nonisolated func savePresentedItemChanges(
+    completionHandler: @escaping @Sendable (Error?) -> Void
+  ) {
+    continueOnMainActor {
+      do {
+        // WebKit cannot reliably finish a text read while AppKit blocks main,
+        // an ordinary save can sync it later.
+        try self.requireSynchronized()
+      } catch {
+        completionHandler(error)
+        return
+      }
+
+      self.pendingPresenterSaves += 1
+      super.savePresentedItemChanges { error in
+        self.continueOnMainActor {
+          self.pendingPresenterSaves -= 1
+          completionHandler(error)
+        }
+      }
+    }
+  }
+
+  private func requireSynchronized(implicitlyCancellable: Bool = false) throws {
+    // A no-op autosave does not need current editor text
+    guard !isOutdated || !hasUnautosavedChanges else {
+      Logger.log(.error, "Cannot autosave while editor text is still outdated")
+
+      // AppKit does not present cancellation errors for optional autosaves
+      throw CocoaError(implicitlyCancellable ? .userCancelled : .fileWriteUnknown)
     }
   }
 
