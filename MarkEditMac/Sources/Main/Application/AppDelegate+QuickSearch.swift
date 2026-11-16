@@ -87,15 +87,13 @@ extension AppDelegate {
         reportError: { Logger.log(.error, "Quick Search: \($0)") },
         onResultActivated: { AppPreferences.General.hasUsedQuickSearch = true },
         performMenuAction: { item in
-          if item.action == #selector(NSDocumentController.newDocument(_:)) {
-            // Clicking New in Quick Search can animate the first document from the wrong origin.
-            // Defer the menu action, preserving its target and responder-chain routing.
-            DispatchQueue.main.async {
-              guard item.performAction() else {
-                Logger.log(.error, "Quick Search: deferred New action is no longer available")
-                NSSound.beep()
-                return
-              }
+          if item.isNewDocument {
+            // Explicitly create then show: AppKit's New action can animate the first window
+            // from the wrong origin when invoked by a Quick Search mouse click.
+            do {
+              try NSDocumentController.shared.openUntitledDocument()
+            } catch {
+              NSApp.presentError(error)
             }
 
             return true
@@ -253,5 +251,24 @@ private extension AppDelegate {
     }
 
     return theme.prefersTintedColors ? theme.windowBackground.withAlphaComponent(0.5).resolvedColor() : nil
+  }
+}
+
+private extension NSDocumentController {
+  func openUntitledDocument() throws {
+    let document = try openUntitledDocumentAndDisplay(false)
+    document.makeWindowControllers()
+    document.showWindows()
+  }
+}
+
+private extension NSMenuItem {
+  var isNewDocument: Bool {
+    if let action, action == #selector(NSDocumentController.newDocument(_:)) {
+      let target = NSApp.target(forAction: action, to: target, from: self)
+      return target as? NSDocumentController === NSDocumentController.shared
+    }
+
+    return false
   }
 }
