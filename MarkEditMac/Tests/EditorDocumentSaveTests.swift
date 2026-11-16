@@ -5,6 +5,7 @@
 //
 
 import AppKit
+import AppKitExtensions
 import MarkEditCore
 import UniformTypeIdentifiers
 import WebKit
@@ -173,6 +174,228 @@ extension EditorDocumentTests {
     await fulfillment(of: [released, saved], timeout: 10)
     XCTAssertEqual(try Data(contentsOf: url), Data("Autosaved text\n".utf8))
     XCTAssertEqual(document.fileData, Data("Autosaved text\n".utf8))
+  }
+
+  func testOutdatedPresenterSavePreservesEditsAndAllowsLaterAutosave() async throws {
+    try await withSynchronizationEditor { document, editor in
+      let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+      defer { try? FileManager.default.removeItem(at: directory) }
+
+      let url = directory.appending(path: "document.txt")
+      try await document.save(to: url, ofType: "public.plain-text", for: .saveAsOperation)
+
+      _ = try await editor.webView.evaluateJavaScript("""
+      window.nativeModules.core.notifyEditorDidBecomeIdle = () => {};
+      window.editor.dispatch({
+        changes: { from: 0, to: window.editor.state.doc.length, insert: "Edited text\\n" }
+      });
+      void 0;
+      """)
+
+      let deadline = ContinuousClock.now + .seconds(2)
+      while !document.isOutdated, ContinuousClock.now < deadline {
+        try await Task.sleep(for: .milliseconds(10))
+      }
+
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+      await assertCoordinatedPresenterSave(document, expectsError: true)
+
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertTrue(document.isDocumentEdited)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+      XCTAssertEqual(try Data(contentsOf: url), Data("Original text\n".utf8))
+
+      let editorText = await editor.editorText
+      XCTAssertEqual(editorText, "Edited text\n")
+
+      try await document.autosave(withImplicitCancellability: false)
+      XCTAssertFalse(document.isOutdated)
+      XCTAssertEqual(try Data(contentsOf: url), Data("Edited text\n".utf8))
+    }
+  }
+
+  func testPresenterSaveCompletesWhileMainThreadWaitsForActivity() async throws {
+    for isOutdated in [false, true] {
+      try await withExternalChangeDocument { document, url in
+        document.stringValue = "Unsaved text\n"
+        document.isOutdated = isOutdated
+        document.updateChangeCount(.changeDone)
+        XCTAssertTrue(document.hasUnautosavedChanges)
+
+        let started = expectation(description: "First activity starts")
+        let saved = expectation(description: "Presenter save completes while main waits")
+        saved.assertForOverFulfill = true
+
+        let released = expectation(description: "First activity finishes")
+        let start = DispatchSemaphore(value: 0)
+        let completed = DispatchSemaphore(value: 0)
+        let presenterQueue = document.presentedItemOperationQueue
+
+        document.performActivity(withSynchronousWaiting: false) { finishActivity in
+          let finishOnMain: @MainActor @Sendable () -> Void = {
+            finishActivity()
+            released.fulfill()
+          }
+
+          DispatchQueue.global().async {
+            XCTAssertEqual(start.wait(timeout: .now() + 5), .success)
+            presenterQueue.addOperation {
+              document.savePresentedItemChanges { error in
+                if isOutdated {
+                  XCTAssertEqual((error as? CocoaError)?.code, .fileWriteUnknown)
+                } else {
+                  XCTAssertNil(error)
+                }
+
+                completed.signal()
+                saved.fulfill()
+              }
+            }
+
+            if completed.wait(timeout: .now() + 3) == .timedOut {
+              XCTFail("Presenter save required the main-thread activity wait to end")
+            }
+
+            // Keep the watchdog independent of the continuation helper under test
+            document.continueAsynchronousWorkOnMainThread {
+              MainActor.assumeIsolated(finishOnMain)
+            }
+          }
+
+          started.fulfill()
+        }
+
+        await fulfillment(of: [started], timeout: 5)
+        start.signal()
+        document.performActivity(withSynchronousWaiting: true) { finishActivity in
+          finishActivity()
+        }
+
+        await fulfillment(of: [saved, released], timeout: 10)
+        XCTAssertEqual(document.isOutdated, isOutdated)
+        XCTAssertEqual(document.hasUnautosavedChanges, isOutdated)
+
+        let expected = Data((isOutdated ? "Original text\n" : "Unsaved text\n").utf8)
+        XCTAssertEqual(try Data(contentsOf: url), expected)
+        XCTAssertEqual(document.fileData, expected)
+      }
+    }
+  }
+
+  func testOutdatedPresenterSaveWithNoUnautosavedChangesIsANoOp() async throws {
+    try await withExternalChangeDocument { document, url in
+      document.isOutdated = true
+      XCTAssertFalse(document.hasUnautosavedChanges)
+
+      await assertCoordinatedPresenterSave(document, expectsError: false)
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertFalse(document.hasUnautosavedChanges)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+      XCTAssertEqual(try Data(contentsOf: url), Data("Original text\n".utf8))
+    }
+  }
+
+  func testEditBeforeDeferredPresenterAutosaveDoesNotRefreshText() async throws {
+    try await withSynchronizationEditor { document, editor in
+      let directory = ApplicationEnvironment.documentsDirectory.appending(path: UUID().uuidString)
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+      defer { try? FileManager.default.removeItem(at: directory) }
+
+      let url = directory.appending(path: "document.txt")
+      try await document.save(to: url, ofType: "public.plain-text", for: .saveAsOperation)
+
+      _ = try await editor.webView.evaluateJavaScript("""
+      window.nativeModules.core.notifyEditorDidBecomeIdle = () => {};
+      window.presenterTextReads = 0;
+      const getText = window.webModules.core.getEditorText;
+      window.webModules.core.getEditorText = () => {
+        window.presenterTextReads += 1;
+        return getText();
+      };
+      void 0;
+      """)
+
+      document.updateChangeCount(.changeDone)
+      XCTAssertTrue(document.hasUnautosavedChanges)
+      XCTAssertFalse(document.isOutdated)
+
+      let saved = expectation(description: "Presenter autosave rejects the intervening edit")
+      saved.assertForOverFulfill = true
+
+      let edited = expectation(description: "Late edit reaches the editor")
+      document.savePresentedItemChanges { error in
+        XCTAssertNotNil(error)
+        saved.fulfill()
+      }
+
+      // Queue the edit behind presenter entry but ahead of AppKit's deferred autosave
+      document.continueOnMainActor {
+        document.isOutdated = true
+        document.updateChangeCount(.changeDone)
+        editor.webView.evaluateJavaScript("""
+        window.editor.dispatch({
+          changes: { from: 0, to: window.editor.state.doc.length, insert: "Late edit\\n" }
+        });
+        void 0;
+        """) { _, error in
+          XCTAssertNil(error)
+          edited.fulfill()
+        }
+      }
+
+      await fulfillment(of: [saved, edited], timeout: 5)
+      let reads = try await editor.webView.evaluateJavaScript("window.presenterTextReads")
+      XCTAssertEqual(reads as? Int, 0)
+      XCTAssertTrue(document.isOutdated)
+      XCTAssertTrue(document.hasUnautosavedChanges)
+      XCTAssertEqual(document.stringValue, "Original text\n")
+      XCTAssertEqual(try Data(contentsOf: url), Data("Original text\n".utf8))
+
+      try await document.autosave(withImplicitCancellability: false)
+      XCTAssertFalse(document.isOutdated)
+      XCTAssertEqual(try Data(contentsOf: url), Data("Late edit\n".utf8))
+    }
+  }
+
+  private func assertCoordinatedPresenterSave(
+    _ document: EditorDocument,
+    expectsError: Bool
+  ) async {
+    let saved = expectation(description: "Presenter save completes")
+    saved.assertForOverFulfill = true
+
+    let released = expectation(description: "Writer releases file access")
+    let completed = DispatchSemaphore(value: 0)
+
+    document.presentedItemOperationQueue.addOperation {
+      let relinquishToWriter = document.relinquishPresentedItem(toWriter:)
+      relinquishToWriter { reacquire in
+        // Release independently of main so a regression reports a failure instead of hanging the suite
+        DispatchQueue.global().async {
+          if completed.wait(timeout: .now() + 3) == .timedOut {
+            XCTFail("Presenter save waited for coordinated file access to be released")
+          }
+
+          reacquire?()
+          released.fulfill()
+        }
+
+        document.savePresentedItemChanges { error in
+          if expectsError {
+            XCTAssertEqual((error as? CocoaError)?.code, .fileWriteUnknown)
+          } else {
+            XCTAssertNil(error)
+          }
+
+          completed.signal()
+          saved.fulfill()
+        }
+      }
+    }
+
+    await fulfillment(of: [saved, released], timeout: 10)
   }
 
   func testTimestampOnlyChangesPreserveEditsAndAllowSaving() async throws {
@@ -439,8 +662,14 @@ extension EditorDocumentTests {
       """)
 
       document.isOutdated = true
-      await withCheckedContinuation { continuation in
-        document.updateContent { continuation.resume() }
+      document.updateChangeCount(.changeDone)
+      XCTAssertTrue(document.hasUnautosavedChanges)
+
+      do {
+        try await document.autosave(withImplicitCancellability: false)
+        XCTFail("Autosave must reject a failed text synchronization")
+      } catch {
+        XCTAssertEqual((error as? CocoaError)?.code, .fileWriteUnknown)
       }
 
       XCTAssertTrue(document.isOutdated)
@@ -449,25 +678,31 @@ extension EditorDocumentTests {
   }
 
   func testEditDuringTextSynchronizationKeepsOutdatedFlag() async throws {
-    try await withSynchronizationEditor { document, editor in
-      _ = try await editor.webView.evaluateJavaScript("""
-      const getText = window.webModules.core.getEditorText;
-      window.webModules.core.getEditorText = () => {
-        const text = getText();
-        window.editor.dispatch({ changes: { from: 0, insert: "Newer " } });
-        return text;
-      };
-      void 0;
-      """)
+    for implicitlyCancellable in [false, true] {
+      try await withSynchronizationEditor { document, editor in
+        _ = try await editor.webView.evaluateJavaScript("""
+        const getText = window.webModules.core.getEditorText;
+        window.webModules.core.getEditorText = () => {
+          const text = getText();
+          window.editor.dispatch({ changes: { from: 0, insert: "Newer " } });
+          return text;
+        };
+        void 0;
+        """)
 
-      document.stringValue = "Previous snapshot\n"
-      document.isOutdated = true
-      await withCheckedContinuation { continuation in
-        document.updateContent { continuation.resume() }
+        document.stringValue = "Previous snapshot\n"
+        document.isOutdated = true
+        do {
+          try await document.autosave(withImplicitCancellability: implicitlyCancellable)
+          XCTFail("Autosave must reject text made stale during synchronization")
+        } catch {
+          let expected: CocoaError.Code = implicitlyCancellable ? .userCancelled : .fileWriteUnknown
+          XCTAssertEqual((error as? CocoaError)?.code, expected)
+        }
+
+        XCTAssertTrue(document.isOutdated)
+        XCTAssertEqual(document.stringValue, "Original text\n")
       }
-
-      XCTAssertTrue(document.isOutdated)
-      XCTAssertEqual(document.stringValue, "Original text\n")
     }
   }
 

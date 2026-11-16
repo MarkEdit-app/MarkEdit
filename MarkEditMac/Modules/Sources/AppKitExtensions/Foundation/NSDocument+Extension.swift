@@ -58,6 +58,14 @@ public extension NSDocument {
     }
   }
 
+  /// Unlike a main-queue dispatch, this can interrupt AppKit's synchronous document-access waits.
+  nonisolated func continueOnMainActor(_ body: @Sendable @MainActor @escaping () -> Void) {
+    continueAsynchronousWorkOnMainThread {
+      // AppKit guarantees main-thread execution but does not annotate the callback's actor
+      MainActor.assumeIsolated(body)
+    }
+  }
+
   func markContentDirty(_ isDirty: Bool) {
     // The undo stack is implemented in CoreEditor entirely,
     // there are only two meaningful change count values: 0 (saved) or 1 (dirty).
