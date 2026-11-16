@@ -7,7 +7,6 @@
 import AppKit
 import AppKitExtensions
 import MarkEditKit
-import FileVersion
 import Synchronization
 import TextBundle
 
@@ -17,16 +16,6 @@ import TextBundle
  https://developer.apple.com/documentation/appkit/nsdocument
  */
 final class EditorDocument: NSDocument {
-  var fileData: Data? {
-    get {
-      fileSnapshots.withLock { $0.saved }
-    }
-    set {
-      fileSnapshots.withLock { $0.saved = newValue }
-    }
-  }
-
-  var spellDocTag: Int?
   var stringValue = ""
   var formatCompleted = false // The result of format content is all good
 
@@ -47,6 +36,30 @@ final class EditorDocument: NSDocument {
   var lastWasStandalone: Bool = false
   weak var lastSiblingWindow: NSWindow?
 
+  /**
+   File name from external apps, such as Shortcuts or URL schemes.
+   */
+  var externalFilename: String? {
+    didSet {
+      windowControllers.forEach {
+        $0.synchronizeWindowTitleWithDocumentName()
+      }
+    }
+  }
+
+  private(set) weak var hostViewController: EditorViewController?
+  private(set) lazy var sessionID = UUID() // Defer until Quick Search needs it
+  private(set) var spellDocTag: Int?
+
+  var fileData: Data? {
+    get {
+      fileSnapshots.withLock { $0.saved }
+    }
+    set {
+      fileSnapshots.withLock { $0.saved = newValue }
+    }
+  }
+
   var isContentReady: Bool {
     isDraft || fileURL == nil || fileData != nil
   }
@@ -55,30 +68,8 @@ final class EditorDocument: NSDocument {
     Date.now.timeIntervalSince(revertedDate) < 1
   }
 
-  var canUndo: Bool {
-    get async {
-      if isReadOnlyMode {
-        return false
-      }
-
-      return (try? await bridge?.history.canUndo()) ?? false
-    }
-  }
-
-  var canRedo: Bool {
-    get async {
-      if isReadOnlyMode {
-        return false
-      }
-
-      return (try? await bridge?.history.canRedo()) ?? false
-    }
-  }
-
-  var lineEndings: LineEndings? {
-    get async {
-      try? await bridge?.lineEndings.getLineEndings()
-    }
+  var hasTextBundle: Bool {
+    textBundle != nil
   }
 
   var baseURL: URL? {
@@ -94,33 +85,65 @@ final class EditorDocument: NSDocument {
     AppRuntimeConfig.autoSaveWhenIdle && fileURL != nil
   }
 
-  /**
-   File name from external apps, such as Shortcuts or URL schemes.
-   */
-  var externalFilename: String? {
-    didSet {
-      windowControllers.forEach {
-        $0.synchronizeWindowTitleWithDocumentName()
+  private let fileSnapshots = Mutex(EditorFileSnapshots())
+  private let pendingFileReads = DispatchGroup()
+  private var textBundle: TextBundleWrapper?
+  private var suggestedTextEncoding: EditorTextEncoding?
+  private var revertedDate: Date = .distantPast
+  private var autosaveDelayedTask: Task<Void, Never>?
+  private var contentChangeCount: UInt64 = 0
+  private var suggestedFilename: String?
+}
+
+// MARK: - External
+
+extension EditorDocument {
+  func prepareSpellDocTag() {
+    guard spellDocTag == nil else {
+      return
+    }
+
+    spellDocTag = NSSpellChecker.uniqueSpellDocumentTag()
+  }
+
+  func autosaveDelayed(seconds: Double = 0.25) {
+    autosaveDelayedTask?.cancel()
+    autosaveDelayedTask = Task { [weak self] in
+      try? await Task.sleep(for: .seconds(seconds))
+      if !Task.isCancelled {
+        try? await self?.autosave(withImplicitCancellability: false)
       }
     }
   }
+}
 
-  // Defer identity generation until Quick Search needs it
-  private(set) lazy var sessionID = UUID()
-  private let fileSnapshots = Mutex(EditorFileSnapshots())
-  private var autosaveDelayedTask: Task<Void, Never>?
-  private var contentChangeCount: UInt64 = 0
-  private let pendingFileReads = DispatchGroup()
-  private var textBundle: TextBundleWrapper?
-  private var revertedDate: Date = .distantPast
-  private var suggestedTextEncoding: EditorTextEncoding?
-  private weak var hostViewController: EditorViewController?
+// MARK: - Content Synchronization
 
-  /**
-   File name from the table of contents.
-   */
-  private var suggestedFilename: String?
+extension EditorDocument {
+  func synchronizeText() async -> String? {
+    let changeCount = contentChangeCount
+    if let editorText = await hostViewController?.editorText {
+      stringValue = editorText
+      isOutdated = contentChangeCount != changeCount
+      return editorText
+    }
 
+    return nil
+  }
+
+  func updateSuggestedFilename() async {
+    // If the content contains headings, use the first one to override the displayName
+    if fileURL == nil, let heading = await hostViewController?.tableOfContents?.first {
+      suggestedFilename = heading.title
+    } else {
+      suggestedFilename = nil
+    }
+  }
+}
+
+// MARK: - Lifecycle
+
+extension EditorDocument {
   override func makeWindowControllers() {
     let storyboard = NSStoryboard(name: NSStoryboard.Name("Main"), bundle: nil)
     let sceneIdentifier = NSStoryboard.SceneIdentifier("EditorWindowController")
@@ -145,85 +168,61 @@ final class EditorDocument: NSDocument {
     NSApplication.shared.closeOpenPanels()
     addWindowController(windowController)
 
-    #if DEBUG
-      if ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] == "YES" {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-          windowController.window?.setFrameSize(CGSize(width: 720, height: 480))
-          windowController.window?.center()
-        }
+  #if DEBUG
+    if ProcessInfo.processInfo.environment["DEBUG_TAKING_SCREENSHOTS"] == "YES" {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        windowController.window?.setFrameSize(CGSize(width: 720, height: 480))
+        windowController.window?.center()
       }
-    #endif
+    }
+  #endif
   }
 
-  func waitUntilSaveCompleted(userInitiated: Bool = false, delay: TimeInterval = 0.6) async {
-    await withCheckedContinuation { continuation in
-      saveContent(userInitiated: userInitiated) {
-        continuation.resume()
-      }
-    }
-
-    // It takes sometime to actually save the document
-    await withCheckedContinuation { continuation in
-      DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-        continuation.resume()
-      }
-    }
+  override func canClose(
+    withDelegate delegate: Any,
+    shouldClose shouldCloseSelector: Selector?,
+    contextInfo: UnsafeMutableRawPointer?
+  ) {
+    handleCloseRequest(
+      withDelegate: delegate,
+      shouldClose: shouldCloseSelector,
+      contextInfo: contextInfo
+    )
   }
 
-  func saveContent(sender: Any? = nil, userInitiated: Bool = false, completion: (() -> Void)? = nil) {
-    Task { @MainActor in
-      let saveAction = {
-        super.save(sender)
-        completion?()
-      }
-
-      // Deferred formatting can remain after the editor text has been synchronized
-      if isOutdated || needsFormatting {
-        updateContent(userInitiated: userInitiated, saveAction: saveAction)
-      } else {
-        saveAction()
-
-        if userInitiated {
-          markContentClean()
-        }
-      }
-    }
-  }
-
-  func autosaveDelayed(seconds: Double = 0.25) {
-    autosaveDelayedTask?.cancel()
-    autosaveDelayedTask = Task { [weak self] in
-      try? await Task.sleep(for: .seconds(seconds))
-      if !Task.isCancelled {
-        try? await self?.autosave(withImplicitCancellability: false)
-      }
-    }
-  }
-
-  func updateContent(userInitiated: Bool = false, saveAction: @escaping (() -> Void) = {}) {
-    Task { @MainActor in
-      await updateContent(userInitiated: userInitiated)
-      saveAction()
-    }
-  }
-
-  func prepareSpellDocTag() {
-    guard spellDocTag == nil else {
-      return
+  override func close() {
+    if !isTerminating {
+      saveToClosedTabHistory()
     }
 
-    spellDocTag = NSSpellChecker.uniqueSpellDocumentTag()
+    if let spellDocTag {
+      NSSpellChecker.shared.closeSpellDocument(withTag: spellDocTag)
+    }
+
+    super.close()
   }
 }
 
-// MARK: - Overridden
+// MARK: - File Properties
 
 extension EditorDocument {
+  var newFilenameExtension: String {
+    AppPreferences.General.newFilenameExtension.rawValue
+  }
+
   override class var autosavesInPlace: Bool {
     true
   }
 
   override class func canConcurrentlyReadDocuments(ofType type: String) -> Bool {
+    true
+  }
+
+  override func canAsynchronouslyWrite(
+    to url: URL,
+    ofType typeName: String,
+    for saveOperation: NSDocument.SaveOperationType
+  ) -> Bool {
     true
   }
 
@@ -262,64 +261,6 @@ extension EditorDocument {
   override func updateChangeCount(_ change: NSDocument.ChangeType) {
     // The "Edited" label is hidden when changes are saved periodically
     super.updateChangeCount(shouldSaveWhenIdle ? .changeCleared : change)
-  }
-
-  override func canAsynchronouslyWrite(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) -> Bool {
-    true
-  }
-
-  override func canClose(withDelegate delegate: Any, shouldClose shouldCloseSelector: Selector?, contextInfo: UnsafeMutableRawPointer?) {
-    let isNewFile = fileURL == nil
-    let confirmsChanges = #selector(confirmsChanges(_:shouldClose:contextInfo:))
-    let canHandleConfirmation = (delegate as? NSObject)?.responds(to: confirmsChanges) == true
-
-    let shouldClose: Selector? = {
-      if !isNewFile && !isTerminating && closeAlwaysConfirmsChanges && canHandleConfirmation {
-        return confirmsChanges
-      }
-
-      return shouldCloseSelector
-    }()
-
-    let canClose = {
-      super.canClose(
-        withDelegate: delegate,
-        shouldClose: shouldClose,
-        contextInfo: contextInfo
-      )
-    }
-
-    // Closing a new document, force sync to make sure the content is propagated.
-    //
-    // Don't use `isDraft` here because it's false when closing a document with no files on disk.
-    if isNewFile {
-      return updateContent(saveAction: canClose)
-    }
-
-    // Explicitly save the content before closing.
-    //
-    // Case 1: The content isn't outdated, so auto-saving won't trigger.
-    // Case 2: Occasionally, the ".sb" backup file isn't properly cleaned up.
-    if (shouldSaveWhenIdle && isOutdated) || (!closeAlwaysConfirmsChanges && isDocumentEdited) {
-      return saveContent(completion: canClose)
-    }
-
-    // General cases
-    Task { @MainActor in
-      canClose()
-    }
-  }
-
-  override func close() {
-    if !isTerminating {
-      saveToClosedTabHistory()
-    }
-
-    if let spellDocTag {
-      NSSpellChecker.shared.closeSpellDocument(withTag: spellDocTag)
-    }
-
-    super.close()
   }
 
   override func writableTypes(for saveOperation: NSDocument.SaveOperationType) -> [String] {
@@ -379,6 +320,23 @@ extension EditorDocument {
 // MARK: - Reading and Writing
 
 extension EditorDocument {
+  override func data(ofType typeName: String) throws -> Data {
+    let encoding = suggestedTextEncoding ?? AppPreferences.General.defaultTextEncoding
+    return encoding.encode(string: stringValue) ?? stringValue.toData() ?? Data()
+  }
+
+  override func fileWrapper(ofType typeName: String) throws -> FileWrapper {
+    let wrapper = try super.fileWrapper(ofType: typeName)
+    fileSnapshots.withLock {
+      // Keep the serialized bytes, not text that may change while the write finishes
+      if $0.isWriting {
+        $0.pending = wrapper.regularFileContents
+      }
+    }
+
+    return wrapper
+  }
+
   override func read(from data: Data, ofType typeName: String) throws {
     pendingFileReads.enter()
     DispatchQueue.global(qos: .userInitiated).async {
@@ -398,35 +356,6 @@ extension EditorDocument {
         self.hostViewController?.representedObject = self
       }
     }
-  }
-
-  override func writeSafely(
-    to url: URL,
-    ofType typeName: String,
-    for saveOperation: NSDocument.SaveOperationType
-  ) throws {
-    guard !typeName.isTextBundle, saveOperation.updatesDocumentFile else {
-      return try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
-    }
-
-    fileSnapshots.withLock {
-      $0.pending = nil
-      $0.isWriting = true
-    }
-
-    var succeeded = false
-    defer {
-      fileSnapshots.withLock {
-        if !succeeded {
-          $0.pending = nil
-        }
-
-        $0.isWriting = false
-      }
-    }
-
-    try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
-    succeeded = true
   }
 
   // We don't have a sync way to get the text, override save and autosave to do an async approach.
@@ -500,23 +429,137 @@ extension EditorDocument {
     }
   }
 
-  override func data(ofType typeName: String) throws -> Data {
-    let encoding = suggestedTextEncoding ?? AppPreferences.General.defaultTextEncoding
-    return encoding.encode(string: stringValue) ?? stringValue.toData() ?? Data()
-  }
+  override func writeSafely(
+    to url: URL,
+    ofType typeName: String,
+    for saveOperation: NSDocument.SaveOperationType
+  ) throws {
+    guard !typeName.isTextBundle, saveOperation.updatesDocumentFile else {
+      return try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
+    }
 
-  override func fileWrapper(ofType typeName: String) throws -> FileWrapper {
-    let wrapper = try super.fileWrapper(ofType: typeName)
     fileSnapshots.withLock {
-      // Keep the serialized bytes, not text that may change while the write finishes
-      if $0.isWriting {
-        $0.pending = wrapper.regularFileContents
+      $0.pending = nil
+      $0.isWriting = true
+    }
+
+    var succeeded = false
+    defer {
+      fileSnapshots.withLock {
+        if !succeeded {
+          $0.pending = nil
+        }
+
+        $0.isWriting = false
       }
     }
 
-    return wrapper
+    try super.writeSafely(to: url, ofType: typeName, for: saveOperation)
+    succeeded = true
   }
 
+  override func revert(toContentsOf url: URL, ofType typeName: String) throws {
+    revertedDate = .now
+    try super.revert(toContentsOf: url, ofType: typeName)
+  }
+}
+
+// MARK: - Document Actions
+
+extension EditorDocument {
+  override func browseVersions(_ sender: Any?) {
+    presentFileVersions(sender)
+  }
+
+  override func handleSave(_ command: NSScriptCommand) -> Any? {
+    handleScriptedSave(command)
+  }
+
+  override func print(
+    withSettings printSettings: [NSPrintInfo.AttributeKey: Any],
+    showPrintPanel: Bool,
+    delegate: Any?,
+    didPrint didPrintSelector: Selector?,
+    contextInfo: UnsafeMutableRawPointer?
+  ) {
+    // Ideally we should be able to print WKWebView,
+    // but it doesn't work well because of the lazily rendering strategy used in CodeMirror.
+    //
+    // For now let's just print plain text,
+    // we don't expect printing to be used a lot.
+    Task { @MainActor in
+      await withCheckedContinuation { continuation in
+        pendingFileReads.notify(queue: .main) {
+          continuation.resume()
+        }
+      }
+
+      let operation = await EditorDocumentPrinter.makeOperation(
+        printInfo: printInfo,
+        settings: printSettings,
+        showPrintPanel: showPrintPanel
+      ) {
+        await self.hostViewController?.editorText ?? self.stringValue
+      }
+
+      guard let operation else {
+        return Logger.assertFail("Missing operation to handle printing")
+      }
+
+      runModalPrintOperation(
+        operation,
+        delegate: delegate,
+        didRun: didPrintSelector,
+        contextInfo: contextInfo
+      )
+    }
+  }
+}
+
+// MARK: - Text Bundle
+
+extension EditorDocument {
+  override func read(from fileWrapper: FileWrapper, ofType typeName: String) throws {
+    guard typeName.isTextBundle else {
+      return try super.read(from: fileWrapper, ofType: typeName)
+    }
+
+    textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
+    try read(from: textBundle?.data ?? Data(), ofType: typeName)
+  }
+
+  override func write(to url: URL, ofType typeName: String) throws {
+    guard typeName.isTextBundle else {
+      return try super.write(to: url, ofType: typeName)
+    }
+
+    guard let textBundle else {
+      Logger.assertFail("Missing textBundle for document: \(self)")
+      throw CocoaError(.fileWriteUnknown, userInfo: [
+        NSLocalizedDescriptionKey: "Unable to save as TextBundle, file wrapper is missing."
+      ])
+    }
+
+    let fileWrapper = try textBundle.fileWrapper(with: try data(ofType: typeName))
+    try fileWrapper.write(to: url, originalContentsURL: nil)
+  }
+
+  override func duplicate() throws -> NSDocument {
+    guard textBundle != nil, let fileURL else {
+      return try super.duplicate()
+    }
+
+    return try NSDocumentController.shared.duplicateDocument(
+      withContentsOf: fileURL,
+      copying: true,
+      displayName: fileURL.deletingPathExtension().lastPathComponent
+    )
+  }
+}
+
+// MARK: - File State
+
+extension EditorDocument {
   override func presentedItemDidChange() {
     // Only under certain conditions we need this flow,
     // e.g., editing in VS Code won't trigger the regular data(ofType...) reload
@@ -579,299 +622,10 @@ extension EditorDocument {
     }
   }
 
-  override func revert(toContentsOf url: URL, ofType typeName: String) throws {
-    revertedDate = .now
-    try super.revert(toContentsOf: url, ofType: typeName)
-  }
-}
-
-// MARK: - Scripting
-
-extension EditorDocument {
-  /// Handle save operations from AppleScript.
-  ///
-  /// Override to catch invalid output paths early so we can present more informative errors.
-  override func handleSave(_ command: NSScriptCommand) -> Any? {
-    guard let fileURL = command.evaluatedArguments?["File"] as? URL else {
-      // Save without predefined destination (will open save panel if needed)
-      return super.handleSave(command)
-    }
-
-    let inputExtension = fileURL.pathExtension.lowercased()
-
-    // Support extension-less paths by bypassing file type validation
-    if inputExtension.isEmpty {
-      Task { @MainActor in
-        do {
-          try await save(to: fileURL.deletingPathExtension(), ofType: "", for: .saveOperation)
-        } catch {
-          Logger.log(.error, "Failed to handle save: \(error)")
-        }
-      }
-
-      return nil
-    }
-
-    // Provided limited support for the 'as' parameter
-    if let desiredType = command.evaluatedArguments?["FileType"] as? String {
-      let desiredExtension = NewFilenameExtension.preferredExtension(for: desiredType)?.rawValue ?? newFilenameExtension
-      if inputExtension == desiredExtension {
-        return super.handleSave(command)
-      }
-
-      // Raise error because we cannot adjust the extension due to sandbox restrictions
-      let scriptError = ScriptingError.extensionMismatch(
-        expectedExtension: desiredExtension,
-        outputType: desiredType
-      )
-
-      scriptError.applyToCommand(command)
-      return nil
-    }
-
-    let isValidExtension = NewFilenameExtension.allCases.contains {
-      $0.rawValue == inputExtension
-    } || (textBundle != nil && inputExtension == "textbundle")
-
-    guard isValidExtension else {
-      let scriptError = ScriptingError.invalidDestination(fileURL, document: self)
-      scriptError.applyToCommand(command)
-      return nil
-    }
-
-    return super.handleSave(command)
-  }
-}
-
-// MARK: - Version Browsing
-
-extension EditorDocument: FileVersionPickerDelegate {
-  override func browseVersions(_ sender: Any?) {
-    guard let fileURL else {
-      return Logger.assertFail("Missing fileURL for document: \(self)")
-    }
-
-    let localVersions = {
-      let otherVersions = NSFileVersion.otherVersionsOfItem(at: fileURL) ?? []
-      Logger.log(.debug, "Found \(otherVersions.count) local versions")
-
-      if otherVersions.isEmpty, let currentVersion = NSFileVersion.currentVersionOfItem(at: fileURL) {
-        return [currentVersion]
-      }
-
-      let sortedVersions = otherVersions.newestToOldest()
-      let differentIndex = sortedVersions.firstIndex {
-        // Find the first version that differs from the current one
-        (try? Data(contentsOf: $0.url))?.toString() != stringValue
-      }
-
-      return Array(sortedVersions.suffix(from: differentIndex ?? 0))
-    }()
-
-    guard !localVersions.isEmpty else {
-      return Logger.assertFail("File \(fileURL) has no local versions")
-    }
-
-    let picker = FileVersionPicker(
-      fileURL: fileURL,
-      currentText: stringValue,
-      localVersions: localVersions,
-      localizable: FileVersionLocalizable(
-        previous: Localized.General.previous,
-        next: Localized.General.next,
-        cancel: Localized.General.cancel,
-        revertTitle: Localized.FileVersion.revertTitle,
-        modeTitles: Localized.FileVersion.modeTitles
-      ),
-      delegate: self
-    )
-
-    hostViewController?.presentAsSheet(picker)
-  }
-
-  func fileVersionPicker(_ picker: FileVersionPicker, didPickVersion version: NSFileVersion) async {
-    guard let contents = try? Data(contentsOf: version.url).toString() else {
-      return Logger.assertFail("Failed to get file contents of version: \(version)")
-    }
-
-    stringValue = contents
-    hostViewController?.resetEditor(resetSelection: true)
-
-    await hostViewController?.waitUntilEditorReset()
-    await waitUntilSaveCompleted()
-  }
-
-  func fileVersionPicker(_ picker: FileVersionPicker, didBecomeSheet: Bool) {
-    hostViewController?.setHasModalSheet(value: didBecomeSheet)
-  }
-}
-
-// MARK: - Text Bundle
-
-extension EditorDocument {
-  override func read(from fileWrapper: FileWrapper, ofType typeName: String) throws {
-    guard typeName.isTextBundle else {
-      return try super.read(from: fileWrapper, ofType: typeName)
-    }
-
-    textBundle = try TextBundleWrapper(fileWrapper: fileWrapper)
-    try read(from: textBundle?.data ?? Data(), ofType: typeName)
-  }
-
-  override func write(to url: URL, ofType typeName: String) throws {
-    guard typeName.isTextBundle else {
-      return try super.write(to: url, ofType: typeName)
-    }
-
-    guard let textBundle else {
-      Logger.assertFail("Missing textBundle for document: \(self)")
-      throw CocoaError(.fileWriteUnknown, userInfo: [
-        NSLocalizedDescriptionKey: "Unable to save as TextBundle, file wrapper is missing."
-      ])
-    }
-
-    let fileWrapper = try textBundle.fileWrapper(with: try data(ofType: typeName))
-    try fileWrapper.write(to: url, originalContentsURL: nil)
-  }
-
-  override func duplicate() throws -> NSDocument {
-    guard textBundle != nil, let fileURL else {
-      return try super.duplicate()
-    }
-
-    return try NSDocumentController.shared.duplicateDocument(
-      withContentsOf: fileURL,
-      copying: true,
-      displayName: fileURL.deletingPathExtension().lastPathComponent
-    )
-  }
-}
-
-// MARK: - Printing
-
-extension EditorDocument {
-  override func print(
-    withSettings printSettings: [NSPrintInfo.AttributeKey: Any],
-    showPrintPanel: Bool,
-    delegate: Any?,
-    didPrint didPrintSelector: Selector?,
-    contextInfo: UnsafeMutableRawPointer?
-  ) {
-    // Ideally we should be able to print WKWebView,
-    // but it doesn't work well because of the lazily rendering strategy used in CodeMirror.
-    //
-    // For now let's just print plain text,
-    // we don't expect printing to be used a lot.
-
-    Task { @MainActor in
-      await withCheckedContinuation { continuation in
-        pendingFileReads.notify(queue: .main) {
-          continuation.resume()
-        }
-      }
-
-      guard let info = printInfo.copy() as? NSPrintInfo else {
-        return Logger.assertFail("NSPrintInfo.copy() must return NSPrintInfo")
-      }
-
-      // Alignment
-      info.isHorizontallyCentered = true
-      info.isVerticallyCentered = false
-      info.dictionary().addEntries(from: printSettings)
-
-      // Sizing
-      let width = info.paperSize.width - info.leftMargin - info.rightMargin
-      let height = info.paperSize.height - info.topMargin - info.bottomMargin
-      let frame = CGRect(x: 0, y: 0, width: width, height: height)
-
-      // Rendering
-      let textView = NSTextView(frame: frame)
-      textView.string = await hostViewController?.editorText ?? stringValue
-      textView.sizeToFit()
-
-      let operation = NSPrintOperation(view: textView, printInfo: info)
-      operation.showsPrintPanel = showPrintPanel
-      runModalPrintOperation(
-        operation,
-        delegate: delegate,
-        didRun: didPrintSelector,
-        contextInfo: contextInfo
-      )
-    }
-  }
-}
-
-// MARK: - Private
-
-private extension EditorDocument {
-  var bridge: WebModuleBridge? {
-    hostViewController?.bridge
-  }
-
-  var closeAlwaysConfirmsChanges: Bool {
-    ApplicationEnvironment.preferences.bool(forKey: NSCloseAlwaysConfirmsChanges)
-  }
-
-  var newFilenameExtension: String {
-    AppPreferences.General.newFilenameExtension.rawValue
-  }
-
-  var needsFormatting: Bool {
-    guard !formatCompleted else {
-      return false
-    }
-
-    return AppPreferences.Assistant.insertFinalNewline || AppPreferences.Assistant.trimTrailingWhitespace
-  }
-
-  func updateContent(userInitiated: Bool = false) async {
-    await formatContent(userInitiated: userInitiated)
-
-    if let editorText = await synchronizeText() {
-      writeDebugFile(editorText)
-    }
-
-    // If the content contains headings, use the first one to override the displayName
-    if fileURL == nil, let heading = await hostViewController?.tableOfContents?.first {
-      suggestedFilename = heading.title
-    } else {
-      suggestedFilename = nil
-    }
-
-    unblockUserInteraction()
-    if userInitiated {
-      markContentClean()
-    }
-  }
-
-  func formatContent(userInitiated: Bool) async {
-    let insertFinalNewline = AppPreferences.Assistant.insertFinalNewline
-    let trimTrailingWhitespace = AppPreferences.Assistant.trimTrailingWhitespace
-
-    if insertFinalNewline || trimTrailingWhitespace {
-      formatCompleted = (try? await bridge?.format.formatContent(
-        insertFinalNewline: insertFinalNewline,
-        trimTrailingWhitespace: trimTrailingWhitespace,
-        userInitiated: userInitiated
-      )) ?? false
-    }
-  }
-
-  func synchronizeText() async -> String? {
-    let changeCount = contentChangeCount
-    if let editorText = await hostViewController?.editorText {
-      stringValue = editorText
-      isOutdated = contentChangeCount != changeCount
-      return editorText
-    }
-
-    return nil
-  }
-
   /// Verify timestamp-only drift without reloading or changing the editor's dirty state.
   /// Returns true for an unchanged timestamp or verified unchanged contents.
   @discardableResult
-  func reconcileFileModificationDate() -> Bool {
+  private func reconcileFileModificationDate() -> Bool {
     guard let fileURL, let fileType, !fileType.isTextBundle,
           let documentDate = fileModificationDate,
           fileData != nil, !hasDifferentAutosavedFile else {
@@ -922,7 +676,7 @@ private extension EditorDocument {
     }
   }
 
-  func writeSafelyBeforeTermination() throws -> Bool {
+  private func writeSafelyBeforeTermination() throws -> Bool {
     guard !hasBeenReverted, isTerminating, hasUnautosavedChanges, let fileURL, let fileType else {
       return false
     }
@@ -940,57 +694,5 @@ private extension EditorDocument {
     // Prevent immediate presentedItemDidChange calls
     fileModificationDate = .now
     return true
-  }
-
-  func writeDebugFile(_ editorText: String) {
-    DispatchQueue.global(qos: .utility).async {
-      guard !AppRuntimeConfig.disableDebugFiles else {
-        return
-      }
-
-      let fileData = editorText.toData() ?? Data()
-      let directory = AppCustomization.debugDirectory.fileURL
-      try? fileData.write(to: directory.appending(path: "last-edited.md"))
-    }
-  }
-
-  func markContentClean() {
-    bridge?.history.markContentClean()
-  }
-
-  @objc func confirmsChanges(
-    _ document: EditorDocument,
-    shouldClose: Bool,
-    contextInfo: UnsafeMutableRawPointer?
-  ) {
-    guard shouldClose else {
-      return // Cancelled
-    }
-
-    let performClose: @MainActor @Sendable () -> Void = {
-      // isReleasedWhenClosed is not initially set to true to prevent crashes when deleting drafts.
-      // However, we need to release the window in the confirmsChanges function;
-      // otherwise, it will cause a memory leak.
-      document.windowControllers.forEach {
-        $0.window?.isReleasedWhenClosed = true
-      }
-
-      document.close()
-    }
-
-    if document.hasBeenReverted || !document.isDocumentEdited {
-      // Reverted or no unsaved changes
-      performClose()
-    } else {
-      // Delay this for two reasons:
-      //  1. To make it clear to users that their changes are saved
-      //  2. To avoid leftover .sb copies when a document is closed too quickly
-      let closeDelayed = {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: performClose)
-      }
-
-      // Saved
-      document.saveContent(userInitiated: true, completion: closeDelayed)
-    }
   }
 }
