@@ -57,7 +57,6 @@ final class EditorWindow: NSWindow {
 
   override func addChildWindow(_ childWindow: NSWindow, ordered place: NSWindow.OrderingMode) {
     if childWindow.isWritingToolsAffordance && AppRuntimeConfig.writingToolsAffordance.shouldSuppress {
-      childWindow.orderOut(nil)
       return
     }
 
