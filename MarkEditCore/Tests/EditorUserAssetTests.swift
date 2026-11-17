@@ -11,7 +11,7 @@ import XCTest
 
 @MainActor
 final class EditorUserAssetTests: XCTestCase {
-  func testScriptBindingsAndScope() throws {
+  func testScriptBindingsAndScope() async throws {
     let context = try makeContext()
     let url = URL(fileURLWithPath: "/scripts/it's\\a\nscript\u{2028}.js")
     for declaration in ["", "const { MarkEdit } = require('markedit-api');"] {
@@ -24,7 +24,14 @@ final class EditorUserAssetTests: XCTestCase {
       window.deferred = () => MarkEdit.path;
       """
 
-      for injection in injections(for: url, contents: source, capability: "private-token") {
+      let sources = await Task.detached {
+        XCTAssertFalse(Thread.isMainThread)
+        return EditorUserAsset.contextualSources(for: [
+          (url.path(percentEncoded: false), EditorUserAsset.script(for: url, contents: source), "private-token"),
+        ])
+      }.value
+
+      for injection in sources {
         context.evaluateScript(injection)
         XCTAssertNil(context.exception)
       }
@@ -151,5 +158,16 @@ final class EditorUserAssetTests: XCTestCase {
     }
 
     return scripts.map(\.source)
+  }
+}
+
+private extension EditorUserAsset {
+  @MainActor
+  static func contextualScripts(
+    for scripts: [(path: String, source: String, capability: String?)]
+  ) -> [WKUserScript] {
+    contextualSources(for: scripts).map {
+      WKUserScript(source: $0, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }
   }
 }

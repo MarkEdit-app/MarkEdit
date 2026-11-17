@@ -122,7 +122,7 @@ final class EditorViewController: NSViewController {
   }()
 
   private(set) lazy var webView: WKWebView = {
-    let scripts = AppCustomization.userScripts().map { script in
+    let scriptContexts = AppCustomization.userScripts().map { script in
       (
         context: EditorModuleSecretStorage.Context(id: script.id, path: script.path),
         source: script.source
@@ -136,18 +136,15 @@ final class EditorViewController: NSViewController {
       EditorModuleAPI(delegate: self),
       EditorModuleFoundationModels(delegate: self),
       EditorModuleTranslation(),
-      EditorModuleSecretStorage(contexts: scripts.map(\.context), delegate: self),
+      EditorModuleSecretStorage(contexts: scriptContexts.map(\.context), delegate: self),
     ])
 
     let handler = EditorMessageHandler(modules: modules)
     let controller = WKUserContentController()
     controller.addScriptMessageHandler(handler, contentWorld: .page, name: "bridge")
 
-    EditorUserAsset.contextualScripts(for: scripts.map {
+    let scriptInputs = scriptContexts.map {
       (path: $0.context.path, source: $0.source, capability: $0.context.capability)
-    })
-    .forEach {
-      controller.addUserScript($0)
     }
 
     let config: WKWebViewConfiguration = .newConfig(
@@ -182,6 +179,7 @@ final class EditorViewController: NSViewController {
 
     let theme = AppTheme.current.editorTheme
     DispatchQueue.global(qos: .userInitiated).async {
+      let scriptSources = EditorUserAsset.contextualSources(for: scriptInputs)
       let styles = AppCustomization.isSafeMode ? [] : [
         AppCustomization.editorStyle.fileContents,
         AppCustomization.stylesDirectory.styleContents().joined(separator: "\n"),
@@ -195,6 +193,12 @@ final class EditorViewController: NSViewController {
       ] + styles).joined(separator: "\n\n")
 
       DispatchQueue.main.async {
+        for source in scriptSources {
+          controller.addUserScript(
+            WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+          )
+        }
+
         // Non-nil baseURL is required by scenarios like opening local files
         webView.loadHTMLString(html, baseURL: EditorWebView.baseURL)
       }
