@@ -141,7 +141,9 @@ private extension NSMenuItem {
     }
 
     let key: String
-    switch keyEquivalent {
+    switch keyEquivalent.replacingOccurrences(of: "\u{FE0F}", with: "") {
+    case "\u{1F310}": key = "fn"
+    case "\u{1F3A4}", "\u{1F399}": key = "mic"
     case "\u{08}", "\u{7F}": key = "\u{232B}"
     case "\t": key = "\u{21E5}"
     case "\u{19}":
@@ -174,6 +176,9 @@ private extension NSMenuItem {
       (.control, "\u{2303}"), (.option, "\u{2325}"), (.shift, "\u{21E7}"), (.command, "\u{2318}"),
     ]
 
-    return symbols.filter { modifiers.contains($0.0) }.map(\.1).joined() + key
+    // AppKit also sets .function for special keys such as arrows and F1-F35
+    let isSpecialKey = keyEquivalent.unicodeScalars.first.map { (0xF700...0xF8FF).contains($0.value) } ?? false
+    let functionPrefix = modifiers.contains(.function) && !isSpecialKey && key != "fn" ? "fn " : ""
+    return functionPrefix + symbols.filter { modifiers.contains($0.0) }.map(\.1).joined() + key
   }
 }

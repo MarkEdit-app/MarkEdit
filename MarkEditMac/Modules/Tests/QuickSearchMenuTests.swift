@@ -12,9 +12,16 @@ import XCTest
 
 @MainActor
 final class QuickSearchMenuTests: XCTestCase {
+  // AppKit only allows the function modifier on system-provided menu items
+  private final class FunctionShortcutMenuItem: NSMenuItem {
+    override var keyEquivalentModifierMask: NSEvent.ModifierFlags {
+      get { super.keyEquivalentModifierMask.union(.function) }
+      set { super.keyEquivalentModifierMask = newValue }
+    }
+  }
+
   func testShortcutHintsUseLiveMenuEquivalents() throws {
     let menu = NSMenu()
-    let item = menu.addItem(withTitle: "Command") {}
     let cases: [(String, NSEvent.ModifierFlags, String?)] = [
       ("", .command, nil),
       ("n", .command, "\u{2318}N"),
@@ -30,11 +37,21 @@ final class QuickSearchMenuTests: XCTestCase {
       ("\u{19}", [], "\u{21E7}\u{21E5}"),
       ("\u{1B}", [], "\u{238B}"),
       (" ", .control, "\u{2303}\u{2423}"),
+      ("f", .function, "fn F"),
+      ("\u{1F310}", .function, "fn"),
+      ("\u{1F3A4}", [], "mic"),
+      ("\u{F70F}", .function, "F12"),
     ]
 
     for (key, modifiers, expected) in cases {
+      menu.removeAllItems()
+      let item = modifiers.contains(.function)
+        ? FunctionShortcutMenuItem(title: "Command", action: #selector(NSResponder.cancelOperation(_:)), keyEquivalent: key)
+        : NSMenuItem(title: "Command", action: #selector(NSResponder.cancelOperation(_:)), keyEquivalent: key)
+
+      menu.addItem(item)
       item.keyEquivalent = key
-      item.keyEquivalentModifierMask = modifiers
+      item.keyEquivalentModifierMask = modifiers.subtracting(.function)
 
       let source = QuickSearchMenuActions(menu: menu, sourceWindow: nil)
       XCTAssertEqual(try XCTUnwrap(source.actions.first).shortcutHint, expected)

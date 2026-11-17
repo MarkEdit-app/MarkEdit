@@ -144,7 +144,7 @@ final class QuickSearchWindowTests: XCTestCase {
         subtitle: subtitle,
         iconName: "text.alignleft",
         highlightedRanges: [NSRange(location: $0.element.0.utf16.count - 5, length: 5)],
-        shortcutHint: $0.offset < 2 ? "\u{21E7}\u{2318}T" : nil
+        shortcutHint: ["\u{21E7}\u{2318}T", "fn \u{2318}F", "mic", nil, nil, nil][$0.offset]
       )
     }
 
@@ -182,6 +182,12 @@ final class QuickSearchWindowTests: XCTestCase {
         if let shortcutHint = items[row].shortcutHint {
           XCTAssertEqual(shortcutField.stringValue, shortcutHint)
           XCTAssertTrue(cell.bounds.contains(shortcutField.frame))
+
+          let hint = shortcutField.attributedStringValue
+          for index in 0..<hint.length {
+            let isModifier = "\u{21E7}\u{2318}".utf16.contains((hint.string as NSString).character(at: index))
+            XCTAssertEqual(hint.attribute(.kern, at: index, effectiveRange: nil) as? Double, isModifier ? 2.0 : nil)
+          }
 
           let titleRect = titleField.alignmentRect(forFrame: titleField.frame)
           let shortcutRect = shortcutField.alignmentRect(forFrame: shortcutField.frame)
