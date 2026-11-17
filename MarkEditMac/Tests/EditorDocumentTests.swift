@@ -372,11 +372,11 @@ extension EditorDocumentTests {
     })();
     """
 
-    for script in EditorUserAsset.contextualScripts(for: [
+    for source in EditorUserAsset.contextualSources(for: [
       ("/attacker.js", EditorUserAsset.script(for: URL(fileURLWithPath: "/attacker.js"), contents: attacker), UUID().uuidString),
       (victim.path, EditorUserAsset.script(for: URL(fileURLWithPath: victim.path), contents: consumer), victim.capability),
     ]) {
-      controller.addUserScript(script)
+      controller.addUserScript(WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true))
     }
 
     let webView = WKWebView(frame: .zero, configuration: configuration)

@@ -5,33 +5,27 @@
 //
 
 import Foundation
-import WebKit
 
 /**
  Wrappers for user-injected scripts and styles.
  */
 public enum EditorUserAsset {
   /**
-   Prepare all contexts first, then inject each script separately.
+   Assemble the context bootstrap and separate script sources without main-actor WebKit objects.
    */
-  @MainActor
-  public static func contextualScripts(
+  public static func contextualSources(
     for scripts: [(path: String, source: String, capability: String?)]
-  ) -> [WKUserScript] {
+  ) -> [String] {
     let contexts = scripts.map {
       ["path": $0.path, "capability": $0.capability].compactMapValues { $0 }
     }
 
-    let sources = ["__prepareScriptContexts__(\(contexts.jsonEncoded));"] + scripts.map {
+    return ["__prepareScriptContexts__(\(contexts.jsonEncoded));"] + scripts.map {
       """
       __runScriptWithContext__(\(($0.capability ?? $0.path).jsonEncoded), (MarkEdit, require) => {
       \($0.source)
       });
       """
-    }
-
-    return sources.map {
-      WKUserScript(source: $0, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
   }
 
