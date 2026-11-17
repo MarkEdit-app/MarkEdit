@@ -17,6 +17,17 @@ import WebKit
 final class EditorPreloader {
   static let shared = EditorPreloader()
 
+  func scheduleWarmUp() {
+    guard !ApplicationEnvironment.isRunningTests else {
+      return
+    }
+
+    // Let the presenting UI proceed without waiting for editor construction
+    DispatchQueue.main.async {
+      self.warmUp()
+    }
+  }
+
   func warmUp() {
     // Deliberately synchronous, AppKit doesn't drain the main queue until the app finishes launching
     if preloadedController == nil {

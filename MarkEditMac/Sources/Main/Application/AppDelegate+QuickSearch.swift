@@ -143,6 +143,8 @@ extension AppDelegate {
       appearance: AppTheme.current.resolvedAppearance,
       tintColor: quickSearchTintColor
     )
+
+    EditorPreloader.shared.scheduleWarmUp()
   }
 
   func updateQuickSearchAppearance() {

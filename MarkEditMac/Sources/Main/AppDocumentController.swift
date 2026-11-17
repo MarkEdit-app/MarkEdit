@@ -94,7 +94,8 @@ final class AppDocumentController: NSDocumentController {
         AppHotKeys.register(keyCode: UInt32(kVK_ANSI_O), modifiers: [.shift, .command], handler: handler)
       },
       present: {
-        await super.beginOpenPanel(openPanel, forTypes: inTypes)
+        EditorPreloader.shared.scheduleWarmUp()
+        return await super.beginOpenPanel(openPanel, forTypes: inTypes)
       }
     )
 
