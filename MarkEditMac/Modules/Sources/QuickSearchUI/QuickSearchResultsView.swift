@@ -356,13 +356,21 @@ private final class ResultCell: NSTableCellView {
     }
 
     title.attributedStringValue = text
-    var shortcutAttributes: [NSAttributedString.Key: Any] = [.kern: 2.0]
+    var shortcutAttributes: [NSAttributedString.Key: Any] = [:]
     shortcutAttributes[.font] = shortcutHint.font
-    shortcutHint.attributedStringValue = NSAttributedString(
+
+    let shortcutText = NSMutableAttributedString(
       string: item.shortcutHint ?? "",
       attributes: shortcutAttributes
     )
 
+    // Space modifier symbols, not letters within fn, mic, or F12; UTF-16 offsets match NSRange
+    for (index, character) in shortcutText.string.utf16.enumerated()
+      where [0x2303, 0x2325, 0x21E7, 0x2318].contains(character) {
+      shortcutText.addAttribute(.kern, value: 2.0, range: NSRange(location: index, length: 1))
+    }
+
+    shortcutHint.attributedStringValue = shortcutText
     shortcutHint.isHidden = shortcutHint.stringValue.isEmpty
     shortcutHint.textColor = selected ? .white.withAlphaComponent(0.7) : .secondaryLabelColor
 
