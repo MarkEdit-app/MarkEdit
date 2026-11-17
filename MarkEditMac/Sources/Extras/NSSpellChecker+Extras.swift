@@ -39,12 +39,6 @@ extension NSSpellChecker {
     fileprivate static let showCompletionSelector = sel_getUid("showCompletionForCandidate:selectedRange:offset:inString:rect:view:completionHandler:")
   }
 
-  @MainActor static let warmUp: () = {
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-      NSSpellChecker.shared.checkSpelling(of: "warmup", startingAt: 0)
-    }
-  }()
-
   @MainActor static let swizzleInlineCompletionEnabledOnce: () = {
     guard supportsInlineCompletion else {
       return
