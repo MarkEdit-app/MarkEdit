@@ -38,6 +38,7 @@ extension EditorDocument {
     //
     // Don't use `isDraft` here because it's false when closing a document with no files on disk.
     if isNewFile {
+      hostViewController?.removeFloatingUIElements()
       return updateContent(saveAction: canClose)
     }
 
