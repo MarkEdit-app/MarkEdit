@@ -287,14 +287,8 @@ extension AppDelegate {
 
 private extension AppDelegate {
   @objc func windowDidBecomeKey(_ notification: Notification) {
-    guard let window = notification.object as? NSWindow else {
+    guard notification.object is NSWindow else {
       return
-    }
-
-    if window is NSOpenPanel || window is QuickSearchWindow {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-        EditorPreloader.shared.warmUp()
-      }
     }
 
     AppDeferredTasks.markReady(stage: .firstWindowBecameKey)
