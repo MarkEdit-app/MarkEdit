@@ -21,6 +21,8 @@ public protocol EditorModuleAPIDelegate: AnyObject {
   func editorAPISaveDocument(_ sender: EditorModuleAPI) async -> Bool
   func editorAPICloseDocument(_ sender: EditorModuleAPI) -> Bool
   func editorAPI(_ sender: EditorModuleAPI, addMainMenuItems items: [(String, WebMenuItem)])
+  func editorAPI(_ sender: EditorModuleAPI, addToolbarItems items: [WebToolbarItem])
+  func editorAPI(_ sender: EditorModuleAPI, invalidateToolbarItem id: String)
   func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?)
   func editorAPI(
     _ sender: EditorModuleAPI,
@@ -344,6 +346,18 @@ public final class EditorModuleAPI: NativeModuleAPI {
   #else
     Logger.assertFail("Missing implementation, playing the system beep requires AppKit")
   #endif
+  }
+}
+
+// MARK: - Toolbar
+
+public extension EditorModuleAPI {
+  func addToolbarItems(items: [WebToolbarItem]) {
+    delegate?.editorAPI(self, addToolbarItems: items)
+  }
+
+  func invalidateToolbarItem(id: String) {
+    delegate?.editorAPI(self, invalidateToolbarItem: id)
   }
 }
 

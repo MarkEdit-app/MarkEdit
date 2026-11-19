@@ -2,6 +2,7 @@ import { CreateFileOptions, MoveFileOptions, OpenPanelOptions, PrintPanelOptions
 import { NativeModule } from '../nativeModule';
 import { WebMenuItem } from '../../@types/WebMenuItem';
 import { WebPoint } from '../../@types/WebPoint';
+import { WebToolbarItem } from '../../@types/WebToolbarItem';
 
 /**
  * @shouldExport true
@@ -14,6 +15,8 @@ export interface NativeModuleAPI extends NativeModule {
   closeDocument(): Promise<boolean>;
   recentDocumentPaths(): Promise<string[]>;
   addMainMenuItems({ items }: { items: WebMenuItem[] }): void;
+  addToolbarItems({ items }: { items: WebToolbarItem[] }): void;
+  invalidateToolbarItem({ id }: { id: string }): void;
   showContextMenu(args: { items: WebMenuItem[]; location: WebPoint; highlightedIndex?: CodeGen_Int }): void;
   showAlert(args: { title?: string; message?: string; buttons?: string[] }): Promise<CodeGen_Int>;
   showTextBox(args: { title?: string; placeholder?: string; defaultValue?: string }): Promise<string | undefined>;

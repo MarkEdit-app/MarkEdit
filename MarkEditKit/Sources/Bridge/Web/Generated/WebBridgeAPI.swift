@@ -49,6 +49,18 @@ public final class WebBridgeAPI {
 
     return try await webView.invoke(path: "webModules.api.getMenuItemState", message: message)
   }
+
+  public func getMenuItemStates(ids: [String]) async throws -> [MenuItemState] {
+    let message = BridgeMessage(
+      ("ids", ids)
+    )
+
+    guard let webView else {
+      throw WKWebView.InvokeError.unexpectedNil
+    }
+
+    return try await webView.invoke(path: "webModules.api.getMenuItemStates", message: message)
+  }
 }
 
 public struct MenuItemState: Codable, Sendable {

@@ -388,6 +388,14 @@ extension EditorViewController: EditorModuleAPIDelegate {
     addMainMenuItems(items: items)
   }
 
+  func editorAPI(_ sender: EditorModuleAPI, addToolbarItems items: [WebToolbarItem]) {
+    addToolbarItems(items)
+  }
+
+  func editorAPI(_ sender: EditorModuleAPI, invalidateToolbarItem id: String) {
+    invalidateToolbarItem(id)
+  }
+
   func editorAPI(_ sender: EditorModuleAPI, showContextMenu items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?) {
     showContextMenu(items: items, location: location.cgPoint, highlightedIndex: highlightedIndex)
   }

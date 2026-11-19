@@ -17,6 +17,14 @@ final class EditorWindow: NSWindow {
     didSet {
       toolbarStyle = toolbarMode == .compact ? .unifiedCompact : .unified
       super.toolbar = toolbarMode == .hidden ? nil : cachedToolbar
+
+      if oldValue == .hidden, let toolbar {
+        (toolbar.delegate as? EditorViewController)?.updateExtensionToolbarItems()
+        for item in toolbar.items {
+          item.extensionToolbarController?.invalidateState()
+        }
+      }
+
       updateTitleBarAppearance()
     }
   }
