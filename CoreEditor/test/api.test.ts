@@ -4,10 +4,89 @@ import { notifyEditorConfigChange, notifyEditorReady, onEditorConfigChange, onEd
 import { initMarkEditModules } from '../src/api/modules';
 import { createNativeModule } from '../src/bridge/nativeModule';
 import { NativeModuleAPI } from '../src/bridge/native/api';
-import { OpenPanelOptions } from 'markedit-api';
+import { OpenPanelOptions, ToolbarItem } from 'markedit-api';
+import { getMenuItemStates, handleMainMenuAction } from '../src/api/ui';
+import { WebToolbarItem } from '../src/@types/WebToolbarItem';
 
 afterEach(() => {
   jest.restoreAllMocks();
+});
+
+describe('toolbar declarations', () => {
+  function register(item: ToolbarItem | ToolbarItem[]) {
+    const posted = jest.fn<(message: { moduleName: string; methodName: string; parameters: string }) => Promise<void>>().mockResolvedValue(undefined);
+    window.webkit = { messageHandlers: { bridge: { postMessage: posted } } };
+    window.nativeModules.api = createNativeModule<NativeModuleAPI>('api');
+    initMarkEditModules();
+
+    MarkEdit.addToolbarItem(item);
+    expect(posted).toHaveBeenCalledTimes(1);
+    expect(posted.mock.calls[0][0].methodName).toBe('addToolbarItems');
+
+    const { items } = JSON.parse(posted.mock.calls[0][0].parameters) as { items: WebToolbarItem[] };
+    posted.mockClear();
+    return { items, posted };
+  }
+
+  test.each([false, true])('registers actions and refreshes state after execution (throws: %s)', async fails => {
+    let selected = false;
+    const id = `preview.mode.${fails}`;
+    const { items: [item], posted } = register({
+      id, title: 'Modes', icon: 'eye', type: 'segmented',
+      segments: [{
+        title: 'Source', icon: 'pencil', state: () => ({ isSelected: selected }),
+        action() {
+          selected = true;
+          if (fails) {
+            throw new Error('Expected action failure');
+          }
+        },
+      }],
+    });
+
+    const segment = item.segments[0];
+    expect(getMenuItemStates([segment.stateGetterID])).toEqual([{ isSelected: false }]);
+    if (fails) {
+      expect(() => handleMainMenuAction(segment.actionID)).toThrow('Expected action failure');
+    } else {
+      handleMainMenuAction(segment.actionID);
+    }
+
+    await Promise.resolve();
+    expect(getMenuItemStates([segment.stateGetterID])).toEqual([{ isSelected: true }]);
+    expect(posted).toHaveBeenCalledTimes(1);
+    expect(posted).toHaveBeenCalledWith({
+      moduleName: 'api', methodName: 'invalidateToolbarItem', parameters: JSON.stringify({ id }),
+    });
+
+    MarkEdit.invalidateToolbarItem(id);
+    MarkEdit.invalidateToolbarItem(id);
+    await Promise.resolve();
+    expect(posted).toHaveBeenCalledTimes(2);
+  });
+
+  test('reads and copies all states before queued changes can run', async () => {
+    let selected = 0;
+    const shared = { isSelected: false };
+    const { items: [item] } = register({
+      id: 'preview.snapshot', type: 'segmented', title: 'Modes', icon: 'eye',
+      segments: [0, 1].map(index => ({
+        title: String(index), icon: 'eye', action() {},
+        state() {
+          queueMicrotask(() => { selected = 1; });
+          shared.isSelected = selected === index;
+          return shared;
+        },
+      })),
+    });
+
+    const ids = item.segments.map(segment => segment.stateGetterID);
+    expect(getMenuItemStates(ids)).toEqual([{ isSelected: true }, { isSelected: false }]);
+
+    await Promise.resolve();
+    expect(getMenuItemStates(ids)).toEqual([{ isSelected: false }, { isSelected: true }]);
+  });
+
 });
 
 describe('openDocument', () => {

@@ -1,8 +1,9 @@
 import { EditorView } from '@codemirror/view';
-import { MenuItem, MenuItemState, ContextMenuOptions, Alert, TextBox, OpenPanelOptions, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
+import { MenuItem, MenuItemState, ToolbarItem, ContextMenuOptions, Alert, TextBox, OpenPanelOptions, PrintPanelOptions, SavePanelOptions } from 'markedit-api';
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
+import { WebToolbarItem } from '../@types/WebToolbarItem';
 import { afterDomUpdate, focusedEditor, getClientRect } from '../common/utils';
 import { scrollToSelection, isPositionVisible } from '../modules/selection';
 
@@ -12,6 +13,62 @@ export function addMainMenuItem(spec: MenuItem | MenuItem[]): void {
   const items = Array.isArray(spec) ? spec : [spec];
   window.nativeModules.api.addMainMenuItems({
     items: items.map(item => createMenuItem(item, mainActions)),
+  });
+}
+
+export function addToolbarItem(spec: ToolbarItem | ToolbarItem[]): void {
+  const items = (Array.isArray(spec) ? spec : [spec]).flatMap((item): WebToolbarItem[] => {
+    if (toolbarItemIDs.has(item.id)) {
+      console.error('Duplicate toolbar item ID:', item.id);
+      return [];
+    }
+
+    toolbarItemIDs.add(item.id);
+    const metadata = {
+      id: item.id,
+      type: item.type,
+      title: item.title,
+      icon: item.icon,
+    };
+
+    return [
+      {
+        ...metadata,
+        segments: item.segments.map(segment => ({
+          title: segment.title,
+          icon: segment.icon,
+          actionID: registerAction(() => {
+            try {
+              segment.action();
+            } finally {
+              invalidateToolbarItem(item.id);
+            }
+          }, mainActions),
+          stateGetterID: registerAction(segment.state, mainActions),
+        })),
+      },
+    ];
+  });
+
+  if (items.length > 0) {
+    window.nativeModules.api.addToolbarItems({ items });
+  }
+}
+
+export function invalidateToolbarItem(id: string): void {
+  if (!toolbarItemIDs.has(id)) {
+    console.error('Unknown toolbar item ID:', id);
+    return;
+  }
+
+  if (pendingToolbarInvalidations.has(id)) {
+    return;
+  }
+
+  pendingToolbarInvalidations.add(id);
+  queueMicrotask(() => {
+    pendingToolbarInvalidations.delete(id);
+    window.nativeModules.api.invalidateToolbarItem({ id });
   });
 }
 
@@ -114,21 +171,21 @@ export function getMenuItemState(id: string) {
   return action() as MenuItemState;
 }
 
-function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMenuItem {
-  // Generate identifiers for actions so that native functions can retrieve and invoke them later
-  const generateID = (action?: ActionType) => {
-    if (action === undefined) {
-      return undefined;
+export function getMenuItemStates(ids: string[]): MenuItemState[] {
+  return ids.map(id => {
+    if (!mainActions.has(id) && !contextActions.has(id)) {
+      throw new Error(`Unknown menu state getter: ${id}`);
     }
 
-    const identifier = crypto.randomUUID();
-    actions.set(identifier, action);
-    return identifier;
-  };
+    const { isEnabled, isSelected } = getMenuItemState(id);
+    return { isEnabled, isSelected };
+  });
+}
 
+function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMenuItem {
   return {
-    actionID: generateID(item.action),
-    stateGetterID: generateID(item.state),
+    actionID: item.action === undefined ? undefined : registerAction(item.action, actions),
+    stateGetterID: item.state === undefined ? undefined : registerAction(item.state, actions),
     separator: item.separator ?? false,
     title: item.title,
     icon: item.icon,
@@ -138,6 +195,12 @@ function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMe
   };
 };
 
+function registerAction(action: ActionType, actions: Map<string, ActionType>): string {
+  const identifier = crypto.randomUUID();
+  actions.set(identifier, action);
+  return identifier;
+}
+
 function isSupportedPrintType(type: string): boolean {
   return type === 'pdf';
 }
@@ -145,3 +208,5 @@ function isSupportedPrintType(type: string): boolean {
 type ActionType = () => void | MenuItemState;
 const mainActions = new Map<string, ActionType>();
 const contextActions = new Map<string, ActionType>();
+const toolbarItemIDs = new Set<string>();
+const pendingToolbarInvalidations = new Set<string>();

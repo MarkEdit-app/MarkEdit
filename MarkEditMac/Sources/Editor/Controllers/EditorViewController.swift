@@ -31,6 +31,7 @@ final class EditorViewController: NSViewController {
   var localEventMonitor: Any?
   var safeAreaObservation: NSKeyValueObservation?
   var userDefinedMenuItems = [EditorMenuItem]()
+  var userDefinedToolbarItems = [WebToolbarItem]()
 
   weak var presentedMenu: NSMenu?
   weak var presentedPopover: NSPopover?
@@ -330,6 +331,43 @@ final class EditorViewController: NSViewController {
 // MARK: - Exposed Methods
 
 extension EditorViewController {
+  func prepareToolbarForPresentation() async {
+    guard hasFinishedLoading, pendingResetCount == 0, let toolbar = viewIfLoaded?.window?.toolbar else {
+      return
+    }
+
+    let controllers = toolbar.items.compactMap(\.extensionToolbarController)
+    guard !controllers.isEmpty else {
+      return
+    }
+
+    await withCheckedContinuation { continuation in
+      let preparation = PreloadContinuation(continuation, timeout: 0.1) {
+        Logger.log(.debug, "Initial toolbar state exceeded its 100 ms budget; presenting with available state")
+      }
+
+      Task { @MainActor [weak self] in
+        defer {
+          preparation.resume()
+        }
+
+        guard let self else {
+          return
+        }
+
+        for controller in controllers {
+          guard !preparation.isFinished else {
+            return
+          }
+
+          await controller.refreshState(forceFresh: true)
+        }
+
+        view.window?.contentView?.superview?.layoutSubtreeIfNeeded()
+      }
+    }
+  }
+
   /**
    Wait until the editor finishes loading, or timeout after 1.5 seconds.
 
@@ -460,13 +498,22 @@ extension EditorViewController {
  */
 private final class PreloadContinuation {
   private var continuation: CheckedContinuation<Void, Never>?
+  fileprivate var isFinished: Bool { continuation == nil }
 
-  init(_ continuation: CheckedContinuation<Void, Never>, timeout: TimeInterval = 1.5) {
+  init(
+    _ continuation: CheckedContinuation<Void, Never>,
+    timeout: TimeInterval = 1.5,
+    onTimeout: (() -> Void)? = nil
+  ) {
     self.continuation = continuation
 
     if timeout > 0 {
       Task { @MainActor in
         try? await Task.sleep(for: .seconds(timeout))
+        if !isFinished {
+          onTimeout?()
+        }
+
         resume()
       }
     }

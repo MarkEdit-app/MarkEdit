@@ -99,15 +99,18 @@ extension EditorViewController {
   }
 
   func configureToolbar() {
-    let toolbar = NSToolbar(identifier: "EditorToolbar")
-    toolbar.displayMode = .iconOnly
-    toolbar.delegate = self
-    toolbar.allowsUserCustomization = true
-    toolbar.autosavesConfiguration = true
+    if view.window?.toolbar?.delegate !== self {
+      let toolbar = NSToolbar(identifier: "EditorToolbar")
+      toolbar.displayMode = .iconOnly
+      toolbar.delegate = self
+      toolbar.allowsUserCustomization = true
+      toolbar.autosavesConfiguration = true
 
-    view.window?.toolbar = toolbar
-    view.window?.toolbar?.validateVisibleItems()
+      view.window?.toolbar = toolbar
+      view.window?.toolbar?.validateVisibleItems()
+    }
 
+    updateExtensionToolbarItems()
     view.window?.acceptsMouseMovedEvents = true
     view.window?.appearance = AppTheme.current.resolvedAppearance
 
@@ -420,6 +423,26 @@ extension EditorViewController {
     }
   }
 
+  func createMenuIcon(spec: WebMenuItem) -> NSImage? {
+    guard let icon = spec.icon else {
+      return nil
+    }
+
+    return createMenuIcon(icon)
+  }
+
+  func createMenuIcon(_ icon: String) -> NSImage? {
+    if let image = NSImage(systemSymbolName: icon) {
+      return image
+    }
+
+    if let data = Data(base64Encoded: icon, options: .ignoreUnknownCharacters) {
+      return NSImage(data: data)
+    }
+
+    return nil
+  }
+
   // MARK: - Exposed to user scripts
 
   func addMainMenuItems(items: [(id: String, item: WebMenuItem)]) {
@@ -657,21 +680,5 @@ private extension EditorViewController {
 
     menu.delegate = self
     return menu
-  }
-
-  func createMenuIcon(spec: WebMenuItem) -> NSImage? {
-    guard let icon = spec.icon else {
-      return nil
-    }
-
-    if let image = NSImage(systemSymbolName: icon) {
-      return image
-    }
-
-    if let data = Data(base64Encoded: icon, options: .ignoreUnknownCharacters) {
-      return NSImage(data: data)
-    }
-
-    return nil
   }
 }

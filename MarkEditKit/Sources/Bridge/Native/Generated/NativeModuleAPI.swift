@@ -17,6 +17,8 @@ public protocol NativeModuleAPI: NativeModule {
   func closeDocument() async -> Bool
   func recentDocumentPaths() async -> [String]
   func addMainMenuItems(items: [WebMenuItem])
+  func addToolbarItems(items: [WebToolbarItem])
+  func invalidateToolbarItem(id: String)
   func showContextMenu(items: [WebMenuItem], location: WebPoint, highlightedIndex: Int?)
   func showAlert(title: String?, message: String?, buttons: [String]?) async -> Int
   func showTextBox(title: String?, placeholder: String?, defaultValue: String?) async -> String?
@@ -71,6 +73,10 @@ final class NativeBridgeAPI: NativeBridge {
       return await recentDocumentPaths(parameters: parameters)
     case "addMainMenuItems":
       return addMainMenuItems(parameters: parameters)
+    case "addToolbarItems":
+      return addToolbarItems(parameters: parameters)
+    case "invalidateToolbarItem":
+      return invalidateToolbarItem(parameters: parameters)
     case "showContextMenu":
       return showContextMenu(parameters: parameters)
     case "showAlert":
@@ -170,6 +176,36 @@ final class NativeBridgeAPI: NativeBridge {
     }
 
     module.addMainMenuItems(items: parameter_items)
+    return .success(nil)
+  }
+
+  private func addToolbarItems(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_items: [WebToolbarItem]
+
+    do {
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_items = try container.value("items")
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.addToolbarItems(items: parameter_items)
+    return .success(nil)
+  }
+
+  private func invalidateToolbarItem(parameters: Data) -> Result<Any?, Error>? {
+    let parameter_id: String
+
+    do {
+      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
+      parameter_id = try container.value("id")
+    } catch {
+      Logger.assertFail("Failed to decode parameters: \(parameters)")
+      return .failure(error)
+    }
+
+    module.invalidateToolbarItem(id: parameter_id)
     return .success(nil)
   }
 
@@ -541,6 +577,54 @@ public struct WebMenuItem: Decodable, Sendable {
     key = try container.value("key")
     modifiers = try container.value("modifiers")
     children = try container.value("children")
+  }
+}
+
+/// Represents a toolbar item in native toolbars.
+public struct WebToolbarItem: Decodable, Sendable {
+  public var id: String
+  public var title: String
+  public var icon: String
+  public var segments: [WebToolbarSegment]
+  private var type: String = "segmented"
+
+  public init(id: String, title: String, icon: String, segments: [WebToolbarSegment]) {
+    self.id = id
+    self.title = title
+    self.icon = icon
+    self.segments = segments
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    id = try container.value("id")
+    title = try container.value("title")
+    icon = try container.value("icon")
+    segments = try container.value("segments")
+    type = try container.value("type")
+  }
+}
+
+/// Represents a segment within a toolbar item.
+public struct WebToolbarSegment: Decodable, Sendable {
+  public var title: String
+  public var icon: String
+  public var actionID: String
+  public var stateGetterID: String
+
+  public init(title: String, icon: String, actionID: String, stateGetterID: String) {
+    self.title = title
+    self.icon = icon
+    self.actionID = actionID
+    self.stateGetterID = stateGetterID
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    title = try container.value("title")
+    icon = try container.value("icon")
+    actionID = try container.value("actionID")
+    stateGetterID = try container.value("stateGetterID")
   }
 }
 

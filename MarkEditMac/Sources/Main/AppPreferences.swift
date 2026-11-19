@@ -228,6 +228,9 @@ enum AppPreferences {
   }
 
   enum Window {
+    @Storage(key: "window.promoted-toolbar-item-ids", defaultValue: [])
+    static var promotedToolbarItemIDs: Set<String>
+
     @Storage(key: "window.toolbar-mode", defaultValue: .normal)
     static var toolbarMode: ToolbarMode {
       didSet {

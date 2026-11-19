@@ -72,11 +72,92 @@ extension EditorViewController {
       $0.identifier.rawValue == identifier.rawValue
     }
   }
+
+  func extensionItem(with identifier: NSToolbarItem.Identifier) -> WebToolbarItem? {
+    userDefinedToolbarItems.first {
+      ExtensionToolbarController.identifier(for: $0.id) == identifier
+    }
+  }
+
+  func addToolbarItems(_ items: [WebToolbarItem]) {
+    for spec in items {
+      guard !(userDefinedToolbarItems.contains { $0.id == spec.id }) else {
+        Logger.log(.error, "Duplicate toolbar item ID: \(spec.id)")
+        continue
+      }
+
+      guard ExtensionToolbarController.isValid(spec, editor: self) else {
+        Logger.log(.error, "Invalid toolbar item: \(spec.id)")
+        continue
+      }
+
+      userDefinedToolbarItems.append(spec)
+    }
+
+    updateExtensionToolbarItems()
+  }
+
+  func invalidateToolbarItem(_ id: String) {
+    guard (userDefinedToolbarItems.contains { $0.id == id }) else {
+      Logger.log(.error, "Unknown toolbar item ID: \(id)")
+      return
+    }
+
+    let identifier = ExtensionToolbarController.identifier(for: id)
+    for item in viewIfLoaded?.window?.toolbar?.items ?? [] where item.itemIdentifier == identifier {
+      item.extensionToolbarController?.invalidateState()
+    }
+  }
+
+  func updateExtensionToolbarItems() {
+    guard !userDefinedToolbarItems.isEmpty else {
+      return
+    }
+
+    guard let toolbar = viewIfLoaded?.window?.toolbar, toolbar.delegate === self else {
+      return
+    }
+
+    var promoted = AppPreferences.Window.promotedToolbarItemIDs
+    let previous = promoted
+
+    for spec in userDefinedToolbarItems {
+      let identifier = ExtensionToolbarController.identifier(for: spec.id)
+      if let item = (toolbar.items.first { $0.itemIdentifier == identifier }) {
+        if item.extensionToolbarController == nil, let group = item as? NSToolbarItemGroup {
+          ExtensionToolbarController.configure(group, spec: spec, editor: self)
+        }
+      } else if !promoted.contains(spec.id) {
+        toolbar.insertItem(withItemIdentifier: identifier, at: toolbar.items.count)
+      }
+
+      if (toolbar.items.contains { $0.itemIdentifier == identifier && $0.extensionToolbarController != nil }) {
+        promoted.insert(spec.id)
+      }
+    }
+
+    if promoted != previous {
+      AppPreferences.Window.promotedToolbarItemIDs = promoted
+    }
+  }
 }
 
 // MARK: - NSToolbarDelegate
 
 extension EditorViewController: NSToolbarDelegate {
+  func toolbarWillAddItem(_ notification: Notification) {
+    guard let (toolbar, group, spec) = notification.extensionToolbarSpec(for: self) else {
+      return
+    }
+
+    // Palette items can arrive with stale state or without copied associated objects
+    if group.extensionToolbarController == nil {
+      ExtensionToolbarController.configure(group, spec: spec, editor: self)
+    }
+
+    group.extensionToolbarController?.didInsert(into: toolbar)
+  }
+
   func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
     let item: NSToolbarItem? = {
       switch itemIdentifier {
@@ -98,6 +179,14 @@ extension EditorViewController: NSToolbarDelegate {
       case .copyPandocCommand: return copyPandocCommandItem
       case .writingTools: return writingToolsItem
       default:
+        if let spec = extensionItem(with: itemIdentifier) {
+          return ExtensionToolbarController.makeToolbarItem(spec: spec, editor: self)
+        }
+
+        if itemIdentifier.rawValue.hasPrefix(ExtensionToolbarController.identifierPrefix) {
+          return ExtensionToolbarController.makePlaceholder(identifier: itemIdentifier)
+        }
+
         if let customItem = customItem(with: itemIdentifier) {
           return .with(identifier: itemIdentifier, customItem: customItem)
         }
@@ -123,9 +212,20 @@ extension EditorViewController: NSToolbarDelegate {
   }
 
   func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-    NSToolbarItem.Identifier.allItems + AppRuntimeConfig.customToolbarItems.map {
-      $0.identifier
+    let registered = userDefinedToolbarItems.map {
+      ExtensionToolbarController.identifier(for: $0.id)
     }
+
+    let unavailable = toolbar.itemIdentifiers.filter {
+      $0.rawValue.hasPrefix(ExtensionToolbarController.identifierPrefix) && !registered.contains($0)
+    }
+
+    return [
+      NSToolbarItem.Identifier.allItems,
+      AppRuntimeConfig.customToolbarItems.map(\.identifier),
+      registered,
+      unavailable,
+    ].flatMap { $0 }
   }
 }
 
@@ -319,5 +419,23 @@ private extension EditorViewController {
 
     startTextEditing()
     bridge.toc.gotoHeader(headingInfo: headingInfo)
+  }
+}
+
+private extension Notification {
+  @MainActor
+  func extensionToolbarSpec(for editor: EditorViewController) -> (
+    toolbar: NSToolbar,
+    group: NSToolbarItemGroup,
+    item: WebToolbarItem
+  )? {
+    // https://developer.apple.com/documentation/appkit/nstoolbar/willadditemnotification
+    guard let toolbar = object as? NSToolbar,
+          let group = userInfo?[NSToolbarUserInfoKey.itemKey.rawValue] as? NSToolbarItemGroup,
+          let spec = editor.extensionItem(with: group.itemIdentifier) else {
+      return nil
+    }
+
+    return (toolbar, group, spec)
   }
 }

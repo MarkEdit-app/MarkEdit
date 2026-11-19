@@ -28,7 +28,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate {
   }
 
   override func showWindow(_ sender: Any?) {
-    if shouldWaitResetting {
+    if shouldPrepareToolbar || shouldWaitResetting {
       // Snapshot the caller's tabbing preference,
       // it may be reset before our deferred super call.
       let callerTabbingPreference = NSWindow.allowsAutomaticWindowTabbing
@@ -171,9 +171,32 @@ private extension EditorWindowController {
     return editor.hasFinishedLoading && editor.pendingResetCount > 0
   }
 
+  var shouldPrepareToolbar: Bool {
+    guard pendingInitialPresentation, let editor = editorViewController else {
+      return false
+    }
+
+    guard editor.hasFinishedLoading && !editor.userDefinedToolbarItems.isEmpty else {
+      return false
+    }
+
+    editor.configureToolbar()
+    return editor.view.window?.toolbar?.items.contains {
+      $0.extensionToolbarController != nil
+    } == true
+  }
+
   func windowReadyForPresentation() async -> NSWindow? {
+    guard document != nil else {
+      return nil
+    }
+
     if shouldWaitResetting {
       await editorViewController?.waitUntilEditorReset()
+    }
+
+    if document != nil, shouldPrepareToolbar {
+      await editorViewController?.prepareToolbarForPresentation()
     }
 
     // The document may have closed while waiting for the editor

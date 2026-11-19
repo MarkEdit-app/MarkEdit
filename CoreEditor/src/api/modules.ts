@@ -19,7 +19,7 @@ import { languageModel } from './languageModel';
 import { secretStorage } from './secretStorage';
 
 import { onAppReady, onEditorReady, onEditorConfigChange, openDocument, saveDocument, closeDocument, recentDocumentPaths, addExtension, addMarkdownConfig, addCodeLanguage, overrideHTMLLanguage, runtimeInfo, terminateApp, relaunchApp, playSystemBeep } from './methods';
-import { addMainMenuItem, showContextMenu, showAlert, showTextBox, showOpenPanel, showSavePanel, showPrintPanel, runService } from './ui';
+import { addMainMenuItem, addToolbarItem, invalidateToolbarItem, showContextMenu, showAlert, showTextBox, showOpenPanel, showSavePanel, showPrintPanel, runService } from './ui';
 import { openFile, createFile, deleteFile, moveFile, revealFile, listFiles, getFileContent, getFileObject, getFileInfo, getDirectoryPath } from './files';
 import { getFileVersions, getFileVersionContent, restoreFileVersion, deleteLocalFileVersions } from './fileVersion';
 import { getPasteboardItems, getPasteboardString } from './pasteboard';
@@ -68,6 +68,8 @@ export function initMarkEditModules() {
   MarkEdit.addCodeLanguage = addCodeLanguage;
   MarkEdit.overrideHTMLLanguage = overrideHTMLLanguage;
   MarkEdit.addMainMenuItem = addMainMenuItem;
+  MarkEdit.addToolbarItem = addToolbarItem;
+  MarkEdit.invalidateToolbarItem = invalidateToolbarItem;
   MarkEdit.showContextMenu = showContextMenu;
   MarkEdit.showAlert = showAlert;
   MarkEdit.showTextBox = showTextBox;
