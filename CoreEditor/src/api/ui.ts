@@ -3,7 +3,7 @@ import { MenuItem, MenuItemState, ToolbarItem, ContextMenuOptions, Alert, TextBo
 
 import { WebMenuItem } from '../@types/WebMenuItem';
 import { WebPoint } from '../@types/WebPoint';
-import { WebToolbarItem } from '../@types/WebToolbarItem';
+import { WebToolbarItem, WebToolbarItemState } from '../@types/WebToolbarItem';
 import { afterDomUpdate, focusedEditor, getClientRect } from '../common/utils';
 import { scrollToSelection, isPositionVisible } from '../modules/selection';
 
@@ -29,7 +29,19 @@ export function addToolbarItem(spec: ToolbarItem | ToolbarItem[]): void {
       type: item.type,
       title: item.title,
       icon: item.icon,
+      initialPlacement: item.initialPlacement ?? 'customization',
     };
+
+    const afterAction = () => invalidateToolbarItem(metadata.id);
+    if (item.type !== 'segmented') {
+      const menuItem = createMenuItem(item, mainActions, afterAction);
+      return [{
+        ...metadata,
+        actionID: menuItem.actionID,
+        stateGetterID: menuItem.stateGetterID,
+        children: menuItem.children,
+      }];
+    }
 
     return [
       {
@@ -37,13 +49,7 @@ export function addToolbarItem(spec: ToolbarItem | ToolbarItem[]): void {
         segments: item.segments.map(segment => ({
           title: segment.title,
           icon: segment.icon,
-          actionID: registerAction(() => {
-            try {
-              segment.action();
-            } finally {
-              invalidateToolbarItem(item.id);
-            }
-          }, mainActions),
+          actionID: registerAction(segment.action, mainActions, afterAction),
           stateGetterID: registerAction(segment.state, mainActions),
         })),
       },
@@ -162,42 +168,49 @@ export function handleContextMenuAction(id: string) {
   contextActions.clear();
 }
 
-export function getMenuItemState(id: string) {
+export function getMenuItemState(id: string): WebToolbarItemState {
   const action = mainActions.get(id) ?? contextActions.get(id);
   if (action === undefined) {
     return {};
   }
 
-  return action() as MenuItemState;
+  return action() as WebToolbarItemState;
 }
 
-export function getMenuItemStates(ids: string[]): MenuItemState[] {
+export function getMenuItemStates(ids: string[]): WebToolbarItemState[] {
   return ids.map(id => {
     if (!mainActions.has(id) && !contextActions.has(id)) {
       throw new Error(`Unknown menu state getter: ${id}`);
     }
 
-    const { isEnabled, isSelected } = getMenuItemState(id);
-    return { isEnabled, isSelected };
+    const { isEnabled, isSelected, title, icon } = getMenuItemState(id);
+    return { isEnabled, isSelected, title, icon };
   });
 }
 
-function createMenuItem(item: MenuItem, actions: Map<string, ActionType>): WebMenuItem {
+function createMenuItem(item: MenuItem, actions: Map<string, ActionType>, afterAction?: () => void): WebMenuItem {
   return {
-    actionID: item.action === undefined ? undefined : registerAction(item.action, actions),
+    actionID: item.action === undefined ? undefined : registerAction(item.action, actions, afterAction),
     stateGetterID: item.state === undefined ? undefined : registerAction(item.state, actions),
     separator: item.separator ?? false,
     title: item.title,
     icon: item.icon,
     key: item.key,
     modifiers: item.modifiers,
-    children: item.children?.map(item => createMenuItem(item, actions)),
+    children: item.children?.map(item => createMenuItem(item, actions, afterAction)),
   };
 };
 
-function registerAction(action: ActionType, actions: Map<string, ActionType>): string {
+function registerAction(action: ActionType, actions: Map<string, ActionType>, afterAction?: () => void): string {
   const identifier = crypto.randomUUID();
-  actions.set(identifier, action);
+  actions.set(identifier, afterAction === undefined ? action : () => {
+    try {
+      return action();
+    } finally {
+      afterAction();
+    }
+  });
+
   return identifier;
 }
 
@@ -205,7 +218,7 @@ function isSupportedPrintType(type: string): boolean {
   return type === 'pdf';
 }
 
-type ActionType = () => void | MenuItemState;
+type ActionType = () => void | WebToolbarItemState;
 const mainActions = new Map<string, ActionType>();
 const contextActions = new Map<string, ActionType>();
 const toolbarItemIDs = new Set<string>();

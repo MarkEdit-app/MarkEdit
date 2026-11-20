@@ -4187,9 +4187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markedit-api@npm:^0.41.0":
-  version: 0.41.0
-  resolution: "markedit-api@npm:0.41.0"
+"markedit-api@npm:^0.42.0":
+  version: 0.42.0
+  resolution: "markedit-api@npm:0.42.0"
   peerDependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/commands": ^6.0.0
@@ -4202,7 +4202,7 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
     "@lezer/markdown": ^1.0.0
-  checksum: 10c0/4e5e129dbafb7ed9192f1407bccf477c8d1fc7c5390753e5083f48e7ef44cafc8e731bd1a0a59b68f2ecd901a132fac1b63d5b93f7fc4bb866b36c80583db5bf
+  checksum: 10c0/a1999a429a6b5e2919abed06ce29893ec5d31eea0c9c8110e0886b2590c8d590d819d9822b7417fe9730e4eceaf3ce4d3a55b0db0296dfac3d37adf3ec9f1436
   languageName: node
   linkType: hard
 
@@ -4234,7 +4234,7 @@ __metadata:
     globals: "npm:^15.15.0"
     jest: "npm:^30.2.0"
     jest-environment-jsdom: "npm:^30.2.0"
-    markedit-api: "npm:^0.41.0"
+    markedit-api: "npm:^0.42.0"
     ts-gyb: "npm:^0.12.0"
     ts-jest: "npm:^29.4.5"
     tslib: "npm:^2.6.2"

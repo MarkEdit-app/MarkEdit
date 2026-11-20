@@ -1,4 +1,5 @@
 import { WebModule } from '../webModule';
+import { WebToolbarItemState } from '../../@types/WebToolbarItem';
 import { notifyAppReady } from '../../api/methods';
 import { handleMainMenuAction, handleContextMenuAction, getMenuItemState, getMenuItemStates, MenuItemState } from '../../api/ui';
 
@@ -12,7 +13,7 @@ export interface WebModuleAPI extends WebModule {
   handleMainMenuAction({ id }: { id: string }): void;
   handleContextMenuAction({ id }: { id: string }): void;
   getMenuItemState({ id }: { id: string }): MenuItemState;
-  getMenuItemStates({ ids }: { ids: string[] }): MenuItemState[];
+  getMenuItemStates({ ids }: { ids: string[] }): WebToolbarItemState[];
 }
 
 export class WebModuleAPIImpl implements WebModuleAPI {
@@ -32,7 +33,7 @@ export class WebModuleAPIImpl implements WebModuleAPI {
     return getMenuItemState(id);
   }
 
-  getMenuItemStates({ ids }: { ids: string[] }): MenuItemState[] {
+  getMenuItemStates({ ids }: { ids: string[] }): WebToolbarItemState[] {
     return getMenuItemStates(ids);
   }
 }

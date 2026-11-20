@@ -50,7 +50,7 @@ public final class WebBridgeAPI {
     return try await webView.invoke(path: "webModules.api.getMenuItemState", message: message)
   }
 
-  public func getMenuItemStates(ids: [String]) async throws -> [MenuItemState] {
+  public func getMenuItemStates(ids: [String]) async throws -> [WebToolbarItemState] {
     let message = BridgeMessage(
       ("ids", ids)
     )
@@ -84,5 +84,36 @@ public struct MenuItemState: Codable, Sendable {
     var container = encoder.container(keyedBy: BridgeFieldKey.self)
     try container.encode(isEnabled, forKey: "isEnabled")
     try container.encode(isSelected, forKey: "isSelected")
+  }
+}
+
+/// State snapshot for a toolbar control or menu entry.
+public struct WebToolbarItemState: Codable, Sendable {
+  public var isEnabled: Bool?
+  public var isSelected: Bool?
+  public var title: String?
+  public var icon: String?
+
+  public init(isEnabled: Bool?, isSelected: Bool?, title: String?, icon: String?) {
+    self.isEnabled = isEnabled
+    self.isSelected = isSelected
+    self.title = title
+    self.icon = icon
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: BridgeFieldKey.self)
+    isEnabled = try container.value("isEnabled")
+    isSelected = try container.value("isSelected")
+    title = try container.value("title")
+    icon = try container.value("icon")
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: BridgeFieldKey.self)
+    try container.encode(isEnabled, forKey: "isEnabled")
+    try container.encode(isSelected, forKey: "isSelected")
+    try container.encode(title, forKey: "title")
+    try container.encode(icon, forKey: "icon")
   }
 }
