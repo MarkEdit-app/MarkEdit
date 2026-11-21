@@ -1,12 +1,18 @@
+import { WebMenuItem } from './WebMenuItem';
+
 /**
  * Represents a toolbar item in native toolbars.
  */
 export interface WebToolbarItem {
   id: string;
-  type: 'segmented';
+  type: 'button' | 'menu' | 'segmented';
   title: string;
   icon: string;
-  segments: WebToolbarSegment[];
+  initialPlacement: 'toolbar' | 'customization';
+  actionID?: string;
+  stateGetterID?: string;
+  children?: WebMenuItem[];
+  segments?: WebToolbarSegment[];
 }
 
 /**
@@ -17,4 +23,14 @@ export interface WebToolbarSegment {
   icon: string;
   actionID: string;
   stateGetterID: string;
+}
+
+/**
+ * State snapshot for a toolbar control or menu entry.
+ */
+export interface WebToolbarItemState {
+  isEnabled?: boolean;
+  isSelected?: boolean;
+  title?: string;
+  icon?: string;
 }

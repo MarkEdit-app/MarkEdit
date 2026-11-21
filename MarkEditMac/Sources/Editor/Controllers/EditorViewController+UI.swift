@@ -104,7 +104,7 @@ extension EditorViewController {
       toolbar.displayMode = .iconOnly
       toolbar.delegate = self
       toolbar.allowsUserCustomization = true
-      toolbar.autosavesConfiguration = true
+      toolbar.autosavesConfiguration = !AppCustomization.isSafeMode
 
       view.window?.toolbar = toolbar
       view.window?.toolbar?.validateVisibleItems()
@@ -443,6 +443,49 @@ extension EditorViewController {
     return nil
   }
 
+  func createMenuItem(
+    spec: WebMenuItem,
+    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
+  ) -> NSMenuItem {
+    if spec.separator {
+      return .separator()
+    } else if let children = spec.children {
+      let item = UserDefinedMenuItem(title: spec.title ?? "")
+      item.ensureTitleVisibility()
+      item.image = createMenuIcon(spec: spec)
+      item.submenu = createMenu(items: children, handler: handler)
+      return item
+    } else if let title = spec.title {
+      let item = UserDefinedMenuItem(title: title)
+      item.ensureTitleVisibility()
+      if let actionID = spec.actionID {
+        item.addAction { handler(actionID, nil) }
+      }
+
+      item.stateGetterID = spec.stateGetterID
+      item.image = createMenuIcon(spec: spec)
+      item.keyEquivalent = spec.key ?? ""
+      item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
+      return item
+    } else {
+      Logger.assertFail("Invalid spec of menu item: \(spec)")
+      return UserDefinedMenuItem()
+    }
+  }
+
+  func createMenu(
+    items: [WebMenuItem],
+    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
+  ) -> NSMenu {
+    let menu = NSMenu()
+    for spec in items {
+      menu.addItem(createMenuItem(spec: spec, handler: handler))
+    }
+
+    menu.delegate = self
+    return menu
+  }
+
   // MARK: - Exposed to user scripts
 
   func addMainMenuItems(items: [(id: String, item: WebMenuItem)]) {
@@ -637,48 +680,5 @@ private extension EditorViewController {
     }
 
     presentedPopover = popover
-  }
-
-  func createMenuItem(
-    spec: WebMenuItem,
-    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
-  ) -> NSMenuItem {
-    if spec.separator {
-      return .separator()
-    } else if let children = spec.children {
-      let item = UserDefinedMenuItem(title: spec.title ?? "")
-      item.ensureTitleVisibility()
-      item.image = createMenuIcon(spec: spec)
-      item.submenu = createMenu(items: children, handler: handler)
-      return item
-    } else if let title = spec.title {
-      let item = UserDefinedMenuItem(title: title)
-      item.ensureTitleVisibility()
-      if let actionID = spec.actionID {
-        item.addAction { handler(actionID, nil) }
-      }
-
-      item.stateGetterID = spec.stateGetterID
-      item.image = createMenuIcon(spec: spec)
-      item.keyEquivalent = spec.key ?? ""
-      item.keyEquivalentModifierMask = .init(stringValues: spec.modifiers ?? [])
-      return item
-    } else {
-      Logger.assertFail("Invalid spec of menu item: \(spec)")
-      return UserDefinedMenuItem()
-    }
-  }
-
-  func createMenu(
-    items: [WebMenuItem],
-    handler: @escaping (String, ((Result<Void, WKWebView.InvokeError>) -> Void)?) -> Void
-  ) -> NSMenu {
-    let menu = NSMenu()
-    for spec in items {
-      menu.addItem(createMenuItem(spec: spec, handler: handler))
-    }
-
-    menu.delegate = self
-    return menu
   }
 }

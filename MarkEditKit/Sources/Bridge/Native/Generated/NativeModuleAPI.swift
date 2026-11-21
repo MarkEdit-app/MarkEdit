@@ -583,26 +583,50 @@ public struct WebMenuItem: Decodable, Sendable {
 /// Represents a toolbar item in native toolbars.
 public struct WebToolbarItem: Decodable, Sendable {
   public var id: String
+  public var type: WebToolbarItemMembersTypeType
   public var title: String
   public var icon: String
-  public var segments: [WebToolbarSegment]
-  private var type: String = "segmented"
+  public var initialPlacement: WebToolbarItemMembersInitialPlacementType
+  public var actionID: String?
+  public var stateGetterID: String?
+  public var children: [WebMenuItem]?
+  public var segments: [WebToolbarSegment]?
 
-  public init(id: String, title: String, icon: String, segments: [WebToolbarSegment]) {
+  public init(id: String, type: WebToolbarItemMembersTypeType, title: String, icon: String, initialPlacement: WebToolbarItemMembersInitialPlacementType, actionID: String?, stateGetterID: String?, children: [WebMenuItem]?, segments: [WebToolbarSegment]?) {
     self.id = id
+    self.type = type
     self.title = title
     self.icon = icon
+    self.initialPlacement = initialPlacement
+    self.actionID = actionID
+    self.stateGetterID = stateGetterID
+    self.children = children
     self.segments = segments
   }
 
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: BridgeFieldKey.self)
     id = try container.value("id")
+    type = try container.value("type")
     title = try container.value("title")
     icon = try container.value("icon")
+    initialPlacement = try container.value("initialPlacement")
+    actionID = try container.value("actionID")
+    stateGetterID = try container.value("stateGetterID")
+    children = try container.value("children")
     segments = try container.value("segments")
-    type = try container.value("type")
   }
+}
+
+public enum WebToolbarItemMembersTypeType: String, Codable, Sendable {
+  case button = "button"
+  case menu = "menu"
+  case segmented = "segmented"
+}
+
+public enum WebToolbarItemMembersInitialPlacementType: String, Codable, Sendable {
+  case toolbar = "toolbar"
+  case customization = "customization"
 }
 
 /// Represents a segment within a toolbar item.

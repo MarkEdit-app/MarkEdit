@@ -4,7 +4,7 @@ import { notifyEditorConfigChange, notifyEditorReady, onEditorConfigChange, onEd
 import { initMarkEditModules } from '../src/api/modules';
 import { createNativeModule } from '../src/bridge/nativeModule';
 import { NativeModuleAPI } from '../src/bridge/native/api';
-import { OpenPanelOptions, ToolbarItem } from 'markedit-api';
+import { OpenPanelOptions, ToolbarItem, ToolbarItemState } from 'markedit-api';
 import { getMenuItemStates, handleMainMenuAction } from '../src/api/ui';
 import { WebToolbarItem } from '../src/@types/WebToolbarItem';
 
@@ -33,6 +33,7 @@ describe('toolbar declarations', () => {
     const id = `preview.mode.${fails}`;
     const { items: [item], posted } = register({
       id, title: 'Modes', icon: 'eye', type: 'segmented',
+      initialPlacement: 'toolbar',
       segments: [{
         title: 'Source', icon: 'pencil', state: () => ({ isSelected: selected }),
         action() {
@@ -44,7 +45,8 @@ describe('toolbar declarations', () => {
       }],
     });
 
-    const segment = item.segments[0];
+    expect(item.initialPlacement).toBe('toolbar');
+    const segment = (item.segments ?? [])[0];
     expect(getMenuItemStates([segment.stateGetterID])).toEqual([{ isSelected: false }]);
     if (fails) {
       expect(() => handleMainMenuAction(segment.actionID)).toThrow('Expected action failure');
@@ -65,6 +67,62 @@ describe('toolbar declarations', () => {
     expect(posted).toHaveBeenCalledTimes(2);
   });
 
+  test.each(['button', 'menu'] as const)('registers %s actions with root invalidation, including failures', async type => {
+    let enabled = true;
+    const action = () => {
+      enabled = false;
+      throw new Error('Expected action failure');
+    };
+
+    const state = () => ({ isEnabled: enabled });
+    const metadata = { id: `test.${type}`, title: 'Commands', icon: 'bolt' };
+    const { items: [item], posted } = register(type === 'button'
+      ? { ...metadata, type, action, state }
+      : {
+        ...metadata, type,
+        children: [{ separator: true }, { title: 'Nested', children: [{ title: 'Run', action, state }] }],
+      });
+
+    expect(item.initialPlacement).toBe('customization');
+    const command: Pick<WebToolbarItem, 'actionID' | 'stateGetterID'> | undefined =
+      type === 'button' ? item : item.children?.[1].children?.[0];
+    const { actionID, stateGetterID } = command ?? {};
+    if (actionID === undefined || stateGetterID === undefined) {
+      throw new Error('Missing registered command');
+    }
+
+    expect(getMenuItemStates([stateGetterID])).toEqual([{ isEnabled: true }]);
+    expect(() => handleMainMenuAction(actionID)).toThrow('Expected action failure');
+
+    await Promise.resolve();
+    expect(getMenuItemStates([stateGetterID])).toEqual([{ isEnabled: false }]);
+    expect(posted).toHaveBeenCalledTimes(1);
+    expect(posted).toHaveBeenCalledWith({
+      moduleName: 'api', methodName: 'invalidateToolbarItem', parameters: JSON.stringify({ id: metadata.id }),
+    });
+  });
+
+  test('snapshots appearance overrides and preserves omitted defaults', () => {
+    let state: ToolbarItemState = { title: 'Pause', icon: 'pause.fill' };
+    const { items: [item] } = register({
+      id: 'test.appearance', type: 'button', title: 'Play', icon: 'play.fill',
+      action() {}, state: () => state,
+    });
+
+    if (item.stateGetterID === undefined) {
+      throw new Error('Missing registered state getter');
+    }
+
+    const snapshot = getMenuItemStates([item.stateGetterID]);
+    state.title = 'Resume';
+    state.icon = 'play.fill';
+    expect(snapshot).toEqual([{ title: 'Pause', icon: 'pause.fill' }]);
+    expect(getMenuItemStates([item.stateGetterID])).toEqual([{ title: 'Resume', icon: 'play.fill' }]);
+
+    state = {};
+    expect(getMenuItemStates([item.stateGetterID])).toEqual([{}]);
+  });
+
   test('reads and copies all states before queued changes can run', async () => {
     let selected = 0;
     const shared = { isSelected: false };
@@ -80,7 +138,7 @@ describe('toolbar declarations', () => {
       })),
     });
 
-    const ids = item.segments.map(segment => segment.stateGetterID);
+    const ids = (item.segments ?? []).map(segment => segment.stateGetterID);
     expect(getMenuItemStates(ids)).toEqual([{ isSelected: true }, { isSelected: false }]);
 
     await Promise.resolve();
