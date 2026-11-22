@@ -622,6 +622,7 @@ public enum WebToolbarItemMembersTypeType: String, Codable, Sendable {
   case button = "button"
   case menu = "menu"
   case segmented = "segmented"
+  case group = "group"
 }
 
 public enum WebToolbarItemMembersInitialPlacementType: String, Codable, Sendable {

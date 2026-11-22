@@ -15,18 +15,25 @@ struct ToolbarItemDefaults: Codable, Equatable, Sendable {
   let type: WebToolbarItemMembersTypeType
   let title: String
   let icon: String
-  let segments: [Segment]
+  let items: [Item]
 
   init(_ spec: WebToolbarItem) {
     type = spec.type
     title = spec.title
     icon = spec.icon
-    segments = spec.segments?.map {
-      Segment(title: $0.title, icon: $0.icon)
-    } ?? []
+
+    if spec.type == .group {
+      items = (spec.children ?? []).map {
+        Item(title: $0.title ?? "", icon: $0.icon ?? "")
+      }
+    } else {
+      items = spec.segments?.map {
+        Item(title: $0.title, icon: $0.icon)
+      } ?? []
+    }
   }
 
-  struct Segment: Codable, Equatable, Sendable {
+  struct Item: Codable, Equatable, Sendable {
     let title: String
     let icon: String
   }
@@ -42,9 +49,8 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
   private weak var item: NSToolbarItem?
   private weak var editor: EditorViewController?
   private var group: NSToolbarItemGroup? { item as? NSToolbarItemGroup }
-  private let defaultTitle: String
-  private let defaultIcon: String
-  private var appliedIcon: String
+  private let defaults: ToolbarItemDefaults
+  private var appliedIcons: [String]
   private var entries = [Entry]()
   private var revision = 0
   private var actionGeneration = 0
@@ -57,6 +63,17 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
   private var pendingAction: Int?
   private var customizationObservation: NSKeyValueObservation?
 
+  private init(item: NSToolbarItem, defaults: ToolbarItemDefaults, editor: EditorViewController) {
+    self.item = item
+    self.editor = editor
+    self.defaults = defaults
+    appliedIcons = defaults.type == .group ? defaults.items.map(\.icon) : [defaults.icon]
+
+    super.init()
+  }
+}
+
+extension ExtensionToolbarController {
   nonisolated static func identifier(for id: String) -> NSToolbarItem.Identifier {
     .init(identifierPrefix + id)
   }
@@ -112,7 +129,7 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
     let item = makeItem(
       identifier: identifier,
       kind: defaults.type,
-      images: defaults.segments.compactMap { editor.createMenuIcon($0.icon) }
+      images: defaults.items.compactMap { editor.createMenuIcon($0.icon) }
     )
 
     guard applyDefaults(defaults, to: item, editor: editor) else {
@@ -178,6 +195,16 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
         !$0.stateGetterID.isEmpty &&
         editor.createMenuIcon($0.icon) != nil
       }
+    case .group:
+      guard let children = spec.children, !children.isEmpty else {
+        return false
+      }
+
+      return children.allSatisfy {
+        !$0.separator && $0.children == nil &&
+        $0.title?.isEmpty == false && $0.actionID?.isEmpty == false &&
+        $0.icon.flatMap { editor.createMenuIcon($0) } != nil
+      }
     }
   }
 
@@ -185,12 +212,17 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
     switch spec.type {
     case .button: return !(item is NSMenuToolbarItem) && !(item is NSToolbarItemGroup)
     case .menu: return item is NSMenuToolbarItem
-    case .segmented:
+    case .segmented, .group:
       guard let group = item as? NSToolbarItemGroup else {
         return false
       }
 
-      return group.subitems.isEmpty || group.subitems.count == spec.segments?.count
+      guard (group is ActionToolbarItemGroup) == (spec.type == .group) else {
+        return false
+      }
+
+      let count = spec.type == .group ? spec.children?.count : spec.segments?.count
+      return group.subitems.isEmpty || group.subitems.count == count
     }
   }
 
@@ -219,15 +251,15 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
 
     return true
   }
+}
 
-  private init(item: NSToolbarItem, spec: WebToolbarItem, editor: EditorViewController) {
-    self.item = item
-    self.editor = editor
-    defaultTitle = spec.title
-    defaultIcon = spec.icon
-    appliedIcon = spec.icon
-    super.init()
+private extension ExtensionToolbarController {
+  convenience init(item: NSToolbarItem, spec: WebToolbarItem, editor: EditorViewController) {
+    self.init(item: item, defaults: ToolbarItemDefaults(spec), editor: editor)
+    bindActions(spec: spec, item: item, editor: editor)
+  }
 
+  func bindActions(spec: WebToolbarItem, item: NSToolbarItem, editor: EditorViewController) {
     let children = spec.segments?.map {
       WebMenuItem(
         separator: false,
@@ -258,11 +290,17 @@ final class ExtensionToolbarController: NSObject, NSMenuDelegate, NSMenuItemVali
 
     if let group, let submenu = representation.submenu, let children {
       bind(submenu, specs: children, parent: nil)
-      group.addAction { [weak self] in
-        self?.activate(self?.group?.selectedIndex ?? -1)
+      if spec.type == .segmented {
+        group.addAction { [weak self] in
+          self?.activate(self?.group?.selectedIndex ?? -1)
+        }
       }
 
       for (index, subitem) in group.subitems.enumerated() {
+        if spec.type == .group {
+          subitem.menuFormRepresentation = entries[index].menuItem
+        }
+
         subitem.addAction { [weak self] in
           self?.activate(index)
         }
@@ -325,8 +363,18 @@ extension ExtensionToolbarController {
   func menuNeedsUpdate(_ menu: NSMenu) {
     // AppKit can copy the menu. Use cached state without waiting inside menu tracking
     for item in menu.items where !item.isSeparatorItem && entries.indices.contains(item.tag) {
-      item.isEnabled = entries[item.tag].menuItem.isEnabled
-      item.state = entries[item.tag].menuItem.state
+      let source = entries[item.tag].menuItem
+      item.isEnabled = source.isEnabled
+      item.state = source.state
+
+      if item.title != source.title {
+        item.title = source.title
+        item.attributedTitle = source.attributedTitle
+      }
+
+      if item.image !== source.image {
+        item.image = source.image
+      }
     }
   }
 
@@ -382,13 +430,13 @@ extension ExtensionToolbarController {
       var stateIterator = states.makeIterator()
       for (index, entry) in entries.enumerated() {
         let state = entry.stateGetterID == nil ? nil : stateIterator.next()
-        if index == 0, group == nil {
-          try updateAppearance(state, editor: editor)
+        if defaults.type == .group || (index == 0 && group == nil) {
+          try updateAppearance(state, at: index, editor: editor)
         }
 
         let parentEnabled = entry.parent.map { entries[$0].menuItem.isEnabled } ?? true
         setEnabled(parentEnabled && (state?.isEnabled ?? true), at: index)
-        entry.menuItem.setOn(state?.isSelected ?? false)
+        entry.menuItem.setOn(defaults.type != .group && (state?.isSelected ?? false))
       }
 
       if let group, !group.isEnabled {
@@ -475,33 +523,35 @@ private extension ExtensionToolbarController {
     }
 
     if let group = item as? NSToolbarItemGroup {
-      let images = defaults.segments.compactMap { editor.createMenuIcon($0.icon) }
-      guard !images.isEmpty, images.count == defaults.segments.count else {
-        Logger.log(.error, "Invalid toolbar segment defaults: \(item.itemIdentifier.rawValue)")
+      let images = defaults.items.compactMap { editor.createMenuIcon($0.icon) }
+      guard !images.isEmpty, images.count == defaults.items.count else {
+        Logger.log(.error, "Invalid toolbar subitem defaults: \(item.itemIdentifier.rawValue)")
         return false
       }
 
       if group.subitems.isEmpty {
-        group.subitems = defaults.segments.indices.map {
+        group.subitems = defaults.items.indices.map {
           NSToolbarItem(itemIdentifier: .init("\(group.itemIdentifier.rawValue).\($0)"))
         }
       }
 
       guard group.subitems.count == images.count else {
-        Logger.log(.error, "Mismatched toolbar segment defaults: \(item.itemIdentifier.rawValue)")
+        Logger.log(.error, "Mismatched toolbar subitem defaults: \(item.itemIdentifier.rawValue)")
         return false
       }
 
-      if #available(macOS 27.0, *) {
+      if #available(macOS 27.0, *), defaults.type == .segmented {
         group.role = .tabs
       }
 
       group.controlRepresentation = .expanded
       for (index, subitem) in group.subitems.enumerated() {
-        subitem.label = defaults.segments[index].title
+        subitem.label = defaults.items[index].title
+        subitem.paletteLabel = subitem.label
         subitem.toolTip = subitem.label
         subitem.image = images[index]
         subitem.autovalidates = false
+        subitem.isBordered = true
       }
     }
 
@@ -529,6 +579,8 @@ private extension ExtensionToolbarController {
         target: nil,
         action: nil
       )
+    case .group:
+      return ActionToolbarItemGroup(itemIdentifier: identifier)
     }
   }
 
@@ -638,15 +690,16 @@ private extension ExtensionToolbarController {
     entries[index].menuItem.isEnabled = enabled
   }
 
-  func updateAppearance(_ state: WebToolbarItemState?, editor: EditorViewController) throws {
-    guard let item else {
+  func updateAppearance(_ state: WebToolbarItemState?, at index: Int, editor: EditorViewController) throws {
+    guard let item = defaults.type == .group ? group?.subitems[index] : item else {
       return
     }
 
-    let title = state?.title ?? defaultTitle
-    let icon = state?.icon ?? defaultIcon
+    let title = state?.title ?? (defaults.type == .group ? defaults.items[index].title : defaults.title)
+    let icon = state?.icon ?? (defaults.type == .group ? defaults.items[index].icon : defaults.icon)
+    let representation = defaults.type == .group ? entries[index].menuItem : item.menuFormRepresentation
     let image: NSImage?
-    if icon != appliedIcon {
+    if icon != appliedIcons[index] {
       guard let resolved = editor.createMenuIcon(icon) else {
         throw StateError.invalidIcon
       }
@@ -661,7 +714,7 @@ private extension ExtensionToolbarController {
       item.paletteLabel = title
       item.toolTip = title
 
-      if let representation = item.menuFormRepresentation {
+      if let representation {
         representation.title = title
         representation.attributedTitle = nil
         representation.ensureTitleVisibility()
@@ -670,13 +723,13 @@ private extension ExtensionToolbarController {
 
     if let image {
       item.image = image
-      item.menuFormRepresentation?.image = image
-      appliedIcon = icon
+      representation?.image = image
+      appliedIcons[index] = icon
     }
   }
 
   func updateConfirmedSelection() {
-    guard group != nil else {
+    guard defaults.type == .segmented else {
       reportedFailure = false
       return
     }
@@ -693,7 +746,7 @@ private extension ExtensionToolbarController {
   }
 
   func updateSelection() {
-    guard let group else {
+    guard defaults.type == .segmented, let group else {
       return
     }
 
@@ -718,5 +771,12 @@ private extension ExtensionToolbarController {
     }
 
     group.selectionMode = .selectOne
+  }
+}
+
+private final class ActionToolbarItemGroup: NSToolbarItemGroup {
+  override init(itemIdentifier: NSToolbarItem.Identifier) {
+    super.init(itemIdentifier: itemIdentifier)
+    selectionMode = .momentary
   }
 }

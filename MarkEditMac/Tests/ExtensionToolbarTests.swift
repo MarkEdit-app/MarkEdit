@@ -12,6 +12,99 @@ import WebKit
 
 @MainActor
 final class ExtensionToolbarTests: XCTestCase {
+  func testActionGroupStateCachingAndOverflow() async throws {
+    let editor = try await makeEditor()
+    let toolbar = makeToolbar(editor)
+    toolbar.itemIdentifiers = []
+
+    _ = try await editor.webView.evaluateJavaScript("""
+      window.groupPlaying = false;
+      window.groupClicks = 0;
+      MarkEdit.addToolbarItem({
+        id: 'test.actions', type: 'group', title: 'Actions', icon: 'play', initialPlacement: 'toolbar',
+        items: [
+          { type: 'button', title: 'Play', icon: 'play',
+            action() { window.groupPlaying = !window.groupPlaying; },
+            state: () => window.groupPlaying ? { title: 'Pause', icon: 'pause' } : {} },
+          { type: 'button', title: 'Count', icon: 'plus', action() { window.groupClicks++; } },
+          { type: 'button', title: 'Reset', icon: 'arrow.counterclockwise',
+            action() { window.groupPlaying = false; },
+            state: () => ({ isEnabled: window.groupPlaying }) }
+        ]
+      });
+      true;
+      """)
+
+    try await waitUntil {
+      (toolbar.items.first as? NSToolbarItemGroup)?.subitems.first?.isEnabled == true
+    }
+
+    let group = try XCTUnwrap(toolbar.items.first as? NSToolbarItemGroup)
+    let spec = try XCTUnwrap(editor.userDefinedToolbarItems.first)
+    let buttons = group.subitems
+    XCTAssertEqual(buttons.map(\.label), ["Play", "Count", "Reset"])
+    XCTAssertEqual(buttons.map(\.isEnabled), [true, true, false])
+    XCTAssertNil(group.action)
+    XCTAssertEqual(group.selectionMode, .momentary)
+
+    let copied = try XCTUnwrap(group.copy() as? NSToolbarItemGroup)
+    XCTAssertTrue(ExtensionToolbarController.matches(copied, spec: spec))
+    XCTAssertEqual(copied.selectionMode, .momentary)
+
+    let representation = try XCTUnwrap(group.menuFormRepresentation?.copy() as? NSMenuItem)
+    let menu = try XCTUnwrap(representation.submenu)
+    XCTAssertTrue(NSApp.sendAction(try XCTUnwrap(buttons[0].action), to: buttons[0].target, from: buttons[0]))
+    try await waitUntil { buttons[0].label == "Pause" && buttons[2].isEnabled }
+    XCTAssertEqual(buttons[0].image?.tiffRepresentation, editor.createMenuIcon("pause")?.tiffRepresentation)
+
+    menu.delegate?.menuNeedsUpdate?(menu)
+    XCTAssertEqual(menu.items[0].attributedTitle?.string ?? menu.items[0].title, "Pause")
+    XCTAssertTrue(menu.items.allSatisfy { $0.state == .off })
+    XCTAssertTrue(menu.items[2].isEnabled)
+    XCTAssertTrue(NSApp.sendAction(try XCTUnwrap(buttons[1].action), to: buttons[1].target, from: buttons[1]))
+
+    let clicks = try await editor.webView.evaluateJavaScript("window.groupClicks") as? Int
+    XCTAssertEqual(clicks, 1)
+
+    let restored = try XCTUnwrap(ExtensionToolbarController.makeCachedToolbarItem(
+      identifier: group.itemIdentifier,
+      editor: editor
+    ) as? NSToolbarItemGroup)
+
+    XCTAssertEqual(restored.subitems.map(\.label), ["Play", "Count", "Reset"])
+    XCTAssertEqual(restored.selectionMode, .momentary)
+    XCTAssertFalse(restored.isEnabled)
+    XCTAssertTrue(restored.subitems.allSatisfy { !$0.isEnabled })
+    XCTAssertNil(restored.extensionToolbarController)
+
+    let restoredImage = restored.subitems[0].image
+    XCTAssertTrue(ExtensionToolbarController.configure(restored, spec: spec, editor: editor))
+    XCTAssertIdentical(restored.subitems[0].image, restoredImage)
+    try await waitUntil { restored.subitems[0].label == "Pause" }
+
+    let reset = menu.items[2]
+    XCTAssertTrue(NSApp.sendAction(try XCTUnwrap(reset.action), to: reset.target, from: reset))
+    try await waitUntil { buttons[0].label == "Play" && !buttons[2].isEnabled }
+    XCTAssertEqual(buttons[0].image?.tiffRepresentation, editor.createMenuIcon("play")?.tiffRepresentation)
+
+    menu.delegate?.menuNeedsUpdate?(menu)
+    XCTAssertEqual(menu.items[0].attributedTitle?.string ?? menu.items[0].title, "Play")
+    XCTAssertFalse(menu.items[2].isEnabled)
+
+    var segmented = spec
+    segmented.type = .segmented
+    segmented.children = nil
+    segmented.segments = buttons.map {
+      WebToolbarSegment(title: $0.label, icon: "eye", actionID: "action", stateGetterID: "state")
+    }
+
+    XCTAssertFalse(ExtensionToolbarController.matches(group, spec: segmented))
+    let segmentedItem = try XCTUnwrap(ExtensionToolbarController.makeToolbarItem(spec: segmented, editor: editor))
+    XCTAssertFalse(ExtensionToolbarController.matches(segmentedItem, spec: spec))
+  }
+}
+
+extension ExtensionToolbarTests {
   func testAutomaticPlacementFitsAndRespectsRemoval() throws {
     let spec = segmentedSpec(
       titles: [
