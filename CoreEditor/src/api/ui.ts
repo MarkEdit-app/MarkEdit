@@ -33,25 +33,36 @@ export function addToolbarItem(spec: ToolbarItem | ToolbarItem[]): void {
     };
 
     const afterAction = () => invalidateToolbarItem(metadata.id);
-    if (item.type !== 'segmented') {
+    if (item.type === 'button' || item.type === 'menu') {
       const menuItem = createMenuItem(item, mainActions, afterAction);
-      return [{
-        ...metadata,
-        actionID: menuItem.actionID,
-        stateGetterID: menuItem.stateGetterID,
-        children: menuItem.children,
-      }];
+      return [
+        {
+          ...metadata,
+          actionID: menuItem.actionID,
+          stateGetterID: menuItem.stateGetterID,
+          children: menuItem.children,
+        },
+      ];
+    }
+
+    if (item.type === 'segmented') {
+      return [
+        {
+          ...metadata,
+          segments: item.segments.map(segment => ({
+            title: segment.title,
+            icon: segment.icon,
+            actionID: registerAction(segment.action, mainActions, afterAction),
+            stateGetterID: registerAction(segment.state, mainActions),
+          })),
+        },
+      ];
     }
 
     return [
       {
         ...metadata,
-        segments: item.segments.map(segment => ({
-          title: segment.title,
-          icon: segment.icon,
-          actionID: registerAction(segment.action, mainActions, afterAction),
-          stateGetterID: registerAction(segment.state, mainActions),
-        })),
+        children: item.items.map(button => createMenuItem(button, mainActions, afterAction)),
       },
     ];
   });

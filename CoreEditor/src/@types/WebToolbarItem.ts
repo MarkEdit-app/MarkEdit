@@ -5,7 +5,7 @@ import { WebMenuItem } from './WebMenuItem';
  */
 export interface WebToolbarItem {
   id: string;
-  type: 'button' | 'menu' | 'segmented';
+  type: 'button' | 'menu' | 'segmented' | 'group';
   title: string;
   icon: string;
   initialPlacement: 'toolbar' | 'customization';

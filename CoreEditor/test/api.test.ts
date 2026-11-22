@@ -67,7 +67,7 @@ describe('toolbar declarations', () => {
     expect(posted).toHaveBeenCalledTimes(2);
   });
 
-  test.each(['button', 'menu'] as const)('registers %s actions with root invalidation, including failures', async type => {
+  test.each(['button', 'menu', 'group'] as const)('registers %s actions with root invalidation, including failures', async type => {
     let enabled = true;
     const action = () => {
       enabled = false;
@@ -78,14 +78,20 @@ describe('toolbar declarations', () => {
     const metadata = { id: `test.${type}`, title: 'Commands', icon: 'bolt' };
     const { items: [item], posted } = register(type === 'button'
       ? { ...metadata, type, action, state }
-      : {
+      : type === 'group' ? {
+        ...metadata, type,
+        items: [
+          { type: 'button', title: 'Run', icon: 'play', action, state },
+          { type: 'button', title: 'Reset', icon: 'arrow.counterclockwise', action() {} },
+        ],
+      } : {
         ...metadata, type,
         children: [{ separator: true }, { title: 'Nested', children: [{ title: 'Run', action, state }] }],
       });
 
     expect(item.initialPlacement).toBe('customization');
     const command: Pick<WebToolbarItem, 'actionID' | 'stateGetterID'> | undefined =
-      type === 'button' ? item : item.children?.[1].children?.[0];
+      type === 'button' ? item : type === 'group' ? item.children?.[0] : item.children?.[1].children?.[0];
     const { actionID, stateGetterID } = command ?? {};
     if (actionID === undefined || stateGetterID === undefined) {
       throw new Error('Missing registered command');
