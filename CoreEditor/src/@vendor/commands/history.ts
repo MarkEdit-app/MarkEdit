@@ -160,6 +160,21 @@ export const undoDepth = depth(BranchName.Done)
 /// The amount of redoable change events available in a given state.
 export const redoDepth = depth(BranchName.Undone)
 
+function hasSelection(side: BranchName) {
+  return function(state: EditorState): boolean {
+    let histState = state.field(historyField_, false)
+    if (!histState) return false
+    let branch = side == BranchName.Done ? histState.done : histState.undone
+    return branch.length > 0 && branch[branch.length - 1].selectionsAfter.length > 0
+  }
+}
+
+/// Test whether there is an undoable selection available.
+export const canUndoSelection = hasSelection(BranchName.Done)
+
+/// Test whether there is a redoable selection available.
+export const canRedoSelection = hasSelection(BranchName.Undone)
+
 // History events store groups of changes or effects that need to be
 // undone/redone together.
 class HistEvent {
