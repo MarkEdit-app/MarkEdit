@@ -83,18 +83,6 @@ private extension AppDelegate {
       editPasteItem?.isEnabled = NSPasteboard.general.hasText
     }
 
-    // [macOS 27] Always enable "Writing Tools"
-    if #available(macOS 27.0, *), AppDesign.forceWritingTools {
-      // Prevent duplicate items
-      editWritingToolsItem?.isHidden = !(activeWritingToolsItem?.isHidden ?? true)
-
-      // Copy properties from `standardWritingToolsMenuItem`
-      let systemItem = NSMenuItem.systemWritingToolsItem
-      editWritingToolsItem?.submenu = systemItem?.submenu?.copiedMenu
-      editWritingToolsItem?.title = systemItem?.title ?? Localized.WritingTools.featureName
-      editWritingToolsItem?.image = AppWritingTools.affordanceIcon
-    }
-
     editTypewriterItem?.setOn(AppPreferences.Editor.typewriterMode)
   }
 

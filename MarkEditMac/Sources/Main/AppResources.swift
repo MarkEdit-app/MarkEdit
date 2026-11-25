@@ -129,7 +129,6 @@ enum Localized {
 
   enum WritingTools {
     static let featureName = String(localized: "Writing Tools", comment: "Writing Tools")
-    static let menuItemTitle = String(localized: "Show Writing Tools", comment: "Show Writing Tools")
   }
 
   enum Settings {

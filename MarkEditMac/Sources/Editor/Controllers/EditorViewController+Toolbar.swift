@@ -395,11 +395,6 @@ private extension EditorViewController {
       return .with(identifier: .writingTools, menu: menu.copiedMenu)
     }
 
-    // [macOS 27] Always enable "Writing Tools"
-    if AppDesign.forceWritingTools, let menu = NSMenuItem.systemWritingToolsItem?.submenu {
-      return .with(identifier: .writingTools, menu: menu.copiedMenu)
-    }
-
     return nil
   }
 
