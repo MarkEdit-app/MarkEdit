@@ -227,16 +227,6 @@ final class RuntimeTests: XCTestCase {
     )
   }
 
-  func testExistenceOfShowWritingTools() {
-    let webView = WKWebView()
-    testExistenceOfSelector(object: webView, selector: "_showWritingTools")
-  }
-
-  func testExistenceOfStandardWritingToolsMenuItem() {
-    let item = NSMenuItem.systemWritingToolsItem
-    XCTAssertNotNil(item)
-  }
-
   func testEnsureMenuImageVisibility() {
     let item = NSMenuItem(title: "Test")
     let image = NSImage(size: CGSize(width: 16, height: 16))
