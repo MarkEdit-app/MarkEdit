@@ -5062,23 +5062,6 @@
         }
       }
     },
-    "Writing Tools" : {
-      "comment" : "Writing Tools",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "写作工具"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "書寫工具"
-          }
-        }
-      }
-    },
     "Wrong file extension for type “%@”, use “.%@” instead." : {
       "comment" : "Script save error when the path extension does not match the output type",
       "localizations" : {

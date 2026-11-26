@@ -127,10 +127,6 @@ enum Localized {
     static let fileSize = String(localized: "File Size", comment: "Statistics label: count file size")
   }
 
-  enum WritingTools {
-    static let featureName = String(localized: "Writing Tools", comment: "Writing Tools")
-  }
-
   enum Settings {
     // Editor
     static let editor = String(localized: "Editor", comment: "Window title for editor settings")

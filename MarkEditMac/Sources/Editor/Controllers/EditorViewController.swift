@@ -209,15 +209,6 @@ final class EditorViewController: NSViewController {
       }
     }
 
-    // [macOS 15] Detect Writing Tools visibility to work around issues
-    writingToolsObservation = webView.observe(\.isWritingToolsActive) { [weak self] _, _ in
-      guard let self else {
-        return
-      }
-
-      self.updateWritingTools(isActive: self.webView.isWritingToolsActive)
-    }
-
     return webView
   }()
 
@@ -239,7 +230,6 @@ final class EditorViewController: NSViewController {
 
   private var initialContent: String?
   private var lastResetDocumentID: ObjectIdentifier?
-  private var writingToolsObservation: NSKeyValueObservation?
 
   // For CoreEditor preload
   private var loadingContinuations = [PreloadContinuation]()
@@ -453,10 +443,6 @@ extension EditorViewController {
     }
 
     bridge.history.markContentClean()
-  }
-
-  func ensureWritingToolsSelectionRect() {
-    bridge.writingTools.ensureSelectionRect()
   }
 }
 

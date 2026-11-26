@@ -31,8 +31,6 @@ interface HistoryConfig {
   /// changed ranges from that event. You can pass a custom predicate
   /// here to influence that logic.
   joinToEvent?: (tr: Transaction, isAdjacent: boolean) => boolean
-  /// [MarkEdit] Allow event handling to be optionally skipped
-  ignoreBeforeInput?: (event: InputEvent, view: EditorView) => boolean
   /// [MarkEdit] Called when an undo/redo command (including selection history) returns false.
   onCommandFailed?: () => void
 }
@@ -43,7 +41,6 @@ const historyConfig = Facet.define<HistoryConfig, Required<HistoryConfig>>({
       minDepth: 100,
       newGroupDelay: 500,
       joinToEvent: (_t, isAdjacent) => isAdjacent,
-      ignoreBeforeInput: undefined,
       onCommandFailed: undefined,
     }, {
       minDepth: Math.max,
@@ -104,7 +101,6 @@ export function history(config: HistoryConfig = {}): Extension {
     historyConfig.of(config),
     EditorView.domEventHandlers({
       beforeinput(e, view) {
-        if (config.ignoreBeforeInput && config.ignoreBeforeInput(e, view)) return false
         let command = e.inputType == "historyUndo" ? undo : e.inputType == "historyRedo" ? redo : null
         if (!command) return false
         e.preventDefault()

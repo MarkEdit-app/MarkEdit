@@ -21,7 +21,6 @@ public struct WebModuleBridge {
   public let search: WebBridgeSearch
   public let toc: WebBridgeTableOfContents
   public let api: WebBridgeAPI
-  public let writingTools: WebBridgeWritingTools
   public let foundationModels: WebBridgeFoundationModels
 
   public init(webView: WKWebView) {
@@ -35,7 +34,6 @@ public struct WebModuleBridge {
     self.search = WebBridgeSearch(webView: webView)
     self.toc = WebBridgeTableOfContents(webView: webView)
     self.api = WebBridgeAPI(webView: webView)
-    self.writingTools = WebBridgeWritingTools(webView: webView)
     self.foundationModels = WebBridgeFoundationModels(webView: webView)
   }
 }

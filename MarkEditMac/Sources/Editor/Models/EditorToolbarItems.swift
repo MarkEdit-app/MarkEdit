@@ -15,11 +15,6 @@ extension NSToolbarItem {
     item.label = identifier.itemLabel
     item.image = NSImage(systemSymbolName: identifier.itemIcon, accessibilityDescription: item.label)
 
-    // Special icon for Writing Tools
-    if identifier == .writingTools {
-      item.image = AppWritingTools.affordanceIcon ?? item.image
-    }
-
     if let menu {
       menu.needsHack = true
       item.menu = menu
@@ -91,7 +86,6 @@ extension NSToolbarItem.Identifier {
   static let statistics = newItem("statistics")
   static let shareDocument = newItem("shareDocument")
   static let copyPandocCommand = newItem("copyPandocCommand")
-  static let writingTools = newItem("writingTools")
 
   static var defaultItems: [NSToolbarItem.Identifier] {
     [
@@ -121,7 +115,6 @@ extension NSToolbarItem.Identifier {
       .statistics,
       .shareDocument,
       .copyPandocCommand,
-      .writingTools,
       .space,
       .flexibleSpace,
     ]
@@ -153,7 +146,6 @@ private extension NSToolbarItem.Identifier {
     case .statistics: return Localized.Toolbar.statistics
     case .shareDocument: return Localized.Toolbar.shareDocument
     case .copyPandocCommand: return Localized.Toolbar.copyPandocCommand
-    case .writingTools: return Localized.WritingTools.featureName
     default: fatalError("Unexpected toolbar item identifier: \(self)")
     }
   }
@@ -176,7 +168,6 @@ private extension NSToolbarItem.Identifier {
     case .statistics: return Icons.chartPie
     case .shareDocument: return Icons.squareAndArrowUp
     case .copyPandocCommand: return Icons.appleTerminal
-    case .writingTools: return Icons.wandAndSparkles
     default: fatalError("Unexpected toolbar item identifier: \(self)")
     }
   }
