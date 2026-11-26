@@ -66,67 +66,45 @@ public struct FontPicker: View {
         in: Self.minimumFontSize...Self.maximumFontSize,
       ) {}.accessibilityLabel(selectedFontName)
 
-      ZStack(alignment: .bottomLeading) {
-        IdentifiableWrapper()
-          .frame(width: 1, height: 1)
+      Menu {
+        systemFontButton(
+          style: .systemDefault,
+          name: configuration.defaultFontName,
+          design: .default
+        )
 
-        Menu {
-          systemFontButton(
-            style: .systemDefault,
-            name: configuration.defaultFontName,
-            design: .default
-          )
+        systemFontButton(
+          style: .systemMono,
+          name: configuration.monoFontName,
+          design: .monospaced
+        )
 
-          systemFontButton(
-            style: .systemMono,
-            name: configuration.monoFontName,
-            design: .monospaced
-          )
+        systemFontButton(
+          style: .systemRounded,
+          name: configuration.roundedFontName,
+          design: .rounded
+        )
 
-          systemFontButton(
-            style: .systemRounded,
-            name: configuration.roundedFontName,
-            design: .rounded
-          )
+        systemFontButton(
+          style: .systemSerif,
+          name: configuration.serifFontName,
+          design: .serif
+        )
 
-          systemFontButton(
-            style: .systemSerif,
-            name: configuration.serifFontName,
-            design: .serif
-          )
+        Divider()
 
-          if let recents = NSFont.recentFamilyNames(maxCount: 5) {
-            Divider()
-            Menu(configuration.recentlyUsedItemTitle) {
-              ForEach(recents, id: \.self) { name in
-                Button {
-                  changeFontStyle(.customFont(name: name))
-                } label: {
-                  Text(name).font(.custom(name, size: NSFont.systemFontSize))
-                }
-              }
-            }
+        Button(configuration.openPanelItemTitle) {
+          FontManagerDelegate.shared.fontDidChange = { font in
+            changeFontStyle(.customFont(name: font.fontName))
+            changeFontSize(font.pointSize)
           }
 
-          Divider()
-
-          Button(configuration.moreFontsItemTitle) {
-            presentFontMenu()
-          }
-
-          Button(configuration.openPanelItemTitle) {
-            FontManagerDelegate.shared.fontDidChange = { font in
-              changeFontStyle(.customFont(name: font.fontName))
-              changeFontSize(font.pointSize)
-            }
-
-            NSFontManager.shared.target = FontManagerDelegate.shared
-            NSFontPanel.shared.setPanelFont(selectedFont, isMultiple: false)
-            NSFontPanel.shared.orderBack(nil)
-          }
-        } label: {
-          Text(configuration.selectButtonTitle)
+          NSFontManager.shared.target = FontManagerDelegate.shared
+          NSFontPanel.shared.setPanelFont(selectedFont, isMultiple: false)
+          NSFontPanel.shared.orderBack(nil)
         }
+      } label: {
+        Text(configuration.selectButtonTitle)
       }
     }
     .padding(.vertical, 20)
@@ -167,38 +145,6 @@ private extension FontPicker {
     selectedFontSize = fontSize
     handlers.fontSizeDidChange(fontSize)
   }
-
-  @MainActor
-  func presentFontMenu() {
-    guard let contentView = NSApp.keyWindow?.contentView else {
-      return
-    }
-
-    guard let sourceView = (contentView.firstDescendant { $0 is IdentifiableView }) else {
-      return
-    }
-
-    let menu = NSMenu()
-    let fontSize = NSFont.systemFontSize
-    let textColor = NSColor.labelColor
-
-    for fontFamily in NSFontManager.shared.availableFontFamilies {
-      let attributes: [NSAttributedString.Key: Any] = [
-        .font: NSFont(name: fontFamily, size: fontSize) ?? .systemFont(ofSize: fontSize),
-        .foregroundColor: textColor,
-      ]
-
-      menu.addItem(withTitle: fontFamily) {
-        changeFontStyle(.customFont(name: fontFamily))
-      }.attributedTitle = NSAttributedString(
-        string: fontFamily,
-        attributes: attributes
-      )
-    }
-
-    let location = CGPoint(x: -4, y: sourceView.frame.height - 10)
-    menu.popUp(positioning: nil, at: location, in: sourceView)
-  }
 }
 
 private extension View {
@@ -207,10 +153,4 @@ private extension View {
       .allowsHitTesting(false)
       .accessibilityHidden(true)
   }
-}
-
-private class IdentifiableView: NSView {}
-private struct IdentifiableWrapper: NSViewRepresentable {
-  func makeNSView(context: Context) -> NSView { IdentifiableView() }
-  func updateNSView(_ nsView: NSView, context: Context) {}
 }
