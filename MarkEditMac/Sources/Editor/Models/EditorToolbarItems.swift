@@ -115,6 +115,7 @@ extension NSToolbarItem.Identifier {
       .statistics,
       .shareDocument,
       .copyPandocCommand,
+      .writingToolsItemIdentifier,
       .space,
       .flexibleSpace,
     ]
