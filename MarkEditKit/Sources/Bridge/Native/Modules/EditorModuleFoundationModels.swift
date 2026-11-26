@@ -26,26 +26,13 @@ public final class EditorModuleFoundationModels: NativeModuleFoundationModels {
     self.delegate = delegate
   }
 
-  public func availability(modelName: String) async -> String {
-    if #available(anyAppleOS 27.0, *) {
-      return availability(of: languageModel(named: modelName)).jsonEncoded
-    }
-
-    return defaultModelAvailability.jsonEncoded
+  public func availability() async -> String {
+    defaultModelAvailability.jsonEncoded
   }
 
-  public func createSession(modelName: String, instructions: String?) async -> String? {
+  public func createSession(instructions: String?) async -> String? {
     let identifier = UUID().uuidString
-    let session: LanguageModelSession
-
-    if #available(anyAppleOS 27.0, *) {
-      session = LanguageModelSession(
-        model: languageModel(named: modelName),
-        instructions: instructions
-      )
-    } else {
-      session = LanguageModelSession(instructions: instructions)
-    }
+    let session = LanguageModelSession(instructions: instructions)
 
     sessionPool[identifier] = session
     return identifier
@@ -175,33 +162,6 @@ private extension EditorModuleFoundationModels {
         Attachment(image)
       }
     }
-  }
-}
-
-@available(anyAppleOS 27.0, *)
-private extension EditorModuleFoundationModels {
-  func languageModel(named modelName: String) -> any LanguageModel {
-    switch modelName {
-    case "Private-Cloud-Compute": return PrivateCloudComputeLanguageModel()
-    default: return SystemLanguageModel.default
-    }
-  }
-
-  func availability(of model: some LanguageModel) -> LanguageModelAvailability {
-    if let availability = (model as? PrivateCloudComputeLanguageModel)?.availability {
-      switch availability {
-      case .available:
-        return LanguageModelAvailability(isAvailable: true, unavailableReason: nil)
-      case .unavailable(.deviceNotEligible):
-        return LanguageModelAvailability(isAvailable: false, unavailableReason: "Device Not Eligible")
-      case .unavailable(.systemNotReady):
-        return LanguageModelAvailability(isAvailable: false, unavailableReason: "System Not Ready")
-      @unknown default:
-        return LanguageModelAvailability(isAvailable: false, unavailableReason: "Unknown")
-      }
-    }
-
-    return defaultModelAvailability
   }
 }
 

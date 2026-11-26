@@ -12,8 +12,8 @@ import MarkEditCore
 
 @MainActor
 public protocol NativeModuleFoundationModels: NativeModule {
-  func availability(modelName: String) async -> String
-  func createSession(modelName: String, instructions: String?) async -> String?
+  func availability() async -> String
+  func createSession(instructions: String?) async -> String?
   func isResponding(sessionID: String?) async -> Bool
   func respondTo(sessionID: String?, prompt: String, options: LanguageModelGenerationOptions?) async -> String
   func streamResponseTo(sessionID: String?, streamID: String, prompt: String, options: LanguageModelGenerationOptions?)
@@ -52,34 +52,22 @@ final class NativeBridgeFoundationModels: NativeBridge {
   }
 
   private func availability(parameters: Data) async -> Result<Any?, Error>? {
-    let parameter_modelName: String
-
-    do {
-      let container = try decoder.decode(BridgeParameters.self, from: parameters).container
-      parameter_modelName = try container.value("modelName")
-    } catch {
-      Logger.assertFail("Failed to decode parameters: \(parameters)")
-      return .failure(error)
-    }
-
-    let result = await module.availability(modelName: parameter_modelName)
+    let result = await module.availability()
     return .success(result)
   }
 
   private func createSession(parameters: Data) async -> Result<Any?, Error>? {
-    let parameter_modelName: String
     let parameter_instructions: String?
 
     do {
       let container = try decoder.decode(BridgeParameters.self, from: parameters).container
-      parameter_modelName = try container.value("modelName")
       parameter_instructions = try container.value("instructions")
     } catch {
       Logger.assertFail("Failed to decode parameters: \(parameters)")
       return .failure(error)
     }
 
-    let result = await module.createSession(modelName: parameter_modelName, instructions: parameter_instructions)
+    let result = await module.createSession(instructions: parameter_instructions)
     return .success(result)
   }
 
