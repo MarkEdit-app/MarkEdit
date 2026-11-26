@@ -179,28 +179,6 @@ extension EditorViewController {
     return backgroundColor.withAlphaComponent(0.5).resolvedColor()
   }
 
-  func updateWritingTools(isActive: Bool) {
-    let performUpdate: @MainActor @Sendable () -> Void = {
-      // Work around undo stack and selection range issues
-      self.bridge.writingTools.setActive(
-        isActive: isActive,
-        reselect: AppWritingTools.shouldReselect(with: AppWritingTools.requestedTool)
-      )
-
-      // Invisible rendering doesn't work well with Writing Tools, temporarily disable it for now
-      self.setInvisiblesBehavior(behavior: isActive ? .never : AppPreferences.Editor.invisiblesBehavior)
-    }
-
-    if isActive {
-      performUpdate()
-    } else {
-      DispatchQueue.main.asyncAfter(
-        deadline: .now() + 0.2,
-        execute: performUpdate
-      )
-    }
-  }
-
   func layoutPanels(animated: Bool = false) {
     // findPanel is added before replacePanel to ensure the key view loop,
     // but we want findPanel visually above the replacePanel to play UI tricks.

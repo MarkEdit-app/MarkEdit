@@ -11,7 +11,6 @@ import { WebModuleFormatImpl } from './src/bridge/web/format';
 import { WebModuleSearchImpl } from './src/bridge/web/search';
 import { WebModuleTableOfContentsImpl } from './src/bridge/web/toc';
 import { WebModuleAPIImpl } from './src/bridge/web/api';
-import { WebModuleWritingToolsImpl } from './src/bridge/web/writingTools';
 import { WebModuleFoundationModelsImpl } from './src/bridge/web/foundationModels';
 
 import { pseudoDocument } from './test/utils/mock';
@@ -105,7 +104,6 @@ function setUpMainApp(config: Config) {
     search: new WebModuleSearchImpl(),
     toc: new WebModuleTableOfContentsImpl(),
     api: new WebModuleAPIImpl(),
-    writingTools: new WebModuleWritingToolsImpl(),
     foundationModels: new WebModuleFoundationModelsImpl(),
   };
 

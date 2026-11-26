@@ -33,7 +33,6 @@ import { bundledLanguages } from './languages';
 import { editingState } from './common/store';
 import { playSystemBeep } from './common/utils';
 
-import { isActive as isWritingToolsActive } from './modules/writingTools';
 import { localizePhrases } from './modules/localization';
 import { indentationKeymap } from './modules/indentation';
 import { filterTransaction, wordTokenizer, observeChanges, interceptInputs } from './modules/input';
@@ -84,7 +83,6 @@ export function extensions(options: { lineBreak?: string }) {
     highlightSpecialChars(),
     history({
       newGroupDelay: window.config.undoGroupingInterval ?? 300,
-      ignoreBeforeInput: () => isWritingToolsActive(),
       onCommandFailed: () => playSystemBeep('Failed to move history'),
     }),
     drawSelection({ cursorBlinkRate: 1000 }),

@@ -202,7 +202,6 @@ extension EditorViewController: NSToolbarDelegate {
       case .statistics: return statisticsItem
       case .shareDocument: return shareDocumentItem
       case .copyPandocCommand: return copyPandocCommandItem
-      case .writingTools: return writingToolsItem
       default:
         if let spec = extensionItem(with: itemIdentifier) {
           return ExtensionToolbarController.makeToolbarItem(spec: spec, editor: self)
@@ -388,14 +387,6 @@ private extension EditorViewController {
 
   var copyPandocCommandItem: NSToolbarItem {
     .with(identifier: .copyPandocCommand, menu: NSApp.appDelegate?.copyPandocCommandMenu?.copiedMenu)
-  }
-
-  var writingToolsItem: NSToolbarItem? {
-    if let menu = NSApp.appDelegate?.activeWritingToolsItem?.submenu {
-      return .with(identifier: .writingTools, menu: menu.copiedMenu)
-    }
-
-    return nil
   }
 
   func updateTableOfContentsMenu(_ menu: NSMenu) async {

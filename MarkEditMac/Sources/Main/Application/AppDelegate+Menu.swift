@@ -11,12 +11,6 @@ import MarkEditKit
 // MARK: - NSMenuDelegate
 
 extension AppDelegate: NSMenuDelegate {
-  var activeWritingToolsItem: NSMenuItem? {
-    mainEditMenu?.items.first {
-      $0.identifier?.rawValue == "__NSTextViewContextSubmenuIdentifierWritingTools"
-    }
-  }
-
   func menuNeedsUpdate(_ menu: NSMenu) {
     switch menu {
     case mainFileMenu:

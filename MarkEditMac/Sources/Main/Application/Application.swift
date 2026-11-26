@@ -54,22 +54,6 @@ final class Application: NSApplication {
       sanitizePasteboard()
     }
 
-    // Ensure lines are fully selected for a better Writing Tools experience
-    if action == sel_getUid("showWritingTools:") {
-      Logger.assert(sender is NSMenuItem, "Invalid sender was found")
-      Logger.assert(target == nil || (target as? AnyObject)?.className == "WKMenuTarget", "Invalid target was found")
-
-      if AppWritingTools.shouldReselect(withItem: sender) {
-        ensureWritingToolsSelectionRect()
-      }
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-        super.sendAction(action, to: target, from: sender)
-      }
-
-      return true
-    }
-
     let handled = super.sendAction(action, to: target, from: sender)
     if handled && action == sel_getUid("toggleAutomaticQuoteSubstitution:") {
       AppPreferences.Editor.smartQuotesOptionToggled()
@@ -122,13 +106,5 @@ private extension Application {
     let textContent = currentEditor?.document?.stringValue
     let lineEndings = AppPreferences.General.defaultLineEndings.characters
     NSPasteboard.general.sanitize(lineBreak: textContent?.getLineBreak(defaultValue: lineEndings))
-  }
-
-  func ensureWritingToolsSelectionRect() {
-    guard let currentEditor else {
-      return Logger.assertFail("Invalid keyWindow was found")
-    }
-
-    currentEditor.ensureWritingToolsSelectionRect()
   }
 }
