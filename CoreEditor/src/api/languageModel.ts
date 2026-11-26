@@ -1,15 +1,15 @@
 import { LanguageModel, LanguageModelGenerationOptions, LanguageModelName, LanguageModelResponse, LanguageModelStream } from 'markedit-api';
 import { LanguageModelGenerationOptions as SimplifiedGenerationOptions } from '../bridge/native/foundationModels';
 
-export function languageModel(modelName: LanguageModelName): LanguageModel {
+export function languageModel(_: LanguageModelName): LanguageModel {
   const nativeModule = window.nativeModules.foundationModels;
   return {
     availability: async() => {
-      const availability = await nativeModule.availability({ modelName });
+      const availability = await nativeModule.availability();
       return JSON.parse(availability);
     },
     createSession: async(options) => {
-      const sessionID = await nativeModule.createSession({ modelName, ...(options ?? {}) });
+      const sessionID = await nativeModule.createSession(options ?? {});
       return {
         isResponding: () => nativeModule.isResponding({ sessionID }),
         respondTo: async(prompt, options) => {
