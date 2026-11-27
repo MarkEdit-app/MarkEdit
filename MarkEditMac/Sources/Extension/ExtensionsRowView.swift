@@ -117,11 +117,11 @@ struct ExtensionsRowView: View {
     .padding(.vertical, 8)
     .padding(.horizontal, rowMargin)
     .frame(maxWidth: .infinity)
-    .background(
-      // Rounded for the drag preview; invisible at rest since it matches the content background
-      RoundedRectangle(cornerRadius: 8)
-        .fill(.windowBackground)
-    )
+    .background {
+      if #unavailable(macOS 27.0) {
+        Rectangle().fill(.windowBackground)
+      }
+    }
     // Fresh identity per mode and item so tab switches and cell reuse reset row state
     .id("\(model.mode):\(item.id)")
   }
