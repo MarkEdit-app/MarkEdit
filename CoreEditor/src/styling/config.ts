@@ -55,7 +55,7 @@ export function setTheme(theme: EditorTheme) {
 export function setFontFace(fontFace: WebFontFace) {
   if (styleSheets.fontFace === undefined) {
     styleSheets.fontFace = createStyleSheet(`
-      .cm-content, .cm-tooltip-autocomplete * { font-family: var(--markedit-font-family); }
+      .cm-content, .cm-tooltip-autocomplete * { font-family: var(--markedit-editor-font-family); }
     `);
   }
 
@@ -81,7 +81,7 @@ export function setFontFace(fontFace: WebFontFace) {
   ];
 
   document.documentElement.style.setProperty(
-    '--markedit-font-family',
+    '--markedit-editor-font-family',
     fontFamilies.join(', '),
   );
 }
@@ -90,22 +90,22 @@ export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
     const h = (level: number): string => {
       const cls = `.cm-md-heading${level}`;
-      return `${cls}, *:has(> ${cls}) { font-size: var(--markedit-heading${level}-font-size); }`;
+      return `${cls}, *:has(> ${cls}) { font-size: var(--markedit-markdown-heading${level}-font-size); }`;
     };
 
     styleSheets.fontSize = createStyleSheet(`
-      .cm-editor { font-size: var(--markedit-font-size); }
+      .cm-editor { font-size: var(--markedit-editor-font-size); }
       .cm-foldPlaceholder { font-size: var(--markedit-fold-placeholder-font-size); }
       ${[h(1), h(2), h(3), h(4), h(5), h(6)].join('\n')}
     `);
   }
 
   const style = document.documentElement.style;
-  style.setProperty('--markedit-font-size', `${calculateFontSize(fontSize, 0)}px`);
+  style.setProperty('--markedit-editor-font-size', `${calculateFontSize(fontSize, 0)}px`);
   style.setProperty('--markedit-fold-placeholder-font-size', `${fontSize - 4}px`);
 
   for (let level = 1; level <= 6; ++level) {
-    style.setProperty(`--markedit-heading${level}-font-size`, `${calculateFontSize(fontSize, level)}px`);
+    style.setProperty(`--markedit-markdown-heading${level}-font-size`, `${calculateFontSize(fontSize, level)}px`);
   }
 }
 
@@ -164,12 +164,12 @@ export function setLineWrapping(enabled: boolean) {
 export function setLineHeight(lineHeight: number) {
   if (styleSheets.lineHeight === undefined) {
     styleSheets.lineHeight = createStyleSheet(`
-      .cm-line, .cm-gutterElement { line-height: var(--markedit-line-height); }
+      .cm-line, .cm-gutterElement { line-height: var(--markedit-editor-line-height); }
     `);
   }
 
   // Prefer numbers (like 1.5) over percentages (like 150%), see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#number
-  document.documentElement.style.setProperty('--markedit-line-height', `${lineHeight}`);
+  document.documentElement.style.setProperty('--markedit-editor-line-height', `${lineHeight}`);
 }
 
 export function setTaskMarkerStyle(enabled: boolean) {

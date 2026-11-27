@@ -89,13 +89,13 @@ describe('Typography configuration', () => {
     }
 
     const initialRule = rule.cssText;
-    expect(rule.style.getPropertyValue('font-family')).toBe('var(--markedit-font-family)');
-    expect(document.documentElement.style.getPropertyValue('--markedit-font-family')).toBe(
+    expect(rule.style.getPropertyValue('font-family')).toBe('var(--markedit-editor-font-family)');
+    expect(document.documentElement.style.getPropertyValue('--markedit-editor-font-family')).toBe(
       'Courier New, ui-monospace, monospace, Menlo, system-ui, Helvetica, Arial, sans-serif',
     );
 
     setFontFace({ family: 'system-ui' });
-    expect(document.documentElement.style.getPropertyValue('--markedit-font-family')).toBe(
+    expect(document.documentElement.style.getPropertyValue('--markedit-editor-font-family')).toBe(
       'system-ui, ui-monospace, monospace, Menlo, Helvetica, Arial, sans-serif',
     );
 
@@ -116,7 +116,7 @@ describe('Typography configuration', () => {
     setFontFace({ family: 'Arial' });
     expect(rule.style.fontWeight).toBe('');
     expect(rule.style.fontStyle).toBe('');
-    expect(rule.style.getPropertyValue('font-family')).toBe('var(--markedit-font-family)');
+    expect(rule.style.getPropertyValue('font-family')).toBe('var(--markedit-editor-font-family)');
   });
 
   test('updates font sizes without rewriting rules when heading preferences change', () => {
@@ -128,9 +128,9 @@ describe('Typography configuration', () => {
 
     const rules = Array.from(sheet.sheet.cssRules, rule => rule.cssText);
     const sizes = () => [
-      '--markedit-font-size',
+      '--markedit-editor-font-size',
       '--markedit-fold-placeholder-font-size',
-      ...[1, 2, 3, 4, 5, 6].map(level => `--markedit-heading${level}-font-size`),
+      ...[1, 2, 3, 4, 5, 6].map(level => `--markedit-markdown-heading${level}-font-size`),
     ].map(name => document.documentElement.style.getPropertyValue(name));
 
     expect(sizes()).toEqual(
@@ -156,10 +156,10 @@ describe('Typography configuration', () => {
     }
 
     const rules = Array.from(sheet.sheet.cssRules, rule => rule.cssText);
-    expect(document.documentElement.style.getPropertyValue('--markedit-line-height')).toBe('1.5');
+    expect(document.documentElement.style.getPropertyValue('--markedit-editor-line-height')).toBe('1.5');
 
     setLineHeight(1.75);
-    expect(document.documentElement.style.getPropertyValue('--markedit-line-height')).toBe('1.75');
+    expect(document.documentElement.style.getPropertyValue('--markedit-editor-line-height')).toBe('1.75');
     expect(styleSheets.lineHeight).toBe(sheet);
     expect(Array.from(sheet.sheet.cssRules, rule => rule.cssText)).toEqual(rules);
   });
