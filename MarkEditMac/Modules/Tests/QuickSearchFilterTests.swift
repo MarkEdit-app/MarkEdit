@@ -199,18 +199,7 @@ final class QuickSearchFilterTests: XCTestCase {
       XCTAssertEqual(item.keyEquivalentModifierMask, .command)
 
       let window = try XCTUnwrap(controller.window)
-      let event = try XCTUnwrap(NSEvent.keyEvent(
-        with: .keyDown,
-        location: .zero,
-        modifierFlags: .command,
-        timestamp: 0,
-        windowNumber: window.windowNumber,
-        context: nil,
-        characters: key,
-        charactersIgnoringModifiers: key,
-        isARepeat: false,
-        keyCode: 0
-      ))
+      let event = try makeKeyEvent(key, window: window)
 
       XCTAssertTrue(window.performKeyEquivalent(with: event))
       XCTAssertEqual(item.state, .on)
@@ -231,6 +220,8 @@ final class QuickSearchFilterTests: XCTestCase {
     XCTAssertEqual(locationLoads, 1)
 
     controller.window?.cancelOperation(nil)
+    XCTAssertTrue(menu.items.allSatisfy { $0.keyEquivalent.isEmpty })
+
     controller.present(recentURLs: recents, locations: locations, document: document, screen: screen)
     XCTAssertEqual(locationLoads, 1)
 
@@ -248,5 +239,29 @@ final class QuickSearchFilterTests: XCTestCase {
     menu.performActionForItem(at: try XCTUnwrap(menu.items.firstIndex { $0.title == "All" }))
     XCTAssertEqual(reopenedButton.menu?.items.first { $0.title == "Headings" }?.state, .on)
     XCTAssertEqual(reopenedButton.contentTintColor, .controlAccentColor)
+
+    let reopenedWindow = try XCTUnwrap(controller.window)
+    let event = try makeKeyEvent("0", window: reopenedWindow)
+
+    XCTAssertFalse(menu.performKeyEquivalent(with: event))
+    XCTAssertTrue(reopenedWindow.performKeyEquivalent(with: event))
+    XCTAssertEqual(reopenedButton.menu?.items.first { $0.title == "All" }?.state, .on)
+    XCTAssertEqual(reopenedField.placeholderString, "Quick Search for files, text, and commands")
+    XCTAssertEqual(reopenedField.stringValue, "plan")
+  }
+
+  private func makeKeyEvent(_ key: String, window: NSWindow) throws -> NSEvent {
+    try XCTUnwrap(NSEvent.keyEvent(
+      with: .keyDown,
+      location: .zero,
+      modifierFlags: .command,
+      timestamp: 0,
+      windowNumber: window.windowNumber,
+      context: nil,
+      characters: key,
+      charactersIgnoringModifiers: key,
+      isARepeat: false,
+      keyCode: 0
+    ))
   }
 }

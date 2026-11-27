@@ -695,7 +695,11 @@ private extension QuickSearchController {
     discoveryNeedsRefresh = false
     results = []
     resultsQuery = ""
+
+    // The retained window's popup button still owns this menu after dismissal
+    filterMenu?.items.forEach { $0.keyEquivalent = "" }
     filterMenu = nil
+
     isPreparingResults = false
     isReadingDocument = false
     isDiscovering = false
