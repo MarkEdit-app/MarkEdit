@@ -214,12 +214,27 @@ export function applyReducedMotion(reduceMotion: boolean, types: 'both' | 'curso
 
 function setEditorColors(colors: EditorColors) {
   if (styleSheets.accentColor === undefined) {
-    styleSheets.accentColor = createStyleSheet('.cm-md-header:not(.cm-md-quote) {}');
+    styleSheets.accentColor = createStyleSheet(`
+      .cm-md-header:not(.cm-md-quote) {
+        color: var(--markedit-markdown-heading-color);
+        text-shadow: var(--markedit-markdown-heading-text-shadow);
+      }
+    `);
   }
 
+  const cssColor = shadowableTextColor(colors.accent);
   updateStyleSheet(styleSheets.accentColor, style => {
-    const cssColor = shadowableTextColor(colors.accent);
-    Object.keys(cssColor).forEach(key => style.setProperty(key, cssColor[key] as string));
+    for (const [property, color] of Object.entries(cssColor)) {
+      const variable = `--markedit-markdown-heading-${property}`;
+      document.documentElement.style.setProperty(variable, color);
+
+      // MarkEdit-theming may remove the heading color declaration.
+      // Restore altered bindings on theme updates; changing variables alone cannot restore them.
+      const value = `var(${variable})`;
+      if (style.getPropertyValue(property) !== value || style.getPropertyPriority(property) !== '') {
+        style.setProperty(property, value);
+      }
+    }
   });
 
   globalState.colors = colors;

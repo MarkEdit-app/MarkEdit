@@ -1,13 +1,15 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { Compartment } from '@codemirror/state';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
 import { renderWhitespaceBeforeCaret } from '../src/styling/nodes/invisible';
 import { selectedLinesDecoration } from '../src/styling/nodes/selection';
 import { adjustAlpha } from '../src/styling/helper';
-import { setFontFace, setFontSize, setLineHeight } from '../src/styling/config';
+import { setFontFace, setFontSize, setLineHeight, setTheme } from '../src/styling/config';
 import { InvisiblesBehavior } from '../src/config';
 import { editingState, styleSheets } from '../src/common/store';
 import { classHighlighters } from '../src/styling/markdown';
 import GitHubLight from '../src/styling/themes/github-light';
+import { loadTheme } from '../src/styling/themes';
 import { sleep } from './utils/helpers';
 import * as editor from './utils/editor';
 
@@ -162,6 +164,66 @@ describe('Typography configuration', () => {
     expect(document.documentElement.style.getPropertyValue('--markedit-editor-line-height')).toBe('1.75');
     expect(styleSheets.lineHeight).toBe(sheet);
     expect(Array.from(sheet.sheet.cssRules, rule => rule.cssText)).toEqual(rules);
+  });
+});
+
+describe('Heading theme variables', () => {
+  let rootStyle: string;
+  beforeEach(() => {
+    rootStyle = document.documentElement.style.cssText;
+    const theme = new Compartment;
+    editor.setUp('# Heading\n\n> # Quoted', [classHighlighters, theme.of(GitHubLight().extension)]);
+    window.dynamics = { theme };
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    window.editor.destroy();
+    window.editor.dom.remove();
+    styleSheets.accentColor?.remove();
+    delete styleSheets.accentColor;
+    document.documentElement.style.cssText = rootStyle;
+  });
+
+  function headingRule() {
+    const rule = styleSheets.accentColor?.sheet?.cssRules[0];
+    if (!(rule instanceof CSSStyleRule)) {
+      throw new Error('Heading stylesheet is missing its rule');
+    }
+
+    return rule;
+  }
+
+  test('updates heading color and clears glow without rewriting intact declarations', () => {
+    setTheme(GitHubLight());
+    const rule = headingRule();
+    const update = jest.spyOn(rule.style, 'setProperty');
+    const root = document.documentElement.style;
+
+    setTheme(loadTheme('synthwave84'));
+    expect(root.getPropertyValue('--markedit-markdown-heading-color')).toBe('#f92aad');
+    expect(root.getPropertyValue('--markedit-markdown-heading-text-shadow')).toBe(
+      '0 0 2px #100c0f, 0 0 5px #dc078e33, 0 0 10px #fff3',
+    );
+
+    setTheme(GitHubLight());
+    expect(root.getPropertyValue('--markedit-markdown-heading-color')).toBe('#0550ae');
+    expect(root.getPropertyValue('--markedit-markdown-heading-text-shadow')).toBe('none');
+    expect(update).not.toHaveBeenCalled();
+  });
+
+  test('rebinds declarations altered by legacy themes on the next theme update', () => {
+    setTheme(GitHubLight());
+    const rule = headingRule();
+    rule.style.removeProperty('color');
+    rule.style.setProperty('text-shadow', 'none', 'important');
+
+    setTheme(loadTheme('synthwave84'));
+    expect(headingRule()).toBe(rule);
+    expect(rule.style.getPropertyValue('color')).toBe('var(--markedit-markdown-heading-color)');
+    expect(rule.style.getPropertyValue('text-shadow')).toBe('var(--markedit-markdown-heading-text-shadow)');
+    expect(rule.style.getPropertyPriority('text-shadow')).toBe('');
+    expect(document.documentElement.style.getPropertyValue('--markedit-markdown-heading-color')).toBe('#f92aad');
   });
 });
 
