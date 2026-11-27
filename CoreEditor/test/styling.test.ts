@@ -61,7 +61,7 @@ describe('Typography configuration', () => {
   let rootStyle: string;
   beforeEach(() => {
     rootStyle = document.documentElement.style.cssText;
-    window.config.headerFontSizeDiffs = undefined;
+    window.config = {} as typeof window.config;
   });
 
   afterEach(() => {
