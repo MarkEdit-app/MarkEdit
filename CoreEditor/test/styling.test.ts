@@ -3,7 +3,7 @@ import { gutterExtensions } from '../src/styling/nodes/gutter';
 import { renderWhitespaceBeforeCaret } from '../src/styling/nodes/invisible';
 import { selectedLinesDecoration } from '../src/styling/nodes/selection';
 import { adjustAlpha } from '../src/styling/helper';
-import { setFontSize, setLineHeight } from '../src/styling/config';
+import { setFontFace, setFontSize, setLineHeight } from '../src/styling/config';
 import { InvisiblesBehavior } from '../src/config';
 import { editingState, styleSheets } from '../src/common/store';
 import { classHighlighters } from '../src/styling/markdown';
@@ -66,12 +66,57 @@ describe('Typography configuration', () => {
 
   afterEach(() => {
     document.documentElement.style.cssText = rootStyle;
+    styleSheets.fontFace?.remove();
     styleSheets.fontSize?.remove();
     styleSheets.lineHeight?.remove();
 
+    delete styleSheets.fontFace;
     delete styleSheets.fontSize;
     delete styleSheets.lineHeight;
     window.config.headerFontSizeDiffs = undefined;
+  });
+
+  test('updates the font-family variable with ordered fallbacks without rewriting rules', () => {
+    setFontFace({ family: 'Courier New' });
+    const sheet = styleSheets.fontFace;
+    if (sheet === undefined || sheet.sheet === null) {
+      throw new Error('Font-face stylesheet was not created');
+    }
+
+    const rule = sheet.sheet.cssRules[0];
+    if (!(rule instanceof CSSStyleRule)) {
+      throw new Error('Font-face stylesheet is missing its rule');
+    }
+
+    const initialRule = rule.cssText;
+    expect(rule.style.getPropertyValue('font-family')).toBe('var(--markedit-font-family)');
+    expect(document.documentElement.style.getPropertyValue('--markedit-font-family')).toBe(
+      'Courier New, ui-monospace, monospace, Menlo, system-ui, Helvetica, Arial, sans-serif',
+    );
+
+    setFontFace({ family: 'system-ui' });
+    expect(document.documentElement.style.getPropertyValue('--markedit-font-family')).toBe(
+      'system-ui, ui-monospace, monospace, Menlo, Helvetica, Arial, sans-serif',
+    );
+
+    expect(styleSheets.fontFace).toBe(sheet);
+    expect(rule.cssText).toBe(initialRule);
+  });
+
+  test('removes optional font weight and style when returning to a family-only preference', () => {
+    setFontFace({ family: 'Menlo', weight: '600', style: 'italic' });
+    const rule = styleSheets.fontFace?.sheet?.cssRules[0];
+    if (!(rule instanceof CSSStyleRule)) {
+      throw new Error('Font-face stylesheet is missing its rule');
+    }
+
+    expect(rule.style.fontWeight).toBe('600');
+    expect(rule.style.fontStyle).toBe('italic');
+
+    setFontFace({ family: 'Arial' });
+    expect(rule.style.fontWeight).toBe('');
+    expect(rule.style.fontStyle).toBe('');
+    expect(rule.style.getPropertyValue('font-family')).toBe('var(--markedit-font-family)');
   });
 
   test('updates font sizes without rewriting rules when heading preferences change', () => {

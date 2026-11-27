@@ -54,31 +54,36 @@ export function setTheme(theme: EditorTheme) {
 
 export function setFontFace(fontFace: WebFontFace) {
   if (styleSheets.fontFace === undefined) {
-    styleSheets.fontFace = createStyleSheet('.cm-content, .cm-tooltip-autocomplete * {}');
+    styleSheets.fontFace = createStyleSheet(`
+      .cm-content, .cm-tooltip-autocomplete * { font-family: var(--markedit-font-family); }
+    `);
   }
 
   updateStyleSheet(styleSheets.fontFace, style => {
     style.fontWeight = fontFace.weight ?? '';
     style.fontStyle = fontFace.style ?? '';
-
-    const fallbacks = [
-      'ui-monospace',
-      'monospace',
-      'Menlo',
-      'system-ui',
-      'Helvetica',
-      'Arial',
-      'sans-serif',
-    ];
-
-    // The desired family goes first, followed by the fallbacks minus a possible duplicate
-    const fontFamilies = [
-      fontFace.family,
-      ...fallbacks.filter(family => family !== fontFace.family),
-    ];
-
-    style.fontFamily = fontFamilies.join(', ');
   });
+
+  const fallbacks = [
+    'ui-monospace',
+    'monospace',
+    'Menlo',
+    'system-ui',
+    'Helvetica',
+    'Arial',
+    'sans-serif',
+  ];
+
+  // The desired family goes first, followed by the fallbacks minus a possible duplicate
+  const fontFamilies = [
+    fontFace.family,
+    ...fallbacks.filter(family => family !== fontFace.family),
+  ];
+
+  document.documentElement.style.setProperty(
+    '--markedit-font-family',
+    fontFamilies.join(', '),
+  );
 }
 
 export function setFontSize(fontSize: number) {
