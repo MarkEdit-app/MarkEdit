@@ -85,28 +85,23 @@ export function setFontSize(fontSize: number) {
   if (styleSheets.fontSize === undefined) {
     const h = (level: number): string => {
       const cls = `.cm-md-heading${level}`;
-      return `${cls}, *:has(> ${cls}) {}`;
+      return `${cls}, *:has(> ${cls}) { font-size: var(--markedit-heading${level}-font-size); }`;
     };
 
     styleSheets.fontSize = createStyleSheet(`
-      .cm-editor {}
-      .cm-foldPlaceholder {}
+      .cm-editor { font-size: var(--markedit-font-size); }
+      .cm-foldPlaceholder { font-size: var(--markedit-fold-placeholder-font-size); }
       ${[h(1), h(2), h(3), h(4), h(5), h(6)].join('\n')}
     `);
   }
 
-  updateStyleSheet(styleSheets.fontSize, (style, rule) => {
-    // Smaller font size for fold placeholder (...)
-    if (rule.selectorText === '.cm-foldPlaceholder') {
-      style.fontSize = `${fontSize - 4}px`;
-      return;
-    }
+  const style = document.documentElement.style;
+  style.setProperty('--markedit-font-size', `${calculateFontSize(fontSize, 0)}px`);
+  style.setProperty('--markedit-fold-placeholder-font-size', `${fontSize - 4}px`);
 
-    // E.g., .cm-md-heading1 -> 1, .cm-editor -> 0
-    const match = rule.selectorText.match(/\d+/);
-    const headingLevel = parseInt(match === null ? '0' : match[0]);
-    style.fontSize = `${calculateFontSize(fontSize, headingLevel)}px`;
-  });
+  for (let level = 1; level <= 6; ++level) {
+    style.setProperty(`--markedit-heading${level}-font-size`, `${calculateFontSize(fontSize, level)}px`);
+  }
 }
 
 export function setShowLineNumbers(enabled: boolean) {
@@ -163,11 +158,13 @@ export function setLineWrapping(enabled: boolean) {
 
 export function setLineHeight(lineHeight: number) {
   if (styleSheets.lineHeight === undefined) {
-    styleSheets.lineHeight = createStyleSheet('.cm-line, .cm-gutterElement {}');
+    styleSheets.lineHeight = createStyleSheet(`
+      .cm-line, .cm-gutterElement { line-height: var(--markedit-line-height); }
+    `);
   }
 
   // Prefer numbers (like 1.5) over percentages (like 150%), see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height#number
-  updateStyleSheet(styleSheets.lineHeight, style => style.lineHeight = `${lineHeight}`);
+  document.documentElement.style.setProperty('--markedit-line-height', `${lineHeight}`);
 }
 
 export function setTaskMarkerStyle(enabled: boolean) {

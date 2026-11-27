@@ -1,10 +1,11 @@
-import { afterEach, describe, expect, jest, test } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
 import { renderWhitespaceBeforeCaret } from '../src/styling/nodes/invisible';
 import { selectedLinesDecoration } from '../src/styling/nodes/selection';
 import { adjustAlpha } from '../src/styling/helper';
+import { setFontSize, setLineHeight } from '../src/styling/config';
 import { InvisiblesBehavior } from '../src/config';
-import { editingState } from '../src/common/store';
+import { editingState, styleSheets } from '../src/common/store';
 import { classHighlighters } from '../src/styling/markdown';
 import GitHubLight from '../src/styling/themes/github-light';
 import { sleep } from './utils/helpers';
@@ -53,6 +54,69 @@ describe('Styling module', () => {
 
     const selected = document.querySelectorAll('.cm-selectedLineRange');
     expect(selected.length).toBe(1);
+  });
+});
+
+describe('Typography configuration', () => {
+  let rootStyle: string;
+  beforeEach(() => {
+    rootStyle = document.documentElement.style.cssText;
+    window.config = {} as typeof window.config;
+  });
+
+  afterEach(() => {
+    document.documentElement.style.cssText = rootStyle;
+    styleSheets.fontSize?.remove();
+    styleSheets.lineHeight?.remove();
+
+    delete styleSheets.fontSize;
+    delete styleSheets.lineHeight;
+    window.config.headerFontSizeDiffs = undefined;
+  });
+
+  test('updates font sizes without rewriting rules when heading preferences change', () => {
+    setFontSize(15);
+    const sheet = styleSheets.fontSize;
+    if (sheet === undefined || sheet.sheet === null) {
+      throw new Error('Font-size stylesheet was not created');
+    }
+
+    const rules = Array.from(sheet.sheet.cssRules, rule => rule.cssText);
+    const sizes = () => [
+      '--markedit-font-size',
+      '--markedit-fold-placeholder-font-size',
+      ...[1, 2, 3, 4, 5, 6].map(level => `--markedit-heading${level}-font-size`),
+    ].map(name => document.documentElement.style.getPropertyValue(name));
+
+    expect(sizes()).toEqual(
+      ['15px', '11px', '20px', '18px', '16px', '15px', '15px', '15px'],
+    );
+
+    window.config.headerFontSizeDiffs = [8, 0, -1];
+    setFontSize(20);
+    expect(sizes()).toEqual(['20px', '16px', '28px', '20px', '19px', '20px', '20px', '20px']);
+
+    window.config.headerFontSizeDiffs = [];
+    setFontSize(17.5);
+    expect(sizes()).toEqual(['17.5px', '13.5px', '17.5px', '17.5px', '17.5px', '17.5px', '17.5px', '17.5px']);
+    expect(styleSheets.fontSize).toBe(sheet);
+    expect(Array.from(sheet.sheet.cssRules, rule => rule.cssText)).toEqual(rules);
+  });
+
+  test('updates unitless line height without replacing or rewriting its stylesheet', () => {
+    setLineHeight(1.5);
+    const sheet = styleSheets.lineHeight;
+    if (sheet === undefined || sheet.sheet === null) {
+      throw new Error('Line-height stylesheet was not created');
+    }
+
+    const rules = Array.from(sheet.sheet.cssRules, rule => rule.cssText);
+    expect(document.documentElement.style.getPropertyValue('--markedit-line-height')).toBe('1.5');
+
+    setLineHeight(1.75);
+    expect(document.documentElement.style.getPropertyValue('--markedit-line-height')).toBe('1.75');
+    expect(styleSheets.lineHeight).toBe(sheet);
+    expect(Array.from(sheet.sheet.cssRules, rule => rule.cssText)).toEqual(rules);
   });
 });
 
