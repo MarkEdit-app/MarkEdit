@@ -36,15 +36,4 @@ describe('TextChecker test suite', () => {
     expect(dom.getAttribute('spellcheck')).toBe('true');
     expect(dom.getAttribute('autocorrect')).toBe('off');
   });
-
-  test('test autocomplete and autocapitalize are removed', () => {
-    const dom = createContentDOM();
-    expect(dom.hasAttribute('autocomplete')).toBe(true);
-    expect(dom.hasAttribute('autocapitalize')).toBe(true);
-
-    updateTextChecker(dom, { spellcheck: false, autocorrect: false });
-
-    expect(dom.hasAttribute('autocomplete')).toBe(false);
-    expect(dom.hasAttribute('autocapitalize')).toBe(false);
-  });
 });

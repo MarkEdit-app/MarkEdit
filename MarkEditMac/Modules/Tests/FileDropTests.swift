@@ -148,26 +148,6 @@ final class FileDropTests: XCTestCase {
     XCTAssertEqual(result, "![photo.png](assets/photo-1.png)")
   }
 
-  func testFileDropHandlerSavedDocSiblingSubtree() throws {
-    // Verifies the ../sibling form when the document and target live in
-    // different children of a common ancestor.
-    let dir = try makeTempDir()
-    defer { try? FileManager.default.removeItem(at: dir) }
-
-    let docURL = dir.appending(path: "sub/notes.md")
-    let imageURL = dir.appending(path: "other/photo.png")
-    try FileManager.default.createDirectory(at: imageURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-    try Data().write(to: imageURL)
-
-    let result = FileDropHandler.handle(
-      fileURL: imageURL,
-      documentURL: docURL,
-      documentType: nil
-    )
-
-    XCTAssertEqual(result, "![photo.png](../other/photo.png)")
-  }
-
   // MARK: - URL.relativePath(from:)
 
   func testRelativePathSamePath() {

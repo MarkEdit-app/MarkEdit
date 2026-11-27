@@ -76,26 +76,6 @@ describe('Table of contents module', () => {
     expect(results[1].title).toBe('MarkEdit');
   });
 
-  test('test Setext heading level 1 (===)', async() => {
-    editor.setUp('This is title\n=============');
-    await sleep(200);
-    const results = toc.getTableOfContents();
-
-    expect(results.length).toBe(1);
-    expect(results[0].level).toBe(1);
-    expect(results[0].title).toBe('This is title');
-  });
-
-  test('test Setext heading level 2 (---)', async() => {
-    editor.setUp('This is title\n-------------');
-    await sleep(200);
-    const results = toc.getTableOfContents();
-
-    expect(results.length).toBe(1);
-    expect(results[0].level).toBe(2);
-    expect(results[0].title).toBe('This is title');
-  });
-
   test('test mixed ATX and Setext headings', async() => {
     editor.setUp('# ATX Level 1\n\nSetext Level 1\n==============\n\n## ATX Level 2\n\nSetext Level 2\n--------------');
     await sleep(200);

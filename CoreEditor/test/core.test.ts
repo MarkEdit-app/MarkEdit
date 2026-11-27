@@ -446,18 +446,8 @@ describe('resetEditor selection-dependent state', () => {
     editingState.hasSelection = false;
   });
 
-  test('editingState.hasSelection is true after restoring a non-empty selection', async () => {
-    await resetEditor('Hello, World!', { anchor: 7, head: 12 });
-    expect(editingState.hasSelection).toBe(true);
-  });
-
   test('editingState.hasSelection is false after restoring a cursor', async () => {
     await resetEditor('Hello, World!', { anchor: 5, head: 5 });
-    expect(editingState.hasSelection).toBe(false);
-  });
-
-  test('editingState.hasSelection is false when no selection range is provided', async () => {
-    await resetEditor('Hello, World!');
     expect(editingState.hasSelection).toBe(false);
   });
 

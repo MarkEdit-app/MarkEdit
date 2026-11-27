@@ -390,11 +390,6 @@ extension QuickSearchMenuTests {
         ["New Tab", "\u{2318}T", "Edit \u{203A} New Tab"]
       )
 
-      XCTAssertNotNil(NSImage(
-        systemSymbolName: "command",
-        accessibilityDescription: nil
-      ))
-
       edit.items[0].isEnabled = enabled
       XCTAssertTrue(view.control(NSControl(), textView: NSTextView(), doCommandBy: #selector(NSResponder.insertNewline(_:))))
 

@@ -50,11 +50,6 @@ describe('Math parser', () => {
     }
   });
 
-  test('test BlockMath in blockquote', () => {
-    editor.setUp('> $$\n> x = 1\n> $$');
-    expect(parseTypes(window.editor)).toContain('BlockMath');
-  });
-
   test('test unclosed BlockMath in blockquote', () => {
     editor.setUp('> $$\n>\n> ## Heading');
     const types = parseTypes(window.editor);

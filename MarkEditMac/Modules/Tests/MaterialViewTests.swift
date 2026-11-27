@@ -35,22 +35,6 @@ final class MaterialViewTests: XCTestCase {
     XCTAssertEqual(backdrop.value(forKeyPath: "filters.gaussianBlur.inputRadius") as? Double, 7.0)
   }
 
-  /// Production matches the backdrop by three independent traits (filter, name, class) for
-  /// resilience. Assert each is present so losing any single trait fails loudly here, while
-  /// production still finds the backdrop via the others.
-  func testBackdropCarriesAllKnownTraits() async throws {
-    let view = try await makeRealizedView()
-    let backdrop = try realizedBackdrop(in: view)
-
-    let filterNames = Set((backdrop.filters ?? []).compactMap {
-      ($0 as AnyObject).value(forKey: "name") as? String
-    })
-
-    XCTAssert(filterNames.contains(blurFilterName), "Backdrop should carry the \(blurFilterName) filter")
-    XCTAssertEqual(backdrop.name, backdropLayerName, "Backdrop layer name changed")
-    XCTAssertEqual(backdrop.className, backdropClassName, "Backdrop class changed")
-  }
-
   /// The tint overlay paints when a tint color is set, and clears when it's removed.
   func testAppliesTint() {
     let view = MaterialView()

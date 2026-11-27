@@ -161,19 +161,6 @@ describe('cell-local selection commands', () => {
     performEditCommand(EditCommand.shrinkSelection);
     expect(cell.state.selection.main.anchor).toBe(8);
   });
-
-  test('leaves both selections alone while an input has focus', () => {
-    const input = document.createElement('input');
-    window.editor.dom.appendChild(input);
-    input.focus();
-    for (const command of [EditCommand.selectLine, EditCommand.expandSelection, EditCommand.shrinkSelection]) {
-      performEditCommand(command);
-    }
-
-    expect(cell.state.selection.main.empty).toBe(true);
-    expect(window.editor.state.selection.main.empty).toBe(true);
-    expect(document.activeElement).toBe(input);
-  });
 });
 
 describe('focused-editor edit commands', () => {

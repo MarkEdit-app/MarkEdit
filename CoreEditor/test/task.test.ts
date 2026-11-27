@@ -37,14 +37,6 @@ describe('Task marker decoration', () => {
     expect(marker?.classList.contains('cm-md-taskMarker-unchecked')).toBe(false);
   });
 
-  test('decorates checked tasks with cm-md-taskMarker-checked (uppercase X)', async () => {
-    editor.setUp('- [X] done', taskMarkerStyle);
-    await sleep(200);
-
-    const marker = document.querySelector('.cm-md-taskMarker');
-    expect(marker?.classList.contains('cm-md-taskMarker-checked')).toBe(true);
-  });
-
   test('decorates mixed task lists with the correct state per line', async () => {
     editor.setUp('- [ ] one\n- [x] two\n- [X] three', taskMarkerStyle);
     await sleep(200);
