@@ -137,42 +137,45 @@ const sharedHighlights = [
 ];
 
 function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
+  const text = `var(--markedit-editor-color, ${colors.text})`;
+  const background = `var(--markedit-editor-background-color, ${colors.background})`;
+
   const specs: { [key: string]: StyleSpec } = {
     // Root
     '&': {
-      color: colors.text,
-      backgroundColor: colors.background,
+      color: text,
+      backgroundColor: background,
     },
     '.cm-cursor, .cm-dropCursor': {
-      borderLeftColor: colors.caret,
+      borderLeftColor: `var(--markedit-caret-color, ${colors.caret})`,
     },
     // Selection
     '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
-      backgroundColor: `${colors.selection} !important`, // #180 !important is needed by macOS 14 sdk
+      backgroundColor: `var(--markedit-selection-background-color, ${colors.selection}) !important`, // #180 !important is needed by macOS 14 sdk
     },
     // Brackets
     '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
-      backgroundColor: colors.matchingBracket,
+      backgroundColor: `var(--markedit-bracket-match-background-color, ${colors.matchingBracket})`,
       boxShadow: buildInnerBorder(1.5, colors.bracketBorder),
     },
     // Gutters
     '.cm-gutters': {
-      color: colors.lineNumber,
-      backgroundColor: colors.background,
+      color: `var(--markedit-gutter-color, ${colors.lineNumber})`,
+      backgroundColor: `var(--markedit-gutter-background-color, ${background})`,
     },
     '.cm-lineNumbers > .cm-activeLineGutter': {
-      color: colors.text,
+      color: text,
     },
     // Handle of code folding
     '.cm-foldGutter.cm-gutterHover, .cm-foldPlaceholder': {
-      color: adjustAlpha(colors.text, 0.4),
+      color: `var(--markedit-fold-color, ${adjustAlpha(colors.text, 0.4)})`,
     },
     '.cm-foldPlaceholder': {
-      backgroundColor: colors.lighterBackground,
+      backgroundColor: `var(--markedit-fold-placeholder-background-color, ${colors.lighterBackground})`,
     },
     // Search
     '.cm-searchMatch': {
-      backgroundColor: colors.searchMatch,
+      backgroundColor: `var(--markedit-search-match-background-color, ${colors.searchMatch})`,
     },
     '.cm-searchMatch.cm-searchMatch-selected': {
       borderRadius: '2px',
@@ -183,7 +186,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       backgroundColor: '#ffff00 !important',
     },
     '.cm-selectionMatch': {
-      backgroundColor: colors.selectionHighlight,
+      backgroundColor: `var(--markedit-selection-match-background-color, ${colors.selectionHighlight})`,
     },
     // Autocomplete
     '.cm-tooltip-autocomplete': {
@@ -195,15 +198,15 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
     },
     '.cm-tooltip-autocomplete ul li[aria-selected]': {
-      color: colors.text,
+      color: text,
       background: scheme === 'dark'
-        ? `linear-gradient(#ffffff24, #ffffff24), ${colors.background}`
-        : colors.background,
+        ? `linear-gradient(#ffffff24, #ffffff24), ${background}`
+        : background,
       borderRadius: '6px',
       boxShadow: '0 1px 4px rgba(0, 0, 0, 0.12)',
     },
     '.cm-tooltip-autocomplete ul li': {
-      color: colors.text,
+      color: text,
     },
     '.cm-completionMatchedText': {
       fontWeight: '500',
@@ -217,10 +220,10 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Extended
     '.cm-visibleTab': {
-      backgroundColor: colors.visibleSpace,
+      backgroundColor: `var(--markedit-invisibles-color, ${colors.visibleSpace})`,
     },
     '.cm-visibleSpace::before, .cm-visibleLineBreak::before': {
-      color: colors.visibleSpace,
+      color: `var(--markedit-invisibles-color, ${colors.visibleSpace})`,
     },
     '.cm-selectedVisible .cm-visibleTab': {
       backgroundColor: adjustAlpha(colors.text, 0.6),
@@ -229,11 +232,11 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       color: adjustAlpha(colors.text, 0.6),
     },
     '.cm-md-activeIndicator': {
-      background: colors.activeLine,
+      background: `var(--markedit-line-active-background-color, ${colors.activeLine})`,
       boxShadow: buildInnerBorder(2.5, colors.lineBorder),
     },
     '.cm-md-inlineCode': {
-      backgroundColor: colors.lighterBackground,
+      backgroundColor: `var(--markedit-markdown-inline-code-background-color, ${colors.lighterBackground})`,
     },
     '.cm-md-previewButton': {
       backgroundImage: (() => {

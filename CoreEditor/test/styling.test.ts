@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { Compartment } from '@codemirror/state';
+import { Compartment, EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
 import { renderWhitespaceBeforeCaret } from '../src/styling/nodes/invisible';
 import { selectedLinesDecoration } from '../src/styling/nodes/selection';
@@ -164,6 +165,28 @@ describe('Typography configuration', () => {
     expect(document.documentElement.style.getPropertyValue('--markedit-editor-line-height')).toBe('1.75');
     expect(styleSheets.lineHeight).toBe(sheet);
     expect(Array.from(sheet.sheet.cssRules, rule => rule.cssText)).toEqual(rules);
+  });
+});
+
+describe('Editor color variables', () => {
+  test.each(['github-dark', 'xcode-light', 'synthwave84'])('updates UI fallbacks when switching to %s and back', name => {
+    const compartment = new Compartment;
+    const initial = GitHubLight();
+    let state = EditorState.create({ extensions: compartment.of(initial.extension) });
+
+    for (const theme of [initial, loadTheme(name), initial]) {
+      state = state.update({ effects: compartment.reconfigure(theme.extension) }).state;
+      const rules = state.facet(EditorView.styleModule).flatMap(module => module.getRules().split('\n'));
+      const selection = rules.find(rule => rule.includes('.cm-content ::selection'));
+      const gutters = rules.find(rule => rule.includes(' .cm-gutters {'));
+      const inlineCode = rules.find(rule => rule.includes(' .cm-md-inlineCode {'));
+      const fold = rules.find(rule => /^\S+ \.cm-foldPlaceholder \{/.test(rule));
+
+      expect(selection).toContain(`background-color: var(--markedit-selection-background-color, ${theme.colors.selection}) !important;`);
+      expect(gutters).toContain(`background-color: var(--markedit-gutter-background-color, var(--markedit-editor-background-color, ${theme.colors.background}));`);
+      expect(inlineCode).toContain(`background-color: var(--markedit-markdown-inline-code-background-color, ${theme.colors.lighterBackground});`);
+      expect(fold).toContain(`background-color: var(--markedit-fold-placeholder-background-color, ${theme.colors.lighterBackground});`);
+    }
   });
 });
 
