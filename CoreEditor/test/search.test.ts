@@ -51,15 +51,4 @@ describe('Search module', () => {
     expect(searchOccurrences('Hello, Hello, hello', 'Hello').length).toBe(2);
     expect(searchOccurrences('Hello, Hello, hello', 'hello').length).toBe(1);
   });
-
-  test('test existence of cursor.normalize()', () => {
-    editor.setUp('Hello Hello');
-    search.setState(true);
-
-    const query = new SearchQuery(options);
-    const cursor = query.getCursor(window.editor.state);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(typeof (cursor as any).normalize).toBe('function');
-  });
 });

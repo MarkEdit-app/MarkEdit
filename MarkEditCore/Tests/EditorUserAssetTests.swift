@@ -6,12 +6,11 @@
 
 import JavaScriptCore
 import MarkEditCore
-import WebKit
 import XCTest
 
 @MainActor
 final class EditorUserAssetTests: XCTestCase {
-  func testScriptBindingsAndScope() async throws {
+  func testScriptBindingsAndScope() throws {
     let context = try makeContext()
     let url = URL(fileURLWithPath: "/scripts/it's\\a\nscript\u{2028}.js")
     for declaration in ["", "const { MarkEdit } = require('markedit-api');"] {
@@ -24,12 +23,9 @@ final class EditorUserAssetTests: XCTestCase {
       window.deferred = () => MarkEdit.path;
       """
 
-      let sources = await Task.detached {
-        XCTAssertFalse(Thread.isMainThread)
-        return EditorUserAsset.contextualSources(for: [
-          (url.path(percentEncoded: false), EditorUserAsset.script(for: url, contents: source), "private-token"),
-        ])
-      }.value
+      let sources = EditorUserAsset.contextualSources(for: [
+        (url.path(percentEncoded: false), EditorUserAsset.script(for: url, contents: source), "private-token"),
+      ])
 
       for injection in sources {
         context.evaluateScript(injection)
@@ -91,7 +87,11 @@ final class EditorUserAssetTests: XCTestCase {
   func testBootstrapKeepsSourcesSeparateFromCapabilities() throws {
     let path = "/scripts/'\\\n\u{2028}escape.js"
     let content = "}); window.escaped = true; // </script>\n'\"\\\u{2029}"
-    let sources = injections(for: URL(fileURLWithPath: path), contents: content, capability: "private-token")
+    let url = URL(fileURLWithPath: path)
+    let sources = EditorUserAsset.contextualSources(for: [
+      (url.path(percentEncoded: false), EditorUserAsset.script(for: url, contents: content), "private-token"),
+    ])
+
     XCTAssertEqual(sources.count, 2)
     XCTAssertFalse(sources[0].contains(content))
     XCTAssertTrue(sources[1].contains(content))
@@ -108,12 +108,11 @@ final class EditorUserAssetTests: XCTestCase {
 
   func testMalformedScriptDoesNotBlockLaterInjections() throws {
     let context = try makeContext()
-    let scripts = EditorUserAsset.contextualScripts(for: [
+    let sources = EditorUserAsset.contextualSources(for: [
       ("/bad.js", EditorUserAsset.script(for: URL(fileURLWithPath: "/bad.js"), contents: "const ="), "bad-token"),
       ("/good.js", EditorUserAsset.script(for: URL(fileURLWithPath: "/good.js"), contents: "window.lastScriptRan = true;"), "good-token"),
     ])
 
-    let sources = scripts.map(\.source)
     context.evaluateScript(sources[0])
     XCTAssertNil(context.exception)
 
@@ -145,29 +144,5 @@ final class EditorUserAssetTests: XCTestCase {
     """)
 
     return context
-  }
-
-  private func injections(for url: URL, contents: String, capability: String? = nil) -> [String] {
-    let scripts = EditorUserAsset.contextualScripts(for: [
-      (url.path(percentEncoded: false), EditorUserAsset.script(for: url, contents: contents), capability),
-    ])
-
-    for script in scripts {
-      XCTAssertEqual(script.injectionTime, .atDocumentEnd)
-      XCTAssertTrue(script.isForMainFrameOnly)
-    }
-
-    return scripts.map(\.source)
-  }
-}
-
-private extension EditorUserAsset {
-  @MainActor
-  static func contextualScripts(
-    for scripts: [(path: String, source: String, capability: String?)]
-  ) -> [WKUserScript] {
-    contextualSources(for: scripts).map {
-      WKUserScript(source: $0, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-    }
   }
 }

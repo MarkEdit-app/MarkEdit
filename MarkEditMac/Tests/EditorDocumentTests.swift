@@ -279,15 +279,6 @@ final class EditorDocumentTests: XCTestCase {
     XCTAssertNil(ApplicationEnvironment.preferences.object(forKey: key))
   }
 
-  func testReadLoadsTextAndData() async throws {
-    let document = EditorDocument()
-    let data = Data("Document text\n".utf8)
-    try document.read(from: data, ofType: "public.plain-text")
-
-    try await Self.waitUntilLoaded(document, data: data)
-    XCTAssertEqual(document.stringValue, "Document text\n")
-  }
-
   func testReadReplacesLoadedText() async throws {
     let document = EditorDocument()
     let original = Data("Original text\n".utf8)

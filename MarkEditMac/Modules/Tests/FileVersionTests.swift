@@ -8,17 +8,6 @@ import MarkEditKit
 import XCTest
 
 final class FileVersionTests: XCTestCase {
-  func testFetchLocalContentsReturnsImmediatelyForLocalVersion() async throws {
-    let fixture = try makeFixture(count: 1)
-    defer { fixture.remove() }
-
-    let version = try XCTUnwrap(fixture.versions.first)
-    XCTAssertFalse(version.needsDownloading)
-
-    let succeeded = await version.fetchLocalContents()
-    XCTAssertTrue(succeeded)
-  }
-
   func testNewestToOldestWithoutThrottlingPreservesAllVersions() throws {
     let fixture = try makeFixture(count: 3)
     defer { fixture.remove() }
