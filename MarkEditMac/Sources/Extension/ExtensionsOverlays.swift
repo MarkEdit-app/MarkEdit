@@ -20,7 +20,7 @@ struct ExtensionsStateView: View {
           Double($0.completed) / Double($0.total)
         }
       )
-    } else if model.phase == .loading && !model.hasLoadedIndex {
+    } else if (model.phase == .idle || model.phase == .loading) && !model.hasLoadedIndex {
       // Only spin on a cold start with no catalog yet
       ProgressView()
     } else if model.items.isEmpty {
