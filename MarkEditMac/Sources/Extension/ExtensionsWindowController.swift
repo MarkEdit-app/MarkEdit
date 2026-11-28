@@ -13,13 +13,18 @@ import MarkEditKit
 /// Hosts the Extension Manager: an AppKit window and toolbar wrapping the extension list.
 @MainActor
 final class ExtensionsWindowController: NSWindowController {
-  static let shared = ExtensionsWindowController.createController()
-  private let model = ExtensionsModel()
+  static let shared = ExtensionsWindowController(model: ExtensionsModel())
+  private let model: ExtensionsModel
+  private var lastWindowRect: CGRect?
   private weak var modeControl: NSToolbarItemGroup?
   private weak var updateAllItem: NSMenuItem?
   private weak var updateBehaviorMenu: NSMenu?
 
   func present(mode: ExtensionsModel.Mode? = nil, scrollTo target: ExtensionsScrollTarget? = nil) {
+    if window == nil {
+      loadWindow()
+    }
+
     if !AppPreferences.Extensions.windowHasBeenOpened {
       AppPreferences.Extensions.windowHasBeenOpened = true
       ExtensionUpdater.requestMenuUpdate()
@@ -42,27 +47,69 @@ final class ExtensionsWindowController: NSWindowController {
       return
     }
 
-    Task {
+    Task { [weak contentController = extensionsVC] in
       // Fetch fresh every time the window opens; the conditional GET is cheap
       // and falls back to the cache when offline or unchanged.
       await model.load(forceRefresh: true)
 
-      if let target {
+      if let target, let contentController, contentController === extensionsVC {
         prepareToRevealTarget(mode: mode ?? .discover)
-        extensionsVC?.reveal(target)
+        contentController.reveal(target)
       }
     }
   }
 
-  // MARK: - Disable external init
+  init(model: ExtensionsModel) {
+    self.model = model
+    super.init(window: nil)
 
-  override private init(window: NSWindow?) {
-    super.init(window: window)
+    model.primeFromCache()
+    model.presenter = self
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleExtensionsChange(_:)),
+      name: .extensionsMenuNeedsUpdate,
+      object: nil
+    )
   }
 
   @available(*, unavailable)
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  override func loadWindow() {
+    let window = Self.createWindow()
+    window.delegate = self
+    self.window = window
+
+    configureToolbar()
+    window.contentViewController = ExtensionsViewController(model: model)
+
+    if let lastWindowRect, (NSScreen.screens.contains { $0.visibleFrame.intersects(lastWindowRect) }) {
+      window.setFrame(lastWindowRect, display: false)
+    } else {
+      window.center()
+    }
+  }
+}
+
+// MARK: - NSWindowDelegate
+
+extension ExtensionsWindowController: NSWindowDelegate {
+  func windowWillClose(_ notification: Notification) {
+    guard let window = notification.object as? NSWindow else {
+      return
+    }
+
+    lastWindowRect = window.frame
+    window.contentViewController = nil
+    window.toolbar = nil
+    modeControl = nil
+    updateAllItem = nil
+    updateBehaviorMenu = nil
+    self.window = nil
   }
 }
 
@@ -114,6 +161,7 @@ extension ExtensionsWindowController: NSToolbarDelegate {
       item.searchField.action = #selector(handleSearchChange(_:))
       item.searchField.sendsWholeSearchString = false
       item.searchField.sendsSearchStringImmediately = false
+      item.searchField.stringValue = model.searchQuery
       return item
     case .actions:
       let item = NSMenuToolbarItem(itemIdentifier: .actions)
@@ -174,7 +222,7 @@ private extension ExtensionsWindowController {
     updateModeControl()
   }
 
-  static func createController() -> ExtensionsWindowController {
+  static func createWindow() -> NSWindow {
     let window = NSWindow(
       contentRect: ExtensionsViewController.defaultContentRect,
       styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
@@ -185,21 +233,7 @@ private extension ExtensionsWindowController {
     window.title = Localized.Extension.windowTitle
     window.contentMinSize = CGSize(width: 480, height: 200)
     window.isReleasedWhenClosed = false
-
-    let controller = Self(window: window)
-    controller.model.primeFromCache()
-    controller.configureToolbar()
-
-    NotificationCenter.default.addObserver(
-      controller,
-      selector: #selector(handleExtensionsChange(_:)),
-      name: .extensionsMenuNeedsUpdate,
-      object: nil
-    )
-
-    window.contentViewController = ExtensionsViewController(model: controller.model)
-    window.center()
-    return controller
+    return window
   }
 
   func configureToolbar() {
@@ -266,8 +300,24 @@ private extension ExtensionsWindowController {
       self.updateModeControl()
 
       let delay: TimeInterval = (modeChanged && !AppDesign.reduceMotion) ? 0.8 : 0
-      DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-        self?.extensionsVC?.updateAllAnimated()
+      DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self, model] in
+        if let contentController = self?.extensionsVC, !contentController.isBusyRefreshing() {
+          contentController.updateAllAnimated()
+        } else {
+          Task { @MainActor in
+            guard model.loadingMessage == nil, !model.isBusy else {
+              return
+            }
+
+            defer {
+              model.loadingMessage = nil
+              model.updateProgress = nil
+            }
+
+            model.loadingMessage = Localized.Extension.updating
+            await model.updateAllExtensions()
+          }
+        }
       }
     }
 
@@ -360,7 +410,9 @@ private extension ExtensionsWindowController {
   }
 
   @objc func handleExtensionsChange(_ notification: Notification) {
-    updateModeControl()
+    if window != nil {
+      updateModeControl()
+    }
   }
 
   @objc func promptInstallFromURL() {

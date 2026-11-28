@@ -95,9 +95,7 @@ final class ExtensionsViewController: NSViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    model.presenter = self
-
-    displayedItems = model.items
+    displayedItems = model.loadingMessage == nil ? model.items : []
     displayedRelaunch = model.pendingRelaunch
     layoutContents()
 
@@ -271,37 +269,17 @@ extension ExtensionsViewController: NSMenuDelegate {
   }
 }
 
-// MARK: - ExtensionsPresenting
-
-extension ExtensionsViewController: ExtensionsPresenting {
-  func confirmUninstall(name: String) async -> Bool {
-    let alert = NSAlert()
-    alert.messageText = String(format: Localized.Extension.uninstallConfirmFormat, name)
-    alert.informativeText = Localized.Extension.uninstallConfirmMessage
-    alert.addButton(withTitle: Localized.Extension.uninstall).hasDestructiveAction = true
-    alert.addButton(withTitle: Localized.General.cancel)
-    return await presentSheetModal(alert) == .alertFirstButtonReturn
-  }
-
-  func reportFailure(_ error: Error) async {
-    let alert = NSAlert()
-    alert.messageText = Localized.Extension.failedTitle
-    alert.informativeText = Localized.Extension.failureMessage(for: error)
-    await presentSheetModal(alert)
-  }
-}
-
 // MARK: - Refresh
 
 extension ExtensionsViewController {
   func isBusyRefreshing() -> Bool {
-    isRunningProgressOverlay || isPullRefreshing
+    isRunningProgressOverlay || isPullRefreshing || model.loadingMessage != nil || model.phase == .loading
   }
 
   /// Explicit "Refresh": animate every row out, reconcile and refetch, then animate the fresh rows in.
   func refreshAnimated() {
-    runWithProgressOverlay(message: Localized.Extension.refreshing) { [weak self] in
-      await self?.model.load(forceRefresh: true)
+    runWithProgressOverlay(message: Localized.Extension.refreshing) { [model] in
+      await model.load(forceRefresh: true)
     }
   }
 
@@ -320,21 +298,21 @@ extension ExtensionsViewController {
     isPullRefreshing = true
     updateStateController()
 
-    Task { @MainActor in
+    Task { @MainActor [weak self, weak sender, model] in
       defer {
-        isPullRefreshing = false
-        sender.endRefreshing()
-        updateStateController()
+        sender?.endRefreshing()
+        self?.isPullRefreshing = false
+        self?.updateStateController()
       }
 
       await model.load(forceRefresh: true)
-      applyModelChanges()
+      self?.applyModelChanges()
     }
   }
 
   func updateAllAnimated() {
-    runWithProgressOverlay(message: Localized.Extension.updating) { [weak self] in
-      await self?.model.updateAllExtensions()
+    runWithProgressOverlay(message: Localized.Extension.updating) { [model] in
+      await model.updateAllExtensions()
     }
   }
 
@@ -477,6 +455,7 @@ private extension ExtensionsViewController {
       _ = model.phase
       _ = model.hasLoadedIndex
       _ = model.pendingRelaunch
+      _ = model.loadingMessage
     } onChange: { [weak self] in
       Task { @MainActor in
         self?.applyModelChanges()
@@ -497,7 +476,7 @@ private extension ExtensionsViewController {
       listInteraction.inlineUpdateItemIDs.removeAll()
     }
 
-    animateDifference(to: model.items)
+    animateDifference(to: model.loadingMessage == nil ? model.items : [])
 
     // A mode switch is a fresh list, scroll back to the top
     if modeChanged && !displayedItems.isEmpty {
@@ -619,7 +598,12 @@ private extension ExtensionsViewController {
     tableView.animateRows(from: oldItems, to: [], removeAnimation: .effectFade)
     updateStateController()
 
-    Task { @MainActor in
+    Task { @MainActor [weak self, model] in
+      defer {
+        model.loadingMessage = nil
+        model.updateProgress = nil
+      }
+
       let started = Date()
       await action()
 
@@ -629,6 +613,10 @@ private extension ExtensionsViewController {
         try? await Task.sleep(for: .seconds(remaining))
       }
 
+      guard let self else {
+        return
+      }
+
       displayedMode = model.mode
       displayedItems = model.items
       tableView.animateRows(from: [], to: displayedItems)
@@ -636,8 +624,6 @@ private extension ExtensionsViewController {
       updateRelaunchBar()
       updateStateController()
 
-      model.loadingMessage = nil
-      model.updateProgress = nil
       isRunningProgressOverlay = false
       view.needsLayout = true
     }

@@ -62,6 +62,7 @@ final class ExtensionsModel {
   }
 
   enum Phase: Equatable {
+    case idle
     case loading
     case ready
     case failed
@@ -170,7 +171,7 @@ final class ExtensionsModel {
   }
 
   var mode: Mode = .discover
-  var phase: Phase = .loading
+  var phase: Phase = .idle
   var hasLoadedIndex = false
   var pendingRelaunch = false
   var isBusy = false
