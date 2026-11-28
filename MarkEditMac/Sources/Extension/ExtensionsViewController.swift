@@ -343,13 +343,7 @@ extension ExtensionsViewController {
     }
 
     pendingScrollTarget = nil
-    tableView.needsLayout = true
-    tableView.layoutSubtreeIfNeeded()
-
-    let rowRect = tableView.rect(ofRow: index)
-    let boundsOrigin = CGPoint(x: 0, y: rowRect.origin.y - view.safeAreaInsets.top)
-    scrollView.contentView.setBoundsOrigin(boundsOrigin)
-    scrollView.reflectScrolledClipView(scrollView.contentView)
+    scrollToRow(at: index)
 
     if case .item(let id, highlight: true) = target {
       flashHighlight(itemID: id)
@@ -363,6 +357,7 @@ private extension ExtensionsViewController {
   enum Constants {
     static let rowIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRow")
     static let cellIdentifier = NSUserInterfaceItemIdentifier("ExtensionsRowCell")
+    static let topContentInset: Double = 2 // [macOS 27] Prevent clipping of the blue ring on right-click
     static let overScrollInset: Double = 20
     static let overlayOpticalOffset: Double = 20
     static let minimumOverlayDuration: TimeInterval = 1.2
@@ -480,7 +475,7 @@ private extension ExtensionsViewController {
 
     // A mode switch is a fresh list, scroll back to the top
     if modeChanged && !displayedItems.isEmpty {
-      tableView.scrollRowToVisible(0)
+      scrollToRow(at: 0)
     }
 
     scrollToPendingTarget()
@@ -503,6 +498,16 @@ private extension ExtensionsViewController {
     reloadRows(resizedRows)
   }
 
+  func scrollToRow(at index: Int) {
+    tableView.needsLayout = true
+    tableView.layoutSubtreeIfNeeded()
+
+    let rowRect = tableView.rect(ofRow: index)
+    let boundsOrigin = CGPoint(x: 0, y: rowRect.origin.y - scrollView.contentInsets.top)
+    scrollView.contentView.setBoundsOrigin(boundsOrigin)
+    scrollView.reflectScrolledClipView(scrollView.contentView)
+  }
+
   /// Frame-based layout so content imposes no Auto Layout fitting size, keeping the window resizable.
   func layoutContents(animated: Bool = false) {
     let bounds = view.bounds
@@ -515,7 +520,7 @@ private extension ExtensionsViewController {
 
     // Bottom inset gives over-scroll room and lets the last row clear the overlay bar
     scrollView.contentInsets = NSEdgeInsets(
-      top: topInset,
+      top: topInset + Constants.topContentInset,
       left: 0,
       bottom: Constants.overScrollInset + relaunchHeight,
       right: 0
