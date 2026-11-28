@@ -1,4 +1,5 @@
 import { LanguageDescription, LanguageSupport } from '@codemirror/language';
+import { nestedMarkdownTagConfig } from './styling/markdownTags';
 
 /**
  * Code languages shipped with the app, the rest comes from the MarkEdit-language-data extension.
@@ -14,7 +15,7 @@ export function bundledLanguages(html: LanguageSupport) {
     LanguageDescription.of({
       name: 'Markdown',
       extensions: ['md', 'markdown', 'mkd'],
-      load: async () => (await import('@codemirror/lang-markdown')).markdown(),
+      load: async () => (await import('@codemirror/lang-markdown')).markdown({ extensions: nestedMarkdownTagConfig }),
     }),
   ];
 }

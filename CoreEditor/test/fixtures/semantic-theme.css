@@ -1,0 +1,31 @@
+.cm-editor {
+  --markedit-editor-background-color: #20242c;
+  --markedit-editor-color: #d8dee9;
+  --markedit-editor-font-size: 18px;
+  --markedit-selection-background-color: #46566f;
+  --markedit-markdown-heading-color: #88c0d0;
+  --markedit-markdown-heading-text-shadow: none;
+
+  --markedit-syntax-keyword-color: #c792ea;
+  --markedit-syntax-keyword-text-shadow: none;
+  --markedit-syntax-name-color: #d8dee9;
+  --markedit-syntax-variable-color: #82aaff;
+  --markedit-syntax-function-color: #ffcb6b;
+  --markedit-syntax-function-text-shadow: none;
+  --markedit-syntax-tag-color: #ffcb6b;
+  --markedit-syntax-string-color: #c3e88d;
+  --markedit-syntax-number-color: #f78c6c;
+  --markedit-syntax-comment-color: #8796b0;
+
+  --markedit-markdown-quote-color: #a3be8c;
+  --markedit-markdown-quote-text-shadow: none;
+  --markedit-markdown-link-color: #81a1c1;
+  --markedit-markdown-link-text-shadow: none;
+  --markedit-markdown-marker-color: #7c8a9f;
+  --markedit-markdown-code-marker-color: #d08770;
+  --markedit-markdown-bold-color: #ebcb8b;
+  --markedit-markdown-italic-color: #b48ead;
+  --markedit-markdown-strikethrough-color: #bf616a;
+  --markedit-markdown-inline-code-color: #8fbcbb;
+  --markedit-markdown-inline-code-text-shadow: none;
+}

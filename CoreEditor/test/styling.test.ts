@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { Compartment, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
+import { highlightingFor } from '@codemirror/language';
+import { markdownLanguage } from '@codemirror/lang-markdown';
+import { html } from '@codemirror/lang-html';
 import { gutterExtensions } from '../src/styling/nodes/gutter';
 import { renderWhitespaceBeforeCaret } from '../src/styling/nodes/invisible';
 import { selectedLinesDecoration } from '../src/styling/nodes/selection';
@@ -11,6 +14,7 @@ import { editingState, styleSheets } from '../src/common/store';
 import { classHighlighters } from '../src/styling/markdown';
 import GitHubLight from '../src/styling/themes/github-light';
 import { loadTheme } from '../src/styling/themes';
+import { tags } from '../src/styling/builder';
 import { sleep } from './utils/helpers';
 import * as editor from './utils/editor';
 
@@ -57,6 +61,58 @@ describe('Styling module', () => {
 
     const selected = document.querySelectorAll('.cm-selectedLineRange');
     expect(selected.length).toBe(1);
+  });
+});
+
+describe('Semantic highlighting', () => {
+  test('retains general roles on more specific syntax tags', () => {
+    const state = EditorState.create({ extensions: classHighlighters });
+    const classes = highlightingFor(state, [tags.function(tags.variableName)])?.split(' ');
+    expect(classes).toEqual(expect.arrayContaining([
+      'cm-markedit-syntax-name',
+      'cm-markedit-syntax-variable',
+      'cm-markedit-syntax-function',
+    ]));
+  });
+
+  test.each([
+    { name: 'constant variable', tag: tags.constant(tags.variableName), roles: ['name', 'variable', 'constant'] },
+    { name: 'standard property', tag: tags.standard(tags.propertyName), roles: ['name', 'property', 'constant'] },
+    { name: 'standard function', tag: tags.standard(tags.function(tags.variableName)), roles: ['name', 'variable', 'function', 'constant'] },
+  ])('retains all matching roles for a $name', ({ tag, roles }) => {
+    const state = EditorState.create({ extensions: classHighlighters });
+    const classes = highlightingFor(state, [tag])?.split(' ');
+    expect(classes).toEqual(expect.arrayContaining(roles.map(role => `cm-markedit-syntax-${role}`)));
+  });
+
+  test('scopes Markdown roles to Markdown, including format-only tags', () => {
+    const state = EditorState.create({ extensions: classHighlighters });
+    const markdownScope = markdownLanguage.parser.parse('').type;
+    const htmlScope = html().language.parser.parse('').type;
+    const markdownClasses = highlightingFor(state, [tags.strong, tags.strikethrough], markdownScope);
+    const htmlClasses = highlightingFor(state, [tags.strong, tags.strikethrough], htmlScope);
+
+    expect(markdownClasses).toContain('cm-markedit-markdown-bold');
+    expect(markdownClasses).toContain('cm-markedit-markdown-strikethrough');
+    expect(htmlClasses).not.toContain('cm-markedit-markdown-bold');
+    expect(htmlClasses).not.toContain('cm-markedit-markdown-strikethrough');
+  });
+
+  test('preserves marker ancestry and makes color declarations conditional', () => {
+    const state = EditorState.create({ extensions: classHighlighters });
+    const scope = markdownLanguage.parser.parse('').type;
+    const classes = highlightingFor(state, [tags.tableMark], scope)?.split(' ');
+    expect(classes).toEqual(expect.arrayContaining([
+      'cm-markedit-markdown-marker',
+      'cm-markedit-markdown-list-marker',
+      'cm-markedit-markdown-table-marker',
+    ]));
+
+    const rules = state.facet(EditorView.styleModule).flatMap(module => module.getRules().split('\n'));
+    const bold = rules.find(rule => rule.startsWith('@container style(--markedit-markdown-bold-color) {'));
+    expect(bold).toContain('color: var(--markedit-markdown-bold-color)');
+    expect(bold).not.toContain('inherit');
+    expect(bold).not.toContain('!important');
   });
 });
 
