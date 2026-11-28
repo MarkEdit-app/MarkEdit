@@ -163,13 +163,10 @@ function shouldIgnorePosition(pos: number, selectionOnly: boolean) {
  * Get or create a deco for given invisible character at a position.
  */
 function getOrCreateDeco(invisible: string, pos: number) {
-  const fontSize = (() => {
-    const state = window.editor.state;
-    const node = syntaxTree(state).resolve(pos);
-    return calculateFontSize(window.config.fontSize, headingLevel(node.type));
-  })();
+  const level = headingLevel(syntaxTree(window.editor.state).resolve(pos).type);
+  const fontSize = calculateFontSize(window.config.fontSize, level);
 
-  const key = invisible + fontSize;
+  const key = `${invisible}:${level}:${fontSize}`;
   const cachedDeco = storage.cachedDecos.get(key);
 
   // Great, exactly the same deco was created before
@@ -183,7 +180,8 @@ function getOrCreateDeco(invisible: string, pos: number) {
       return '';
     }
 
-    return `font-size: ${fontSize}px`;
+    // Keep cached decorations in sync with CSS-only heading size changes
+    return `font-size: var(--markedit-markdown-heading${level}-font-size, ${fontSize}px)`;
   })();
 
   const newDeco = Decoration.mark({
