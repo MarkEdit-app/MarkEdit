@@ -10,6 +10,13 @@ import { undo, redo } from '../src/@vendor/commands/history';
 import normalizeSelection from '../src/modules/selection/normalizeSelection';
 import * as styling from '../src/styling/config';
 
+// jsdom does not resolve CSS variables. Native color reporting is outside these
+// editor-behavior tests; rendered colors are covered by the WebKit browser tests.
+jest.mock('../src/styling/helper', () => ({
+  ...jest.requireActual<typeof import('../src/styling/helper')>('../src/styling/helper'),
+  notifyBackgroundColor: jest.fn(),
+}));
+
 // Minimal config
 window.config = {
   theme: 'github-light',

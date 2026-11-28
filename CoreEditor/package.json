@@ -8,6 +8,7 @@
     "typecheck": "tsc",
     "codegen": "ts-gyb --config ./src/@codegen/config.json >/dev/null",
     "test": "jest",
+    "test:browser": "node test/browser/run.mjs",
     "build": "yarn lint && yarn typecheck && yarn codegen && vite build"
   },
   "keywords": [],

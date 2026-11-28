@@ -36,6 +36,9 @@ jobs:
           yarn build
           yarn test
 
+      - name: Test CoreEditor in WebKit
+        run: yarn test:browser
+
       - name: Build MarkEditMac
         run: |
           xcodebuild build -project ../MarkEdit.xcodeproj -scheme MarkEditMac -destination 'platform=macOS' CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO

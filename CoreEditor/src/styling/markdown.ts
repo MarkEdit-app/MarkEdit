@@ -3,6 +3,7 @@ import { classHighlighter, tagHighlighter, styleTags } from '@lezer/highlight';
 import { MarkdownConfig } from '@lezer/markdown';
 import { markdownMathExtension as markdownMathConfig } from '../modules/math';
 import { tags } from './builder';
+import { semanticHighlighting } from './semanticHighlighting';
 import { linkDefinitionConfig } from './nodes/def';
 import { listIndentStyle } from './nodes/indent';
 import { inlineCodeStyle, codeBlockStyle, previewMermaid } from './nodes/code';
@@ -12,6 +13,7 @@ import { frontMatterStyle } from './nodes/frontMatter';
 import { taskMarkerStyle } from './nodes/task';
 
 export const classHighlighters = [
+  semanticHighlighting,
   syntaxHighlighting(classHighlighter),
   syntaxHighlighting(tagHighlighter([
     { tag: tags.heading1, class: 'cm-md-header cm-md-heading1' },

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Semantic highlighting browser tests</title>
+  <script>
+    window.config = {};
+    window.MarkEdit = {};
+
+    const report = result => window.webkit.messageHandlers.browserTests.postMessage(result);
+    window.addEventListener('semantic-theme-result', event => report(event.detail));
+    window.addEventListener('error', event => report({ passed: false, message: event.message || 'Failed to load browser tests' }), true);
+    window.addEventListener('unhandledrejection', event => report({ passed: false, message: String(event.reason) }));
+  </script>
+</head>
+<body>
+  <script type="module" src="./semanticHighlighting.ts"></script>
+</body>
+</html>
