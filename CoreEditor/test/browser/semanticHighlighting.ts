@@ -6,7 +6,9 @@ import { bundledLanguages } from '../../src/languages';
 import { classHighlighters, markdownExtensions } from '../../src/styling/markdown';
 import { loadTheme } from '../../src/styling/themes';
 import { tags } from '../../src/styling/builder';
-import { setTheme } from '../../src/styling/config';
+import { setFontSize, setTheme } from '../../src/styling/config';
+import { invisiblesExtension } from '../../src/styling/nodes/invisible';
+import { InvisiblesBehavior } from '../../src/config';
 import { styleSheets } from '../../src/common/store';
 import fixture from '../fixtures/semantic-theme.css?raw';
 import githubFixture from '../fixtures/github-light.css?raw';
@@ -43,6 +45,71 @@ const properties = [
 function equal(actual: string, expected: string, label: string) {
   if (actual !== expected) {
     throw new Error(`${label}: expected ${expected}, received ${actual}`);
+  }
+}
+
+function runHeadingInvisibles() {
+  const config = window.config;
+  const editor = window.editor;
+  const rootStyle = document.documentElement.style.cssText;
+  window.config = { ...config, fontSize: 15, headerFontSizeDiffs: [5, 5], invisiblesBehavior: InvisiblesBehavior.always };
+  setFontSize(15);
+
+  const view = new EditorView({
+    doc: '# One two\n\n## Three *four five*\n\nBody text',
+    parent: document.body,
+    extensions: [
+      EditorView.editable.of(false),
+      EditorView.editorAttributes.of({ style: 'position: absolute; top: 0; left: 0;' }),
+      markdown({ base: markdownLanguage, extensions: markdownExtensions }),
+      classHighlighters,
+      loadTheme('github-light').extension,
+      invisiblesExtension(InvisiblesBehavior.always, false),
+    ],
+  });
+
+  try {
+    if (!forceParsing(view, view.state.doc.length)) {
+      throw new Error('Heading whitespace did not finish parsing');
+    }
+
+    const lines = view.contentDOM.querySelectorAll('.cm-line');
+    const check = (sizes: number[]) => sizes.forEach((size, index) => {
+      const line = lines.item(index * 2);
+      const spaces = line.querySelectorAll('.cm-visibleSpace');
+      if (spaces.length === 0) {
+        throw new Error(`Missing visible spaces on line ${index * 2 + 1}`);
+      }
+
+      equal(getComputedStyle(line.querySelector('.cm-md-header') ?? line).fontSize, `${size}px`, `line ${index}/text size`);
+      for (const space of spaces) {
+        equal(getComputedStyle(space).fontSize, `${size}px`, `line ${index}/space size`);
+        equal(getComputedStyle(space, '::before').fontSize, `${size}px`, `line ${index}/space glyph size`);
+      }
+    });
+
+    check([20, 20, 15]);
+    view.dom.style.setProperty('--markedit-editor-font-size', '17px');
+    view.dom.style.setProperty('--markedit-markdown-heading1-font-size', '32px');
+    view.dom.style.setProperty('--markedit-markdown-heading2-font-size', '24px');
+    check([32, 24, 17]);
+    view.dom.style.setProperty('--markedit-markdown-heading1-font-size', '12px');
+    check([12, 24, 17]);
+
+    for (const role of ['editor', 'markdown-heading1', 'markdown-heading2']) {
+      view.dom.style.removeProperty(`--markedit-${role}-font-size`);
+    }
+
+    check([20, 20, 15]);
+  } finally {
+    view.destroy();
+    view.dom.remove();
+    window.config = config;
+    window.editor = editor;
+
+    styleSheets.fontSize?.remove();
+    delete styleSheets.fontSize;
+    document.documentElement.style.cssText = rootStyle;
   }
 }
 
@@ -463,8 +530,10 @@ try {
 
   await runNestedMarkdown();
   runGitHubReference();
+  runHeadingInvisibles();
+
   window.dispatchEvent(new CustomEvent('semantic-theme-result', {
-    detail: { passed: true, message: 'Semantic fixtures: application, precedence, restoration, nested Markdown and GitHub CSS reference' },
+    detail: { passed: true, message: 'Semantic fixtures: application, precedence, restoration, nested Markdown, GitHub CSS reference and heading whitespace' },
   }));
 } catch (error) {
   window.dispatchEvent(new CustomEvent('semantic-theme-result', {
