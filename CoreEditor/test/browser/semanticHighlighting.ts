@@ -6,7 +6,10 @@ import { bundledLanguages } from '../../src/languages';
 import { classHighlighters, markdownExtensions } from '../../src/styling/markdown';
 import { loadTheme } from '../../src/styling/themes';
 import { tags } from '../../src/styling/builder';
+import { setTheme } from '../../src/styling/config';
+import { styleSheets } from '../../src/common/store';
 import fixture from '../fixtures/semantic-theme.css?raw';
+import githubFixture from '../fixtures/github-light.css?raw';
 
 const source = [
   '**bold** *italic* ~~strike~~ `inline` [link](https://example.com)',
@@ -253,14 +256,215 @@ async function runNestedMarkdown() {
   }
 }
 
+function runGitHubReference() {
+  const doc = [
+    '# Heading **bold heading** [heading link](https://heading.example) ~~heading strike~~ `heading code` &copy; \\*',
+    '## *Italic heading*',
+    'Setext\n======',
+    '> # Quoted heading',
+    '> **bold quote** and *italic quote* with [quoted link](https://quoted.example)',
+    '**bold** *italic* ~~strike~~ `inline` [link](https://example.com)',
+    '1. Item',
+    '---',
+    '```html\n<span title="value">content &amp;</span>\n<!-- comment -->\n```',
+  ].join('\n\n');
+
+  const rootStyle = document.documentElement.style.cssText;
+  const style = document.createElement('style');
+  setTheme(loadTheme('github-light'));
+
+  const createView = (themeName: string) => {
+    const theme = loadTheme(themeName);
+    const host = document.body.appendChild(document.createElement('div'));
+    host.style.setProperty('--markedit-markdown-heading-color', theme.colors.accent);
+    host.style.setProperty('--markedit-markdown-heading-text-shadow', 'none');
+
+    return new EditorView({
+      doc,
+      parent: host,
+      extensions: [
+        EditorView.editable.of(false),
+        EditorView.editorAttributes.of({ style: 'position: absolute; top: 0; left: 0;' }),
+        markdown({
+          base: markdownLanguage,
+          extensions: markdownExtensions,
+          codeLanguages: info => info === 'html' ? html().language : null,
+        }),
+        classHighlighters,
+        theme.extension,
+      ],
+    });
+  };
+
+  const reference = createView('github-light');
+  const view = createView('solarized-light');
+
+  try {
+    const collect = (editor: EditorView) => {
+      if (!forceParsing(editor, doc.length)) {
+        throw new Error('GitHub reference did not finish parsing');
+      }
+
+      const elements = new Map<string, Element>([['editor', editor.dom]]);
+      for (const text of [
+        '# Heading', 'bold heading', 'heading link', 'Italic heading', 'Setext', '======', 'Quoted heading',
+        'https://heading.example', 'heading strike', '`heading code`', 'heading code', '` &copy;', '&copy;', '\\*',
+        'bold quote', 'italic quote', 'quoted link', 'https://quoted.example',
+        '**bold**', 'bold**', 'italic*', 'strike', '`inline`', '[link]', 'https://example.com',
+        '1.', '---', '```html', 'html', 'span', 'title', '"value"', '&amp;', '<!-- comment',
+      ]) {
+        const { node } = editor.domAtPos(doc.indexOf(text), 1);
+        const element = node instanceof Element ? node : node.parentElement;
+        if (element === null) {
+          throw new Error(`GitHub reference is missing ${text}`);
+        }
+
+        elements.set(`markdown/${text}`, element);
+      }
+
+      // Probe tags not all emitted by HTML, using the same highlighters as parsed tokens
+      const syntaxTags = {
+        name: tags.name, literal: tags.literal, keyword: tags.keyword, self: tags.self,
+        modifier: tags.modifier, operator: tags.operator, operatorKeyword: tags.operatorKeyword,
+        punctuation: tags.punctuation, separator: tags.separator, processingInstruction: tags.processingInstruction,
+        character: tags.character, string: tags.string, stringSpecial: tags.special(tags.string),
+        escape: tags.escape, regexp: tags.regexp, url: tags.url,
+        type: tags.typeName, typeDefinition: tags.definition(tags.typeName), class: tags.className,
+        variable: tags.variableName, variableDefinition: tags.definition(tags.variableName),
+        property: tags.propertyName, propertyDefinition: tags.definition(tags.propertyName),
+        function: tags.function(tags.variableName), method: tags.function(tags.propertyName),
+        functionDefinition: tags.function(tags.definition(tags.variableName)),
+        methodDefinition: tags.function(tags.definition(tags.propertyName)),
+        standardFunction: tags.standard(tags.function(tags.variableName)),
+        standardType: tags.standard(tags.typeName),
+        attribute: tags.attributeName, annotation: tags.annotation, namespace: tags.namespace,
+        tag: tags.tagName, label: tags.labelName, constant: tags.constant(tags.name), color: tags.color,
+        standard: tags.standard(tags.name), variableSpecial: tags.special(tags.variableName), macro: tags.macroName,
+        atom: tags.atom, boolean: tags.bool, number: tags.number, meta: tags.meta, comment: tags.comment,
+        inserted: tags.inserted, deleted: tags.deleted, changed: tags.changed, invalid: tags.invalid,
+      };
+
+      for (const [name, tag] of Object.entries(syntaxTags)) {
+        const classes = highlightingFor(editor.state, [tag]);
+        if (classes === null) {
+          throw new Error(`GitHub reference is missing highlighting for ${name}`);
+        }
+
+        const element = editor.contentDOM.appendChild(document.createElement('span'));
+        element.className = classes;
+        element.textContent = name;
+        elements.set(`syntax/${name}`, element);
+      }
+
+      // UI probes isolate theme paint from completion, search and selection timing
+      editor.dom.classList.add('cm-focused');
+      const ui = editor.dom.appendChild(document.createElement('div'));
+      ui.innerHTML = `
+        <span class="cm-cursor"></span><span class="cm-selectionBackground"></span>
+        <span class="cm-matchingBracket"></span>
+        <div class="cm-gutters"><div class="cm-lineNumbers"><span class="cm-activeLineGutter">1</span></div></div>
+        <span class="cm-foldGutter cm-gutterHover"></span><span class="cm-foldPlaceholder">...</span>
+        <span class="cm-searchMatch"></span><span class="cm-selectionMatch"></span>
+        <div class="cm-tooltip-autocomplete"><ul><li>normal</li><li aria-selected="true"><span class="cm-completionMatchedText">match</span></li></ul></div>
+        <span class="cm-visibleTab"></span><span class="cm-visibleSpace" content="."></span>
+        <div class="cm-selectedVisible"><span class="cm-visibleTab"></span><span class="cm-visibleSpace" content="."></span></div>
+        <span class="cm-md-activeIndicator"></span><span class="cm-md-inlineCode">inline</span>
+      `;
+
+      Array.from(ui.querySelectorAll('*')).forEach((element, index) => elements.set(`ui/${index}/${element.className}`, element));
+      return elements;
+    };
+
+    const referenceElements = collect(reference);
+    const elements = collect(view);
+    const comparedProperties = [
+      ...properties, 'background-color', 'background-image', 'border-top-color', 'border-left-color', 'box-shadow',
+    ];
+
+    const sample = (items: Map<string, Element>) => new Map(Array.from(items, ([name, element]) => [
+      name,
+      Object.fromEntries(comparedProperties.map(property => [
+        property,
+        getComputedStyle(element, element.classList.contains('cm-visibleSpace') ? '::before' : null).getPropertyValue(property),
+      ])),
+    ]));
+
+    const expected = sample(referenceElements);
+    const before = sample(elements);
+    const compare = (actual: typeof expected, target: typeof expected, stage: string) => {
+      const failures: string[] = [];
+      for (const [name, values] of target) {
+        for (const property of comparedProperties) {
+          const value = actual.get(name)?.[property];
+          if (value !== values[property]) {
+            failures.push(`${name}/${property}: expected ${values[property]}, received ${value}`);
+          }
+        }
+      }
+
+      if (failures.length > 0) {
+        throw new Error(`GitHub CSS reference ${stage}:\n${failures.join('\n')}`);
+      }
+    };
+
+    style.textContent = githubFixture;
+    document.head.appendChild(style);
+    compare(sample(elements), expected, 'over Solarized Light');
+
+    style.remove();
+    compare(sample(elements), before, 'restoration');
+
+    const headingOverrides = [
+      { text: '# Heading', role: 'marker' },
+      { text: 'bold heading', role: 'bold' },
+      { text: 'Italic heading', role: 'italic' },
+      { text: 'heading link', role: 'link' },
+    ];
+
+    style.textContent = `.cm-editor {
+      ${headingOverrides.map(({ role }) => `
+        --markedit-markdown-${role}-color: #123456;
+        --markedit-markdown-${role}-text-shadow: 0 0 2px #654321;
+      `).join('\n')}
+    }`;
+
+    document.head.appendChild(style);
+    const overridden = sample(elements);
+    for (const { text, role } of headingOverrides) {
+      const values = overridden.get(`markdown/${text}`);
+      if (values === undefined) {
+        throw new Error(`Missing heading override probe: ${role}`);
+      }
+
+      equal(values.color, 'rgb(18, 52, 86)', `heading/${role}/explicit color`);
+      equal(values['text-shadow'], 'rgb(101, 67, 33) 0px 0px 2px', `heading/${role}/explicit shadow`);
+    }
+
+    style.remove();
+    compare(sample(elements), before, 'heading override restoration');
+  } finally {
+    style.remove();
+    for (const editor of [reference, view]) {
+      const host = editor.dom.parentElement;
+      editor.destroy();
+      host?.remove();
+    }
+
+    styleSheets.accentColor?.remove();
+    delete styleSheets.accentColor;
+    document.documentElement.style.cssText = rootStyle;
+  }
+}
+
 try {
   for (const theme of ['github-light', 'synthwave84']) {
     run(theme);
   }
 
   await runNestedMarkdown();
+  runGitHubReference();
   window.dispatchEvent(new CustomEvent('semantic-theme-result', {
-    detail: { passed: true, message: 'Semantic fixture application, precedence and restoration: github-light, synthwave84, nested Markdown' },
+    detail: { passed: true, message: 'Semantic fixtures: application, precedence, restoration, nested Markdown and GitHub CSS reference' },
   }));
 } catch (error) {
   window.dispatchEvent(new CustomEvent('semantic-theme-result', {

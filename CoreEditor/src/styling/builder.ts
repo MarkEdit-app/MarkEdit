@@ -139,6 +139,12 @@ const sharedHighlights = [
 function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
   const text = `var(--markedit-editor-color, ${colors.text})`;
   const background = `var(--markedit-editor-background-color, ${colors.background})`;
+  const completionBackground = scheme === 'dark'
+    ? `linear-gradient(#ffffff08, #ffffff08), ${adjustAlpha(colors.background, 0.85)}`
+    : `linear-gradient(#00000008, #00000008), ${adjustAlpha(colors.background, 0.85)}`;
+
+  const completionMatch = shadowableTextColor(colors.accent);
+  const selectedInvisibles = `var(--markedit-invisibles-selected-color, ${adjustAlpha(colors.text, 0.6)})`;
 
   const specs: { [key: string]: StyleSpec } = {
     // Root
@@ -156,7 +162,7 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     // Brackets
     '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
       backgroundColor: `var(--markedit-bracket-match-background-color, ${colors.matchingBracket})`,
-      boxShadow: buildInnerBorder(1.5, colors.bracketBorder),
+      boxShadow: `var(--markedit-bracket-match-box-shadow, ${buildInnerBorder(1.5, colors.bracketBorder)})`,
     },
     // Gutters
     '.cm-gutters': {
@@ -190,10 +196,8 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     },
     // Autocomplete
     '.cm-tooltip-autocomplete': {
-      border: `1px solid ${adjustAlpha(colors.text, 0.2)}`,
-      background: scheme === 'dark'
-        ? `linear-gradient(#ffffff08, #ffffff08), ${adjustAlpha(colors.background, 0.85)}`
-        : `linear-gradient(#00000008, #00000008), ${adjustAlpha(colors.background, 0.85)}`,
+      border: `1px solid var(--markedit-completion-border-color, ${adjustAlpha(colors.text, 0.2)})`,
+      background: `var(--markedit-completion-background, ${completionBackground})`,
       backdropFilter: 'blur(16px) saturate(70%)',
       boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
     },
@@ -211,7 +215,8 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
     '.cm-completionMatchedText': {
       fontWeight: '500',
       textDecoration: 'none',
-      ...shadowableTextColor(colors.accent),
+      color: `var(--markedit-completion-match-color, ${completionMatch.color})`,
+      textShadow: `var(--markedit-completion-match-text-shadow, ${completionMatch['text-shadow']})`,
     },
     // Control characters
     '.cm-specialChar': {
@@ -226,10 +231,10 @@ function buildTheme(colors: EditorColors, scheme?: ColorScheme) {
       color: `var(--markedit-invisibles-color, ${colors.visibleSpace})`,
     },
     '.cm-selectedVisible .cm-visibleTab': {
-      backgroundColor: adjustAlpha(colors.text, 0.6),
+      backgroundColor: selectedInvisibles,
     },
     '.cm-selectedVisible .cm-visibleSpace::before, .cm-selectedVisible .cm-visibleLineBreak::before': {
-      color: adjustAlpha(colors.text, 0.6),
+      color: selectedInvisibles,
     },
     '.cm-md-activeIndicator': {
       background: `var(--markedit-line-active-background-color, ${colors.activeLine})`,

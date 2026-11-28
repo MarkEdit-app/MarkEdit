@@ -1,0 +1,112 @@
+.cm-editor {
+  --markedit-editor-color: #1f2328;
+  --markedit-editor-background-color: #ffffff;
+  --markedit-caret-color: #0969da;
+  --markedit-selection-background-color: #add6ff;
+  --markedit-bracket-match-background-color: #4ac26b40;
+  --markedit-bracket-match-box-shadow: inset 0 0 0 1.5px #4ac26b99;
+  --markedit-gutter-color: #8c959f;
+  --markedit-gutter-background-color: #ffffff;
+  --markedit-fold-color: #1f232866;
+  --markedit-fold-placeholder-background-color: #6e77811a;
+  --markedit-search-match-background-color: #fae17d80;
+  --markedit-selection-match-background-color: #4ac26b40;
+  --markedit-invisibles-color: #afb8c1;
+  --markedit-invisibles-selected-color: #1f232899;
+  --markedit-line-active-background-color: #eaeef280;
+  --markedit-markdown-inline-code-background-color: #6e77811a;
+  --markedit-completion-border-color: #1f232833;
+  --markedit-completion-background: linear-gradient(#00000008, #00000008), #ffffffd9;
+  --markedit-completion-match-color: #0550ae;
+  --markedit-completion-match-text-shadow: none;
+
+  --markedit-syntax-name-color: #1f2328;
+  --markedit-syntax-literal-color: #116329;
+  --markedit-syntax-meta-color: #6e7781;
+  --markedit-syntax-processing-instruction-color: #1f2328;
+  --markedit-syntax-comment-color: #6e7781;
+  --markedit-syntax-keyword-color: #cf222e;
+  --markedit-syntax-self-color: #0550ae;
+  --markedit-syntax-operator-color: #cf222e;
+  --markedit-syntax-punctuation-color: #1f2328;
+  --markedit-syntax-string-color: #0a3069;
+  --markedit-syntax-string-special-color: #0a3069;
+  --markedit-syntax-character-color: #1f2328;
+  --markedit-syntax-regular-expression-color: #0a3069;
+  --markedit-syntax-escape-color: #0a3069;
+  --markedit-syntax-url-color: #1f2328;
+  --markedit-syntax-atom-color: #0550ae;
+  --markedit-syntax-boolean-color: #0550ae;
+  --markedit-syntax-number-color: #0550ae;
+  --markedit-syntax-variable-color: #1f2328;
+  --markedit-syntax-property-color: #1f2328;
+  --markedit-syntax-property-definition-color: #953800;
+  --markedit-syntax-type-color: #0550ae;
+  --markedit-syntax-class-color: #953800;
+  --markedit-syntax-type-definition-color: #953800;
+  --markedit-syntax-attribute-color: #0550ae;
+  --markedit-syntax-tag-color: #116329;
+  --markedit-syntax-label-color: #1f2328;
+  --markedit-syntax-function-color: #8250df;
+  --markedit-syntax-macro-color: #82071e;
+  --markedit-syntax-variable-special-color: #0550ae;
+  --markedit-syntax-inserted-color: #116329;
+  --markedit-syntax-deleted-color: #82071e;
+  --markedit-syntax-changed-color: #0550ae;
+  --markedit-syntax-invalid-color: #ff0000;
+
+  --markedit-markdown-heading-color: #0550ae;
+  --markedit-markdown-heading-text-shadow: none;
+  --markedit-markdown-quote-color: #116329;
+
+  /* currentColor overrides the base theme's explicit color with inherited paint. */
+  --markedit-markdown-bold-color: currentColor;
+  --markedit-markdown-bold-font-weight: bolder;
+  --markedit-markdown-italic-color: currentColor;
+  --markedit-markdown-italic-font-style: italic;
+  --markedit-markdown-strikethrough-color: currentColor;
+  --markedit-markdown-link-color: #0a3069;
+  --markedit-markdown-link-destination-color: #1f2328;
+  --markedit-markdown-inline-code-color: currentColor;
+  --markedit-markdown-divider-color: #0550ae;
+  --markedit-markdown-code-info-color: #953800;
+  --markedit-markdown-marker-color: #1f2328;
+  --markedit-markdown-list-marker-color: #953800;
+  --markedit-markdown-table-marker-color: #953800;
+  --markedit-markdown-quote-marker-color: #116329;
+  --markedit-markdown-link-marker-color: #1f2328;
+  --markedit-markdown-code-marker-color: currentColor;
+}
+
+/* GitHub keeps inline heading content and delimiters in the heading color. */
+.cm-md-header:not(.cm-md-quote) {
+  --markedit-syntax-processing-instruction-color: var(--markedit-markdown-heading-color);
+  --markedit-syntax-character-color: var(--markedit-markdown-heading-color);
+  --markedit-syntax-escape-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-bold-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-italic-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-strikethrough-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-link-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-link-destination-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-inline-code-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-marker-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-link-marker-color: var(--markedit-markdown-heading-color);
+  --markedit-markdown-code-marker-color: var(--markedit-markdown-heading-color);
+}
+
+/* GitHub uses the quote color for inline Markdown, including nested formatting. */
+.cm-markedit-markdown-quote {
+  --markedit-markdown-bold-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-italic-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-strikethrough-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-link-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-link-destination-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-inline-code-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-divider-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-code-info-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-marker-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-list-marker-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-table-marker-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-link-marker-color: var(--markedit-markdown-quote-color);
+  --markedit-markdown-code-marker-color: var(--markedit-markdown-quote-color);
+}
